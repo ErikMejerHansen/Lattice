@@ -50,7 +50,7 @@ cat state/wishlist.md state/queue.md state/routine_log.md
 cat state/concept_graph.json
 ```
 
-Pick the **top non-blank, non-comment line** of `wishlist.md` as the topic. If the wishlist is empty, write `EMPTY_WISHLIST` to `state/routine_log.md` with the date and stop. Do not invent a topic.
+Pick the **top non-blank, non-comment line** of `wishlist.md` as the topic. If the wishlist is empty,  you get to pick a physics topic you think Erik would enjoy learning about. 
 
 The wishlist line may include a hint after a `—`:
 ```
