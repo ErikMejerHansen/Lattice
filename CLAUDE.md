@@ -85,3 +85,12 @@ These will get resolved as we go. Listed here so they're visible.
 
 ## Status
 
+**Current slice: 4 (complete)**
+
+Slices shipped:
+1. One static lesson rendered — hand-written JSON, bare React, `npm run dev`.
+2. GitHub Pages deploy — live at GitHub Pages, viewable on phone.
+3. Claude Code generates one lesson manually — two lessons committed (`2026-05-03-photon-energy`, `2026-05-04-wavelength`).
+4. App lists all lessons — `lessons/manifest.json` index, tappable list view, `useState` navigation (routing decision: no react-router yet, defer to slice 9).
+
+Next: **Slice 5** — `validate-lesson.mjs` runs cleanly against existing lessons.
