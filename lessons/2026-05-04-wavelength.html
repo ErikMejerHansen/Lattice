@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz {
+  padding: 14px;
+}
+#region {
+  margin-top: 10px;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+</style>
+</head>
+<body>
+
+<div id="viz">
+  <div class="viz-caption">Drag to explore. The visible band is 380–750 nm; outside that, the human eye sees nothing.</div>
+  <svg id="strip" width="100%" viewBox="0 0 360 56" style="display:block; margin-top: 8px;">
+  </svg>
+  <div class="viz-slider-row">
+    <label>λ</label>
+    <input type="range" id="slider" min="100" max="1100" step="5" value="555">
+    <span class="value" id="value">555 nm</span>
+  </div>
+  <div id="region">green — peak of solar emission, eye most sensitive here</div>
+</div>
+
+<script>
+function wavelengthToColor(nm) {
+  if (nm < 380) return '#3a2f4a';
+  if (nm > 780) return '#3d1f1f';
+  let r = 0, g = 0, b = 0;
+  if (nm < 440) { r = -(nm - 440) / (440 - 380); b = 1; }
+  else if (nm < 490) { g = (nm - 440) / (490 - 440); b = 1; }
+  else if (nm < 510) { g = 1; b = -(nm - 510) / (510 - 490); }
+  else if (nm < 580) { r = (nm - 510) / (580 - 510); g = 1; }
+  else if (nm < 645) { r = 1; g = -(nm - 645) / (645 - 580); }
+  else { r = 1; }
+  let factor = 1;
+  if (nm < 420) factor = 0.3 + 0.7 * (nm - 380) / (420 - 380);
+  else if (nm > 700) factor = 0.3 + 0.7 * (780 - nm) / (780 - 700);
+  const gamma = 0.8;
+  const ch = (c) => Math.round(255 * Math.pow(Math.max(0, c) * factor, gamma));
+  return 'rgb(' + ch(r) + ', ' + ch(g) + ', ' + ch(b) + ')';
+}
+
+function describeRegion(nm) {
+  if (nm < 10)   return 'gamma rays — atomic nuclei, the universe at its most violent';
+  if (nm < 100)  return 'X-rays — pass through soft tissue, stop at bone';
+  if (nm < 380)  return 'ultraviolet — bees see this, you do not';
+  if (nm < 450)  return 'violet — just within reach of the eye';
+  if (nm < 495)  return 'blue — sky color, daylit shadows';
+  if (nm < 570)  return 'green — peak of solar emission, eye most sensitive here';
+  if (nm < 590)  return 'yellow — sodium lamps, ripe lemons';
+  if (nm < 620)  return 'orange — sunset, embers of a fire';
+  if (nm < 750)  return 'red — taillights, the long edge of vision';
+  if (nm < 1000) return 'near infrared — heat you feel from a stove, before you see the glow';
+  return 'infrared — the cold dark sky, warm bodies, cooling lava';
+}
+
+var strip = document.getElementById('strip');
+var slider = document.getElementById('slider');
+var valueEl = document.getElementById('value');
+var regionEl = document.getElementById('region');
+
+// Build the visible strip 380–750
+var W = 360, H = 36;
+var visibleStart = 380, visibleEnd = 750;
+var visW = W - 40; // leave some margin
+var stops = '';
+for (var nm = visibleStart; nm <= visibleEnd; nm += 5) {
+  var x = 20 + ((nm - visibleStart) / (visibleEnd - visibleStart)) * visW;
+  stops += '<rect x="' + x.toFixed(2) + '" y="6" width="' + (visW / ((visibleEnd-visibleStart)/5) + 0.6).toFixed(2) + '" height="' + H + '" fill="' + wavelengthToColor(nm) + '" />';
+}
+// Tick labels
+stops += '<text x="20" y="56" font-size="9" font-style="italic" fill="#6b6359" text-anchor="start">380 nm</text>';
+stops += '<text x="' + (20 + visW) + '" y="56" font-size="9" font-style="italic" fill="#6b6359" text-anchor="end">750 nm</text>';
+
+function updateMarker(nm) {
+  var marker = '';
+  if (nm >= visibleStart && nm <= visibleEnd) {
+    var x = 20 + ((nm - visibleStart) / (visibleEnd - visibleStart)) * visW;
+    marker = '<line x1="' + x.toFixed(2) + '" y1="2" x2="' + x.toFixed(2) + '" y2="44" stroke="#1a1a18" stroke-width="1.5"/>';
+    marker += '<text x="' + x.toFixed(2) + '" y="-2" font-size="0" fill="#1a1a18">' + nm + '</text>';
+  } else if (nm < visibleStart) {
+    marker = '<text x="20" y="24" font-size="13" font-style="italic" fill="#1a1a18" text-anchor="end" dx="-4">← out of sight</text>';
+  } else {
+    marker = '<text x="' + (20 + visW) + '" y="24" font-size="13" font-style="italic" fill="#1a1a18" text-anchor="start" dx="4">out of sight →</text>';
+  }
+  strip.innerHTML = stops + marker;
+}
+
+function update() {
+  var nm = parseInt(slider.value, 10);
+  valueEl.textContent = nm + ' nm';
+  regionEl.textContent = describeRegion(nm);
+  updateMarker(nm);
+}
+
+slider.addEventListener('input', update);
+update();
+</script>
+
+</body>
+</html>

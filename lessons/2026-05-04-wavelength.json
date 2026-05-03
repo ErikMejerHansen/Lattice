@@ -1,0 +1,125 @@
+{
+  "slug": "2026-05-04-wavelength",
+  "title": "Wavelength: the ruler that fits the wave",
+  "node": {
+    "id": "wavelength",
+    "label": "Wavelength",
+    "subtitle": "λ, frequency"
+  },
+  "intro": "Walk along a quiet beach and watch the swells roll in. There is a distance between one crest and the next, and that distance is a property of the wave itself, not the beach, not the day, not your mood. Light does the same thing, except the crests are unimaginably close together and they pass you billions of times each second. The wavelength is the ruler that fits the wave, and once you can read it, half of physics opens up: why the sky is blue, why hot iron glows red before it glows white, why a microwave oven is a different beast from an X-ray machine.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. A distance you can almost see",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Picture the beach again. If you marked the crest of one wave with a stick and the crest of the next with another stick, the distance between them is the wavelength. We give it the Greek letter lambda, λ, because nineteenth-century physicists were unembarrassed about borrowing from the alphabet to dignify their work." },
+        { "type": "p", "text": "Two waves can travel through the same patch of water. A long, slow swell from a storm out at sea, and on top of it, the small ripples kicked up by the local breeze. Same water, two wavelengths riding together. This is the first surprise: a wave is not a thing, it is a pattern, and patterns add up." },
+        { "type": "p", "text": "Light works exactly like this. The wavelengths are tiny, around 500 nanometers for green, but the principle is identical. Different wavelengths travel through the same air and your eye separates them by which receptor they tickle. Red and blue arrive together, and you see purple, or you see them as themselves, depending on the receptors." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Frequency: the same thing, told sideways",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Stand still on a pier and count how many crests pass your feet in a second. That number is the frequency, ν (the Greek letter 'nu'). A long wavelength means crests arrive less often; a short wavelength means they pile in fast. Wavelength and frequency are not two independent properties of a wave, they are the same property described from two angles." },
+        { "type": "p", "text": "The relationship is one of the cleanest in physics. The product of wavelength and frequency equals the speed at which the wave travels:" },
+        { "type": "math", "tex": "\\lambda \\nu = c", "display": true },
+        { "type": "p", "text": "For light in vacuum, c is the famous speed, about 3 × 10⁸ meters per second. So if you tell me the wavelength, I can tell you the frequency, and vice versa. They are bound together. This is why physicists shrug when asked which one is more fundamental — neither is. Choose whichever is easier to measure for the problem in front of you." },
+        { "type": "p", "text": "Heinrich Hertz demonstrated this experimentally in 1887, generating radio waves in his lab and showing they travelled at the speed of light. Maxwell had predicted this on theoretical grounds twenty years earlier; Hertz made it real. The implication was electric: visible light, radio, and whatever else might exist on this scale were all the same phenomenon, distinguished only by their wavelength." }
+      ],
+      "quiz": {
+        "question": "A radio station broadcasts at 100 MHz (10⁸ Hz). Roughly what is the wavelength of its signal?",
+        "options": [
+          "3 meters",
+          "3 centimeters",
+          "300 meters",
+          "3 millimeters"
+        ],
+        "correctIndex": 0,
+        "explanation": "Using λν = c, we get λ = c/ν = (3 × 10⁸) / (10⁸) = 3 meters. The most tempting wrong answer is 3 centimeters, which would be the case for ν = 10¹⁰ Hz; people sometimes drop a factor of 100 when shifting between the meter and centimeter scales."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The spectrum, top to bottom",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "If you organize all the wavelengths from longest to shortest, you get the electromagnetic spectrum. At one end, kilometers-long radio waves used to talk to submarines underwater. At the other end, gamma rays so short they fit inside an atomic nucleus. Visible light, the part we see, is a thin slice in the middle, roughly 380 to 750 nanometers." },
+        { "type": "viz", "src": "2026-05-04-wavelength.html", "height": 220, "caption": "The visible band, with markers for canonical wavelengths" },
+        { "type": "p", "text": "It is a small accident of biology that we see this particular slice. Our sun puts out most of its energy in this band, because the sun's surface temperature lands the peak of its emission right where our chemistry could most usefully evolve receptors. Bees and birds see ultraviolet too, having made slightly different bets. There is no privileged window onto the world, only the window we got." },
+        { "type": "p", "text": "When you change wavelength by ten orders of magnitude, the same physics gets very different names. Microwaves boil water by spinning its molecules. X-rays pass through soft tissue and stop at bone. Gamma rays break chemical bonds outright. Each technology, each medical scan, each communication band — all of it is choosing a wavelength to exploit a specific interaction with matter." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Why hot things glow",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Heat a horseshoe in a forge. At first nothing visible happens, but a thermometer would tell you the iron is gaining energy. Past a certain temperature it starts to glow dull red, then bright cherry red, then orange, then yellow, then white-hot. Push it hotter still and it would shade toward blue. The progression is universal. Iron, copper, the filament of an old lightbulb, the surface of a star — they all do the same dance, with the same colors at the same temperatures." },
+        { "type": "p", "text": "What is happening is that any object with a temperature radiates light, and the wavelength of that light depends on the temperature. Cold objects radiate in the infrared, which is why night-vision goggles can see a person standing in the dark. Hotter objects shift their peak emission toward shorter wavelengths. Wien put a number on this in 1893: the peak wavelength is inversely proportional to temperature." },
+        { "type": "math", "tex": "\\lambda_{\\max} \\propto \\frac{1}{T}", "display": true },
+        { "type": "p", "text": "Multiply temperature by two, the peak wavelength halves. Our sun, at about 5800 Kelvin, peaks in the green-yellow part of the visible spectrum. The bright bluish stars are hotter, peaking in the ultraviolet. The dim red dwarfs are cooler, peaking in the infrared. The same law that tells you when a horseshoe is ready to hammer also tells you the temperature of a star you've never been within a trillion miles of." }
+      ],
+      "quiz": {
+        "question": "Star A appears blue; star B appears red. What can you say about their surface temperatures?",
+        "options": [
+          "Star A is hotter than star B",
+          "Star B is hotter than star A",
+          "They must be the same temperature",
+          "We cannot tell without knowing their distances"
+        ],
+        "correctIndex": 0,
+        "explanation": "Blue light has a shorter wavelength than red, so by Wien's law a blue-peaking spectrum requires a higher temperature. Distance is the most tempting wrong answer because intuitively brighter feels hotter, but apparent brightness depends on distance and luminosity together, while color depends only on temperature."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Where this is going",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "We have wavelength as a property of the wave, frequency as the same property told sideways, the spectrum as the full range of wavelengths the universe makes use of, and the connection between temperature and the color of glowing things. Already you can read a star, choose a microwave, and not be surprised that radio waves and X-rays are the same kind of thing." },
+        { "type": "p", "text": "What we have not addressed: why does a hot object emit a smooth curve of wavelengths rather than just one? Why does the curve have the specific shape it has? When physicists tried to derive that shape from classical physics in the 1890s, they got an answer so wrong it broke the field. The fix, which arrived in 1900, was the seed of quantum mechanics. We will get there." },
+        { "type": "p", "text": "For now, hold onto wavelength as a real, measurable thing. Not an abstraction. The distance between two crests, in meters, in nanometers, in whatever ruler fits the wave you are looking at." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Two stars have the same chemical composition, but star X has a peak wavelength of 300 nm and star Y has a peak wavelength of 600 nm. What is the ratio of their surface temperatures, T_X to T_Y?",
+    "options": [
+      "2 to 1",
+      "1 to 2",
+      "4 to 1",
+      "1 to 4"
+    ],
+    "correctIndex": 0,
+    "explanation": "By Wien's law, peak wavelength is inversely proportional to temperature. Star X has half the peak wavelength of star Y, so star X has twice the temperature. The most tempting wrong answer is 4 to 1, which would be correct if luminosity scaled like T⁴ (Stefan's law) were the question, but the question is about temperature ratio, not luminosity ratio."
+  },
+  "suggestedNodes": [
+    {
+      "id": "photon_energy",
+      "label": "Photon energy",
+      "subtitle": "E = hν",
+      "edgeType": "extends"
+    },
+    {
+      "id": "blackbody",
+      "label": "Blackbody",
+      "subtitle": "radiation",
+      "edgeType": "extends"
+    },
+    {
+      "id": "wien",
+      "label": "Wien's law",
+      "subtitle": "λ_max ∝ 1/T",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-04T07:00:00Z",
+    "generatedBy": "manual-extraction",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": []
+  }
+}
