@@ -83,8 +83,3 @@ These will get resolved as we go. Listed here so they're visible.
 
 ## Status
 
-**Current slice:** 1 — One static lesson rendered.
-
-**Done:** none yet.
-
-**Next up:** Hand-write `lessons/2026-05-04-wavelength.json` (sample lesson, 3-4 paragraphs across two sections, one quiz, no viz). Set up Vite + React in `/app` with a single component that fetches and renders it. Run `npm run dev`, confirm it reads.
