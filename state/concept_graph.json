@@ -1,0 +1,27 @@
+{
+  "nodes": [
+    {
+      "id": "wavelength",
+      "label": "Wavelength",
+      "subtitle": "λ, frequency",
+      "state": "available",
+      "lesson": "2026-05-04-wavelength",
+      "createdAt": "2026-05-04T07:00:00Z",
+      "col": 0,
+      "row": 0
+    },
+    {
+      "id": "photon_energy",
+      "label": "Photon energy",
+      "subtitle": "E = hν",
+      "state": "available",
+      "lesson": "2026-05-03-photon-energy",
+      "createdAt": "2026-05-03T10:00:00Z",
+      "col": 1,
+      "row": 0
+    }
+  ],
+  "edges": [
+    { "from": "photon_energy", "to": "wavelength", "kind": "extends" }
+  ]
+}

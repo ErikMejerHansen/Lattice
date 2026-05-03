@@ -1,0 +1,124 @@
+{
+  "slug": "2026-05-03-photon-energy",
+  "title": "Photon energy: the quantum that broke classical physics",
+  "node": {
+    "id": "photon_energy",
+    "label": "Photon energy",
+    "subtitle": "E = hν"
+  },
+  "intro": "In 1900, Max Planck had a problem he could not solve honestly. He knew exactly what the blackbody radiation curve looked like — experimenters had measured it with precision — but every attempt to derive it from classical mechanics and electromagnetism ended in absurdity, predicting infinite energy at short wavelengths. The fix Planck found was so uncomfortable that he spent years trying to argue it away: energy does not flow in a continuous stream but arrives in discrete packets, each packet's size locked to the frequency of the light by a constant that now carries his name.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The catastrophe that classical physics could not survive",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "By the 1890s the blackbody spectrum was one of the best-measured things in physics. Heat any object to a given temperature and it radiates light in a characteristic distribution of wavelengths, a hump that shifts toward shorter wavelengths as the temperature rises. The data were reproducible and clean. The theory was catastrophic." },
+        { "type": "p", "text": "Rayleigh and Jeans applied the full apparatus of classical statistical mechanics to the problem. Their argument was impeccable by the standards of the day: count the number of electromagnetic modes in a cavity, assign each one an average energy kT (the classical equipartition result), and sum up. The sum diverged. At short wavelengths the predicted energy climbed without limit, a feature Paul Ehrenfest later named the ultraviolet catastrophe." },
+        { "type": "p", "text": "The Rayleigh-Jeans formula worked fine at long wavelengths. At short wavelengths it predicted that a warm room would destroy the universe. Something was deeply wrong, and it was not the measurements." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Planck's formula and what it required",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Planck found the right formula in October 1900 by interpolating between two limiting cases that were each partially correct. He then worked backward to discover what physical assumption could produce it. The assumption was this: an oscillator of frequency ν cannot hold any arbitrary amount of energy but only whole-number multiples of a minimum unit." },
+        { "type": "math", "tex": "E = h\\nu", "display": true },
+        { "type": "p", "text": "Here h is Planck's constant, approximately 6.626 × 10⁻³⁴ joule-seconds. It is an extraordinarily small number, which is why quantization is invisible at human scales: the minimum energy packet for a 100 Hz sound wave is about 10⁻³² joules, so the continuous approximation is exact to any measurement we could make. But for oscillators in the walls of a hot cavity, operating at frequencies of 10¹⁴ Hz and above, the packets become large enough to cut off the classical count of modes at short wavelengths and prevent the divergence." },
+        { "type": "p", "text": "Planck's curve fit the data at every wavelength and every temperature. No other formula in the history of physics has fit its data so exactly over such a wide range. But Planck himself thought of the quantization as a mathematical trick. He spent the next decade trying to derive the same result without it." }
+      ],
+      "quiz": {
+        "question": "If the frequency of a photon doubles, what happens to its energy?",
+        "options": [
+          "It doubles",
+          "It quadruples",
+          "It halves",
+          "It stays the same"
+        ],
+        "correctIndex": 0,
+        "explanation": "E = hν is a direct proportionality: energy scales linearly with frequency, so doubling frequency doubles energy. The tempting wrong answer is 'quadruples', which confuses photon energy with wave intensity, which scales as the square of amplitude. Amplitude is a wave property; photon energy is not."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Einstein takes the packet literally",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "In 1905, working in the Bern patent office, Albert Einstein read Planck's derivation and did what Planck had not: he took the quantization seriously as a statement about light itself, not just about the oscillators that emit it. If energy comes in packets when emitted, Einstein argued, then light in flight consists of discrete packets too. He called them light quanta. We call them photons." },
+        { "type": "viz", "src": "2026-05-03-photon-energy.html", "height": 280, "caption": "Photon energy across the electromagnetic spectrum. Slide to explore how E = hν connects frequency to energy, and where different technologies sit on the scale." },
+        { "type": "p", "text": "The immediate application was the photoelectric effect, an observation that had puzzled experimenters since Hertz: shine ultraviolet light on a metal surface and electrons fly off, but shine red light, however brightly, and nothing happens. Classical wave theory predicted that brightness, not color, should determine whether electrons were ejected: pile in enough wave energy and eventually the surface should respond. The data said otherwise." },
+        { "type": "p", "text": "Einstein's explanation was direct. Each electron needs a minimum energy to escape the metal surface (the work function, φ). A photon of frequency ν carries energy hν. If hν is less than φ, no electron escapes, regardless of how many photons arrive. If hν exceeds φ, one photon ejects one electron, and the excess becomes kinetic energy. The threshold frequency, not brightness, is what matters. Einstein was awarded the Nobel Prize in Physics in 1921 for this explanation, not for relativity." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Millikan measures h and hates the result",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Robert Millikan spent nearly a decade building a photoelectric apparatus precise enough to test Einstein's formula. He found the relationship between the frequency of incoming light and the maximum kinetic energy of ejected electrons to be exactly linear:" },
+        { "type": "math", "tex": "KE_{\\max} = h\\nu - \\phi", "display": true },
+        { "type": "p", "text": "The slope of the KE-versus-frequency line gave h directly. Millikan measured it at 6.57 × 10⁻³⁴ joule-seconds, within a percent of Planck's value extracted from the blackbody curve by a completely different method. His experimental conclusion in 1916: Einstein's photoelectric equation is confirmed to high precision. His stated opinion in the same paper: the underlying photon concept is probably wrong." },
+        { "type": "p", "text": "Millikan's discomfort is instructive about how physics actually works. He believed light was a wave; Maxwell had proved it; interference patterns proved it; nothing about his experiment touched those facts. That light could be both a wave and a discrete particle struck him as incoherent. He was not wrong that it is strange. He was wrong that strangeness was grounds for rejection." }
+      ],
+      "quiz": {
+        "question": "In a photoelectric experiment you plot maximum kinetic energy of ejected electrons against light frequency and fit a straight line. What quantity does the slope equal?",
+        "options": [
+          "Planck's constant h",
+          "The work function φ",
+          "The speed of light c",
+          "The electron charge e"
+        ],
+        "correctIndex": 0,
+        "explanation": "From KE_max = hν - φ, the slope of KE_max vs. ν is exactly h. The y-intercept (extrapolated to zero KE) is -φ. This is how Millikan measured h independently from the blackbody data and obtained agreement. The work function φ is the y-intercept, not the slope, which is the most tempting confusion."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. What the constant h opens up",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Planck's constant h is the conversion factor between frequency and energy. It shows up in the uncertainty principle (Heisenberg, 1927), in the quantized energy levels of the hydrogen atom (Bohr, 1913), in the theory of semiconductors, in every laser that has ever been built. It is one of the small set of constants that appear to be fundamental features of the universe rather than emergent consequences of something deeper." },
+        { "type": "p", "text": "The step from E = hν to a full quantum theory took another twenty-five years and the work of a dozen physicists in Germany, Denmark, England, and France. What Planck found in 1900 was not a complete theory; it was a crack in the wall. The crack was that energy is granular at small scales, that nature does not distribute energy continuously, and that this fact produces a formula that fits the data perfectly while classical physics does not." },
+        { "type": "p", "text": "The next questions follow naturally. If light comes in quanta, what is it between quanta: a wave or a stream of particles? If electrons absorb photons one at a time, what determines which electron and when? These questions led, within three decades, to quantum mechanics, and the answer to both is: neither classical picture is adequate. Something new is needed, and h is the doorway." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A photon of green light has frequency ≈ 6 × 10¹⁴ Hz. Using h ≈ 6.6 × 10⁻³⁴ J·s, what is its energy?",
+    "options": [
+      "About 4 × 10⁻¹⁹ J",
+      "About 4 × 10⁻¹³ J",
+      "About 4 × 10⁻²⁵ J",
+      "About 1.1 × 10⁻⁴⁷ J"
+    ],
+    "correctIndex": 0,
+    "explanation": "E = hν = (6.6 × 10⁻³⁴)(6 × 10¹⁴) = 39.6 × 10⁻²⁰ ≈ 4 × 10⁻¹⁹ J. The exponent arithmetic is -34 + 14 = -20, so the result is order 10⁻¹⁹. The most tempting wrong answer is 4 × 10⁻¹³, which comes from misreading the exponent sum as -34 + 14 = -14 rather than -20 (a sign error in mental arithmetic that catches many people)."
+  },
+  "suggestedNodes": [
+    {
+      "id": "blackbody",
+      "label": "Blackbody",
+      "subtitle": "radiation curve",
+      "edgeType": "extends"
+    },
+    {
+      "id": "photoelectric",
+      "label": "Photoelectric",
+      "subtitle": "effect",
+      "edgeType": "applied"
+    },
+    {
+      "id": "wave_particle",
+      "label": "Wave-particle",
+      "subtitle": "duality",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-03T10:00:00Z",
+    "generatedBy": "routine-manual",
+    "estimatedReadingMinutes": 20,
+    "previouslyMastered": ["wavelength"]
+  }
+}

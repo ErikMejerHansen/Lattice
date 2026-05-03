@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photon energy</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+</style>
+</head>
+<body>
+<div id="viz" style="padding:16px;box-sizing:border-box;">
+
+  <canvas id="spectrumCanvas" height="48" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);"></canvas>
+
+  <div id="markerAnchor" style="position:relative;height:0;"></div>
+
+  <div class="viz-slider-row">
+    <label style="min-width:12px;font-family:serif;">ν</label>
+    <input type="range" id="freqSlider" min="0" max="1000" value="420" style="min-height:36px;">
+  </div>
+
+  <div id="readout" style="margin-top:12px;padding:10px 14px;background:var(--bg-raised);border:1px solid var(--border);border-radius:3px;display:flex;gap:20px;flex-wrap:wrap;align-items:center;"></div>
+
+  <div id="photoStatus" style="margin-top:10px;padding:8px 12px;border-radius:3px;font-size:13px;border:1px solid var(--border);"></div>
+
+  <p class="viz-caption" style="margin-top:10px;">Photon energy E = hν across the electromagnetic spectrum. The dashed line shows a typical metal work function (≈2 eV). Photons above the threshold eject electrons; photons below it cannot, no matter how many arrive.</p>
+</div>
+
+<script>
+const h = 6.626e-34;
+const c = 3e8;
+const eV = 1.602e-19;
+
+const LOG_MIN = 6;
+const LOG_MAX = 22;
+
+const regions = [
+  { name: "Radio",    logMin: 6,     logMax: 9,     bg: "#dce8f5" },
+  { name: "Micro",    logMin: 9,     logMax: 11,    bg: "#ddd5f0" },
+  { name: "IR",       logMin: 11,    logMax: 14.38, bg: "#f5ddb0" },
+  { name: "Visible",  logMin: 14.38, logMax: 14.95, bg: null      },
+  { name: "UV",       logMin: 14.95, logMax: 17,    bg: "#d5b8e8" },
+  { name: "X-ray",    logMin: 17,    logMax: 21,    bg: "#b8d8ec" },
+  { name: "Gamma",    logMin: 21,    logMax: 22,    bg: "#ecb8b8" },
+];
+
+function wlToRGB(nm) {
+  let r, g, b;
+  if      (nm >= 380 && nm < 440) { r = (440-nm)/60; g = 0;          b = 1; }
+  else if (nm >= 440 && nm < 490) { r = 0;           g = (nm-440)/50; b = 1; }
+  else if (nm >= 490 && nm < 510) { r = 0;           g = 1;           b = (510-nm)/20; }
+  else if (nm >= 510 && nm < 580) { r = (nm-510)/70; g = 1;           b = 0; }
+  else if (nm >= 580 && nm < 645) { r = 1;           g = (645-nm)/65; b = 0; }
+  else                            { r = 1;           g = 0;           b = 0; }
+  return `rgb(${Math.round(r*255)},${Math.round(g*255)},${Math.round(b*255)})`;
+}
+
+function logToX(lf, W) {
+  return ((lf - LOG_MIN) / (LOG_MAX - LOG_MIN)) * W;
+}
+
+function formatFreq(f) {
+  if (f < 1e9)  return `${f.toExponential(1)} Hz`;
+  if (f < 1e12) return `${(f/1e9).toFixed(0)} GHz`;
+  if (f < 1e15) return `${(f/1e12).toFixed(1)} THz`;
+  return `${f.toExponential(2)} Hz`;
+}
+
+function formatWL(m) {
+  const nm = m * 1e9;
+  if (nm > 1e6)  return `${(m*100).toFixed(1)} cm`;
+  if (nm > 1000) return `${(nm/1000).toFixed(2)} µm`;
+  if (nm >= 1)   return `${nm.toFixed(0)} nm`;
+  return `${(nm*1000).toFixed(1)} pm`;
+}
+
+function getRegion(lf) {
+  for (const r of regions) if (lf >= r.logMin && lf < r.logMax) return r.name;
+  return "—";
+}
+
+const canvas = document.getElementById("spectrumCanvas");
+const markerDiv = document.createElement("div");
+markerDiv.style.cssText = "position:absolute;top:-48px;width:2px;height:48px;background:var(--accent);transform:translateX(-50%);pointer-events:none;";
+document.getElementById("markerAnchor").appendChild(markerDiv);
+
+function drawSpectrum() {
+  canvas.width = canvas.offsetWidth || 300;
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  for (const r of regions) {
+    const x0 = logToX(r.logMin, W);
+    const x1 = logToX(r.logMax, W);
+    if (r.name === "Visible") {
+      const grad = ctx.createLinearGradient(x0, 0, x1, 0);
+      // lower freq = longer wl = red side; higher freq = shorter wl = violet
+      const stops = [[0,"rgb(255,0,0)"],[0.18,"rgb(255,127,0)"],[0.35,"rgb(255,220,0)"],
+                     [0.5,"rgb(0,210,0)"],[0.65,"rgb(0,80,255)"],[0.82,"rgb(80,0,160)"],[1,"rgb(148,0,211)"]];
+      stops.forEach(([t, col]) => grad.addColorStop(t, col));
+      ctx.fillStyle = grad;
+    } else {
+      ctx.fillStyle = r.bg;
+    }
+    ctx.fillRect(x0, 0, x1 - x0, H);
+  }
+
+  // Region labels
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "center";
+  ctx.fillStyle = "rgba(26,26,24,0.65)";
+  ctx.font = "9px 'IBM Plex Mono',monospace";
+  const labels = ["Radio","µwave","IR","Vis","UV","X-ray","γ"];
+  regions.forEach((r, i) => {
+    if (r.logMax - r.logMin < 0.8) return;
+    const cx = logToX((r.logMin + r.logMax) / 2, W);
+    ctx.fillText(labels[i], cx, H / 2);
+  });
+
+  // Work function threshold line (≈2 eV → ν = 2*eV/h ≈ 4.83e14 Hz → log ≈ 14.68)
+  const wfLog = Math.log10(2 * eV / h);
+  const wfX = logToX(wfLog, W);
+  ctx.setLineDash([4, 3]);
+  ctx.strokeStyle = "rgba(100,60,20,0.7)";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(wfX, 0);
+  ctx.lineTo(wfX, H);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+// Build readout fields
+function makeField(label) {
+  const wrap = document.createElement("div");
+  wrap.style.cssText = "display:flex;flex-direction:column;gap:1px;min-width:80px;";
+  const lbl = document.createElement("span");
+  lbl.textContent = label;
+  lbl.style.cssText = "font-size:11px;color:var(--text-muted);font-style:italic;";
+  const val = document.createElement("span");
+  val.style.cssText = "font-family:'IBM Plex Mono','SF Mono',Menlo,monospace;font-size:13px;";
+  wrap.appendChild(lbl); wrap.appendChild(val);
+  document.getElementById("readout").appendChild(wrap);
+  return val;
+}
+
+const fRegion   = makeField("region");
+const fFreq     = makeField("frequency");
+const fWL       = makeField("wavelength");
+const fEnergy   = makeField("energy (eV)");
+
+// Color swatch
+const swatch = document.createElement("div");
+swatch.style.cssText = "width:28px;height:28px;border-radius:50%;border:1px solid var(--border-strong);flex-shrink:0;";
+document.getElementById("readout").appendChild(swatch);
+
+const slider = document.getElementById("freqSlider");
+const photoStatus = document.getElementById("photoStatus");
+
+function update() {
+  const t = parseInt(slider.value) / 1000;
+  const lf = LOG_MIN + t * (LOG_MAX - LOG_MIN);
+  const freq = Math.pow(10, lf);
+  const wl = c / freq;
+  const energy_J = h * freq;
+  const energy_eV = energy_J / eV;
+
+  const markerPct = t * 100;
+  markerDiv.style.left = markerPct + "%";
+
+  fRegion.textContent  = getRegion(lf);
+  fFreq.textContent    = formatFreq(freq);
+  fWL.textContent      = formatWL(wl);
+  fEnergy.textContent  = energy_eV >= 0.001 ? `${energy_eV.toExponential(2)} eV` : `${energy_J.toExponential(2)} J`;
+
+  const wlNm = wl * 1e9;
+  if (wlNm >= 380 && wlNm <= 750) {
+    swatch.style.background = wlToRGB(wlNm);
+    swatch.style.opacity = "1";
+  } else {
+    swatch.style.background = "var(--bg)";
+    swatch.style.opacity = "0.3";
+  }
+
+  const WORK_FUNCTION_eV = 2.0;
+  if (energy_eV >= WORK_FUNCTION_eV) {
+    const ke = energy_eV - WORK_FUNCTION_eV;
+    photoStatus.style.background = "#e8f4e0";
+    photoStatus.style.borderColor = "#7aad5a";
+    photoStatus.style.color = "#2a5a10";
+    photoStatus.textContent = `Electron ejected — KE = ${ke.toExponential(2)} eV (photon energy exceeds work function of 2 eV)`;
+  } else {
+    photoStatus.style.background = "#f4e8e0";
+    photoStatus.style.borderColor = "#c08060";
+    photoStatus.style.color = "#6a2a10";
+    photoStatus.textContent = `No photoelectric effect — photon energy (${energy_eV.toExponential(2)} eV) is below the 2 eV work function`;
+  }
+}
+
+slider.addEventListener("input", update);
+
+window.addEventListener("load", () => {
+  drawSpectrum();
+  update();
+});
+
+setTimeout(() => { drawSpectrum(); update(); }, 80);
+</script>
+</body>
+</html>
