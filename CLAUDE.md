@@ -60,6 +60,8 @@ For slice 1, the repo only needs `/app` and `/lessons`. Add directories when a s
 
 **Ask before assuming.** When a slice begins, read this file plus the relevant prior slice's output. If a decision feels load-bearing and isn't covered here, ask the human; don't pick.
 
+**Stop and log when flagging.** When something blocks progress (missing infrastructure, ambiguous spec, conflicting instructions), default to: append a one-line entry to `state/routine_log.md` (or the appropriate log for the context), commit it, and stop. Don't improvise around the blocker. Don't half-build infrastructure to keep moving.
+
 **One slice at a time.** If a request seems to span multiple slices, name the split and propose the smallest first slice. Don't quietly do extra work.
 
 **No premature abstraction.** Inline the lesson rendering for slice 1. Extract a `Block` component when slice 4 makes us render multiple lessons. Don't build a plugin system for viz types in week one.
