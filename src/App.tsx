@@ -26,6 +26,13 @@ type Block =
   | { type: 'math'; tex: string; display?: boolean }
   | { type: 'viz'; src: string; height: number; caption: string }
 
+type Quiz = {
+  question: string
+  options: [string, string, string, string]
+  correctIndex: number
+  explanation: string
+}
+
 type Lesson = {
   slug: string
   title: string
@@ -34,7 +41,9 @@ type Lesson = {
   sections: Array<{
     id: string
     heading: string
+    hasQuiz: boolean
     blocks: Block[]
+    quiz?: Quiz
   }>
 }
 
@@ -259,6 +268,130 @@ function ConstellationView({
   )
 }
 
+const OPTION_LETTERS = ['A', 'B', 'C', 'D']
+
+function SectionQuiz({
+  quiz,
+  quizLabel,
+  selectedIndex,
+  onAnswer,
+  noteId,
+}: {
+  quiz: Quiz
+  quizLabel: string
+  selectedIndex: number | null
+  onAnswer: (index: number) => void
+  noteId: string
+}) {
+  const answered = selectedIndex !== null
+  const correct = answered && selectedIndex === quiz.correctIndex
+
+  return (
+    <div style={{ margin: '2rem 0 0' }}>
+      <div style={{
+        fontFamily: "'IBM Plex Mono', monospace",
+        fontSize: '0.7rem',
+        letterSpacing: '0.1em',
+        textTransform: 'uppercase',
+        color: '#9c3a22',
+        marginBottom: '0.5rem',
+        fontWeight: 500,
+      }}>
+        Quick check
+      </div>
+      <div style={{ width: '2rem', borderBottom: '1px solid #9c3a22', marginBottom: '1.25rem' }} />
+
+      <p style={{ margin: '0 0 1rem', fontSize: '1.05rem', lineHeight: 1.4 }}>
+        <span style={{
+          fontFamily: "'IBM Plex Mono', monospace",
+          fontSize: '0.85rem',
+          color: '#888',
+          marginRight: '0.5rem',
+        }}>
+          {quizLabel}
+        </span>
+        <strong>{quiz.question}</strong>
+      </p>
+
+      {quiz.options.map((opt, i) => {
+        const isCorrect = i === quiz.correctIndex
+        const dimmed = answered && !isCorrect
+        return (
+          <button
+            key={i}
+            onClick={() => { if (!answered) onAnswer(i) }}
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '0.75rem',
+              width: '100%',
+              padding: '0.75rem 0.875rem',
+              marginBottom: '0.5rem',
+              background: answered && isCorrect ? '#eaf2e8' : '#f4eee2',
+              border: `1px solid ${answered && isCorrect ? '#6a9a6a' : '#d8cfc0'}`,
+              borderRadius: 0,
+              cursor: answered ? 'default' : 'pointer',
+              textAlign: 'left',
+              fontFamily: "'Source Serif 4', Georgia, serif",
+              fontSize: '0.95rem',
+              lineHeight: 1.5,
+              color: dimmed ? '#b8ae9e' : '#3a2c1a',
+            }}
+          >
+            <span style={{
+              fontFamily: "'IBM Plex Mono', monospace",
+              fontSize: '0.8rem',
+              color: dimmed ? '#c8c0b0' : '#888',
+              minWidth: '1rem',
+              paddingTop: '0.1rem',
+            }}>
+              {OPTION_LETTERS[i]}
+            </span>
+            <span style={{ flex: 1 }}>{opt}</span>
+            {answered && isCorrect && (
+              <span style={{ color: '#6a9a6a' }}>✓</span>
+            )}
+          </button>
+        )
+      })}
+
+      {answered && (
+        <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #d8cfc0' }}>
+          <div style={{
+            fontFamily: "'IBM Plex Mono', monospace",
+            fontSize: '0.7rem',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: correct ? '#6a9a6a' : '#9c3a22',
+            marginBottom: '0.5rem',
+            fontWeight: 500,
+          }}>
+            {correct ? '✓ Right' : '✗ Wrong'}
+          </div>
+          <div style={{ width: '2rem', borderBottom: '1px solid #d8cfc0', marginBottom: '0.875rem' }} />
+          <p style={{ margin: '0 0 1.25rem', lineHeight: 1.6, fontSize: '0.95rem' }}>
+            {quiz.explanation}
+          </p>
+          <button
+            onClick={() => document.getElementById(noteId)?.focus()}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              cursor: 'pointer',
+              fontFamily: "'Source Serif 4', Georgia, serif",
+              fontSize: '1rem',
+              color: '#9c3a22',
+            }}
+          >
+            Continue →
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function formatNotesForClipboard(lesson: Lesson, notes: Record<string, string>): string {
   return lesson.sections
     .filter(s => notes[s.id]?.trim())
@@ -269,8 +402,20 @@ function formatNotesForClipboard(lesson: Lesson, notes: Record<string, string>):
 function LessonView({ lesson, onBack }: { lesson: Lesson; onBack: () => void }) {
   const [notes, setNotes] = useState<Record<string, string>>({})
   const [copied, setCopied] = useState(false)
+  const [quizAnswers, setQuizAnswers] = useState<Record<string, number>>({})
 
   const nonEmptyNotes = lesson.sections.filter(s => notes[s.id]?.trim())
+
+  // quizLabel: "sectionNum.quizIndex" e.g. "2.1", "4.2"
+  const quizLabels: Record<string, string> = {}
+  let quizCount = 0
+  lesson.sections.forEach(s => {
+    if (s.hasQuiz) {
+      quizCount++
+      const sectionNum = parseInt(s.id.replace('s', ''), 10)
+      quizLabels[s.id] = `${sectionNum}.${quizCount}`
+    }
+  })
 
   function handleCopy() {
     navigator.clipboard.writeText(formatNotesForClipboard(lesson, notes)).then(() => {
@@ -339,7 +484,17 @@ function LessonView({ lesson, onBack }: { lesson: Lesson; onBack: () => void }) 
               {section.heading}
             </h2>
             {(section.blocks as Block[]).map((block, i) => renderBlock(block, i))}
+            {section.hasQuiz && section.quiz && (
+              <SectionQuiz
+                quiz={section.quiz}
+                quizLabel={quizLabels[section.id]}
+                selectedIndex={quizAnswers[section.id] ?? null}
+                onAnswer={index => setQuizAnswers(prev => ({ ...prev, [section.id]: index }))}
+                noteId={`note-${section.id}`}
+              />
+            )}
             <textarea
+              id={`note-${section.id}`}
               value={notes[section.id] ?? ''}
               onChange={e => setNotes(prev => ({ ...prev, [section.id]: e.target.value }))}
               placeholder="Add a note..."
