@@ -39,6 +39,16 @@
       "createdAt": "2026-05-04T08:00:00Z",
       "col": 1,
       "row": 1
+    },
+    {
+      "id": "interference_diffraction",
+      "label": "Interference",
+      "subtitle": "d sin θ = mλ",
+      "state": "available",
+      "lesson": "2026-05-04-interference-and-diffraction",
+      "createdAt": "2026-05-04T09:00:00Z",
+      "col": 0,
+      "row": 2
     }
   ],
   "edges": [
@@ -46,6 +56,8 @@
     { "from": "blackbody", "to": "photon_energy", "kind": "extends" },
     { "from": "blackbody", "to": "wavelength", "kind": "related" },
     { "from": "wien_displacement", "to": "blackbody", "kind": "extends" },
-    { "from": "wien_displacement", "to": "wavelength", "kind": "applied" }
+    { "from": "wien_displacement", "to": "wavelength", "kind": "applied" },
+    { "from": "interference_diffraction", "to": "wavelength", "kind": "extends" },
+    { "from": "interference_diffraction", "to": "photon_energy", "kind": "related" }
   ]
 }

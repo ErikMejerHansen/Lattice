@@ -1,4 +1,3 @@
-Interference and diffraction — the double-slit, why waves add amplitudes
 Refraction — Snell's law from Fermat's principle, fast vs. slow media
 
 # auto-suggested 2026-05-03 from photon-energy
@@ -13,3 +12,7 @@ Cosmic microwave background — Planck's curve at the largest scale, COBE/FIRAS
 Stellar classification — OBAFGKM, mapping color to temperature to physics
 Color temperature in lighting — Kelvin scale, daylight vs incandescent
 Spectroscopy basics — absorption lines, what the sun is made of
+
+# auto-suggested 2026-05-04 from interference-and-diffraction
+Coherence — what makes two beams able to interfere, laser vs lamp
+Diffraction gratings — many slits, the spectrometer at the heart of chemistry
