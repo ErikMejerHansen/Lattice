@@ -1,0 +1,129 @@
+{
+  "slug": "2026-05-04-interference-and-diffraction",
+  "title": "Interference and diffraction: when two beams of light produce darkness",
+  "node": {
+    "id": "interference_diffraction",
+    "label": "Interference",
+    "subtitle": "d sin θ = mλ"
+  },
+  "intro": "In 1801 Thomas Young stood up at the Royal Society and announced that Newton was wrong about light. The experiment he had used to prove it was almost embarrassingly simple: a pinhole, a card with two more pinholes, and a screen. What he saw on that screen has become, over the two centuries since, the cleanest demonstration of what waves are and the most stubborn doorway into quantum mechanics. Two beams of light, added together, can produce darkness. Particles, by themselves, cannot.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The man who corrected Newton",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Newton had been dead seventy-four years when Young challenged him, but his prestige still hung over English physics like incense in a cathedral. Newton's Opticks (1704) had pronounced light to be a stream of corpuscles, tiny particles that travelled in straight lines and refracted by attraction toward dense media. To contradict Newton in London at the turn of the nineteenth century was, in plain career terms, a kind of suicide. Young, a polymath physician with a sideline in Egyptian hieroglyphs, did it anyway." },
+        { "type": "p", "text": "His case was simple to state and almost impossible to refute, once you had seen the experiment. He let sunlight pass through a single pinhole, then split the resulting beam with a second screen carrying two more pinholes a fraction of a millimeter apart. On a third screen behind, he saw not two bright spots, as Newton's particles would predict, but a series of light and dark stripes alternating across the screen. Two beams of light, added together, could produce darkness. Particles do not do this. Waves do." },
+        { "type": "p", "text": "The reception was vicious. Henry Brougham, writing anonymously in the Edinburgh Review, called Young's papers 'destitute of every species of merit' and accused him of seeking to subvert the tranquil reign of true philosophy. Young's reputation needed fifteen years to recover, and only then because Augustin Fresnel in France had repeated and extended the experiments until the wave theory was unavoidable. The story is a useful reminder that the scientific community is a community first and a discipline second." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Adding the waves themselves",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "What does it mean for two beams of light to produce darkness? Newton's mistake, viewed from now, was to assume the wrong addition law. A particle adds to another particle by piling up: two particles deposit twice as much energy as one. A wave, by contrast, has a phase, and phases can cancel. The principle of superposition states that when two waves coexist at the same place at the same instant, the total disturbance is the signed sum of the two." },
+        { "type": "p", "text": "Write the two waves arriving at a point on the screen as ψ₁ = A cos(ωt) and ψ₂ = A cos(ωt + Δφ), where Δφ is the phase difference acquired along their two travel paths. Their superposition is just their sum:" },
+        { "type": "math", "tex": "\\psi_{\\text{tot}} = \\psi_1 + \\psi_2 = A[\\cos(\\omega t) + \\cos(\\omega t + \\Delta\\varphi)]", "display": true },
+        { "type": "p", "text": "What an instrument actually measures is the intensity, which is proportional to the time-averaged square of the amplitude. After a little trigonometry:" },
+        { "type": "math", "tex": "I \\propto \\langle \\psi_{\\text{tot}}^2 \\rangle = 2 A^2 (1 + \\cos \\Delta\\varphi)", "display": true },
+        { "type": "p", "text": "The cross term cos Δφ is where the interference lives. When Δφ = 0 (waves in phase) the intensity is 4A², four times one beam alone. When Δφ = π (waves exactly out of phase) the intensity is zero. Two beams of light, added correctly, produce a pattern that runs from four-times-bright to fully dark and back. Newton's particles cannot produce zero by addition. That single fact is what Young saw." }
+      ],
+      "quiz": {
+        "question": "At a perfectly dark fringe in Young's experiment, two beams of equal intensity I₀ arrive at the screen. What is the resulting intensity at that point?",
+        "options": [
+          "0",
+          "I₀, one beam's worth",
+          "2I₀, the sum of the two intensities",
+          "4I₀, twice the sum"
+        ],
+        "correctIndex": 0,
+        "explanation": "At a dark fringe the two waves arrive exactly out of phase (Δφ = π). The cross term in I = 2I₀(1 + cos Δφ) becomes -2I₀ and cancels the rest, leaving zero. The most tempting wrong answer is 2I₀: the answer particles would give, since two equal contributions just add. But waves add amplitudes, not intensities. Two equal amplitudes pointing in opposite directions sum to zero, and the energy that would have arrived there has been redistributed to the bright fringes, which are 4I₀ rather than the 2I₀ a particle picture would predict."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The geometry of fringes",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Phases acquire themselves along travel paths. If the two slits are separated by a distance d, and the screen is far enough away that we can treat the two emerging beams as nearly parallel, the path lengths to a point at angle θ from the central axis differ by d sin θ. Constructive interference (a bright fringe) occurs whenever this path difference is a whole number of wavelengths:" },
+        { "type": "math", "tex": "d \\sin\\theta = m\\lambda, \\qquad m = 0, \\pm 1, \\pm 2, \\ldots", "display": true },
+        { "type": "p", "text": "Destructive interference (a dark fringe) requires a half-integer number of wavelengths. For the small angles relevant to a benchtop experiment, sin θ ≈ y/L, where y is the position on the screen and L is the slits-to-screen distance. The spacing between adjacent bright fringes is then:" },
+        { "type": "math", "tex": "y_{\\text{fringe}} = \\frac{\\lambda L}{d}", "display": true },
+        { "type": "viz", "src": "2026-05-04-interference-and-diffraction.html", "height": 380, "caption": "Two coherent beams (λ = 550 nm, screen 1 m away) emerge from slits separated by d. Drag d to vary the spacing. The schematic at top shows the slits and the rays converging on the screen; the curve below shows the resulting intensity pattern across the screen. The vertical marker locates the m = 1 bright fringe, whose distance from center is y = λL/d. Pull the slits closer and the fringes spread out; push them apart and the pattern compresses." },
+        { "type": "p", "text": "Three things are immediately visible in this geometry. The smaller you make d, the wider the fringes spread. The longer the wavelength, the wider the fringes. And the central fringe (m = 0) sits dead on the axis no matter what λ is, because zero path difference always produces zero phase difference. The central peak is achromatic; the higher orders fan out into rainbows. Look at any fluorescent lamp through a CD and you will see exactly this pattern, smeared by the multitude of slits etched into the disc." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. From two slits to one: Huygens",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Young's two slits were the cleanest demonstration, but the same physics runs in any geometry where light has to choose its path. In 1818 Augustin Fresnel, then a young engineer for the French department of bridges and roads, presented to the Paris Academy a complete wave theory of diffraction built on a simple insight from Christiaan Huygens (1678): every point on a wavefront acts as a source of secondary spherical wavelets, and the total wave at any later instant is the superposition of all those wavelets." },
+        { "type": "p", "text": "Apply Huygens to a single slit of width a, and you no longer have two sources to add but a continuous distribution of them spread across the slit. The integral works out neatly, and the dark fringes (places where the wavelets from the slit cancel one another) appear at:" },
+        { "type": "math", "tex": "a \\sin\\theta = m\\lambda, \\qquad m = \\pm 1, \\pm 2, \\ldots", "display": true },
+        { "type": "p", "text": "Notice the geometry. The wider the slit, the narrower the central peak, the opposite of the d sin θ = mλ rule for two slits. A slit so wide that a >> λ produces effectively no diffraction, recovering geometrical optics. A slit so narrow that a is comparable to λ produces a single broad smear of light. Diffraction is what sets the resolution limit of every imaging instrument from a camera lens to a radio telescope. The Hubble Space Telescope's 2.4-meter mirror is not large for vanity; it is large because for visible light a smaller mirror could not resolve the features the mission was sent to see." },
+        { "type": "p", "text": "There is a wonderful historical detail. When Fresnel submitted his theory in 1818, the prize committee included Siméon Poisson, a confirmed Newtonian, who tried to demolish it by deriving a 'ridiculous' consequence: a circular obstacle should produce a bright spot at the center of its shadow, where wavelets from all around the rim meet in phase. The committee chair, François Arago, went into the lab and looked. The bright spot was there. The Fresnel theory won the prize. Poisson's spot still bears his name, even though he had set out to use it against the wave theory rather than for it." }
+      ],
+      "quiz": {
+        "question": "You are designing a telescope to resolve fine surface features at visible wavelengths. The diffraction-limited angular resolution scales as λ/D, where D is the aperture diameter. Doubling D does what to the smallest resolvable feature size at a fixed distance?",
+        "options": [
+          "Doubles it (worse resolution)",
+          "Halves it (better resolution)",
+          "Quadruples it",
+          "Has no effect; only λ matters"
+        ],
+        "correctIndex": 1,
+        "explanation": "The smallest resolvable angle scales as λ/D, so doubling D halves the angle and therefore halves the smallest resolvable feature size at a given distance. The most tempting wrong answer is the first: people expect that a larger aperture spreads the diffraction pattern out and so makes resolution worse. The opposite is true. A wider aperture is a wider single slit; the central peak narrows, and finer detail can be distinguished. This is why every advance in astronomical resolution since Galileo has been driven by larger mirrors, and why the next generation of optical telescopes are thirty meters across rather than three."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The only mystery",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Feynman, in the third volume of his lectures, called the double-slit experiment 'a phenomenon which is impossible, absolutely impossible, to explain in any classical way' and went further: it 'has in it the heart of quantum mechanics. In reality, it contains the only mystery.' He was not exaggerating, and the experiment that pinned it down most cleanly was performed almost two centuries after Young's." },
+        { "type": "p", "text": "In 1989 Akira Tonomura at Hitachi sent electrons one at a time toward a biprism (the electron equivalent of a double slit) at a rate so low that no two electrons could be in flight together. Each electron registered at the detector as a single bright dot, the unmistakable signature of a particle. After ten thousand dots, they had assembled themselves into the same fringe pattern Young had seen with sunlight. Each electron, somehow, knew about both slits. Block one slit and the fringes vanish. Try to detect which slit any electron used and the fringes vanish." },
+        { "type": "p", "text": "This is what Young's experiment, escalated to its quantum conclusion, finally tells us. The wave description (amplitudes adding) and the particle description (discrete arrivals) are both right, simultaneously, and neither alone is enough. Light interferes because amplitudes add. So do electrons. So does everything. The pattern Young saw on his screen in 1801 is, in modern terms, a probability density: the squared amplitude of a quantum field summed over indistinguishable paths. Two centuries of physics have not produced a deeper or stranger answer to the question of what darkness made of light actually is." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Tonomura's 1989 experiment fired electrons one at a time through a double-slit setup. Each electron registered at the detector as a single localized dot, and yet after enough electrons accumulated, an interference pattern of fringes emerged. Which interpretation does this experiment most directly support?",
+    "options": [
+      "Each electron is a small wave that spreads out, splits, and recombines, and what we see is its time-averaged density",
+      "Each electron arrives as a discrete particle, but the probability of arrival follows the squared amplitude of a wave that explores both paths",
+      "The first electrons through the apparatus condition later electrons to land in the same places, by classical correlation",
+      "The fringes are a statistical artifact of imperfect collimation; with a perfect source they would disappear"
+    ],
+    "correctIndex": 1,
+    "explanation": "Each electron registers as a single localized event (a particle), but the probability distribution that determines where it lands is set by the squared amplitude of a wave that traverses both paths. The most tempting wrong answer is option 1: it sounds quantum-mechanical but is wrong in the same classical way Newton was wrong. Electrons do not arrive smeared out; they arrive as single hits, indistinguishable from particles. What is wave-like is not the matter itself but the amplitude that determines its probability. This distinction (between the thing and the amplitude that calculates the thing) is the central conceptual move of quantum mechanics, and the double-slit experiment is the cleanest place to see it."
+  },
+  "suggestedNodes": [
+    {
+      "id": "wave_particle_duality",
+      "label": "Wave-particle",
+      "subtitle": "ψ as amplitude",
+      "edgeType": "extends"
+    },
+    {
+      "id": "coherence",
+      "label": "Coherence",
+      "subtitle": "phase stability",
+      "edgeType": "related"
+    },
+    {
+      "id": "diffraction_gratings",
+      "label": "Gratings",
+      "subtitle": "many slits, λ",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-04T09:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["wavelength", "photon_energy"]
+  }
+}
