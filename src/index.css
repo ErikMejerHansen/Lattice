@@ -2,11 +2,31 @@
   box-sizing: border-box;
 }
 
+:root {
+  --paper:        #f4eee2;
+  --paper-raised: #faf5e9;
+  --paper-sunk:   #ebe3d2;
+  --ink:          #1a1a18;
+  --ink-muted:    #6b6359;
+  --ink-ghost:    #a89e90;
+  --rust:         #9c3a22;
+  --rust-soft:    #c47558;
+  --olive:        #3f6b3a;
+  --warning:      #993322;
+  --rule:         #d8cfb8;
+  --rule-strong:  #b8ac8e;
+  --serif: "Source Serif 4", "Iowan Old Style", Palatino, Georgia, serif;
+  --mono:  "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
 body {
   margin: 0;
-  background: #f4eee2;
-  color: #1a1a1a;
-  font-family: 'Source Serif 4', Georgia, serif;
-  font-size: 18px;
-  line-height: 1.7;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.65;
+  font-feature-settings: "onum" 1, "liga" 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }

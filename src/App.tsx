@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import type React from 'react'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
@@ -19,7 +19,7 @@ type GraphNode = {
 type Edge = {
   from: string
   to: string
-  kind: 'extends' | 'related'
+  kind: 'extends' | 'related' | 'applied'
 }
 
 type Block =
@@ -69,9 +69,404 @@ function persistNodeState(
   return next
 }
 
+// ── Primitives ─────────────────────────────────────────────────────────
+
+function CategoryLabel({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
+  return (
+    <div style={style}>
+      <div style={{
+        fontFamily: 'var(--mono)',
+        fontSize: 11,
+        letterSpacing: '0.14em',
+        textTransform: 'uppercase',
+        color: 'var(--ink-muted)',
+        fontWeight: 500,
+      }}>{children}</div>
+      <div style={{ width: 40, height: 1, background: 'var(--rule-strong)', marginTop: 6 }} />
+    </div>
+  )
+}
+
+function HammingHeading({ num, children, style }: {
+  num?: string | number
+  children: React.ReactNode
+  style?: React.CSSProperties
+}) {
+  return (
+    <h2 style={{
+      fontFamily: 'var(--serif)',
+      fontWeight: 600,
+      fontSize: 22,
+      lineHeight: 1.25,
+      letterSpacing: '-0.005em',
+      color: 'var(--ink)',
+      margin: 0,
+      ...style,
+    }}>
+      {num != null && (
+        <span style={{
+          fontFamily: 'var(--mono)',
+          fontWeight: 400,
+          fontSize: 13,
+          color: 'var(--ink-muted)',
+          marginRight: 10,
+          letterSpacing: '0.04em',
+        }}>{num}</span>
+      )}
+      {children}
+    </h2>
+  )
+}
+
+function ContinueBtn({ label = 'Continue', onClick, style }: {
+  label?: string
+  onClick?: () => void
+  style?: React.CSSProperties
+}) {
+  return (
+    <div
+      onClick={onClick}
+      role="button"
+      style={{
+        borderTop: '1px solid var(--rule)',
+        paddingTop: 14,
+        marginTop: 36,
+        fontFamily: 'var(--serif)',
+        fontSize: 17,
+        fontWeight: 500,
+        color: 'var(--rust)',
+        letterSpacing: '0.005em',
+        cursor: 'pointer',
+        userSelect: 'none',
+        display: 'inline-flex',
+        alignItems: 'baseline',
+        gap: 8,
+        ...style,
+      }}
+    >
+      <span>{label}</span>
+      <span>→</span>
+    </div>
+  )
+}
+
+// ── ConceptNode ────────────────────────────────────────────────────────
+
+function ConceptNode({ title, state = 'available', cat, onClick, style }: {
+  title: string
+  state?: NodeState
+  cat?: string
+  onClick?: () => void
+  style?: React.CSSProperties
+}) {
+  const s = ({
+    mastered:    { bg: 'var(--paper-raised)', border: 'var(--rule-strong)', dash: 'solid',  ink: 'var(--ink)',       cat: 'var(--ink-muted)', bar: 'var(--ink)'  },
+    in_progress: { bg: 'var(--paper-raised)', border: 'var(--rust-soft)',   dash: 'solid',  ink: 'var(--ink)',       cat: 'var(--rust)',      bar: 'var(--rust)' },
+    available:   { bg: 'transparent',         border: 'var(--rule)',        dash: 'dashed', ink: 'var(--ink)',       cat: 'var(--ink-muted)', bar: null          },
+    queued:      { bg: 'transparent',         border: 'var(--rule)',        dash: 'dashed', ink: 'var(--ink-muted)', cat: 'var(--ink-ghost)', bar: null          },
+  } as const)[state]
+
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        position: 'relative',
+        background: s.bg,
+        border: `1px ${s.dash} ${s.border}`,
+        padding: '11px 12px 12px',
+        cursor: onClick ? 'pointer' : 'default',
+        minHeight: 78,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        ...style,
+      }}
+    >
+      {(state === 'mastered' || state === 'in_progress') && (
+        <div style={{
+          position: 'absolute', top: -1, left: -1, right: -1, height: 3,
+          background: s.bar!,
+        }} />
+      )}
+      {state === 'queued' && (
+        <span style={{
+          position: 'absolute', top: 8, right: 10,
+          fontFamily: 'var(--serif)', fontSize: 14,
+          color: 'var(--ink-ghost)',
+        }}>◷</span>
+      )}
+      {cat && (
+        <div style={{
+          fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.12em',
+          textTransform: 'uppercase', color: s.cat,
+        }}>{cat}</div>
+      )}
+      <div style={{
+        fontFamily: 'var(--serif)', fontSize: 14.5, lineHeight: 1.25,
+        color: s.ink, fontWeight: 500, letterSpacing: '-0.005em',
+        marginTop: cat ? 6 : 0,
+      }}>{title}</div>
+    </div>
+  )
+}
+
+// ── Constellation (card grid + SVG edges) ──────────────────────────────
+
+function Constellation({ nodes, edges, onNode }: {
+  nodes: GraphNode[]
+  edges: Edge[]
+  onNode?: (n: GraphNode) => void
+}) {
+  const COL_W = 159
+  const COL_GAP = 16
+  const ROW_H = 96
+  const ROW_GAP = 38
+  const PAD_X = 28
+  const PAD_Y = 8
+
+  const maxRow = Math.max(...nodes.map(n => n.row))
+  const totalH = PAD_Y + (maxRow + 1) * ROW_H + maxRow * ROW_GAP + PAD_Y + 20
+  const totalW = PAD_X * 2 + 2 * COL_W + COL_GAP
+
+  const byId = useMemo(
+    () => Object.fromEntries(nodes.map(n => [n.id, n])),
+    [nodes],
+  )
+
+  function center(col: number, row: number, side: 'top' | 'mid' | 'bot' = 'mid') {
+    const x = PAD_X + col * (COL_W + COL_GAP) + COL_W / 2
+    const yTop = PAD_Y + row * (ROW_H + ROW_GAP)
+    return {
+      x,
+      y: side === 'top' ? yTop : side === 'bot' ? yTop + ROW_H : yTop + ROW_H / 2,
+    }
+  }
+
+  return (
+    <div style={{ position: 'relative', width: totalW, height: totalH, margin: '0 auto' }}>
+      <svg
+        width={totalW} height={totalH}
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none' }}
+      >
+        {edges.map((e, i) => {
+          const a = byId[e.from], b = byId[e.to]
+          if (!a || !b) return null
+          const sameCol = a.col === b.col
+          const pa = center(a.col, a.row, sameCol ? 'bot' : 'mid')
+          const pb = center(b.col, b.row, sameCol ? 'top' : 'mid')
+          const stroke = e.kind === 'related' ? 'var(--rule-strong)' : 'var(--ink-muted)'
+          const dash = e.kind === 'applied' ? '4 4' : e.kind === 'related' ? '2 5' : undefined
+          if (sameCol) {
+            return (
+              <line key={i}
+                x1={pa.x} y1={pa.y} x2={pb.x} y2={pb.y}
+                stroke={stroke} strokeWidth="1" strokeDasharray={dash} opacity="0.9"
+              />
+            )
+          }
+          const mx = (pa.x + pb.x) / 2
+          return (
+            <path key={i}
+              d={`M ${pa.x} ${pa.y} C ${mx} ${pa.y}, ${mx} ${pb.y}, ${pb.x} ${pb.y}`}
+              fill="none" stroke={stroke} strokeWidth="1" strokeDasharray={dash} opacity="0.9"
+            />
+          )
+        })}
+      </svg>
+
+      {nodes.map(n => {
+        const x = PAD_X + n.col * (COL_W + COL_GAP)
+        const y = PAD_Y + n.row * (ROW_H + ROW_GAP)
+        return (
+          <div key={n.id} style={{ position: 'absolute', left: x, top: y, width: COL_W, height: ROW_H }}>
+            <ConceptNode
+              title={n.label} cat={n.subtitle} state={n.state}
+              onClick={() => onNode?.(n)}
+              style={{ height: '100%' }}
+            />
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ── ConstellationView ──────────────────────────────────────────────────
+
+function ConstellationView({ onSelect, nodeStates }: {
+  onSelect: (slug: string, nodeId: string) => void
+  nodeStates: Record<string, NodeState>
+}) {
+  const nodes = (graphData.nodes as GraphNode[]).map(n => ({
+    ...n,
+    state: (nodeStates[n.id] ?? n.state) as NodeState,
+  }))
+  const edges = graphData.edges as Edge[]
+  const masteredCount = nodes.filter(n => n.state === 'mastered').length
+
+  return (
+    <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', maxWidth: 500, margin: '0 auto' }}>
+      <div style={{ padding: '36px 28px 6px' }}>
+        <CategoryLabel>{masteredCount > 0 ? 'Constellation' : 'Begin here'}</CategoryLabel>
+        <h1 style={{
+          fontFamily: 'var(--serif)', fontSize: 26, fontWeight: 600,
+          lineHeight: 1.2, letterSpacing: '-0.01em', margin: '14px 0 0',
+          color: 'var(--ink)',
+        }}>
+          {masteredCount > 0 ? 'A growing map.' : 'A small map.'}
+        </h1>
+        <p style={{
+          margin: '8px 0 0', fontFamily: 'var(--serif)', fontStyle: 'italic',
+          fontSize: 14.5, color: 'var(--ink-muted)', lineHeight: 1.5, maxWidth: 320,
+        }}>
+          {masteredCount > 0
+            ? <>{masteredCount} of {nodes.length} mastered. Tap a concept to keep reading.</>
+            : 'Tap a concept to begin reading.'}
+        </p>
+      </div>
+
+      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 0 28px' }}>
+        <Constellation nodes={nodes} edges={edges} onNode={n => onSelect(n.lesson, n.id)} />
+
+        <div style={{
+          margin: '24px 28px 0', paddingTop: 16,
+          borderTop: '1px solid var(--rule)',
+          display: 'grid', gridTemplateColumns: '1fr 1fr', rowGap: 8, columnGap: 12,
+          fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.1em',
+          textTransform: 'uppercase', color: 'var(--ink-muted)',
+        }}>
+          <div>
+            <span style={{
+              display: 'inline-block', width: 12, height: 8,
+              background: 'var(--paper-raised)', border: '1px solid var(--rule-strong)',
+              borderTop: '2px solid var(--ink)', verticalAlign: 'middle', marginRight: 6,
+            }} />
+            Mastered
+          </div>
+          <div>
+            <span style={{
+              display: 'inline-block', width: 12, height: 8,
+              background: 'var(--paper-raised)', border: '1px solid var(--rust-soft)',
+              borderTop: '2px solid var(--rust)', verticalAlign: 'middle', marginRight: 6,
+            }} />
+            In progress
+          </div>
+          <div>
+            <span style={{
+              display: 'inline-block', width: 12, height: 8,
+              border: '1px dashed var(--rule)', verticalAlign: 'middle', marginRight: 6,
+            }} />
+            Available
+          </div>
+          <div>
+            <span style={{
+              display: 'inline-block', width: 12, height: 8,
+              border: '1px dashed var(--rule)', verticalAlign: 'middle', marginRight: 6,
+            }} />
+            Queued ◷
+          </div>
+          <div style={{ gridColumn: '1 / -1', height: 1, background: 'var(--rule)', margin: '4px 0' }} />
+          <div>
+            <svg width="20" height="6" style={{ verticalAlign: 'middle', marginRight: 6 }}>
+              <line x1="0" y1="3" x2="20" y2="3" stroke="var(--ink-muted)" strokeWidth="1" />
+            </svg>
+            builds on
+          </div>
+          <div>
+            <svg width="20" height="6" style={{ verticalAlign: 'middle', marginRight: 6 }}>
+              <line x1="0" y1="3" x2="20" y2="3" stroke="var(--ink-muted)" strokeWidth="1" strokeDasharray="2 5" />
+            </svg>
+            related
+          </div>
+        </div>
+      </div>
+
+      <div style={{
+        display: 'flex', justifyContent: 'space-between',
+        fontFamily: 'var(--mono)', fontSize: 11,
+        color: 'var(--ink-ghost)', letterSpacing: '0.08em',
+        padding: '10px 28px 14px',
+        textTransform: 'uppercase',
+        borderTop: '1px solid var(--rule)',
+        flexShrink: 0,
+      }}>
+        <span>Lattice</span>
+        <span>{nodes.length} concept{nodes.length !== 1 ? 's' : ''}</span>
+      </div>
+    </div>
+  )
+}
+
+// ── LessonHeader ───────────────────────────────────────────────────────
+
+function LessonHeader({ title, current, total, noteCount, onBack }: {
+  title: string
+  current: number
+  total: number
+  noteCount: number
+  onBack: () => void
+}) {
+  return (
+    <div style={{
+      padding: '14px 28px 14px',
+      borderBottom: '1px solid var(--rule)',
+      display: 'flex', alignItems: 'center', gap: 14,
+      background: 'var(--paper)',
+      flexShrink: 0,
+    }}>
+      <div
+        onClick={onBack}
+        style={{
+          fontFamily: 'var(--serif)', fontSize: 22, color: 'var(--ink-muted)',
+          lineHeight: 1, cursor: 'pointer', userSelect: 'none', marginTop: -1,
+        }}
+      >←</div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{
+          fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 600,
+          letterSpacing: '-0.005em', whiteSpace: 'nowrap',
+          overflow: 'hidden', textOverflow: 'ellipsis',
+        }}>{title}</div>
+        <div style={{
+          fontFamily: 'var(--mono)', fontSize: 10.5, color: 'var(--ink-muted)',
+          letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 2,
+        }}>
+          {current} / {total}
+          {noteCount > 0 ? `  ·  ${noteCount} ${noteCount === 1 ? 'note' : 'notes'}` : ''}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── PageFolio ──────────────────────────────────────────────────────────
+
+function PageFolio({ left, right }: { left: string; right: string }) {
+  return (
+    <div style={{
+      display: 'flex', justifyContent: 'space-between',
+      fontFamily: 'var(--mono)', fontSize: 11,
+      color: 'var(--ink-ghost)', letterSpacing: '0.08em',
+      padding: '10px 28px 14px',
+      textTransform: 'uppercase',
+      borderTop: '1px solid var(--rule)',
+      flexShrink: 0,
+    }}>
+      <span>{left}</span>
+      <span>{right}</span>
+    </div>
+  )
+}
+
+// ── renderBlock ────────────────────────────────────────────────────────
+
 function renderBlock(block: Block, i: number) {
   if (block.type === 'p') {
-    return <p key={i} style={{ margin: '0 0 1.25rem' }}>{block.text}</p>
+    return (
+      <p key={i} style={{ margin: '0 0 18px' }}>
+        {block.text}
+      </p>
+    )
   }
   if (block.type === 'math') {
     const html = katex.renderToString(block.tex, {
@@ -83,7 +478,7 @@ function renderBlock(block: Block, i: number) {
         <div
           key={i}
           dangerouslySetInnerHTML={{ __html: html }}
-          style={{ margin: '1.75rem 0', overflowX: 'auto' }}
+          style={{ margin: '14px 0 16px', overflowX: 'auto' }}
         />
       )
     }
@@ -91,7 +486,12 @@ function renderBlock(block: Block, i: number) {
   }
   if (block.type === 'viz') {
     return (
-      <figure key={i} style={{ margin: '1.75rem 0' }}>
+      <figure key={i} style={{
+        margin: '18px 0 4px',
+        background: 'var(--paper-raised)',
+        border: '1px solid var(--rule)',
+        padding: '16px 18px 14px',
+      }}>
         <iframe
           src={`${import.meta.env.BASE_URL}lessons/${block.src}`}
           height={block.height}
@@ -100,11 +500,8 @@ function renderBlock(block: Block, i: number) {
           title={block.caption}
         />
         <figcaption style={{
-          fontSize: '0.8rem',
-          color: '#666',
-          marginTop: '0.5rem',
-          fontStyle: 'italic',
-          lineHeight: 1.4,
+          marginTop: 10, fontFamily: 'var(--serif)', fontStyle: 'italic',
+          fontSize: 13, color: 'var(--ink-muted)', lineHeight: 1.4,
         }}>
           {block.caption}
         </figcaption>
@@ -114,170 +511,62 @@ function renderBlock(block: Block, i: number) {
   return null
 }
 
-const CELL_W = 180
-const CELL_H = 160
-const NODE_R = 28
-const PAD_X = 90
-const PAD_Y = 80
+// ── NoteInput ──────────────────────────────────────────────────────────
 
-function nodeCenter(node: GraphNode) {
-  return {
-    x: PAD_X + node.col * CELL_W,
-    y: PAD_Y + node.row * CELL_H,
-  }
-}
-
-function nodeById(nodes: GraphNode[], id: string) {
-  return nodes.find(n => n.id === id)!
-}
-
-function circleFill(state: NodeState) {
-  if (state === 'mastered') return '#9c3a22'
-  if (state === 'in_progress') return '#e8d5c4'
-  return '#f4eee2'
-}
-
-function circleStrokeWidth(state: NodeState) {
-  if (state === 'in_progress') return 2.5
-  return 1.5
-}
-
-function ConstellationView({
-  onSelect,
-  nodeStates,
-}: {
-  onSelect: (slug: string, nodeId: string) => void
-  nodeStates: Record<string, NodeState>
-}) {
-  const nodes = graphData.nodes as GraphNode[]
-  const edges = graphData.edges as Edge[]
-
-  const maxCol = Math.max(...nodes.map(n => n.col))
-  const maxRow = Math.max(...nodes.map(n => n.row))
-
-  const W = PAD_X + maxCol * CELL_W + PAD_X
-  const H = PAD_Y + maxRow * CELL_H + 90
+function NoteInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [open, setOpen] = useState(value.trim().length > 0)
 
   return (
-    <main style={{ maxWidth: 660, margin: '0 auto', padding: '3rem 1.5rem 6rem' }}>
-      <header style={{ marginBottom: '3rem', borderBottom: '1px solid #d8cfc0', paddingBottom: '1.5rem' }}>
-        <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 600, letterSpacing: '-0.01em' }}>
-          Lattice
-        </h1>
-        <p style={{ margin: '0.5rem 0 0', color: '#888', fontSize: '0.875rem' }}>
-          {nodes.length} concept{nodes.length !== 1 ? 's' : ''}
-        </p>
-      </header>
-
-      <svg
-        viewBox={`0 0 ${W} ${H}`}
-        style={{ width: '100%', height: 'auto', display: 'block' }}
-        aria-label="Concept constellation"
-      >
-        <defs>
-          <marker id="arrow-extends" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
-            <path d="M0,0.5 L0,6.5 L6,3.5 z" fill="#c4b49a" />
-          </marker>
-        </defs>
-
-        {edges.map((edge, i) => {
-          const from = nodeById(nodes, edge.from)
-          const to = nodeById(nodes, edge.to)
-          const { x: x1, y: y1 } = nodeCenter(from)
-          const { x: x2, y: y2 } = nodeCenter(to)
-          const dx = x2 - x1
-          const dy = y2 - y1
-          const d = Math.sqrt(dx * dx + dy * dy)
-          const nx = dx / d
-          const ny = dy / d
-          const arrowGap = edge.kind === 'extends' ? NODE_R + 8 : NODE_R
-          return (
-            <line
-              key={i}
-              x1={x1 + nx * NODE_R}
-              y1={y1 + ny * NODE_R}
-              x2={x2 - nx * arrowGap}
-              y2={y2 - ny * arrowGap}
-              stroke="#c4b49a"
-              strokeWidth={edge.kind === 'extends' ? 1.5 : 1}
-              strokeDasharray={edge.kind === 'related' ? '5,4' : undefined}
-              markerEnd={edge.kind === 'extends' ? 'url(#arrow-extends)' : undefined}
-            />
-          )
-        })}
-
-        {nodes.map(node => {
-          const { x, y } = nodeCenter(node)
-          const state = nodeStates[node.id] ?? node.state
-          const labelColor = state === 'mastered' ? '#f4eee2' : '#3a2c1a'
-          return (
-            <g
-              key={node.id}
-              onClick={() => onSelect(node.lesson, node.id)}
-              style={{ cursor: 'pointer' }}
-              role="button"
-              aria-label={node.label}
-            >
-              <circle
-                cx={x}
-                cy={y}
-                r={NODE_R}
-                fill={circleFill(state)}
-                stroke="#9c3a22"
-                strokeWidth={circleStrokeWidth(state)}
-                strokeDasharray={state === 'queued' ? '4,3' : undefined}
-              />
-              {state === 'mastered' && (
-                <text
-                  x={x}
-                  y={y + 4}
-                  textAnchor="middle"
-                  fill={labelColor}
-                  fontSize={14}
-                  fontFamily="'IBM Plex Mono', monospace"
-                >
-                  ✓
-                </text>
-              )}
-              <text
-                x={x}
-                y={y + NODE_R + 16}
-                textAnchor="middle"
-                fill="#3a2c1a"
-                fontSize={12}
-                fontFamily="'Source Serif 4', Georgia, serif"
-                fontWeight={600}
-              >
-                {node.label}
-              </text>
-              <text
-                x={x}
-                y={y + NODE_R + 29}
-                textAnchor="middle"
-                fill="#888"
-                fontSize={9}
-                fontFamily="'IBM Plex Mono', monospace"
-                letterSpacing="0.05em"
-              >
-                {node.subtitle}
-              </text>
-            </g>
-          )
-        })}
-      </svg>
-    </main>
+    <div style={{ borderTop: '1px solid var(--rule)', paddingTop: 14, marginTop: 24 }}>
+      {!open ? (
+        <div
+          onClick={() => setOpen(true)}
+          style={{
+            fontFamily: 'var(--serif)', fontStyle: 'italic',
+            fontSize: 14, color: 'var(--ink-muted)', cursor: 'pointer',
+          }}
+        >
+          + note something to revisit
+        </div>
+      ) : (
+        <div>
+          <CategoryLabel>Note for the queue</CategoryLabel>
+          <textarea
+            value={value}
+            onChange={e => onChange(e.target.value)}
+            placeholder="what do you want to revisit?"
+            rows={2}
+            style={{
+              display: 'block', width: '100%',
+              fontFamily: 'var(--serif)', fontSize: 16, fontStyle: 'italic',
+              color: 'var(--ink)',
+              border: 'none', borderBottom: '1px solid var(--ink)',
+              padding: '10px 0 8px', marginTop: 12,
+              background: 'transparent',
+              outline: 'none', resize: 'none', boxSizing: 'border-box',
+              lineHeight: 1.5,
+            }}
+          />
+          {!value.trim() && (
+            <div
+              onClick={() => setOpen(false)}
+              style={{
+                fontFamily: 'var(--serif)', fontSize: 13, fontStyle: 'italic',
+                color: 'var(--ink-ghost)', cursor: 'pointer', marginTop: 8,
+              }}
+            >cancel</div>
+          )}
+        </div>
+      )}
+    </div>
   )
 }
 
+// ── SectionQuiz ────────────────────────────────────────────────────────
+
 const OPTION_LETTERS = ['A', 'B', 'C', 'D']
 
-function SectionQuiz({
-  quiz,
-  quizLabel,
-  selectedIndex,
-  onAnswer,
-  onContinue,
-}: {
+function SectionQuiz({ quiz, quizLabel, selectedIndex, onAnswer, onContinue }: {
   quiz: Quiz
   quizLabel: string
   selectedIndex: number | null
@@ -288,110 +577,63 @@ function SectionQuiz({
   const correct = answered && selectedIndex === quiz.correctIndex
 
   return (
-    <div style={{ margin: '2rem 0 0' }}>
-      <div style={{
-        fontFamily: "'IBM Plex Mono', monospace",
-        fontSize: '0.7rem',
-        letterSpacing: '0.1em',
-        textTransform: 'uppercase',
-        color: '#9c3a22',
-        marginBottom: '0.5rem',
-        fontWeight: 500,
-      }}>
-        Quick check
+    <div style={{ marginTop: 36 }}>
+      <CategoryLabel style={{ marginBottom: 14 }}>Quick check</CategoryLabel>
+      <HammingHeading num={quizLabel} style={{ marginBottom: 16 }}>
+        {quiz.question}
+      </HammingHeading>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 6 }}>
+        {quiz.options.map((opt, i) => {
+          const isPicked = answered && selectedIndex === i
+          const isCorrect = i === quiz.correctIndex
+          const isRight = isCorrect && answered
+          const isWrong = isPicked && !isCorrect
+          return (
+            <div
+              key={i}
+              onClick={() => !answered && onAnswer(i)}
+              style={{
+                border: '1px solid ' + (isWrong ? 'var(--warning)' : isRight ? 'var(--olive)' : 'var(--rule-strong)'),
+                background: isWrong ? 'rgba(153,51,34,0.06)' : isRight ? 'rgba(63,107,58,0.07)' : 'transparent',
+                padding: '12px 14px',
+                display: 'flex', gap: 14, alignItems: 'baseline',
+                cursor: answered ? 'default' : 'pointer',
+                opacity: answered && !isPicked && !isRight ? 0.5 : 1,
+              }}
+            >
+              <span style={{
+                fontFamily: 'var(--mono)', fontSize: 12,
+                color: isWrong ? 'var(--warning)' : isRight ? 'var(--olive)' : 'var(--ink-muted)',
+                letterSpacing: '0.06em',
+              }}>{OPTION_LETTERS[i]}</span>
+              <span style={{
+                fontFamily: 'var(--serif)', fontSize: 16,
+                color: 'var(--ink)', lineHeight: 1.4, flex: 1,
+              }}>{opt}</span>
+              {isRight && <span style={{ color: 'var(--olive)' }}>✓</span>}
+              {isWrong && <span style={{ color: 'var(--warning)' }}>✗</span>}
+            </div>
+          )
+        })}
       </div>
-      <div style={{ width: '2rem', borderBottom: '1px solid #9c3a22', marginBottom: '1.25rem' }} />
-
-      <p style={{ margin: '0 0 1rem', fontSize: '1.05rem', lineHeight: 1.4 }}>
-        <span style={{
-          fontFamily: "'IBM Plex Mono', monospace",
-          fontSize: '0.85rem',
-          color: '#888',
-          marginRight: '0.5rem',
-        }}>
-          {quizLabel}
-        </span>
-        <strong>{quiz.question}</strong>
-      </p>
-
-      {quiz.options.map((opt, i) => {
-        const isCorrect = i === quiz.correctIndex
-        const dimmed = answered && !isCorrect
-        return (
-          <button
-            key={i}
-            onClick={() => { if (!answered) onAnswer(i) }}
-            style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: '0.75rem',
-              width: '100%',
-              padding: '0.75rem 0.875rem',
-              marginBottom: '0.5rem',
-              background: answered && isCorrect ? '#eaf2e8' : '#f4eee2',
-              border: `1px solid ${answered && isCorrect ? '#6a9a6a' : '#d8cfc0'}`,
-              borderRadius: 0,
-              cursor: answered ? 'default' : 'pointer',
-              textAlign: 'left',
-              fontFamily: "'Source Serif 4', Georgia, serif",
-              fontSize: '0.95rem',
-              lineHeight: 1.5,
-              color: dimmed ? '#b8ae9e' : '#3a2c1a',
-            }}
-          >
-            <span style={{
-              fontFamily: "'IBM Plex Mono', monospace",
-              fontSize: '0.8rem',
-              color: dimmed ? '#c8c0b0' : '#888',
-              minWidth: '1rem',
-              paddingTop: '0.1rem',
-            }}>
-              {OPTION_LETTERS[i]}
-            </span>
-            <span style={{ flex: 1 }}>{opt}</span>
-            {answered && isCorrect && (
-              <span style={{ color: '#6a9a6a' }}>✓</span>
-            )}
-          </button>
-        )
-      })}
 
       {answered && (
-        <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #d8cfc0' }}>
-          <div style={{
-            fontFamily: "'IBM Plex Mono', monospace",
-            fontSize: '0.7rem',
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            color: correct ? '#6a9a6a' : '#9c3a22',
-            marginBottom: '0.5rem',
-            fontWeight: 500,
-          }}>
-            {correct ? '✓ Right' : '✗ Wrong'}
-          </div>
-          <div style={{ width: '2rem', borderBottom: '1px solid #d8cfc0', marginBottom: '0.875rem' }} />
-          <p style={{ margin: '0 0 1.25rem', lineHeight: 1.6, fontSize: '0.95rem' }}>
+        <div style={{ marginTop: 22, paddingTop: 16, borderTop: '1px solid var(--rule)' }}>
+          <CategoryLabel style={{ marginBottom: 12 }}>
+            {correct ? '✓ Right' : '✗ Not quite'}
+          </CategoryLabel>
+          <p style={{ margin: 0, fontFamily: 'var(--serif)', fontSize: 16, lineHeight: 1.55, color: 'var(--ink)' }}>
             {quiz.explanation}
           </p>
-          <button
-            onClick={onContinue}
-            style={{
-              background: 'none',
-              border: 'none',
-              padding: 0,
-              cursor: 'pointer',
-              fontFamily: "'Source Serif 4', Georgia, serif",
-              fontSize: '1rem',
-              color: '#9c3a22',
-            }}
-          >
-            Continue →
-          </button>
+          <ContinueBtn onClick={onContinue} style={{ marginTop: 24 }} />
         </div>
       )}
     </div>
   )
 }
+
+// ── formatNotes ────────────────────────────────────────────────────────
 
 function formatNotesForClipboard(lesson: Lesson, notes: Record<string, string>): string {
   return lesson.sections
@@ -400,51 +642,33 @@ function formatNotesForClipboard(lesson: Lesson, notes: Record<string, string>):
     .join('\n')
 }
 
-const noteInputStyle: React.CSSProperties = {
-  width: '100%',
-  marginTop: '1.5rem',
-  padding: '0.5rem 0.625rem',
-  fontFamily: "'Source Serif 4', Georgia, serif",
-  fontSize: '0.9rem',
-  lineHeight: 1.5,
-  color: '#3a2c1a',
-  background: '#faf7f1',
-  border: '1px solid #d8cfc0',
-  borderRadius: 0,
-  resize: 'vertical',
-  boxSizing: 'border-box',
-  outline: 'none',
-}
+// ── LessonView ─────────────────────────────────────────────────────────
 
 function LessonView({ lesson, onBack }: { lesson: Lesson; onBack: () => void }) {
   const [notes, setNotes] = useState<Record<string, string>>({})
   const [copied, setCopied] = useState(false)
   const [quizAnswers, setQuizAnswers] = useState<Record<string, number>>({})
-  // -1 = intro page, 0..N-1 = section pages
   const [sectionIndex, setSectionIndex] = useState(-1)
   const [showReview, setShowReview] = useState(false)
 
   const totalSections = lesson.sections.length
-  const totalPages = totalSections + 1 // intro + sections
-  const currentPage = sectionIndex + 2 // intro=1, section[0]=2, …
+  const totalPages = totalSections + 1
+  const currentPage = sectionIndex + 2
   const noteCount = lesson.sections.filter(s => notes[s.id]?.trim()).length
   const nonEmptyNotes = lesson.sections.filter(s => notes[s.id]?.trim())
 
   const quizLabels: Record<string, string> = {}
-  let quizCount = 0
+  let quizCounter = 0
   lesson.sections.forEach(s => {
     if (s.hasQuiz) {
-      quizCount++
-      const sectionNum = parseInt(s.id.replace('s', ''), 10)
-      quizLabels[s.id] = `${sectionNum}.${quizCount}`
+      quizCounter++
+      const sNum = parseInt(s.id.replace('s', ''), 10)
+      quizLabels[s.id] = `${sNum}.${quizCounter}`
     }
   })
 
   const currentSection = sectionIndex >= 0 ? lesson.sections[sectionIndex] : null
   const currentSectionNum = currentSection ? parseInt(currentSection.id.replace('s', ''), 10) : null
-  const sectionLabel = currentSection
-    ? (quizLabels[currentSection.id] ?? String(currentSectionNum))
-    : null
 
   function handleContinue() {
     if (sectionIndex < totalSections - 1) {
@@ -461,200 +685,125 @@ function LessonView({ lesson, onBack }: { lesson: Lesson; onBack: () => void }) 
     })
   }
 
-  const monoSm: React.CSSProperties = {
-    fontFamily: "'IBM Plex Mono', monospace",
-    fontSize: '0.7rem',
-    letterSpacing: '0.08em',
-    textTransform: 'uppercase',
-    fontWeight: 500,
-  }
-
-  const header = (
-    <div style={{
-      padding: '0.875rem 1.5rem 0.75rem',
-      borderBottom: '1px solid #d8cfc0',
-      background: '#f4eee2',
-      flexShrink: 0,
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-        <button
-          onClick={onBack}
-          style={{
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            cursor: 'pointer',
-            fontFamily: "'IBM Plex Mono', monospace",
-            fontSize: '0.9rem',
-            color: '#9c3a22',
-            lineHeight: 1,
-            flexShrink: 0,
-          }}
-        >
-          ←
-        </button>
-        <span style={{
-          fontFamily: "'Source Serif 4', Georgia, serif",
-          fontSize: '1.05rem',
-          fontWeight: 600,
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-        }}>
-          {lesson.title}
-        </span>
-      </div>
-      {!showReview && (
-        <div style={{
-          ...monoSm,
-          color: '#888',
-          marginTop: '0.2rem',
-          paddingLeft: '1.625rem',
-        }}>
-          {currentPage} / {totalPages}
-          {noteCount > 0 ? ` · ${noteCount} NOTE${noteCount !== 1 ? 'S' : ''}` : ''}
-        </div>
-      )}
-    </div>
-  )
-
-  const footer = (
-    <div style={{
-      padding: '0.5rem 1.5rem 0.625rem',
-      borderTop: '1px solid #d8cfc0',
-      background: '#f4eee2',
-      flexShrink: 0,
-    }}>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '0.375rem',
-      }}>
-        <span style={{ ...monoSm, color: '#aaa', fontSize: '0.65rem' }}>
-          {lesson.title}
-        </span>
-        <span style={{ ...monoSm, color: '#aaa', fontSize: '0.65rem', textTransform: 'none' }}>
-          {sectionLabel ? `§ ${sectionLabel} — ` : ''}{currentPage} / {totalPages}
-        </span>
-      </div>
-      <div style={{ height: '2px', background: '#e8ddd0' }}>
-        <div style={{
-          height: '100%',
-          width: `${(currentPage / totalPages) * 100}%`,
-          background: '#9c3a22',
-          transition: 'width 0.25s ease',
-        }} />
-      </div>
-    </div>
-  )
-
   const wrapper: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
+    display: 'flex', flexDirection: 'column',
     height: '100dvh',
-    maxWidth: 660,
-    margin: '0 auto',
+    maxWidth: 660, margin: '0 auto',
   }
+
+  const folioRight = currentSection
+    ? `§ ${currentSectionNum} — ${currentPage} / ${totalPages}`
+    : `${currentPage} / ${totalPages}`
 
   if (showReview) {
     return (
       <div style={wrapper}>
-        {header}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '2rem 1.5rem 3rem' }}>
-          <div style={{ ...monoSm, color: '#9c3a22', marginBottom: '1rem' }}>
-            Your notes
-          </div>
+        <LessonHeader
+          title={lesson.title}
+          current={totalPages}
+          total={totalPages}
+          noteCount={noteCount}
+          onBack={() => setShowReview(false)}
+        />
+        <div style={{ flex: 1, overflowY: 'auto', padding: '22px 28px 3rem' }}>
+          <CategoryLabel style={{ marginBottom: 14 }}>Your notes</CategoryLabel>
+          <HammingHeading style={{ marginBottom: 18 }}>
+            {nonEmptyNotes.length > 0
+              ? `${nonEmptyNotes.length} ${nonEmptyNotes.length === 1 ? 'thing' : 'things'} to revisit`
+              : 'No notes taken'}
+          </HammingHeading>
+
           {nonEmptyNotes.length > 0 ? (
             <>
-              <ul style={{ margin: '0 0 1.25rem', padding: '0 0 0 1.25rem' }}>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '18px 0 0' }}>
                 {nonEmptyNotes.map(s => (
-                  <li key={s.id} style={{ marginBottom: '0.5rem', fontSize: '0.95rem', lineHeight: 1.5 }}>
-                    <span style={{ color: '#888', fontSize: '0.8rem', fontFamily: "'IBM Plex Mono', monospace" }}>
-                      {s.heading}:{' '}
-                    </span>
-                    {notes[s.id].trim()}
+                  <li key={s.id} style={{
+                    padding: '14px 0',
+                    borderTop: '1px solid var(--rule)',
+                  }}>
+                    <div style={{
+                      fontFamily: 'var(--mono)', fontSize: 10.5,
+                      letterSpacing: '0.1em', textTransform: 'uppercase',
+                      color: 'var(--ink-muted)', marginBottom: 6,
+                    }}>{s.heading}</div>
+                    <div style={{
+                      fontFamily: 'var(--serif)', fontSize: 16, lineHeight: 1.45, color: 'var(--ink)',
+                    }}>— {notes[s.id].trim()}</div>
                   </li>
                 ))}
               </ul>
-              <button
+              <div
                 onClick={handleCopy}
                 style={{
-                  background: 'none',
-                  border: '1px solid #9c3a22',
-                  padding: '0.4rem 0.9rem',
-                  cursor: 'pointer',
-                  fontFamily: "'IBM Plex Mono', monospace",
-                  fontSize: '0.75rem',
-                  fontWeight: 500,
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                  color: '#9c3a22',
-                  marginBottom: '2.5rem',
-                  display: 'block',
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  border: '1px solid var(--ink)', padding: '11px 14px',
+                  cursor: 'pointer', marginTop: 22,
+                  background: copied ? 'var(--paper-raised)' : 'transparent',
                 }}
               >
-                {copied ? 'Copied' : 'Copy to wishlist'}
-              </button>
+                <span style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 500 }}>
+                  {copied ? 'Copied to clipboard' : `Copy all ${nonEmptyNotes.length} ↗`}
+                </span>
+                <span style={{
+                  fontFamily: 'var(--mono)', fontSize: 10.5,
+                  letterSpacing: '0.12em', textTransform: 'uppercase',
+                  color: 'var(--ink-muted)',
+                }}>{copied ? '✓' : 'plain text'}</span>
+              </div>
             </>
           ) : (
-            <p style={{ color: '#888', fontSize: '0.95rem', marginBottom: '2.5rem' }}>No notes taken.</p>
+            <p style={{ color: 'var(--ink-muted)', fontStyle: 'italic', marginTop: 14 }}>
+              Nothing flagged this time.
+            </p>
           )}
-          <button
-            onClick={onBack}
-            style={{
-              background: 'none',
-              border: 'none',
-              padding: 0,
-              cursor: 'pointer',
-              fontFamily: "'Source Serif 4', Georgia, serif",
-              fontSize: '1rem',
-              color: '#9c3a22',
-            }}
-          >
-            ← Back to constellation
-          </button>
+
+          <ContinueBtn label="Back to constellation" onClick={onBack} />
         </div>
+        <PageFolio left={lesson.title} right="Notes" />
       </div>
     )
   }
 
   return (
     <div style={wrapper}>
-      {header}
-      <div key={sectionIndex} style={{ flex: 1, overflowY: 'auto', padding: '2rem 1.5rem 3rem' }}>
+      <LessonHeader
+        title={lesson.title}
+        current={currentPage}
+        total={totalPages}
+        noteCount={noteCount}
+        onBack={onBack}
+      />
+      <div key={sectionIndex} style={{ flex: 1, overflowY: 'auto', padding: '22px 28px 3rem' }}>
         {sectionIndex === -1 ? (
           <>
-            <div style={{ ...monoSm, color: '#9c3a22', marginBottom: '0.6rem' }}>
-              {lesson.node.subtitle}
-            </div>
-            <h1 style={{ margin: '0 0 1.5rem', fontSize: '1.875rem', fontWeight: 600, lineHeight: 1.2, letterSpacing: '-0.01em' }}>
+            <CategoryLabel style={{ marginBottom: 14 }}>{lesson.node.subtitle}</CategoryLabel>
+            <h1 style={{
+              fontFamily: 'var(--serif)', fontSize: 26, fontWeight: 600,
+              lineHeight: 1.2, letterSpacing: '-0.01em', margin: '14px 0 0',
+              color: 'var(--ink)',
+            }}>
               {lesson.title}
             </h1>
-            <p style={{ margin: '0 0 2.5rem', fontStyle: 'italic', color: '#555', lineHeight: 1.6, fontSize: '1rem' }}>
+            <p style={{
+              margin: '16px 0 0', fontFamily: 'var(--serif)', fontStyle: 'italic',
+              color: 'var(--ink-muted)', lineHeight: 1.6, fontSize: 16,
+            }}>
               {lesson.intro}
             </p>
-            <button
-              onClick={handleContinue}
-              style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: "'Source Serif 4', Georgia, serif", fontSize: '1rem', color: '#9c3a22' }}
-            >
-              Begin →
-            </button>
+            <ContinueBtn label="Begin" onClick={handleContinue} />
           </>
         ) : (
           <>
-            <h2 style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 1.25rem', color: '#9c3a22' }}>
+            <CategoryLabel style={{ marginBottom: 14 }}>
+              Section {currentSectionNum}
+            </CategoryLabel>
+            <HammingHeading num={String(currentSectionNum)} style={{ marginBottom: 18 }}>
               {currentSection!.heading}
-            </h2>
+            </HammingHeading>
             {(currentSection!.blocks as Block[]).map((block, i) => renderBlock(block, i))}
-            <textarea
+            <NoteInput
               value={notes[currentSection!.id] ?? ''}
-              onChange={e => setNotes(prev => ({ ...prev, [currentSection!.id]: e.target.value }))}
-              placeholder="Add a note..."
-              rows={2}
-              style={noteInputStyle}
-              onFocus={e => { e.target.style.borderColor = '#9c3a22' }}
-              onBlur={e => { e.target.style.borderColor = '#d8cfc0' }}
+              onChange={v => setNotes(prev => ({ ...prev, [currentSection!.id]: v }))}
             />
             {currentSection!.hasQuiz && currentSection!.quiz ? (
               <SectionQuiz
@@ -665,20 +814,20 @@ function LessonView({ lesson, onBack }: { lesson: Lesson; onBack: () => void }) 
                 onContinue={handleContinue}
               />
             ) : (
-              <button
+              <ContinueBtn
+                label={sectionIndex < totalSections - 1 ? `Continue to §${currentSectionNum! + 1}` : 'Finish lesson'}
                 onClick={handleContinue}
-                style={{ background: 'none', border: 'none', padding: '1.5rem 0 0', cursor: 'pointer', fontFamily: "'Source Serif 4', Georgia, serif", fontSize: '1rem', color: '#9c3a22', display: 'block' }}
-              >
-                Continue →
-              </button>
+              />
             )}
           </>
         )}
       </div>
-      {footer}
+      <PageFolio left={lesson.title} right={folioRight} />
     </div>
   )
 }
+
+// ── App ────────────────────────────────────────────────────────────────
 
 function App() {
   const [lesson, setLesson] = useState<Lesson | null>(null)
