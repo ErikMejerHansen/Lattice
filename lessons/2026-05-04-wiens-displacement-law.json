@@ -1,0 +1,127 @@
+{
+  "slug": "2026-05-04-wiens-displacement-law",
+  "title": "Wien's displacement law: the color of fire and the temperature of stars",
+  "node": {
+    "id": "wien_displacement",
+    "label": "Wien's law",
+    "subtitle": "λ_max ∝ 1/T"
+  },
+  "intro": "A blacksmith does not own a thermometer. Push a horseshoe into the forge and the iron tells you when it is ready by changing color: dull red, then cherry, orange, yellow, finally a hot bluish white. Long before anyone could write down the laws of radiation, every working smith in Europe could read the temperature of an iron bar to within a hundred degrees by eye. Wien's displacement law, derived in 1893, made that craft knowledge into a formula sharp enough to weigh stars with.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. What the smith already knew",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The connection between heat and color is among the oldest pieces of practical physics. Potters in Sumer judged kilns by the color of the firebricks. Foundries in nineteenth-century Sheffield ran whole production lines on it: a foreman with thirty years of practice could call the temperature of a casting within fifty degrees by glance alone. The color did not depend on what the metal was. Iron, copper, the carbon arc of a streetlamp, the sun itself — all of them progressed through the same sequence as they got hotter." },
+        { "type": "p", "text": "By the 1880s the German national standards lab in Berlin (the Physikalisch-Technische Reichsanstalt) had turned this folklore into a measurement program. They built cavity radiators (small ovens with a pinhole) to approximate an idealized blackbody, and instruments sensitive enough to plot the full emission spectrum at each cavity temperature. By 1900 the curves were beautiful, smooth, and consistent: a hump that grew taller and shifted toward shorter wavelengths as the cavity got hotter." },
+        { "type": "p", "text": "The hump's position was the obvious thing to look at. Where, exactly, does the curve peak? And how does that peak move with temperature? Wilhelm Wien, working at the Reichsanstalt, answered that question seven years before anyone could derive the full curve. His method was thermodynamics, not statistics, and his answer is still exactly right." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Wien's argument from thermodynamics",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "In 1893 Wien performed a thought experiment. Take a cavity full of blackbody radiation and slowly compress it with a perfectly reflecting piston. The work you do raises the temperature of the radiation. The light bouncing off the receding piston is Doppler-shifted to higher frequencies. Wien tracked both effects together and showed that the spectrum, however it was shaped, had to obey a scaling law:" },
+        { "type": "math", "tex": "u(\\lambda, T) = \\frac{1}{\\lambda^5} \\, f(\\lambda T)", "display": true },
+        { "type": "p", "text": "The function f was unknown. (Planck would write it down in 1900.) But the form already constrains where the peak lives. Take the derivative of u with respect to λ at fixed T, set it to zero, and the maximum has to occur where λT equals some constant. Wien's displacement law follows immediately:" },
+        { "type": "math", "tex": "\\lambda_{\\max} \\, T = b \\approx 2.898 \\times 10^{-3} \\; \\text{m} \\cdot \\text{K}", "display": true },
+        { "type": "p", "text": "The constant b, often called Wien's constant, was determined experimentally first and from theory later. The remarkable thing is that the displacement law required no commitment to any particular spectral shape. Even when Wien's own guess for f(λT) (an exponential that fit the violet end of the curve) turned out to be wrong, the displacement law survived intact. Scaling arguments are stronger than guessed forms; that is a lesson worth keeping." }
+      ],
+      "quiz": {
+        "question": "An iron horseshoe in a forge glows a steady cherry red. Its temperature is around 1500 K. Roughly where does its blackbody emission actually peak?",
+        "options": [
+          "Around 1.9 micrometers (near-infrared)",
+          "Around 500 nanometers (green visible)",
+          "Around 50 micrometers (mid-infrared)",
+          "Around 2.9 millimeters (microwave)"
+        ],
+        "correctIndex": 0,
+        "explanation": "Wien's law gives λ_max = b/T = (2.898 × 10⁻³ m·K) / (1500 K) ≈ 1.93 × 10⁻⁶ m, about 1.9 μm in the near-infrared. The most tempting wrong answer is 500 nm: surely a glowing horseshoe peaks in the visible? It does not. What you see is only the high-frequency tail of the curve poking into your eye. Most of the energy is leaving as invisible infrared, which is why a forge feels warm from across the room."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Deriving the displacement from Planck",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Once Planck wrote down the full spectrum in 1900, Wien's constant stopped being an experimental number and became calculable. Start from the Planck spectral energy density per unit wavelength:" },
+        { "type": "math", "tex": "u(\\lambda, T) = \\frac{8 \\pi h c}{\\lambda^5} \\cdot \\frac{1}{e^{hc/\\lambda k T} - 1}", "display": true },
+        { "type": "p", "text": "Take the derivative with respect to λ, set it to zero, and a small algebraic massage produces a transcendental equation. Let x = hc/(λkT). The peak condition becomes:" },
+        { "type": "math", "tex": "5 \\, (1 - e^{-x}) = x", "display": true },
+        { "type": "viz", "src": "2026-05-04-wiens-displacement-law.html", "height": 340, "caption": "Planck's spectrum u(λ, T) plotted against wavelength. Drag the temperature slider: the peak slides left as T rises, and its product λ_max · T stays pinned at Wien's constant. The thin vertical line marks λ_max; the readout shows the product holding constant to four decimal places, no matter where you push the slider." },
+        { "type": "p", "text": "This equation has no closed form, but a few iterations of Newton's method give x ≈ 4.9651. Plug that back in: b = hc/(4.9651 k) ≈ 2.898 × 10⁻³ m·K, exactly the value Wien had measured experimentally a generation earlier. (A small subtlety worth noting: if you instead look for the peak of the spectrum in frequency-space rather than wavelength-space, you get a different transcendental equation and a different answer. The two peaks describe the same radiation; they just measure it with different rulers, and a Jacobian sits between them.)" }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Reading the universe by color",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Wien's law is the working physicist's astronomical thermometer. You cannot visit a star, but you can measure where its spectrum peaks, and one division gives you its surface temperature. The sun's spectrum peaks near 500 nanometers, which puts its surface at roughly 5800 K. Sirius, blue-white in the winter sky, peaks in the near ultraviolet around 290 nm: about 9900 K. Betelgeuse, red and old, peaks near 830 nm in the near infrared: about 3500 K. Three glances, three temperatures, no rocket required." },
+        { "type": "p", "text": "The same logic runs in the other direction. Find the coldest natural radiation in the sky and Wien's law tells you the temperature of whatever is producing it. Penzias and Wilson, in 1965, found a uniform microwave hiss that was eventually pinned to a peak around 1.06 millimeters. Wien gives:" },
+        { "type": "math", "tex": "T = \\frac{b}{\\lambda_{\\max}} = \\frac{2.898 \\times 10^{-3}}{1.06 \\times 10^{-3}} \\approx 2.7 \\; \\text{K}", "display": true },
+        { "type": "p", "text": "Three kelvin: the temperature of the universe at large, cooled by 13.8 billion years of expansion from the white-hot fireball of recombination. The same scaling law that called the temperature of a horseshoe also called the temperature of the cosmos, and got it right to the third decimal. Few formulas have ever stretched so far without breaking." }
+      ],
+      "quiz": {
+        "question": "Spica, a hot blue star in the constellation Virgo, has a surface temperature of about 22,400 K. Where does the peak of its blackbody emission actually fall?",
+        "options": [
+          "Around 130 nanometers (far ultraviolet)",
+          "Around 450 nanometers (visible blue)",
+          "Around 290 nanometers (near ultraviolet)",
+          "Around 700 nanometers (visible red)"
+        ],
+        "correctIndex": 0,
+        "explanation": "λ_max = b/T = (2.898 × 10⁻³) / 22400 ≈ 1.29 × 10⁻⁷ m, about 130 nm in the far ultraviolet. The most tempting wrong answer is 450 nm: the star looks blue, so its peak should be in the blue. Same trap as the forge. Spica's visible blue is only the long-wavelength tail of a spectrum that mostly radiates UV your eye cannot see. The hotter the source, the further its true peak slides past the visible window."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The right answer from a wrong theory",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Wien published two distinct things and history tends to blur them. The displacement law (1893) was a thermodynamic scaling argument: λ_max T = constant. The displacement law has never been wrong. The Wien distribution (1896) was a guessed functional form for the spectrum itself, an exponential u ∝ ν³ exp(−hν/kT) that fit the high-frequency end and failed badly at low frequency. The Wien distribution was replaced by Planck within four years. The displacement law was not." },
+        { "type": "p", "text": "This separation is worth holding onto. A scaling argument constrains how a quantity must transform under a change of conditions, without committing to the underlying mechanism. Wien did not need to know what radiation was, only that compressing a cavity must shift its spectrum in a particular way to remain in thermal equilibrium. Planck did need a mechanism (the quantum). When Planck's mechanism replaced Wien's exponential, the scaling law it had to satisfy was Wien's, unchanged." },
+        { "type": "p", "text": "Keep this pattern in your back pocket. Whenever you can derive how things scale, even without a full theory, you have a result that any future theory will have to respect. Sometimes that scaling is the most durable thing physics ever produces." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "You point a spectrometer at an unfamiliar source and find that its emission peaks at a wavelength of 1.06 millimeters (in the microwave band). What can you say about its temperature?",
+    "options": [
+      "About 2.7 K, the temperature of the cosmic microwave background",
+      "About 27 K, roughly liquid hydrogen",
+      "About 273 K, near room temperature",
+      "About 0.27 K, near absolute zero"
+    ],
+    "correctIndex": 0,
+    "explanation": "T = b / λ_max = (2.898 × 10⁻³ m·K) / (1.06 × 10⁻³ m) ≈ 2.73 K. This is exactly how Penzias and Wilson's microwave hiss was identified as the cosmic microwave background. The most tempting wrong answer is 273 K (room temperature), because rooms are warm and microwaves feel like a kitchen technology. But room-temperature blackbody radiation peaks near 10 micrometers in the mid-infrared, not in the microwave band. Wien's law cuts cleanly through that intuition: a millimeter peak means a kelvin-scale source, every time."
+  },
+  "suggestedNodes": [
+    {
+      "id": "stellar_classification",
+      "label": "Star types",
+      "subtitle": "OBAFGKM",
+      "edgeType": "applied"
+    },
+    {
+      "id": "color_temperature",
+      "label": "Color temp",
+      "subtitle": "K for lighting",
+      "edgeType": "applied"
+    },
+    {
+      "id": "spectroscopy",
+      "label": "Spectroscopy",
+      "subtitle": "absorption lines",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-04T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["wavelength", "photon_energy", "blackbody"]
+  }
+}

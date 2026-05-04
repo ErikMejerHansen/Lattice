@@ -4,3 +4,4 @@
 
 2026-05-03T10:00:00Z  ok  2026-05-03-photon-energy  manual run, 1 viz, 1 edge, 2 auto-suggestions
 2026-05-03T19:00Z  ok  blackbody-radiation  5sec, 1 viz, 2 edges, 2 auto-suggestions
+2026-05-04T08:00Z  ok  wiens-displacement-law  5sec, 1 viz, 2 edges, 3 auto-suggestions; pushed to claude/festive-gates-cRHh8 per session branch policy (routine spec asks for main)

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wien's displacement law</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+.readout .pin {
+  color: var(--accent);
+}
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+
+  <canvas id="plot" height="240" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);background:var(--bg-raised);"></canvas>
+
+  <div class="viz-slider-row">
+    <label>T</label>
+    <input type="range" id="tempSlider" min="1500" max="12000" step="50" value="5800" style="min-height:36px;">
+    <span class="value" id="tempVal">5800 K</span>
+  </div>
+
+  <div class="readout" id="readout"></div>
+
+  <p class="viz-caption" style="margin-top:10px;">Planck's spectral energy density u(λ, T), plotted against wavelength from 100 nm to 5 μm. Tinted band marks the visible window (380-750 nm). Drag T: the curve's peak slides left as T rises, the tinted region tells you when the peak crosses into visible light, and the readout shows λ_max · T pinned at Wien's constant 2.898 × 10⁻³ m·K, no matter where you push the slider.</p>
+</div>
+
+<script>
+const h = 6.626e-34;
+const k = 1.381e-23;
+const c = 2.998e8;
+const WIEN_X = 4.96511423;
+const WIEN_B = h * c / (WIEN_X * k);
+
+const LAM_MIN = 100e-9;
+const LAM_MAX = 5000e-9;
+const VIS_LO = 380e-9;
+const VIS_HI = 750e-9;
+const STEPS = 480;
+
+const canvas = document.getElementById("plot");
+const slider = document.getElementById("tempSlider");
+const tempVal = document.getElementById("tempVal");
+const readoutEl = document.getElementById("readout");
+
+function planckLambda(lambda, T) {
+  const x = (h * c) / (lambda * k * T);
+  if (x > 700) return 0;
+  const denom = Math.exp(x) - 1;
+  if (denom <= 0) return 0;
+  return (8 * Math.PI * h * c) / (Math.pow(lambda, 5) * denom);
+}
+
+function lambdaMax(T) {
+  return WIEN_B / T;
+}
+
+function regionFor(lam) {
+  const nm = lam * 1e9;
+  if (nm < 380) return "ultraviolet";
+  if (nm < 750) return "visible";
+  if (nm < 1e4) return "near infrared";
+  return "infrared";
+}
+
+function makeField(parent, label, pinned) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  const lbl = document.createElement("span");
+  lbl.className = "lbl";
+  lbl.textContent = label;
+  const val = document.createElement("span");
+  if (pinned) val.className = "pin";
+  wrap.appendChild(lbl);
+  wrap.appendChild(val);
+  parent.appendChild(wrap);
+  return val;
+}
+
+const fT = makeField(readoutEl, "T");
+const fLam = makeField(readoutEl, "λ_max");
+const fRegion = makeField(readoutEl, "region of peak");
+const fProduct = makeField(readoutEl, "λ_max · T", true);
+
+function draw() {
+  const T = parseFloat(slider.value);
+  tempVal.textContent = T.toFixed(0) + " K";
+
+  const W = canvas.offsetWidth || 320;
+  canvas.width = W;
+  const H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const padL = 42, padR = 12, padT = 10, padB = 32;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  function xFor(lam) {
+    return padL + ((lam - LAM_MIN) / (LAM_MAX - LAM_MIN)) * plotW;
+  }
+
+  const lamPeak = lambdaMax(T);
+  const peakU = planckLambda(lamPeak, T);
+  const yMax = peakU * 1.15;
+  function yFor(u) {
+    return padT + plotH - Math.min(Math.max(u / yMax, 0), 1.06) * plotH;
+  }
+
+  // Visible band tint
+  const vxLo = Math.max(xFor(VIS_LO), padL);
+  const vxHi = Math.min(xFor(VIS_HI), padL + plotW);
+  if (vxHi > vxLo) {
+    const grad = ctx.createLinearGradient(vxLo, 0, vxHi, 0);
+    grad.addColorStop(0.00, "rgba(120, 60, 180, 0.18)");
+    grad.addColorStop(0.20, "rgba(60, 110, 200, 0.18)");
+    grad.addColorStop(0.45, "rgba(80, 170, 110, 0.18)");
+    grad.addColorStop(0.65, "rgba(220, 200, 70, 0.20)");
+    grad.addColorStop(0.85, "rgba(220, 130, 60, 0.20)");
+    grad.addColorStop(1.00, "rgba(200, 60, 60, 0.20)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(vxLo, padT, vxHi - vxLo, plotH);
+  }
+
+  // Grid
+  ctx.strokeStyle = "rgba(26,26,24,0.07)";
+  ctx.lineWidth = 1;
+  for (let nm = 1000; nm <= 5000; nm += 1000) {
+    const x = xFor(nm * 1e-9);
+    ctx.beginPath();
+    ctx.moveTo(x, padT);
+    ctx.lineTo(x, padT + plotH);
+    ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = "rgba(26,26,24,0.45)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, padT);
+  ctx.lineTo(padL, padT + plotH);
+  ctx.lineTo(padL + plotW, padT + plotH);
+  ctx.stroke();
+
+  // X tick labels
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  ctx.fillStyle = "rgba(26,26,24,0.6)";
+  const ticks = [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
+  for (const nm of ticks) {
+    const x = xFor(nm * 1e-9);
+    ctx.beginPath();
+    ctx.strokeStyle = "rgba(26,26,24,0.45)";
+    ctx.moveTo(x, padT + plotH);
+    ctx.lineTo(x, padT + plotH + 3);
+    ctx.stroke();
+    if (nm % 1000 === 0) ctx.fillText(String(nm), x, padT + plotH + 5);
+  }
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("λ  (nm)", padL + plotW / 2, padT + plotH + 18);
+
+  // Y axis label
+  ctx.save();
+  ctx.translate(13, padT + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = "center";
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("u(λ, T)", 0, 0);
+  ctx.restore();
+
+  // Planck curve
+  ctx.strokeStyle = "#9c3a22";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  let started = false;
+  for (let i = 0; i <= STEPS; i++) {
+    const lam = LAM_MIN + (i / STEPS) * (LAM_MAX - LAM_MIN);
+    const u = planckLambda(lam, T);
+    const x = xFor(lam);
+    const y = yFor(u);
+    if (!started) { ctx.moveTo(x, y); started = true; }
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Peak vertical marker
+  if (lamPeak >= LAM_MIN && lamPeak <= LAM_MAX) {
+    const px = xFor(lamPeak);
+    ctx.strokeStyle = "rgba(156,58,34,0.55)";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(px, padT);
+    ctx.lineTo(px, padT + plotH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = "#9c3a22";
+    ctx.beginPath();
+    ctx.arc(px, yFor(peakU), 3.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.font = "10px 'IBM Plex Mono',monospace";
+    ctx.fillStyle = "rgba(156,58,34,0.95)";
+    ctx.textAlign = px > padL + plotW - 80 ? "right" : "left";
+    ctx.textBaseline = "top";
+    const lblX = ctx.textAlign === "right" ? px - 5 : px + 5;
+    ctx.fillText("λ_max", lblX, padT + 4);
+  }
+
+  // Readout
+  fT.textContent = T.toFixed(0) + " K";
+  const lamNm = lamPeak * 1e9;
+  fLam.textContent = lamNm < 1000
+    ? lamNm.toFixed(0) + " nm"
+    : (lamNm / 1000).toFixed(2) + " μm";
+  fRegion.textContent = regionFor(lamPeak);
+  fProduct.textContent = (lamPeak * T * 1e3).toFixed(4) + " × 10⁻³ m·K";
+}
+
+slider.addEventListener("input", draw);
+window.addEventListener("load", draw);
+setTimeout(draw, 80);
+</script>
+</body>
+</html>
