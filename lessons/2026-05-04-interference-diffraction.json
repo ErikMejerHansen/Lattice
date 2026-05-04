@@ -1,0 +1,129 @@
+{
+  "slug": "2026-05-04-interference-diffraction",
+  "title": "Interference and diffraction: why waves add amplitudes",
+  "node": {
+    "id": "interference",
+    "label": "Interference",
+    "subtitle": "amplitudes add"
+  },
+  "intro": "By 1700, Newton had decreed that light was made of tiny particles, and for a hundred years no one in Europe had the standing to argue. In 1801, an English doctor named Thomas Young set up a small lamp, two narrow slits, and a screen, and saw stripes of light and dark where any sensible particle theory said there should only be light. The argument that started in his cellar took twenty years and a botched royal commission to settle. When it was over, physics had a new universal rule: waves do not add their brightnesses, they add their amplitudes, and amplitudes can cancel.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The argument that lasted a century",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "By 1675, Isaac Newton had committed paper to a corpuscular theory of light: light was made of tiny particles shot in straight lines from a luminous body. Christiaan Huygens, working in Holland the same decade, argued the opposite: light was a wave in some pervading aether, and every point on a wavefront acted as a new source of secondary wavelets. Both theories explained reflection. Both could be made to explain refraction with enough fudging." },
+        { "type": "p", "text": "For the next century Newton's authority did the rest. Every English-speaking physicist taught corpuscles, every continental physicist taught waves, and the corpuscle camp grew larger because it was Newton's. The few people who pointed at troubling experiments (colored bands in soap films, rainbow fringes around the shadows of sharp edges) had their work explained away or quietly ignored." },
+        { "type": "p", "text": "The first English physicist to break ranks was Thomas Young, a polymath physician with a private income and no academic post to lose. He had been thinking about how sound waves combine in air: two musical notes can reinforce or beat against each other depending on whether their compressions arrive together or apart. In 1801 Young asked the question no Newtonian had asked. What would happen if you let light from a single source pass through two narrow slits and projected it onto a screen?" }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Young's two slits, 1801",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Young set up a candle (later, a pinhole in a window shutter), a card with two parallel slits cut about a millimeter apart, and a white screen on the other side of the room. Newton's corpuscle theory predicted two bright bands behind the slits, perhaps slightly fuzzy. What Young saw was a parade of bright and dark stripes, equally spaced, marching across the screen well outside the geometric shadow of the slits." },
+        { "type": "p", "text": "The bright stripes appeared where the path from one slit was a whole number of wavelengths longer than the path from the other. The dark stripes appeared where the difference was a half-integer. A small piece of geometry gave him the spacing between adjacent bright bands:" },
+        { "type": "math", "tex": "\\Delta y = \\frac{\\lambda L}{d}", "display": true },
+        { "type": "p", "text": "with d the slit separation, L the slit-to-screen distance, and Δy the fringe spacing. Young could measure Δy with a ruler and back-solve for λ. He got roughly 600 nm for red light, 450 nm for blue: the first directly determined wavelengths of visible light, and still correct to better than a percent." },
+        { "type": "p", "text": "The English Royal Society treated the result as crank work for a decade. Henry Brougham wrote a famously wrong review accusing Young of \"an absolute dearth of talent.\" Young's measurements were right and his theory was right; Newton's reputation kept the question open in England long after Paris had begun to move on." }
+      ],
+      "quiz": {
+        "question": "You double the distance between the two slits while keeping the wavelength and the screen distance fixed. What happens to the fringe spacing on the screen?",
+        "options": [
+          "It halves",
+          "It doubles",
+          "It stays the same",
+          "It quadruples"
+        ],
+        "correctIndex": 0,
+        "explanation": "From Δy = λL/d, doubling d halves the fringe spacing. The most tempting wrong answer is \"it doubles\": more separation between the slits feels like it ought to spread the pattern out. The opposite is true. The path-length difference between the two routes to a point at angle θ is d sin θ, so to advance one full wavelength of difference (one fringe) you only need to change θ by λ/d. Larger d means a smaller angular step between fringes, which means tighter bands on the screen."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Why amplitudes, not intensities",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The fringes were the result, but the deeper question is why they appear at all. A particle theory cannot manufacture darkness from two beams of light, and yet that is exactly what happens at the dark stripes: a point on the screen is bright when only the left slit is open, bright when only the right slit is open, and dark when both are open together. Adding light to light produces less light. Particles do not do this. Waves do." },
+        { "type": "p", "text": "A wave at a point in space carries an amplitude (a height of the disturbance, with a sign) and a phase (where in the cycle of oscillation it currently sits). When two waves arrive at the same point, the disturbance there is the sum of the two amplitudes:" },
+        { "type": "math", "tex": "A_{\\mathrm{total}} = A_1 \\cos(\\phi_1) + A_2 \\cos(\\phi_2)", "display": true },
+        { "type": "p", "text": "If the phases match, the amplitudes reinforce. If they are exactly opposite, they cancel. What our eyes and detectors actually register is not amplitude but intensity, which is the time-averaged square of the amplitude. For two coherent sources of equal strength I_0:" },
+        { "type": "math", "tex": "I = I_1 + I_2 + 2\\sqrt{I_1 I_2}\\,\\cos(\\Delta\\phi)", "display": true },
+        { "type": "p", "text": "That last cross term is the entire interference effect. It is positive at bright fringes, negative at dark ones, and averages to zero for incoherent sources (which is why ordinary light bulbs do not make stripes). Particles add intensities. Waves add amplitudes first and square afterwards. The factor-of-two difference in the algebra is the difference between two universes." },
+        { "type": "viz", "src": "2026-05-04-interference-diffraction.html", "height": 360, "caption": "Two slits 0.5 mm apart, lit at λ = 600 nm, project onto a screen 1 m away. Drag y along the screen. The top diagram shows the two paths, the middle plot shows the resulting intensity pattern with a marker at y, and the bottom shows phasors A₁ and A₂ adding head-to-tail to give A_total. Where the phasors point the same way, intensity peaks. Where they oppose, the screen goes dark." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Fresnel and the spot of Arago",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Young's evidence convinced almost no one in France. Fifteen years later, the French Academy of Sciences set a prize competition for the best mathematical theory of diffraction, expecting to settle the question in favor of corpuscles. Augustin-Jean Fresnel, a young road engineer with no academic position, submitted a wave theory built on Huygens' wavelet construction with one essential addition: each wavelet carries amplitude and phase, and the wavelets from across the entire wavefront interfere with each other even when the wavefront is broken by a slit, an edge, or an obstacle." },
+        { "type": "p", "text": "The committee included Siméon Denis Poisson, a Newtonian who disliked wave theory. Poisson worked through Fresnel's mathematics looking for an absurd consequence and thought he had found one. Set a small opaque disk in a beam of light. Fresnel's equations, by Poisson's reading, predicted a bright spot at the very center of the disk's geometric shadow, where every wavelet diffracted from the disk's circular edge has traveled the same distance and arrives in phase. Poisson called this prediction ridiculous. The brightest place in the shadow, right behind the obstruction?" },
+        { "type": "p", "text": "The committee chair, François Arago, did the experiment. The spot was there. It has been called the Poisson spot or the Arago spot ever since, depending on whose contribution you want to honor, and it has been visible in any half-decent freshman lab from that day to this. Fresnel won the prize. The corpuscular theory of light, after a century and a half, was finished." }
+      ],
+      "quiz": {
+        "question": "The Poisson spot appears at the center of the geometric shadow of a small opaque disk because:",
+        "options": [
+          "Every wavelet diffracted from the disk's edge travels the same path length to that point, so all the wavelets arrive in phase",
+          "Light bends around the disk and accidentally refocuses behind it",
+          "The disk's surface re-radiates light into the shadow region",
+          "Photons tunnel through the disk and emerge on the far side"
+        ],
+        "correctIndex": 0,
+        "explanation": "The shadow's center is exactly equidistant from every point on the disk's circular edge, so every Huygens wavelet from the rim covers the same distance and arrives with the same phase. They add constructively, producing a bright spot. The most tempting wrong answer is the \"refocuses by accident\" option: it sounds plausible because diffraction does bend light around obstacles. But there is no accident, and refocusing is the wrong word. The spot's brightness comes from a strict geometric symmetry: path lengths from every edge point are equal by construction. Move off-center by a fraction of a wavelength and the path lengths begin to disagree, the phases scramble, and the spot fades."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. From slits to atoms",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The double-slit experiment did not stay an experiment about light. In 1924 Louis de Broglie, in his doctoral thesis, proposed that every particle of matter has a wavelength inversely proportional to its momentum:" },
+        { "type": "math", "tex": "\\lambda = \\frac{h}{p}", "display": true },
+        { "type": "p", "text": "The thesis was sufficiently strange that his examiners wrote to Einstein for a second opinion. Einstein wrote back that the idea was correct. Three years later Clinton Davisson and Lester Germer at Bell Labs accidentally diffracted a beam of electrons off a nickel crystal, and George Thomson did the same on purpose with a thin metal foil. The patterns were ringed and periodic, exactly what waves do passing through a periodic lattice. Electrons interfere with themselves the way Young's light did." },
+        { "type": "p", "text": "Atoms interfere too, and so do molecules. In 1999 Anton Zeilinger sent buckyballs (C₆₀, 720 atomic mass units each) through a grating and got fringes. The double slit, in short, is not a fact about light. It is a fact about everything." },
+        { "type": "p", "text": "Whatever quantum mechanics is, it carries amplitudes that add and are then squared into probabilities, the same algebraic move Young saw on his cellar wall in 1801. Feynman would later say that the entire mystery of quantum mechanics is contained in this one experiment. That is not hyperbole. An argument that began with Newton and Huygens about the nature of light ended by telling us the nature of matter, and physics is still living in the wake of it." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A beam of electrons is fired through a double-slit apparatus, one electron at a time, and a fringe pattern slowly builds up on a detector screen. What does the buildup actually demonstrate?",
+    "options": [
+      "Each electron carries an amplitude that takes both paths and interferes with itself",
+      "The electrons knock into each other inside the apparatus and bunch into stripes",
+      "Tiny irregularities in the screen produce an artificial periodic pattern",
+      "Electrons travel in coordinated pairs that share a common wavelength"
+    ],
+    "correctIndex": 0,
+    "explanation": "Even at a rate so slow that only one electron is in the apparatus at a time, the fringe pattern still builds up. The most tempting wrong answer is \"the electrons knock into each other\": that was the natural first guess in the 1920s, and it is decisively ruled out by single-electron versions of the experiment. Each electron's amplitude takes both paths through the slits, adds with itself at the screen, and squares to a probability density that is brightest where the amplitudes interfere constructively. Young's cosine law applies to one electron at a time. That is exactly what makes the experiment so disturbing, and it is why Feynman called it the heart of quantum mechanics."
+  },
+  "suggestedNodes": [
+    {
+      "id": "single_slit_diffraction",
+      "label": "Single slit",
+      "subtitle": "Fraunhofer sinc",
+      "edgeType": "extends"
+    },
+    {
+      "id": "bragg_diffraction",
+      "label": "Bragg",
+      "subtitle": "2d sin θ = nλ",
+      "edgeType": "applied"
+    },
+    {
+      "id": "coherence",
+      "label": "Coherence",
+      "subtitle": "what makes fringes",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-04T09:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["wavelength", "photon_energy", "blackbody", "wien_displacement"]
+  }
+}

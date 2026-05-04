@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Double-slit interference</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+.readout .pin { color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+
+  <canvas id="plot" height="300" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);background:var(--bg-raised);"></canvas>
+
+  <div class="viz-slider-row">
+    <label>y</label>
+    <input type="range" id="ySlider" min="-3" max="3" step="0.02" value="0" style="min-height:36px;">
+    <span class="value" id="yVal">+0.00 mm</span>
+  </div>
+
+  <div class="readout" id="readout"></div>
+
+  <p class="viz-caption" style="margin-top:10px;">Two slits 0.5 mm apart, lit at λ = 600 nm, project onto a screen 1 m away. Drag y to slide the marker along the screen. Top: schematic of the two paths from each slit to the marker. Middle: intensity I(y) across the screen, with the marker shown. Bottom: phasors A₁ and A₂ adding head-to-tail to give A_total. When the phasors point the same way, intensity peaks; when they oppose, the screen goes dark.</p>
+</div>
+
+<script>
+const D = 0.5e-3;
+const L = 1.0;
+const LAM = 600e-9;
+
+const canvas = document.getElementById("plot");
+const slider = document.getElementById("ySlider");
+const yVal = document.getElementById("yVal");
+const readoutEl = document.getElementById("readout");
+
+function makeField(parent, label, pinned) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  const lbl = document.createElement("span");
+  lbl.className = "lbl";
+  lbl.textContent = label;
+  const val = document.createElement("span");
+  if (pinned) val.className = "pin";
+  wrap.appendChild(lbl);
+  wrap.appendChild(val);
+  parent.appendChild(wrap);
+  return val;
+}
+
+const fY = makeField(readoutEl, "y");
+const fPath = makeField(readoutEl, "path diff Δ");
+const fPhase = makeField(readoutEl, "Δφ");
+const fI = makeField(readoutEl, "I / I_peak", true);
+
+function pathDiff(yMM) {
+  const y = yMM * 1e-3;
+  return D * y / L;
+}
+function phaseDiff(yMM) {
+  return 2 * Math.PI * pathDiff(yMM) / LAM;
+}
+function intensity(yMM) {
+  const dphi = phaseDiff(yMM);
+  return Math.cos(dphi / 2) ** 2;
+}
+function fmtSigned(v) {
+  return (v >= 0 ? "+" : "") + v.toFixed(2);
+}
+
+function arrow(ctx, x1, y1, x2, y2, color, w) {
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = w || 2;
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 6;
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - ah * Math.cos(ang - Math.PI / 6), y2 - ah * Math.sin(ang - Math.PI / 6));
+  ctx.lineTo(x2 - ah * Math.cos(ang + Math.PI / 6), y2 - ah * Math.sin(ang + Math.PI / 6));
+  ctx.closePath();
+  ctx.fill();
+}
+
+function draw() {
+  const yMM = parseFloat(slider.value);
+  yVal.textContent = fmtSigned(yMM) + " mm";
+
+  const W = canvas.offsetWidth || 320;
+  canvas.width = W;
+  const H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const padL = 12, padR = 12, padT = 6;
+  const plotW = W - padL - padR;
+  const cx = padL + plotW / 2;
+
+  // y-domain: -3 to +3 mm
+  const yScale = plotW / 6;
+  function yToPx(yMM) { return cx + yMM * yScale; }
+
+  // === SETUP ===
+  const setupY = padT;
+  const setupH = 86;
+  const slitsY = setupY + 12;
+  const screenY = setupY + setupH - 6;
+
+  const slitOffsetPx = 14;
+  const slit1X = cx - slitOffsetPx;
+  const slit2X = cx + slitOffsetPx;
+
+  // screen line
+  ctx.strokeStyle = "rgba(26,26,24,0.5)";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(padL, screenY);
+  ctx.lineTo(padL + plotW, screenY);
+  ctx.stroke();
+
+  // slit barrier with two gaps
+  ctx.strokeStyle = "rgba(26,26,24,0.5)";
+  ctx.beginPath();
+  ctx.moveTo(padL, slitsY);
+  ctx.lineTo(slit1X - 3, slitsY);
+  ctx.moveTo(slit1X + 3, slitsY);
+  ctx.lineTo(slit2X - 3, slitsY);
+  ctx.moveTo(slit2X + 3, slitsY);
+  ctx.lineTo(padL + plotW, slitsY);
+  ctx.stroke();
+
+  ctx.fillStyle = "#1a1a18";
+  ctx.beginPath();
+  ctx.arc(slit1X, slitsY, 2.5, 0, Math.PI * 2);
+  ctx.arc(slit2X, slitsY, 2.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // target on screen
+  const targetX = Math.max(padL + 4, Math.min(padL + plotW - 4, yToPx(yMM)));
+
+  // path lines
+  ctx.strokeStyle = "#9c3a22";
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(slit1X, slitsY);
+  ctx.lineTo(targetX, screenY);
+  ctx.moveTo(slit2X, slitsY);
+  ctx.lineTo(targetX, screenY);
+  ctx.stroke();
+
+  ctx.fillStyle = "#9c3a22";
+  ctx.beginPath();
+  ctx.arc(targetX, screenY, 4, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.font = "italic 10px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.6)";
+  ctx.textAlign = "left";
+  ctx.fillText("slits", padL + 4, slitsY - 4);
+  ctx.textAlign = "right";
+  ctx.fillText("screen", padL + plotW - 4, screenY - 4);
+
+  // === INTENSITY CURVE ===
+  const intY = setupY + setupH + 4;
+  const intH = 80;
+
+  ctx.strokeStyle = "rgba(26,26,24,0.25)";
+  ctx.lineWidth = 1;
+  ctx.strokeRect(padL, intY, plotW, intH);
+
+  // center reference
+  ctx.strokeStyle = "rgba(26,26,24,0.1)";
+  ctx.beginPath();
+  ctx.moveTo(cx, intY);
+  ctx.lineTo(cx, intY + intH);
+  ctx.stroke();
+
+  // curve
+  ctx.strokeStyle = "#9c3a22";
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  const N = 280;
+  for (let i = 0; i <= N; i++) {
+    const t = i / N;
+    const yMMi = -3 + t * 6;
+    const I = intensity(yMMi);
+    const x = padL + t * plotW;
+    const y = intY + intH - 6 - I * (intH - 12);
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  const Inow = intensity(yMM);
+  const markerY = intY + intH - 6 - Inow * (intH - 12);
+
+  ctx.strokeStyle = "rgba(156,58,34,0.4)";
+  ctx.setLineDash([3, 3]);
+  ctx.beginPath();
+  ctx.moveTo(targetX, intY);
+  ctx.lineTo(targetX, intY + intH);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.fillStyle = "#9c3a22";
+  ctx.beginPath();
+  ctx.arc(targetX, markerY, 3.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ticks below intensity
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.fillStyle = "rgba(26,26,24,0.6)";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  for (const ymm of [-3, -2, -1, 0, 1, 2, 3]) {
+    const x = padL + ((ymm + 3) / 6) * plotW;
+    const lbl = ymm > 0 ? "+" + ymm : "" + ymm;
+    ctx.fillText(lbl, x, intY + intH + 2);
+  }
+
+  ctx.font = "italic 10px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.6)";
+  ctx.textAlign = "left";
+  ctx.fillText("I(y)", padL + 4, intY + 12);
+
+  // === PHASOR DIAGRAM ===
+  const phasorY = intY + intH + 18;
+  const phasorH = H - phasorY - 4;
+  const phasorCY = phasorY + phasorH / 2;
+  const armLen = Math.min(28, plotW * 0.07);
+
+  ctx.strokeStyle = "rgba(26,26,24,0.25)";
+  ctx.lineWidth = 1;
+  ctx.strokeRect(padL, phasorY, plotW, phasorH);
+
+  ctx.font = "italic 10px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.6)";
+  ctx.textAlign = "left";
+  ctx.fillText("phasor sum", padL + 4, phasorY + 12);
+
+  const startX = padL + plotW / 2 - armLen;
+  const startY = phasorCY;
+
+  // gentle reference circle
+  ctx.strokeStyle = "rgba(26,26,24,0.12)";
+  ctx.beginPath();
+  ctx.arc(startX, startY, 2 * armLen, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // tip of A1 (along +x)
+  const tipA1x = startX + armLen;
+  const tipA1y = startY;
+
+  // tip of A2 (rotated by Δφ from A1)
+  const dphi = phaseDiff(yMM);
+  const tipA2x = tipA1x + armLen * Math.cos(dphi);
+  const tipA2y = tipA1y + armLen * Math.sin(dphi);
+
+  arrow(ctx, startX, startY, tipA1x, tipA1y, "rgba(26,26,24,0.7)", 2);
+  arrow(ctx, tipA1x, tipA1y, tipA2x, tipA2y, "rgba(26,26,24,0.7)", 2);
+  arrow(ctx, startX, startY, tipA2x, tipA2y, "#9c3a22", 2.5);
+
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.85)";
+  ctx.textAlign = "center";
+  ctx.fillText("A₁", (startX + tipA1x) / 2, tipA1y + 14);
+  ctx.fillText("A₂", (tipA1x + tipA2x) / 2 + 10, (tipA1y + tipA2y) / 2 - 4);
+  ctx.fillStyle = "#9c3a22";
+  ctx.fillText("A_total", (startX + tipA2x) / 2 - 4, (startY + tipA2y) / 2 - 8);
+
+  // === READOUT ===
+  fY.textContent = fmtSigned(yMM) + " mm";
+  const dPath = pathDiff(yMM);
+  fPath.textContent = (dPath * 1e9).toFixed(0) + " nm";
+  fPhase.textContent = (dphi / Math.PI).toFixed(2) + " π";
+  fI.textContent = Inow.toFixed(3);
+}
+
+slider.addEventListener("input", draw);
+window.addEventListener("load", draw);
+setTimeout(draw, 80);
+</script>
+</body>
+</html>
