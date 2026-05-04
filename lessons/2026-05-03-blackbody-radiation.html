@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blackbody radiation</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.legend {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  margin-top: 8px;
+  font-size: 11px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  color: var(--text-muted);
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.swatch-solid  { width: 22px; height: 2px; background: var(--accent); }
+.swatch-dashed { width: 22px; border-top: 2px dashed #555; }
+.swatch-dotted { width: 22px; border-top: 2px dotted #555; }
+.readout {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+
+  <canvas id="plot" height="220" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);background:var(--bg-raised);"></canvas>
+
+  <div class="legend">
+    <div class="legend-item"><div class="swatch-solid"></div>Planck</div>
+    <div class="legend-item"><div class="swatch-dashed"></div>Rayleigh-Jeans</div>
+    <div class="legend-item"><div class="swatch-dotted"></div>Wien</div>
+  </div>
+
+  <div class="viz-slider-row">
+    <label>T</label>
+    <input type="range" id="tempSlider" min="1500" max="9000" step="50" value="5800" style="min-height:36px;">
+    <span class="value" id="tempVal">5800 K</span>
+  </div>
+
+  <div class="readout" id="readout"></div>
+
+  <p class="viz-caption" style="margin-top:10px;">Spectral energy density u(ν, T) versus frequency. Solid curve: Planck. Dashed: Rayleigh-Jeans (rises without bound, the ultraviolet catastrophe). Dotted: Wien (hugs the high-ν tail, undershoots the peak). Drag T to retune the cavity. Planck threads through the data at every wavelength and every temperature.</p>
+</div>
+
+<script>
+const h = 6.626e-34;
+const k = 1.381e-23;
+const c = 2.998e8;
+const SIGMA = 5.670e-8;
+
+const NU_MAX = 1.6e15;
+const STEPS = 360;
+
+const canvas = document.getElementById("plot");
+const slider = document.getElementById("tempSlider");
+const tempVal = document.getElementById("tempVal");
+const readoutEl = document.getElementById("readout");
+
+function planck(nu, T) {
+  const a = 8 * Math.PI * h * nu * nu * nu / (c * c * c);
+  const x = h * nu / (k * T);
+  if (x > 700) return 0;
+  return a / (Math.exp(x) - 1);
+}
+function rj(nu, T) {
+  return 8 * Math.PI * nu * nu * k * T / (c * c * c);
+}
+function wien(nu, T) {
+  const a = 8 * Math.PI * h * nu * nu * nu / (c * c * c);
+  return a * Math.exp(-h * nu / (k * T));
+}
+function peakNu(T) {
+  return 2.821 * k * T / h;
+}
+
+function makeField(parent, label) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  const lbl = document.createElement("span");
+  lbl.className = "lbl";
+  lbl.textContent = label;
+  const val = document.createElement("span");
+  wrap.appendChild(lbl);
+  wrap.appendChild(val);
+  parent.appendChild(wrap);
+  return val;
+}
+
+const fPeakNu = makeField(readoutEl, "ν_peak");
+const fPeakLam = makeField(readoutEl, "λ at ν_peak");
+const fRegion = makeField(readoutEl, "region");
+const fPower = makeField(readoutEl, "σT⁴");
+
+function regionFor(nu) {
+  if (nu < 4.0e14) return "infrared";
+  if (nu > 7.5e14) return "ultraviolet";
+  return "visible";
+}
+
+function draw() {
+  const T = parseFloat(slider.value);
+  tempVal.textContent = T.toFixed(0) + " K";
+
+  const W = canvas.offsetWidth || 320;
+  canvas.width = W;
+  const H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const np = peakNu(T);
+  const yMax = planck(np, T) * 1.18;
+  if (!isFinite(yMax) || yMax <= 0) return;
+
+  const padL = 38, padR = 10, padT = 10, padB = 30;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  function xFor(nu) { return padL + (nu / NU_MAX) * plotW; }
+  function yFor(u)  { return padT + plotH - (Math.min(u / yMax, 1.06)) * plotH; }
+
+  // Grid
+  ctx.strokeStyle = "rgba(26,26,24,0.07)";
+  ctx.lineWidth = 1;
+  for (let f = 2; f <= 14; f += 2) {
+    const x = xFor(f * 1e14);
+    ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + plotH); ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = "rgba(26,26,24,0.45)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, padT);
+  ctx.lineTo(padL, padT + plotH);
+  ctx.lineTo(padL + plotW, padT + plotH);
+  ctx.stroke();
+
+  // X tick labels
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  ctx.fillStyle = "rgba(26,26,24,0.55)";
+  for (let f = 0; f <= 16; f += 4) {
+    const x = xFor(f * 1e14);
+    ctx.beginPath();
+    ctx.strokeStyle = "rgba(26,26,24,0.45)";
+    ctx.moveTo(x, padT + plotH); ctx.lineTo(x, padT + plotH + 3);
+    ctx.stroke();
+    ctx.fillText(String(f), x, padT + plotH + 5);
+  }
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("ν  (× 10¹⁴ Hz)", padL + plotW / 2, padT + plotH + 17);
+
+  // Y axis label
+  ctx.save();
+  ctx.translate(12, padT + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = "center";
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("u(ν, T)", 0, 0);
+  ctx.restore();
+
+  // RJ (dashed)
+  ctx.strokeStyle = "rgba(80,80,80,0.85)";
+  ctx.lineWidth = 1.4;
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  let first = true;
+  for (let i = 1; i <= STEPS; i++) {
+    const nu = (i / STEPS) * NU_MAX;
+    const u = rj(nu, T);
+    const x = xFor(nu);
+    const y = yFor(u);
+    if (first) { ctx.moveTo(x, y); first = false; }
+    else ctx.lineTo(x, y);
+    if (u >= yMax * 1.06) break;
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Wien (dotted)
+  ctx.strokeStyle = "rgba(60,60,60,0.85)";
+  ctx.lineWidth = 1.4;
+  ctx.setLineDash([1.6, 3]);
+  ctx.beginPath();
+  for (let i = 1; i <= STEPS; i++) {
+    const nu = (i / STEPS) * NU_MAX;
+    const u = wien(nu, T);
+    const x = xFor(nu);
+    const y = yFor(u);
+    if (i === 1) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Planck (solid accent)
+  ctx.strokeStyle = "#9c3a22";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let i = 1; i <= STEPS; i++) {
+    const nu = (i / STEPS) * NU_MAX;
+    const u = planck(nu, T);
+    const x = xFor(nu);
+    const y = yFor(u);
+    if (i === 1) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Peak marker
+  if (np > 0 && np <= NU_MAX) {
+    const px = xFor(np);
+    ctx.strokeStyle = "rgba(156,58,34,0.45)";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, padT + plotH); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Readout
+  const lamAtPeakNu = (c / np) * 1e9;
+  const power = SIGMA * Math.pow(T, 4);
+  fPeakNu.textContent = (np / 1e14).toFixed(2) + " × 10¹⁴ Hz";
+  fPeakLam.textContent = lamAtPeakNu.toFixed(0) + " nm";
+  fRegion.textContent = regionFor(np);
+  fPower.textContent = power.toExponential(2) + " W/m²";
+}
+
+slider.addEventListener("input", draw);
+window.addEventListener("load", draw);
+setTimeout(draw, 80);
+</script>
+</body>
+</html>

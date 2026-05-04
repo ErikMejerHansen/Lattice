@@ -1,0 +1,124 @@
+{
+  "slug": "2026-05-03-blackbody-radiation",
+  "title": "Blackbody radiation: the curve that classical physics could not draw",
+  "node": {
+    "id": "blackbody",
+    "label": "Blackbody",
+    "subtitle": "Planck spectrum"
+  },
+  "intro": "Push an iron poker into a hot forge and watch it change color: dull red, then orange, then yellow, finally white-hot. That progression is universal. Any object with a temperature radiates light in a characteristic spectrum, and by 1900 German experimentalists had measured that spectrum to extraordinary precision. Two competing classical formulas described it, each one perfect on its own side and disastrous on the other. The story of how Planck stitched them together, in what he later called an act of desperation, is the story of how quantum physics began.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The forge, the foundry, and the spectrum",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "By the 1880s several practical industries needed to know how hot something was without touching it. Steel mills judged the temperature of molten iron by its color. Lighthouse keepers calibrated their incandescent filaments. Astronomers wanted the surface temperature of stars they could never visit. The shared physical fact behind all three problems was simple: any hot object glows, and the color of that glow encodes the temperature." },
+        { "type": "p", "text": "In Berlin, the Physikalisch-Technische Reichsanstalt (the German national standards lab) put serious effort into measuring the spectrum. Otto Lummer and Ernst Pringsheim built cavity radiators: hollow ovens with a tiny aperture, the closest physical realization of an idealized blackbody, an absorber that reflects nothing. Heinrich Rubens and Ferdinand Kurlbaum extended the measurements deep into the infrared with bolometers sensitive enough to detect a candle a kilometer away." },
+        { "type": "p", "text": "By 1900 they had spectral curves of unprecedented quality, smooth, reproducible, and consistent across instruments. The shape was clear: at each temperature, the curve rose from zero, climbed to a hump that shifted toward higher frequencies as the cavity grew hotter, and tailed off again. This was no industrial curiosity. It was one of the cleanest datasets in physics, and it sat there on the page, waiting for a theory that could draw it." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Two laws, two halves of the same curve",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Two formulas were on the table. Wilhelm Wien proposed an exponential law in 1896 that fit the high-frequency (short-wavelength) side of the curve beautifully. The energy density per unit frequency went as:" },
+        { "type": "math", "tex": "u(\\nu, T) \\propto \\nu^3 \\, e^{-h\\nu/kT}", "display": true },
+        { "type": "p", "text": "(In 1896 the constant in the exponent did not yet bear Planck's name, but the shape was the same.) Lord Rayleigh in 1900, with James Jeans completing the argument in 1905, derived a different formula from impeccable classical principles. Count the standing-wave modes of the electromagnetic field in a cavity, give each one the equipartition energy kT, and you get:" },
+        { "type": "math", "tex": "u(\\nu, T) = \\frac{8\\pi \\nu^2}{c^3} \\, kT", "display": true },
+        { "type": "p", "text": "The Rayleigh-Jeans formula matched the long-wavelength data perfectly. Then it kept rising. As ν increased, u(ν, T) grew without bound; integrate it across all frequencies and the total energy in any warm cavity is infinite. Paul Ehrenfest later coined the name: the ultraviolet catastrophe. So by mid-1900 physicists had two halves of the right answer. Wien fit the violet end, Rayleigh-Jeans fit the red end, neither fit both, and both were derived from supposedly first principles." }
+      ],
+      "quiz": {
+        "question": "Which classical formula predicts that the total energy radiated by a warm cavity, summed over all frequencies, is infinite?",
+        "options": [
+          "Wien's distribution",
+          "Rayleigh-Jeans law",
+          "Stefan-Boltzmann law",
+          "Planck's law"
+        ],
+        "correctIndex": 1,
+        "explanation": "Rayleigh-Jeans gives u(ν, T) ∝ ν², which grows without bound at high frequency. Integrate it and the total is infinite. The most tempting wrong answer is Wien's distribution because it is 'the other classical formula', but Wien's exponential e^(-hν/kT) suppresses the high-frequency tail so its integral is finite. Wien fails differently, by undershooting at low frequency."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Planck's interpolation and the quantum gambit",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "On October 7, 1900, Heinrich Rubens visited Max Planck and showed him the latest infrared data. Planck, who had spent years working on the problem from a thermodynamic angle, went home and within hours produced a formula that interpolated between Wien (high ν) and Rayleigh-Jeans (low ν). He communicated it that same week. Within days the experimentalists confirmed: it fit at every wavelength, every temperature, with extraordinary precision." },
+        { "type": "math", "tex": "u(\\nu, T) = \\frac{8\\pi h \\nu^3}{c^3} \\cdot \\frac{1}{e^{h\\nu/kT} - 1}", "display": true },
+        { "type": "viz", "src": "2026-05-03-blackbody-radiation.html", "height": 320, "caption": "Planck's curve (solid) compared with Rayleigh-Jeans (dashed) and Wien (dotted), at the temperature you choose. RJ runs up the right side toward infinity; Wien hugs the high-ν tail but undershoots the peak. Planck threads through the data at every frequency." },
+        { "type": "p", "text": "But the formula was, at first, a guess. Planck spent the next two months trying to derive it. The derivation he found, presented in December 1900, required an assumption he himself called desperate: the oscillators in the walls of the cavity cannot hold any continuous amount of energy, only discrete multiples of hν. This was the birth of the quantum, though Planck for years afterward thought of it as a mathematical maneuver and continued looking for a classical justification that never arrived." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Reading the Planck formula",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The Planck formula contains its two predecessors as limiting cases, which is exactly what a good theory should do. At low frequency, where hν is much smaller than kT, the exponential expands as e^(hν/kT) ≈ 1 + hν/kT. The denominator becomes hν/kT, the hν cancels in the numerator, and the result is the Rayleigh-Jeans formula. Equipartition was right, but only when the energy quantum was negligible." },
+        { "type": "p", "text": "At high frequency, where hν is much larger than kT, the exponential is enormous and the -1 in the denominator becomes irrelevant. The denominator collapses to e^(hν/kT), and the formula reduces to Wien's exponential form. Wien was right, but only when the quantum cuts off the modes that classical equipartition wanted to fill. Planck's formula explained why each prior law worked where it did, and why each failed where it did." },
+        { "type": "p", "text": "Two further consequences fall out almost for free. The peak of u(ν, T) sits where hν ≈ 2.82 kT, so as T rises the peak shifts to higher frequencies (Wien's displacement law, the same Wien who had the wrong distribution; he was right about the peak). And integrating u(ν, T) across all frequencies gives a total radiated power proportional to T⁴ (Stefan-Boltzmann). Both results had been measured before Planck. Neither had a derivation. Now they did." }
+      ],
+      "quiz": {
+        "question": "When kT is much greater than hν (the low-frequency limit at any normal temperature), the Planck formula reduces to which expression?",
+        "options": [
+          "Rayleigh-Jeans law",
+          "Wien's exponential distribution",
+          "The Stefan-Boltzmann law",
+          "The Bohr quantization condition"
+        ],
+        "correctIndex": 0,
+        "explanation": "For hν/kT ≪ 1, expand e^(hν/kT) ≈ 1 + hν/kT. The denominator becomes hν/kT, and Planck's formula reduces to (8π/c³) ν² kT, exactly Rayleigh-Jeans. The most tempting wrong answer is Wien's exponential because both Wien and RJ are 'classical limits', but Wien is the high-frequency limit, not the low. Classical equipartition works precisely when energy quanta are too small to matter."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The curve that wrote the cosmos",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The Planck spectrum keeps appearing in places its discoverer could not have anticipated. The most spectacular: the cosmic microwave background. In 1965 Arno Penzias and Robert Wilson, debugging a microwave horn antenna at Bell Labs, detected a faint and uniform radio hiss arriving from every direction in the sky. A group at Princeton (Robert Dicke, Jim Peebles, Peter Roll, David Wilkinson) immediately recognized it as the relic radiation of the early universe, redshifted by cosmic expansion to a temperature of about 3 kelvin." },
+        { "type": "p", "text": "In 1990 the FIRAS instrument on the COBE satellite measured the full spectrum. It is a Planck curve at T = 2.725 K, accurate to one part in 10⁵. The match is so precise that on the published plot the experimental error bars are smaller than the line thickness used to draw the theoretical curve. There has never been a more perfect blackbody anywhere in physics, and the universe itself is the one that produced it." },
+        { "type": "p", "text": "What Planck found in 1900, struggling with cavity-radiator data from the Berlin standards lab, turns out to describe the universe at age 380,000 years. The crack he saw in classical physics widened into the door of quantum mechanics, and the curve itself became one of the most precisely tested predictions in cosmology. Few formulas have ever done so much work, in so many places, after starting as an act of desperation." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A blackbody's absolute temperature doubles. By what factor does its peak emission frequency change, and by what factor does its total radiated power per unit area change?",
+    "options": [
+      "Peak frequency × 2; total power × 16",
+      "Peak frequency × 2; total power × 4",
+      "Peak frequency × 4; total power × 16",
+      "Peak frequency × 4; total power × 4"
+    ],
+    "correctIndex": 0,
+    "explanation": "Wien's displacement law gives ν_peak ∝ T (from hν ≈ 2.82 kT), so doubling T doubles the peak frequency. Stefan-Boltzmann gives total power ∝ T⁴, so doubling T multiplies power by 2⁴ = 16. The most tempting wrong answer is '× 2; × 4', which conflates the linear shift in peak frequency with the area under the curve. The area scales much faster than the peak shifts because the entire curve grows up and out as it slides right."
+  },
+  "suggestedNodes": [
+    {
+      "id": "wien_displacement",
+      "label": "Wien's law",
+      "subtitle": "λ_max ∝ 1/T",
+      "edgeType": "extends"
+    },
+    {
+      "id": "stefan_boltzmann",
+      "label": "Stefan-Boltz.",
+      "subtitle": "P ∝ T⁴",
+      "edgeType": "extends"
+    },
+    {
+      "id": "cmb_radiation",
+      "label": "CMB",
+      "subtitle": "T = 2.725 K",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-03T19:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["photon_energy", "wavelength"]
+  }
+}
