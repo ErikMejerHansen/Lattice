@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type React from 'react'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import graphData from '../state/concept_graph.json'
@@ -275,13 +276,13 @@ function SectionQuiz({
   quizLabel,
   selectedIndex,
   onAnswer,
-  noteId,
+  onContinue,
 }: {
   quiz: Quiz
   quizLabel: string
   selectedIndex: number | null
   onAnswer: (index: number) => void
-  noteId: string
+  onContinue: () => void
 }) {
   const answered = selectedIndex !== null
   const correct = answered && selectedIndex === quiz.correctIndex
@@ -373,7 +374,7 @@ function SectionQuiz({
             {quiz.explanation}
           </p>
           <button
-            onClick={() => document.getElementById(noteId)?.focus()}
+            onClick={onContinue}
             style={{
               background: 'none',
               border: 'none',
@@ -399,14 +400,36 @@ function formatNotesForClipboard(lesson: Lesson, notes: Record<string, string>):
     .join('\n')
 }
 
+const noteInputStyle: React.CSSProperties = {
+  width: '100%',
+  marginTop: '1.5rem',
+  padding: '0.5rem 0.625rem',
+  fontFamily: "'Source Serif 4', Georgia, serif",
+  fontSize: '0.9rem',
+  lineHeight: 1.5,
+  color: '#3a2c1a',
+  background: '#faf7f1',
+  border: '1px solid #d8cfc0',
+  borderRadius: 0,
+  resize: 'vertical',
+  boxSizing: 'border-box',
+  outline: 'none',
+}
+
 function LessonView({ lesson, onBack }: { lesson: Lesson; onBack: () => void }) {
   const [notes, setNotes] = useState<Record<string, string>>({})
   const [copied, setCopied] = useState(false)
   const [quizAnswers, setQuizAnswers] = useState<Record<string, number>>({})
+  // -1 = intro page, 0..N-1 = section pages
+  const [sectionIndex, setSectionIndex] = useState(-1)
+  const [showReview, setShowReview] = useState(false)
 
+  const totalSections = lesson.sections.length
+  const totalPages = totalSections + 1 // intro + sections
+  const currentPage = sectionIndex + 2 // intro=1, section[0]=2, …
+  const noteCount = lesson.sections.filter(s => notes[s.id]?.trim()).length
   const nonEmptyNotes = lesson.sections.filter(s => notes[s.id]?.trim())
 
-  // quizLabel: "sectionNum.quizIndex" e.g. "2.1", "4.2"
   const quizLabels: Record<string, string> = {}
   let quizCount = 0
   lesson.sections.forEach(s => {
@@ -417,6 +440,20 @@ function LessonView({ lesson, onBack }: { lesson: Lesson; onBack: () => void }) 
     }
   })
 
+  const currentSection = sectionIndex >= 0 ? lesson.sections[sectionIndex] : null
+  const currentSectionNum = currentSection ? parseInt(currentSection.id.replace('s', ''), 10) : null
+  const sectionLabel = currentSection
+    ? (quizLabels[currentSection.id] ?? String(currentSectionNum))
+    : null
+
+  function handleContinue() {
+    if (sectionIndex < totalSections - 1) {
+      setSectionIndex(prev => prev + 1)
+    } else {
+      setShowReview(true)
+    }
+  }
+
   function handleCopy() {
     navigator.clipboard.writeText(formatNotesForClipboard(lesson, notes)).then(() => {
       setCopied(true)
@@ -424,150 +461,222 @@ function LessonView({ lesson, onBack }: { lesson: Lesson; onBack: () => void }) 
     })
   }
 
-  return (
-    <main style={{ maxWidth: 660, margin: '0 auto', padding: '3rem 1.5rem 6rem' }}>
-      <button
-        onClick={onBack}
-        style={{
-          background: 'none',
-          border: 'none',
-          padding: 0,
-          cursor: 'pointer',
-          fontFamily: "'IBM Plex Mono', monospace",
-          fontSize: '0.75rem',
-          fontWeight: 500,
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-          color: '#9c3a22',
-          marginBottom: '2rem',
-          display: 'block',
-        }}
-      >
-        ← Constellation
-      </button>
+  const monoSm: React.CSSProperties = {
+    fontFamily: "'IBM Plex Mono', monospace",
+    fontSize: '0.7rem',
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase',
+    fontWeight: 500,
+  }
 
-      <header style={{ marginBottom: '2.5rem' }}>
-        <div style={{
-          fontFamily: "'IBM Plex Mono', monospace",
-          fontSize: '0.75rem',
-          fontWeight: 500,
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          color: '#9c3a22',
-          marginBottom: '0.6rem',
-        }}>
-          {lesson.node.subtitle}
-        </div>
-        <h1 style={{
-          margin: 0,
-          fontSize: '2rem',
+  const header = (
+    <div style={{
+      padding: '0.875rem 1.5rem 0.75rem',
+      borderBottom: '1px solid #d8cfc0',
+      background: '#f4eee2',
+      flexShrink: 0,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+        <button
+          onClick={onBack}
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            cursor: 'pointer',
+            fontFamily: "'IBM Plex Mono', monospace",
+            fontSize: '0.9rem',
+            color: '#9c3a22',
+            lineHeight: 1,
+            flexShrink: 0,
+          }}
+        >
+          ←
+        </button>
+        <span style={{
+          fontFamily: "'Source Serif 4', Georgia, serif",
+          fontSize: '1.05rem',
           fontWeight: 600,
-          lineHeight: 1.2,
-          letterSpacing: '-0.01em',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
         }}>
           {lesson.title}
-        </h1>
-      </header>
-
-      <article>
-        <p style={{ margin: '0 0 2rem', fontStyle: 'italic', color: '#555' }}>
-          {lesson.intro}
-        </p>
-        {lesson.sections.map(section => (
-          <section key={section.id} style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{
-              fontSize: '1.1rem',
-              fontWeight: 600,
-              margin: '0 0 1rem',
-              color: '#9c3a22',
-            }}>
-              {section.heading}
-            </h2>
-            {(section.blocks as Block[]).map((block, i) => renderBlock(block, i))}
-            {section.hasQuiz && section.quiz && (
-              <SectionQuiz
-                quiz={section.quiz}
-                quizLabel={quizLabels[section.id]}
-                selectedIndex={quizAnswers[section.id] ?? null}
-                onAnswer={index => setQuizAnswers(prev => ({ ...prev, [section.id]: index }))}
-                noteId={`note-${section.id}`}
-              />
-            )}
-            <textarea
-              id={`note-${section.id}`}
-              value={notes[section.id] ?? ''}
-              onChange={e => setNotes(prev => ({ ...prev, [section.id]: e.target.value }))}
-              placeholder="Add a note..."
-              rows={2}
-              style={{
-                width: '100%',
-                marginTop: '1rem',
-                padding: '0.5rem 0.625rem',
-                fontFamily: "'Source Serif 4', Georgia, serif",
-                fontSize: '0.9rem',
-                lineHeight: 1.5,
-                color: '#3a2c1a',
-                background: '#faf7f1',
-                border: '1px solid #d8cfc0',
-                borderRadius: 0,
-                resize: 'vertical',
-                boxSizing: 'border-box',
-                outline: 'none',
-              }}
-              onFocus={e => { e.target.style.borderColor = '#9c3a22' }}
-              onBlur={e => { e.target.style.borderColor = '#d8cfc0' }}
-            />
-          </section>
-        ))}
-      </article>
-
-      {nonEmptyNotes.length > 0 && (
-        <aside style={{
-          marginTop: '3rem',
-          paddingTop: '2rem',
-          borderTop: '1px solid #d8cfc0',
+        </span>
+      </div>
+      {!showReview && (
+        <div style={{
+          ...monoSm,
+          color: '#888',
+          marginTop: '0.2rem',
+          paddingLeft: '1.625rem',
         }}>
-          <div style={{
-            fontFamily: "'IBM Plex Mono', monospace",
-            fontSize: '0.75rem',
-            fontWeight: 500,
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-            color: '#9c3a22',
-            marginBottom: '1rem',
-          }}>
+          {currentPage} / {totalPages}
+          {noteCount > 0 ? ` · ${noteCount} NOTE${noteCount !== 1 ? 'S' : ''}` : ''}
+        </div>
+      )}
+    </div>
+  )
+
+  const footer = (
+    <div style={{
+      padding: '0.5rem 1.5rem 0.625rem',
+      borderTop: '1px solid #d8cfc0',
+      background: '#f4eee2',
+      flexShrink: 0,
+    }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '0.375rem',
+      }}>
+        <span style={{ ...monoSm, color: '#aaa', fontSize: '0.65rem' }}>
+          {lesson.title}
+        </span>
+        <span style={{ ...monoSm, color: '#aaa', fontSize: '0.65rem', textTransform: 'none' }}>
+          {sectionLabel ? `§ ${sectionLabel} — ` : ''}{currentPage} / {totalPages}
+        </span>
+      </div>
+      <div style={{ height: '2px', background: '#e8ddd0' }}>
+        <div style={{
+          height: '100%',
+          width: `${(currentPage / totalPages) * 100}%`,
+          background: '#9c3a22',
+          transition: 'width 0.25s ease',
+        }} />
+      </div>
+    </div>
+  )
+
+  const wrapper: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100dvh',
+    maxWidth: 660,
+    margin: '0 auto',
+  }
+
+  if (showReview) {
+    return (
+      <div style={wrapper}>
+        {header}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '2rem 1.5rem 3rem' }}>
+          <div style={{ ...monoSm, color: '#9c3a22', marginBottom: '1rem' }}>
             Your notes
           </div>
-          <ul style={{ margin: '0 0 1.25rem', padding: '0 0 0 1.25rem' }}>
-            {nonEmptyNotes.map(s => (
-              <li key={s.id} style={{ marginBottom: '0.5rem', fontSize: '0.95rem', lineHeight: 1.5 }}>
-                <span style={{ color: '#888', fontSize: '0.8rem', fontFamily: "'IBM Plex Mono', monospace" }}>
-                  {s.heading}:{' '}
-                </span>
-                {notes[s.id].trim()}
-              </li>
-            ))}
-          </ul>
+          {nonEmptyNotes.length > 0 ? (
+            <>
+              <ul style={{ margin: '0 0 1.25rem', padding: '0 0 0 1.25rem' }}>
+                {nonEmptyNotes.map(s => (
+                  <li key={s.id} style={{ marginBottom: '0.5rem', fontSize: '0.95rem', lineHeight: 1.5 }}>
+                    <span style={{ color: '#888', fontSize: '0.8rem', fontFamily: "'IBM Plex Mono', monospace" }}>
+                      {s.heading}:{' '}
+                    </span>
+                    {notes[s.id].trim()}
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={handleCopy}
+                style={{
+                  background: 'none',
+                  border: '1px solid #9c3a22',
+                  padding: '0.4rem 0.9rem',
+                  cursor: 'pointer',
+                  fontFamily: "'IBM Plex Mono', monospace",
+                  fontSize: '0.75rem',
+                  fontWeight: 500,
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  color: '#9c3a22',
+                  marginBottom: '2.5rem',
+                  display: 'block',
+                }}
+              >
+                {copied ? 'Copied' : 'Copy to wishlist'}
+              </button>
+            </>
+          ) : (
+            <p style={{ color: '#888', fontSize: '0.95rem', marginBottom: '2.5rem' }}>No notes taken.</p>
+          )}
           <button
-            onClick={handleCopy}
+            onClick={onBack}
             style={{
               background: 'none',
-              border: '1px solid #9c3a22',
-              padding: '0.4rem 0.9rem',
+              border: 'none',
+              padding: 0,
               cursor: 'pointer',
-              fontFamily: "'IBM Plex Mono', monospace",
-              fontSize: '0.75rem',
-              fontWeight: 500,
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
+              fontFamily: "'Source Serif 4', Georgia, serif",
+              fontSize: '1rem',
               color: '#9c3a22',
             }}
           >
-            {copied ? 'Copied' : 'Copy to wishlist'}
+            ← Back to constellation
           </button>
-        </aside>
-      )}
-    </main>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div style={wrapper}>
+      {header}
+      <div key={sectionIndex} style={{ flex: 1, overflowY: 'auto', padding: '2rem 1.5rem 3rem' }}>
+        {sectionIndex === -1 ? (
+          <>
+            <div style={{ ...monoSm, color: '#9c3a22', marginBottom: '0.6rem' }}>
+              {lesson.node.subtitle}
+            </div>
+            <h1 style={{ margin: '0 0 1.5rem', fontSize: '1.875rem', fontWeight: 600, lineHeight: 1.2, letterSpacing: '-0.01em' }}>
+              {lesson.title}
+            </h1>
+            <p style={{ margin: '0 0 2.5rem', fontStyle: 'italic', color: '#555', lineHeight: 1.6, fontSize: '1rem' }}>
+              {lesson.intro}
+            </p>
+            <button
+              onClick={handleContinue}
+              style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: "'Source Serif 4', Georgia, serif", fontSize: '1rem', color: '#9c3a22' }}
+            >
+              Begin →
+            </button>
+          </>
+        ) : (
+          <>
+            <h2 style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 1.25rem', color: '#9c3a22' }}>
+              {currentSection!.heading}
+            </h2>
+            {(currentSection!.blocks as Block[]).map((block, i) => renderBlock(block, i))}
+            <textarea
+              value={notes[currentSection!.id] ?? ''}
+              onChange={e => setNotes(prev => ({ ...prev, [currentSection!.id]: e.target.value }))}
+              placeholder="Add a note..."
+              rows={2}
+              style={noteInputStyle}
+              onFocus={e => { e.target.style.borderColor = '#9c3a22' }}
+              onBlur={e => { e.target.style.borderColor = '#d8cfc0' }}
+            />
+            {currentSection!.hasQuiz && currentSection!.quiz ? (
+              <SectionQuiz
+                quiz={currentSection!.quiz}
+                quizLabel={quizLabels[currentSection!.id]}
+                selectedIndex={quizAnswers[currentSection!.id] ?? null}
+                onAnswer={index => setQuizAnswers(prev => ({ ...prev, [currentSection!.id]: index }))}
+                onContinue={handleContinue}
+              />
+            ) : (
+              <button
+                onClick={handleContinue}
+                style={{ background: 'none', border: 'none', padding: '1.5rem 0 0', cursor: 'pointer', fontFamily: "'Source Serif 4', Georgia, serif", fontSize: '1rem', color: '#9c3a22', display: 'block' }}
+              >
+                Continue →
+              </button>
+            )}
+          </>
+        )}
+      </div>
+      {footer}
+    </div>
   )
 }
 
