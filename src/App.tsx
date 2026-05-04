@@ -644,7 +644,7 @@ function formatNotesForClipboard(lesson: Lesson, notes: Record<string, string>):
 
 // ── LessonView ─────────────────────────────────────────────────────────
 
-function LessonView({ lesson, onBack }: { lesson: Lesson; onBack: () => void }) {
+function LessonView({ lesson, onBack, onComplete }: { lesson: Lesson; onBack: () => void; onComplete: () => void }) {
   const [notes, setNotes] = useState<Record<string, string>>({})
   const [copied, setCopied] = useState(false)
   const [quizAnswers, setQuizAnswers] = useState<Record<string, number>>({})
@@ -757,7 +757,7 @@ function LessonView({ lesson, onBack }: { lesson: Lesson; onBack: () => void }) 
             </p>
           )}
 
-          <ContinueBtn label="Back to constellation" onClick={onBack} />
+          <ContinueBtn label="Back to constellation" onClick={onComplete} />
         </div>
         <PageFolio left={lesson.title} right="Notes" />
       </div>
@@ -842,7 +842,16 @@ function App() {
   }
 
   if (lesson) {
-    return <LessonView lesson={lesson} onBack={() => setLesson(null)} />
+    return (
+      <LessonView
+        lesson={lesson}
+        onBack={() => setLesson(null)}
+        onComplete={() => {
+          setNodeStates(prev => persistNodeState(lesson.node.id, 'mastered', prev))
+          setLesson(null)
+        }}
+      />
+    )
   }
 
   return <ConstellationView onSelect={handleSelect} nodeStates={nodeStates} />
