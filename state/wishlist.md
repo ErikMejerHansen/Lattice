@@ -1,5 +1,3 @@
-Refraction — Snell's law from Fermat's principle, fast vs. slow media
-
 # auto-suggested 2026-05-03 from photon-energy
 Photoelectric effect — Millikan's decade-long attempt to disprove Einstein, detailed treatment
 Wave-particle duality — de Broglie 1924, what is waving when an electron waves
@@ -16,3 +14,8 @@ Spectroscopy basics — absorption lines, what the sun is made of
 # auto-suggested 2026-05-04 from interference-and-diffraction
 Coherence — what makes two beams able to interfere, laser vs lamp
 Diffraction gratings — many slits, the spectrometer at the heart of chemistry
+
+# auto-suggested 2026-05-04 from refraction
+Principle of least action — Maupertuis to Lagrange, optics generalized to mechanics
+Total internal reflection — fiber optics, the angle past which light cannot escape
+Dispersion — n(λ), why prisms make rainbows, why old glass distorts color

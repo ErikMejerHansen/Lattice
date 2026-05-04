@@ -49,6 +49,16 @@
       "createdAt": "2026-05-04T09:00:00Z",
       "col": 0,
       "row": 2
+    },
+    {
+      "id": "refraction",
+      "label": "Refraction",
+      "subtitle": "n sin θ = const",
+      "state": "available",
+      "lesson": "2026-05-04-refraction",
+      "createdAt": "2026-05-04T10:00:00Z",
+      "col": 1,
+      "row": 2
     }
   ],
   "edges": [
@@ -58,6 +68,8 @@
     { "from": "wien_displacement", "to": "blackbody", "kind": "extends" },
     { "from": "wien_displacement", "to": "wavelength", "kind": "applied" },
     { "from": "interference_diffraction", "to": "wavelength", "kind": "extends" },
-    { "from": "interference_diffraction", "to": "photon_energy", "kind": "related" }
+    { "from": "interference_diffraction", "to": "photon_energy", "kind": "related" },
+    { "from": "refraction", "to": "wavelength", "kind": "related" },
+    { "from": "refraction", "to": "interference_diffraction", "kind": "related" }
   ]
 }
