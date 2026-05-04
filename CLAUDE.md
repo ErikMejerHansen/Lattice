@@ -80,11 +80,11 @@ These will get resolved as we go. Listed here so they're visible.
 - **Routing.** Do we need URLs per lesson (`/lattice/lessons/carnot-cycles`) or is in-app state enough? Decide at slice 4.
 - **Viz CDN policy.** The routine spec says cdnjs only. The app shell may also need to load KaTeX for math blocks — same policy, different consumer. Confirm at slice 1 or 2.
 - **PWA / home screen.** Iconography, manifest, "Add to Home Screen" flow. Not blocking anything; pick up around slice 8 when daily use becomes real.
-- **Storage.** Mastered/in_progress state has to live somewhere. localStorage is fine for now (single device, single user). Revisit only if we hit iOS storage eviction in practice.
+- **Storage.** Mastered/in_progress state lives in `localStorage` under `lattice_node_states` (a `Record<nodeId, NodeState>`). `mastered` is set by quizzes (future slice). Revisit only if iOS storage eviction becomes a real problem.
 
 ## Status
 
-**Current slice: 7 (complete)**
+**Current slice: 8 (complete)**
 
 Slices shipped:
 1. One static lesson rendered — hand-written JSON, bare React, `npm run dev`.
@@ -94,5 +94,6 @@ Slices shipped:
 5. Validation script — `validate-lesson.mjs` runs cleanly against existing lessons.
 6. Routine spec, manual trigger — `scripts/smoke-viz.mjs` structural smoke test added; full routine spec lives in `routine/CLAUDE.md` with prompts in `routine/prompts/`. Routine ready to run end-to-end.
 7. Viz iframe rendering — `lessons/*.html` served via inline Vite plugin (dev middleware + build emitter); `viz` blocks render as sandboxed iframes with caption.
+8. Constellation view — SVG concept graph replaces lesson list; nodes positioned by `col`/`row` from `state/concept_graph.json`; `extends` edges have arrowheads, `related` edges are dashed; opening a lesson flips its node to `in_progress` in localStorage; `mastered` reserved for quiz integration.
 
-Next: **Slice 8** 
+Next: **Slice 9**
