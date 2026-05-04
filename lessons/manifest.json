@@ -19,5 +19,12 @@
     "subtitle": "Planck spectrum",
     "date": "2026-05-03",
     "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-05-04-wiens-displacement-law",
+    "title": "Wien's displacement law: the color of fire and the temperature of stars",
+    "subtitle": "λ_max ∝ 1/T",
+    "date": "2026-05-04",
+    "estimatedReadingMinutes": 22
   }
 ]
