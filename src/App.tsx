@@ -51,7 +51,28 @@ function renderBlock(block: Block, i: number) {
     }
     return <span key={i} dangerouslySetInnerHTML={{ __html: html }} />
   }
-  // viz blocks handled in slice 7
+  if (block.type === 'viz') {
+    return (
+      <figure key={i} style={{ margin: '1.75rem 0' }}>
+        <iframe
+          src={`${import.meta.env.BASE_URL}lessons/${block.src}`}
+          height={block.height}
+          style={{ width: '100%', border: 'none', display: 'block' }}
+          sandbox="allow-scripts"
+          title={block.caption}
+        />
+        <figcaption style={{
+          fontSize: '0.8rem',
+          color: '#666',
+          marginTop: '0.5rem',
+          fontStyle: 'italic',
+          lineHeight: 1.4,
+        }}>
+          {block.caption}
+        </figcaption>
+      </figure>
+    )
+  }
   return null
 }
 

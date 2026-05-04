@@ -85,7 +85,7 @@ These will get resolved as we go. Listed here so they're visible.
 
 ## Status
 
-**Current slice: 6 (complete)**
+**Current slice: 7 (complete)**
 
 Slices shipped:
 1. One static lesson rendered — hand-written JSON, bare React, `npm run dev`.
@@ -94,5 +94,6 @@ Slices shipped:
 4. App lists all lessons — `lessons/manifest.json` index, tappable list view, `useState` navigation (routing decision: no react-router yet, defer to slice 9).
 5. Validation script — `validate-lesson.mjs` runs cleanly against existing lessons.
 6. Routine spec, manual trigger — `scripts/smoke-viz.mjs` structural smoke test added; full routine spec lives in `routine/CLAUDE.md` with prompts in `routine/prompts/`. Routine ready to run end-to-end.
+7. Viz iframe rendering — `lessons/*.html` served via inline Vite plugin (dev middleware + build emitter); `viz` blocks render as sandboxed iframes with caption.
 
-Next: **Slice 7** — viz iframe rendering. Embed bespoke HTML viz files from lesson JSON in the React app.
+Next: **Slice 8** — schedule the routine. Daily 7am run.
