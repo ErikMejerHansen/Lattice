@@ -21,9 +21,8 @@ The current slice is tracked at the bottom of this file under "Status." Update i
 5. **Validation script.** `validate-lesson.mjs` runs cleanly against existing lessons.
 6. **Routine spec, manual trigger.** Claude Code executes the routine end-to-end under supervision.
 7. **Viz iframe rendering.** Embed bespoke HTML viz files from lesson JSON.
-8. **Schedule the routine.** Daily 7am run.
-9. **Constellation view.** Replace list with concept graph.
-10. **Notes loop.** Per-section note input, queue review at lesson end, copy-paste to wishlist.
+8. **Constellation view.** Replace list with concept graph.
+9. **Notes loop.** Per-section note input, queue review at lesson end, copy-paste to wishlist.
 
 ## What's true about Lattice (decisions already made)
 
@@ -96,4 +95,4 @@ Slices shipped:
 6. Routine spec, manual trigger — `scripts/smoke-viz.mjs` structural smoke test added; full routine spec lives in `routine/CLAUDE.md` with prompts in `routine/prompts/`. Routine ready to run end-to-end.
 7. Viz iframe rendering — `lessons/*.html` served via inline Vite plugin (dev middleware + build emitter); `viz` blocks render as sandboxed iframes with caption.
 
-Next: **Slice 8** — schedule the routine. Daily 7am run.
+Next: **Slice 8** 
