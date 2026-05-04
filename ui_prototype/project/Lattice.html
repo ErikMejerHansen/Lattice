@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lattice — Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="tokens.css" />
+  <style>
+    html, body { margin: 0; padding: 0; background: #2c322f; color: var(--ink); }
+    body {
+      font-family: var(--serif);
+      min-height: 100vh;
+    }
+    /* slider styling for vizes */
+    .lattice-slider, .lattice input[type=range] {
+      -webkit-appearance: none; appearance: none;
+      height: 1px; background: var(--rule-strong);
+      outline: none; padding: 0; margin: 0;
+    }
+    .lattice-slider::-webkit-slider-thumb,
+    .lattice input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--rust); cursor: pointer;
+      border: 2px solid var(--paper-raised);
+      box-shadow: 0 0 0 1px var(--rust);
+    }
+    .lattice-slider::-moz-range-thumb,
+    .lattice input[type=range]::-moz-range-thumb {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--rust); cursor: pointer; border: 2px solid var(--paper-raised);
+      box-shadow: 0 0 0 1px var(--rust);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="ios-frame.jsx"></script>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="components.jsx"></script>
+  <script type="text/babel" src="screens.jsx"></script>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    // wrap each screen in an iPhone frame
+    function Phone({ children, label }) {
+      return (
+        <IOSDevice width={390} height={844}>
+          {children}
+        </IOSDevice>
+      );
+    }
+
+    function App() {
+      return (
+        <DesignCanvas>
+          <DCSection id="home" title="Home — the constellation">
+            <DCArtboard id="con-pop" label="Constellation · populated (Day 47)" width={420} height={874}>
+              <Phone><ScreenConstellation /></Phone>
+            </DCArtboard>
+            <DCArtboard id="con-first" label="Constellation · first run (Day 1)" width={420} height={874}>
+              <Phone><ScreenConstellation first /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection id="lesson" title="Lesson — reading flow">
+            <DCArtboard id="lesson-section" label="Section · prose · viz · note" width={420} height={874}>
+              <Phone><ScreenLessonSection /></Phone>
+            </DCArtboard>
+            <DCArtboard id="lesson-section-qa" label="Section · with clarifying Q&A" width={420} height={874}>
+              <Phone><ScreenLessonSection seedQa={[{
+                q: 'Why is the formula independent of the working fluid?',
+                a: "Carnot's argument is that any engine exceeding this efficiency could be coupled in reverse to the Carnot engine and produce net work from a single reservoir — forbidden by the second law. The ceiling is therefore not a property of the machinery but of the surrounding thermodynamics.",
+              }]} /></Phone>
+            </DCArtboard>
+            <DCArtboard id="lesson-quiz" label="Quiz · default" width={420} height={874}>
+              <Phone><ScreenQuiz /></Phone>
+            </DCArtboard>
+            <DCArtboard id="lesson-quiz-correct" label="Quiz · answered" width={420} height={874}>
+              <Phone><QuizAnswered /></Phone>
+            </DCArtboard>
+            <DCArtboard id="lesson-checkin" label="Checkin" width={420} height={874}>
+              <Phone><ScreenCheckin /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection id="end" title="Lesson — closing">
+            <DCArtboard id="queue" label="Queue review" width={420} height={874}>
+              <Phone><ScreenQueueReview /></Phone>
+            </DCArtboard>
+            <DCArtboard id="qa-export" label="Q&A export · copy bundle" width={420} height={874}>
+              <Phone><ScreenQAExport /></Phone>
+            </DCArtboard>
+            <DCArtboard id="complete" label="Lesson complete" width={420} height={874}>
+              <Phone><ScreenComplete /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection id="states" title="System states">
+            <DCArtboard id="loading" label="Loading" width={420} height={874}>
+              <Phone><ScreenLoading /></Phone>
+            </DCArtboard>
+            <DCArtboard id="error" label="Error" width={420} height={874}>
+              <Phone><ScreenError /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection id="system" title="Style guide">
+            <DCArtboard id="guide" label="Tokens · type · components · viz preamble" width={900} height={1380}>
+              <StyleGuide />
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+      );
+    }
+
+    /* answered-quiz variant */
+    function QuizAnswered() {
+      // hack: render quiz then auto-pick correct
+      const [mounted, setMounted] = useState(false);
+      React.useEffect(() => {
+        const t = setTimeout(() => {
+          // find first quiz option button and click 'B'
+          const root = document.currentScript;
+          const btns = document.querySelectorAll('[data-qb]');
+        }, 0);
+      }, []);
+      return <QuizPrefilled pick="B" />;
+    }
+    function QuizPrefilled({ pick }) {
+      const correct = 'B';
+      const opts = [
+        { k: 'A', t: 'On the working fluid (water vs. helium)' },
+        { k: 'B', t: 'Only on the two reservoir temperatures' },
+        { k: 'C', t: 'On the size of the engine' },
+        { k: 'D', t: 'On the speed at which the cycle is run' },
+      ];
+      const picked = pick;
+      return (
+        <div className="lattice" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <LessonHeader title="Carnot cycles" progress={[6, 12]} notes={1} />
+          <div style={{ flex: 1, overflowY: 'auto' }}>
+            <article style={{ padding: '22px 28px 28px' }}>
+              <CategoryLabel style={{ marginBottom: 14 }}>Quick check</CategoryLabel>
+              <HammingHeading num="3.2" style={{ marginBottom: 16 }}>
+                What does Carnot efficiency depend on?
+              </HammingHeading>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 6 }}>
+                {opts.map(o => {
+                  const isPicked = picked === o.k;
+                  const isRight = picked && o.k === correct;
+                  const isWrong = isPicked && o.k !== correct;
+                  return (
+                    <div key={o.k}
+                      style={{
+                        border: '1px solid ' + (isWrong ? 'var(--warning)' : isRight ? 'var(--olive)' : 'var(--rule-strong)'),
+                        background: isWrong ? 'rgba(153,51,34,0.06)' : isRight ? 'rgba(63,107,58,0.07)' : 'transparent',
+                        padding: '12px 14px', display: 'flex', gap: 14, alignItems: 'baseline',
+                        opacity: !isPicked && !isRight ? 0.5 : 1,
+                      }}>
+                      <span style={{
+                        fontFamily: 'var(--mono)', fontSize: 12,
+                        color: isRight ? 'var(--olive)' : 'var(--ink-muted)',
+                        letterSpacing: '0.06em',
+                      }}>{o.k}</span>
+                      <span style={{
+                        fontFamily: 'var(--serif)', fontSize: 16,
+                        color: 'var(--ink)', lineHeight: 1.4, flex: 1,
+                      }}>{o.t}</span>
+                      {isRight && <span style={{ color: 'var(--olive)', fontFamily: 'var(--serif)' }}>✓</span>}
+                    </div>
+                  );
+                })}
+              </div>
+              <div style={{ marginTop: 22, paddingTop: 16, borderTop: '1px solid var(--rule)' }}>
+                <CategoryLabel style={{ marginBottom: 12 }}>✓ Right</CategoryLabel>
+                <p style={{ margin: 0, fontFamily: 'var(--serif)', fontSize: 16, lineHeight: 1.55, color: 'var(--ink)' }}>
+                  Carnot's result is striking precisely because it ignores the engine. <em>Only the temperatures matter</em> — that's the point. A steam Carnot engine and a helium Carnot engine between the same reservoirs reach the same ceiling.
+                </p>
+                <Continue style={{ marginTop: 24 }} />
+              </div>
+            </article>
+          </div>
+          <PageFolio foot left="Carnot cycles" right="§ 3.2 — 6 / 12" />
+        </div>
+      );
+    }
+
+    /* style guide artboard */
+    function StyleGuide() {
+      const swatches = [
+        ['Paper',         '#f4eee2', '--paper'],
+        ['Paper raised',  '#faf5e9', '--paper-raised'],
+        ['Paper sunk',    '#ebe3d2', '--paper-sunk'],
+        ['Ink',           '#1a1a18', '--ink'],
+        ['Ink muted',     '#6b6359', '--ink-muted'],
+        ['Ink ghost',     '#a89e90', '--ink-ghost'],
+        ['Rust',          '#9c3a22', '--rust'],
+        ['Rust soft',     '#c47558', '--rust-soft'],
+        ['Olive',         '#3f6b3a', '--olive'],
+        ['Warning',       '#993322', '--warning'],
+        ['Rule',          '#d8cfb8', '--rule'],
+        ['Rule strong',   '#b8ac8e', '--rule-strong'],
+      ];
+      const Box = ({ children, title }) => (
+        <div style={{ borderTop: '1px solid var(--rule-strong)', paddingTop: 14, marginTop: 28 }}>
+          <CategoryLabel style={{ marginBottom: 14 }}>{title}</CategoryLabel>
+          {children}
+        </div>
+      );
+      return (
+        <div className="lattice" style={{ padding: '40px 56px', minHeight: '100%' }}>
+          <PageFolio left="Lattice" right="Style guide" />
+          <h1 className="h-page" style={{ fontSize: 34, marginTop: 18 }}>
+            Style guide
+          </h1>
+          <p style={{
+            margin: '10px 0 0', fontFamily: 'var(--serif)', fontStyle: 'italic',
+            color: 'var(--ink-muted)', fontSize: 16, lineHeight: 1.55, maxWidth: 560,
+          }}>
+            The whole system, on one page. Working values from the prototype, refined.
+            Anything beyond what's here is scope creep.
+          </p>
+
+          <Box title="Palette">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
+              {swatches.map(([n, hex, tok]) => (
+                <div key={tok} style={{ border: '1px solid var(--rule)' }}>
+                  <div style={{ background: hex, height: 56, borderBottom: '1px solid var(--rule)' }} />
+                  <div style={{ padding: '8px 10px' }}>
+                    <div style={{ fontFamily: 'var(--serif)', fontSize: 14, fontWeight: 500 }}>{n}</div>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 10.5, color: 'var(--ink-muted)', letterSpacing: '0.06em' }}>{hex}</div>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--ink-ghost)', letterSpacing: '0.06em' }}>{tok}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Box>
+
+          <Box title="Type">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
+              <div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--ink-muted)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Page title · serif 26 / 600</div>
+                <div className="h-page" style={{ marginTop: 6 }}>Carnot cycles, mastered.</div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--ink-muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: 18 }}>Section · serif 22 / 600</div>
+                <HammingHeading num="3.1" style={{ marginTop: 6 }}>The reversible engine</HammingHeading>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--ink-muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: 18 }}>Body · serif 17 / 1.65</div>
+                <p style={{ margin: '6px 0 0', maxWidth: 380 }}>
+                  Imagine an engine so gentle that, run backwards, it consumes
+                  exactly the work it produced going forward. <em>What is the
+                  most work such an engine can do?</em>
+                </p>
+              </div>
+              <div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--ink-muted)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Category · mono 11 caps</div>
+                <CategoryLabel style={{ marginTop: 6 }}>Quick check</CategoryLabel>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--ink-muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: 18 }}>Italic caption · serif 14 italic</div>
+                <div style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 14, color: 'var(--ink-muted)', marginTop: 6 }}>
+                  Spectral radiance of a black body.
+                </div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--ink-muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: 18 }}>Numerics · mono 11</div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 11, marginTop: 6 }}>
+                  T = 5800 K · η = 0.42 · 12 / 12
+                </div>
+              </div>
+            </div>
+          </Box>
+
+          <Box title="Components">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 14 }}>
+              <ConceptNode title="Newton's laws"   cat="Mechanics" state="mastered" />
+              <ConceptNode title="Carnot cycles"   cat="Thermo"    state="in_progress" />
+              <ConceptNode title="Black-body radiation" cat="Quantum" state="available" />
+              <ConceptNode title="Free energy"     cat="Thermo"    state="queued" />
+            </div>
+            <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              <ChoiceButton variant="filled">Keep going</ChoiceButton>
+              <ChoiceButton>Pick another concept</ChoiceButton>
+            </div>
+            <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', gap: 24 }}>
+              <Continue label="Continue" />
+              <LoadingLine />
+            </div>
+          </Box>
+
+          <Box title="Spacing">
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--ink)', lineHeight: 1.9 }}>
+              <div>4 · 8 · 12 · 18 · 22 · 28 · 36 · 56  px</div>
+              <div style={{ color: 'var(--ink-muted)' }}>paragraph 18 · before heading 28 · before continue 36 · content max-width 600</div>
+            </div>
+          </Box>
+
+          <Box title="Embedded viz · CSS preamble">
+            <p style={{ margin: '0 0 14px', fontFamily: 'var(--serif)', fontStyle: 'italic', color: 'var(--ink-muted)', fontSize: 14, maxWidth: 620 }}>
+              Paste at the top of every sandboxed viz iframe. Fonts inherit through the parent; if the iframe is cross-origin, link the same Google Fonts stylesheet.
+            </p>
+            <pre style={{
+              background: 'var(--paper-sunk)', border: '1px solid var(--rule)',
+              padding: 16, fontFamily: 'var(--mono)', fontSize: 11.5, lineHeight: 1.55,
+              color: 'var(--ink)', overflow: 'auto', margin: 0,
+            }}>{`:root {
+  --paper:        #f4eee2;
+  --paper-raised: #faf5e9;
+  --ink:          #1a1a18;
+  --ink-muted:    #6b6359;
+  --rust:         #9c3a22;
+  --rule:         #d8cfb8;
+  --rule-strong:  #b8ac8e;
+  --serif: "Source Serif 4", "Iowan Old Style", Palatino, Georgia, serif;
+  --mono:  "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--paper-raised);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 15px; line-height: 1.5;
+}
+.viz-axis line, .viz-axis path {
+  stroke: var(--ink); stroke-width: 0.7; fill: none;
+}
+.viz-curve  { stroke: var(--rust); stroke-width: 1.4; fill: none; }
+.viz-grid   { stroke: var(--rule); stroke-width: 0.5; }
+.viz-label  { font-family: var(--mono); font-size: 9px; fill: var(--ink-muted);
+              letter-spacing: 0.04em; }
+.viz-caption {
+  font-family: var(--serif); font-style: italic; font-size: 13px;
+  color: var(--ink-muted); line-height: 1.4; margin-top: 10px;
+}
+input[type=range] {
+  -webkit-appearance: none; height: 1px; background: var(--rule-strong);
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 14px; height: 14px;
+  border-radius: 50%; background: var(--rust);
+  border: 2px solid var(--paper-raised); box-shadow: 0 0 0 1px var(--rust);
+}`}</pre>
+          </Box>
+
+          <Box title="Direction notes">
+            <ul style={{ margin: 0, paddingLeft: 20, fontFamily: 'var(--serif)', fontSize: 15, lineHeight: 1.7, color: 'var(--ink)' }}>
+              <li>The cream you proposed reads slightly green on calibrated displays. I kept it; suggest testing #f4ebda as a marginally warmer alternative.</li>
+              <li>The constellation works as a two-column vertical scroll; a radial layout looked clever and read poorly. Recommend keeping the grid; reach for clusters at ~50 nodes, not now.</li>
+              <li>Rust is right. Lowering it any further reads brown rather than authoritative. Used on continue affordances, in-progress accents, slider thumbs only.</li>
+              <li>No iconography beyond ◷ and →. Resisted the urge for everything else.</li>
+            </ul>
+          </Box>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
