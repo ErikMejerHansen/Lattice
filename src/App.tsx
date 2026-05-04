@@ -259,7 +259,26 @@ function ConstellationView({
   )
 }
 
+function formatNotesForClipboard(lesson: Lesson, notes: Record<string, string>): string {
+  return lesson.sections
+    .filter(s => notes[s.id]?.trim())
+    .map(s => `- ${notes[s.id].trim()} (${lesson.title}, ${s.heading})`)
+    .join('\n')
+}
+
 function LessonView({ lesson, onBack }: { lesson: Lesson; onBack: () => void }) {
+  const [notes, setNotes] = useState<Record<string, string>>({})
+  const [copied, setCopied] = useState(false)
+
+  const nonEmptyNotes = lesson.sections.filter(s => notes[s.id]?.trim())
+
+  function handleCopy() {
+    navigator.clipboard.writeText(formatNotesForClipboard(lesson, notes)).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
+
   return (
     <main style={{ maxWidth: 660, margin: '0 auto', padding: '3rem 1.5rem 6rem' }}>
       <button
@@ -320,9 +339,79 @@ function LessonView({ lesson, onBack }: { lesson: Lesson; onBack: () => void }) 
               {section.heading}
             </h2>
             {(section.blocks as Block[]).map((block, i) => renderBlock(block, i))}
+            <textarea
+              value={notes[section.id] ?? ''}
+              onChange={e => setNotes(prev => ({ ...prev, [section.id]: e.target.value }))}
+              placeholder="Add a note..."
+              rows={2}
+              style={{
+                width: '100%',
+                marginTop: '1rem',
+                padding: '0.5rem 0.625rem',
+                fontFamily: "'Source Serif 4', Georgia, serif",
+                fontSize: '0.9rem',
+                lineHeight: 1.5,
+                color: '#3a2c1a',
+                background: '#faf7f1',
+                border: '1px solid #d8cfc0',
+                borderRadius: 0,
+                resize: 'vertical',
+                boxSizing: 'border-box',
+                outline: 'none',
+              }}
+              onFocus={e => { e.target.style.borderColor = '#9c3a22' }}
+              onBlur={e => { e.target.style.borderColor = '#d8cfc0' }}
+            />
           </section>
         ))}
       </article>
+
+      {nonEmptyNotes.length > 0 && (
+        <aside style={{
+          marginTop: '3rem',
+          paddingTop: '2rem',
+          borderTop: '1px solid #d8cfc0',
+        }}>
+          <div style={{
+            fontFamily: "'IBM Plex Mono', monospace",
+            fontSize: '0.75rem',
+            fontWeight: 500,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: '#9c3a22',
+            marginBottom: '1rem',
+          }}>
+            Your notes
+          </div>
+          <ul style={{ margin: '0 0 1.25rem', padding: '0 0 0 1.25rem' }}>
+            {nonEmptyNotes.map(s => (
+              <li key={s.id} style={{ marginBottom: '0.5rem', fontSize: '0.95rem', lineHeight: 1.5 }}>
+                <span style={{ color: '#888', fontSize: '0.8rem', fontFamily: "'IBM Plex Mono', monospace" }}>
+                  {s.heading}:{' '}
+                </span>
+                {notes[s.id].trim()}
+              </li>
+            ))}
+          </ul>
+          <button
+            onClick={handleCopy}
+            style={{
+              background: 'none',
+              border: '1px solid #9c3a22',
+              padding: '0.4rem 0.9rem',
+              cursor: 'pointer',
+              fontFamily: "'IBM Plex Mono', monospace",
+              fontSize: '0.75rem',
+              fontWeight: 500,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              color: '#9c3a22',
+            }}
+          >
+            {copied ? 'Copied' : 'Copy to wishlist'}
+          </button>
+        </aside>
+      )}
     </main>
   )
 }

@@ -84,7 +84,7 @@ These will get resolved as we go. Listed here so they're visible.
 
 ## Status
 
-**Current slice: 8 (complete)**
+**Current slice: 9 (complete)**
 
 Slices shipped:
 1. One static lesson rendered — hand-written JSON, bare React, `npm run dev`.
@@ -95,5 +95,4 @@ Slices shipped:
 6. Routine spec, manual trigger — `scripts/smoke-viz.mjs` structural smoke test added; full routine spec lives in `routine/CLAUDE.md` with prompts in `routine/prompts/`. Routine ready to run end-to-end.
 7. Viz iframe rendering — `lessons/*.html` served via inline Vite plugin (dev middleware + build emitter); `viz` blocks render as sandboxed iframes with caption.
 8. Constellation view — SVG concept graph replaces lesson list; nodes positioned by `col`/`row` from `state/concept_graph.json`; `extends` edges have arrowheads, `related` edges are dashed; opening a lesson flips its node to `in_progress` in localStorage; `mastered` reserved for quiz integration.
-
-Next: **Slice 9**
+9. Notes loop — per-section textarea below each section's content; notes live in component state; review panel appears at lesson end when any notes are non-empty; "Copy to wishlist" button formats notes as wishlist-ready lines and copies to clipboard.
