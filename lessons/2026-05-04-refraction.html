@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fermat's principle and Snell's law</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+.readout .pin { color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+
+  <canvas id="plot" height="380" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);background:var(--bg-raised);touch-action:none;cursor:ew-resize;"></canvas>
+
+  <div class="viz-slider-row">
+    <label>n₂</label>
+    <input type="range" id="nSlider" min="1.00" max="2.40" step="0.01" value="1.50" style="min-height:36px;">
+    <span class="value" id="nVal">1.50</span>
+  </div>
+
+  <div class="readout" id="readout"></div>
+
+  <p class="viz-caption" style="margin-top:10px;">A source A in a fast medium (n₁ = 1.00) above the interface, target B in a slow medium (n₂, adjustable) below. Drag the crossing point P along the interface and watch the total travel time T(x) plotted underneath. The straight-line path is rarely the fastest; the minimum-time path bends, and the dashed marker on the time curve is the Fermat optimum, exactly where n₁ sin θ₁ = n₂ sin θ₂. Push n₂ higher to see denser media bend the path harder.</p>
+</div>
+
+<script>
+const canvas = document.getElementById("plot");
+const slider = document.getElementById("nSlider");
+const nVal = document.getElementById("nVal");
+const readoutEl = document.getElementById("readout");
+
+const C_TEXT = "#1a1a18";
+const C_TEXT_MUTED = "#6b6359";
+const C_BORDER = "#b8ac8e";
+const C_ACCENT = "#9c3a22";
+const C_BG_RAISED = "#faf5e9";
+
+const AX = -3.0, AY = 1.5;
+const BX =  3.0, BY = -2.0;
+const INTERFACE_Y = 0;
+const N1 = 1.0;
+let N2 = 1.5;
+let xCross = 0.5;
+
+let scaleS = 1, originX = 0, originY = 0;
+
+function makeField(parent, label, pinned) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  const lbl = document.createElement("span");
+  lbl.className = "lbl";
+  lbl.textContent = label;
+  const val = document.createElement("span");
+  if (pinned) val.className = "pin";
+  wrap.appendChild(lbl);
+  wrap.appendChild(val);
+  parent.appendChild(wrap);
+  return val;
+}
+
+const fT = makeField(readoutEl, "travel time T(x)", true);
+const fTh1 = makeField(readoutEl, "θ₁ (incidence)");
+const fTh2 = makeField(readoutEl, "θ₂ (refraction)");
+const fSnell = makeField(readoutEl, "n₁sinθ₁  vs  n₂sinθ₂");
+const fOpt = makeField(readoutEl, "Fermat optimum x*");
+
+function timeOfPath(x, n2) {
+  const AP = Math.hypot(x - AX, AY);
+  const PB = Math.hypot(BX - x, BY);
+  return N1 * AP + n2 * PB;
+}
+
+function findOptimum(n2) {
+  let lo = AX, hi = BX;
+  const phi = (Math.sqrt(5) - 1) / 2;
+  let a = hi - phi * (hi - lo);
+  let b = lo + phi * (hi - lo);
+  for (let i = 0; i < 80; i++) {
+    if (timeOfPath(a, n2) < timeOfPath(b, n2)) {
+      hi = b; b = a; a = hi - phi * (hi - lo);
+    } else {
+      lo = a; a = b; b = lo + phi * (hi - lo);
+    }
+  }
+  return 0.5 * (lo + hi);
+}
+
+function setupCoords(W, schemH) {
+  const padL = 24, padR = 24, padT = 14, padB = 14;
+  const innerW = W - padL - padR;
+  const innerH = schemH - padT - padB;
+  const worldW = 7.0, worldH = 4.5;
+  const s = Math.min(innerW / worldW, innerH / worldH);
+  scaleS = s;
+  originX = padL + (innerW - worldW * s) / 2 - (-3.5) * s;
+  originY = padT + (innerH - worldH * s) / 2 + 2.0 * s;
+}
+
+function w2pX(wx) { return originX + wx * scaleS; }
+function w2pY(wy) { return originY - wy * scaleS; }
+function p2wX(px) { return (px - originX) / scaleS; }
+
+function drawAngleArc(ctx, cx, cy, r, normalAngle, rayAngle) {
+  let d = rayAngle - normalAngle;
+  while (d >  Math.PI) d -= 2 * Math.PI;
+  while (d < -Math.PI) d += 2 * Math.PI;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, normalAngle, normalAngle + d, d < 0);
+  ctx.stroke();
+}
+
+function draw() {
+  N2 = parseFloat(slider.value);
+  nVal.textContent = N2.toFixed(2);
+
+  const W = canvas.offsetWidth || 320;
+  canvas.width = W;
+  const H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const schemH = Math.round(H * 0.55);
+  const plotY0 = schemH + 18;
+  const plotH = H - plotY0 - 32;
+
+  setupCoords(W, schemH);
+
+  const interfacePy = w2pY(INTERFACE_Y);
+
+  // Slow medium shading
+  ctx.fillStyle = "rgba(196,117,88,0.10)";
+  ctx.fillRect(0, interfacePy, W, schemH - interfacePy);
+
+  // Interface line
+  ctx.strokeStyle = C_BORDER;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(0, interfacePy);
+  ctx.lineTo(W, interfacePy);
+  ctx.stroke();
+
+  ctx.fillStyle = C_TEXT_MUTED;
+  ctx.font = "italic 11px 'Source Serif 4', serif";
+  ctx.textAlign = "left";
+  ctx.fillText("n₁ = 1.00 (fast)", 8, interfacePy - 6);
+  ctx.fillText("n₂ = " + N2.toFixed(2) + " (slow)", 8, interfacePy + 14);
+
+  const Px = xCross, Py = INTERFACE_Y;
+  const PxPx = w2pX(Px), PyPx = w2pY(Py);
+
+  // Normal at P (dashed)
+  ctx.strokeStyle = "rgba(26,26,24,0.35)";
+  ctx.setLineDash([3, 3]);
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PxPx, PyPx - scaleS * 1.2);
+  ctx.lineTo(PxPx, PyPx + scaleS * 1.2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Ray A->P->B
+  const APxPx = w2pX(AX), APyPx = w2pY(AY);
+  const BPxPx = w2pX(BX), BPyPx = w2pY(BY);
+  ctx.strokeStyle = C_ACCENT;
+  ctx.lineWidth = 1.8;
+  ctx.beginPath();
+  ctx.moveTo(APxPx, APyPx);
+  ctx.lineTo(PxPx, PyPx);
+  ctx.lineTo(BPxPx, BPyPx);
+  ctx.stroke();
+
+  // Endpoint markers
+  ctx.fillStyle = C_TEXT;
+  ctx.beginPath(); ctx.arc(APxPx, APyPx, 4, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(BPxPx, BPyPx, 4, 0, Math.PI * 2); ctx.fill();
+  ctx.font = "italic 12px 'Source Serif 4', serif";
+  ctx.textAlign = "left";
+  ctx.fillText("A", APxPx + 6, APyPx - 4);
+  ctx.fillText("B", BPxPx + 6, BPyPx + 14);
+
+  // Angles measured from normal
+  const dxA = AX - Px, dyA = AY - Py;
+  const dxB = BX - Px, dyB = BY - Py;
+  const th1 = Math.atan2(Math.abs(dxA), Math.abs(dyA));
+  const th2 = Math.atan2(Math.abs(dxB), Math.abs(dyB));
+
+  // Angle arcs
+  ctx.strokeStyle = C_TEXT_MUTED;
+  ctx.lineWidth = 1;
+  const angleA = Math.atan2(APyPx - PyPx, APxPx - PxPx);
+  const angleB = Math.atan2(BPyPx - PyPx, BPxPx - PxPx);
+  drawAngleArc(ctx, PxPx, PyPx, 22, -Math.PI / 2, angleA);
+  drawAngleArc(ctx, PxPx, PyPx, 22,  Math.PI / 2, angleB);
+
+  ctx.fillStyle = C_TEXT_MUTED;
+  ctx.font = "italic 10px 'Source Serif 4', serif";
+  ctx.textAlign = "center";
+  const sgn1 = (AX < Px) ? -1 : 1;
+  const sgn2 = (BX < Px) ? -1 : 1;
+  ctx.fillText("θ₁", PxPx + sgn1 * 14, PyPx - 24);
+  ctx.fillText("θ₂", PxPx + sgn2 * 14, PyPx + 32);
+
+  // P (draggable)
+  ctx.fillStyle = C_ACCENT;
+  ctx.beginPath(); ctx.arc(PxPx, PyPx, 8, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "#fff";
+  ctx.beginPath(); ctx.arc(PxPx, PyPx, 3, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = C_ACCENT;
+  ctx.font = "italic 11px 'Source Serif 4', serif";
+  ctx.textAlign = "left";
+  ctx.fillText("P (drag)", PxPx + 12, PyPx - 8);
+
+  // ===== Bottom plot =====
+  const padL = 38, padR = 14;
+  const xPad = padL;
+  const plotW = W - xPad - padR;
+
+  const samples = Math.max(160, Math.floor(plotW));
+  const ts = new Float64Array(samples + 1);
+  let yMin = Infinity, yMax = -Infinity;
+  for (let i = 0; i <= samples; i++) {
+    const xx = AX + (BX - AX) * i / samples;
+    const tt = timeOfPath(xx, N2);
+    ts[i] = tt;
+    if (tt < yMin) yMin = tt;
+    if (tt > yMax) yMax = tt;
+  }
+  const yPad = (yMax - yMin) * 0.10 || 0.1;
+  const yLo = yMin - yPad;
+  const yHi = yMax + yPad;
+
+  function tx2px(xx) { return xPad + plotW * (xx - AX) / (BX - AX); }
+  function ty2px(yy) { return plotY0 + plotH - plotH * (yy - yLo) / (yHi - yLo); }
+
+  ctx.strokeStyle = C_BORDER;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(xPad, plotY0);
+  ctx.lineTo(xPad, plotY0 + plotH);
+  ctx.lineTo(xPad + plotW, plotY0 + plotH);
+  ctx.stroke();
+
+  ctx.strokeStyle = C_ACCENT;
+  ctx.lineWidth = 1.7;
+  ctx.beginPath();
+  for (let i = 0; i <= samples; i++) {
+    const xx = AX + (BX - AX) * i / samples;
+    const px = tx2px(xx);
+    const py = ty2px(ts[i]);
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+
+  const xOpt = findOptimum(N2);
+  const xOptPx = tx2px(xOpt);
+  ctx.strokeStyle = "rgba(156,58,34,0.65)";
+  ctx.setLineDash([3, 3]);
+  ctx.beginPath();
+  ctx.moveTo(xOptPx, plotY0);
+  ctx.lineTo(xOptPx, plotY0 + plotH);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = C_ACCENT;
+  ctx.font = "10px 'IBM Plex Mono', monospace";
+  ctx.textAlign = xOptPx > W - 80 ? "right" : "left";
+  const lblX = ctx.textAlign === "right" ? xOptPx - 4 : xOptPx + 4;
+  ctx.fillText("x* (Fermat)", lblX, plotY0 + 11);
+
+  const tNow = timeOfPath(xCross, N2);
+  ctx.fillStyle = C_TEXT;
+  ctx.beginPath();
+  ctx.arc(tx2px(xCross), ty2px(tNow), 4.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // X-axis ticks
+  ctx.fillStyle = C_TEXT_MUTED;
+  ctx.font = "10px 'IBM Plex Mono', monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  for (let xx = -3; xx <= 3; xx++) {
+    const px = tx2px(xx);
+    ctx.strokeStyle = C_BORDER;
+    ctx.beginPath();
+    ctx.moveTo(px, plotY0 + plotH);
+    ctx.lineTo(px, plotY0 + plotH + 3);
+    ctx.stroke();
+    ctx.fillText(String(xx), px, plotY0 + plotH + 5);
+  }
+  ctx.font = "italic 11px 'Source Serif 4', serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("crossing point x", xPad + plotW / 2, plotY0 + plotH + 18);
+
+  // Y-axis label rotated
+  ctx.save();
+  ctx.translate(xPad - 26, plotY0 + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = "center";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.font = "italic 11px 'Source Serif 4', serif";
+  ctx.fillText("T  (units of L/c)", 0, 0);
+  ctx.restore();
+
+  // Readout
+  fT.textContent = tNow.toFixed(3);
+  fTh1.textContent = (th1 * 180 / Math.PI).toFixed(1) + "°";
+  fTh2.textContent = (th2 * 180 / Math.PI).toFixed(1) + "°";
+  const lhs = (N1 * Math.sin(th1)).toFixed(3);
+  const rhs = (N2 * Math.sin(th2)).toFixed(3);
+  fSnell.textContent = lhs + "  vs  " + rhs;
+  fOpt.textContent = xOpt.toFixed(3);
+}
+
+let dragging = false;
+function pickPx(evt) {
+  const rect = canvas.getBoundingClientRect();
+  const t = evt.touches && evt.touches[0];
+  const cx = (t ? t.clientX : evt.clientX) - rect.left;
+  const cy = (t ? t.clientY : evt.clientY) - rect.top;
+  return { cx, cy };
+}
+function tryDragStart(evt) {
+  const { cx, cy } = pickPx(evt);
+  const interfacePy = w2pY(INTERFACE_Y);
+  if (Math.abs(cy - interfacePy) <= 36) {
+    dragging = true;
+    moveTo(cx);
+    evt.preventDefault();
+  }
+}
+function moveTo(cx) {
+  const wx = p2wX(cx);
+  xCross = Math.max(AX + 0.1, Math.min(BX - 0.1, wx));
+  draw();
+}
+canvas.addEventListener("mousedown", tryDragStart);
+canvas.addEventListener("touchstart", tryDragStart, { passive: false });
+canvas.addEventListener("mousemove", (e) => { if (dragging) moveTo(pickPx(e).cx); });
+canvas.addEventListener("touchmove", (e) => { if (dragging) { moveTo(pickPx(e).cx); e.preventDefault(); } }, { passive: false });
+canvas.addEventListener("mouseup", () => { dragging = false; });
+canvas.addEventListener("mouseleave", () => { dragging = false; });
+canvas.addEventListener("touchend", () => { dragging = false; });
+
+slider.addEventListener("input", draw);
+window.addEventListener("load", draw);
+setTimeout(draw, 80);
+</script>
+</body>
+</html>
