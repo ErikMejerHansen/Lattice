@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-03 from photon-energy
-Photoelectric effect — Millikan's decade-long attempt to disprove Einstein, detailed treatment
 Wave-particle duality — de Broglie 1924, what is waving when an electron waves
 
 # auto-suggested 2026-05-03 from blackbody-radiation
@@ -19,3 +18,7 @@ Diffraction gratings — many slits, the spectrometer at the heart of chemistry
 Principle of least action — Maupertuis to Lagrange, optics generalized to mechanics
 Total internal reflection — fiber optics, the angle past which light cannot escape
 Dispersion — n(λ), why prisms make rainbows, why old glass distorts color
+
+# auto-suggested 2026-05-05 from photoelectric-effect
+Compton scattering — photon momentum p = h/λ, the experiment that closed off the alternatives to the photon
+Work function — what binds electrons to a metal, surface chemistry, why some metals ionize easier than others

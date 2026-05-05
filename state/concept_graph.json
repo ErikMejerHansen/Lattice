@@ -59,6 +59,16 @@
       "createdAt": "2026-05-04T10:00:00Z",
       "col": 1,
       "row": 2
+    },
+    {
+      "id": "photoelectric_effect",
+      "label": "Photoelectric",
+      "subtitle": "K = hν - φ",
+      "state": "available",
+      "lesson": "2026-05-05-photoelectric-effect",
+      "createdAt": "2026-05-05T08:00:00Z",
+      "col": 0,
+      "row": 3
     }
   ],
   "edges": [
@@ -70,6 +80,8 @@
     { "from": "interference_diffraction", "to": "wavelength", "kind": "extends" },
     { "from": "interference_diffraction", "to": "photon_energy", "kind": "related" },
     { "from": "refraction", "to": "wavelength", "kind": "related" },
-    { "from": "refraction", "to": "interference_diffraction", "kind": "related" }
+    { "from": "refraction", "to": "interference_diffraction", "kind": "related" },
+    { "from": "photoelectric_effect", "to": "photon_energy", "kind": "extends" },
+    { "from": "photoelectric_effect", "to": "blackbody", "kind": "related" }
   ]
 }
