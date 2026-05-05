@@ -1,0 +1,128 @@
+{
+  "slug": "2026-05-05-photoelectric-effect",
+  "title": "The photoelectric effect: Millikan's ten-year war on Einstein",
+  "node": {
+    "id": "photoelectric_effect",
+    "label": "Photoelectric",
+    "subtitle": "K = hν - φ"
+  },
+  "intro": "In 1887 Heinrich Hertz, in the middle of confirming Maxwell's prediction that light is an electromagnetic wave, noticed something he could not explain: ultraviolet light made the spark gaps of his receiver fire more easily. He published a careful note about it and moved on; he had bigger fish. The puzzle Hertz had brushed past would harden over the next twenty years into a piece of physics that classical theory could not bend, no matter how hard Philipp Lenard pushed on it. Einstein resolved it in 1905 with a sentence so heretical that the senior experimenter who eventually proved him right, Robert Millikan, spent ten years trying to prove him wrong.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Hertz's accident and Lenard's four facts",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Hertz was not looking for the photoelectric effect; he was looking for radio waves. His apparatus, in 1887, was a transmitter spark across one gap and a receiver spark across another, and he found that the receiver fired more reliably when the transmitter spark could shine ultraviolet on it directly. Putting a glass plate in between, which absorbs UV, killed the effect. Putting a quartz plate in, which transmits UV, restored it. Hertz noted the result, called it inexplicable, and went back to confirming Maxwell. The crisis he had stumbled across was nominally the consequence of Maxwell, but its resolution would arrive from a direction Maxwell could not have anticipated." },
+        { "type": "p", "text": "Philipp Lenard, who had been Hertz's assistant, picked the puzzle up and turned it into a properly posed experiment. By 1902 he had isolated the bare phenomenon: shine monochromatic light on a clean metal surface in vacuum, and electrons come off with measurable kinetic energy. Vary the light, vary the metal, measure the electrons with retarding voltages. The result was four facts that fit together strangely." },
+        { "type": "p", "text": "First, below some threshold frequency ν₀ no electrons emerged, no matter how bright the light. Second, above the threshold, electrons appeared instantly, well within the millisecond timing of 1902, even when the beam was so dim that classical theory said an electron would have to wait years to absorb enough energy. Third, brighter light produced more electrons, but did not raise the energy of any individual electron. Fourth, the maximum kinetic energy K_max grew linearly with the light's frequency ν, with the threshold sitting cleanly at the line's x-intercept." },
+        { "type": "p", "text": "Each fact, alone, was odd. Taken together, they told classical physics that whatever was carrying the light's energy was not behaving like a wave. Lenard had set the table. The meal arrived from an unexpected direction." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The wall classical physics could not climb",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "To feel why Lenard's four facts hurt, you have to picture classical theory at full strength. Light is an electromagnetic wave; the wave's energy density is proportional to the square of its electric field amplitude E²; the wave's intensity (power per unit area) is the time-averaged energy density times the speed of light. When this wave reaches a metal surface and shakes a charged electron, the electron absorbs energy continuously, like a child being pumped on a swing." },
+        { "type": "p", "text": "From this picture, three sharp predictions follow. (a) Any frequency of light should eventually eject electrons, given enough intensity, because the electron simply needs to accumulate energy. (b) Brighter light should produce more energetic electrons: a louder push gives a louder shake. (c) Very faint light should produce a measurable delay before the first electron emerges, because the accumulation takes time. Estimating that delay quantitatively gives the size of the conflict:" },
+        { "type": "math", "tex": "\\tau \\sim \\frac{\\phi}{I \\cdot A_{\\rm atom}}", "display": true },
+        { "type": "p", "text": "where φ is the energy needed to liberate the electron (a few eV), I is the wave's intensity, and A_atom is the cross-sectional area of an atom (roughly 10⁻²⁰ m²). For a faint beam at 10⁻¹⁰ W/m², the formula gives τ on the order of a year. Lenard saw the first electron in under a millisecond. None of the three classical predictions survived. By 1904 the photoelectric effect sat on every theorist's short list of unsolved anomalies, alongside blackbody radiation and the spectral lines of atoms. The right kind of strange was about to arrive." }
+      ],
+      "quiz": {
+        "question": "A theorist in 1903 predicts that doubling the intensity of monochromatic light incident on a metal cathode should double the maximum kinetic energy of the ejected electrons. The prediction fails: doubling intensity doubles the count of electrons but leaves their maximum energy unchanged. Which classical assumption is most directly contradicted by this failure?",
+        "options": [
+          "The metal cathode is a perfect electrical conductor at the frequencies tested",
+          "The electromagnetic field's energy is delivered continuously and is shared smoothly across the wavefront, so each electron's energy gain scales with the wave's amplitude",
+          "The cathode's work function depends on the surface oxidation state of the metal",
+          "Photoelectrons obey conservation of momentum in their interactions with bound electrons"
+        ],
+        "correctIndex": 1,
+        "explanation": "Doubling intensity in a classical wave doubles E² and therefore the rate at which an oscillating electron absorbs energy from the field. Stronger shaking ought to give more energetic electrons. The fact that intensity changes only the count, never the maximum energy, says energy is not arriving smoothly across the wavefront for electrons to share. Each ejection is independent; the field is acting like a stream of discrete kicks rather than a continuous bath. The other options are real physics issues but they do not address what intensity does to electron energy. Work functions (option C) set the threshold, not the slope, and would not explain why intensity has no effect at all on individual energies. Momentum conservation (option D) constrains scattering geometry but not whether the field's energy is continuous."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Einstein's heretical sentence",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "In March 1905, the same year Einstein published special relativity and the work that won him his doctorate, he submitted to Annalen der Physik a paper titled 'On a heuristic point of view concerning the production and transformation of light.' Of the four miraculous papers of that year, this was the one Einstein himself called 'very revolutionary,' the one he was unsure about. The proposal was simple to state and difficult to swallow. Light, he wrote, comes in discrete chunks of energy, each chunk carrying" },
+        { "type": "math", "tex": "E = h\\nu", "display": true },
+        { "type": "p", "text": "where ν is the frequency and h is Planck's constant. In the photoelectric effect, a single chunk transfers all of its energy to a single electron. If that energy exceeds the work function φ that binds the electron to the metal, the electron escapes; whatever is left over comes out as kinetic energy:" },
+        { "type": "math", "tex": "K_{\\max} = h\\nu - \\phi", "display": true },
+        { "type": "viz", "src": "2026-05-05-photoelectric-effect.html", "height": 460, "caption": "Photons of frequency ν strike a clean alkali metal surface (top schematic). Below the threshold ν₀ = φ/h, no electrons escape, no matter how many photons arrive. Above the threshold, each absorbed photon ejects one electron with maximum kinetic energy K_max = hν - φ. The K_max vs ν plot below shows three metals at once: parallel lines, same slope h, different intercepts φ. Switch metals to see Millikan's central observation: the slope is universal, the intercept is local." },
+        { "type": "p", "text": "Look at what falls out of one sentence. Below the threshold ν₀ = φ/h, no chunk has enough energy to free an electron, regardless of how many chunks arrive (intensity). Above the threshold, K_max grows linearly with ν, the slope is h, and the line's x-intercept is the work function. Brighter light means more chunks per second, and so more electrons per second, but each electron gets the same kick. The delay vanishes, because each escape is a single event, not a slow accumulation. Every one of Lenard's four puzzles dissolves at once, if you allow yourself to think of light as having a granular side. Einstein was not the first to write E = hν: Planck had used the rule in 1900 to fit the blackbody spectrum. But Planck had treated quantization as a property of how oscillators in the wall absorb and re-emit energy, an awkward bookkeeping trick he expected would dissolve when classical theory was set straight. Einstein took the audacious step of asserting that the chunkiness was a property of light itself, in flight, between absorber and emitter. That move was what the physics community could not stomach. It said the wave theory of light, triumphant since Young and Maxwell, was either wrong or only half the story. Few were ready, in 1905, to give that up." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Millikan's ten-year war",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Robert Millikan, professor at Chicago, was as classical a physicist as 1905 produced. He had a gift for building apparatus and a temperament that did not bend toward speculation. The photoelectric data of his time was, he believed, infested with surface-contamination effects: oxide layers on the metal, residual gas in the tubes, irreproducible cathode preparations. Einstein's equation might happen to fit, he suspected, but the underlying picture of light corpuscles was a step backward into pre-Maxwellian darkness. Millikan resolved to settle the question with experiments cleaner than anyone had managed, in order to drive Einstein's interpretation off the table. Decades later he wrote that he had begun the work 'fully expecting that the test would show Einstein's theory to be wrong.'" },
+        { "type": "p", "text": "The hard problem was preparing a cathode whose surface stayed clean long enough to be measured. Air ruined the alkali metals, sodium and potassium and lithium, within seconds. Millikan's solution was characteristically baroque. Inside an evacuated glass envelope, he installed a small magnetically-driven knife on a swivel. Before each measurement, the knife would shave a fresh face onto the alkali block, exposing a clean metallic surface that had never seen oxygen. The whole apparatus, nicknamed 'the machine shop in vacuo' by his students, took years to build and tune. He published incremental results from 1908 onward, each set tighter than the last, and each set agreed with Einstein's equation. Millikan was, in his own assessment, in the strange position of an honest experimenter watching his own data destroy the position he had set out to defend." },
+        { "type": "p", "text": "By 1916 Millikan had measured K_max as a function of ν for sodium, lithium, and potassium across a wide range of frequencies. The plots were straight lines. The slopes, taken across three different metals, gave the same value of Planck's constant: h ≈ 6.57 × 10⁻²⁷ erg-second, in striking agreement with the value Planck had extracted from blackbody curves a decade earlier from a wholly different experiment. The work functions came out as the y-intercepts, around 1.8 to 2.3 eV depending on the metal. Einstein's equation was vindicated to a precision Millikan himself had not anticipated when he started the work." },
+        { "type": "p", "text": "What Millikan wrote in his 1916 paper, after presenting the data, has become a small monument in the history of physics: 'Einstein's photoelectric equation has been subjected to very searching tests and it appears in every case to predict exactly the observed results... yet the semi-corpuscular theory by which Einstein arrived at his equation seems at present to be wholly untenable.' He gave Einstein the equation and refused him the picture. The 1923 Nobel committee was not so squeamish; Millikan won the prize that year, with the photoelectric measurements cited alongside his oil-drop determination of the electron charge. Einstein's 1921 Nobel had been carefully worded 'especially for his discovery of the law of the photoelectric effect,' rewarding the equation while sidestepping any endorsement of the photon. Only after Compton's 1923 scattering experiment did even Millikan privately come around. The theory he had spent ten years trying to disprove had become the physics of his own lifetime."
+        }
+      ],
+      "quiz": {
+        "question": "Millikan's careful 1916 measurements of K_max versus ν for sodium, lithium, and potassium produced three parallel straight lines: same slope, different y-intercepts. What does this geometric pattern tell you about Einstein's equation K_max = hν - φ?",
+        "options": [
+          "The slope h is a property of the metal, varying between sodium, lithium, and potassium; the work function φ is a universal constant of nature",
+          "The slope h is a universal constant of nature, while the work function φ depends on the specific metal and its surface chemistry",
+          "Both h and φ are universal constants; the apparent line spacing is an artifact of residual surface contamination Millikan failed to eliminate",
+          "h depends on the wavelength used in the measurement, which is why Millikan saw straight lines only over narrow frequency ranges"
+        ],
+        "correctIndex": 1,
+        "explanation": "Same slope means h is the same for every metal in every laboratory: it is a property of light, not of the absorber. Different y-intercepts mean φ varies metal by metal, set by chemistry and crystal structure. This split, universal h and local φ, is exactly what Einstein's equation predicts, and it was the cleanest possible vindication of the photon picture. Option A inverts the roles, missing that the slope is what carries Planck's constant. Option C is the kind of objection Millikan dearly wanted to be true and could not make stick: he had spent years engineering the contamination away, and parallel lines with three different intercepts are not the signature of random surface noise. Option D is the classical evasion that the data ruled out by spanning a wide frequency range and still showing the same slope."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The seam where wave and particle had to meet",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The strangest feature of the photoelectric effect, in retrospect, is not that Einstein's quanta won. It is that the wave theory of light did not lose. Diffraction, interference, the polarization patterns of Fresnel and the wavelength-tuned colors of thin films, none of these effects had explanations as quanta. They needed wavefronts, phases, and the whole continuous apparatus that Maxwell had perfected. By 1916 you had Millikan's data on one side, demanding a granular particle picture, and Young's two-slit fringes on the other, demanding a smooth wave. Both kinds of evidence were equally indisputable. Light was being forced to be two things at once." },
+        { "type": "p", "text": "The seam was the photon's energy E = hν and momentum p = h/λ, both of which only make sense if light is granular but both of which are written in terms of frequency and wavelength, which only make sense if light is a wave. Compton's 1923 scattering experiment showed X-rays bouncing off electrons exactly as if they were billiard balls of momentum h/λ. By then the resistance was over. De Broglie generalized the embarrassment the wrong way around in 1924, asking whether matter ought to also have a wavelength λ = h/p. Davisson and Germer found electron diffraction in 1927. The split between wave and particle was no longer something to bemoan; it was the doorway into a new physics, and Einstein's heretical 1905 sentence had quietly done the prying." },
+        { "type": "p", "text": "The photoelectric effect is, finally, the cleanest historical example of how a physical theory actually graduates. It is not that Einstein gave a brilliant argument and the world saw the light. Lenard published his data; Einstein wrote his equation; and a senior experimenter spent a decade trying to break it, with the best instruments money could build, before grudgingly conceding. Ten years of skepticism, the most stubborn possible kind, applied by a craftsman who knew exactly what he was doing. That is what graduation looks like in physics. Millikan's eventual concession is, in its way, a more important moment than Einstein's original paper; it is the moment a community changed its mind. Take comfort in this when you find yourself disbelieving something the data is telling you. The Nobel committee was as nervous about photons in 1921 as Millikan was in 1916. Comfort with the photon, and with the strange wave-particle compromise it inhabits, came only in retrospect." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Robert Millikan's 1916 paper presented experimental measurements that confirmed Einstein's photoelectric equation to within one percent and yielded a value of Planck's constant consistent with Planck's blackbody value. In the same paper, Millikan wrote that the 'semi-corpuscular theory' that produced the equation 'seems at present to be wholly untenable.' Which best describes what Millikan's stance reveals about how scientific theories gain acceptance?",
+    "options": [
+      "Millikan's stance was simply inconsistent: confirming the equation logically requires accepting the photon picture, and his refusal showed he had not understood his own data",
+      "Equations and the physical pictures that motivate them can be tested somewhat independently; an experimenter can be forced by data to accept a quantitative law while reasonably resisting the underlying picture, until other lines of evidence (Compton scattering, electron diffraction) close off the alternatives",
+      "Millikan's measurements were flawed; the equation he confirmed turned out by 1925 to require correction terms that restored a more classical interpretation of the data",
+      "The 1923 Nobel committee privately discounted Millikan's photoelectric work, which is why the prize was awarded primarily for the oil-drop experiment and Millikan was free to dissent from Einstein's interpretation"
+    ],
+    "correctIndex": 1,
+    "explanation": "Millikan's stance is not a contradiction but a careful distinction: an equation predicts numbers, while a physical picture supplies a mechanism for why those numbers come out right. The data forced him to accept Einstein's equation, but in 1916 alternative pictures (Lenard's trigger theories, semi-classical resonance schemes) had not yet been definitively ruled out. Compton's 1923 scattering and Davisson-Germer's 1927 electron diffraction closed off the alternatives, after which holding the equation while rejecting the photon became untenable. Option A is the most tempting wrong answer because it sounds like a logical critique, but confirming an empirical equation does not by itself identify the unique mechanism behind it (a recurring theme in physics, see thermodynamics before statistical mechanics). Option C is invented; Einstein's equation is correct as he wrote it. Option D is also invented; the photoelectric work was front and center in the 1923 citation."
+  },
+  "suggestedNodes": [
+    {
+      "id": "compton_scattering",
+      "label": "Compton",
+      "subtitle": "p = h/λ",
+      "edgeType": "extends"
+    },
+    {
+      "id": "wave_particle_duality",
+      "label": "Duality",
+      "subtitle": "wave + particle",
+      "edgeType": "related"
+    },
+    {
+      "id": "work_function",
+      "label": "Work fn φ",
+      "subtitle": "metal binding",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-05T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 24,
+    "previouslyMastered": ["photon_energy", "blackbody", "wavelength"]
+  }
+}
