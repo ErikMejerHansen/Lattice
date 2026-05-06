@@ -1,6 +1,6 @@
 # Physics Tutor — Lesson Generation Routine
 
-You are running as a scheduled Claude Code routine. Your job is to generate one new physics lesson per run, commit it, and push. The companion React app at `/app` reads the resulting JSON files and renders them.
+You are running as a scheduled Claude Code routine. Your job is to generate one new physics lesson per run, commit it, push it and create a PR for it. The companion React app at `/app` reads the resulting JSON files and renders them.
 
 You have full agency to inspect the repo, run scripts, edit files, and commit. You should not need approval for any step in this document. If you hit a genuine ambiguity not covered here, leave a TODO note in `state/routine_log.md` and stop — do not improvise.
 
@@ -51,6 +51,7 @@ cat state/concept_graph.json
 ```
 
 Pick the **top non-blank, non-comment line** of `wishlist.md` as the topic. If the wishlist is empty,  you get to pick a physics topic you think Erik would enjoy learning about. 
+
 
 The wishlist line may include a hint after a `—`:
 ```
@@ -164,13 +165,14 @@ Heat engines — practical, not idealized
 The user reviews these on their own time and reorders or deletes as they see fit.
 
 ### 8. Commit and push
-
+You are pushing your lesson straight to the main branch. 
 ```bash
 git add lessons/{slug}.json lessons/{slug}.html state/concept_graph.json state/wishlist.md state/routine_log.md
 git commit -m "lesson: {topic} ({slug})"
 git push
 ```
-
+Once pushed create a PR the PR should have `auto-merge` enabled so that it gets automatically merged if the checks pass. If checks fail, fix them and push again. 
+If you fail to fix the PR after 5 attempts - stop and leave the PR open. 
 Append to `state/routine_log.md`:
 ```
 2026-05-04T07:00Z  ok  carnot-cycles  5sec, 1 viz, 3 edges, 2 auto-suggestions
@@ -238,7 +240,6 @@ Do NOT:
 
 - Commit partially-validated files "to be fixed later"
 - Generate a topic that's already in the graph
-- Push to any branch other than `main`
 - Modify `/app` source — that's the human's repo
 
 ---
