@@ -1,0 +1,127 @@
+{
+  "slug": "2026-05-06-wave-particle-duality",
+  "title": "Wave-particle duality: de Broglie's bet and the accident at Bell Labs",
+  "node": {
+    "id": "wave_particle_duality",
+    "label": "Duality",
+    "subtitle": "λ = h/p"
+  },
+  "intro": "Einstein had upended the wave theory of light by 1905 when he proposed that light arrives in particles, and Compton sealed the case in 1923 with x-rays bouncing off electrons like billiard balls. The asymmetry was awkward: if a wave can also be a particle, why not the reverse? In 1924 a French aristocrat finishing his PhD took the question seriously and built his entire thesis around one formula. Three years later, an oxidized cathode at Bell Labs was baked clean, and Clinton Davisson, who had no idea what he was looking at, saw electrons diffracting like x-rays off a nickel crystal.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The question Einstein left dangling",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "By 1923 the case for the photon was no longer disputed. Einstein's 1905 photoelectric paper had spent a decade being grudgingly accepted, and Arthur Compton's 1923 experiment had finished the job. Compton aimed monochromatic x-rays at a graphite block and watched the scattered x-rays come out at lower frequencies, with the shift depending on scattering angle exactly as if each x-ray were a billiard ball of momentum h/λ bouncing off an electron at rest. The relation that came out of his analysis was the same one Einstein needed for the photoelectric effect:" },
+        { "type": "math", "tex": "p = \\frac{h}{\\lambda}", "display": true, "caption": "The momentum of a photon. p is its momentum, h is Planck's constant, λ is its wavelength. Compton was the first to measure this directly, by tracking the energy and angle of x-rays scattering off electrons at rest." },
+        { "type": "p", "text": "Light had two natures. A wave whose interference patterns Young had demonstrated in 1801, and a particle whose energy E = hν and momentum p = h/λ were both now established to within a percent. The dust was settling on a strange compromise: light was not exactly either thing; it was whatever the experiment asked it to be." },
+        { "type": "p", "text": "Among the people watching this settle was Louis de Broglie, a thirty-two-year-old French aristocrat finishing his PhD at the Sorbonne. His older brother Maurice ran a private x-ray laboratory in the family townhouse in Paris and had been tutoring Louis on the wave-particle question for years. The asymmetry that everyone else had stopped puzzling over still bothered him. If we now accept that light, which everyone had thought was a wave, has a particle nature, why should we not also expect the reverse? Why should matter, which everyone calls particles, not also have a wave nature? Nobody had asked the question seriously, partly because nobody had a reason to. de Broglie decided to ask it anyway." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. de Broglie's thesis",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "de Broglie's 1924 thesis, Recherches sur la théorie des quanta, runs about a hundred pages. The central move takes a few lines. He took Compton's relation p = h/λ for the photon and proposed that the same relation runs in reverse, for any particle:" },
+        { "type": "math", "tex": "\\lambda = \\frac{h}{p}", "display": true, "caption": "de Broglie's matter-wave relation. λ is the wavelength associated with a particle of momentum p; h is Planck's constant. The relation makes no exception for what the particle is made of, charged or neutral, light or heavy." },
+        { "type": "p", "text": "Every electron, every atom, every baseball has a wavelength. The wavelength is just Planck's constant divided by the particle's momentum. For a baseball this gives a number absurdly small (h ≈ 6.6 × 10⁻³⁴ J·s, a baseball's momentum is around 6 kg·m/s) so λ ≈ 10⁻³⁴ m, smaller than any conceivable measuring stick. For an electron, with mass nine orders of magnitude smaller than a kilogram and velocities easily in the millions of meters per second inside a cathode tube, the wavelength comes out somewhere around an ångstrom, the same scale as the spacing between atoms in a crystal. Crystals are nature's diffraction gratings for x-rays, as Bragg and Laue had shown the previous decade. de Broglie's prediction was that electrons should diffract from crystals too." },
+        { "type": "p", "text": "His thesis examiners did not know what to do with this. Paul Langevin, his advisor, sent the manuscript to Einstein for an opinion. Einstein wrote back that de Broglie had 'lifted a corner of the great veil' and that the work deserved the doctorate. de Broglie defended successfully in November 1924. The committee may have been less convinced than Einstein, but the testable prediction was now on the record, and somebody, somewhere, was bound sooner or later to look for diffracting electrons." }
+      ],
+      "quiz": {
+        "question": "A baseball of mass 0.15 kg is thrown at 40 m/s. An electron in a cathode-ray tube has been accelerated to a velocity of 6 × 10⁶ m/s (its mass is 9.1 × 10⁻³¹ kg). Which is closest to true regarding their de Broglie wavelengths?",
+        "options": [
+          "The baseball's wavelength is larger because it carries more momentum",
+          "Both wavelengths are too small to detect with any current technique",
+          "The electron's wavelength is roughly the spacing of atoms in a crystal; the baseball's is over twenty orders of magnitude smaller still",
+          "Macroscopic objects have no de Broglie wavelength because the relation only applies to charged particles"
+        ],
+        "correctIndex": 2,
+        "explanation": "Compute λ = h/p. For the baseball, p = 6 kg·m/s, so λ ≈ 10⁻³⁴ m, far below anything measurable in principle and indeed below the Planck length itself. For the electron, p = m_e v ≈ 9.1 × 10⁻³¹ × 6 × 10⁶ ≈ 5.5 × 10⁻²⁴ kg·m/s, so λ ≈ 1.2 × 10⁻¹⁰ m = 1.2 Å, the same scale as atomic spacing in a crystal. This is precisely why electrons can be diffracted by crystals (Davisson-Germer 1927) while baseballs cannot. Option A inverts the relation: more momentum gives a smaller wavelength, not larger. Option B underestimates the electron case; ångstrom-scale wavelengths are detected routinely in electron crystallography. Option D is wrong; the relation applies to any particle with momentum, charged or not, and neutron diffraction (uncharged neutrons) is now a workhorse of materials science."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. An accident at Bell Labs",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Clinton Davisson had been at Western Electric (renamed Bell Labs in 1925) since 1917, studying secondary electron emission from metal surfaces. The work was practical: vacuum-tube engineers wanted to know how electrons interacted with the metal targets inside the tubes their company sold. Davisson and his assistant Lester Germer fired a beam of low-energy electrons at a polished nickel target and counted the electrons that bounced back at various angles. Through 1923 and 1924 the results were unremarkable, a smooth angular distribution with no obvious features." },
+        { "type": "p", "text": "In April 1925 the apparatus failed. A liquid-air bottle near the vacuum tube exploded, the seal broke, and atmospheric oxygen rushed onto the hot nickel target. The nickel oxidized into a useless tarnished surface. To recover the experiment, Davisson and Germer baked the target for hours in a hydrogen oven to reduce the oxide back to metal, then continued the runs. The angular distribution had changed completely. Sharp peaks now appeared at specific angles where before there had been a smooth curve. Davisson did not yet realize that the long bake had recrystallized the polycrystalline nickel into a few large single-crystal grains, and that he was now firing electrons at a real crystal lattice." },
+        { "type": "p", "text": "In the summer of 1926 Davisson took a vacation to Britain and attended a meeting in Oxford where Max Born and James Franck were discussing quantum mechanics. Davisson showed his strange angular peaks. Born immediately recognized them as diffraction patterns and pointed Davisson to de Broglie's thesis. Davisson returned to New York and ran the calculation. With electrons accelerated through 54 volts, de Broglie's formula predicted a wavelength of 1.67 Å. The spacing of nickel atoms along the surface row the beam was hitting was 2.15 Å. Plugging both into the same Bragg condition that x-ray crystallographers had been using for a decade gave a predicted angle of 50° between the incoming beam and the strongest reflected peak, exactly where Davisson's data had its sharpest spike." },
+        { "type": "viz", "src": "2026-05-06-wave-particle-duality.html", "height": 480, "caption": "Drag the slider to set the kinetic energy of an electron beam, and watch its de Broglie wavelength λ = h/√(2 m_e K) shift up and down across the nickel surface row spacing of 2.15 Å (the green marker). The Bragg condition for the first-order diffraction peak is d sin φ = λ, where φ is the angle between the incoming beam and the diffracted beam. At Davisson's 54 eV the wavelength is 1.67 Å, which solves to φ = 50°, exactly where his strongest peak sat. Move the slider away and the peak swings: at lower energies the wavelength approaches the lattice spacing and the angle opens toward grazing; below the threshold where λ > d, no first-order peak is geometrically possible at all." },
+        { "type": "p", "text": "Davisson and Germer published in Physical Review in December 1927. Within months and independently, George Thomson in Aberdeen passed electrons through thin metal foils and saw the same circular diffraction rings that x-rays make in powder diffraction. de Broglie's prediction had been confirmed on two continents at once. The closing irony of the story: George Thomson's father J. J. Thomson had won the 1906 Nobel for proving that the electron was a particle. The son shared the 1937 Nobel with Davisson for proving that the same electron is a wave. The family had bracketed wave-particle duality across thirty-one years." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. What is waving?",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "de Broglie's relation gave matter a wavelength but did not say what was waving. For a sound wave, the air pressure is waving. For a light wave, the electric and magnetic fields are waving. For an electron wave, what? Erwin Schrödinger took up the question in late 1925 and produced, by January 1926, a wave equation for matter:" },
+        { "type": "math", "tex": "i\\hbar\\,\\frac{\\partial\\psi}{\\partial t} = -\\frac{\\hbar^2}{2m}\\frac{\\partial^2\\psi}{\\partial x^2} + V(x)\\,\\psi", "display": true, "caption": "The Schrödinger equation in one spatial dimension. ψ(x,t) is the wave function, ℏ = h/(2π) is the reduced Planck constant, m is the particle's mass, and V(x) is the potential energy the particle moves through. The equation is first-order in time but second-order in space, with an explicit i on the left-hand side, which is why ψ has to be complex." },
+        { "type": "p", "text": "Schrödinger applied his equation to the hydrogen atom, treating the electron as a wave bound by the proton's electric potential. Out came a discrete set of allowed standing-wave solutions, each with its own energy. The energies matched Bohr's 1913 atomic spectrum to the precision of the available data, but now they came out of a continuous wave equation rather than being postulated as discrete jumps. This was the moment quantum mechanics passed from speculation into a working theory of the atom." },
+        { "type": "p", "text": "The wave function ψ, however, was complex-valued, and Schrödinger himself was unsure what it represented physically. His first guess was that |ψ|² was the actual electric charge density of the smeared-out electron, the electron literally spread as a cloud over the atom. Max Born, in a short paper in June 1926, argued that this could not be right. The correct interpretation, Born proposed, was that |ψ(x,t)|² is the probability density of finding the particle at position x at time t. The wave is not a wave in space made of stuff; it is a wave of probability amplitude. Schrödinger never accepted this. Born received the Nobel for it in 1954, almost three decades later." }
+      ],
+      "quiz": {
+        "question": "An electron in a hydrogen atom is described by a wave function ψ(x). At a certain point P the value |ψ(P)|² is twice as large as at point Q. According to Born's interpretation, what does this comparison say about the electron?",
+        "options": [
+          "The electron has twice as much electric charge concentrated at P as at Q",
+          "If we measure the electron's position many times in identically prepared atoms, we will find it at P about twice as often as at Q",
+          "The electron is moving twice as fast through P as it is through Q",
+          "Two electrons are present at P for every one at Q"
+        ],
+        "correctIndex": 1,
+        "explanation": "The Born rule says |ψ|² is the probability density for the particle's position. A factor of two means twice the probability per unit volume of finding the electron at P versus Q in any single measurement, equivalently twice the long-run frequency over many identically-prepared trials. This was Born's break from Schrödinger, who wanted (option A) the wave function to describe a literal smeared-out charge. The modern interpretation: the electron is not at any particular place between measurements; the wave function tells us only what we will find when we look. Option C confuses |ψ|² with kinetic energy or speed, which it does not represent. Option D is the popular misconception that wave functions describe ensembles of multiple particles; a one-electron atom contains exactly one electron, with its probability spread out across space."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Single electrons go through both slits",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The cleanest experimental confrontation with what wave-particle duality really means was published by Akira Tonomura's group at Hitachi's Central Research Laboratory in 1989. They built a two-slit-equivalent interferometer for single electrons, using an electron biprism in place of physical slits. The source emitted electrons one at a time, slowly enough that no two were ever in the apparatus simultaneously. A position-sensitive detector recorded each individual arrival on the far screen as a single bright dot." },
+        { "type": "p", "text": "In the first few seconds the screen showed a scatter of seemingly random dots. After a few minutes, faint fringes began to appear. After thirty thousand electrons, an unmistakable interference pattern: alternating bright and dark stripes, just as Young had observed for light in 1801. Each electron arrived as a single localized particle, but the distribution of where they arrived was the distribution a wave would make. The interference cannot be explained as electrons interfering with one another, because there was only ever one electron in the apparatus at any given time. Each electron, in some sense, interferes with itself." },
+        { "type": "p", "text": "What does this mean? The honest answer is that classical language fails. The electron is not a tiny ball that takes one slit. It is also not a wave that physically passes through both. Between source and detector it has no definite position; what propagates is the probability amplitude ψ, a complex-valued wave that does pass through both, and whose squared magnitude at the screen tells us where the electron is likely to land. When we make a measurement we find a particle. When we ask what was happening between measurements we find the wave equation. Wave-particle duality is not the assertion that the electron is sometimes one thing and sometimes the other. It is the more uncomfortable observation that the classical categories of particle and wave were both incomplete, and the formalism that replaced them does not respect their boundaries." },
+        { "type": "p", "text": "There is a temptation, when looking back at de Broglie's 1924 thesis, to credit him with foreseeing all of this. He did not. He thought of his matter wave as a real wave that guided a real particle, a 'pilot wave' picture, and he held that view for the rest of his life. Schrödinger thought ψ was a charge cloud. Einstein never reconciled himself to the probabilistic interpretation that quantum mechanics ended up with, sending Born his famous letter that 'God does not play dice.' The interpretive question, what is waving, has not really been settled. The equations have. They predict everything from semiconductor band structure to electron microscopes to magnetic resonance imaging, and every prediction over nine decades of testing has come out right. The remaining disagreement, when it surfaces, is no longer over whether wave-particle duality is real. It is over what 'real' could possibly mean." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A teaching assistant tells a student that 'the electron is sometimes a wave and sometimes a particle, depending on the experiment we use to look at it.' Why is this slogan, while popular, considered a misleading description of wave-particle duality?",
+    "options": [
+      "Because the electron is always a wave; calling it a particle is a relic of nineteenth-century physics that modern theory has discarded",
+      "Because the slogan suggests a switch between two classical descriptions, when the actual content of quantum mechanics is that neither classical category accurately describes the electron at all; ψ propagates as a complex amplitude that does not correspond to either a localized ball or a smooth wave of stuff",
+      "Because the electron is always a particle; the apparent wave behavior is a statistical artifact of measuring many electrons together",
+      "Because the slogan applies only to photons, not to electrons; matter particles do not actually have wavelengths in any experimentally meaningful sense"
+    ],
+    "correctIndex": 1,
+    "explanation": "The popular slogan packages duality as a kind of shape-shifting between two classically intelligible objects, but Tonomura's single-electron experiment makes clear this is not what is happening. Each electron arrives as one localized hit (the 'particle' aspect), yet the cumulative pattern of hits is the interference pattern of a wave passing through both slits (the 'wave' aspect). The electron is not switching between modes; the new formalism, with ψ as a complex probability amplitude propagating through space, has no analog in classical mechanics, and the words 'particle' and 'wave' are both partial descriptions of something the language was not built for. Option A is wrong; localization on detection is just as real as the wave aspect. Option C is what some of Bohr's competitors briefly hoped, but single-electron interference rules it out cleanly. Option D is wrong; matter-wave behavior is observed routinely with electrons, neutrons, atoms, and even buckyball-sized molecules."
+  },
+  "suggestedNodes": [
+    {
+      "id": "schrodinger_equation",
+      "label": "Schrödinger",
+      "subtitle": "iℏ∂ψ/∂t = Hψ",
+      "edgeType": "extends"
+    },
+    {
+      "id": "heisenberg_uncertainty",
+      "label": "Uncertainty",
+      "subtitle": "Δx·Δp ≥ ℏ/2",
+      "edgeType": "extends"
+    },
+    {
+      "id": "bohr_atom",
+      "label": "Bohr atom",
+      "subtitle": "standing waves",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-06T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 24,
+    "previouslyMastered": ["photoelectric_effect", "photon_energy", "interference_diffraction"]
+  }
+}

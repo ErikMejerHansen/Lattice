@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>de Broglie wavelength and Davisson-Germer geometry</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 90px; text-align: right;
+}
+.readout {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+.readout .pin { color: var(--accent); }
+.readout .ghost { color: var(--text-muted); }
+.readout .lattice { color: #2f6b3c; }
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+
+  <canvas id="plot" height="430" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);background:var(--bg-raised);touch-action:none;"></canvas>
+
+  <div class="viz-slider-row">
+    <label>K</label>
+    <input type="range" id="keSlider" min="0" max="3" step="0.005" value="1.7324" style="min-height:36px;">
+    <span class="value" id="keVal">54.0 eV</span>
+  </div>
+
+  <div class="readout" id="readout"></div>
+
+  <p class="viz-caption" style="margin-top:10px;">Electron kinetic energy K (slider, log scale 1 eV to 1000 eV) sets the de Broglie wavelength λ = h/√(2 m_e K). The schematic shows electrons hitting a nickel crystal at normal incidence; the surface row spacing is d = 2.15 Å (green marker on the lower scale). The first-order Bragg condition d sin φ = λ predicts the angle φ at which the diffracted peak emerges. At 54 eV (Davisson 1927) the answer is φ ≈ 51°, exactly the angle of the strongest peak in his data. Below the threshold where λ > d (around 32 eV), no first-order diffraction is geometrically possible at all.</p>
+</div>
+
+<script>
+const H_J_S = 6.62607015e-34;
+const M_E = 9.1093837e-31;
+const EV = 1.602176634e-19;
+const D_NI_M = 2.15e-10;
+const D_NI_A = 2.15;
+
+const canvas = document.getElementById("plot");
+const slider = document.getElementById("keSlider");
+const keValEl = document.getElementById("keVal");
+const readoutEl = document.getElementById("readout");
+
+const C_TEXT = "#1a1a18";
+const C_TEXT_MUTED = "#6b6359";
+const C_BORDER = "#b8ac8e";
+const C_ACCENT = "#9c3a22";
+const C_LATTICE = "#2f6b3c";
+const C_NICKEL = "#5a5550";
+
+let logKe = 1.7324; // log10(54) = 1.7324
+
+function makeField(parent, label, cls) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  const lbl = document.createElement("span");
+  lbl.className = "lbl";
+  lbl.textContent = label;
+  const val = document.createElement("span");
+  if (cls) val.className = cls;
+  wrap.appendChild(lbl);
+  wrap.appendChild(val);
+  parent.appendChild(wrap);
+  return val;
+}
+
+const fLam = makeField(readoutEl, "λ = h/√(2 m_e K)", "pin");
+const fD = makeField(readoutEl, "Ni row spacing d", "lattice");
+const fSin = makeField(readoutEl, "sin φ = λ/d", "pin");
+const fPhi = makeField(readoutEl, "φ (1st-order peak)", "pin");
+const fStatus = makeField(readoutEl, "status", "ghost");
+
+function deBroglie_m(ke_eV) {
+  const ke_J = ke_eV * EV;
+  return H_J_S / Math.sqrt(2 * M_E * ke_J);
+}
+
+function draw() {
+  const W = canvas.offsetWidth || 320;
+  canvas.width = W;
+  const H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const ke_eV = Math.pow(10, logKe);
+  const lam_m = deBroglie_m(ke_eV);
+  const lam_A = lam_m * 1e10;
+  const sinPhi = lam_A / D_NI_A;
+  const ejected = sinPhi <= 1.0;
+  const phi_rad = ejected ? Math.asin(sinPhi) : Math.PI / 2;
+  const phi_deg = phi_rad * 180 / Math.PI;
+
+  const padX = 14;
+  const schemH = 260;
+  const schemY = 8;
+
+  ctx.fillStyle = "rgba(184,172,142,0.10)";
+  ctx.fillRect(padX, schemY, W - 2 * padX, schemH - 8);
+
+  // Crystal surface
+  const surfY = schemY + 200;
+  const slabBottom = schemY + schemH - 8;
+  const slabL = padX + 10;
+  const slabR = W - padX - 10;
+
+  // Nickel slab body
+  const grad = ctx.createLinearGradient(0, surfY, 0, slabBottom);
+  grad.addColorStop(0, "#888379");
+  grad.addColorStop(1, "#5a5550");
+  ctx.fillStyle = grad;
+  ctx.fillRect(slabL, surfY, slabR - slabL, slabBottom - surfY);
+
+  // Nickel atom row at surface
+  const surfaceCenterX = (slabL + slabR) / 2;
+  const atomSpacingPx = 20;
+  const nAtoms = Math.floor((slabR - slabL - 10) / atomSpacingPx);
+  const startAtomX = surfaceCenterX - (nAtoms - 1) / 2 * atomSpacingPx;
+  for (let i = 0; i < nAtoms; i++) {
+    const ax = startAtomX + i * atomSpacingPx;
+    ctx.beginPath();
+    ctx.arc(ax, surfY, 6, 0, Math.PI * 2);
+    ctx.fillStyle = "#c8bfa8";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(0,0,0,0.4)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+  // d label between two atoms near center
+  const aIdx = Math.floor(nAtoms / 2);
+  const aL = startAtomX + (aIdx - 1) * atomSpacingPx;
+  const aR = startAtomX + aIdx * atomSpacingPx;
+  const dY = surfY + 22;
+  ctx.strokeStyle = C_LATTICE;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(aL, dY);
+  ctx.lineTo(aR, dY);
+  ctx.stroke();
+  // small caps on the d ruler
+  ctx.beginPath();
+  ctx.moveTo(aL, dY - 3); ctx.lineTo(aL, dY + 3);
+  ctx.moveTo(aR, dY - 3); ctx.lineTo(aR, dY + 3);
+  ctx.stroke();
+  ctx.fillStyle = C_LATTICE;
+  ctx.font = "italic 11px 'Source Serif 4', Georgia, serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  ctx.fillText("d = 2.15 Å", (aL + aR) / 2, dY + 5);
+
+  // Incoming beam: vertical, normal incidence, from top down
+  const beamX = surfaceCenterX;
+  const beamTop = schemY + 14;
+  const beamBottom = surfY;
+  const wavelengthPx = Math.max(8, Math.min(80, lam_A * 22));
+
+  ctx.strokeStyle = C_ACCENT;
+  ctx.lineWidth = 1.8;
+  ctx.beginPath();
+  for (let y = beamTop; y <= beamBottom; y += 1.2) {
+    const t = (y - beamTop) / wavelengthPx * 2 * Math.PI;
+    const x = beamX + 5 * Math.sin(t);
+    if (y === beamTop) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  // arrowhead at bottom of incoming
+  ctx.fillStyle = C_ACCENT;
+  ctx.beginPath();
+  ctx.moveTo(beamX, beamBottom - 1);
+  ctx.lineTo(beamX - 4, beamBottom - 8);
+  ctx.lineTo(beamX + 4, beamBottom - 8);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = C_TEXT_MUTED;
+  ctx.font = "italic 11px 'Source Serif 4', Georgia, serif";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
+  ctx.fillText("incoming e⁻  K = " + ke_eV.toFixed(1) + " eV", beamX + 10, beamTop + 6);
+
+  // Surface normal (dashed reference)
+  ctx.strokeStyle = "rgba(107,99,89,0.5)";
+  ctx.setLineDash([3, 3]);
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(beamX, surfY);
+  ctx.lineTo(beamX, surfY - 80);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = C_TEXT_MUTED;
+  ctx.font = "italic 10px 'Source Serif 4', Georgia, serif";
+  ctx.textAlign = "left";
+  ctx.fillText("normal", beamX + 4, surfY - 78);
+
+  // Outgoing diffracted beam: angle phi from normal
+  if (ejected) {
+    const beamLen = 150;
+    const dx = Math.sin(phi_rad);
+    const dy = -Math.cos(phi_rad);
+    const ex = beamX + beamLen * dx;
+    const ey = surfY + beamLen * dy;
+
+    ctx.strokeStyle = C_ACCENT;
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    const steps = Math.floor(beamLen);
+    for (let s = 0; s <= steps; s++) {
+      const t = s;
+      const along = (t / wavelengthPx) * 2 * Math.PI;
+      const perpX = -dy * 5 * Math.sin(along);
+      const perpY = dx * 5 * Math.sin(along);
+      const x = beamX + dx * t + perpX;
+      const y = surfY + dy * t + perpY;
+      if (s === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    // arrowhead
+    const ahx = beamX + dx * (beamLen + 1);
+    const ahy = surfY + dy * (beamLen + 1);
+    const perpL = 5;
+    ctx.fillStyle = C_ACCENT;
+    ctx.beginPath();
+    ctx.moveTo(ahx, ahy);
+    ctx.lineTo(ahx - dx * 8 + (-dy) * perpL, ahy - dy * 8 + dx * perpL);
+    ctx.lineTo(ahx - dx * 8 - (-dy) * perpL, ahy - dy * 8 - dx * perpL);
+    ctx.closePath();
+    ctx.fill();
+
+    // angle arc between normal and outgoing
+    const arcR = 38;
+    ctx.strokeStyle = C_ACCENT;
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.arc(beamX, surfY, arcR, -Math.PI / 2, -Math.PI / 2 + phi_rad);
+    ctx.stroke();
+    // phi label
+    const labelAngle = -Math.PI / 2 + phi_rad / 2;
+    const lx = beamX + (arcR + 14) * Math.cos(labelAngle);
+    const ly = surfY + (arcR + 14) * Math.sin(labelAngle);
+    ctx.fillStyle = C_ACCENT;
+    ctx.font = "italic 12px 'Source Serif 4', Georgia, serif";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText("φ = " + phi_deg.toFixed(0) + "°", lx, ly);
+
+    // outgoing beam label
+    ctx.fillStyle = C_TEXT_MUTED;
+    ctx.font = "italic 11px 'Source Serif 4', Georgia, serif";
+    ctx.textAlign = "left";
+    ctx.fillText("diffracted beam", ex + 6, ey - 4);
+  } else {
+    ctx.fillStyle = "rgba(107,99,89,0.85)";
+    ctx.font = "italic 12px 'Source Serif 4', Georgia, serif";
+    ctx.textAlign = "center";
+    ctx.fillText("λ > d : no first-order diffraction possible", surfaceCenterX, surfY - 60);
+    ctx.fillText("(too few wavelengths fit between rows)", surfaceCenterX, surfY - 44);
+  }
+
+  // ===== Lower wavelength scale =====
+  const scaleY0 = schemH + 40;
+  const scaleH = 50;
+  const padL = 50, padR = 24;
+  const scaleW = W - padL - padR;
+  const scaleX0 = padL;
+  const xMinA = 0;
+  const xMaxA = 5; // ångströms
+
+  function ax2px(x) { return scaleX0 + scaleW * (x - xMinA) / (xMaxA - xMinA); }
+
+  // axis
+  ctx.strokeStyle = C_BORDER;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(scaleX0, scaleY0 + scaleH / 2);
+  ctx.lineTo(scaleX0 + scaleW, scaleY0 + scaleH / 2);
+  ctx.stroke();
+
+  // ticks
+  ctx.fillStyle = C_TEXT_MUTED;
+  ctx.font = "10px 'IBM Plex Mono', monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  for (let a = 0; a <= 5; a++) {
+    const px = ax2px(a);
+    ctx.beginPath();
+    ctx.strokeStyle = C_BORDER;
+    ctx.moveTo(px, scaleY0 + scaleH / 2);
+    ctx.lineTo(px, scaleY0 + scaleH / 2 + 4);
+    ctx.stroke();
+    ctx.fillStyle = C_TEXT_MUTED;
+    ctx.fillText(a.toFixed(0), px, scaleY0 + scaleH / 2 + 6);
+  }
+  ctx.font = "italic 11px 'Source Serif 4', Georgia, serif";
+  ctx.fillStyle = C_TEXT_MUTED;
+  ctx.fillText("wavelength (Å)", scaleX0 + scaleW / 2, scaleY0 + scaleH / 2 + 22);
+
+  // marker for d (nickel row spacing)
+  const dPx = ax2px(D_NI_A);
+  ctx.strokeStyle = C_LATTICE;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(dPx, scaleY0 + 4);
+  ctx.lineTo(dPx, scaleY0 + scaleH - 4);
+  ctx.stroke();
+  ctx.fillStyle = C_LATTICE;
+  ctx.beginPath();
+  ctx.arc(dPx, scaleY0 + scaleH / 2, 4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.font = "italic 11px 'Source Serif 4', Georgia, serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillText("d = 2.15 Å", dPx, scaleY0 + 0);
+
+  // marker for lambda
+  const lamClamped = Math.max(xMinA, Math.min(xMaxA, lam_A));
+  const lamPx = ax2px(lamClamped);
+  ctx.strokeStyle = C_ACCENT;
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(lamPx, scaleY0 + 4);
+  ctx.lineTo(lamPx, scaleY0 + scaleH - 4);
+  ctx.stroke();
+  ctx.fillStyle = C_ACCENT;
+  ctx.beginPath();
+  ctx.arc(lamPx, scaleY0 + scaleH / 2, 5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "#fff";
+  ctx.beginPath();
+  ctx.arc(lamPx, scaleY0 + scaleH / 2, 1.6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = C_ACCENT;
+  ctx.font = "italic 11px 'Source Serif 4', Georgia, serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "alphabetic";
+  const lamLabel = lam_A > 5 ? "λ ≈ " + lam_A.toFixed(2) + " Å (off scale)"
+                  : "λ = " + lam_A.toFixed(2) + " Å";
+  ctx.fillText(lamLabel, lamPx, scaleY0 + scaleH + 32);
+
+  // y-axis label on left
+  ctx.save();
+  ctx.translate(padL - 36, scaleY0 + scaleH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = C_TEXT_MUTED;
+  ctx.font = "italic 10px 'Source Serif 4', Georgia, serif";
+  ctx.textAlign = "center";
+  ctx.fillText("scale", 0, 0);
+  ctx.restore();
+
+  keValEl.textContent = ke_eV >= 100 ? ke_eV.toFixed(0) + " eV" : ke_eV.toFixed(1) + " eV";
+  fLam.textContent = lam_A.toFixed(3) + " Å";
+  fD.textContent = D_NI_A.toFixed(2) + " Å";
+  fSin.textContent = sinPhi.toFixed(3);
+  fPhi.textContent = ejected ? phi_deg.toFixed(1) + "°" : "no peak";
+  fStatus.textContent = ejected
+    ? (Math.abs(ke_eV - 54) < 1 ? "Davisson's setting (54 eV)" : "first-order diffraction")
+    : "below threshold (λ > d)";
+}
+
+slider.addEventListener("input", () => {
+  logKe = parseFloat(slider.value);
+  draw();
+});
+
+window.addEventListener("load", draw);
+setTimeout(draw, 80);
+</script>
+</body>
+</html>

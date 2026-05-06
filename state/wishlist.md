@@ -1,6 +1,3 @@
-# auto-suggested 2026-05-03 from photon-energy
-Wave-particle duality — de Broglie 1924, what is waving when an electron waves
-
 # auto-suggested 2026-05-03 from blackbody-radiation
 Stefan-Boltzmann law — total radiated power as T⁴, derive by integrating Planck
 Cosmic microwave background — Planck's curve at the largest scale, COBE/FIRAS
@@ -22,3 +19,8 @@ Dispersion — n(λ), why prisms make rainbows, why old glass distorts color
 # auto-suggested 2026-05-05 from photoelectric-effect
 Compton scattering — photon momentum p = h/λ, the experiment that closed off the alternatives to the photon
 Work function — what binds electrons to a metal, surface chemistry, why some metals ionize easier than others
+
+# auto-suggested 2026-05-06 from wave-particle-duality
+Schrödinger equation — what the wave function is and how it evolves in time
+Heisenberg uncertainty principle — Δx·Δp ≥ ℏ/2, the noncommutative price of being a wave
+Bohr atom — quantized angular momentum recovered from de Broglie standing waves on the orbit
