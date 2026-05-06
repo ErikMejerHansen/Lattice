@@ -645,7 +645,15 @@ function formatNotesForClipboard(lesson: Lesson, notes: Record<string, string>):
 // ── LessonView ─────────────────────────────────────────────────────────
 
 function LessonView({ lesson, onBack, onComplete }: { lesson: Lesson; onBack: () => void; onComplete: () => void }) {
-  const [notes, setNotes] = useState<Record<string, string>>({})
+  const notesKey = `lattice_notes_${lesson.slug}`
+  const [notes, setNotes] = useState<Record<string, string>>(() => {
+    try {
+      const stored = localStorage.getItem(notesKey)
+      return stored ? JSON.parse(stored) : {}
+    } catch {
+      return {}
+    }
+  })
   const [copied, setCopied] = useState(false)
   const [quizAnswers, setQuizAnswers] = useState<Record<string, number>>({})
   const [sectionIndex, setSectionIndex] = useState(-1)
@@ -803,7 +811,11 @@ function LessonView({ lesson, onBack, onComplete }: { lesson: Lesson; onBack: ()
             {(currentSection!.blocks as Block[]).map((block, i) => renderBlock(block, i))}
             <NoteInput
               value={notes[currentSection!.id] ?? ''}
-              onChange={v => setNotes(prev => ({ ...prev, [currentSection!.id]: v }))}
+              onChange={v => setNotes(prev => {
+                const next = { ...prev, [currentSection!.id]: v }
+                try { localStorage.setItem(notesKey, JSON.stringify(next)) } catch {}
+                return next
+              })}
             />
             {currentSection!.hasQuiz && currentSection!.quiz ? (
               <SectionQuiz
