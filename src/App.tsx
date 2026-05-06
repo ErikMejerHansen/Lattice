@@ -24,7 +24,7 @@ type Edge = {
 
 type Block =
   | { type: 'p'; text: string }
-  | { type: 'math'; tex: string; display?: boolean }
+  | { type: 'math'; tex: string; display?: boolean; caption?: string }
   | { type: 'viz'; src: string; height: number; caption: string }
 
 type Quiz = {
@@ -474,6 +474,22 @@ function renderBlock(block: Block, i: number) {
       throwOnError: false,
     })
     if (block.display) {
+      if (block.caption) {
+        return (
+          <figure key={i} style={{ margin: '14px 0 16px' }}>
+            <div
+              dangerouslySetInnerHTML={{ __html: html }}
+              style={{ overflowX: 'auto' }}
+            />
+            <figcaption style={{
+              marginTop: 6, fontFamily: 'var(--serif)', fontStyle: 'italic',
+              fontSize: 13, color: 'var(--ink-muted)', lineHeight: 1.4,
+            }}>
+              {block.caption}
+            </figcaption>
+          </figure>
+        )
+      }
       return (
         <div
           key={i}

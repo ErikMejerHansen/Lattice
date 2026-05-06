@@ -26,3 +26,4 @@ Hard requirements:
 8. Specific to THIS lesson: not a generic sine wave or bar chart.
    The interaction must illuminate the concept being taught.
 9. File must be under 30KB.
+10. Every plotted axis must be labeled directly on the chart with both variable name and units (e.g., "ν (×10¹⁴ Hz)" along the x-axis, "K_max (eV)" along the y-axis). The label position must match the data orientation: x-axis labels sit below the horizontal axis, y-axis labels sit to the left of the vertical axis (rotated if needed). After generating the script, verify the label and the actual plotted variable agree; mislabeled axes silently break the viz's pedagogical value.

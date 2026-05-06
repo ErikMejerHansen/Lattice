@@ -7,11 +7,12 @@ User:
 Generate the outline for a physics lesson on: {topic}
 {hint}
 
-Learner state:
-- Mastered: {mastered}
-- In progress: {inProgress}
-- Queued (flagged as confusing): {queued}
-- Open confusion queue: {openQueue}
+Repo state (the routine cannot see what the learner has actually studied; per-browser progress is invisible. Treat existing graph nodes as material that has been published and may or may not have been read.):
+- Published lessons (graph nodes already in the repo): {graphNodes}
+- Wishlist (topics queued for future lessons): {wishlist}
+- Open confusion queue (learner-flagged terms from queue.md): {openQueue}
+
+The lesson should stand on its own. It may reference earlier lessons by name, but should not assume the learner has internalized them.
 
 Return valid JSON only — no preamble, no markdown fence:
 
@@ -41,6 +42,7 @@ Return valid JSON only — no preamble, no markdown fence:
 
 Constraints:
 - Exactly 5 sections. Sections 2 and 4 have hasQuiz: true. Others have hasQuiz: false.
-- Exactly 3 suggestedNodes. Each must have a valid edgeType.
+- Section 5 develops one specific case (a distinction, a refinement, a single historical resolution) and earns any broader observation from it. Not a generic moral closer ("hold onto", "take comfort in", "remember that"), not a teaser for the next lesson.
+- Exactly 3 suggestedNodes. Each must have a valid edgeType. SuggestedNodes can be forward-pointing (topics this lesson sets up, e.g., photoelectric → Compton) or sideways (terms the lesson uses but does not fully unpack, e.g., "equipartition", "energy density", "statistical mechanics"). When the lesson leans on an unfamiliar term, prefer surfacing it as a suggestedNode over inserting a digression to define it. Avoid suggesting topics already in {graphNodes} or {wishlist}.
 - Intro is 3-4 sentences. Story-led. No em-dashes.
 - node.label max 14 chars. node.subtitle max 16 chars.

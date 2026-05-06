@@ -61,12 +61,13 @@ The hint is guidance for tone or angle; honor it.
 
 ### 2. Plan the lesson
 
-Read the queue and graph to understand the learner's current footing:
+Read the repo state to understand what is already published and what is queued:
 
-- `concept_graph.json` tells you what's mastered, in_progress, queued, available
-- `queue.md` tells you what they've recently flagged as confusing
+- `concept_graph.json` is the list of published-lesson nodes. The `state` field on each node is meaningless cloud-side (the learner's actual mastered/in_progress state lives in their browser's localStorage and is invisible to this routine). Use it as a list of "lessons that have been published," nothing more.
+- `wishlist.md` is the curated topic list, including auto-suggestion comments from prior runs.
+- `queue.md` is the learner-flagged confusion log (often empty).
 
-Compose the outline using the prompt in `routine/prompts/outline.md`. The outline must conform to the schema in `scripts/validate-lesson.mjs`.
+Compose the outline using the prompt in `routine/prompts/outline.md`. Inject the outline prompt's fields from these files: `{graphNodes}` from concept_graph.json (id and label per node), `{wishlist}` from wishlist.md, `{openQueue}` from queue.md. The outline must conform to the schema in `scripts/validate-lesson.mjs`.
 
 ### 3. Write each section
 
@@ -190,13 +191,13 @@ These are the system + user prompts used at each stage. They live in `routine/pr
 >
 > Punctuation: avoid em-dashes (use commas, colons, parentheses). Plain ASCII apostrophes. Unicode for math symbols in prose (λ, ν, ∝, ≈, π, ², ³). Always return ONLY valid JSON, no preamble, no markdown code fences.
 >
-> When you reference a formula, you MUST also include it as a math block. Never describe a formula's parts ("a factor of ν³ over an exponential") without first showing the formula. The reader cannot follow the description without seeing the symbols.
+> When you reference a formula, you MUST also include it as a math block. Never describe a formula's parts ("a factor of ν³ over an exponential") without first showing the formula. The reader cannot follow the description without seeing the symbols. Every display-math block must carry a "caption" field that names every symbol introduced; the body prose can then build on those definitions instead of re-glossing them.
 
 ### Outline prompt (`routine/prompts/outline.md`)
 
-User prompt template. Fields injected by routine: `{topic}`, `{hint}`, `{mastered}`, `{inProgress}`, `{queued}`, `{openQueue}`.
+User prompt template. Fields injected by routine: `{topic}`, `{hint}`, `{graphNodes}` (list of all published-lesson nodes from the graph, by id and label), `{wishlist}` (current wishlist content, including auto-suggestion comments), `{openQueue}` (queue.md content).
 
-Produces JSON with: `title`, `intro` (1 paragraph, 3-4 sentences), `sections` (exactly 5, headings numbered 1-5, sections 2 and 4 have `hasQuiz: true`), `checkInAfter: [1, 3]`, `suggestedNodes` (exactly 3, with `edgeType` of extends/applied/related).
+Produces JSON with: `title`, `intro` (1 paragraph, 3-4 sentences), `sections` (exactly 5, headings numbered 1-5, sections 2 and 4 have `hasQuiz: true`; section 5 develops one specific case and earns any broader observation from it, no generic moral closers, no teasers for future lessons), `checkInAfter: [1, 3]`, `suggestedNodes` (exactly 3, with `edgeType` of extends/applied/related).
 
 ### Section prompt (`routine/prompts/section.md`)
 

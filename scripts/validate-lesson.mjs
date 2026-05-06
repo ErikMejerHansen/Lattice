@@ -73,6 +73,9 @@ function validateLesson(path) {
           if (b.type === 'math') {
             check(typeof b.tex === 'string', `sections[${i}].blocks[${j}].tex must be a string`);
             check(typeof b.display === 'boolean', `sections[${i}].blocks[${j}].display must be a boolean`);
+            if (b.caption !== undefined) {
+              check(typeof b.caption === 'string', `sections[${i}].blocks[${j}].caption must be a string when present`);
+            }
           }
           if (b.type === 'viz') {
             check(typeof b.src === 'string', `sections[${i}].blocks[${j}].src must be a string`);
