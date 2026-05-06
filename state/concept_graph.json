@@ -69,6 +69,16 @@
       "createdAt": "2026-05-05T08:00:00Z",
       "col": 0,
       "row": 3
+    },
+    {
+      "id": "wave_particle_duality",
+      "label": "Duality",
+      "subtitle": "λ = h/p",
+      "state": "available",
+      "lesson": "2026-05-06-wave-particle-duality",
+      "createdAt": "2026-05-06T08:00:00Z",
+      "col": 1,
+      "row": 3
     }
   ],
   "edges": [
@@ -82,6 +92,9 @@
     { "from": "refraction", "to": "wavelength", "kind": "related" },
     { "from": "refraction", "to": "interference_diffraction", "kind": "related" },
     { "from": "photoelectric_effect", "to": "photon_energy", "kind": "extends" },
-    { "from": "photoelectric_effect", "to": "blackbody", "kind": "related" }
+    { "from": "photoelectric_effect", "to": "blackbody", "kind": "related" },
+    { "from": "wave_particle_duality", "to": "photon_energy", "kind": "extends" },
+    { "from": "wave_particle_duality", "to": "photoelectric_effect", "kind": "extends" },
+    { "from": "wave_particle_duality", "to": "interference_diffraction", "kind": "applied" }
   ]
 }
