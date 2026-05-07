@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Color temperature</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.mono { font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; }
+.lbl { font-size: 11px; color: var(--text-muted); }
+.val { font-size: 18px; }
+</style>
+</head>
+<body>
+<div id="viz" style="padding: 12px 16px;">
+  <div style="display: flex; gap: 16px; align-items: stretch; height: 92px; margin-bottom: 14px;">
+    <div id="swatch" style="flex: 1; border: 1px solid var(--border-strong); background: rgb(255,167,87);"></div>
+    <div style="display: flex; flex-direction: column; justify-content: center; width: 200px; gap: 2px;">
+      <div class="mono lbl">CCT</div>
+      <div id="cct" class="mono val">2700 K</div>
+      <div class="mono lbl" style="margin-top: 8px;">&lambda;<sub>max</sub> (Wien)</div>
+      <div id="lammax" class="mono val">1073 nm</div>
+    </div>
+  </div>
+  <svg id="plot" viewBox="0 0 660 220" preserveAspectRatio="none" style="width: 100%; height: 220px; display: block;">
+    <rect id="vis-band" x="0" y="0" width="0" height="200" fill="rgba(156,58,34,0.08)"/>
+    <line x1="40" y1="200" x2="650" y2="200" stroke="#b8ac8e" stroke-width="1"/>
+    <line x1="40" y1="20" x2="40" y2="200" stroke="#b8ac8e" stroke-width="1"/>
+    <g id="xticks" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6b6359"></g>
+    <path id="planck" fill="none" stroke="#9c3a22" stroke-width="1.6"/>
+    <line id="peak" x1="0" y1="20" x2="0" y2="200" stroke="#9c3a22" stroke-dasharray="3,3" stroke-width="1"/>
+    <text x="345" y="14" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#9c3a22">visible 380-740 nm</text>
+    <text x="345" y="217" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6b6359">wavelength (nm)</text>
+    <text x="44" y="32" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6b6359">B&#955;(&#955;,T) / max</text>
+  </svg>
+  <div class="viz-slider-row">
+    <label for="t-slider">T</label>
+    <input id="t-slider" type="range" min="1500" max="10000" step="50" value="2700">
+    <span class="value" id="t-value">2700 K</span>
+  </div>
+  <div class="mono" style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-ghost); margin-top: 4px; padding: 0 28px;">
+    <span>candle 1850</span>
+    <span>incand 2700</span>
+    <span>halogen 3200</span>
+    <span>noon 5500</span>
+    <span>overcast 6500</span>
+    <span>blue sky 10000</span>
+  </div>
+  <div class="viz-caption" style="margin-top: 10px;">
+    Drag the slider. The swatch is the rough perceived color of an ideal blackbody at temperature T (Tanner Helland's standard approximation). The Planck curve below it is normalized to its own peak; the rust band marks the visible window from 380 to 740 nm, and the dashed line is &lambda;<sub>max</sub> from Wien's law. A 2700 K incandescent puts only a sliver of its curve in the visible window; a 6500 K daylight source has its peak just past the blue edge.
+  </div>
+</div>
+<script>
+(function () {
+  var slider = document.getElementById('t-slider');
+  var tValue = document.getElementById('t-value');
+  var swatch = document.getElementById('swatch');
+  var cct = document.getElementById('cct');
+  var lammax = document.getElementById('lammax');
+  var peak = document.getElementById('peak');
+  var planck = document.getElementById('planck');
+  var visBand = document.getElementById('vis-band');
+  var xticks = document.getElementById('xticks');
+
+  var X0 = 40, X1 = 650, Y0 = 20, Y1 = 200;
+  var LAM_MIN = 100, LAM_MAX = 2000;
+  var VIS_MIN = 380, VIS_MAX = 740;
+
+  function lamToX(lam) {
+    return X0 + (lam - LAM_MIN) / (LAM_MAX - LAM_MIN) * (X1 - X0);
+  }
+
+  [200, 500, 1000, 1500, 2000].forEach(function (lam) {
+    var x = lamToX(lam);
+    var t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('x', x);
+    t.setAttribute('y', 213);
+    t.setAttribute('text-anchor', 'middle');
+    t.textContent = lam;
+    xticks.appendChild(t);
+    var tk = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    tk.setAttribute('x1', x); tk.setAttribute('x2', x);
+    tk.setAttribute('y1', Y1); tk.setAttribute('y2', Y1 + 4);
+    tk.setAttribute('stroke', '#b8ac8e');
+    xticks.appendChild(tk);
+  });
+
+  visBand.setAttribute('x', lamToX(VIS_MIN));
+  visBand.setAttribute('width', lamToX(VIS_MAX) - lamToX(VIS_MIN));
+  visBand.setAttribute('y', Y0);
+  visBand.setAttribute('height', Y1 - Y0);
+
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  function bbColor(T) {
+    var t = clamp(T, 1000, 40000) / 100;
+    var r, g, b;
+    if (t <= 66) r = 255;
+    else r = clamp(329.698727446 * Math.pow(t - 60, -0.1332047592), 0, 255);
+    if (t <= 66) g = clamp(99.4708025861 * Math.log(t) - 161.1195681661, 0, 255);
+    else g = clamp(288.1221695283 * Math.pow(t - 60, -0.0755148492), 0, 255);
+    if (t >= 66) b = 255;
+    else if (t <= 19) b = 0;
+    else b = clamp(138.5177312231 * Math.log(t - 10) - 305.0447927307, 0, 255);
+    return 'rgb(' + Math.round(r) + ',' + Math.round(g) + ',' + Math.round(b) + ')';
+  }
+
+  var hPl = 6.62607015e-34, cLi = 2.99792458e8, kB = 1.380649e-23;
+  function planckB(lamNm, T) {
+    var lam = lamNm * 1e-9;
+    var x = (hPl * cLi) / (lam * kB * T);
+    if (x > 700) return 0;
+    return (2 * hPl * cLi * cLi) / Math.pow(lam, 5) / (Math.exp(x) - 1);
+  }
+
+  function update() {
+    var T = parseInt(slider.value, 10);
+    tValue.textContent = T + ' K';
+    cct.textContent = T + ' K';
+    swatch.style.background = bbColor(T);
+
+    var lamPeakNm = 2.898e-3 / T * 1e9;
+    lammax.textContent = lamPeakNm < 10000
+      ? lamPeakNm.toFixed(0) + ' nm'
+      : (lamPeakNm / 1000).toFixed(1) + ' μm';
+    var peakX = lamToX(clamp(lamPeakNm, LAM_MIN, LAM_MAX));
+    peak.setAttribute('x1', peakX);
+    peak.setAttribute('x2', peakX);
+
+    var N = 220;
+    var vals = [];
+    var maxV = 0;
+    for (var i = 0; i <= N; i++) {
+      var lam = LAM_MIN + (LAM_MAX - LAM_MIN) * i / N;
+      var v = planckB(lam, T);
+      vals.push({ lam: lam, v: v });
+      if (v > maxV) maxV = v;
+    }
+    var d = '';
+    for (var j = 0; j < vals.length; j++) {
+      var x = lamToX(vals[j].lam);
+      var y = Y1 - (vals[j].v / maxV) * (Y1 - Y0);
+      d += (j === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+    }
+    planck.setAttribute('d', d);
+  }
+
+  slider.addEventListener('input', update);
+  update();
+})();
+</script>
+</body>
+</html>

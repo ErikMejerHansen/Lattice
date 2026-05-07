@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-04 from wiens-displacement-law
-Color temperature in lighting — Kelvin scale, daylight vs incandescent
 Spectroscopy basics — absorption lines, what the sun is made of
 
 # auto-suggested 2026-05-04 from interference-and-diffraction
@@ -34,3 +33,8 @@ CMB anisotropies — ΔT/T ≈ 10⁻⁵, the seeds of every galaxy ever formed, 
 Saha ionization equation — n+/n0 ∝ T^(3/2) exp(-χ/kT), the bridge from temperature to spectrum
 Hertzsprung-Russell diagram — luminosity vs temperature, the family portrait of stars
 Balmer series — n → 2 transitions in hydrogen, the lines that started OBAFGKM
+
+# auto-suggested 2026-05-07 from color-temperature
+Color rendering index — the eight-patch test, why two 3000K LEDs disagree on a tomato
+Chromaticity diagram — CIE 1931 xy, the (x,y) sheet that the Planckian locus lives on
+Metamerism — same color seen, different spectra emitted, the catch behind every camera

@@ -109,6 +109,16 @@
       "createdAt": "2026-05-07T11:00:00Z",
       "col": 0,
       "row": 5
+    },
+    {
+      "id": "color_temperature",
+      "label": "Color temp",
+      "subtitle": "Planckian locus",
+      "state": "available",
+      "lesson": "2026-05-07-color-temperature",
+      "createdAt": "2026-05-07T14:00:00Z",
+      "col": 1,
+      "row": 5
     }
   ],
   "edges": [
@@ -133,6 +143,8 @@
     { "from": "cmb", "to": "stefan_boltzmann", "kind": "related" },
     { "from": "stellar_classification", "to": "wien_displacement", "kind": "extends" },
     { "from": "stellar_classification", "to": "blackbody", "kind": "related" },
-    { "from": "stellar_classification", "to": "stefan_boltzmann", "kind": "applied" }
+    { "from": "stellar_classification", "to": "stefan_boltzmann", "kind": "applied" },
+    { "from": "color_temperature", "to": "wien_displacement", "kind": "extends" },
+    { "from": "color_temperature", "to": "blackbody", "kind": "related" }
   ]
 }

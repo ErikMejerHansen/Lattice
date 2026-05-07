@@ -1,0 +1,125 @@
+{
+  "slug": "2026-05-07-color-temperature",
+  "title": "Color temperature: how a blackbody ended up on every light-bulb box",
+  "node": {
+    "id": "color_temperature",
+    "label": "Color temp",
+    "subtitle": "Planckian locus"
+  },
+  "intro": "In 1931 the International Commission on Illumination met in Cambridge and decided the fair way to compare a tungsten lamp with sunlight was to ask which blackbody temperature each one most resembled. The committee settled on three reference points: 2856 K for the photographer's tripod lamp, 4874 K for direct noon sun, 6774 K for an overcast sky. None of those numbers was the temperature of anything in the room; they were temperatures the rooms wished they had. Ninety-five years later your living-room LED still carries one printed on its box, and it is the same trick.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The thermometer that escaped the laboratory",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "William Thomson, later Lord Kelvin, gave the world an absolute temperature scale in 1848. He did it by following Carnot's reasoning to its limit: there is a temperature below which no engine can run, and counting upward from that floor in degree-Celsius steps gives a thermometer that reads the same in every laboratory. For sixty years the scale stayed in physics, useful for computing efficiencies of steam engines and the freezing points of mixtures. Then it leaked into the photo studios." },
+        { "type": "p", "text": "Photographers in the 1910s and 1920s had a problem the painters never had. A black-and-white plate of a candlelit room and a black-and-white plate of a sunlit garden could not be made to print on the same paper without one of them looking sickly. The two scenes were lit by sources whose visible spectra differed wildly, and chemistry alone could not equalize them. Once Kodachrome arrived in 1935 the gap turned ugly: a portrait taken indoors on daylight-balanced film came out the color of a swimming pool full of orange juice." },
+        { "type": "p", "text": "The fix arrived in 1931 from the CIE meeting in Cambridge. Three reference illuminants were defined by saying not what they were, but which blackbody they matched: A at 2856 K (tungsten lamp), B at 4874 K (direct noon sun), C at 6774 K (overcast daylight). The trick was to anchor every film stock, every camera filter, and every print bath to an imagined Planck curve at some specific T. The Kelvin scale was no longer a thermometer reading. It had become a vocabulary for describing the color of light." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The Planckian locus",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Take every color the human eye can distinguish, throw away brightness, and you can lay the surviving hues on a single two-dimensional sheet. The CIE drew this sheet in 1931 and called it the chromaticity diagram. Pure spectral colors trace the curved upper boundary, from violet near the lower-left, through green at the top, around to red at the right. Whites and pastels live in the interior. Every patch of light a human can distinguish corresponds to one point on the sheet." },
+        { "type": "p", "text": "To find where a blackbody at temperature T lands on the sheet, take the Planck spectrum and weight it through the eye's three color-matching functions. The arithmetic is direct and the answer is a single (x, y) point. Walk T from 1000 K up to 20000 K and the point traces a curve. That curve is the Planckian locus. It enters the diagram from the red corner, sweeps through orange and yellow, brushes the white center near 6500 K, and parks itself at a steady-state pale blue." },
+        { "type": "math", "tex": "B_{\\lambda}(\\lambda, T) = \\frac{2 h c^{2}}{\\lambda^{5}} \\cdot \\frac{1}{\\exp\\!\\left( \\frac{h c}{\\lambda k T} \\right) - 1}", "display": true, "caption": "B_λ is the spectral radiance of a blackbody per unit wavelength; λ is wavelength in meters; T is temperature in kelvin; h is Planck's constant; c is the speed of light; k is Boltzmann's constant. Read aloud: the only knob is T, and turning it slides the entire curve and its peak across the spectrum." },
+        { "type": "p", "text": "What the locus is not is a straight line, and what it never reaches is a saturated blue or violet. A blackbody at any temperature has a broadband spectrum by construction. Even a 1000 K source emits across red, orange, yellow, and a long infrared tail at the same time, and the eye blends those into a desaturated red-orange. Even a 50000 K source still lights up green and red receptors enough to dilute the blue. The locus is short and stubby because the laws of physics will not let a thermal radiator emit a single hue." }
+      ],
+      "quiz": {
+        "question": "A blackbody at 1500 K appears red-orange to the eye, and a blackbody at 50000 K (hotter than any visible source on Earth's surface) would still appear pale blue, never a deep violet. Why does the Planckian locus refuse to reach a saturated blue or violet?",
+        "options": [
+          "The eye's blue cones desensitize at high luminance, so very hot sources read as washed-out",
+          "The Planck spectrum is broadband by construction; even at extreme T the visible window catches a long tail mixed with green and red, never a single hue",
+          "Above 10000 K the radiator emits more in the infrared and the overall hue cools back toward red",
+          "The CIE chromaticity diagram is defined to clip the deep-blue corner for safety reasons"
+        ],
+        "correctIndex": 1,
+        "explanation": "The Planck curve is smooth and broadband for any T greater than zero. Whatever temperature you choose, the visible window from 380 to 740 nm will catch a slice of that smooth curve, which always contains some red and some green along with the dominant color, so the perceived hue stays inside an interior arc of the chromaticity diagram and never touches the saturated boundary. Option 1 confuses an adaptation effect with a property of the source; option 3 is the opposite of what Wien's law says (hotter T pushes the peak shorter, into the UV); option 4 invents a constraint the CIE never imposed. Saturated blue and saturated violet are reachable only by narrowband sources like lasers or gas-discharge lines, never by anything thermal."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Correlated color temperature, the practical fudge",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Real lamps are not blackbodies. A mercury-vapor fluorescent emits at three or four sharp atomic lines smeared by a phosphor coating; a 'white' LED is a blue gallium-nitride diode capped with a yellow yttrium-aluminum-garnet phosphor that downconverts about 60 percent of its photons. The chromaticity points of these lamps land near the Planckian locus but rarely on it. Industry still wanted a single Kelvin number to print on the box." },
+        { "type": "p", "text": "Deane Judd, at the National Bureau of Standards in 1936, supplied the convention. Take the lamp's (x, y) point, drop a perpendicular onto the Planckian locus inside a perceptually uniform space (the geometry was later cleaned up in the CIE 1960 uv chart), and read the temperature at the foot of the perpendicular. Call that the correlated color temperature, or CCT. Two lamps with the same CCT can have wildly different underlying spectra, yet a casual eye glancing at a freshly painted wall will register the same shade of white from both." },
+        { "type": "p", "text": "Wien's displacement law (your earlier lesson) translates a CCT directly into the wavelength where the matching Planck curve peaks:" },
+        { "type": "math", "tex": "\\lambda_{\\text{max}} = \\frac{b}{T_{c}}, \\quad b \\approx 2.898 \\times 10^{-3} \\, \\text{m} \\cdot \\text{K}", "display": true, "caption": "λ_max is the wavelength of peak emission per unit wavelength; T_c is the correlated color temperature in kelvin; b is Wien's displacement constant. A 2700 K warm-white LED matches a Planck curve peaking at 1073 nm, deep in the near-infrared, which is why so much of its visible output is the long-wavelength edge of an unseen peak. A 6500 K daylight LED matches a Planck curve peaking at 446 nm, on the blue edge of the visible window." },
+        { "type": "p", "text": "Drag the slider below from a candle flame at the cool end up to a blue overcast sky at the hot end. The swatch shows the rough perceived color of an ideal blackbody at that T; the curve below it is the Planck spectrum, with the visible window shaded in. Notice how little of any curve sits inside the visible band: most of a 2700 K bulb's light is heat you cannot see, and the peak of a 6500 K source has just walked off the blue edge into the ultraviolet." },
+        { "type": "viz", "src": "2026-05-07-color-temperature.html", "height": 480, "caption": "Slide the temperature. The swatch is the apparent color of an ideal blackbody at T. The Planck curve below it slides left as T rises, with the visible window (380 to 740 nm) shaded in rust. The dashed marker is λ_max from Wien's law. Common reference temperatures are labeled along the slider, from a candle flame at 1850 K to a blue sky near 10000 K." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Why warm light is cool light",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "There is a perceptual rotation built into all of this that the physics does not predict. A blackbody at low temperature glows red and orange and feels emotionally warm. A blackbody at high temperature glows blue-white and feels emotionally cool. The English-language convention assigns 'warm' and 'cool' in exactly the wrong direction for the underlying temperature." },
+        { "type": "p", "text": "The convention almost certainly came from Earth-bound experience. The sources you sit close to are red-orange (campfire, candle, hearth) and they are physically hot when you touch them. The sources you cannot reach are blue (the noon sky, the deep sea, snow in shade) and they live at a distance. The brain decided which colors meant 'come closer' and which meant 'I am chilly' long before any thermometer was invented." },
+        { "type": "p", "text": "Light-bulb manufacturers, who would prefer customers reach for the right box without taking a physics course, have inherited the inversion and printed it on every package. A 'warm white' LED is sold at 2700 K, near the spectrum of a tungsten coil. A 'cool white' LED is sold at 5000 K to 6500 K, the part of the Planckian locus that resembles open daylight. The Kelvin number on the box increases as the marketing word cools down." }
+      ],
+      "quiz": {
+        "question": "You unpack two LED bulbs labeled 'warm white 2700 K' and 'cool white 6500 K.' Which one most closely resembles, in chromaticity, the spectrum of a hot tungsten filament glowing yellow-orange in an old incandescent bulb?",
+        "options": [
+          "The 2700 K warm white",
+          "The 6500 K cool white",
+          "Neither, because no LED can ever match a continuous incandescent spectrum",
+          "Both equally, because both are sold as 'white' light"
+        ],
+        "correctIndex": 0,
+        "explanation": "An incandescent tungsten filament runs at about 2700 to 2900 K and emits the broadband Planck curve of a hot solid. The 'warm white 2700 K' LED is engineered (with phosphors) to land near that same point on the Planckian locus, even though its underlying spectrum is a hacked combination of a blue diode and a yellow phosphor. Option 2 (6500 K) corresponds to direct noon daylight, the opposite end of the locus. Option 3 points at a real fact (the LED's spectrum is not continuous, which is the CRI argument coming next) but overstates the case: phosphor-converted LEDs imitate the chromaticity of a tungsten filament closely enough to fool a casual eye glancing at a wall. Option 4 forgets that 'white' is a region on the chromaticity diagram, not a single point."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Why the museum buys CRI 95",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Two LEDs labeled 2700 K can fail badly at the same job. The chromaticity number says only that the average light reflected off a freshly painted white wall is the same shade in both cases. It says nothing about what those lamps do to a tomato in the kitchen, a piece of mahogany on the floor, or a Vermeer pearl on a museum wall." },
+        { "type": "p", "text": "The CIE addressed this in 1965 by defining the color rendering index, Ra. The recipe is mechanical. Pick fourteen test color samples (originally Deane Judd's choice of textile and paint chips, including a strong red, a yellow, several skin tones, and a leaf green). Light each sample with the test lamp and again with a reference illuminant of the same CCT (a Planck curve below 5000 K, daylight phase above). Measure the chromaticity shift between the two renderings. Average the shift across the eight standard samples and subtract it from 100. A perfect score is Ra = 100; a score of zero means random colors." },
+        { "type": "p", "text": "A cheap phosphor LED at 2700 K typically scores Ra near 75. The blue-pump-plus-yellow-phosphor recipe simply has no red in it; what looks 'warm white' on the wall is yellowed-by-gaslight standards and turns red objects under it dull and gray. A premium LED with a second red phosphor scores Ra above 90. The Louvre and the National Gallery in London specify Ra 95 lamps for their painting halls: the difference is the difference between a Vermeer pearl that holds its luster and one that goes muddy. The Kelvin number on the bulb tells you where the lamp's chromaticity sits on the Planckian locus. Ra tells you whether anything else in the room can be itself under that light." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "You are shopping for living-room LEDs. You want bulbs that match the cozy yellow-orange of an old tungsten incandescent and that also let red wood furniture and skin tones look natural. Which package label combination should you reach for, and why?",
+    "options": [
+      "2700 K with Ra ≥ 90: the CCT puts the chromaticity near a tungsten filament, and the high Ra guarantees that the spectrum is dense enough across the visible band to render reds faithfully",
+      "6500 K with Ra ≥ 90: the high Ra renders reds faithfully and the high CCT ensures plenty of red and orange in the spectrum",
+      "2700 K with no Ra listed: the warm CCT is the only number that matters, since CRI is a marketing add-on",
+      "5000 K with Ra around 75: a balanced compromise between cozy and clinical, suitable for most homes"
+    ],
+    "correctIndex": 0,
+    "explanation": "2700 K places the lamp's chromaticity on the Planckian locus near the spot a hot tungsten filament occupies, giving the warm cast you want on the wall. Ra ≥ 90 says the underlying spectrum is dense enough across the visible band that red wood and skin keep their saturation. Option 2 has the right Ra but the wrong CCT: 6500 K is overcast daylight, blue-white, the opposite of cozy, and a high Ra at that color temperature does not retroactively warm the chromaticity. Option 3 matches the chromaticity but ignores the CRI argument and risks a 2700 K lamp that turns red objects gray. Option 4 fails on both axes (a clinical CCT plus a CRI low enough to mute reds). The two numbers do separate jobs: Kelvin sets the location on the Planckian locus, and Ra constrains the spectrum that lives at that location."
+  },
+  "suggestedNodes": [
+    {
+      "id": "color_rendering_index",
+      "label": "CRI / Ra",
+      "subtitle": "8 patch test",
+      "edgeType": "extends"
+    },
+    {
+      "id": "chromaticity_diagram",
+      "label": "Chromaticity",
+      "subtitle": "CIE 1931 xy",
+      "edgeType": "extends"
+    },
+    {
+      "id": "metamerism",
+      "label": "Metamerism",
+      "subtitle": "same color, ≠ spectra",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-07T14:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["wavelength", "photon_energy", "blackbody", "wien_displacement"]
+  }
+}
