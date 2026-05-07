@@ -1,0 +1,124 @@
+{
+  "slug": "2026-05-07-spectroscopy-basics",
+  "title": "Spectroscopy basics: how the dark lines told us what the sun is made of",
+  "node": {
+    "id": "spectroscopy_basics",
+    "label": "Spectroscopy",
+    "subtitle": "absorption lines"
+  },
+  "intro": "In 1814 a Bavarian glass-grinder pointed a homemade prism at the sun and counted 574 dark gaps crossing the rainbow, every one of them at a precisely repeatable wavelength. He had no idea what the gaps meant. Forty-five years later a Heidelberg chemist heated a pinch of table salt in a flame and watched a yellow line ignite at exactly the wavelength of one of those dark gaps. The sun, it turned out, was speaking the same chemical language as the laboratory bench. Within a century the dark lines would name the dominant element in the universe and reveal that we had been wrong about what stars are made of.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. A glass-grinder catalogues 574 mysteries",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Joseph von Fraunhofer apprenticed in a Munich glass shop at age 11, was buried by the collapsing roof at 14, and was rescued by the Elector of Bavaria, who paid for his education on a whim. By his twenties he was running the optical works at Benediktbeuern, grinding the finest prisms and lenses in Europe. His real problem was metrological: every glass batch had a slightly different refractive index, and a prism that worked at one wavelength did not focus the next. He needed a sharp wavelength reference inside the visible band that any laboratory in Europe could reproduce." },
+        { "type": "p", "text": "In 1814 he pointed his best prism at sunlight admitted through a narrow slit, projected the spectrum across his workbench, and noticed something the textbook said should not be there. Hundreds of fine dark vertical lines crossed the rainbow at fixed positions. He counted 574 of them, picked out the strongest, and tagged them with letters: A in the deep red, B and C nearby, the prominent D in the yellow, E in the green, F in the blue, G and H in the violet. Those letter labels are still in use." },
+        { "type": "p", "text": "Fraunhofer used the lines to do exactly what he had needed all along, anchor the wavelength scale and characterize his glass. He never offered an explanation for why the lines were there. He died of tuberculosis at 39, leaving behind a catalogue, the world's best telescopes, and a puzzle that sat unsolved for forty-five years." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Kirchhoff and Bunsen translate the puzzle",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "In 1859 in Heidelberg, Robert Bunsen had perfected a gas burner whose flame was so pale and clean that the color of any salt sprinkled into it would dominate the emission. His office mate Gustav Kirchhoff, a physicist, was studying that emission with a prism. Sodium gave a sharp yellow line; lithium a crimson one; potassium a violet pair. Each element seemed to own a unique pattern of bright spectral lines, an optical fingerprint." },
+        { "type": "p", "text": "Then Kirchhoff did the experiment that mattered. He shone strong sunlight through his sodium-flame, expecting the yellow line to brighten. Instead the dark D line in the solar spectrum got darker. He repeated the trick with a hot continuous source instead of the sun and saw the same pattern: a cooler gas in front of a hotter continuum subtracted photons at exactly the wavelengths it would have emitted on its own. He named three rules, now called Kirchhoff's laws of spectroscopy: a hot dense object emits a continuous spectrum; a hot rarefied gas emits at sharp lines characteristic of its atoms; a cool gas in front of a hotter continuum imprints those same lines as dark absorption." },
+        { "type": "p", "text": "The implication for the sun was immediate. Its dark lines were a signature, not of the deep hot interior, but of the cooler atmosphere through which the light escaped. The Fraunhofer D pair matched sodium in the lab. Other lines matched iron, magnesium, calcium, hydrogen. By 1862 Anders Angstrom had identified hydrogen lines in the solar spectrum, two years before he gave optical wavelengths the unit they still bear in older textbooks." }
+      ],
+      "quiz": {
+        "question": "A laboratory hydrogen lamp at low pressure shows bright emission lines at exactly 656.3, 486.1, and 434.0 nm. The sun's spectrum, taken from earth, shows dark lines at the same three wavelengths. Why do the same atomic transitions show up bright in one case and dark in the other?",
+        "options": [
+          "The sun is too far away for emission lines to reach us, so we only ever see absorption from interstellar gas",
+          "Hydrogen happens to absorb at slightly different wavelengths than it emits, and the match is a coincidence",
+          "An atom absorbs photons at the same wavelengths it emits; whether you see the lines bright or dark depends on whether the gas is hotter or cooler than the continuum behind it",
+          "Bright emission requires an electrical discharge, which is present in the lamp but not in the sun"
+        ],
+        "correctIndex": 2,
+        "explanation": "An atomic transition is reversible. The energy gap that lets an atom emit a photon at λ is the same gap that lets it absorb a photon at λ. Whether you see the line as a bright addition or a dark subtraction depends entirely on the geometry. Hot rarefied hydrogen with no continuum behind it (the discharge lamp, or the sun's chromosphere during a total eclipse) emits at sharp wavelengths. The same hydrogen sitting in front of a hotter continuum (the sun's photosphere, with cooler hydrogen above) absorbs photons out of that continuum at the same wavelengths and re-radiates them in random directions, so the line of sight loses photons there, hence a dark line. Option 1 misunderstands distance; option 2 invents a non-symmetry that does not exist; option 4 confuses the excitation mechanism with the spectroscopic geometry."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Why each element wears its own fingerprint",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "An atom holds its electrons on a discrete ladder of allowed energies, not a continuous slope. (You will see why when we get to the Bohr atom and the Schrödinger equation; for now take the discreteness as observed fact.) An incoming photon can be absorbed only if its energy exactly closes the gap between two rungs, lifting an electron from level m to level n. The condition is one line in algebra:" },
+        { "type": "math", "tex": "h \\nu = E_{n} - E_{m}", "display": true, "caption": "h is Planck's constant; ν is the photon's frequency; E_n and E_m are the upper and lower atomic energy levels. The photon is absorbed only if ν matches this difference exactly. Translate to wavelength via λ = c / ν, and the same rule selects which colors get pulled out of a beam passing through the gas." },
+        { "type": "p", "text": "Different elements have different ladders, so the wavelengths they pluck out are different. Hydrogen's visible-light ladder was tabulated empirically in 1885 by Johann Balmer, a Basel schoolteacher who had spent years staring at four numbers (the Hα, Hβ, Hγ, Hδ wavelengths) until he found a formula that reproduced them:" },
+        { "type": "math", "tex": "\\frac{1}{\\lambda} = R \\left( \\frac{1}{2^{2}} - \\frac{1}{n^{2}} \\right), \\quad n = 3, 4, 5, \\ldots", "display": true, "caption": "λ is the wavelength of a Balmer line; R is the Rydberg constant, 1.097 × 10⁷ m⁻¹; the integer n labels the upper energy level the electron started from before falling to level 2. Set n = 3 and you get Hα at 656.3 nm; n = 4 gives Hβ at 486.1 nm; the series crowds toward the ultraviolet limit at 364.6 nm." },
+        { "type": "p", "text": "The fingerprint metaphor is exact. Hydrogen's four visible Balmer lines, sodium's tight yellow doublet at 589.0 and 589.6 nm, the calcium H and K pair near 397 nm, the iron forest near 430 nm, every species lives at its own set of wavelengths, fixed by atomic structure and never imitated by another element. Drop a cool sample in front of a continuum and the missing photons spell its name." },
+        { "type": "viz", "src": "2026-05-07-spectroscopy-basics.html", "height": 360, "caption": "The strip is the visible spectrum from 380 to 740 nm, drawn with the rough hue the eye assigns at each wavelength. Tap an element to drop its absorption fingerprint into the beam, as if you placed that cool vapor between yourself and a hot continuum source. Tap again to remove it. The bottom panel lists every line you have switched on, with its wavelength. Mix elements to see why a real solar spectrum, with thousands of lines from dozens of species, looks the way it does." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. An element discovered in the sun before earth",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "On 18 August 1868 a total solar eclipse was visible from Guntur on the east coast of India. Pierre Janssen, a French astronomer who had taken three months by ship to get there, set up a slit-spectroscope and pointed it at the chromosphere, the thin pink layer of gas that becomes briefly visible at totality. He saw the expected hydrogen lines, plus a bright yellow line at 587.49 nm that did not match anything on the laboratory shelf. It was close to the sodium D pair but unmistakably to the blue side of them, well separated." },
+        { "type": "p", "text": "The next morning Janssen realized that the line was so bright he could see it without an eclipse, by simply blocking the sun's disk and feeding the spectroscope light from the limb. He cabled the discovery back to Paris. Two months later, in October, Norman Lockyer in London saw the same line in solar prominences using the same trick, which he had invented independently. Lockyer named the unidentified element helium, from the Greek helios, sun." },
+        { "type": "p", "text": "For 27 years helium remained an element known only in the sun. Skeptical chemists called it a fancy. Then in 1895 William Ramsay in London was investigating uranium ores and noticed a gas escaping when he treated cleveite with acid. He passed the gas through a discharge tube, prismed the light, and saw the bright yellow line at 587.49 nm, sitting where Janssen and Lockyer had put it. Earth had finally caught up with the sun." }
+      ],
+      "quiz": {
+        "question": "Janssen and Lockyer in 1868 saw a single bright yellow line at 587.49 nm in the solar chromosphere and proposed a brand new element on the strength of that one observation. Why was a single unmatched line considered solid evidence for a previously unknown element, rather than (say) an instrument artifact or a strange line of a known species?",
+        "options": [
+          "Because Kirchhoff's laws say that any element's emission spectrum is unique to that element, so a sharp line at a wavelength no known species emitted there had to be a species nobody had seen yet",
+          "Because the line was at exactly the same wavelength as one of Fraunhofer's original D lines, which had not yet been assigned to any element",
+          "Because helium was the only element predicted by Mendeleev's periodic table whose lines were still missing",
+          "Because Lockyer had a theoretical prediction for the helium spectrum and was looking for the line"
+        ],
+        "correctIndex": 0,
+        "explanation": "By 1868 Kirchhoff's three laws were the foundation of analytical spectroscopy, and the ground rule that each species owns a unique fingerprint was already battle-tested in mining and chemistry. A sharp emission line at a wavelength where no known element emitted, observed independently in two laboratories with different instruments, could not be an artifact (artifacts do not reproduce across setups) and could not belong to a known species (their lines were tabulated). The only consistent inference was a previously unobserved element. Option 2 is wrong: the helium line is between, not at, the sodium D pair, and the Fraunhofer D lines were already understood as sodium absorption by 1860. Option 3 is anachronistic: Mendeleev's table was published in 1869, after the helium discovery, and never specifically predicted helium. Option 4 is the inverse of what happened: helium was found accidentally and named afterward."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Cecilia Payne reads the sun correctly",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "By 1920 every observatory had thousands of stellar spectra on glass plates, and the lines had been catalogued meticulously. The dominant lines in a sun-like spectrum belonged to iron, calcium, magnesium, sodium. The reasonable inference, repeated in textbooks for two decades, was that the sun was made mostly of those metals, in proportions resembling the earth's crust. Henry Norris Russell at Princeton, the most influential American astronomer of his generation, held that view in print." },
+        { "type": "p", "text": "Cecilia Payne arrived at Harvard in 1923, age 23, fleeing a Cambridge degree program that refused to award women degrees. For her doctoral thesis she applied a brand-new tool: Meghnad Saha's 1920 ionization equation, which gave the fraction of any atomic species in each ionization state as a function of temperature and pressure. Payne realized that the strength of an absorption line depends on three things at once: how many of that species are present, how many of them are in the right ionization state, and how many of those are in the right lower energy level to absorb the relevant photon. The line strength is not a thermometer for abundance until you correct for the other two." },
+        { "type": "p", "text": "When she did the calculation, the answer was a shock. The sun was overwhelmingly hydrogen, with helium second, and everything else (the iron and calcium that made the loudest lines) was a trace contaminant at a million times less abundance. Iron's lines are loud not because the sun is iron-rich but because most solar iron is neutral and its ground-state electrons are perfectly placed to absorb visible photons. Hydrogen's lines look modest because at 5800 K most hydrogen sits in the ground state, where it absorbs ultraviolet, not visible. Russell read her draft, called the conclusion 'clearly impossible,' and persuaded her to add a sentence calling it spurious. Four years later he repeated the calculation himself, conceded she was right, and published it under his own name. The dark lines that began as Fraunhofer's metrological convenience had revealed the dominant chemistry of the universe, and an entire generation of astronomers had been reading them backwards." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A pure red-hot iron rod in a furnace shows a smooth continuous spectrum with no lines. The same iron rod, when vaporized in a low-pressure discharge tube, shows hundreds of sharp bright emission lines. Sunlight passing through the cool atmosphere of an unknown star is found to contain dark lines at exactly those same hundreds of iron wavelengths. What does the dark-line observation actually let you conclude about that star?",
+  "options": [
+    "That the star is made primarily of iron, since iron lines dominate its spectrum",
+    "That the star's atmosphere contains some iron, in a temperature range where neutral iron atoms with electrons in absorbing states are present, but the abundance cannot be read off the line strengths alone",
+    "That the star is hotter than the iron rod in the furnace, since hotter sources show more lines",
+    "That the star is cooler than 1000 K, since iron only absorbs at low temperatures"
+  ],
+    "correctIndex": 1,
+    "explanation": "The dark iron lines tell you three things: (a) some neutral iron is present in the cool atmosphere, since the absorption fingerprint matches; (b) the temperature lies in the range where neutral iron has electrons populating the lower levels of those particular transitions; (c) the underlying continuum from deeper layers is hotter than the absorbing gas, otherwise the lines would appear bright instead of dark. What you cannot read off line strength alone is abundance. That is the lesson Cecilia Payne carved into the field: line intensity blends abundance, ionization fraction, and excitation populations, and you have to unfold the second two with the Saha and Boltzmann equations before the first one means anything. Option 1 is the exact mistake the 1920s consensus made. Option 3 confuses 'more lines' (a continuum issue) with 'these particular lines' (a population issue). Option 4 invents a constraint; iron in stellar atmospheres is observed across a wide temperature range, with line strengths shifting because of ionization, not disappearing."
+  },
+  "suggestedNodes": [
+    {
+      "id": "balmer_series",
+      "label": "Balmer series",
+      "subtitle": "1/λ = R(1/4 - 1/n²)",
+      "edgeType": "extends"
+    },
+    {
+      "id": "saha_equation",
+      "label": "Saha equation",
+      "subtitle": "ionization vs T",
+      "edgeType": "applied"
+    },
+    {
+      "id": "doppler_spectroscopy",
+      "label": "Doppler shift",
+      "subtitle": "radial velocity",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-07T17:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["wavelength", "photon_energy", "blackbody", "wien_displacement", "stellar_classification"]
+  }
+}

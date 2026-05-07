@@ -1,6 +1,3 @@
-# auto-suggested 2026-05-04 from wiens-displacement-law
-Spectroscopy basics — absorption lines, what the sun is made of
-
 # auto-suggested 2026-05-04 from interference-and-diffraction
 Coherence — what makes two beams able to interfere, laser vs lamp
 Diffraction gratings — many slits, the spectrometer at the heart of chemistry
@@ -38,3 +35,6 @@ Balmer series — n → 2 transitions in hydrogen, the lines that started OBAFGK
 Color rendering index — the eight-patch test, why two 3000K LEDs disagree on a tomato
 Chromaticity diagram — CIE 1931 xy, the (x,y) sheet that the Planckian locus lives on
 Metamerism — same color seen, different spectra emitted, the catch behind every camera
+
+# auto-suggested 2026-05-07 from spectroscopy-basics
+Doppler spectroscopy — Δλ/λ = v/c, the radial-velocity trick that found the first exoplanets and that runs every redshift survey
