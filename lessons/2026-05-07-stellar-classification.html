@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBAFGKM: temperature, ionization, Balmer strength</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+.readout .pin { color: var(--accent); }
+.readout .swatch {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 2px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+  <canvas id="plot" height="420" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);background:var(--bg-raised);"></canvas>
+  <div class="viz-slider-row">
+    <label>T</label>
+    <input type="range" id="tempSlider" min="2800" max="42000" step="100" value="9500" style="min-height:36px;">
+    <span class="value" id="tempVal">9500 K</span>
+  </div>
+  <div class="readout" id="readout"></div>
+  <p class="viz-caption" style="margin-top:10px;">Drag the temperature slider. The top panel shows two curves: the fraction of hydrogen ionized (rust) and the Balmer absorption strength (dark), normalized to its own peak. Balmer strength is the product of (fraction neutral) and (fraction of neutral hydrogen sitting in n=2, ready to absorb), so it dies on the cool side because n=2 is empty and dies on the hot side because hydrogen has been stripped. The bottom strip is the OBAFGKM sequence painted in roughly the color a star at that temperature actually shows; the rust pin marks where your slider is.</p>
+</div>
+<script>
+const k_B = 1.380649e-23;
+const eV = 1.602176634e-19;
+const E21_K = 1.184e5;
+
+const CLASSES = [
+  { L: "M", lo: 2400,  hi: 3700,  color: "#ffcc6f" },
+  { L: "K", lo: 3700,  hi: 5200,  color: "#ffd2a1" },
+  { L: "G", lo: 5200,  hi: 6000,  color: "#fff4ea" },
+  { L: "F", lo: 6000,  hi: 7500,  color: "#f8f7ff" },
+  { L: "A", lo: 7500,  hi: 10000, color: "#cad7ff" },
+  { L: "B", lo: 10000, hi: 30000, color: "#aabfff" },
+  { L: "O", lo: 30000, hi: 50000, color: "#9bb0ff" }
+];
+
+function classFor(T) {
+  for (const c of CLASSES) if (T >= c.lo && T < c.hi) return c;
+  return CLASSES[CLASSES.length - 1];
+}
+
+function ionFraction(T) {
+  return 1 / (1 + Math.exp(-(T - 9700) / 620));
+}
+
+function n2Frac(T) {
+  return 4 * Math.exp(-E21_K / T);
+}
+
+function balmerRaw(T) {
+  return (1 - ionFraction(T)) * n2Frac(T);
+}
+
+const T_GRID = (() => {
+  const arr = [];
+  const lo = Math.log(2500), hi = Math.log(50000);
+  for (let i = 0; i <= 400; i++) {
+    arr.push(Math.exp(lo + (hi - lo) * i / 400));
+  }
+  return arr;
+})();
+
+const BALMER_PEAK = (() => {
+  let m = 0;
+  for (const T of T_GRID) {
+    const v = balmerRaw(T);
+    if (v > m) m = v;
+  }
+  return m;
+})();
+
+function balmer(T) { return balmerRaw(T) / BALMER_PEAK; }
+
+const canvas = document.getElementById("plot");
+const slider = document.getElementById("tempSlider");
+const tempVal = document.getElementById("tempVal");
+const readoutEl = document.getElementById("readout");
+
+function makeField(parent, label, pinned) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  const lbl = document.createElement("span");
+  lbl.className = "lbl"; lbl.textContent = label;
+  const val = document.createElement("span");
+  if (pinned) val.className = "pin";
+  wrap.appendChild(lbl); wrap.appendChild(val); parent.appendChild(wrap);
+  return val;
+}
+
+const fClass = makeField(readoutEl, "class", true);
+const fT = makeField(readoutEl, "T (slider)");
+const fIon = makeField(readoutEl, "ionized");
+const fBalmer = makeField(readoutEl, "Balmer strength");
+const fLam = makeField(readoutEl, "lambda_max = b/T");
+
+function xForT(T, padL, plotW) {
+  const lo = Math.log(2500), hi = Math.log(50000);
+  return padL + ((Math.log(T) - lo) / (hi - lo)) * plotW;
+}
+
+function draw() {
+  const T = parseInt(slider.value, 10);
+  tempVal.textContent = T.toLocaleString() + " K";
+
+  const W = canvas.offsetWidth || 360;
+  canvas.width = W;
+  const H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const padL = 56, padR = 14, padT = 10, padB = 26;
+  const stripH = 56;
+  const stripGap = 14;
+  const fullPlotH = H - padT - padB - stripH - stripGap;
+  const mainTop = padT;
+  const mainBot = padT + fullPlotH;
+  const stripTop = mainBot + stripGap;
+  const stripBot = stripTop + stripH;
+  const plotW = W - padL - padR;
+
+  function xT(T) { return xForT(T, padL, plotW); }
+  function yV(v) { return mainBot - v * (mainBot - mainTop); }
+
+  ctx.strokeStyle = "rgba(184,172,142,0.45)";
+  ctx.lineWidth = 0.5;
+  for (const Tt of [3000, 5000, 7000, 10000, 15000, 20000, 30000, 40000]) {
+    const x = xT(Tt);
+    ctx.beginPath(); ctx.moveTo(x, mainTop); ctx.lineTo(x, mainBot); ctx.stroke();
+  }
+  for (const v of [0.25, 0.5, 0.75, 1.0]) {
+    const y = yV(v);
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + plotW, y); ctx.stroke();
+  }
+
+  ctx.strokeStyle = "rgba(26,26,24,0.6)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, mainTop);
+  ctx.lineTo(padL, mainBot);
+  ctx.lineTo(padL + plotW, mainBot);
+  ctx.stroke();
+
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.textAlign = "right"; ctx.textBaseline = "middle";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  for (const v of [0, 0.25, 0.5, 0.75, 1.0]) {
+    ctx.fillText(v.toFixed(2), padL - 6, yV(v));
+  }
+
+  ctx.save();
+  ctx.translate(15, (mainTop + mainBot) / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = "center";
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.75)";
+  ctx.fillText("fraction (0 to 1)", 0, 0);
+  ctx.restore();
+
+  ctx.strokeStyle = "#9c3a22";
+  ctx.lineWidth = 2.0;
+  ctx.beginPath();
+  for (let i = 0; i < T_GRID.length; i++) {
+    const Tt = T_GRID[i];
+    const x = xT(Tt), y = yV(ionFraction(Tt));
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  ctx.strokeStyle = "rgba(26,26,24,0.85)";
+  ctx.lineWidth = 2.0;
+  ctx.beginPath();
+  for (let i = 0; i < T_GRID.length; i++) {
+    const Tt = T_GRID[i];
+    const x = xT(Tt), y = yV(balmer(Tt));
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  const xPin = xT(T);
+  ctx.strokeStyle = "rgba(156,58,34,0.55)";
+  ctx.lineWidth = 1.2;
+  ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(xPin, mainTop); ctx.lineTo(xPin, mainBot); ctx.stroke();
+  ctx.setLineDash([]);
+
+  const ionV = ionFraction(T);
+  const balV = balmer(T);
+  ctx.fillStyle = "#9c3a22";
+  ctx.beginPath(); ctx.arc(xPin, yV(ionV), 3.4, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "rgba(26,26,24,0.95)";
+  ctx.beginPath(); ctx.arc(xPin, yV(balV), 3.4, 0, Math.PI * 2); ctx.fill();
+
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.textAlign = "left"; ctx.textBaseline = "top";
+  ctx.fillStyle = "#9c3a22";
+  ctx.fillRect(padL + plotW - 138, mainTop + 10, 12, 2);
+  ctx.fillStyle = "rgba(26,26,24,0.85)";
+  ctx.fillText("ionization fraction", padL + plotW - 122, mainTop + 6);
+  ctx.fillStyle = "rgba(26,26,24,0.85)";
+  ctx.fillRect(padL + plotW - 138, mainTop + 24, 12, 2);
+  ctx.fillStyle = "rgba(26,26,24,0.85)";
+  ctx.fillText("Balmer strength", padL + plotW - 122, mainTop + 20);
+
+  for (const c of CLASSES) {
+    const xLo = xT(Math.max(c.lo, 2500));
+    const xHi = xT(Math.min(c.hi, 50000));
+    if (xHi <= padL || xLo >= padL + plotW) continue;
+    const xL = Math.max(xLo, padL);
+    const xH = Math.min(xHi, padL + plotW);
+    ctx.fillStyle = c.color;
+    ctx.fillRect(xL, stripTop, xH - xL, stripBot - stripTop);
+    ctx.strokeStyle = "rgba(26,26,24,0.35)";
+    ctx.lineWidth = 0.6;
+    ctx.strokeRect(xL, stripTop, xH - xL, stripBot - stripTop);
+    if (xH - xL > 18) {
+      ctx.fillStyle = "rgba(26,26,24,0.85)";
+      ctx.font = "bold 12px 'IBM Plex Mono',monospace";
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(c.L, (xL + xH) / 2, (stripTop + stripBot) / 2);
+    }
+  }
+
+  ctx.strokeStyle = "#9c3a22";
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(xPin, stripTop - 4);
+  ctx.lineTo(xPin, stripBot + 4);
+  ctx.stroke();
+  ctx.fillStyle = "#9c3a22";
+  ctx.beginPath();
+  ctx.moveTo(xPin, stripTop - 4);
+  ctx.lineTo(xPin - 4, stripTop - 10);
+  ctx.lineTo(xPin + 4, stripTop - 10);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.textAlign = "center"; ctx.textBaseline = "top";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  for (const Tt of [3000, 5000, 7000, 10000, 15000, 20000, 30000, 40000]) {
+    const x = xT(Tt);
+    let lbl = Tt >= 1000 ? (Tt / 1000) + "k" : Tt.toString();
+    ctx.fillText(lbl, x, stripBot + 4);
+  }
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.75)";
+  ctx.fillText("surface temperature T (K, log scale)", padL + plotW / 2, stripBot + 16);
+
+  const cls = classFor(T);
+  fClass.innerHTML = '<span class="swatch" style="background:' + cls.color + '"></span>' + cls.L;
+  fT.textContent = T.toLocaleString() + " K";
+  fIon.textContent = (ionV * 100).toFixed(1) + " %";
+  fBalmer.textContent = balV.toFixed(3);
+  const lamMax_nm = 2.8977719e6 / T;
+  fLam.textContent = lamMax_nm.toFixed(0) + " nm";
+}
+
+slider.addEventListener("input", draw);
+window.addEventListener("load", draw);
+setTimeout(draw, 80);
+</script>
+</body>
+</html>
