@@ -5,6 +5,7 @@ import 'katex/dist/katex.min.css'
 import graphData from '../state/concept_graph.json'
 
 type NodeState = 'available' | 'in_progress' | 'mastered' | 'queued'
+type Rating = 'insight' | 'trouble'
 
 type GraphNode = {
   id: string
@@ -67,6 +68,12 @@ function persistNodeState(
   const next = { ...current, [id]: state }
   localStorage.setItem('lattice_node_states', JSON.stringify(next))
   return next
+}
+
+function nextRating(r: Rating | undefined): Rating | undefined {
+  if (r === undefined) return 'insight'
+  if (r === 'insight') return 'trouble'
+  return undefined
 }
 
 // ── Primitives ─────────────────────────────────────────────────────────
@@ -399,13 +406,18 @@ function ConstellationView({ onSelect, nodeStates }: {
 
 // ── LessonHeader ───────────────────────────────────────────────────────
 
-function LessonHeader({ title, current, total, noteCount, onBack }: {
+function LessonHeader({ title, current, total, noteCount, ratingCount, onBack }: {
   title: string
   current: number
   total: number
   noteCount: number
+  ratingCount: number
   onBack: () => void
 }) {
+  const pills: string[] = []
+  if (ratingCount > 0) pills.push(`${ratingCount} marked`)
+  if (noteCount > 0) pills.push(`${noteCount} ${noteCount === 1 ? 'note' : 'notes'}`)
+
   return (
     <div style={{
       padding: '14px 28px 14px',
@@ -432,7 +444,7 @@ function LessonHeader({ title, current, total, noteCount, onBack }: {
           letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 2,
         }}>
           {current} / {total}
-          {noteCount > 0 ? `  ·  ${noteCount} ${noteCount === 1 ? 'note' : 'notes'}` : ''}
+          {pills.length > 0 ? `  ·  ${pills.join('  ·  ')}` : ''}
         </div>
       </div>
     </div>
@@ -649,22 +661,56 @@ function SectionQuiz({ quiz, quizLabel, selectedIndex, onAnswer, onContinue }: {
   )
 }
 
-// ── formatNotes ────────────────────────────────────────────────────────
+// ── formatForClipboard ─────────────────────────────────────────────────
 
-function formatNotesForClipboard(lesson: Lesson, notes: Record<string, string>): string {
-  return lesson.sections
-    .filter(s => notes[s.id]?.trim())
-    .map(s => `- ${notes[s.id].trim()} (${lesson.title}, ${s.heading})`)
-    .join('\n')
+function formatForClipboard(
+  lesson: Lesson,
+  notes: Record<string, string>,
+  ratings: Record<string, Rating>,
+): string {
+  const sNum = (id: string) => parseInt(id.replace('s', ''), 10)
+  const ratedBlocks = lesson.sections.flatMap(s =>
+    (s.blocks as Block[])
+      .map((block, i) => ({ block, blockKey: `${s.id}_${i}`, sNum: sNum(s.id), rating: ratings[`${s.id}_${i}`] }))
+      .filter(b => b.rating)
+  )
+  const notedSections = lesson.sections.filter(s => notes[s.id]?.trim())
+  const output: Record<string, unknown> = { lesson: lesson.title }
+  if (ratedBlocks.length > 0) {
+    output.highlights = ratedBlocks.map(b => {
+      const base: Record<string, unknown> = { rating: b.rating, section: b.sNum }
+      if (b.block.type === 'p') base.text = b.block.text
+      if (b.block.type === 'math') base.tex = b.block.tex
+      return base
+    })
+  }
+  if (notedSections.length > 0) {
+    output.notes = notedSections.map(s => ({
+      section: sNum(s.id),
+      heading: s.heading,
+      text: notes[s.id].trim(),
+    }))
+  }
+  return JSON.stringify(output, null, 2)
 }
 
 // ── LessonView ─────────────────────────────────────────────────────────
 
 function LessonView({ lesson, onBack, onComplete }: { lesson: Lesson; onBack: () => void; onComplete: () => void }) {
   const notesKey = `lattice_notes_${lesson.slug}`
+  const ratingsKey = `lattice_ratings_${lesson.slug}`
+
   const [notes, setNotes] = useState<Record<string, string>>(() => {
     try {
       const stored = localStorage.getItem(notesKey)
+      return stored ? JSON.parse(stored) : {}
+    } catch {
+      return {}
+    }
+  })
+  const [ratings, setRatings] = useState<Record<string, Rating>>(() => {
+    try {
+      const stored = localStorage.getItem(ratingsKey)
       return stored ? JSON.parse(stored) : {}
     } catch {
       return {}
@@ -679,7 +725,30 @@ function LessonView({ lesson, onBack, onComplete }: { lesson: Lesson; onBack: ()
   const totalPages = totalSections + 1
   const currentPage = sectionIndex + 2
   const noteCount = lesson.sections.filter(s => notes[s.id]?.trim()).length
+  const ratingCount = Object.keys(ratings).length
   const nonEmptyNotes = lesson.sections.filter(s => notes[s.id]?.trim())
+  const ratedBlocks = lesson.sections.flatMap(s =>
+    (s.blocks as Block[])
+      .map((block, i) => ({
+        sectionId: s.id,
+        sectionNum: parseInt(s.id.replace('s', ''), 10),
+        blockKey: `${s.id}_${i}`,
+        block,
+        rating: ratings[`${s.id}_${i}`],
+      }))
+      .filter((b): b is typeof b & { rating: Rating } => b.rating !== undefined)
+  )
+
+  function setRating(sectionId: string, next: Rating | undefined) {
+    const updated = { ...ratings }
+    if (next === undefined) {
+      delete updated[sectionId]
+    } else {
+      updated[sectionId] = next
+    }
+    setRatings(updated)
+    try { localStorage.setItem(ratingsKey, JSON.stringify(updated)) } catch {}
+  }
 
   const quizLabels: Record<string, string> = {}
   let quizCounter = 0
@@ -703,7 +772,7 @@ function LessonView({ lesson, onBack, onComplete }: { lesson: Lesson; onBack: ()
   }
 
   function handleCopy() {
-    navigator.clipboard.writeText(formatNotesForClipboard(lesson, notes)).then(() => {
+    navigator.clipboard.writeText(formatForClipboard(lesson, notes, ratings)).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     })
@@ -727,35 +796,23 @@ function LessonView({ lesson, onBack, onComplete }: { lesson: Lesson; onBack: ()
           current={totalPages}
           total={totalPages}
           noteCount={noteCount}
+          ratingCount={ratingCount}
           onBack={() => setShowReview(false)}
         />
         <div style={{ flex: 1, overflowY: 'auto', padding: '22px 28px 3rem' }}>
-          <CategoryLabel style={{ marginBottom: 14 }}>Your notes</CategoryLabel>
-          <HammingHeading style={{ marginBottom: 18 }}>
-            {nonEmptyNotes.length > 0
-              ? `${nonEmptyNotes.length} ${nonEmptyNotes.length === 1 ? 'thing' : 'things'} to revisit`
-              : 'No notes taken'}
+          <CategoryLabel style={{ marginBottom: 14 }}>Lesson takeaways</CategoryLabel>
+          <HammingHeading style={{ marginBottom: 8 }}>
+            What you marked, asked, and noted.
           </HammingHeading>
+          <p style={{
+            margin: '8px 0 0', fontFamily: 'var(--serif)', fontStyle: 'italic',
+            fontSize: 14.5, color: 'var(--ink-muted)', lineHeight: 1.5,
+          }}>
+            Highlights and notes gathered. Trim what you don't want, then copy the bundle to your notes app.
+          </p>
 
-          {nonEmptyNotes.length > 0 ? (
+          {(ratedBlocks.length > 0 || nonEmptyNotes.length > 0) ? (
             <>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '18px 0 0' }}>
-                {nonEmptyNotes.map(s => (
-                  <li key={s.id} style={{
-                    padding: '14px 0',
-                    borderTop: '1px solid var(--rule)',
-                  }}>
-                    <div style={{
-                      fontFamily: 'var(--mono)', fontSize: 10.5,
-                      letterSpacing: '0.1em', textTransform: 'uppercase',
-                      color: 'var(--ink-muted)', marginBottom: 6,
-                    }}>{s.heading}</div>
-                    <div style={{
-                      fontFamily: 'var(--serif)', fontSize: 16, lineHeight: 1.45, color: 'var(--ink)',
-                    }}>— {notes[s.id].trim()}</div>
-                  </li>
-                ))}
-              </ul>
               <div
                 onClick={handleCopy}
                 style={{
@@ -766,24 +823,148 @@ function LessonView({ lesson, onBack, onComplete }: { lesson: Lesson; onBack: ()
                 }}
               >
                 <span style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 500 }}>
-                  {copied ? 'Copied to clipboard' : `Copy all ${nonEmptyNotes.length} ↗`}
+                  {copied ? 'Copied to clipboard' : `Copy all ${ratedBlocks.length + nonEmptyNotes.length} ↗`}
                 </span>
                 <span style={{
                   fontFamily: 'var(--mono)', fontSize: 10.5,
                   letterSpacing: '0.12em', textTransform: 'uppercase',
                   color: 'var(--ink-muted)',
-                }}>{copied ? '✓' : 'plain text'}</span>
+                }}>{copied ? '✓' : 'json'}</span>
               </div>
+
+              {ratedBlocks.length > 0 && (
+                <>
+                  <div style={{
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+                    marginTop: 28, paddingBottom: 8,
+                    borderBottom: '1px solid var(--rule-strong)',
+                    fontFamily: 'var(--mono)', fontSize: 10.5,
+                    letterSpacing: '0.12em', textTransform: 'uppercase',
+                    color: 'var(--ink-muted)',
+                  }}>
+                    <span>Highlights</span>
+                    <span>{ratedBlocks.length}</span>
+                  </div>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                    {ratedBlocks.map(b => {
+                      const borderColor = b.rating === 'insight' ? 'var(--olive)' : 'var(--rust)'
+                      return (
+                        <li key={b.blockKey} style={{ paddingTop: 14 }}>
+                          <div style={{ borderLeft: `3px solid ${borderColor}`, paddingLeft: 14 }}>
+                            <div style={{
+                              display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+                              marginBottom: 8,
+                            }}>
+                              <span style={{
+                                fontFamily: 'var(--mono)', fontSize: 10.5,
+                                letterSpacing: '0.12em', textTransform: 'uppercase',
+                                color: borderColor,
+                              }}>
+                                {b.rating === 'insight' ? '◆' : '◇'} {b.rating.toUpperCase()} · § {b.sectionNum}
+                              </span>
+                              <span
+                                onClick={() => setRating(b.blockKey, undefined)}
+                                style={{
+                                  fontFamily: 'var(--mono)', fontSize: 13,
+                                  color: 'var(--ink-ghost)', cursor: 'pointer',
+                                  lineHeight: 1, userSelect: 'none',
+                                }}
+                              >×</span>
+                            </div>
+                            {b.block.type === 'p' && (
+                              <p style={{
+                                margin: 0, fontFamily: 'var(--serif)',
+                                fontSize: 15, lineHeight: 1.5, color: 'var(--ink)',
+                                fontStyle: b.rating === 'trouble' ? 'italic' : 'normal',
+                              }}>
+                                {b.block.text}
+                              </p>
+                            )}
+                            {b.block.type === 'math' && (
+                              <div
+                                dangerouslySetInnerHTML={{ __html: katex.renderToString(b.block.tex, { displayMode: b.block.display ?? false, throwOnError: false }) }}
+                                style={{ overflowX: 'auto', opacity: b.rating === 'trouble' ? 0.7 : 1 }}
+                              />
+                            )}
+                          </div>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </>
+              )}
+
+              {nonEmptyNotes.length > 0 && (
+                <>
+                  <div style={{
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+                    marginTop: 28, paddingBottom: 8,
+                    borderBottom: '1px solid var(--rule-strong)',
+                    fontFamily: 'var(--mono)', fontSize: 10.5,
+                    letterSpacing: '0.12em', textTransform: 'uppercase',
+                    color: 'var(--ink-muted)',
+                  }}>
+                    <span>Notes</span>
+                    <span>{nonEmptyNotes.length}</span>
+                  </div>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                    {nonEmptyNotes.map(s => {
+                      const sNum = parseInt(s.id.replace('s', ''), 10)
+                      return (
+                        <li key={s.id} style={{ paddingTop: 14 }}>
+                          <div style={{
+                            borderLeft: '3px solid var(--rule-strong)',
+                            paddingLeft: 14,
+                          }}>
+                            <div style={{
+                              display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+                              marginBottom: 8,
+                            }}>
+                              <span style={{
+                                fontFamily: 'var(--mono)', fontSize: 10.5,
+                                letterSpacing: '0.12em', textTransform: 'uppercase',
+                                color: 'var(--ink-muted)',
+                              }}>
+                                § {sNum} · {s.heading}
+                              </span>
+                              <span
+                                onClick={() => {
+                                  const next = { ...notes }
+                                  delete next[s.id]
+                                  setNotes(next)
+                                  try { localStorage.setItem(notesKey, JSON.stringify(next)) } catch {}
+                                }}
+                                style={{
+                                  fontFamily: 'var(--mono)', fontSize: 13,
+                                  color: 'var(--ink-ghost)', cursor: 'pointer',
+                                  lineHeight: 1, userSelect: 'none',
+                                }}
+                              >×</span>
+                            </div>
+                            <p style={{
+                              margin: 0,
+                              fontFamily: 'var(--serif)', fontStyle: 'italic',
+                              fontSize: 15, lineHeight: 1.5, color: 'var(--ink)',
+                            }}>
+                              {notes[s.id].trim()}
+                            </p>
+                          </div>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </>
+              )}
             </>
           ) : (
-            <p style={{ color: 'var(--ink-muted)', fontStyle: 'italic', marginTop: 14 }}>
-              Nothing flagged this time.
+            <p style={{ color: 'var(--ink-muted)', fontStyle: 'italic', marginTop: 20 }}>
+              Nothing marked or noted this time.
             </p>
           )}
 
           <ContinueBtn label="Back to constellation" onClick={onComplete} />
         </div>
-        <PageFolio left={lesson.title} right="Notes" />
+        <PageFolio left={lesson.title} right="Takeaways" />
       </div>
     )
   }
@@ -795,6 +976,7 @@ function LessonView({ lesson, onBack, onComplete }: { lesson: Lesson; onBack: ()
         current={currentPage}
         total={totalPages}
         noteCount={noteCount}
+        ratingCount={ratingCount}
         onBack={onBack}
       />
       <div key={sectionIndex} style={{ flex: 1, overflowY: 'auto', padding: '22px 28px 3rem' }}>
@@ -824,7 +1006,48 @@ function LessonView({ lesson, onBack, onComplete }: { lesson: Lesson; onBack: ()
             <HammingHeading num={String(currentSectionNum)} style={{ marginBottom: 18 }}>
               {currentSection!.heading}
             </HammingHeading>
-            {(currentSection!.blocks as Block[]).map((block, i) => renderBlock(block, i))}
+            {(currentSection!.blocks as Block[]).map((block, i) => {
+              if (block.type === 'viz') return renderBlock(block, i)
+              const blockKey = `${currentSection!.id}_${i}`
+              const rating = ratings[blockKey]
+              const isRated = rating !== undefined
+              const borderColor = rating === 'insight' ? 'var(--olive)' : 'var(--rust)'
+              const bgColor = rating === 'insight' ? 'rgba(63,107,58,0.06)' : 'rgba(156,58,34,0.05)'
+              return (
+                <div
+                  key={blockKey}
+                  onClick={() => setRating(blockKey, nextRating(rating))}
+                  style={{
+                    position: 'relative',
+                    cursor: 'pointer',
+                    ...(isRated && {
+                      borderLeft: `3px solid ${borderColor}`,
+                      background: bgColor,
+                      paddingLeft: 14,
+                      marginLeft: -14,
+                      paddingTop: 4,
+                      paddingBottom: 4,
+                    }),
+                  }}
+                >
+                  {isRated && (
+                    <div style={{
+                      position: 'absolute', top: 2, right: 0,
+                      fontFamily: 'var(--mono)', fontSize: 10,
+                      letterSpacing: '0.12em', textTransform: 'uppercase',
+                      color: borderColor,
+                      display: 'flex', gap: 5, alignItems: 'center',
+                      userSelect: 'none',
+                      pointerEvents: 'none',
+                    }}>
+                      <span>{rating === 'insight' ? '◆' : '◇'}</span>
+                      <span>{rating.toUpperCase()}</span>
+                    </div>
+                  )}
+                  {renderBlock(block, i)}
+                </div>
+              )
+            })}
             <NoteInput
               value={notes[currentSection!.id] ?? ''}
               onChange={v => setNotes(prev => {
