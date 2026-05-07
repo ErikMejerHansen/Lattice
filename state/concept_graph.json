@@ -119,6 +119,16 @@
       "createdAt": "2026-05-07T14:00:00Z",
       "col": 1,
       "row": 5
+    },
+    {
+      "id": "spectroscopy_basics",
+      "label": "Spectroscopy",
+      "subtitle": "absorption lines",
+      "state": "available",
+      "lesson": "2026-05-07-spectroscopy-basics",
+      "createdAt": "2026-05-07T17:00:00Z",
+      "col": 0,
+      "row": 6
     }
   ],
   "edges": [
@@ -145,6 +155,9 @@
     { "from": "stellar_classification", "to": "blackbody", "kind": "related" },
     { "from": "stellar_classification", "to": "stefan_boltzmann", "kind": "applied" },
     { "from": "color_temperature", "to": "wien_displacement", "kind": "extends" },
-    { "from": "color_temperature", "to": "blackbody", "kind": "related" }
+    { "from": "color_temperature", "to": "blackbody", "kind": "related" },
+    { "from": "spectroscopy_basics", "to": "photon_energy", "kind": "extends" },
+    { "from": "spectroscopy_basics", "to": "wavelength", "kind": "extends" },
+    { "from": "spectroscopy_basics", "to": "stellar_classification", "kind": "related" }
   ]
 }

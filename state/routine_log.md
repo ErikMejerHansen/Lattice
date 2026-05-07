@@ -13,3 +13,4 @@
 2026-05-07T08:00Z  ok  cosmic-microwave-background  5sec, 1 viz, 3 edges, 3 auto-suggestions; pushed to claude/inspiring-heisenberg-hfafp per session branch policy (routine spec asks for main)
 2026-05-07T11:00Z  ok  stellar-classification  5sec, 1 viz, 3 edges, 3 auto-suggestions; pushed to claude/great-gauss-8q1Bq per session branch policy (routine spec asks for main)
 2026-05-07T14:00Z  ok  color-temperature  5sec, 1 viz, 2 edges, 3 auto-suggestions; pushed to claude/funny-faraday-XULCw per session branch policy (routine spec asks for main)
+2026-05-07T17:00Z  ok  spectroscopy-basics  5sec, 1 viz, 3 edges, 1 auto-suggestion; pushed to claude/funny-faraday-LJ5Xg per session branch policy (routine spec asks for main)
