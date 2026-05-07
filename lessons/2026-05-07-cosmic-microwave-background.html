@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIRAS: the CMB blackbody curve</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+.readout .pin { color: var(--accent); }
+.snap {
+  margin-left: auto;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  border-radius: 3px;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+.snap:hover { background: var(--bg-raised); }
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+  <canvas id="plot" height="380" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);background:var(--bg-raised);"></canvas>
+  <div class="viz-slider-row">
+    <label>T</label>
+    <input type="range" id="tempSlider" min="2.40" max="3.10" step="0.001" value="2.7255" style="min-height:36px;">
+    <span class="value" id="tempVal">2.7255 K</span>
+    <button class="snap" id="snapBtn">snap to 2.7255</button>
+  </div>
+  <div class="readout" id="readout"></div>
+  <p class="viz-caption" style="margin-top:10px;">Drag the slider. The red curve is the Planck spectrum at your chosen T; the dark dots are FIRAS-style measurements of the real CMB at T₀ = 2.7255 K. The lower panel is the residual (data minus current model) on its own auto-scaled axis. The χ² readout sums squared residuals divided by per-point variance: it sits near 1 only inside a millikelvin-wide window around 2.7255 K, and explodes the moment you leave it. This is what the AAS audience saw in January 1990.</p>
+</div>
+<script>
+const h = 6.62607015e-34;
+const k = 1.380649e-23;
+const c = 2.99792458e8;
+const T_TRUE = 2.7255;
+
+function planckMJy(nuGHz, T) {
+  const nu = nuGHz * 1e9;
+  const x = (h * nu) / (k * T);
+  if (x > 700) return 0;
+  const denom = Math.exp(x) - 1;
+  if (denom <= 0) return 0;
+  return (2 * h * Math.pow(nu, 3) / (c * c)) / denom * 1e20;
+}
+
+const FIRAS_POINTS = (() => {
+  const pts = [];
+  const N = 36;
+  let s = 1234567;
+  function rng() { s = (s * 16807 + 19) % 2147483647; return s / 2147483647 - 0.5; }
+  const sigma = 0.8;
+  for (let i = 0; i < N; i++) {
+    const f = 60 + (i / (N - 1)) * (600 - 60);
+    const I = planckMJy(f, T_TRUE) + sigma * rng() * 2;
+    pts.push({ f, I, sigma });
+  }
+  return pts;
+})();
+
+const canvas = document.getElementById("plot");
+const slider = document.getElementById("tempSlider");
+const tempVal = document.getElementById("tempVal");
+const readoutEl = document.getElementById("readout");
+const snapBtn = document.getElementById("snapBtn");
+
+function makeField(parent, label, pinned) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  const lbl = document.createElement("span");
+  lbl.className = "lbl"; lbl.textContent = label;
+  const val = document.createElement("span");
+  if (pinned) val.className = "pin";
+  wrap.appendChild(lbl); wrap.appendChild(val); parent.appendChild(wrap);
+  return val;
+}
+const fT = makeField(readoutEl, "T (slider)");
+const fLam = makeField(readoutEl, "lambda_max = b/T");
+const fChi2 = makeField(readoutEl, "chi^2 / N", true);
+const fTruth = makeField(readoutEl, "FIRAS T_0", true);
+fTruth.textContent = T_TRUE.toFixed(4) + " K";
+
+function draw() {
+  const T = parseFloat(slider.value);
+  tempVal.textContent = T.toFixed(4) + " K";
+
+  const W = canvas.offsetWidth || 360;
+  canvas.width = W;
+  const H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const padL = 54, padR = 14, padT = 10, padB = 26;
+  const splitGap = 18;
+  const fullPlotH = H - padT - padB;
+  const mainH = Math.round(fullPlotH * 0.66);
+  const resH = fullPlotH - mainH - splitGap;
+  const mainTop = padT;
+  const mainBot = padT + mainH;
+  const resTop = mainBot + splitGap;
+  const resBot = resTop + resH;
+  const plotW = W - padL - padR;
+
+  const fLo = 30, fHi = 680;
+  function xFor(f) { return padL + ((f - fLo) / (fHi - fLo)) * plotW; }
+
+  const ILo = 0, IHi = 420;
+  function yFor(I) {
+    return mainBot - ((I - ILo) / (IHi - ILo)) * (mainBot - mainTop);
+  }
+
+  // Grid
+  ctx.strokeStyle = "rgba(184,172,142,0.45)";
+  ctx.lineWidth = 0.5;
+  for (const f of [100, 200, 300, 400, 500, 600]) {
+    const x = xFor(f);
+    ctx.beginPath(); ctx.moveTo(x, mainTop); ctx.lineTo(x, mainBot); ctx.stroke();
+  }
+  for (const I of [100, 200, 300, 400]) {
+    const y = yFor(I);
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + plotW, y); ctx.stroke();
+  }
+
+  // Main axes
+  ctx.strokeStyle = "rgba(26,26,24,0.6)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, mainTop);
+  ctx.lineTo(padL, mainBot);
+  ctx.lineTo(padL + plotW, mainBot);
+  ctx.stroke();
+
+  // Y tick labels
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.textAlign = "right"; ctx.textBaseline = "middle";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  for (const I of [0, 100, 200, 300, 400]) {
+    ctx.fillText(I.toString(), padL - 6, yFor(I));
+  }
+
+  // Y axis label
+  ctx.save();
+  ctx.translate(15, (mainTop + mainBot) / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = "center";
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.75)";
+  ctx.fillText("intensity (MJy/sr)", 0, 0);
+  ctx.restore();
+
+  // True curve at T_TRUE for reference (very faint)
+  ctx.strokeStyle = "rgba(108,99,89,0.35)";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 3]);
+  ctx.beginPath();
+  const NREF = 200;
+  for (let i = 0; i <= NREF; i++) {
+    const f = fLo + (i / NREF) * (fHi - fLo);
+    const I = planckMJy(f, T_TRUE);
+    const x = xFor(f), y = yFor(I);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Planck curve at slider T (accent)
+  ctx.strokeStyle = "#9c3a22";
+  ctx.lineWidth = 2.2;
+  ctx.beginPath();
+  const NMAIN = 240;
+  for (let i = 0; i <= NMAIN; i++) {
+    const f = fLo + (i / NMAIN) * (fHi - fLo);
+    const I = planckMJy(f, T);
+    const x = xFor(f), y = yFor(I);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // FIRAS data points
+  ctx.fillStyle = "rgba(26,26,24,0.9)";
+  for (const p of FIRAS_POINTS) {
+    const x = xFor(p.f);
+    const y = yFor(p.I);
+    if (y >= mainTop - 2 && y <= mainBot + 2) {
+      ctx.beginPath();
+      ctx.arc(x, y, 2.6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // χ² accumulator
+  let chi2 = 0;
+  let maxAbsResidual = 0;
+  const residuals = [];
+  for (const p of FIRAS_POINTS) {
+    const model = planckMJy(p.f, T);
+    const r = p.I - model;
+    residuals.push(r);
+    chi2 += (r / p.sigma) ** 2;
+    if (Math.abs(r) > maxAbsResidual) maxAbsResidual = Math.abs(r);
+  }
+  const chi2Reduced = chi2 / FIRAS_POINTS.length;
+
+  // Legend
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.textAlign = "left"; ctx.textBaseline = "top";
+  ctx.fillStyle = "rgba(26,26,24,0.85)";
+  ctx.fillRect(padL + plotW - 130, mainTop + 10, 8, 2);
+  ctx.fillStyle = "rgba(108,99,89,0.85)";
+  ctx.fillRect(padL + plotW - 130, mainTop + 24, 8, 2);
+  ctx.fillStyle = "#9c3a22";
+  ctx.beginPath(); ctx.arc(padL + plotW - 126, mainTop + 38, 2.4, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "rgba(26,26,24,0.75)";
+  ctx.fillStyle = "#9c3a22";
+  ctx.fillRect(padL + plotW - 130, mainTop + 10, 12, 2);
+  ctx.fillStyle = "rgba(26,26,24,0.85)";
+  ctx.fillText("model at T", padL + plotW - 112, mainTop + 6);
+  ctx.fillStyle = "rgba(108,99,89,0.95)";
+  ctx.fillText("Planck @ 2.7255", padL + plotW - 112, mainTop + 21);
+  ctx.fillStyle = "rgba(26,26,24,0.85)";
+  ctx.fillText("FIRAS data", padL + plotW - 112, mainTop + 36);
+
+  // Residual axes
+  ctx.strokeStyle = "rgba(26,26,24,0.6)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, resTop);
+  ctx.lineTo(padL, resBot);
+  ctx.lineTo(padL + plotW, resBot);
+  ctx.stroke();
+
+  // Residual auto-scale
+  let scale = Math.max(2.5, Math.ceil(maxAbsResidual + 0.5));
+  if (scale > 200) scale = 200;
+  function rYFor(r) {
+    const cy = (resTop + resBot) / 2;
+    const half = (resBot - resTop) / 2 - 4;
+    const clamped = Math.max(-1.05, Math.min(1.05, r / scale));
+    return cy - clamped * half;
+  }
+
+  // Zero line
+  ctx.strokeStyle = "rgba(26,26,24,0.35)";
+  ctx.lineWidth = 0.6;
+  const cy = (resTop + resBot) / 2;
+  ctx.beginPath(); ctx.moveTo(padL, cy); ctx.lineTo(padL + plotW, cy); ctx.stroke();
+
+  // Residual y labels
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.textAlign = "right"; ctx.textBaseline = "middle";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("0", padL - 6, cy);
+  ctx.fillText("+" + scale, padL - 6, rYFor(scale));
+  ctx.fillText("-" + scale, padL - 6, rYFor(-scale));
+
+  // Residual y-axis label
+  ctx.save();
+  ctx.translate(15, (resTop + resBot) / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = "center";
+  ctx.font = "italic 10px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("residual (MJy/sr)", 0, 0);
+  ctx.restore();
+
+  // Residual points
+  for (let i = 0; i < FIRAS_POINTS.length; i++) {
+    const p = FIRAS_POINTS[i];
+    const r = residuals[i];
+    const x = xFor(p.f);
+    const y = rYFor(r);
+    ctx.fillStyle = "#9c3a22";
+    ctx.beginPath();
+    ctx.arc(x, y, 2.4, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // X tick labels (under residual)
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.textAlign = "center"; ctx.textBaseline = "top";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  for (const f of [100, 200, 300, 400, 500, 600]) {
+    ctx.fillText(f.toString(), xFor(f), resBot + 4);
+  }
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.75)";
+  ctx.fillText("frequency (GHz)", padL + plotW / 2, resBot + 16);
+
+  // Readout
+  fT.textContent = T.toFixed(4) + " K";
+  const lamPeakMM = 2.8977719 / T;
+  fLam.textContent = lamPeakMM.toFixed(4) + " mm";
+  fChi2.textContent = chi2Reduced > 9999
+    ? chi2Reduced.toExponential(2)
+    : chi2Reduced.toFixed(2);
+}
+
+slider.addEventListener("input", draw);
+snapBtn.addEventListener("click", () => {
+  slider.value = T_TRUE.toString();
+  draw();
+});
+window.addEventListener("load", draw);
+setTimeout(draw, 80);
+</script>
+</body>
+</html>

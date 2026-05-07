@@ -1,6 +1,3 @@
-# auto-suggested 2026-05-03 from blackbody-radiation
-Cosmic microwave background — Planck's curve at the largest scale, COBE/FIRAS
-
 # auto-suggested 2026-05-04 from wiens-displacement-law
 Stellar classification — OBAFGKM, mapping color to temperature to physics
 Color temperature in lighting — Kelvin scale, daylight vs incandescent
@@ -28,3 +25,8 @@ Bohr atom — quantized angular momentum recovered from de Broglie standing wave
 Planetary equilibrium temperature — solar input vs σT⁴ output, why Mars is colder than Earth but not by as much as you would guess
 Stellar luminosity — L = 4πR²σT⁴, how stars are weighed and timed by their surface alone
 Greenhouse effect — atmospheric IR absorption and the 34 K gap between Earth's blackbody and observed temperature
+
+# auto-suggested 2026-05-07 from cosmic-microwave-background
+Recombination — when the universe became transparent at z ≈ 1100, the surface of last scattering
+Cosmic redshift — λ' = (1+z)λ, how the wavelengths and the temperature of a photon bath stretch with the universe
+CMB anisotropies — ΔT/T ≈ 10⁻⁵, the seeds of every galaxy ever formed, mapped by COBE/WMAP/Planck

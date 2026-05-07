@@ -89,6 +89,16 @@
       "createdAt": "2026-05-06T11:00:00Z",
       "col": 0,
       "row": 4
+    },
+    {
+      "id": "cmb",
+      "label": "CMB",
+      "subtitle": "T = 2.7255 K",
+      "state": "available",
+      "lesson": "2026-05-07-cosmic-microwave-background",
+      "createdAt": "2026-05-07T08:00:00Z",
+      "col": 1,
+      "row": 4
     }
   ],
   "edges": [
@@ -107,6 +117,9 @@
     { "from": "wave_particle_duality", "to": "photoelectric_effect", "kind": "extends" },
     { "from": "wave_particle_duality", "to": "interference_diffraction", "kind": "applied" },
     { "from": "stefan_boltzmann", "to": "blackbody", "kind": "extends" },
-    { "from": "stefan_boltzmann", "to": "wien_displacement", "kind": "related" }
+    { "from": "stefan_boltzmann", "to": "wien_displacement", "kind": "related" },
+    { "from": "cmb", "to": "blackbody", "kind": "extends" },
+    { "from": "cmb", "to": "wien_displacement", "kind": "applied" },
+    { "from": "cmb", "to": "stefan_boltzmann", "kind": "related" }
   ]
 }
