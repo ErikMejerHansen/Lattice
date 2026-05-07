@@ -1,0 +1,123 @@
+{
+  "slug": "2026-05-07-stellar-classification",
+  "title": "Stellar classification: the Harvard letters that hide a temperature scale",
+  "node": {
+    "id": "stellar_classification",
+    "label": "Stellar class",
+    "subtitle": "OBAFGKM types"
+  },
+  "intro": "In 1885 Edward Pickering, director of the Harvard College Observatory, began handing photographic plates of stellar spectra to a team of women he called his 'computers.' Their job was to look at a glass plate streaked with the rainbows of a thousand stars and assign each rainbow a letter, A through Q. The letters originally meant something specific (the strength of hydrogen's Balmer absorption lines), but within a decade Annie Jump Cannon had noticed the alphabet did not order itself the way physics seemed to want it to. By the time she finished, sometime in the early 1920s, the letters had been culled and shuffled to OBAFGKM, and a temperature scale was sitting inside the order that nobody had quite intended to put there.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The first letters were a mess",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Mary Anna Draper, the widow of the astronomer Henry Draper, endowed a stellar spectroscopy program at Harvard in 1886. The plan was simple: photograph as many stellar spectra as possible, then sort them by what you saw. The 'sort them' step was the hard one. Pickering put Williamina Fleming in charge, then over the next decade hired Antonia Maury, Annie Jump Cannon, and dozens of others. They worked at 25 to 50 cents an hour, less than the men doing janitorial work in the same building, and they were the most accurate spectral classifiers anyone had ever assembled." },
+        { "type": "p", "text": "The first scheme was Fleming's. Letters A through Q stood for groups defined by the strength of hydrogen's Balmer absorption lines: A had the strongest, B a little weaker, and so on down through letters that had nothing where the Balmer lines should be. It was simple, defensible, replicable. It was also, as Antonia Maury noticed by 1897, badly wrong as a classification of stars by anything physical." },
+        { "type": "p", "text": "Maury saw that the same letter sometimes contained stars whose calcium, helium, and iron lines looked nothing like each other. Pickering was reluctant to deviate from a hydrogen-only sort; Maury kept pushing. The argument was about whether classification should follow the data you had or the underlying physics, and in 1897 nobody could yet say what the underlying physics was. Saha's equation, which would settle the question, was twenty-three years away." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. OBAFGKM and the great reshuffle",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Annie Jump Cannon arrived at Harvard in 1896 and inherited the question Maury had raised. Cannon had a knack for spectra: she could classify three stars per minute by eye off photographic plates. She had also lost most of her hearing to scarlet fever as a child, and colleagues would later credit (or blame) the silence around her for an unusual ability to focus on a slow visual task ten hours a day. By 1901 she had reorganized the Harvard sequence." },
+        { "type": "p", "text": "The new ordering was OBAFGKM. Cannon kept some of Fleming's letters, dropped many of them, reordered what remained. Stars Fleming had buried in late letters with strong helium and weak hydrogen Cannon moved to the front and called O. Stars with intermediate hydrogen plus extra calcium and metal lines went into G, K, and M, in that order. The new sequence corresponded to a continuous physical parameter, though Cannon herself could not yet say which one." },
+        { "type": "p", "text": "The mnemonic 'Oh Be A Fine Girl, Kiss Me' is apocryphally Cannon's own, more likely a backronym her students retrofitted to make the order memorable. The deeper point is that hydrogen line strength is not monotonic across her sequence: it climbs from O to A, peaks at A, and falls toward M. Whatever continuous parameter Cannon had stumbled onto, it could not be hydrogen content. It had to be something that pushed atoms into and out of different states across the sequence." }
+      ],
+      "quiz": {
+        "question": "Why does the strength of hydrogen's Balmer absorption lines peak in class A stars (around 9500 K) rather than continuing to grow in the hotter O and B stars?",
+        "options": [
+          "In O and B stars, the temperature is high enough to ionize most hydrogen atoms, leaving few neutrals with bound electrons available to absorb Balmer photons",
+          "O and B stars contain less hydrogen by number than A stars",
+          "A stars have larger photospheres and so contain more hydrogen along the line of sight",
+          "The Balmer lines actually do peak in O stars; A stars only appear stronger because of contamination by helium"
+        ],
+        "correctIndex": 0,
+        "explanation": "Balmer absorption requires neutral hydrogen with an electron sitting in n=2, ready to jump to n=3, 4, or 5. In O and B stars, the photosphere is hot enough (15,000 to 30,000 K) that most hydrogen has been ionized into bare protons, so there are very few bound electrons to absorb. The most tempting wrong answer is option 2, but Cecilia Payne would soon show that hydrogen abundance is essentially uniform across stars; what changes from O to M is not how much hydrogen there is but what state it is in. The Balmer line strength is therefore a product (fraction neutral) times (fraction of neutral in n=2), and that product peaks near 9500 K, exactly where Cannon placed her A class."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Saha's equation puts the physics in the letters",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "In 1920 Meghnad Saha, an Indian physicist working in Calcutta, derived the equation that explained Cannon's sequence. Balmer absorption requires three conditions at once: enough hydrogen, enough of it neutral (not stripped to bare protons), and enough thermal energy to lift some fraction of those neutrals from n=1 up to n=2 where the Balmer photons can hit them. Saha's equation gives the ionization side of that ledger:" },
+        { "type": "math", "tex": "\\frac{n_{+} \\, n_{e}}{n_{0}} = \\left( \\frac{2 \\pi m_{e} k T}{h^{2}} \\right)^{3/2} \\cdot 2 \\, e^{-\\chi / kT}", "display": true, "caption": "n_+ is the number density of ionized hydrogen (bare protons); n_0 is the number density of neutral hydrogen; n_e is the local electron density; m_e is the electron mass; k is Boltzmann's constant; T is the gas temperature; h is Planck's constant; and χ is the ionization energy (13.6 eV for hydrogen). Read aloud: at high T the right side blows up and ionization wins; at low T the exponential dies and atoms stay neutral." },
+        { "type": "p", "text": "At cool temperatures (M stars near 3500 K), almost every hydrogen sits in the ground state and the Balmer absorption is starved by an empty n=2 level. At hot temperatures (O stars near 30,000 K), almost every hydrogen is fully ionized and the Balmer absorption is starved by an empty pool of bound atoms. The Balmer lines maximize in the middle, around 9500 K, exactly where Cannon had placed her A class. The OBAFGKM ordering, in other words, was a thermometer in disguise. The continuous parameter Cannon had stumbled onto was the surface temperature of the star, sliding from 30,000 K at O down to 3,500 K at M." },
+        { "type": "viz", "src": "2026-05-07-stellar-classification.html", "height": 460, "caption": "Drag the temperature slider. The top panel shows two curves Saha would recognize: the fraction of hydrogen ionized (rising sigmoid) and the Balmer line strength, which is the product of (fraction neutral) and (fraction of neutrals in n=2). Watch how Balmer strength peaks near 9500 K and collapses on either side. The bottom strip shows where the slider lands in the OBAFGKM sequence, with each band painted in the rough color a star at that temperature actually appears. The same equation, evaluated at different T, draws the entire Harvard sort." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Reading temperature off color",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Once you accept that OBAFGKM is a temperature ranking, two earlier results take care of the rest. Wien's displacement law tells you where the Planck spectrum peaks, and Stefan-Boltzmann tells you how much radiation is leaving the surface. Wien gives the color:" },
+        { "type": "math", "tex": "\\lambda_{\\text{max}} = \\frac{b}{T}, \\quad b \\approx 2.898 \\times 10^{-3} \\, \\text{m} \\cdot \\text{K}", "display": true, "caption": "λ_max is the wavelength at which the Planck spectrum peaks per unit wavelength; T is the surface temperature of the star in kelvin; b is Wien's displacement constant. Read aloud: the apparent color of a star is set by the temperature of its photosphere through this single relation." },
+        { "type": "p", "text": "Plug in a class O star at T ≈ 30,000 K: λ_max ≈ 97 nm, deep in the ultraviolet. We see only the long-wavelength tail in visible light, which is why O and B stars look bluish-white. Plug in an M star at T ≈ 3,500 K: λ_max ≈ 830 nm, in the near-infrared, with the visible tail reading red-orange. The colors of stars across OBAFGKM are not a coincidence with the order. They are the order, viewed as a Wien peak walking across the visible window." },
+        { "type": "p", "text": "Two practical consequences follow. First, photometry (a broadband color measurement, e.g. B − V) can substitute for full spectroscopy when only a crude temperature is needed: B − V ≈ 0.0 puts a star near 9500 K, in class A. Second, two stars of identical luminosity but very different temperatures must have very different sizes, because the radiated flux per unit area scales as σT⁴. A red M giant has to be enormous to be as bright as a blue main-sequence B star, and that mismatch is what eventually pried the Hertzsprung-Russell diagram apart into giants, dwarfs, and main sequence." }
+      ],
+      "quiz": {
+        "question": "The Sun is a class G star with surface temperature T ≈ 5800 K. Using Wien's displacement law with b = 2.898 × 10⁻³ m·K, where does the solar Planck spectrum peak per unit wavelength?",
+        "options": [
+          "About 500 nm, in the visible green-yellow",
+          "About 100 nm, deep ultraviolet",
+          "About 5 μm, mid-infrared",
+          "About 50 nm, extreme ultraviolet"
+        ],
+        "correctIndex": 0,
+        "explanation": "Wien's law gives λ_max = b/T = 2.898 × 10⁻³ / 5800 ≈ 5.0 × 10⁻⁷ m = 500 nm, right at the peak of human eye sensitivity (an evolutionary tuning to the sky we live under, not a coincidence). The most tempting wrong answer is 100 nm, which would correspond to T ≈ 30,000 K, a class O star, and confuses the Sun with something six times hotter. The 5 μm answer puts the Sun way too cool (more like a class M giant) and 50 nm puts it absurdly hot, hotter than any main-sequence star."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Cecilia Payne and what stars are made of",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "In 1924 a young British astronomer named Cecilia Payne arrived at Harvard from Cambridge, where she had been told there was no future for a woman in physics. There was no future for her in astronomy at Cambridge either, so she crossed the Atlantic. She brought with her a copy of Saha's equation and a thesis problem: invert the Cannon sequence. If you knew the Saha equation and you measured a Balmer line strength, you could in principle recover both the temperature and the abundance of hydrogen, separately, from one stellar spectrum." },
+        { "type": "p", "text": "Payne ran the calculation across the entire Harvard plate library. The temperatures came out beautifully: a tidy monotonic ladder, in agreement with Cannon's order. The abundances came out wrong in a way that startled her. Hydrogen was not a few percent of stellar matter, the way it was a few percent of Earth's crust. Hydrogen was, by number, more than 90 percent of every star she could analyze. Helium was most of the rest. The everyday elements (iron, silicon, carbon, oxygen) were trace contaminants by comparison." },
+        { "type": "p", "text": "She wrote it up in her 1925 thesis. Henry Norris Russell, the dean of American stellar astrophysics, told her in writing that the result was 'almost certainly not real' and asked her to insert a disclaimer in the manuscript saying so. She did. Four years later Russell ran the analysis himself, confirmed her finding, and credited her in print. By 1930 the textbook view of stellar composition had inverted: stars are hydrogen and helium, decorated with traces of everything else, and the OBAFGKM sequence is the spectroscopic thermometer that reads it off. The letters that began as a hydrogen-line-strength sort had become, through Saha and Payne, the key to the chemistry of the cosmos." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "An astronomer measures a stellar spectrum showing strong neutral helium absorption lines and very weak hydrogen Balmer lines. Using everything you now know about OBAFGKM, what is this star most likely, and why?",
+    "options": [
+      "A class O or early B star: hot enough (≈ 25,000 to 40,000 K) to populate excited helium states yet hot enough to ionize most hydrogen, which weakens Balmer absorption",
+      "A class M dwarf: cool stars are dominated by neutral helium because helium has no ionized states available at low temperature",
+      "A class G star like the Sun: helium and hydrogen are equally visible at Sun-like temperatures, hence the mixed spectrum",
+      "A class A star: weak Balmer lines are the defining feature of the A class"
+    ],
+    "correctIndex": 0,
+    "explanation": "Strong neutral-helium absorption requires high temperatures to lift helium out of its ground state into excited levels where photons can be absorbed (the ionization energy of helium is 24.6 eV, so it needs even more thermal energy than hydrogen does). At those temperatures, hydrogen is already mostly stripped of its electrons, so the Balmer lines starve for the same reason they starved Cannon's O stars. Class A is the most tempting wrong answer because A stars are 'weak Balmer relative to neighboring B' in some textbooks, but A is actually defined by the strongest Balmer of the sequence; they are no good place to find strong neutral helium either. The G-star option contradicts what Saha says about helium at 5800 K (essentially all in ground state, invisible in absorption), and the M dwarf option gets helium ionization backwards."
+  },
+  "suggestedNodes": [
+    {
+      "id": "saha_ionization",
+      "label": "Saha equation",
+      "subtitle": "n+/n0 ∝ T^3/2",
+      "edgeType": "extends"
+    },
+    {
+      "id": "hr_diagram",
+      "label": "HR diagram",
+      "subtitle": "T vs L plot",
+      "edgeType": "applied"
+    },
+    {
+      "id": "balmer_series",
+      "label": "Balmer lines",
+      "subtitle": "n → 2 in H",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-07T11:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": ["wavelength", "photon_energy", "blackbody", "wien_displacement", "stefan_boltzmann"]
+  }
+}

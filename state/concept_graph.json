@@ -99,6 +99,16 @@
       "createdAt": "2026-05-07T08:00:00Z",
       "col": 1,
       "row": 4
+    },
+    {
+      "id": "stellar_classification",
+      "label": "Stellar class",
+      "subtitle": "OBAFGKM types",
+      "state": "available",
+      "lesson": "2026-05-07-stellar-classification",
+      "createdAt": "2026-05-07T11:00:00Z",
+      "col": 0,
+      "row": 5
     }
   ],
   "edges": [
@@ -120,6 +130,9 @@
     { "from": "stefan_boltzmann", "to": "wien_displacement", "kind": "related" },
     { "from": "cmb", "to": "blackbody", "kind": "extends" },
     { "from": "cmb", "to": "wien_displacement", "kind": "applied" },
-    { "from": "cmb", "to": "stefan_boltzmann", "kind": "related" }
+    { "from": "cmb", "to": "stefan_boltzmann", "kind": "related" },
+    { "from": "stellar_classification", "to": "wien_displacement", "kind": "extends" },
+    { "from": "stellar_classification", "to": "blackbody", "kind": "related" },
+    { "from": "stellar_classification", "to": "stefan_boltzmann", "kind": "applied" }
   ]
 }

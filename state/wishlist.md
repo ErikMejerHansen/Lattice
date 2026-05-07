@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-04 from wiens-displacement-law
-Stellar classification — OBAFGKM, mapping color to temperature to physics
 Color temperature in lighting — Kelvin scale, daylight vs incandescent
 Spectroscopy basics — absorption lines, what the sun is made of
 
@@ -30,3 +29,8 @@ Greenhouse effect — atmospheric IR absorption and the 34 K gap between Earth's
 Recombination — when the universe became transparent at z ≈ 1100, the surface of last scattering
 Cosmic redshift — λ' = (1+z)λ, how the wavelengths and the temperature of a photon bath stretch with the universe
 CMB anisotropies — ΔT/T ≈ 10⁻⁵, the seeds of every galaxy ever formed, mapped by COBE/WMAP/Planck
+
+# auto-suggested 2026-05-07 from stellar-classification
+Saha ionization equation — n+/n0 ∝ T^(3/2) exp(-χ/kT), the bridge from temperature to spectrum
+Hertzsprung-Russell diagram — luminosity vs temperature, the family portrait of stars
+Balmer series — n → 2 transitions in hydrogen, the lines that started OBAFGKM
