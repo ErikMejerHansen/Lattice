@@ -1,0 +1,123 @@
+{
+  "slug": "2026-05-07-cosmic-microwave-background",
+  "title": "The cosmic microwave background: the cleanest blackbody curve in nature",
+  "node": {
+    "id": "cmb",
+    "label": "CMB",
+    "subtitle": "T = 2.7255 K"
+  },
+  "intro": "In 1948 three theorists named George Gamow, Ralph Alpher, and Robert Herman calculated that the early universe should have left behind a thermal glow at about 5 K, then watched the prediction sink without a trace for sixteen years. In 1964 two radio engineers at Bell Labs found exactly such a glow, did not know they had found it, and assumed the persistent hiss in their horn antenna came from pigeon droppings on the receiver. Twenty-five years later John Mather's FIRAS instrument aboard the COBE satellite measured the spectrum so cleanly that the data points fit a Planck curve at 2.7255 K with error bars smaller than the line drawn through them. It is the cleanest blackbody curve nature has ever shown us, and it fills every cubic centimeter of the universe.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Pigeon dung and a missing 3.5 K",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "In 1948 Ralph Alpher and Robert Herman, working with George Gamow on the consequences of nuclear cooking in the early universe, predicted that whatever radiation was around when the cosmos became transparent should still be around now, redshifted to a thermal background at roughly 5 K. The paper appeared in Nature. Nobody followed up. Cosmology was a disreputable hobby in 1948, hot Big Bang ideas were one of two competing pictures, and 5 kelvin in the microwave was below every receiver's sensitivity floor." },
+        { "type": "p", "text": "Sixteen years later, Arno Penzias and Robert Wilson were trying to repurpose a Bell Labs horn antenna in Holmdel, New Jersey, for radio astronomy. The antenna had been built for satellite work and was unusually clean. They found a stubborn excess noise of about 3.5 K, isotropic across the sky, the same day and night, summer and winter. They scrubbed the horn. They evicted a pair of nesting pigeons whose contribution they politely called 'a white dielectric material' and disassembled, cleaned, and reassembled the receiver. The noise stayed." },
+        { "type": "p", "text": "Forty kilometers south, at Princeton, Robert Dicke had independently reinvented the Alpher-Herman prediction and was building a horn antenna to look for it. A phone call from Bell Labs reached him mid-design. He hung up, turned to his group, and said, 'boys, we've been scooped.' Penzias and Wilson published their measurement of an isotropic noise floor; Dicke's group published the cosmological interpretation alongside it. Together they had the cosmic microwave background: leftover heat from when the universe was young and hot enough to glow." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. A spectrum we already knew how to write",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "What is this radiation, physically? When the universe was younger than 380,000 years, it was hot enough that hydrogen could not stay neutral: every newly formed atom was kicked apart by passing photons before it could settle. The cosmos was an opaque plasma, exactly the conditions that put matter and radiation in thermal equilibrium and produce a blackbody spectrum. As the universe expanded and cooled past about 3000 K, electrons finally bound to protons, photons stopped scattering, and the radiation streamed outward through a now-transparent universe carrying the spectrum of that final hot state with it." },
+        { "type": "p", "text": "The remarkable fact is that cosmic expansion preserves the shape. Stretching every wavelength by the same factor (1 + z) is mathematically the same operation as cooling the temperature by 1/(1 + z), and Planck's curve carries through unchanged in form. The spectrum we should see today is therefore the same Planck curve we wrote down for any blackbody:" },
+        { "type": "math", "tex": "u(\\nu, T) = \\frac{8\\pi h \\nu^{3}}{c^{3}} \\cdot \\frac{1}{e^{h\\nu / kT} - 1}", "display": true, "caption": "u(ν, T) is the spectral energy density per unit frequency, h is Planck's constant, ν is frequency, c is the speed of light, k is Boltzmann's constant, and T is the absolute temperature of the radiation. The same formula governs a furnace, a star, and the universe; only T changes." },
+        { "type": "p", "text": "Wien's displacement law gives the peak. With b ≈ 2.898 × 10⁻³ m·K and T near 2.7 K, the wavelength of maximum spectral density comes out at λ_max = b/T ≈ 1.06 mm: squarely in the microwave band. The hiss in Penzias and Wilson's antenna was a slice from the long-wavelength tail of that distribution." }
+      ],
+      "quiz": {
+        "question": "At T = 2.725 K, where does the Planck spectrum (per unit wavelength) peak, using Wien's displacement law with b = 2.898 × 10⁻³ m·K?",
+        "options": [
+          "About 1.06 mm, in the microwave band",
+          "About 500 nm, visible green light",
+          "About 10 μm, mid-infrared",
+          "About 1 cm, in the radio band"
+        ],
+        "correctIndex": 0,
+        "explanation": "Wien's law gives λ_max = b/T = 2.898 × 10⁻³ / 2.725 ≈ 1.06 × 10⁻³ m, which is 1.06 mm. That puts the peak right in the microwave band, which is exactly why the radiation is called the cosmic microwave background. The other answers correspond to other regions of the spectrum: 500 nm visible green is what the sun's surface produces because T ≈ 5800 K is two thousand times hotter, and λ_max scales as 1/T. The shape of the curve is the same in all cases; only the peak slides along with temperature."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. FIRAS: the cleanest blackbody in nature",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "For two decades after Penzias and Wilson, balloon flights and ground-based radiometers chipped away at the spectrum. Every measurement was a different instrument at a different wavelength with different systematics, and the assembled curve was a constellation of error bars that more or less agreed on a thermal shape. To pin the spectrum down to the Planck curve required a single instrument, calibrated against an internal blackbody, riding above the atmosphere." },
+        { "type": "p", "text": "COBE launched in November 1989, carrying three instruments. FIRAS, the Far-Infrared Absolute Spectrophotometer, designed by John Mather at NASA Goddard, was a Michelson interferometer with a deep cavity blackbody calibration source built into the optics. You could swing the calibrator into the beam at any moment and verify that the instrument really was reading blackbody flux from a blackbody. Mather presented the first nine minutes of FIRAS data at the American Astronomical Society meeting in January 1990, eight months after launch." },
+        { "type": "viz", "src": "2026-05-07-cosmic-microwave-background.html", "height": 420, "caption": "Drag the temperature slider. The red curve is the Planck spectrum at your chosen T; the dark dots are FIRAS-style measurements of the real CMB at T₀ = 2.7255 K. The lower panel shows the residuals (data minus model); the readout shows reduced χ² per point. Shift even a few millikelvin away from 2.7255 and the residuals leap and χ² explodes. This is what the AAS audience saw in 1990: every dot on the line, error bars smaller than the line itself." },
+        { "type": "p", "text": "The plot drew the audience to its feet. Forty data points clustered around a Planck curve with error bars smaller than the line drawn through them. There was no quibbling room left. Whatever the cosmic microwave background was, it was a blackbody to an absolute precision better than one part in 10⁴ across the entire range of frequencies FIRAS could see. Any deviation, from a stray dust component, from energy injection, from a non-thermal source, would have shown up as a wiggle. There was no wiggle." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. One number, many consequences",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Once you know T = 2.7255 K, the rest of the cosmic photon bath follows from formulas we have already seen. Number density goes as T³: about 411 photons per cubic centimeter, more than a billion times the average density of baryons in the universe. Energy density goes as T⁴ via Stefan-Boltzmann, which gives:" },
+        { "type": "math", "tex": "u_{\\text{rad}} = \\frac{4\\sigma}{c} T^{4} \\approx 4.17 \\times 10^{-14} \\; \\text{J/m}^{3}", "display": true, "caption": "u_rad is the energy density of the cosmic microwave background, σ is the Stefan-Boltzmann constant, c is the speed of light, and T is the present-day CMB temperature. The numerical value is about 0.26 eV/cm³, dominated by photons too soft to ionize anything but enormous in count." },
+        { "type": "p", "text": "Most of the consequences come from how that energy density scales with cosmic expansion. As the universe expands by a factor a, photon wavelengths stretch as a, so frequencies drop as 1/a, and the energy density of radiation drops as 1/a⁴ (three powers from volume dilution and one extra power from the redshifting of each photon). Matter density, by contrast, only dilutes as 1/a³. The two scalings cross when matter and radiation contribute equally to the energy budget; before that crossover (at redshift around 3400, when the universe was about 50,000 years old) the universe was radiation-dominated and expanding under a different equation of state. After it, matter took over, gravitational structure could grow, and the CMB became a passenger." }
+      ],
+      "quiz": {
+        "question": "Today the cosmic microwave background contains about 411 photons per cubic centimeter at T = 2.725 K. Just before recombination at redshift z ≈ 1100, what was the proper number density of CMB photons in a cubic centimeter of space?",
+        "options": [
+          "About 5.5 × 10¹¹ photons per cm³, scaling as (1+z)³",
+          "About 411 photons per cm³, photon number is conserved",
+          "About 4.5 × 10⁵ photons per cm³, scaling linearly with (1+z)",
+          "About 0.0003 photons per cm³, scaling as 1/(1+z)³"
+        ],
+        "correctIndex": 0,
+        "explanation": "Photons are conserved as the universe expands, but the volume containing them shrinks toward the past by a factor (1+z)³. So the proper number density was higher in the past by exactly that factor. With 1+z = 1101, (1+z)³ ≈ 1.33 × 10⁹, giving n_γ ≈ 411 × 1.33 × 10⁹ ≈ 5.5 × 10¹¹ per cm³. The most tempting wrong answer is 411 itself, which confuses comoving (conserved) photon number with proper (volume-shrunk) photon density. The temperature itself scales as (1+z), but density depends on the cube because volume is three-dimensional."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The cleanest curve in physics",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Take the FIRAS curve seriously for a moment. The instrument was a Michelson interferometer with a built-in calibration blackbody held at the same temperature as the sky signal. Each measurement subtracted one Planck curve (the calibrator) from another (the universe), and the difference was zero to within the spectrometer's noise. The temperature came out at 2.7255 K. The deviations from a pure Planck curve, integrated over the entire spectrum, came in below 6 × 10⁻⁵ of the peak intensity: the tightest thermodynamic equilibrium measurement ever made on anything." },
+        { "type": "p", "text": "That number does not just confirm the hot Big Bang, it forecloses on the alternatives. Any process that synthesized this radiation later, in starlight reprocessed by intergalactic dust or in some galactic feedback loop, would distort the spectrum from the Planck shape. Cold dust grains add a frequency-dependent emissivity. Compton scattering off hot electrons puts a y-distortion at high frequencies. Sudden energy injection at a specific epoch leaves a μ-distortion in the spectral shape. FIRAS saw none of these, at precisions that ruled each of them out down to negligible levels." },
+        { "type": "p", "text": "What remains is the only history consistent with such a clean curve: an early universe hot and dense enough to be in equilibrium, expanding fast enough that the equilibrium was frozen in when it became transparent, and quiet enough afterward that nothing reheated the photons. T = 2.7255 K is not just a reading on a thermometer. It is a four-decimal-place claim about the entire thermal past of the cosmos, signed off by Planck himself in a formula written eighty-nine years before COBE was launched. Mather got the Nobel Prize for that curve in 2006. It is the cleanest curve in physics, and it covers the whole sky." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A graduate student proposes that the cosmic microwave background is not the cooled relic of a hot early universe but instead emission from very cold intergalactic dust at about 3 K. Which feature of the FIRAS measurement most directly contradicts this idea?",
+    "options": [
+      "The spectrum is a near-perfect Planck blackbody, with no frequency-dependent emissivity distortion",
+      "The temperature comes out at 2.725 K, which is colder than dust can be",
+      "The peak wavelength matches Wien's displacement law to high precision",
+      "The radiation arrives uniformly from every direction in the sky"
+    ],
+    "correctIndex": 0,
+    "explanation": "Thermal dust emission has a frequency-dependent emissivity that bends the Planck shape into a so-called modified Planck curve, typically with an extra factor of ν^β in front of the Bose-Einstein term. FIRAS saw a clean Planck spectrum with no such distortion, eliminating dust as the source to extraordinary precision. The other answers describe true facts about the CMB but are not the discriminating ones: temperature alone does not rule out cold dust (some interstellar dust is cold), Wien's law and isotropy are obeyed by any large-scale thermal source. The structural argument is the one that wins: a perfect blackbody is the signature of true thermodynamic equilibrium, and only a hot, dense, opaque early universe could have produced that across the whole sky."
+  },
+  "suggestedNodes": [
+    {
+      "id": "recombination",
+      "label": "Recombination",
+      "subtitle": "z ≈ 1100",
+      "edgeType": "extends"
+    },
+    {
+      "id": "cosmic_redshift",
+      "label": "Cosmic z",
+      "subtitle": "λ' = (1+z)λ",
+      "edgeType": "applied"
+    },
+    {
+      "id": "cmb_anisotropies",
+      "label": "CMB anisotropy",
+      "subtitle": "ΔT/T ≈ 10⁻⁵",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-07T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": ["wavelength", "photon_energy", "blackbody", "wien_displacement", "stefan_boltzmann"]
+  }
+}
