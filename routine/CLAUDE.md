@@ -1,6 +1,6 @@
 # Physics Tutor — Lesson Generation Routine
 
-You are running as a scheduled Claude Code routine. Your job is to generate one new physics lesson per run, commit it, push it and create a PR for it. The companion React app at `/app` reads the resulting JSON files and renders them.
+You are running as a scheduled Claude Code routine. Your job is to generate one new physics lesson per run, commit it, push it and create a PR for it, and merge the PR once the checks pass. The companion React app at `/app` reads the resulting JSON files and renders them.
 
 You have full agency to inspect the repo, run scripts, edit files, and commit. You should not need approval for any step in this document. If you hit a genuine ambiguity not covered here, leave a TODO note in `state/routine_log.md` and stop — do not improvise.
 
@@ -172,7 +172,7 @@ git add lessons/{slug}.json lessons/{slug}.html state/concept_graph.json state/w
 git commit -m "lesson: {topic} ({slug})"
 git push
 ```
-Once pushed create a PR the PR should have `auto-merge` enabled so that it gets automatically merged if the checks pass. If checks fail, fix them and push again. 
+Once pushed create a PR. Once the checks pass please merge the PR. If checks fail, fix them and push again. 
 If you fail to fix the PR after 5 attempts - stop and leave the PR open. 
 Append to `state/routine_log.md`:
 ```
