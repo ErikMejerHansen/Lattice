@@ -1,0 +1,129 @@
+{
+  "slug": "2026-05-06-stefan-boltzmann-law",
+  "title": "The Stefan-Boltzmann law: the guess that weighed the stars",
+  "node": {
+    "id": "stefan_boltzmann",
+    "label": "Stefan's law",
+    "subtitle": "j = σT⁴"
+  },
+  "intro": "In 1879 a Slovene physicist named Josef Stefan stared at Tyndall's tables of glowing platinum and announced that the power radiated by a hot body climbed as the fourth power of its absolute temperature. Most of his colleagues thought the data did not support so confident a claim. Five years later his student Ludwig Boltzmann derived the same law from the second law of thermodynamics, and a quarter century after that Planck's quantum theory delivered its constant exact to whatever precision you wanted. The fourth power has been running the energy budget of the universe ever since.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Stefan's audacious fit",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "John Tyndall, an Irish physicist working at the Royal Institution in London, spent the 1860s heating platinum strips with electric currents and measuring their thermal output. His tables were the best radiation data of the century: a hot platinum filament at 1200 °C radiated about 11.7 times as much as the same filament at 525 °C. The numbers sat in print for fourteen years before anyone made physical sense of them." },
+        { "type": "p", "text": "In 1879 Josef Stefan, professor at Vienna, noticed that Tyndall's ratio came out exactly right if you assumed the radiated power scaled as the fourth power of the absolute temperature. Convert °C to kelvin: (1200 + 273)⁴ / (525 + 273)⁴ ≈ 11.6, almost on the nose. Stefan published the law on the strength of one numerical coincidence and very little else, and most of the German-speaking physics establishment thought he had embarrassed himself." },
+        { "type": "p", "text": "He had not. The same year, Stefan turned the law on the sun. Plug in the measured solar irradiance at the top of the atmosphere, work backwards through the inverse-square thinning over the Earth-sun distance, and demand that whatever surface produced this flux obey his T⁴ rule. Out came a temperature near 5700 K, the first defensible estimate of the surface temperature of the sun, decades before anyone had a theory of how the sun shone. Five years later Ludwig Boltzmann, Stefan's former student, gave the law a derivation no one could quibble with." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Boltzmann's heat engine made of light",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Maxwell had predicted in 1862 that electromagnetic radiation must carry momentum and exert pressure on whatever absorbs it. Crookes's radiometer was a curiosity for parlour rooms, but Lebedev's careful experiments at Moscow eventually confirmed real photon pressure in 1899. Boltzmann took this seriously. A cavity full of thermal radiation, he reasoned, is just a fluid: it has an energy density u, a pressure p, and (because the radiation is isotropic) a known relation between the two:" },
+        { "type": "math", "tex": "p = \\frac{u}{3}", "display": true, "caption": "p is the radiation pressure on a cavity wall, u is the energy density of equilibrium radiation in the cavity. The factor 1/3 is geometric, because in three dimensions only one third of the photon momentum points along any one axis on average." },
+        { "type": "p", "text": "Now run a heat engine on this fluid. Take the cavity through a Carnot cycle: expand isothermally at temperature T, expand adiabatically while cooling, recompress at lower temperature, recompress adiabatically back. The second law demands that the cycle's efficiency depend only on the two temperatures. Spelling that demand out as a differential equation, using p = u/3 and the fact that radiation in equilibrium has no parameter except T, gives Boltzmann a clean answer:" },
+        { "type": "math", "tex": "u(T) = a \\, T^{4}", "display": true, "caption": "u is the total energy density of equilibrium radiation, T is its absolute temperature, and a is a constant Boltzmann's argument cannot determine on its own. Translating the energy density inside the cavity to the power flux through a hole in its wall introduces a factor c/4, giving the radiated intensity j = σT⁴ with σ = ac/4." },
+        { "type": "p", "text": "The argument was beautiful and complete in 1884. It identified the T⁴ law as a thermodynamic necessity, not a guess. What it could not do was tell you the value of σ. The constant a stayed an empirical number for sixteen more years, until Planck's spectrum in 1900 turned it into a calculable combination of h, c and k." }
+      ],
+      "quiz": {
+        "question": "A tungsten filament inside an incandescent bulb is heated from 1500 K to 3000 K. By what factor does its total radiated power per unit area increase?",
+        "options": [
+          "16-fold",
+          "8-fold",
+          "4-fold",
+          "2-fold"
+        ],
+        "correctIndex": 0,
+        "explanation": "Stefan-Boltzmann gives j ∝ T⁴, and doubling T multiplies the power by 2⁴ = 16. The most tempting wrong answer is 8 (cube of 2), which sneaks in if you remember a T³ from somewhere or confuse the exponent. But the integral over all wavelengths of the Planck curve picks up four factors of T (one from the dx Jacobian and three from the cubic in the integrand), and that fourth power is the entire reason an incandescent bulb gets so much brighter as you push more current through its filament."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Integrating Planck",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Planck's spectrum is the missing function. Per unit frequency, the energy density of equilibrium radiation at temperature T is:" },
+        { "type": "math", "tex": "u(\\nu, T) = \\frac{8 \\pi h \\nu^{3}}{c^{3}} \\cdot \\frac{1}{e^{h\\nu/kT} - 1}", "display": true, "caption": "u(ν, T) is the spectral energy density per unit frequency, h is Planck's constant, ν is frequency, c is the speed of light, k is Boltzmann's constant, T is the absolute temperature. The cubic factor in front comes from counting electromagnetic modes in the cavity; the Bose-Einstein denominator counts how many photons each mode holds at temperature T." },
+        { "type": "p", "text": "To get total energy density, integrate over all frequencies. The substitution x = hν/kT pulls four factors of T out of the integrand, leaving a pure number behind:" },
+        { "type": "math", "tex": "u(T) = \\frac{8\\pi (kT)^{4}}{(hc)^{3}} \\int_{0}^{\\infty} \\frac{x^{3}}{e^{x} - 1} \\, dx", "display": true, "caption": "x is a dimensionless integration variable, equal to hν/kT. The integral over x is independent of any physical scale: T⁴ has already separated cleanly out front. The remaining integral evaluates to π⁴/15 (a result due to Euler, expressible through the Riemann zeta function as 6 ζ(4)), which closes everything into one formula." },
+        { "type": "viz", "src": "2026-05-06-stefan-boltzmann-law.html", "height": 380, "caption": "Drag T from 300 K to 12 000 K. The Planck spectrum redraws itself, the area under it (shaded) is the integrated total energy density, and the readout shows that area side by side with the analytic Stefan-Boltzmann prediction aT⁴. The two values track to four decimal places no matter where you push the slider, because the integral of the Planck curve is exactly Stefan's law. The inset on the upper right plots radiated flux against T on log axes; the moving dot is your current setting, sliding along a line of slope 4." },
+        { "type": "p", "text": "Pull the constants out and you have the modern Stefan-Boltzmann law for the radiated power per unit area of a blackbody surface:" },
+        { "type": "math", "tex": "j = \\sigma T^{4}, \\quad \\sigma = \\frac{2 \\pi^{5} k^{4}}{15 \\, h^{3} c^{2}} \\approx 5.67 \\times 10^{-8} \\; \\text{W m}^{-2} \\text{K}^{-4}", "display": true, "caption": "j is the radiant power per unit surface area emitted by a blackbody at temperature T, σ is the Stefan-Boltzmann constant. The numerical value is now exact by definition (the 2019 SI redefinition fixed h, k and c), so σ inherits the precision of pure arithmetic." },
+        { "type": "p", "text": "Stefan had the formula in 1879 with the constant unknown. Boltzmann had its structure in 1884 with the constant still unknown. Planck handed them the value sixteen years later, and what had looked like a brave fit to one experimentalist's table turned out to be one of the cleanest calculable numbers in physics." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The fourth power runs the planets",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Earth's average temperature is whatever value makes its outgoing T⁴ radiation balance the sunlight it absorbs. Treat the planet as a perfect emitter and absorber, set absorbed solar power equal to radiated thermal power, and the equation almost writes itself:" },
+        { "type": "math", "tex": "S \\, (1 - A) \\, \\pi R^{2} = 4 \\pi R^{2} \\, \\sigma T^{4}", "display": true, "caption": "S is the solar constant (the radiation flux at Earth's orbit, about 1361 W/m²), A is Earth's albedo (about 0.30, the fraction of sunlight reflected away), R is Earth's radius. The left side is power absorbed by the disk Earth presents to the sun; the right side is power radiated by the full sphere. The R² cancels, telling you that planet size does not enter the equilibrium temperature at all." },
+        { "type": "p", "text": "Solve for T. Plug in numbers and the answer is 254 K, about −19 °C. That is what Earth's surface ought to be. The actual average is closer to 288 K, fully 34 K warmer. The 34-kelvin gap is the greenhouse effect, and the fourth power makes it instructive: at 254 K each kelvin of warming has to push σT⁴ output up by about 1.6%, so a small extra absorbing layer in the atmosphere does not need to add much energy to lift T appreciably. Real, but not absurd." },
+        { "type": "p", "text": "The same logic, applied to a star, gives its luminosity. A star of radius R and surface temperature T radiates total power L = 4πR²σT⁴. The sun's R is 7.0 × 10⁸ m and its T is about 5780 K, giving L ≈ 3.85 × 10²⁶ W to two significant figures. That number, divided by 4π times the Earth-sun distance squared, is the solar constant S we just plugged into the Earth equation. The fourth power closes the loop: stars set planet temperatures, and Stefan-Boltzmann is how you read both ends." }
+      ],
+      "quiz": {
+        "question": "Two stars have exactly the same radius. Star A has a surface temperature of 3000 K. Star B has a surface temperature of 6000 K. By what factor is Star B more luminous than Star A?",
+        "options": [
+          "16 times",
+          "2 times",
+          "4 times",
+          "8 times"
+        ],
+        "correctIndex": 0,
+        "explanation": "L = 4πR²σT⁴, so at fixed radius luminosity scales as T⁴. The temperature ratio is 2, so the luminosity ratio is 2⁴ = 16. The most tempting wrong answer is 2 (linear in temperature, which is what your gut says when something gets hotter). T⁴ scaling is what makes hot blue stars so spectacularly bright compared to cool red stars even at the same surface area. A red dwarf at 3000 K and a sun-like star at 6000 K of identical radius differ in luminosity by sixteen, almost entirely because of σT⁴."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The tyranny of the fourth power",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Stefan's law is a fourth-power law, and fourth-power laws are tyrants. Differentiate j = σT⁴ logarithmically and you find dj/j = 4 dT/T. A 1% rise in absolute temperature drives a 4% rise in radiated power; a 25% rise in temperature more than doubles it. There is no negotiating with this number, and it sets the pace of every system that radiates as a blackbody." },
+        { "type": "p", "text": "Inside a star, the fourth power becomes a thermostat. If fusion in the core ticks a little hotter, the σT⁴ losses through the radiating surface (after diffusing outward through the bulk) climb steeply, and the star sheds the excess as light. If the core cools, the outflow drops faster than the heating, and gravity has time to compress the core back to ignition temperature. The same nonlinearity that would run T⁴ away in one direction stabilises stars in the other. Without it, the sun could not have shone steadily for four and a half billion years." },
+        { "type": "p", "text": "The lesson generalises. A formula's exponent tells you how brittle a system is going to feel. Linear systems forgive; quadratic systems frown; quartic systems do not negotiate. Most of the loud surprises in physics come from places where some quantity went up by 1% and the response went up by 4% or 16% or 256%, because the underlying law was not the law you expected. Stefan saw a tidy fourth power in some platinum measurements, refused to look away from it, and inherited a prediction that ran from foundry temperatures to the surface of the sun without a single adjustable parameter. That is the kind of result physics keeps you up at night hoping to find." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A planet sits at twice Earth's distance from a sun-like star, so the incoming solar flux per unit area is one-fourth of Earth's. Treat both planets as perfect absorbers and emitters with the same albedo. Earth's blackbody equilibrium temperature is about 254 K. What temperature do you expect at the more distant planet?",
+    "options": [
+      "About 180 K",
+      "About 127 K",
+      "About 64 K",
+      "About 254 K (distance does not matter)"
+    ],
+    "correctIndex": 0,
+    "explanation": "Equilibrium gives σT⁴ ∝ S, the incoming flux. Quartering S quarters T⁴, which means T drops by a factor of 4^(1/4) = √2 ≈ 1.414. So T_new ≈ 254 / √2 ≈ 180 K. The most tempting wrong answer is 127 K (half of 254), which assumes T scales linearly with flux. It does not. The fourth power means you have to take a fourth root to undo it, and a four-fold drop in flux only cuts temperature by about 30%, not 75%. This is also why Mars, despite being much further from the sun, is not nearly as cold as a linear scaling would predict."
+  },
+  "suggestedNodes": [
+    {
+      "id": "planetary_equilibrium",
+      "label": "Planet T_eq",
+      "subtitle": "(S/4σ)^¼",
+      "edgeType": "applied"
+    },
+    {
+      "id": "stellar_luminosity",
+      "label": "Luminosity",
+      "subtitle": "L = 4πR²σT⁴",
+      "edgeType": "applied"
+    },
+    {
+      "id": "greenhouse_effect",
+      "label": "Greenhouse",
+      "subtitle": "IR back-emission",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-06T11:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": ["wavelength", "photon_energy", "blackbody", "wien_displacement"]
+  }
+}

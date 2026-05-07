@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-03 from blackbody-radiation
-Stefan-Boltzmann law — total radiated power as T⁴, derive by integrating Planck
 Cosmic microwave background — Planck's curve at the largest scale, COBE/FIRAS
 
 # auto-suggested 2026-05-04 from wiens-displacement-law
@@ -24,3 +23,8 @@ Work function — what binds electrons to a metal, surface chemistry, why some m
 Schrödinger equation — what the wave function is and how it evolves in time
 Heisenberg uncertainty principle — Δx·Δp ≥ ℏ/2, the noncommutative price of being a wave
 Bohr atom — quantized angular momentum recovered from de Broglie standing waves on the orbit
+
+# auto-suggested 2026-05-06 from stefan-boltzmann-law
+Planetary equilibrium temperature — solar input vs σT⁴ output, why Mars is colder than Earth but not by as much as you would guess
+Stellar luminosity — L = 4πR²σT⁴, how stars are weighed and timed by their surface alone
+Greenhouse effect — atmospheric IR absorption and the 34 K gap between Earth's blackbody and observed temperature

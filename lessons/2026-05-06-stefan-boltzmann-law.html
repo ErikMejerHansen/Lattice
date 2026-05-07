@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stefan-Boltzmann law</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+.readout .pin { color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+  <canvas id="plot" height="280" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);background:var(--bg-raised);"></canvas>
+  <div class="viz-slider-row">
+    <label>T</label>
+    <input type="range" id="tempSlider" min="300" max="12000" step="50" value="5778" style="min-height:36px;">
+    <span class="value" id="tempVal">5778 K</span>
+  </div>
+  <div class="readout" id="readout"></div>
+  <p class="viz-caption" style="margin-top:10px;">Planck spectrum on log-wavelength axes. The shaded area under the curve is the integrated total energy density. Drag T: the curve grows and shifts, the area swells. The readout shows the numerical integral side by side with the analytic prediction aT⁴ — they track to four significant figures wherever you push the slider, because the integral of Planck is exactly Stefan's law. The inset on the upper right plots radiated flux against T on log axes, with a moving dot sliding along a line of slope 4.</p>
+</div>
+
+<script>
+const h = 6.62607015e-34;
+const k = 1.380649e-23;
+const c = 2.99792458e8;
+const SIGMA = 2 * Math.pow(Math.PI, 5) * Math.pow(k, 4) / (15 * Math.pow(h, 3) * Math.pow(c, 2));
+const A_RAD = 4 * SIGMA / c;
+
+const canvas = document.getElementById("plot");
+const slider = document.getElementById("tempSlider");
+const tempVal = document.getElementById("tempVal");
+const readoutEl = document.getElementById("readout");
+
+function rangeFor(T) {
+  const lamPeak = 2.8977719e-3 / T;
+  return { lamMin: lamPeak * 0.05, lamMax: lamPeak * 12 };
+}
+
+function planckLambda(lambda, T) {
+  const x = (h * c) / (lambda * k * T);
+  if (x > 700) return 0;
+  const denom = Math.exp(x) - 1;
+  if (denom <= 0) return 0;
+  return (8 * Math.PI * h * c) / (Math.pow(lambda, 5) * denom);
+}
+
+function integrate(T) {
+  const { lamMin, lamMax } = rangeFor(T);
+  const N = 800;
+  const lo = Math.log(lamMin);
+  const hi = Math.log(lamMax);
+  let total = 0;
+  for (let i = 0; i < N; i++) {
+    const lamA = Math.exp(lo + (i / N) * (hi - lo));
+    const lamB = Math.exp(lo + ((i + 1) / N) * (hi - lo));
+    total += 0.5 * (planckLambda(lamA, T) + planckLambda(lamB, T)) * (lamB - lamA);
+  }
+  return total;
+}
+
+function makeField(parent, label, pinned) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  const lbl = document.createElement("span");
+  lbl.className = "lbl";
+  lbl.textContent = label;
+  const val = document.createElement("span");
+  if (pinned) val.className = "pin";
+  wrap.appendChild(lbl);
+  wrap.appendChild(val);
+  parent.appendChild(wrap);
+  return val;
+}
+
+const fT = makeField(readoutEl, "T");
+const fInt = makeField(readoutEl, "∫ u(λ,T) dλ");
+const fAna = makeField(readoutEl, "aT⁴ (analytic)", true);
+const fJ = makeField(readoutEl, "j = σT⁴", true);
+
+function supDigit(n) {
+  const map = { "-": "⁻", "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹" };
+  return String(n).split("").map(s => map[s] || s).join("");
+}
+function fmtSci(x) {
+  if (!isFinite(x) || x === 0) return "0";
+  const e = Math.floor(Math.log10(Math.abs(x)));
+  const m = x / Math.pow(10, e);
+  return m.toFixed(3) + " × 10" + supDigit(e);
+}
+
+function draw() {
+  const T = parseFloat(slider.value);
+  tempVal.textContent = T.toFixed(0) + " K";
+
+  const W = canvas.offsetWidth || 320;
+  canvas.width = W;
+  const H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const padL = 46, padR = 12, padT = 10, padB = 32;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  const { lamMin, lamMax } = rangeFor(T);
+  const lo = Math.log(lamMin);
+  const hi = Math.log(lamMax);
+  function xFor(lam) {
+    return padL + ((Math.log(lam) - lo) / (hi - lo)) * plotW;
+  }
+
+  const lamPeak = 2.8977719e-3 / T;
+  const peakU = planckLambda(lamPeak, T);
+  const yMax = peakU * 1.15;
+  function yFor(u) {
+    return padT + plotH - Math.min(Math.max(u / yMax, 0), 1.06) * plotH;
+  }
+
+  // Filled area under curve
+  const NSTEP = 280;
+  ctx.fillStyle = "rgba(156,58,34,0.22)";
+  ctx.beginPath();
+  ctx.moveTo(xFor(lamMin), yFor(0));
+  for (let i = 0; i <= NSTEP; i++) {
+    const lam = Math.exp(lo + (i / NSTEP) * (hi - lo));
+    ctx.lineTo(xFor(lam), yFor(planckLambda(lam, T)));
+  }
+  ctx.lineTo(xFor(lamMax), yFor(0));
+  ctx.closePath();
+  ctx.fill();
+
+  // Axes
+  ctx.strokeStyle = "rgba(26,26,24,0.45)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, padT);
+  ctx.lineTo(padL, padT + plotH);
+  ctx.lineTo(padL + plotW, padT + plotH);
+  ctx.stroke();
+
+  // X tick labels at decades
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  ctx.fillStyle = "rgba(26,26,24,0.6)";
+  const candidates = [1e-8, 3e-8, 1e-7, 3e-7, 1e-6, 3e-6, 1e-5, 3e-5, 1e-4, 1e-3];
+  for (const lam of candidates) {
+    if (lam < lamMin || lam > lamMax) continue;
+    const x = xFor(lam);
+    ctx.strokeStyle = "rgba(26,26,24,0.45)";
+    ctx.beginPath();
+    ctx.moveTo(x, padT + plotH);
+    ctx.lineTo(x, padT + plotH + 3);
+    ctx.stroke();
+    let label;
+    if (lam < 1e-6) label = (lam * 1e9).toFixed(0) + " nm";
+    else if (lam < 1e-3) label = (lam * 1e6).toFixed(0) + " μm";
+    else label = (lam * 1e3).toFixed(0) + " mm";
+    ctx.fillStyle = "rgba(26,26,24,0.6)";
+    ctx.fillText(label, x, padT + plotH + 5);
+  }
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("λ (log)", padL + plotW / 2, padT + plotH + 18);
+
+  // Y axis label
+  ctx.save();
+  ctx.translate(13, padT + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = "center";
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("u(λ, T)", 0, 0);
+  ctx.restore();
+
+  // Planck curve
+  ctx.strokeStyle = "#9c3a22";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let i = 0; i <= NSTEP; i++) {
+    const lam = Math.exp(lo + (i / NSTEP) * (hi - lo));
+    const x = xFor(lam);
+    const y = yFor(planckLambda(lam, T));
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Inset: log-log j vs T in upper right
+  const insetW = Math.min(150, Math.max(110, plotW * 0.42));
+  const insetH = 88;
+  const ix0 = padL + plotW - insetW - 8;
+  const iy0 = padT + 8;
+  ctx.fillStyle = "rgba(248,242,225,0.95)";
+  ctx.fillRect(ix0, iy0, insetW, insetH);
+  ctx.strokeStyle = "rgba(26,26,24,0.35)";
+  ctx.strokeRect(ix0, iy0, insetW, insetH);
+
+  const TLO = 100, THI = 30000;
+  const JLO = SIGMA * Math.pow(TLO, 4);
+  const JHI = SIGMA * Math.pow(THI, 4);
+  function ixFor(Tt) { return ix0 + 8 + (Math.log(Tt / TLO) / Math.log(THI / TLO)) * (insetW - 16); }
+  function iyFor(Jj) { return iy0 + insetH - 14 - (Math.log(Jj / JLO) / Math.log(JHI / JLO)) * (insetH - 22); }
+
+  ctx.strokeStyle = "rgba(26,26,24,0.45)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(ix0 + 8, iy0 + insetH - 14);
+  ctx.lineTo(ix0 + insetW - 8, iy0 + insetH - 14);
+  ctx.moveTo(ix0 + 8, iy0 + 6);
+  ctx.lineTo(ix0 + 8, iy0 + insetH - 14);
+  ctx.stroke();
+
+  ctx.strokeStyle = "rgba(156,58,34,0.85)";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(ixFor(TLO), iyFor(JLO));
+  ctx.lineTo(ixFor(THI), iyFor(JHI));
+  ctx.stroke();
+
+  const J = SIGMA * Math.pow(T, 4);
+  ctx.fillStyle = "#9c3a22";
+  ctx.beginPath();
+  ctx.arc(ixFor(T), iyFor(J), 3.8, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.font = "italic 9px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.65)";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "top";
+  ctx.fillText("log j", ix0 + 10, iy0 + 4);
+  ctx.textAlign = "right";
+  ctx.textBaseline = "bottom";
+  ctx.fillText("log T", ix0 + insetW - 6, iy0 + insetH - 2);
+  ctx.font = "9px 'IBM Plex Mono',monospace";
+  ctx.textAlign = "right";
+  ctx.textBaseline = "top";
+  ctx.fillStyle = "rgba(156,58,34,0.95)";
+  ctx.fillText("slope 4", ix0 + insetW - 6, iy0 + 4);
+
+  // Readout
+  fT.textContent = T.toFixed(0) + " K";
+  const numerical = integrate(T);
+  const analytic = A_RAD * Math.pow(T, 4);
+  fInt.textContent = fmtSci(numerical) + " J/m³";
+  fAna.textContent = fmtSci(analytic) + " J/m³";
+  fJ.textContent = fmtSci(SIGMA * Math.pow(T, 4)) + " W/m²";
+}
+
+slider.addEventListener("input", draw);
+window.addEventListener("load", draw);
+setTimeout(draw, 80);
+</script>
+</body>
+</html>

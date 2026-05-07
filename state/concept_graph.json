@@ -79,6 +79,16 @@
       "createdAt": "2026-05-06T08:00:00Z",
       "col": 1,
       "row": 3
+    },
+    {
+      "id": "stefan_boltzmann",
+      "label": "Stefan's law",
+      "subtitle": "j = σT⁴",
+      "state": "available",
+      "lesson": "2026-05-06-stefan-boltzmann-law",
+      "createdAt": "2026-05-06T11:00:00Z",
+      "col": 0,
+      "row": 4
     }
   ],
   "edges": [
@@ -95,6 +105,8 @@
     { "from": "photoelectric_effect", "to": "blackbody", "kind": "related" },
     { "from": "wave_particle_duality", "to": "photon_energy", "kind": "extends" },
     { "from": "wave_particle_duality", "to": "photoelectric_effect", "kind": "extends" },
-    { "from": "wave_particle_duality", "to": "interference_diffraction", "kind": "applied" }
+    { "from": "wave_particle_duality", "to": "interference_diffraction", "kind": "applied" },
+    { "from": "stefan_boltzmann", "to": "blackbody", "kind": "extends" },
+    { "from": "stefan_boltzmann", "to": "wien_displacement", "kind": "related" }
   ]
 }
