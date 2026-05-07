@@ -2,6 +2,7 @@
 
 You are running as a scheduled Claude Code routine. Your job is to generate one new physics lesson per run, commit it, push it and create a PR for it, and merge the PR once the checks pass. The companion React app at `/app` reads the resulting JSON files and renders them.
 
+
 You have full agency to inspect the repo, run scripts, edit files, and commit. You should not need approval for any step in this document. If you hit a genuine ambiguity not covered here, leave a TODO note in `state/routine_log.md` and stop — do not improvise.
 
 ---
@@ -172,8 +173,7 @@ git add lessons/{slug}.json lessons/{slug}.html state/concept_graph.json state/w
 git commit -m "lesson: {topic} ({slug})"
 git push
 ```
-Once pushed create a PR. Once the checks pass please merge the PR. If checks fail, fix them and push again. 
-If you fail to fix the PR after 5 attempts - stop and leave the PR open. 
+Create the PR, then poll the CI status until every check completes — do not end your turn while checks are pending. Use the Monitor tool wrapping a pull_request_read get_check_runs loop, or call pull_request_read get_check_runs repeatedly with a brief wait between calls. Once every check has status: completed: if all conclusions are success, merge with merge_pull_request (method: merge), then append the routine log entry. If any check failed, fetch the failure log, fix the file, commit and push again. Stop only after a successful merge or after five failed fix attempts.
 Append to `state/routine_log.md`:
 ```
 2026-05-04T07:00Z  ok  carnot-cycles  5sec, 1 viz, 3 edges, 2 auto-suggestions
@@ -263,6 +263,8 @@ Set the model per call rather than globally.
 A run took ~3 minutes, used roughly 8-12 model calls, produced two files totaling 8-25KB, added one node and 1-3 edges to the graph, and the user opens the app the next morning and sees one new node lit up as "available."
 
 A great run additionally produces a viz the user spends a full minute fiddling with before reading the next section.
+
+And the PR is merged on main before the routine logs success.
 
 ---
 
