@@ -89,5 +89,12 @@
     "subtitle": "absorption lines",
     "date": "2026-05-07",
     "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-05-08-coherence",
+    "title": "Coherence: from Young's pinhole to LIGO's laser",
+    "subtitle": "phase stability",
+    "date": "2026-05-08",
+    "estimatedReadingMinutes": 23
   }
 ]
