@@ -1,0 +1,125 @@
+{
+  "slug": "2026-05-08-coherence",
+  "title": "Coherence: from Young's pinhole to LIGO's laser",
+  "node": {
+    "id": "coherence",
+    "label": "Coherence",
+    "subtitle": "phase stability"
+  },
+  "intro": "Two beams of light that disagree about phase do not interfere; they just add in intensity, like two flashlights crossing on a wall. Whether two beams agree about phase is the property called coherence, and Young's fringes happened in 1801 only because his sunlight, his pinhole, and his close-set slits conspired to enforce it. Coherence comes in two flavors, one along a beam (temporal) and one across a wavefront (spatial), each set by a different physical fact about the source. Both were understood in detail only in the twentieth century. The laser is the technology that finally made coherence cheap.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The fringes that wouldn't stay still",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Young's experiment was beautiful and brittle. Move the slits a few centimeters apart and the fringes vanished. Use raw sunlight without the pinhole filter and they vanished. Light a candle for the source and they appeared faintly, then disappeared as soon as the wax sputtered. None of this fit the picture in the lecture notes, where the slits were illuminated by a wave with definite frequency and infinite reach. The wave on the diagram was a mathematical idealization; the wave from the pinhole was something messier. The first century of wave optics was in part an exercise in figuring out exactly how messy." },
+        { "type": "p", "text": "Augustin Fresnel was the first to spell out what was going on. Atoms emit light, he wrote in the 1820s, in short bursts. The phase of the wave drifts unpredictably from one burst to the next, and the bursts are short on a human scale, a few tens of centimeters in space for a typical lamp. For two paths to interfere, the photon arriving by path A and the photon arriving by path B must come from the same burst. If the path difference exceeds the burst length, they sample independent phases and the fringes wash out into a uniform glow." },
+        { "type": "p", "text": "Émile Verdet, in the 1860s, gave the burst length a name (longueur de cohérence) and the effect a number. By the 1930s the picture had been split cleanly into two: temporal coherence, the phase memory of a single beam over time, and spatial coherence, the phase agreement across a wavefront at one instant. Each is set by a different physical property of the source. Temporal coherence by the spectrum, spatial coherence by the angular size. Both are needed for fringes; either alone will not do." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Temporal coherence: bandwidth and memory",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Take a single beam and split it on a half-silvered mirror. Send one half down a long arm and one down a short arm, then recombine. If both halves carry photons from the same emission burst, they interfere; if not, they do not. The longest path difference for which fringes are still visible is the coherence length ℓ_c. The corresponding round-trip travel time is the coherence time τ_c = ℓ_c / c. The two are tied to the spectrum of the source by Fourier:" },
+        { "type": "math", "tex": "\\tau_c \\approx \\frac{1}{\\Delta\\nu}, \\qquad \\ell_c = c\\,\\tau_c \\approx \\frac{c}{\\Delta\\nu}", "display": true, "caption": "τ_c is the coherence time of the source; Δν is its spectral bandwidth (the full width at half maximum of an emission line, or the total frequency range for a broadband source); c is the speed of light. A narrow source (small Δν) has a long phase memory; a broadband source has a short one. The relation comes straight from the Fourier inverse between time-domain duration and frequency-domain width." },
+        { "type": "p", "text": "The numbers are sobering. White sunlight covers most of the visible band, Δν ≈ 3 × 10¹⁴ Hz, giving a coherence length around 1 μm, only a few wavelengths. A low-pressure sodium street lamp is far better, Δν ≈ 1 GHz from Doppler broadening, ℓ_c ≈ 30 cm. A typical multi-mode helium-neon laser comes in around 20 cm; a frequency-stabilized single-mode HeNe reaches 300 m. The narrowest research lasers, locked to atomic references, reach linewidths under 1 Hz and coherence lengths past the orbit of the Moon." },
+        { "type": "p", "text": "The way to measure ℓ_c, in fact, is exactly the Michelson interferometer experiment. Walk one mirror outward and watch the fringe contrast shrink. The path difference at which the contrast has dropped by half is, give or take a constant of order unity, the coherence length. Albert Michelson and Francis Pease repurposed this in 1920 not to measure their light source but to measure their star, a backwards application that turns the same instrument into a stellar-diameter machine. That move is the next section." }
+      ],
+      "quiz": {
+        "question": "A photographic filter narrows white light to a 1 nm bandwidth around 600 nm. Estimate the coherence length of the filtered beam.",
+        "options": [
+          "About 1 μm, the same as raw white light (the filter changes intensity, not coherence)",
+          "About 0.4 mm, set by ℓ_c = c/Δν with Δν = c·Δλ/λ²",
+          "About 1 cm",
+          "About 3 m"
+        ],
+        "correctIndex": 1,
+        "explanation": "The coherence length is c/Δν, where Δν is the bandwidth in frequency. Convert the wavelength bandwidth: Δν = c·Δλ/λ², which for Δλ = 1 nm at λ = 600 nm gives Δν ≈ 8.3 × 10¹¹ Hz, so ℓ_c ≈ 0.36 mm. The first answer is the value for raw unfiltered white light, whose bandwidth is hundreds of nanometers; narrowing to 1 nm extends the coherence length by about three hundred. The third and fourth options correspond to bandwidths thousands or millions of times narrower still. The lesson is general: you can buy yourself almost any coherence length you want by filtering, at the cost of throwing away most of the light."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Spatial coherence and the diameter of a star",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Now turn ninety degrees. Instead of asking whether two times along one beam are in phase, ask whether two points across a wavefront are in phase at one instant. A perfect point source emits a spherical wavefront; everywhere on that surface the phase is identical. An extended source is a sum of independent point emitters, each with its own random phase, each painting the slit plane with its own slightly tilted wavefront. The mismatch grows with both source size and slit separation, and the fringes a finite source can produce are progressively diluted." },
+        { "type": "p", "text": "The exact relation is the van Cittert-Zernike theorem (1934). For a uniform slit source of angular extent θ at wavelength λ, the visibility of fringes formed by two slits a distance d apart is:" },
+        { "type": "math", "tex": "V(d) = \\left| \\frac{\\sin(\\pi d \\theta/\\lambda)}{\\pi d \\theta/\\lambda} \\right|", "display": true, "caption": "V is the Michelson visibility (peak minus trough divided by peak plus trough, ranging from 0 to 1). d is the slit separation. θ is the angular size of the source as seen from the slits, in radians. λ is the wavelength of the light. The first zero, where fringes vanish entirely, sits at d = λ/θ; below that, the spatial coherence length is ℓ_s ≈ λ/θ." },
+        { "type": "p", "text": "The numbers are again concrete. The sun, θ ≈ 9.3 mrad (half a degree), at 550 nm, gives ℓ_s ≈ 60 μm. Try to make Young fringes with two slits 1 mm apart in raw sunlight and you get nothing, which is why every textbook description invokes a pinhole prefilter to shrink the effective source size first. Betelgeuse, θ ≈ 50 milliarcseconds (2.4 × 10⁻⁷ rad): ℓ_s ≈ 2.3 m. Albert Michelson and Francis Pease bolted a pair of mirrors onto the 100-inch Hooker telescope at Mount Wilson in 1920, walked them apart along a steel beam, and watched the fringes fade out at d ≈ 3 m. They had measured the diameter of a star directly, and they had done it before any photograph could resolve one." },
+        { "type": "viz", "src": "2026-05-08-coherence.html", "height": 380, "caption": "Two slits 0.3 mm apart at 1 m from a screen, illuminated by a source whose angular diameter θ you control with the slider, at 550 nm. The top panel shows the visibility envelope V(d) = |sinc(πdθ/λ)| as a function of slit separation; the dot tracks the current d = 0.3 mm. The bottom panel shows the resulting fringe pattern on the screen. As you widen the source (drag right), the spatial coherence length ℓ_s = λ/θ shrinks past d, the visibility collapses, and the fringes fade into a uniform glow. The sun, at 30 arcmin, is well past several zero-crossings; a pinhole reducing it to under 6 arcmin restores fringes." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Hanbury Brown and Twiss: intensity, not amplitude",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Stellar interferometry was beautiful but extraordinarily hard. You had to combine light from two telescopes onto a common detector, with optical paths stable to a fraction of a wavelength against vibration, wind, and atmospheric turbulence. By the 1950s the Michelson technique had measured perhaps half a dozen stars in three decades. Robert Hanbury Brown, a radio engineer at Manchester who had spent the war on radar, asked an impertinent question. What if you did not combine the light at all? What if you measured the intensity at each detector separately and just correlated the two signals?" },
+        { "type": "p", "text": "The optics establishment said it would not work. The phase information, they argued, was supposedly lost the moment a photon entered a photomultiplier, and without phase you could not see fringes. But Hanbury Brown and Richard Twiss, his theoretician, did the experiment anyway, first on a tabletop mercury arc in 1956 and then on Sirius the same year. The signal was right where the spatial-coherence formula predicted. The function they were measuring was the second-order coherence:" },
+        { "type": "math", "tex": "g^{(2)}(d) = \\frac{\\langle I_1 I_2 \\rangle}{\\langle I_1 \\rangle \\langle I_2 \\rangle} = 1 + |\\gamma(d)|^{2}", "display": true, "caption": "g^(2) is the normalized correlation of the two detector intensities I_1 and I_2 at slit separation d. ⟨…⟩ denotes a time average over the integration window. γ(d) is the same first-order coherence function whose magnitude is the visibility V from section 3. Crucially, the correlation depends on |γ|², so it survives even after the absolute phase between the two detectors has been lost." },
+        { "type": "p", "text": "At zero separation the correlation rises to 2: photons from a thermal source arrive in clumps, twice as likely to come together as Poisson statistics would predict. Edward Purcell at Harvard explained the bunching as classical wave intensity beating; Roy Glauber, in 1963, gave it a fully quantum description that earned him a Nobel Prize forty years later. The same g²(0) = 2 telltale, by the way, distinguishes thermal light from a laser, which has g²(0) = 1, perfectly Poissonian. The dim glow of a star and the sharp pencil of a HeNe are different not just in brightness but in the very statistics of their photons." }
+      ],
+      "quiz": {
+        "question": "A free-running multi-mode helium-neon laser has a coherence length of about 20 cm, similar to a low-pressure sodium lamp's. The two sources can look almost identical in a Michelson interferometer at moderate path differences. What does the Hanbury Brown and Twiss intensity-correlation experiment measure that distinguishes them?",
+        "options": [
+          "The first-order coherence γ(d), which is the visibility of fringes",
+          "The second-order coherence g²(0); it equals 2 for the thermal lamp and 1 for the laser",
+          "The wavelength stability over time, which is higher for the laser",
+          "The polarization purity, which is higher for the laser"
+        ],
+        "correctIndex": 1,
+        "explanation": "Michelson interferometry tests the first-order coherence γ(d), how predictable the phase is over a path difference d. By that measure a multi-mode HeNe laser and a sodium lamp can be very similar. Hanbury Brown and Twiss looks at second-order coherence, the correlation of the intensity fluctuations at two detectors. A thermal source bunches its photons, giving g²(0) = 2; a coherent laser does not, giving g²(0) = 1. This is a deeper signature of the source than its phase memory, and it is the reason the technique started a whole new field, quantum optics. Options 3 and 4 are real differences between the two sources but not what HBT measures; option 1 is the quantity Michelson interferometry already covers."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The laser that listens for gravitational waves",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "When Theodore Maiman fired the first ruby laser in May 1960, he had built a light source whose coherence properties were in a class by themselves. The ruby laser's bandwidth was a few tenths of a nanometer at 694 nm, giving a coherence length of order a centimeter. Modest by today's standards, but already five orders of magnitude beyond a thermal source. By the 1970s, frequency-stabilized helium-neon lasers had reached coherence lengths of hundreds of meters. By the 2000s, lasers locked to ultra-stable cavities had passed 10⁵ km, halfway to the Moon." },
+        { "type": "p", "text": "LIGO's pre-stabilized laser, the workhorse at the heart of the gravitational-wave detectors at Hanford and Livingston, runs at 1064 nm with an in-loop linewidth below 1 Hz. Its coherence length is comfortably past the distance to the Moon. The arms of the interferometer are 4 km long, and the light bounces inside a Fabry-Perot cavity in each arm about 280 times before being recombined, for an effective stored optical path of roughly 1100 km. The laser's coherence is six orders of magnitude longer than the longest path it ever has to remember." },
+        { "type": "p", "text": "That headroom is what the measurement spends. LIGO registers a phase shift of around 10⁻¹¹ radians, induced by a length change of 10⁻¹⁸ m, a thousandth of the diameter of a proton, in each arm. To see a phase shift that small, every other phase in the system has to be predictable to better than that. Coherence is no longer a topic in optics; it is the load-bearing physical property of the instrument. The detection of GW150914 on 14 September 2015 was, among many other things, two beams from a 100-watt laser agreeing about phase across a kilometer-scale interferometer at the level of one part in 10¹¹. The same business of comparing two paths that Young set up on his benchtop in 1801 had become, two centuries later, the way humans hear black holes collide." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Sunlight has a coherence length of about 1 μm and the sun has an angular diameter of about 0.5° as seen from Earth. To produce visible interference fringes from sunlight on a screen behind two slits 1 mm apart, you have to engineer the light. Which combination of fixes is necessary, and why?",
+    "options": [
+      "A pinhole or single-slit prefilter to shrink the effective angular size and extend spatial coherence; and a narrowband color filter to shrink the bandwidth and extend temporal coherence",
+      "A brighter source and a wider bandpass; the fringes are dim only because sunlight is weak",
+      "A laser only; sunlight cannot be made to interfere by any classical means",
+      "A polarizing filter; the issue is that sunlight is unpolarized and polarized waves interfere where unpolarized waves do not"
+    ],
+    "correctIndex": 0,
+    "explanation": "Two coherence conditions have to be met, and they are independent. The 1 mm slit spacing is far larger than the spatial coherence length of raw sunlight at the slits (about 60 μm), so the wavefront across the slits is uncorrelated; the sun is too big on the sky. A pinhole or single-slit prefilter reduces the effective angular size and extends ℓ_s past the slit separation. Separately, the path difference at any non-central fringe will quickly exceed the 1 μm temporal coherence length of unfiltered white light, so even with the spatial fix only the central fringe survives; a narrowband color filter extends ℓ_c and brings out higher orders. Option 2 confuses brightness with coherence. Option 3 is wrong because Young saw his fringes with sunlight (and lasers did not exist for another 159 years). Option 4 invokes a real property of light that has nothing to do with the failure mode here; unpolarized light interferes perfectly well, polarization just adds an extra averaging when the two beams have orthogonal components."
+  },
+  "suggestedNodes": [
+    {
+      "id": "stimulated_emission",
+      "label": "Stim. emission",
+      "subtitle": "the laser engine",
+      "edgeType": "extends"
+    },
+    {
+      "id": "michelson_interferometer",
+      "label": "Michelson",
+      "subtitle": "interferometer",
+      "edgeType": "applied"
+    },
+    {
+      "id": "photon_bunching",
+      "label": "Photon bunch",
+      "subtitle": "g²(0) = 2",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-08T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": ["interference_diffraction", "wavelength", "wave_particle_duality"]
+  }
+}

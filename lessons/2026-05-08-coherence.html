@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spatial coherence and source angular size</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 88px; text-align: right;
+}
+.readout {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+.readout .pin { color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+
+  <canvas id="plot" height="340" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);background:var(--bg-raised);"></canvas>
+
+  <div class="viz-slider-row">
+    <label>θ</label>
+    <input type="range" id="thSlider" min="0" max="1000" step="1" value="500" style="min-height:36px;">
+    <span class="value" id="thVal">0.59 arcmin</span>
+  </div>
+
+  <div class="readout" id="readout"></div>
+
+  <p class="viz-caption" style="margin-top:10px;">Two slits 0.3 mm apart at L = 1 m from a screen, illuminated at λ = 550 nm by a source whose angular diameter θ you set with the slider (logarithmic, 0.01 to 35 arcmin). The top panel plots the visibility envelope V(d) = |sinc(πdθ/λ)| as the slit separation d varies; the dot marks the actual d = 0.3 mm. The bottom panel shows the resulting fringe pattern on the screen, with peak-to-trough contrast equal to V. Drag right and the source widens; the spatial coherence length ℓ_s = λ/θ shrinks past d, and the fringes fade. Keep going and you reach the angular size of the sun (about 30 arcmin), well past several zeros of the sinc.</p>
+</div>
+
+<script>
+const LAMBDA = 550e-9;
+const L = 1.0;
+const D = 0.3e-3;
+const ARCMIN_TO_RAD = Math.PI / (180 * 60);
+
+const C_TEXT = "#1a1a18";
+const C_TEXT_MUTED = "#6b6359";
+const C_BORDER = "#b8ac8e";
+const C_ACCENT = "#9c3a22";
+
+const canvas = document.getElementById("plot");
+const slider = document.getElementById("thSlider");
+const thVal = document.getElementById("thVal");
+const readoutEl = document.getElementById("readout");
+
+function sliderToTheta(s) {
+  const tMin = Math.log(0.01);
+  const tMax = Math.log(35);
+  const u = s / 1000;
+  return Math.exp(tMin + u * (tMax - tMin));
+}
+
+function makeField(parent, label, pinned) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  const lbl = document.createElement("span");
+  lbl.className = "lbl";
+  lbl.textContent = label;
+  const val = document.createElement("span");
+  if (pinned) val.className = "pin";
+  wrap.appendChild(lbl);
+  wrap.appendChild(val);
+  parent.appendChild(wrap);
+  return val;
+}
+
+const fTh = makeField(readoutEl, "source θ");
+const fLs = makeField(readoutEl, "spatial coh. ℓ_s = λ/θ");
+const fD = makeField(readoutEl, "slit separation d");
+const fV = makeField(readoutEl, "fringe visibility V", true);
+
+function sinc(x) {
+  if (Math.abs(x) < 1e-9) return 1;
+  return Math.sin(x) / x;
+}
+
+function visibility(thRad, dVal) {
+  return Math.abs(sinc(Math.PI * dVal * thRad / LAMBDA));
+}
+
+function fmtTheta(t) {
+  return t < 1 ? t.toFixed(3) + " arcmin" : t.toFixed(2) + " arcmin";
+}
+
+function draw() {
+  const sVal = parseFloat(slider.value);
+  const thArcmin = sliderToTheta(sVal);
+  const thRad = thArcmin * ARCMIN_TO_RAD;
+  thVal.textContent = fmtTheta(thArcmin);
+
+  const W = canvas.offsetWidth || 600;
+  canvas.width = W;
+  const H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const padL = 50, padR = 14;
+  const topH = 130;
+  const gap = 28;
+  const botH = H - 14 - topH - gap - 30;
+  const topY = 14;
+  const botY = topY + topH + gap;
+  const plotW = W - padL - padR;
+
+  // ===== TOP: V(d) envelope =====
+  const D_MAX = 3.0e-3;
+  function dToPx(dM) { return padL + plotW * dM / D_MAX; }
+  function vToPx(v)  { return topY + topH - v * topH; }
+
+  ctx.strokeStyle = C_BORDER;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, topY);
+  ctx.lineTo(padL, topY + topH);
+  ctx.lineTo(padL + plotW, topY + topH);
+  ctx.stroke();
+
+  ctx.strokeStyle = C_ACCENT;
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  const samples = Math.max(360, Math.floor(plotW));
+  for (let i = 0; i <= samples; i++) {
+    const dM = (i / samples) * D_MAX;
+    const v = visibility(thRad, dM);
+    const x = dToPx(dM);
+    const y = vToPx(v);
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  const Vnow = visibility(thRad, D);
+  const markerX = dToPx(D);
+  const markerY = vToPx(Vnow);
+  ctx.strokeStyle = "rgba(156,58,34,0.55)";
+  ctx.setLineDash([3, 3]);
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(markerX, topY);
+  ctx.lineTo(markerX, topY + topH);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = C_ACCENT;
+  ctx.beginPath();
+  ctx.arc(markerX, markerY, 4, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = C_TEXT_MUTED;
+  ctx.font = "10px 'IBM Plex Mono', monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  for (let mm = 0; mm <= 3; mm += 0.5) {
+    const x = dToPx(mm * 1e-3);
+    ctx.strokeStyle = C_BORDER;
+    ctx.beginPath();
+    ctx.moveTo(x, topY + topH);
+    ctx.lineTo(x, topY + topH + 3);
+    ctx.stroke();
+    ctx.fillText(mm.toFixed(1), x, topY + topH + 5);
+  }
+  ctx.font = "italic 11px 'Source Serif 4', serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("slit separation d  (mm)", padL + plotW / 2, topY + topH + 16);
+
+  ctx.font = "10px 'IBM Plex Mono', monospace";
+  ctx.fillStyle = C_TEXT_MUTED;
+  ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
+  ctx.fillText("V=1", padL - 5, topY + 4);
+  ctx.fillText("0", padL - 5, topY + topH - 4);
+
+  ctx.font = "italic 11px 'Source Serif 4', serif";
+  ctx.fillStyle = C_TEXT;
+  ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillText("V(d) = |sinc(πd θ/λ)|", padL + 4, topY + 12);
+
+  ctx.fillStyle = C_ACCENT;
+  ctx.font = "10px 'IBM Plex Mono', monospace";
+  const labelLeft = markerX + 6 < W - 70;
+  ctx.textAlign = labelLeft ? "left" : "right";
+  ctx.fillText("d = 0.3 mm", labelLeft ? markerX + 6 : markerX - 6, markerY < topY + 18 ? markerY + 12 : markerY - 6);
+
+  // ===== BOTTOM: fringe pattern =====
+  const Y_MIN = -8e-3;
+  const Y_MAX =  8e-3;
+  function yToPx(yM) { return padL + plotW * (yM - Y_MIN) / (Y_MAX - Y_MIN); }
+  function iToPx(I) { return botY + botH - I * botH; }
+
+  ctx.strokeStyle = C_BORDER;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, botY);
+  ctx.lineTo(padL, botY + botH);
+  ctx.lineTo(padL + plotW, botY + botH);
+  ctx.stroke();
+
+  ctx.strokeStyle = "rgba(26,26,24,0.10)";
+  ctx.setLineDash([2, 3]);
+  ctx.beginPath();
+  ctx.moveTo(yToPx(0), botY);
+  ctx.lineTo(yToPx(0), botY + botH);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Envelope at peak and trough
+  const peakI = (1 + Vnow) / 2;
+  const troughI = (1 - Vnow) / 2;
+  ctx.strokeStyle = "rgba(196,117,88,0.55)";
+  ctx.setLineDash([2, 4]);
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, iToPx(peakI));
+  ctx.lineTo(padL + plotW, iToPx(peakI));
+  ctx.moveTo(padL, iToPx(troughI));
+  ctx.lineTo(padL + plotW, iToPx(troughI));
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Fringe curve
+  ctx.strokeStyle = C_ACCENT;
+  ctx.lineWidth = 1.7;
+  ctx.beginPath();
+  const fSamples = Math.max(360, Math.floor(plotW));
+  for (let i = 0; i <= fSamples; i++) {
+    const yM = Y_MIN + (Y_MAX - Y_MIN) * i / fSamples;
+    const phi = 2 * Math.PI * D * yM / (LAMBDA * L);
+    const I = 0.5 * (1 + Vnow * Math.cos(phi));
+    const x = padL + plotW * i / fSamples;
+    const y = iToPx(I);
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Bottom x-axis ticks
+  ctx.fillStyle = C_TEXT_MUTED;
+  ctx.font = "10px 'IBM Plex Mono', monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  for (let mm = -8; mm <= 8; mm += 4) {
+    const x = yToPx(mm * 1e-3);
+    ctx.strokeStyle = C_BORDER;
+    ctx.beginPath();
+    ctx.moveTo(x, botY + botH);
+    ctx.lineTo(x, botY + botH + 3);
+    ctx.stroke();
+    ctx.fillText(String(mm), x, botY + botH + 5);
+  }
+  ctx.font = "italic 11px 'Source Serif 4', serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("position on screen y  (mm)", padL + plotW / 2, botY + botH + 16);
+
+  ctx.font = "italic 11px 'Source Serif 4', serif";
+  ctx.fillStyle = C_TEXT;
+  ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillText("fringes I(y) on the screen", padL + 4, botY + 12);
+
+  ctx.font = "10px 'IBM Plex Mono', monospace";
+  ctx.fillStyle = C_TEXT_MUTED;
+  ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
+  ctx.fillText("max", padL - 5, botY + 4);
+  ctx.fillText("0", padL - 5, botY + botH - 4);
+
+  // ===== Readout =====
+  fTh.textContent = fmtTheta(thArcmin);
+  const lsM = LAMBDA / thRad;
+  fLs.textContent = lsM > 1
+    ? lsM.toFixed(2) + " m"
+    : lsM > 1e-3
+      ? (lsM * 1e3).toFixed(2) + " mm"
+      : (lsM * 1e6).toFixed(1) + " μm";
+  fD.textContent = "0.30 mm  (fixed)";
+  fV.textContent = Vnow.toFixed(3);
+}
+
+slider.addEventListener("input", draw);
+window.addEventListener("load", draw);
+setTimeout(draw, 80);
+</script>
+</body>
+</html>

@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-04 from interference-and-diffraction
-Coherence — what makes two beams able to interfere, laser vs lamp
 Diffraction gratings — many slits, the spectrometer at the heart of chemistry
 
 # auto-suggested 2026-05-04 from refraction
@@ -38,3 +37,8 @@ Metamerism — same color seen, different spectra emitted, the catch behind ever
 
 # auto-suggested 2026-05-07 from spectroscopy-basics
 Doppler spectroscopy — Δλ/λ = v/c, the radial-velocity trick that found the first exoplanets and that runs every redshift survey
+
+# auto-suggested 2026-05-08 from coherence
+Stimulated emission — Einstein 1917, the inverted population, the engine that runs every laser from Maiman onward
+Michelson interferometer — the splitter, two arms, and recombiner that measured the ether's nonexistence and now hears black holes collide
+Photon bunching — g²(0) = 2 for a thermal source, g²(0) = 1 for a laser, the statistic that distinguishes them when their first-order coherence cannot
