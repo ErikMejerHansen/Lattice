@@ -1,6 +1,3 @@
-# auto-suggested 2026-05-04 from interference-and-diffraction
-Diffraction gratings — many slits, the spectrometer at the heart of chemistry
-
 # auto-suggested 2026-05-04 from refraction
 Principle of least action — Maupertuis to Lagrange, optics generalized to mechanics
 Total internal reflection — fiber optics, the angle past which light cannot escape
@@ -42,3 +39,8 @@ Doppler spectroscopy — Δλ/λ = v/c, the radial-velocity trick that found the
 Stimulated emission — Einstein 1917, the inverted population, the engine that runs every laser from Maiman onward
 Michelson interferometer — the splitter, two arms, and recombiner that measured the ether's nonexistence and now hears black holes collide
 Photon bunching — g²(0) = 2 for a thermal source, g²(0) = 1 for a laser, the statistic that distinguishes them when their first-order coherence cannot
+
+# auto-suggested 2026-05-09 from diffraction-gratings
+Rowland grating — concave grating, no collimating lens, the Johns Hopkins ruling engine that pushed R past 80,000
+Echelle spectrograph — high-order, high-dispersion, the workhorse of stellar and exoplanet spectroscopy
+Helium discovery 1868 — Janssen and Lockyer, an element found in the corona twenty-seven years before being isolated on Earth

@@ -96,5 +96,12 @@
     "subtitle": "phase stability",
     "date": "2026-05-08",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-05-09-diffraction-gratings",
+    "title": "Diffraction gratings: the ruled lines that read the spectrum",
+    "subtitle": "λ/Δλ = mN",
+    "date": "2026-05-09",
+    "estimatedReadingMinutes": 23
   }
 ]

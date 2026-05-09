@@ -139,6 +139,16 @@
       "createdAt": "2026-05-08T08:00:00Z",
       "col": 1,
       "row": 6
+    },
+    {
+      "id": "diffraction_gratings",
+      "label": "Gratings",
+      "subtitle": "λ/Δλ = mN",
+      "state": "available",
+      "lesson": "2026-05-09-diffraction-gratings",
+      "createdAt": "2026-05-09T09:00:00Z",
+      "col": 0,
+      "row": 7
     }
   ],
   "edges": [
@@ -171,6 +181,9 @@
     { "from": "spectroscopy_basics", "to": "stellar_classification", "kind": "related" },
     { "from": "coherence", "to": "interference_diffraction", "kind": "extends" },
     { "from": "coherence", "to": "wavelength", "kind": "related" },
-    { "from": "coherence", "to": "wave_particle_duality", "kind": "related" }
+    { "from": "coherence", "to": "wave_particle_duality", "kind": "related" },
+    { "from": "diffraction_gratings", "to": "interference_diffraction", "kind": "extends" },
+    { "from": "diffraction_gratings", "to": "wavelength", "kind": "applied" },
+    { "from": "diffraction_gratings", "to": "spectroscopy_basics", "kind": "related" }
   ]
 }
