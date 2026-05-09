@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>N-slit interference</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz {
+  padding: 16px;
+  max-width: 620px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+svg { display: block; width: 100%; height: auto; }
+.axis-label {
+  font-size: 11px;
+  fill: var(--text-muted);
+  font-style: italic;
+  font-family: "Source Serif 4", "Iowan Old Style", Palatino, Georgia, serif;
+}
+.tick-label {
+  font-size: 10px;
+  fill: var(--text-muted);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+}
+.order-label {
+  font-size: 10px;
+  fill: var(--text-ghost);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+}
+.curve {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.fill {
+  fill: var(--accent);
+  fill-opacity: 0.10;
+  stroke: none;
+}
+.axis {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+.gridline {
+  stroke: var(--border);
+  stroke-width: 0.5;
+  stroke-dasharray: 2 2;
+}
+.fwhm-bar {
+  stroke: var(--accent-soft);
+  stroke-width: 1.2;
+}
+.fwhm-text {
+  font-size: 10px;
+  fill: var(--accent);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+}
+input[type=range] {
+  height: 36px;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <svg id="chart" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" aria-label="Multi-slit intensity vs phase"></svg>
+  <div class="viz-slider-row">
+    <label for="nSlider">N</label>
+    <input id="nSlider" type="range" min="2" max="30" value="2" step="1">
+    <span class="value" id="nValue">N = 2</span>
+  </div>
+  <div class="viz-caption">
+    Multi-slit intensity I(φ) / N² as a function of inter-slit phase φ = (2π d sin θ) / λ. Principal maxima sit at φ = 2πm (orders m = -1, 0, +1 shown), independent of N. Drag N from 2 (Young's two slits) to 30. Watch the principal maxima narrow (FWHM ∝ 1/N) and the secondary bumps between them flatten. By N = 20 the secondary maxima are below 1% of the principal heights. Extrapolate to Fraunhofer's 12,000 illuminated rulings, where the spikes have a width measured in arcseconds, and you have a spectrometer.
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+(function () {
+  const W = 600, H = 320;
+  const margin = { top: 22, right: 18, bottom: 46, left: 56 };
+  const innerW = W - margin.left - margin.right;
+  const innerH = H - margin.top - margin.bottom;
+
+  const svg = d3.select("#chart");
+  const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  const xMin = -3 * Math.PI;
+  const xMax =  3 * Math.PI;
+  const x = d3.scaleLinear().domain([xMin, xMax]).range([0, innerW]);
+  const y = d3.scaleLinear().domain([0, 1.05]).range([innerH, 0]);
+
+  const orderXs = [-2 * Math.PI, 0, 2 * Math.PI];
+  g.selectAll(".gridline-v")
+    .data(orderXs).enter().append("line")
+    .attr("class", "gridline")
+    .attr("x1", function (d) { return x(d); })
+    .attr("x2", function (d) { return x(d); })
+    .attr("y1", 0).attr("y2", innerH);
+
+  g.append("line").attr("class", "axis")
+    .attr("x1", 0).attr("x2", innerW)
+    .attr("y1", innerH).attr("y2", innerH);
+  g.append("line").attr("class", "axis")
+    .attr("x1", 0).attr("x2", 0)
+    .attr("y1", 0).attr("y2", innerH);
+
+  const xTicks = [
+    { v: -2 * Math.PI, t: "−2π" },
+    { v: -Math.PI,     t: "−π"  },
+    { v: 0,            t: "0"               },
+    { v:  Math.PI,     t: "π"          },
+    { v:  2 * Math.PI, t: "2π"         }
+  ];
+  g.selectAll(".x-tick")
+    .data(xTicks).enter().append("text")
+    .attr("class", "tick-label")
+    .attr("x", function (d) { return x(d.v); })
+    .attr("y", innerH + 14)
+    .attr("text-anchor", "middle")
+    .text(function (d) { return d.t; });
+
+  const orderLabels = [
+    { v: -2 * Math.PI, t: "m = −1" },
+    { v: 0,            t: "m = 0"        },
+    { v:  2 * Math.PI, t: "m = +1"       }
+  ];
+  g.selectAll(".order-label")
+    .data(orderLabels).enter().append("text")
+    .attr("class", "order-label")
+    .attr("x", function (d) { return x(d.v); })
+    .attr("y", -6)
+    .attr("text-anchor", "middle")
+    .text(function (d) { return d.t; });
+
+  const yTicks = [0, 0.25, 0.5, 0.75, 1.0];
+  g.selectAll(".y-tick")
+    .data(yTicks).enter().append("text")
+    .attr("class", "tick-label")
+    .attr("x", -8)
+    .attr("y", function (d) { return y(d) + 3; })
+    .attr("text-anchor", "end")
+    .text(function (d) { return d.toFixed(2); });
+
+  yTicks.forEach(function (yv) {
+    g.append("line").attr("class", "gridline")
+      .attr("x1", 0).attr("x2", innerW)
+      .attr("y1", y(yv)).attr("y2", y(yv));
+  });
+
+  g.append("text")
+    .attr("class", "axis-label")
+    .attr("x", innerW / 2)
+    .attr("y", innerH + 36)
+    .attr("text-anchor", "middle")
+    .text("inter-slit phase φ (radians)");
+
+  g.append("text")
+    .attr("class", "axis-label")
+    .attr("transform", "rotate(-90) translate(" + (-innerH / 2) + ", -42)")
+    .attr("text-anchor", "middle")
+    .text("intensity I(φ) / N²");
+
+  const fillPath = g.append("path").attr("class", "fill");
+  const linePath = g.append("path").attr("class", "curve");
+
+  const fwhmBar = g.append("line").attr("class", "fwhm-bar");
+  const fwhmText = g.append("text")
+    .attr("class", "fwhm-text")
+    .attr("text-anchor", "middle");
+
+  function intensity(phi, N) {
+    const den = Math.sin(phi / 2);
+    if (Math.abs(den) < 1e-7) return 1;
+    const r = Math.sin(N * phi / 2) / (N * den);
+    return r * r;
+  }
+
+  const SAMPLES = 2400;
+
+  function update(N) {
+    const data = new Array(SAMPLES + 1);
+    for (let i = 0; i <= SAMPLES; i++) {
+      const phi = xMin + (xMax - xMin) * i / SAMPLES;
+      data[i] = { phi: phi, I: intensity(phi, N) };
+    }
+    const line = d3.line()
+      .x(function (d) { return x(d.phi); })
+      .y(function (d) { return y(d.I); });
+
+    const area = d3.area()
+      .x(function (d) { return x(d.phi); })
+      .y0(y(0))
+      .y1(function (d) { return y(d.I); });
+
+    linePath.datum(data).attr("d", line);
+    fillPath.datum(data).attr("d", area);
+
+    // FWHM ~ 5.566 / N in φ units (sinc² half-power width)
+    const fwhmPhi = 5.566 / N;
+    const cx0 = x(-fwhmPhi / 2);
+    const cx1 = x( fwhmPhi / 2);
+    const yBar = y(0.5);
+    fwhmBar
+      .attr("x1", cx0).attr("x2", cx1)
+      .attr("y1", yBar).attr("y2", yBar);
+    fwhmText
+      .attr("x", x(0))
+      .attr("y", y(0.5) - 6)
+      .text("FWHM ≈ " + fwhmPhi.toFixed(2) + " rad");
+  }
+
+  const slider = document.getElementById("nSlider");
+  const nValue = document.getElementById("nValue");
+
+  function onInput() {
+    const N = +slider.value;
+    nValue.textContent = "N = " + N;
+    update(N);
+  }
+
+  slider.addEventListener("input", onInput);
+  onInput();
+})();
+</script>
+</body>
+</html>

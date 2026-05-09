@@ -1,0 +1,128 @@
+{
+  "slug": "2026-05-09-diffraction-gratings",
+  "title": "Diffraction gratings: the ruled lines that read the spectrum",
+  "node": {
+    "id": "diffraction_gratings",
+    "label": "Gratings",
+    "subtitle": "λ/Δλ = mN"
+  },
+  "intro": "Young's two-slit fringes are broad and gentle. Fraunhofer's grating of three thousand parallel lines, ruled in soot on glass with a diamond on a lead screw, produces fringes so narrow that a difference of one part in three thousand between two wavelengths puts them in different places on the screen. The same equation, d sin θ = mλ, governs both; what changes with the number of slits N is not where the maxima sit but how narrow they become. The grating is what turned the diffraction pattern of a curiosity into the spectrometer of a science.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. From two slits to a thousand",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "David Rittenhouse, in 1785, wound a single human hair between the threads of two finely-pitched screws, made a transmission grating of about a hundred hairs to the inch, and pointed it at a distant lamp. He saw what he expected: a smear of color displaced from the lamp on either side, like a prism's spectrum but at angles he could compute from the spacing of the hairs. He published the result in the Transactions of the American Philosophical Society and dropped the line of work. The technique sat unused for thirty-six years." },
+        { "type": "p", "text": "Joseph Fraunhofer was a Bavarian optician, working at a glassworks that supplied military telescopes. Around 1821 he set up a dividing engine to rule fine grooves into a flat glass surface with a diamond, achieving transmission gratings with 3,300 lines per inch. Illuminated by sunlight passing through a slit, these produced spectra crisp enough to show the dark absorption lines that now bear his name. He mapped 576 of them, lettered the strongest A through K, and used the grating equation to assign them absolute wavelengths in micrometers, the first absolute optical wavelength measurements ever made." },
+        { "type": "p", "text": "The leap was technological, not conceptual. The two-slit math from Young carried over directly: maxima at d sin θ = mλ, just at much smaller d and many more slits per beam. What was new was N, and what N bought, as the next sections will show, was sharpness. One particular Fraunhofer line near 587.49 nm, very close to the bright sodium D doublet at 589.0 and 589.6 nm, was distinguishable from sodium for the first time. Six decades later that single line would turn out to be the first sighting of helium." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The grating equation, refined",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The condition for a maximum on a grating is the same one Young wrote for two slits. Each adjacent pair of rulings must agree about phase, which happens when the path difference between them is a whole number of wavelengths:" },
+        { "type": "math", "tex": "d\\,\\sin\\theta_m = m\\,\\lambda", "display": true, "caption": "d is the grating spacing, the period between adjacent rulings. θ_m is the angle of the m-th order maximum, measured from the grating normal. m is an integer (0 is the un-deflected beam, ±1 are the first orders on either side, and so on). λ is the wavelength of the incident light. Reading aloud: 'the path difference d sin θ between adjacent slits is m wavelengths.'" },
+        { "type": "p", "text": "What is striking about the equation is what it does not contain. The number of slits N has dropped out. The slit width has dropped out. The grating equation locates each maximum but says nothing about how bright or how narrow it is. A grating with two slits, ten slits, or ten thousand slits all send 600 nm light to the same first-order angle, given the same line spacing d. The role of N is reserved for the next section." },
+        { "type": "p", "text": "Differentiating with respect to wavelength gives the angular dispersion:" },
+        { "type": "math", "tex": "\\frac{d\\theta}{d\\lambda} = \\frac{m}{d\\,\\cos\\theta}", "display": true, "caption": "dθ/dλ is the angular dispersion: how far apart in angle two nearby wavelengths land on the screen. m is the order, d the line spacing, θ the diffraction angle. Two ways to increase dispersion: work in higher order (larger m), or rule a finer grating (smaller d)." },
+        { "type": "p", "text": "Each knob costs something. Higher orders overlap, since third-order red can land at the same angle as second-order green and the wavelengths must be sorted by a pre-filter. Finer rulings are harder to manufacture and harder to illuminate fully, since the beam has to cover the whole face cleanly. Fraunhofer's choice of 3,300 lines per inch was a compromise his shop could just about hold." }
+      ],
+      "quiz": {
+        "question": "A grating with 6,000 lines per millimeter sends blue light farther from the central maximum than a grating with 600 lines per millimeter, at the same wavelength and order. Why?",
+        "options": [
+          "Higher line density gives larger angular dispersion: dθ/dλ = m/(d cos θ), so a smaller d means a larger dθ/dλ at fixed m and λ.",
+          "Higher line density gives more total transmitted light, which broadens the deflected beam.",
+          "Higher line density makes the central maximum shift away from the normal direction.",
+          "Higher line density allows higher orders, and higher orders are always farther from the center."
+        ],
+        "correctIndex": 0,
+        "explanation": "The grating equation says sin θ = mλ/d, so for fixed m and λ, smaller d means larger θ. Differentiating gives the dispersion dθ/dλ = m/(d cos θ), which grows when d shrinks. Option 4 is the most tempting wrong answer because the questioner often conflates 'more orders accessible' with 'a given order being farther out.' What the line density changes is the spread of any given order, not which orders exist. The central (m = 0) maximum is at θ = 0 regardless of d, so option 3 is also wrong."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The intensity formula and the sharpening with N",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Sum N coherent contributions from equally-spaced slits, each shifted by the same inter-slit phase φ = (2π d sin θ)/λ, and the intensity comes out as a single closed-form expression:" },
+        { "type": "math", "tex": "\\frac{I(\\phi)}{I_0} = \\left[\\frac{\\sin(N\\phi/2)}{\\sin(\\phi/2)}\\right]^{2}", "display": true, "caption": "I_0 is the intensity from a single slit at the same angle. φ = (2π d sin θ)/λ is the phase difference between waves from adjacent slits. N is the number of illuminated slits. The bracketed factor reaches the value N at φ = 2πm (numerator and denominator both vanish, but their ratio is finite), so the intensity at each principal maximum peaks at N²I_0. Between adjacent orders sit N − 2 secondary maxima, each much smaller than the principal peaks." },
+        { "type": "p", "text": "Two things change as N rises. The principal maxima at φ = 2πm sit at the same angles, governed only by the grating equation. But their angular full-width-at-half-maximum shrinks as 1/N, and their peak intensity grows as N². The secondary maxima between them, parasitic ripples that show up at any finite N, decay quickly: the largest is about 5% of a principal peak at N = 10, about 1% at N = 30, irrelevant by N = 1,000. The bookkeeping that adding more slits buys you is exactly the bookkeeping that turns a soft fringe pattern into a sharp line." },
+        { "type": "p", "text": "The viz below plots the multi-slit factor across one order on each side of the central maximum, with N as a slider you can drag from 2 (Young's two slits) to 30. Two slits give broad, lazy fringes that overlap. By N = 6 the principal maxima are crisp and the secondary bumps already visible. By N = 30 the pattern is a row of spikes, and you can extrapolate to Fraunhofer's 12,000 illuminated rulings, where the spikes have a width measured in arcseconds." },
+        { "type": "viz", "src": "2026-05-09-diffraction-gratings.html", "height": 380, "caption": "Multi-slit intensity I(φ)/N² as a function of inter-slit phase φ, normalized so the principal maxima hit 1. Drag N from 2 to 30 to watch the principal maxima narrow (FWHM ∝ 1/N) and the secondary bumps between them flatten out. Line positions stay where the grating equation puts them; line widths and brightness scale with N." },
+        { "type": "p", "text": "Two things follow. The location of each line is set by d alone; the width and brightness are set by N. These are independent knobs. That independence is what made the grating into a precision instrument: you can calibrate wavelengths from the d spacing of the grating and you can sharpen the lines by ruling more of them, without one disturbing the other." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Resolving power: the Rayleigh limit",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Two wavelengths λ and λ + Δλ produce principal maxima at slightly different angles. They are clearly separated when the gap between them exceeds the width of either one. Lord Rayleigh wrote down a clean criterion: the maximum of one line should sit at the first zero of the other. Applied to the multi-slit factor, whose first zero falls at φ = 2π/N from a principal maximum, the criterion gives a chromatic resolving power:" },
+        { "type": "math", "tex": "R = \\frac{\\lambda}{\\Delta\\lambda} = m\\,N", "display": true, "caption": "R is the chromatic resolving power: the smallest λ/Δλ the grating can distinguish under the Rayleigh criterion. m is the order being used, N is the total number of illuminated rulings. Reading aloud: 'in order m on a grating of N illuminated lines, you can resolve to one part in m·N.'" },
+        { "type": "p", "text": "The numbers tell the story of a century of instrument-building. Fraunhofer's 4-inch gratings, with 3,300 lines per inch and 12,000 illuminated lines, gave R = 12,000 in first order, enough to split the sodium D doublet at 0.6 nm separation and to resolve hundreds of solar absorption lines. Henry Rowland at Johns Hopkins, in the 1880s, drove the ruling engine to 14,000 lines per inch on 6-inch concave gratings, reaching R = 84,000 in first order. Modern echelle spectrographs work in 50th to 100th order on 100-mm gratings of modest line density, reaching R = 100,000 routinely; the radial-velocity machines that find exoplanets push past R = 200,000." },
+        { "type": "p", "text": "The formula R = mN comes with a price tag. It is the upper limit, achieved only when the entire grating face is illuminated by a parallel, monochromatic beam aligned to the rulings. Anything that cuts illumination cuts the effective N. Any aberration in the collimating optics blurs the signal. The art of building a great spectrograph is mostly the art of getting full, parallel, clean light onto the grating." }
+      ],
+      "quiz": {
+        "question": "A 25 mm wide grating has 1,200 lines per millimeter and is used in third order at 600 nm. What is the smallest wavelength separation it can resolve under the Rayleigh criterion?",
+        "options": [
+          "About 6 nm: roughly the bandwidth of the third order itself.",
+          "About 0.6 nm: set by the line spacing alone (1/d in the wavelength sense).",
+          "About 0.02 nm: set by the order alone, because higher orders give finer resolution.",
+          "About 0.0067 nm: R = mN = 3 × (1,200 × 25) = 90,000, so Δλ = λ/R = 600 / 90,000 nm."
+        ],
+        "correctIndex": 3,
+        "explanation": "Resolving power is R = mN. With m = 3 and N = 1,200 × 25 = 30,000 illuminated rulings, R = 90,000. The minimum resolvable Δλ is λ/R = 600 / 90,000 ≈ 0.0067 nm. The most tempting wrong answer is option 3, which uses only one of the two factors in R; both N and m matter, and they multiply. Options 1 and 2 confuse the resolving power with unrelated quantities (the order's bandwidth or the line spacing). The lesson: at fixed wavelength and order, R scales linearly with the number of illuminated rulings, so the size of the illuminated face matters as much as the line density."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Helium discovered in the sun",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "On 18 August 1868, Pierre Janssen sat on a hilltop near Guntur in southeastern India, watching a total solar eclipse through a spectroscope of his own design. Two flint-glass prisms fed an eyepiece. As the moon's limb crossed the photosphere, the prominences flared bright at the edge, and their emission lines drifted across the dispersing system. One yellow line, near 587.49 nm, refused to align with sodium; it sat about 1.5 nm to the violet side of the bright sodium D doublet. Janssen wrote to the French Academy that the sun had a yellow line that no laboratory possessed." },
+        { "type": "p", "text": "Norman Lockyer, in London, working with a higher-resolution Browning grating spectroscope, confirmed the line that same year and named it. He coined 'helium,' from Helios the sun god, and proposed that it belonged to a chemical element which did not exist on Earth. The geochemists were dubious. An element discovered in the sun before being found on Earth was a stretch. Lockyer was made a fellow of the Royal Society anyway. In 1895, William Ramsay in London was investigating clévéite, a uranium ore, looking for argon. He found instead a gas that gave the same yellow line at 587.49 nm in his Bunsen flame. The sun god's element was finally on Earth, twenty-seven years after its discovery in the corona." },
+        { "type": "p", "text": "What had made it possible was the angular dispersion of a grating, and nothing more. Fraunhofer's 1821 spectroscope was just barely good enough to distinguish the helium line from the bright sodium D doublet; Lockyer's Browning grating, with R near 5,000, was comfortably good enough. The grating had become the eye that read the chemistry of bodies humans cannot touch. Every later astrophysical statement about composition starts from the same fact: enough rulings, illuminated cleanly, distinguish wavelengths to one part in tens of thousands." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A handheld 50 mm spectroscope is built around a grating ruled at 1,800 lines per millimeter. It is used in first order at 580 nm. A learner asks whether it can resolve two emission lines separated by 0.05 nm at that wavelength. What is the answer, and why?",
+    "options": [
+      "Yes. R = mN = 1 × (1,800 × 50) = 90,000, while the doublet requires R = λ/Δλ = 580 / 0.05 = 11,600. The grating has nearly an order of magnitude more resolving power than needed.",
+      "No. R is only 1,800 in first order, the same as the line density.",
+      "Yes, but only because the wavelengths are so widely spaced; for any tighter pair the grating would fail.",
+      "No. Resolutions this fine require a prism; only echelle gratings of much higher order can do better."
+    ],
+    "correctIndex": 0,
+    "explanation": "The chromatic resolving power is R = mN, the order times the total number of illuminated rulings. With m = 1 and N = 1,800 × 50 = 90,000, R = 90,000, while the doublet requires R = 580/0.05 = 11,600. The grating has roughly an eight-times margin and easily resolves the pair. The most tempting wrong answer is option 4, because intuition often equates 'fine resolution' with prisms or specialized instruments. Historically that has been backwards since Lockyer: gratings overtook prisms for high-resolution work in the 1860s, and a 50-mm transmission grating like the one in a modern handheld spectroscope handily out-resolves any prism a learner is likely to encounter. Options 2 and 3 misread the formula: R uses both m and N, not one without the other."
+  },
+  "suggestedNodes": [
+    {
+      "id": "rowland_grating",
+      "label": "Rowland grat",
+      "subtitle": "concave grating",
+      "edgeType": "extends"
+    },
+    {
+      "id": "echelle_spectrograph",
+      "label": "Echelle",
+      "subtitle": "high-m, R≈10⁵",
+      "edgeType": "applied"
+    },
+    {
+      "id": "helium_discovery",
+      "label": "Helium 1868",
+      "subtitle": "sun before Earth",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-09T09:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": ["interference_diffraction", "wavelength", "spectroscopy_basics"]
+  }
+}
