@@ -149,6 +149,16 @@
       "createdAt": "2026-05-09T09:00:00Z",
       "col": 0,
       "row": 7
+    },
+    {
+      "id": "least_action",
+      "label": "Least action",
+      "subtitle": "δS = 0",
+      "state": "available",
+      "lesson": "2026-05-10-principle-of-least-action",
+      "createdAt": "2026-05-10T10:00:00Z",
+      "col": 1,
+      "row": 7
     }
   ],
   "edges": [
@@ -184,6 +194,9 @@
     { "from": "coherence", "to": "wave_particle_duality", "kind": "related" },
     { "from": "diffraction_gratings", "to": "interference_diffraction", "kind": "extends" },
     { "from": "diffraction_gratings", "to": "wavelength", "kind": "applied" },
-    { "from": "diffraction_gratings", "to": "spectroscopy_basics", "kind": "related" }
+    { "from": "diffraction_gratings", "to": "spectroscopy_basics", "kind": "related" },
+    { "from": "least_action", "to": "refraction", "kind": "extends" },
+    { "from": "least_action", "to": "wave_particle_duality", "kind": "related" },
+    { "from": "least_action", "to": "photon_energy", "kind": "related" }
   ]
 }

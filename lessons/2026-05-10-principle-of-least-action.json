@@ -1,0 +1,128 @@
+{
+  "slug": "2026-05-10-principle-of-least-action",
+  "title": "The principle of least action: from Fermat's lazy ray to Lagrange's equation",
+  "node": {
+    "id": "least_action",
+    "label": "Least action",
+    "subtitle": "δS = 0"
+  },
+  "intro": "In 1662 Pierre de Fermat claimed that light, traveling from one point to another, picks the path of least time. The claim was old in spirit (Hero of Alexandria had said the same about reflection a millennium and a half earlier) but new in reach: Snell's law of refraction fell out of it without any reference to corpuscles or pressure or the shape of the medium. Eighty-two years later Pierre-Louis Moreau de Maupertuis announced that matter, too, obeys a principle of least 'action,' the integral of momentum times path length. The leap from optics to mechanics was a guess, and it turned out to be one of the deepest guesses in physics.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Fermat's lazy light",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Hero of Alexandria, around 60 AD, noticed that a ray reflected from a mirror takes the shortest path; the proof was a clean geometric trick involving the virtual image behind the mirror, with no physics in it. Sixteen centuries later Pierre de Fermat sharpened the idea. In a 1662 letter to Cureau de la Chambre, replying to a critique of Descartes's optics, he proposed that light traveling between two points picks the path of least time. If c/n is the speed in a medium of refractive index n, the time along a candidate path is just the optical path length divided by c:" },
+        { "type": "math", "tex": "T = \\frac{1}{c} \\int n(s)\\, ds", "display": true, "caption": "T is the elapsed time along the path. n(s) is the refractive index at each point along the trajectory. ds is the arc-length element, c is the vacuum speed of light. Reading aloud: 'time is the integral of n along the path, divided by c.'" },
+        { "type": "p", "text": "Fermat showed that minimizing T across a flat interface between two media yields Snell's law, n_1 sin θ_1 = n_2 sin θ_2. Descartes had published the same law in 1637 from a corpuscular argument that assumed light moves faster in denser media. Fermat had assumed the opposite and arrived at the same equation. The disagreement could not be settled by experiment until Foucault measured light's slower speed in water in 1850; Fermat was right." },
+        { "type": "p", "text": "What made the result remarkable was not Snell's law itself but the form of the argument. Reflection at a mirror is local: the ray hits a point and bounces. Fermat's principle is global: out of every candidate path, light picks the one with least time. The ray seems to know about the whole route in advance, including parts it never traverses. Fermat himself shrugged at the metaphysics. The equation worked." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Maupertuis's leap: action for matter",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "On 15 April 1744, Pierre-Louis Moreau de Maupertuis presented to the Académie des sciences a paper titled 'Accord des différentes lois de la nature qui avoient jusqu'ici paru incompatibles.' What holds for light, he proposed, should also hold for matter. A particle moving between two points picks the path that minimizes a quantity he called 'action,' the integral of momentum along the trajectory:" },
+        { "type": "math", "tex": "S = \\int p \\cdot ds = \\int m\\, v\\, ds", "display": true, "caption": "S is the action, with units of energy × time (equivalently, momentum × length). p is the momentum, m the particle's mass, v its speed, ds the arc length along the path. Reading aloud: 'action is the integrated momentum along the trajectory.'" },
+        { "type": "p", "text": "Maupertuis dressed the principle in theology: nature, governed by an economical God, would never waste action. The dressing made enemies (Voltaire pilloried him in 'Histoire du docteur Akakia' a decade later) but the physics had real teeth. Within months Leonhard Euler, working independently, derived the same result rigorously for a single particle in a potential. Euler's 1744 'Methodus inveniendi lineas curvas' contained, in an appendix, the first systematic calculus of variations: a procedure for finding the function that makes an integral stationary." },
+        { "type": "p", "text": "The conceptual claim was bold. Newton's mechanics is local: at each instant a force determines an acceleration. Maupertuis's principle is global: out of all imaginable trajectories, the particle picks the one whose path-integrated action is least. Both descriptions, it would turn out, give exactly the same equations of motion. But the variational form generalized in ways the differential form could not, eventually reaching fields, constraints, relativity, and quantum mechanics." }
+      ],
+      "quiz": {
+        "question": "A particle moves freely (no forces, conserved energy) from point A to point B in a fixed total time T. According to the Maupertuis form of the action principle, S = ∫ m v ds, which path between A and B does it take?",
+        "options": [
+          "A straight line at constant speed: with energy conserved v is uniform, so action reduces to m v · L, and the path that minimizes length wins.",
+          "Any path is allowed, since with no forces every trajectory has the same energy.",
+          "The path that starts slow and ends fast, because ∫ v ds is smallest when v is small at the start.",
+          "The shortest path, regardless of speed: action depends on length alone."
+        ],
+        "correctIndex": 0,
+        "explanation": "Energy conservation fixes v at each point (it is constant when V = 0), so among the candidate paths the action is m v · L with v the same constant everywhere. Minimizing the action then reduces to minimizing the path length, and the straight line wins. The most tempting wrong answer is option 3, which mistakes ∫ m v ds for a quantity in which the speed profile is free to vary; but with energy conserved v is not a free knob, only the geometry of the path is. Options 2 and 4 misread the principle: action depends on both speed and length, and only one path among the candidates is stationary."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Lagrange and the modern form",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Forty-four years after Maupertuis, Joseph-Louis Lagrange published 'Mécanique analytique' (1788) and changed the statement decisively. Instead of integrating momentum along the spatial path (the Maupertuis form ∫ m v ds), Lagrange integrated a new quantity along the time axis. He defined the Lagrangian:" },
+        { "type": "math", "tex": "L(q, \\dot{q}, t) = T(\\dot{q}) - V(q)", "display": true, "caption": "L is the Lagrangian. T is the kinetic energy, written as a function of the generalized velocity q̇. V is the potential energy, a function of the generalized coordinate q. The minus sign is the part most learners stumble on; it is exactly what makes the variational principle below reduce to F = ma." },
+        { "type": "p", "text": "The minus sign is not a guess. If you assume Newton's equation m q̈ = −∂V/∂q comes from making some integral stationary, and you ask which integrand reproduces it, the answer falls out: it has to be T − V, not T + V. The plus combination is the total energy, which stays conserved; the minus combination is the thing whose time integral nature minimizes. Two different quantities, two different roles." },
+        { "type": "p", "text": "Lagrange's action is the time integral of L along a candidate trajectory between fixed endpoints in time. His principle is that the path nature actually follows is the one for which S is stationary against small variations:" },
+        { "type": "math", "tex": "S = \\int_{t_1}^{t_2} L(q, \\dot{q}, t)\\, dt", "display": true, "caption": "S is the action, in units of energy × time. The integral runs over time between fixed endpoints t_1 and t_2. q(t) is the candidate trajectory connecting q(t_1) to q(t_2). Reading aloud: 'action is the time integral of kinetic minus potential energy along the path.'" },
+        { "type": "p", "text": "The viz below holds a particle thrown straight up at t = 0 and constrained to land back at y = 0 at t = 2 s (with g = 10 m/s², m = 1 kg). It restricts candidate paths to a one-parameter family y_α(t) = α t (T − t), so each path is a different parabola; the slider varies α. Watch the action S(α) plotted in the lower panel; the minimum, where the trial parabola becomes the physical free-fall trajectory, sits at α = g/2 = 5 m/s." },
+        { "type": "viz", "src": "2026-05-10-principle-of-least-action.html", "height": 460, "caption": "Trial path y_α(t) = α t (T − t) plotted against time t (top panel). Drag α from 0 to 10 m/s; the dashed curve marks the physical trajectory at α = 5. The lower panel plots the action S(α) computed by integrating L = ½m·ẏ² − m g y along the trial parabola. Its minimum, at α = g/2, is the path Lagrange's principle picks out." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The Euler-Lagrange equation and Newton recovered",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Take Lagrange's claim seriously: among all paths q(t) connecting fixed endpoints in time, the physical trajectory is the one for which S is stationary against variations δq(t) that vanish at the endpoints. Demand δS = 0, expand to first order in δq, integrate by parts to peel the time derivative off δq̇, and the requirement reduces to a single equation that must hold at every instant along the path:" },
+        { "type": "math", "tex": "\\frac{d}{dt}\\left(\\frac{\\partial L}{\\partial \\dot{q}}\\right) = \\frac{\\partial L}{\\partial q}", "display": true, "caption": "The Euler-Lagrange equation. L is the Lagrangian, q a generalized coordinate, q̇ its time derivative. ∂L/∂q̇ is the conjugate momentum (mass times velocity for a free particle, angular momentum for an angular coordinate). ∂L/∂q is the generalized force. Reading aloud: 'rate of change of conjugate momentum equals generalized force.'" },
+        { "type": "p", "text": "For a particle in one dimension with L = ½m·ẋ² − V(x), the partial derivatives are ∂L/∂ẋ = m ẋ and ∂L/∂x = −dV/dx. Substituting into the Euler-Lagrange equation gives m ẍ = −dV/dx, which is exactly Newton's second law in the form F = ma with F = −dV/dx. Lagrange has not produced a new mechanics; he has re-derived Newton's, from a different starting point." },
+        { "type": "p", "text": "Two things changed by switching starting points. First, the choice of coordinate becomes free. Lagrange's q can be a Cartesian position, an angle, or any generalized coordinate that bakes in a constraint; the Euler-Lagrange equation in those coordinates has the same form, and the algebra that would have been brutal in x, y, z becomes routine. Second, the variational form generalizes naturally. Maxwell's equations come from extremizing a field Lagrangian; general relativity from extremizing the Einstein-Hilbert action; the Standard Model from extremizing its own Lagrangian. Newton's F = ma generalizes nowhere; Lagrange's δS = 0 generalizes everywhere." }
+      ],
+      "quiz": {
+        "question": "A bead slides on a frictionless wire bent into a vertical circle of radius R. Using the angle θ measured from the bottom of the circle as the coordinate, the Lagrangian is L = ½ m R² θ̇² − m g R (1 − cos θ). What equation of motion does the Euler-Lagrange procedure give?",
+        "options": [
+          "θ̈ = −(g/R) sin θ: the simple pendulum equation. The constraint to the wire is built into the choice of θ, so the wire's normal force never enters.",
+          "m R θ̈ = −m g sin θ + N, where N is the normal force the wire exerts on the bead.",
+          "θ̈ = (g/R) sin θ: the sign flips because of the cos θ in the potential.",
+          "θ̈ = −g sin θ: the radius R cancels because the bead is constrained to the wire."
+        ],
+        "correctIndex": 0,
+        "explanation": "Compute ∂L/∂θ̇ = m R² θ̇; its time derivative is m R² θ̈. Compute ∂L/∂θ = −m g R sin θ. Setting d/dt(∂L/∂θ̇) = ∂L/∂θ gives R² θ̈ = −g R sin θ, or θ̈ = −(g/R) sin θ, the standard pendulum equation. The most tempting wrong answer is option 2, which carries over the Newtonian habit of drawing the wire's normal force into the equation of motion. The Lagrangian approach is exactly what makes that force unnecessary: the constraint is baked into the coordinate θ, and constraint forces never appear. That is the practical reason Lagrangians replaced free-body diagrams in advanced mechanics."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Feynman's path integral: why nature minimizes at all",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Lagrange's principle works, but it is mysterious in the same way Fermat's was. How does a particle, at the moment it leaves point A, know which path will minimize the action between A and B? The trajectory seems to consult its own future. For two and a half centuries physicists used the principle and avoided the question. In 1942 Richard Feynman, in his Princeton dissertation under John Wheeler, gave the only honest answer the question has ever received. The particle does not pick one path. It takes all of them." },
+        { "type": "p", "text": "In Feynman's reformulation of quantum mechanics, the amplitude for a particle to go from A to B is a sum (an integral, really) over every conceivable path between them. Each path q(t) contributes a complex number of unit magnitude, e^(i S[q] / ℏ), where S[q] is the classical action evaluated along that path. Paths whose actions differ by much more than ℏ have phases that vary rapidly from one nearby path to the next; their contributions cancel by destructive interference. Only paths near a stationary point of S, where neighboring paths share roughly the same action, survive the cancellation. In the limit ℏ → 0, all that is left is the classical trajectory with δS = 0." },
+        { "type": "p", "text": "The classical principle of least action is therefore not a separate law of physics; it is what the quantum mechanics of small ℏ looks like from far away. Fermat's lazy ray, Maupertuis's economical particle, Lagrange's δS = 0, all describe the same effect: the constructive interference of quantum phases happens at stationary action. Once Feynman wrote down his path integral in the 1948 Reviews of Modern Physics paper, the question 'why does nature minimize action?' stopped being mysterious and started being a calculation. The variational principle physicists had been using since 1744 had finally earned its credentials." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A learner asks why, if Newton's F = ma and Lagrange's δS = 0 give the same equations of motion for classical particles, modern physics is built almost entirely on Lagrangians and almost not at all on free-body diagrams. Which answer captures the deepest reason?",
+    "options": [
+      "The variational form generalizes. Special relativity has a Lorentz-invariant action, general relativity has the Einstein-Hilbert action, every field theory in the Standard Model is specified by writing down its Lagrangian, and Feynman's path integral takes S, not F, as its starting point. F = ma generalizes nowhere; δS = 0 generalizes everywhere.",
+      "Newton's mechanics is wrong at small scales; Lagrangian mechanics is right.",
+      "Lagrangians are always mathematically simpler to write than free-body diagrams.",
+      "F = ma cannot be applied in three dimensions, while δS = 0 can."
+    ],
+    "correctIndex": 0,
+    "explanation": "For classical mechanics on flat space the two formulations are equivalent; neither is 'more right.' The reason physics is built on Lagrangians is that the variational form is the one that survives every generalization that mattered in the 20th century: relativistic invariance, field theory, quantum mechanics via the path integral. The most tempting wrong answer is option 3, since Lagrangians often are simpler in advanced problems (the bead-on-a-wire from section 4 is one example); but in introductory problems Newton's law remains more direct, so convenience is a side effect rather than the deep reason. Option 2 is simply wrong (Newton's law is the classical limit of quantum mechanics, not a falsified theory), and option 4 misstates a basic fact about Newton's equation."
+  },
+  "suggestedNodes": [
+    {
+      "id": "lagrangian_mechanics",
+      "label": "Lagrangian",
+      "subtitle": "L = T − V",
+      "edgeType": "extends"
+    },
+    {
+      "id": "noethers_theorem",
+      "label": "Noether thm",
+      "subtitle": "symmetry → law",
+      "edgeType": "applied"
+    },
+    {
+      "id": "brachistochrone",
+      "label": "Brachistoch.",
+      "subtitle": "fastest descent",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-10T10:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": ["refraction", "wave_particle_duality", "photon_energy"]
+  }
+}
