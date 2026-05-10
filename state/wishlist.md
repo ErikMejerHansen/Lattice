@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-04 from refraction
-Principle of least action — Maupertuis to Lagrange, optics generalized to mechanics
 Total internal reflection — fiber optics, the angle past which light cannot escape
 Dispersion — n(λ), why prisms make rainbows, why old glass distorts color
 
@@ -44,3 +43,8 @@ Photon bunching — g²(0) = 2 for a thermal source, g²(0) = 1 for a laser, the
 Rowland grating — concave grating, no collimating lens, the Johns Hopkins ruling engine that pushed R past 80,000
 Echelle spectrograph — high-order, high-dispersion, the workhorse of stellar and exoplanet spectroscopy
 Helium discovery 1868 — Janssen and Lockyer, an element found in the corona twenty-seven years before being isolated on Earth
+
+# auto-suggested 2026-05-10 from principle-of-least-action
+Lagrangian mechanics — L = T − V, generalized coordinates, the framework that ate classical mechanics
+Noether's theorem — every continuous symmetry of the action gives a conservation law (time → energy, space → momentum)
+Brachistochrone — the cycloid that gets a bead from A to B in the least time, the variational problem that started it all

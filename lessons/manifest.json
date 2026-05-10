@@ -103,5 +103,12 @@
     "subtitle": "λ/Δλ = mN",
     "date": "2026-05-09",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-05-10-principle-of-least-action",
+    "title": "The principle of least action: from Fermat's lazy ray to Lagrange's equation",
+    "subtitle": "δS = 0",
+    "date": "2026-05-10",
+    "estimatedReadingMinutes": 23
   }
 ]
