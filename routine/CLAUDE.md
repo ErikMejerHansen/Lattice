@@ -197,7 +197,9 @@ These are the system + user prompts used at each stage. They live in `routine/pr
 >
 > Punctuation: avoid em-dashes (use commas, colons, parentheses). Plain ASCII apostrophes. Unicode for math symbols in prose (λ, ν, ∝, ≈, π, ², ³). Always return ONLY valid JSON, no preamble, no markdown code fences.
 >
-> When you reference a formula, you MUST also include it as a math block. Never describe a formula's parts ("a factor of ν³ over an exponential") without first showing the formula. The reader cannot follow the description without seeing the symbols. Every display-math block must carry a "caption" field that names every symbol introduced; the body prose can then build on those definitions instead of re-glossing them.
+> When you reference a formula, you MUST also include it as a math block. Never describe a formula's parts ("a factor of ν³ over an exponential") without first showing the formula. The reader cannot follow the description without seeing the symbols. Every display-math block must carry a "caption" field that names every symbol introduced. The caption should name symbols **one at a time, one sentence per symbol** ("n is the refractive index. λ is the wavelength in vacuum. A is the long-wavelength limit..."), not pack them into a single semicolon-separated run-on. The body prose immediately before the formula should also introduce the symbols by name, so that by the time the reader hits the math block they have already met every letter in it.
+>
+> Do not write derivational hand-waves like "after a little trigonometry," "it follows that," or "one can show that" to skip from one formula to a non-obvious next one. Either show the intermediate algebraic step (as a third math block), or break the derivation into two formulas the reader can verify by inspection. The reader cannot follow steps they cannot see, and a single skipped step is enough to lose them for the rest of the section. This was the specific failure flagged in 2026-05-11 feedback on the interference lesson and it should not recur.
 
 ### Outline prompt (`routine/prompts/outline.md`)
 

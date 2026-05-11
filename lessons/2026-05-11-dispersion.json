@@ -1,0 +1,204 @@
+{
+  "slug": "2026-05-11-dispersion",
+  "title": "Dispersion: why a prism makes a rainbow and a cheap telescope smears the stars",
+  "node": {
+    "id": "dispersion",
+    "label": "Dispersion",
+    "subtitle": "n = n(λ)"
+  },
+  "intro": "In the plague summer of 1666 a 23-year-old Isaac Newton drilled a hole in a window shutter, let a beam of sunlight cross his room, and put a triangular piece of glass in its way. The light came out the other side as a fan of colors. The fact that has been hiding behind every prism, every rainbow, every chromatic fringe on a cheap telescope is that the refractive index n of a transparent material is not one number but a slow function of wavelength: n = n(λ). That qualification, harmless-sounding, reorganizes what we thought we knew about refraction.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The experimentum crucis",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Triangular pieces of glass had been sold as toys for a century before Newton picked one up. Everyone knew they split a sunbeam into a fan of colors. The standard explanation, going back to Aristotle, was that the prism manufactured the colors itself, by some staining or weakening of pure white light. Red was light slightly darkened, violet was light deeply darkened, and so on along the scale. The prism was a chemist's instrument, working on the substance of the beam."
+        },
+        {
+          "type": "p",
+          "text": "Newton's contribution was to test that picture rather than accept it. In his Cambridge rooms (closed for the plague, he had gone home to Woolsthorpe) he let a sunbeam through a small hole, sent it through a first prism, and projected the oblong spectrum on a wall fifteen feet away. So far, ordinary. The new step was a second prism. He put a screen with a small aperture between the two so that only one color, say red, made it through. The pure red emerged from the second prism still red, refracted again at its own angle, and refused to split any further."
+        },
+        {
+          "type": "p",
+          "text": "He called the demonstration his experimentum crucis, the crucial experiment. The conclusion was forced. White sunlight is already a mixture, and a prism is simply a sorting machine that bends each component by its own particular angle. Red is not white-minus-something; it is a pure ingredient that travels through the second prism without changing. Robert Hooke disagreed at the Royal Society on temperament; Christiaan Huygens, building a careful wave theory, was unconvinced that colors had to be primitive ingredients. The fight took thirty years to settle."
+        },
+        {
+          "type": "p",
+          "text": "What Newton did not yet have the language to write down, and what we will write down in the next section, is the precise property of glass that does the sorting. The refractive index n that we have been treating as a single number for each material is in fact a slow function of the wavelength λ of the light passing through. That one qualification, n = n(λ), is what we call dispersion."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. n is a function of λ",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Snell's law, which we have been using so far, relates the angle of an incoming ray to the angle of the refracted ray through a single refractive index of each medium: n₁ sin θ₁ = n₂ sin θ₂. We tacitly treated n as a property of the material, full stop. The honest statement is that n is a property of the material at a given wavelength. Once we let n depend on λ, every quantity in the law inherits that dependence."
+        },
+        {
+          "type": "math",
+          "tex": "n_1(\\lambda)\\, \\sin\\theta_1 \\;=\\; n_2(\\lambda)\\, \\sin\\theta_2",
+          "display": true,
+          "caption": "n₁(λ) is the refractive index of the first medium, evaluated at the wavelength λ of the light. n₂(λ) is the refractive index of the second medium, evaluated at the same wavelength. θ₁ is the angle of the incoming ray, measured from the line perpendicular to the interface. θ₂ is the angle of the refracted ray, measured the same way. λ is the wavelength of the light, treated here as a label that follows the ray through the interface. Every other color of the same beam obeys the same equation with its own value of n on each side."
+        },
+        {
+          "type": "p",
+          "text": "How fast does n change with λ in ordinary glass? Slowly, but enough to matter. The first useful empirical fit, due to Augustin-Louis Cauchy in 1836, was a power series in 1/λ. The leading two terms already capture the visible band quite well."
+        },
+        {
+          "type": "math",
+          "tex": "n(\\lambda) \\;=\\; A \\;+\\; \\frac{B}{\\lambda^{2}}",
+          "display": true,
+          "caption": "n(λ) is the refractive index of the glass as a function of wavelength. λ is the wavelength of the light, in vacuum, expressed (for the constants below) in nanometres. A is a dimensionless constant, the value n would approach for very long wavelengths. B is a coefficient with units of length squared (so that B/λ² is dimensionless and adds to A). The formula says, plainly, that n grows as λ shrinks: short-wavelength light sees a larger n than long-wavelength light."
+        },
+        {
+          "type": "p",
+          "text": "Plug in the constants for BK7 crown glass, the workhorse of optics labs: A ≈ 1.5046 and B ≈ 4200 nm². At λ = 700 nm (red) Cauchy's formula gives n ≈ 1.5132. At λ = 400 nm (violet) it gives n ≈ 1.5309. A spread of about 1.2 percent in the index, not much in absolute terms. But push that small difference through Snell's law at the slanted faces of a prism and the colors fan apart by several degrees, exactly the spread Newton saw on his wall."
+        }
+      ],
+      "quiz": {
+        "question": "White light passes through a glass prism. Which color emerges most strongly bent from its original direction, and why?",
+        "options": [
+          "Red, because it has the longest wavelength and is most affected by refraction.",
+          "Yellow, because it sits in the middle of the visible spectrum and is the eye's reference.",
+          "Violet, because Cauchy's formula makes n largest at the shortest visible wavelengths and Snell's law then bends the ray hardest.",
+          "All colors bend by the same angle; the apparent fan is an artifact of scattering inside the glass."
+        ],
+        "correctIndex": 2,
+        "explanation": "Cauchy's formula n(λ) = A + B/λ² makes n larger at shorter λ. Snell's law, n₁ sin θ₁ = n₂ sin θ₂, with a larger n on the glass side, forces a smaller angle inside the glass and (after the second face) a larger total deviation of the ray. Violet has the shortest visible λ, so it sees the largest n in ordinary glass and is bent most. Red, with the longest λ, sees the smallest n and is bent least. Option A inverts the trend. Option B has no physical content. Option D mistakes the cause; scattering happens but does not produce the orderly fan Newton saw."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Why glass disperses",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Cauchy's formula fits the data. It does not explain why. The microscopic story had to wait for the late nineteenth century, when Hendrik Lorentz wrote down a model of matter as a collection of electrons bound to their parent atoms by springs. Each bound electron has a natural oscillation frequency, call it ω₀, set by how stiff the binding is. For the electrons in ordinary glass the strongest such resonances sit in the ultraviolet, just past the violet end of the visible band."
+        },
+        {
+          "type": "p",
+          "text": "When a light wave of angular frequency ω passes through the glass, its oscillating electric field pushes those electrons up and down. They respond as driven oscillators: the closer ω is to the natural frequency ω₀, the larger their wiggle, and the larger the induced polarization of the medium. The refractive index n is essentially the bookkeeping of that polarization. The Lorentz model, with one resonance to keep the algebra honest, gives n²(ω) the following shape:"
+        },
+        {
+          "type": "math",
+          "tex": "n^{2}(\\omega) \\;-\\; 1 \\;=\\; \\frac{N e^{2}\\,/\\,(\\varepsilon_{0}\\, m_{e})}{\\omega_{0}^{2}\\;-\\;\\omega^{2}}",
+          "display": true,
+          "caption": "n(ω) is the refractive index of the medium at the angular frequency ω of the passing light wave. N is the number of bound electrons per unit volume in the glass. e is the magnitude of the electron's charge. ε₀ is the permittivity of free space (a universal constant). m_e is the electron's mass. ω₀ is the natural oscillation frequency of the bound electron, set by how stiff its binding is (for ordinary glass, this lies in the ultraviolet). ω = 2πc/λ is the angular frequency of the light, related to wavelength λ by the speed of light c. The numerator is fixed by the material; the wavelength dependence lives entirely in the denominator (ω₀² − ω²)."
+        },
+        {
+          "type": "viz",
+          "src": "2026-05-11-dispersion.html",
+          "height": 460,
+          "caption": "A beam of white light enters the left face of a glass prism (apex angle adjustable with the upper slider, and material adjustable with the lower control). Inside the prism, the beam splits into a fan of monochromatic rays whose colors follow the Cauchy law n(λ) = A + B/λ² with the chosen A, B. A panel on the right plots n(λ) for the selected material across the visible band, with a marker on each color. Pull the apex angle wide and the fan opens; switch from crown to flint glass and the fan opens further still, because flint has a steeper Cauchy slope. The angular spread is exactly what Newton saw on his wall in 1666, redrawn live."
+        },
+        {
+          "type": "p",
+          "text": "Two regimes follow from that single denominator. As long as the light's ω stays below the UV resonance ω₀, the denominator (ω₀² − ω²) is positive and shrinks as ω rises toward ω₀. So n grows as ω rises, which is to say as λ falls. Short wavelengths get a larger index. This is normal dispersion, and it is what Cauchy's formula fits in the visible. Cross ω₀ and the denominator flips sign; n drops sharply as you sweep through the resonance, and the material absorbs there strongly, because the same resonant electrons that bend the wave also drink its energy. That sign-flipped regime is called anomalous dispersion and is hidden, for ordinary window glass, in the UV where the eye cannot see it."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The rainbow",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "René Descartes worked out the geometry of the rainbow in 1637, three decades before Newton's prism. He traced a single ray entering a spherical raindrop, refracting on the way in, reflecting once off the back wall, refracting again on the way out, and noticed that the angle between the outgoing ray and the original sunlight direction has a minimum near 138°, or equivalently 42° as measured from the antisolar point (the point in your shadow directly opposite the sun). Rays striking the drop near that impact parameter bunch up at the minimum-deviation angle; rays farther out spread thin. The bunching is why we see a bright arc at 42° and a darker sky just beyond."
+        },
+        {
+          "type": "p",
+          "text": "Descartes had to use a single n for water, and so his rainbow was a single bright arc with no colors. Newton supplied what was missing. The refractive index of water itself depends on wavelength, varying from n ≈ 1.331 at red wavelengths to n ≈ 1.344 at violet. The minimum-deviation calculation, repeated for each color separately, gives a slightly different rainbow angle for each. The angle of incidence i that produces the minimum is set by the following condition, derivable in two lines of calculus from the geometry:"
+        },
+        {
+          "type": "math",
+          "tex": "\\cos i_{\\min}(\\lambda) \\;=\\; \\sqrt{\\frac{n(\\lambda)^{2} \\;-\\; 1}{3}}",
+          "display": true,
+          "caption": "i_min(λ) is the angle of incidence (measured from the normal to the drop's surface) of the ray that emerges at the minimum-deviation angle, for light of wavelength λ. n(λ) is the refractive index of water at that wavelength. The factor 1/3 in the square root comes from one internal reflection in the drop (it would be 1/8 for the secondary rainbow's two internal reflections). The rainbow's angular radius around the antisolar point is then obtained by tracing the ray with this i_min through the standard geometry."
+        },
+        {
+          "type": "p",
+          "text": "Run the numbers. For red light at n = 1.331, the rainbow sits at 42.4° from the antisolar point. For violet at n = 1.344, it sits at 40.5°. The primary rainbow is the 1.9° strip between those two angles, with red on the outer edge of the arc (smaller deviation, bigger angle from the antisolar point) and violet on the inner edge. Above the bow the sky is darker than just below it, because no primary rainbow rays emerge in that strip. That dark zone, between the primary at 42° and the fainter secondary rainbow at 51°, is called Alexander's dark band, after Alexander of Aphrodisias who described it around 200 AD without knowing why. The secondary bow comes from two internal reflections inside the drop, and the extra reflection reverses the colors: violet on the outer edge, red on the inner."
+        }
+      ],
+      "quiz": {
+        "question": "You are looking at a primary rainbow on a wet afternoon. Which color sits on the outer (upper) edge of the arc, and why?",
+        "options": [
+          "Violet, because it has the largest n and is therefore bent most strongly inside the drop, ending up at the largest angle.",
+          "Red, because it has the smallest n, the smallest total deviation through the drop, and therefore the largest angle measured from the antisolar point.",
+          "Green, because it sits in the middle of the spectrum and the symmetric ones flank it.",
+          "The order is randomized by atmospheric scattering; no fixed color sits on a particular edge."
+        ],
+        "correctIndex": 1,
+        "explanation": "The rainbow's angle is measured from the antisolar point, the point in your shadow directly opposite the sun. The full ray path through a raindrop deviates the light by close to 180°; the smaller that deviation, the larger the angle from the antisolar point at which the bunched bright rays emerge. Red has the smallest n in water and so the smallest deviation, putting its bright minimum at about 42.4°. Violet has the larger n and the larger deviation, putting its minimum at 40.5°. Red therefore sits on the outer edge of the arc and violet on the inner edge. In a secondary rainbow the extra internal reflection reverses this ordering, which is one of the cleanest ways to tell the two bows apart."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The achromatic doublet",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Newton's prism work had a practical consequence he found discouraging. The same dispersion that makes a rainbow makes a refracting telescope smear stars into colored halos: red rays focus a little farther behind the lens than violet, and a point source becomes a small smudged disk with a colored fringe. Newton in fact gave up on lens telescopes for this reason and built the first reflector in 1668, sidestepping refraction altogether. His Opticks went further, asserting that any refracting medium would disperse the colors in strict proportion to how strongly it refracted them. If true, no combination of lenses could ever produce a sharp image."
+        },
+        {
+          "type": "p",
+          "text": "Newton was wrong on that one. Around 1730 the English barrister Chester Moor Hall noticed that two common kinds of optical glass, called crown and flint, had quite different ratios of refraction to dispersion. Crown glass (a soda-lime composition) refracted strongly but dispersed only moderately. Flint glass (with lead added, hence the higher index) dispersed more for the same refraction. Hall reasoned that if you cemented a converging crown-glass element to a weaker diverging flint-glass element, the focusing powers would partially cancel but the net would still be converging, while the color spreads, being in opposite senses, could be made to cancel almost exactly. John Dollond rediscovered the trick, patented it in 1758, and (after a long lawsuit Dollond won on priority of patent rather than priority of idea) sold the resulting two-element objectives by the thousand."
+        },
+        {
+          "type": "p",
+          "text": "The recipe sounds modest: pair two glasses with different dispersion to null the color smear. The consequence is enormous. The achromatic doublet is the lens behind every camera, every microscope, every pair of binoculars made in the last two and a half centuries. The same Hall-Dollond idea, generalized, runs every transatlantic fiber-optic cable: a 10-picosecond laser pulse contains a small spread of wavelengths, and a pure-silica fiber would let the red and violet edges of the pulse travel at slightly different speeds and arrive at the far end smeared into uselessness. The fix is to dope the silica with materials whose dispersion curves bend the opposite way, then engineer the total to be flat across the operating band. The bug Newton tried to escape by abandoning lenses became, once you knew you needed two materials, the lever for designing every precision optical system since."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A single-lens magnifying glass forms an image of the sun on a piece of paper. You notice a colored fringe at the edge of the disk: red on the outside, violet on the inside. You have two replacement elements available: a converging crown-glass lens (low dispersion) and a diverging flint-glass lens (high dispersion). You want a still-converging system with the fringe largely gone. Which arrangement does it, and what is the principle?",
+    "options": [
+      "Use only the diverging flint lens; its higher dispersion alone compensates for the absent crown.",
+      "Cement the converging crown lens to a (weaker) diverging flint lens so the net focal length is still positive, but the flint's color spread (acting as a diverging element) cancels the crown's color spread (acting as a converging element) at the focal plane. This is the achromatic doublet.",
+      "Stack two converging crown lenses; doubling the glass doubles the color spread but also halves the focal length, leaving the relative aberration unchanged.",
+      "Replace the lens with a prism oriented at minimum deviation; prisms by symmetry produce no chromatic effect."
+    ],
+    "correctIndex": 1,
+    "explanation": "This is the achromatic doublet Hall noticed and Dollond patented. A single converging lens focuses violet light slightly closer to the lens than red, producing the fringe you see. Add a weaker diverging flint element with higher dispersion: as a diverging lens its color spread has the opposite sign, but because flint disperses more per unit of focusing power, you can choose its strength so the two color spreads cancel while the combined focal length remains positive. The image is still focused, but the red and violet foci now nearly coincide. Option A removes the converging power. Option C doubles the glass but leaves the per-color ratio of focal lengths unchanged: aberrations scale together with focal length, so the relative smear stays the same. Option D mistakes a prism for an image former; at minimum deviation a prism still sends each color along its own outgoing direction, which is the whole point of dispersion."
+  },
+  "suggestedNodes": [
+    {
+      "id": "sellmeier_equation",
+      "label": "Sellmeier",
+      "subtitle": "n²(λ), broadband",
+      "edgeType": "extends"
+    },
+    {
+      "id": "chromatic_aberration",
+      "label": "Chromatic ab.",
+      "subtitle": "color smear",
+      "edgeType": "applied"
+    },
+    {
+      "id": "group_velocity",
+      "label": "Group vel.",
+      "subtitle": "vg vs vp",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-11T12:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": [
+      "refraction",
+      "wavelength",
+      "diffraction_gratings"
+    ]
+  }
+}
