@@ -1,0 +1,47 @@
+{
+  "lesson": "Interference and diffraction: when two beams of light produce darkness",
+  "highlights": [
+    {
+      "rating": "insight",
+      "section": 1,
+      "text": "Newton had been dead seventy-four years when Young challenged him, but his prestige still hung over English physics like incense in a cathedral. Newton's Opticks (1704) had pronounced light to be a stream of corpuscles, tiny particles that travelled in straight lines and refracted by attraction toward dense media. To contradict Newton in London at the turn of the nineteenth century was, in plain career terms, a kind of suicide. Young, a polymath physician with a sideline in Egyptian hieroglyphs, did it anyway."
+    },
+    {
+      "rating": "insight",
+      "section": 1,
+      "text": "The reception was vicious. Henry Brougham, writing anonymously in the Edinburgh Review, called Young's papers 'destitute of every species of merit' and accused him of seeking to subvert the tranquil reign of true philosophy. Young's reputation needed fifteen years to recover, and only then because Augustin Fresnel in France had repeated and extended the experiments until the wave theory was unavoidable. The story is a useful reminder that the scientific community is a community first and a discipline second."
+    },
+    {
+      "rating": "trouble",
+      "section": 2,
+      "tex": "\\psi_{\\text{tot}} = \\psi_1 + \\psi_2 = A[\\cos(\\omega t) + \\cos(\\omega t + \\Delta\\varphi)]"
+    },
+    {
+      "rating": "trouble",
+      "section": 2,
+      "tex": "I \\propto \\langle \\psi_{\\text{tot}}^2 \\rangle = 2 A^2 (1 + \\cos \\Delta\\varphi)"
+    },
+    {
+      "rating": "insight",
+      "section": 3,
+      "text": "Three things are immediately visible in this geometry. The smaller you make d, the wider the fringes spread. The longer the wavelength, the wider the fringes. And the central fringe (m = 0) sits dead on the axis no matter what λ is, because zero path difference always produces zero phase difference. The central peak is achromatic; the higher orders fan out into rainbows. Look at any fluorescent lamp through a CD and you will see exactly this pattern, smeared by the multitude of slits etched into the disc."
+    },
+    {
+      "rating": "insight",
+      "section": 4,
+      "text": "There is a wonderful historical detail. When Fresnel submitted his theory in 1818, the prize committee included Siméon Poisson, a confirmed Newtonian, who tried to demolish it by deriving a 'ridiculous' consequence: a circular obstacle should produce a bright spot at the center of its shadow, where wavelets from all around the rim meet in phase. The committee chair, François Arago, went into the lab and looked. The bright spot was there. The Fresnel theory won the prize. Poisson's spot still bears his name, even though he had set out to use it against the wave theory rather than for it."
+    },
+    {
+      "rating": "insight",
+      "section": 5,
+      "text": "In 1989 Akira Tonomura at Hitachi sent electrons one at a time toward a biprism (the electron equivalent of a double slit) at a rate so low that no two electrons could be in flight together. Each electron registered at the detector as a single bright dot, the unmistakable signature of a particle. After ten thousand dots, they had assembled themselves into the same fringe pattern Young had seen with sunlight. Each electron, somehow, knew about both slits. Block one slit and the fringes vanish. Try to detect which slit any electron used and the fringes vanish."
+    }
+  ],
+  "notes": [
+    {
+      "section": 2,
+      "heading": "2. Adding the waves themselves",
+      "text": "Terms of formula not described, meaning that I can’t follow along"
+    }
+  ]
+}

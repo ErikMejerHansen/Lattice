@@ -44,6 +44,11 @@ The viz file is referenced from inside the JSON via `{ "type": "viz", "src": "{s
 
 ## The run, step by step
 
+### 0. Reflect
+`routine/lesson_feedback` contains json files with the users feedback. Make sure you've seen these and adjust accordingly. 
+
+`routine/CLAUDE.md` is you - if you think your description needs updating based on the lesson feedback from the user do so and add it to your PR - you should still make sure the PR is merged so that the user get's his new lesson. If Erik/the user doesn't like the changes to the file he'll just revert them. 
+
 ### 1. Read state
 
 ```bash
@@ -67,6 +72,7 @@ Read the repo state to understand what is already published and what is queued:
 - `concept_graph.json` is the list of published-lesson nodes. The `state` field on each node is meaningless cloud-side (the learner's actual mastered/in_progress state lives in their browser's localStorage and is invisible to this routine). Use it as a list of "lessons that have been published," nothing more.
 - `wishlist.md` is the curated topic list, including auto-suggestion comments from prior runs.
 - `queue.md` is the learner-flagged confusion log (often empty).
+
 
 Compose the outline using the prompt in `routine/prompts/outline.md`. Inject the outline prompt's fields from these files: `{graphNodes}` from concept_graph.json (id and label per node), `{wishlist}` from wishlist.md, `{openQueue}` from queue.md. The outline must conform to the schema in `scripts/validate-lesson.mjs`.
 
