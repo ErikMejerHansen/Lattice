@@ -24,7 +24,7 @@
       "hasQuiz": true,
       "blocks": [
         { "type": "p", "text": "Planck found the right formula in October 1900 by interpolating between two limiting cases that were each partially correct. He then worked backward to discover what physical assumption could produce it. The assumption was this: an oscillator of frequency ν cannot hold any arbitrary amount of energy but only whole-number multiples of a minimum unit." },
-        { "type": "math", "tex": "E = h\\nu", "display": true },
+        { "type": "math", "tex": "E = h\\nu", "display": true, "caption": "E is the energy of a single quantum (a photon). ν is the frequency of the light. h is Planck's constant, about 6.626 × 10⁻³⁴ J·s. Read aloud: the energy of one packet of light is its frequency multiplied by a tiny fixed number." },
         { "type": "p", "text": "Here h is Planck's constant, approximately 6.626 × 10⁻³⁴ joule-seconds. It is an extraordinarily small number, which is why quantization is invisible at human scales: the minimum energy packet for a 100 Hz sound wave is about 10⁻³² joules, so the continuous approximation is exact to any measurement we could make. But for oscillators in the walls of a hot cavity, operating at frequencies of 10¹⁴ Hz and above, the packets become large enough to cut off the classical count of modes at short wavelengths and prevent the divergence." },
         { "type": "p", "text": "Planck's curve fit the data at every wavelength and every temperature. No other formula in the history of physics has fit its data so exactly over such a wide range. But Planck himself thought of the quantization as a mathematical trick. He spent the next decade trying to derive the same result without it." }
       ],
@@ -57,7 +57,7 @@
       "hasQuiz": true,
       "blocks": [
         { "type": "p", "text": "Robert Millikan spent nearly a decade building a photoelectric apparatus precise enough to test Einstein's formula. He found the relationship between the frequency of incoming light and the maximum kinetic energy of ejected electrons to be exactly linear:" },
-        { "type": "math", "tex": "KE_{\\max} = h\\nu - \\phi", "display": true },
+        { "type": "math", "tex": "KE_{\\max} = h\\nu - \\phi", "display": true, "caption": "KE_max is the maximum kinetic energy of an electron knocked loose from the metal. hν is the energy of the incoming photon (same h and ν as before). φ (phi, the work function) is the energy needed to free an electron from the metal's surface. Read aloud: the electron leaves with whatever energy the photon delivered minus what it cost to escape." },
         { "type": "p", "text": "The slope of the KE-versus-frequency line gave h directly. Millikan measured it at 6.57 × 10⁻³⁴ joule-seconds, within a percent of Planck's value extracted from the blackbody curve by a completely different method. His experimental conclusion in 1916: Einstein's photoelectric equation is confirmed to high precision. His stated opinion in the same paper: the underlying photon concept is probably wrong." },
         { "type": "p", "text": "Millikan's discomfort is instructive about how physics actually works. He believed light was a wave; Maxwell had proved it; interference patterns proved it; nothing about his experiment touched those facts. That light could be both a wave and a discrete particle struck him as incoherent. He was not wrong that it is strange. He was wrong that strangeness was grounds for rejection." }
       ],

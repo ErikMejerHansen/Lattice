@@ -110,5 +110,12 @@
     "subtitle": "δS = 0",
     "date": "2026-05-10",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-05-11-total-internal-reflection",
+    "title": "Total internal reflection: the angle that built the internet",
+    "subtitle": "sin θ_c = n₂/n₁",
+    "date": "2026-05-11",
+    "estimatedReadingMinutes": 22
   }
 ]
