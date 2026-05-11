@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.material-row {
+  display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;
+}
+.material-btn {
+  padding: 8px 14px; border: 1px solid var(--border-strong); background: var(--bg-raised);
+  cursor: pointer; font-family: inherit; color: var(--text-muted);
+  min-height: 36px; font-size: 13px;
+}
+.material-btn.active {
+  background: var(--accent); color: var(--bg-raised); border-color: var(--accent);
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 10px;
+  line-height: 1.7;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <div style="padding: 14px 18px;">
+    <svg id="svg" width="100%" viewBox="0 0 700 340" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="viz-slider-row">
+      <label>&alpha;</label>
+      <input type="range" id="apex" min="25" max="50" step="1" value="40">
+      <span class="value" id="apexval">40&deg;</span>
+    </div>
+    <div class="material-row">
+      <button class="material-btn" data-mat="silica">Fused silica</button>
+      <button class="material-btn active" data-mat="crown">Crown (BK7)</button>
+      <button class="material-btn" data-mat="flint">Light flint (LF5)</button>
+    </div>
+    <div class="readout" id="readout"></div>
+    <div class="viz-caption" style="margin-top: 12px;">
+      A horizontal beam of white light enters the left face of a glass prism. Inside, each wavelength refracts to its own angle by Snell's law and Cauchy's formula n(&lambda;) = A + B/&lambda;&sup2;. They exit the right face fanning into a spectrum that lands on a virtual screen at right. Widen the apex angle &alpha; to fan the colors farther apart. Switch material from fused silica (low dispersion) to BK7 crown (medium) to LF5 light flint (high) to watch the same beam spread more or less, even at the same apex. The readout shows n at the red and violet ends and the spread &Delta;n that drives the fan.
+    </div>
+  </div>
+</div>
+<script>
+const materials = {
+  silica: { A: 1.4577, B: 3540,  name: 'Fused silica' },
+  crown:  { A: 1.5046, B: 4200,  name: 'BK7 crown' },
+  flint:  { A: 1.5750, B: 8000,  name: 'LF5 light flint' }
+};
+
+const colors = [
+  { lam: 700, color: '#c81e1e' },
+  { lam: 640, color: '#e15a17' },
+  { lam: 580, color: '#cfa800' },
+  { lam: 540, color: '#3a9c2a' },
+  { lam: 490, color: '#1e7fb8' },
+  { lam: 450, color: '#2d28b0' },
+  { lam: 410, color: '#7a1e9c' }
+];
+
+let apexDeg = 40;
+let matKey = 'crown';
+
+const svg = document.getElementById('svg');
+const apexInput = document.getElementById('apex');
+const apexVal = document.getElementById('apexval');
+const readout = document.getElementById('readout');
+
+apexInput.addEventListener('input', () => {
+  apexDeg = +apexInput.value;
+  apexVal.textContent = apexDeg + '°';
+  render();
+});
+
+document.querySelectorAll('.material-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    matKey = btn.dataset.mat;
+    document.querySelectorAll('.material-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+  });
+});
+
+function nOf(lam, mat) { return mat.A + mat.B / (lam * lam); }
+
+function render() {
+  const mat = materials[matKey];
+  const alpha = apexDeg * Math.PI / 180;
+  const halfA = alpha / 2;
+
+  const apexY = 60;
+  const baseY = 280;
+  const cx = 250;
+  const height = baseY - apexY;
+  const halfBase = height * Math.tan(halfA);
+  const apex = { x: cx, y: apexY };
+  const leftV = { x: cx - halfBase, y: baseY };
+  const rightV = { x: cx + halfBase, y: baseY };
+
+  const tHit = 0.55;
+  const hit1 = {
+    x: apex.x + tHit * (leftV.x - apex.x),
+    y: apex.y + tHit * (leftV.y - apex.y)
+  };
+
+  const screenX = 660;
+  let parts = [];
+
+  // Soft prism fill
+  parts.push(
+    `<path d="M ${apex.x} ${apex.y} L ${leftV.x} ${leftV.y} L ${rightV.x} ${rightV.y} Z" ` +
+    `fill="#ece6d6" stroke="#8a7e62" stroke-width="1.4" opacity="0.55"/>`
+  );
+
+  // Subtle normal at left-face hit point (dashed)
+  const nLx = -Math.cos(halfA), nLy = -Math.sin(halfA);
+  parts.push(
+    `<line x1="${hit1.x - 22*nLx}" y1="${hit1.y - 22*nLy}" ` +
+    `x2="${hit1.x + 22*nLx}" y2="${hit1.y + 22*nLy}" ` +
+    `stroke="#a89e90" stroke-width="1" stroke-dasharray="3,3"/>`
+  );
+
+  // Incoming white beam (horizontal, hits hit1)
+  parts.push(
+    `<line x1="30" y1="${hit1.y}" x2="${hit1.x}" y2="${hit1.y}" ` +
+    `stroke="#1a1a18" stroke-width="2.6" opacity="0.75"/>`
+  );
+  parts.push(
+    `<text x="34" y="${hit1.y - 8}" font-family="Source Serif 4, serif" ` +
+    `font-size="12" fill="#6b6359" font-style="italic">white light</text>`
+  );
+
+  // Right-face outward normal
+  const nRx = Math.cos(halfA), nRy = -Math.sin(halfA);
+
+  // Direction of incoming ray
+  const inDx = 1, inDy = 0;
+
+  // For each color: refract at left face, traverse, refract at right face
+  let exitPoints = [];
+  colors.forEach(col => {
+    const n = nOf(col.lam, mat);
+    // Snell at left face: vector form. Incident = (1,0). Outward normal n_vec = (-cos halfA, -sin halfA).
+    // cos_i = -i . n_vec = cos halfA
+    // eta = 1/n
+    const eta1 = 1 / n;
+    const cosI1 = Math.cos(halfA);
+    const k1 = 1 - eta1*eta1*(1 - cosI1*cosI1);
+    if (k1 < 0) return;
+    const cosT1 = Math.sqrt(k1);
+    // t = eta * i + (eta * cos_i - cos_t) * n_vec
+    let tx = eta1 * inDx + (eta1 * cosI1 - cosT1) * nLx;
+    let ty = eta1 * inDy + (eta1 * cosI1 - cosT1) * nLy;
+
+    // Intersect this ray with right face (apex -> rightV)
+    const dxR = rightV.x - apex.x;
+    const dyR = rightV.y - apex.y;
+    const det = dxR * (-ty) - (-tx) * dyR;
+    if (Math.abs(det) < 1e-9) return;
+    const rx = hit1.x - apex.x;
+    const ry = hit1.y - apex.y;
+    const u = (dxR * ry - dyR * rx) / det;
+    if (u <= 0) return;
+    const hit2 = { x: hit1.x + u*tx, y: hit1.y + u*ty };
+
+    // Snell at right face: going glass -> air, eta = n
+    // n_vec is outward of right face = (cos halfA, -sin halfA), pointing into air (medium 1 from receiver's POV).
+    // For vector form, normal must point INTO the medium the ray came FROM (glass). So use inward normal of right face.
+    const nRix = -nRx, nRiy = -nRy;
+    const cosI2 = -(tx*nRix + ty*nRiy);
+    if (cosI2 <= 0) return;
+    const eta2 = n;
+    const k2 = 1 - eta2*eta2*(1 - cosI2*cosI2);
+    if (k2 < 0) return; // total internal reflection
+    const cosT2 = Math.sqrt(k2);
+    const exDx = eta2 * tx + (eta2 * cosI2 - cosT2) * nRix;
+    const exDy = eta2 * ty + (eta2 * cosI2 - cosT2) * nRiy;
+
+    // Inside-glass ray (this color, slightly transparent)
+    parts.push(
+      `<line x1="${hit1.x}" y1="${hit1.y}" x2="${hit2.x}" y2="${hit2.y}" ` +
+      `stroke="${col.color}" stroke-width="1.4" opacity="0.85"/>`
+    );
+
+    // Outgoing ray to virtual screen at screenX
+    if (exDx > 0) {
+      const tOut = (screenX - hit2.x) / exDx;
+      const endX = hit2.x + tOut * exDx;
+      const endY = hit2.y + tOut * exDy;
+      parts.push(
+        `<line x1="${hit2.x}" y1="${hit2.y}" x2="${endX}" y2="${endY}" ` +
+        `stroke="${col.color}" stroke-width="2" opacity="0.92"/>`
+      );
+      parts.push(`<circle cx="${endX}" cy="${endY}" r="4.5" fill="${col.color}"/>`);
+      exitPoints.push({ y: endY, lam: col.lam, color: col.color });
+    }
+  });
+
+  // Virtual screen line
+  parts.push(
+    `<line x1="${screenX}" y1="40" x2="${screenX}" y2="320" ` +
+    `stroke="#b8ac8e" stroke-width="1" opacity="0.45" stroke-dasharray="4,4"/>`
+  );
+  parts.push(
+    `<text x="${screenX - 6}" y="34" font-family="Source Serif 4, serif" ` +
+    `font-size="11" fill="#6b6359" font-style="italic" text-anchor="end">screen</text>`
+  );
+
+  // Label apex angle inside prism
+  parts.push(
+    `<text x="${apex.x}" y="${apex.y - 8}" font-family="Source Serif 4, serif" ` +
+    `font-size="13" fill="#6b6359" font-style="italic" text-anchor="middle">&alpha; = ${apexDeg}&deg;</text>`
+  );
+
+  svg.innerHTML = parts.join('');
+
+  // Update readout text
+  const nRed = nOf(700, mat);
+  const nViolet = nOf(410, mat);
+  const dn = nViolet - nRed;
+  let spread = '';
+  if (exitPoints.length >= 2) {
+    const ys = exitPoints.map(p => p.y);
+    const dy = Math.max(...ys) - Math.min(...ys);
+    spread = `   fan on screen: ${dy.toFixed(1)} px`;
+  }
+  readout.innerHTML =
+    `${mat.name}: n(700 nm) = ${nRed.toFixed(4)}   n(410 nm) = ${nViolet.toFixed(4)}   ` +
+    `&Delta;n = ${dn.toFixed(4)}${spread}`;
+}
+
+render();
+</script>
+</body>
+</html>

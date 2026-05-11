@@ -1,6 +1,3 @@
-# auto-suggested 2026-05-04 from refraction
-Dispersion — n(λ), why prisms make rainbows, why old glass distorts color
-
 # auto-suggested 2026-05-05 from photoelectric-effect
 Compton scattering — photon momentum p = h/λ, the experiment that closed off the alternatives to the photon
 Work function — what binds electrons to a metal, surface chemistry, why some metals ionize easier than others
@@ -52,3 +49,8 @@ Brachistochrone — the cycloid that gets a bead from A to B in the least time, 
 Evanescent wave — the exp(-z/d) field that lives in the medium where no ray penetrates, and why a wavelength-thin gap can leak energy across it
 Numerical aperture — NA = √(n₁² − n₂²), the acceptance cone of a step-index fiber and why bigger NA is not always better
 Frustrated TIR — pressing two prisms within a wavelength: optical tunneling that beat Schrödinger to the idea by half a century
+
+# auto-suggested 2026-05-11 from dispersion
+Sellmeier equation — n²(λ) = 1 + Σ Bᵢλ²/(λ² − Cᵢ²), the multi-resonance refinement of Cauchy that fits glass across a broader band
+Chromatic aberration — why a single-element lens cannot focus all colors at one point, and how the achromatic doublet kills it
+Group velocity vs phase velocity — vg = vp − λ(dvp/dλ), why a wave packet in a dispersive medium moves at a different speed from its carrier

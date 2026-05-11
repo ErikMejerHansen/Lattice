@@ -117,5 +117,12 @@
     "subtitle": "sin θ_c = n₂/n₁",
     "date": "2026-05-11",
     "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-05-11-dispersion",
+    "title": "Dispersion: why a prism makes a rainbow and a cheap telescope smears the stars",
+    "subtitle": "n = n(λ)",
+    "date": "2026-05-11",
+    "estimatedReadingMinutes": 23
   }
 ]

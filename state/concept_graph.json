@@ -169,6 +169,16 @@
       "createdAt": "2026-05-11T09:30:00Z",
       "col": 0,
       "row": 8
+    },
+    {
+      "id": "dispersion",
+      "label": "Dispersion",
+      "subtitle": "n = n(λ)",
+      "state": "available",
+      "lesson": "2026-05-11-dispersion",
+      "createdAt": "2026-05-11T12:00:00Z",
+      "col": 1,
+      "row": 8
     }
   ],
   "edges": [
@@ -209,6 +219,9 @@
     { "from": "least_action", "to": "wave_particle_duality", "kind": "related" },
     { "from": "least_action", "to": "photon_energy", "kind": "related" },
     { "from": "total_internal_reflection", "to": "refraction", "kind": "extends" },
-    { "from": "total_internal_reflection", "to": "wavelength", "kind": "related" }
+    { "from": "total_internal_reflection", "to": "wavelength", "kind": "related" },
+    { "from": "dispersion", "to": "refraction", "kind": "extends" },
+    { "from": "dispersion", "to": "wavelength", "kind": "related" },
+    { "from": "dispersion", "to": "diffraction_gratings", "kind": "related" }
   ]
 }
