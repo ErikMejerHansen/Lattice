@@ -1,0 +1,126 @@
+{
+  "slug": "2026-05-11-total-internal-reflection",
+  "title": "Total internal reflection: the angle that built the internet",
+  "node": {
+    "id": "total_internal_reflection",
+    "label": "TIR",
+    "subtitle": "sin θ_c = n₂/n₁"
+  },
+  "intro": "Look up at the surface of a swimming pool from underneath. Directly above you the surface is a perfect window, but tilt your gaze toward the side of the pool and the surface becomes a mirror that gives back the tiled floor. There is an exact angle, measurable to four decimal places for clean water, past which no light at all escapes upward. Kepler noticed the effect in 1611 and let it lie. Three and a half centuries later, the same geometry, scaled down to a glass thread thinner than a human hair, is what the internet runs on.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The window that becomes a mirror",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Anyone who has swum underwater with their eyes open has felt the phenomenon without naming it. Above your head the surface is transparent, a window onto the sky and the diving board. Sweep your eyes toward the pool wall and somewhere on the way the window turns into a polished mirror, returning the tiled floor and your own pale legs. Past a sharp angle of view, no light from above arrives at all. The boundary is so clean that a clear pool at dusk shows two skies meeting in the middle, the real one overhead and a perfect reflected one along the surface." },
+        { "type": "p", "text": "Kepler described it in Dioptrice (1611) as a curiosity of denser media and moved on. Newton noted it in the Opticks (1704) and assigned it, with everything else he could not derive, to short-range corpuscular attractions. The clean treatment had to wait for Augustin Fresnel in the 1820s, who showed that the cutoff was exact: at the critical angle the refracted ray lies along the interface itself, and one degree past, the refracted ray simply does not exist." },
+        { "type": "p", "text": "What makes the effect so striking, and so useful, is that the cutoff depends only on the two refractive indices on either side of the boundary. Not on color, not on brightness, not on which way the light was polarized. The same geometric fact pins the angle at the bottom of a swimming pool, the sparkle of a cut diamond, and the loss budget of a fiber-optic cable running under the Atlantic." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The critical angle from Snell's law",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The derivation is immediate from Snell's law. A ray inside a medium of refractive index n₁ strikes an interface with a lighter medium of index n₂ < n₁ at angle θ₁ from the normal. The angle θ₂ in the second medium is set by:" },
+        { "type": "math", "tex": "n_1 \\sin\\theta_1 = n_2 \\sin\\theta_2", "display": true, "caption": "n₁ and n₂ are the refractive indices on either side of the interface; θ₁ is the angle of the incoming ray inside the denser medium, θ₂ is the angle of the outgoing ray in the lighter medium, both measured from the normal. Read aloud: the product n sin θ is conserved across the boundary, which is the same Snell's law as for refraction; total internal reflection is just what happens when this equation has no solution." },
+        { "type": "p", "text": "If n₁ > n₂, then sin θ₂ = (n₁/n₂) sin θ₁ is larger than sin θ₁. Push θ₁ up and sin θ₂ climbs faster, until at some θ₁ = θ_c the right-hand side hits 1 and θ₂ reaches 90°. The refracted ray is grazing the surface. The critical angle is set by the requirement sin θ_c · (n₁/n₂) = 1:" },
+        { "type": "math", "tex": "\\sin\\theta_c = \\frac{n_2}{n_1}", "display": true, "caption": "θ_c is the critical angle of incidence measured from the normal, inside the denser medium (index n₁). n₂ is the index of the medium on the other side of the boundary. Read aloud: the critical angle's sine is the ratio of the lighter index to the denser one. For water against air this is 1/1.33 ≈ 0.752, giving θ_c ≈ 48.6°." },
+        { "type": "p", "text": "Past θ_c, Snell's law would demand sin θ₂ > 1, which is geometrically impossible. There is no refracted ray. Every photon's worth of energy goes into the reflected ray, and the boundary returns 100% of the incident light. 'Total' is meant literally: unlike a silvered mirror, where a few percent is always lost to absorption in the metal, an idealized TIR interface absorbs nothing. It is the closest thing physics gives you to a perfect reflector, and it costs nothing to build." }
+      ],
+      "quiz": {
+        "question": "A diver in a freshwater pool (n = 1.33) looks up at the surface. At what angle from the vertical (the normal to the surface) does her view of the sky cut off and the surface become a mirror that shows the pool floor?",
+        "options": [
+          "About 48.6°",
+          "About 41.4°",
+          "About 24.4°",
+          "About 90° (only at grazing incidence)"
+        ],
+        "correctIndex": 0,
+        "explanation": "Apply sin θ_c = n₂/n₁ with n₁ = 1.33 (water) and n₂ = 1.00 (air). sin θ_c = 1/1.33 ≈ 0.752, so θ_c ≈ 48.6°. The most tempting wrong answer is 41.4°, the critical angle inside ordinary crown glass (n ≈ 1.50). It is a number people remember from school demonstrations using glass prisms and then mis-apply to water. 24.4° is for diamond (n ≈ 2.42), which is why faceted diamonds trap and re-emit incident light so well. 90° misreads the geometry: the critical angle is inside the denser medium, not the lighter one."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Colladon's light fountain",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "On a summer evening in Geneva in 1841, the engineer Jean-Daniel Colladon was lecturing on fluid dynamics. To make his curved water jet visible to the back of the auditorium he aimed a bright lantern at the source. The audience was startled to see the light bending along the jet itself, traveling around the parabola and emerging as a glowing fountain wherever the water broke up. Colladon had built, by accident, the first optical waveguide." },
+        { "type": "p", "text": "What he had stumbled on was repeated TIR. Light entering the jet at one end strikes the curved water-air boundary at a very glancing angle (well past 48.6°), reflects totally, crosses the jet, strikes the other side, reflects totally again, and so on. After hundreds of internal bounces the light has followed the water around its arc and exits where the jet breaks up into spray. None of the energy leaks into the air; the entire jet glows from end to end because the residual scattering inside the water is enough to make it visible to the eye." },
+        { "type": "viz", "src": "2026-05-11-total-internal-reflection.html", "height": 360, "caption": "A ray inside glass (n₁ = 1.50, bottom) strikes a glass-air interface (n₂ = 1.00). Drag the angle slider to vary θ₁. Below the critical angle, you see the refracted ray bending into the air; above it, the refracted ray vanishes and all the energy goes back into the reflected ray. The critical angle θ_c = arcsin(1/1.50) ≈ 41.8° is marked. Slide right past it and watch the air go dark." },
+        { "type": "p", "text": "Thirteen years later John Tyndall, at the Royal Institution in London, demonstrated Colladon's effect to a packed lecture hall using a horizontal jet of water and an arc lamp. The audience saw a thin rope of light running along the falling water across the stage, and the demonstration became a fixed feature of Victorian science evenings. The idea then sat for almost a century, because while water works as a waveguide, the loss per kilometer of even the clearest river is catastrophic. To carry a real telephone signal needed something water could not provide." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The hundred-year wait for fiber optics",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "By the 1950s glass fibers thin enough to act as optical waveguides existed, used in medical endoscopes that snaked light into stomachs and lungs. But they were short-haul devices. Send a beam in at one end of a meter-long bundle and roughly half emerged at the other end. Over a kilometer, the signal would attenuate by a factor of 10⁵⁰, hopeless. The trouble was not TIR; the trouble was that the glass itself was opaque to a tiny fraction of the light at every micrometer of travel, and after a kilometer the tiny fraction had multiplied into total loss." },
+        { "type": "p", "text": "Charles Kuen Kao, working at Standard Telecommunications Laboratories in Harlow, identified the cause in 1966. The intrinsic transparency of pure silica was about 20 dB/km at near-infrared wavelengths, a useful number for telecommunications. The 1000 dB/km of contemporary glass came almost entirely from impurities, especially iron, copper, and chromium, present at part-per-million levels. Kao's paper argued that if one could push trace metal contamination below a part per billion, the silica itself would let a signal survive tens of kilometers. He won the Nobel Prize for this in 2009, four decades after the calculation." },
+        { "type": "p", "text": "In 1970 a team at Corning (Maurer, Keck, Schultz) demonstrated exactly that: a 20 dB/km fiber, a thousand-fold improvement over commercial glass. Modern single-mode fiber is below 0.2 dB/km at 1550 nm: half the light still arrives after 15 kilometers, and amplifier-spaced long-haul links span oceans. The acceptance condition (which input rays will be trapped) is set by the numerical aperture:" },
+        { "type": "math", "tex": "\\text{NA} = \\sqrt{n_1^2 - n_2^2}", "display": true, "caption": "NA is the numerical aperture, a dimensionless number that sets the half-angle of the entry cone of rays that will undergo TIR inside the fiber. n₁ is the refractive index of the fiber core, n₂ of the cladding surrounding it. Read aloud: the larger the index contrast between core and cladding, the wider the cone of rays the fiber will accept. For a typical core (1.475) and cladding (1.450), NA ≈ 0.21 and the acceptance half-angle is about 12°." }
+      ],
+      "quiz": {
+        "question": "Charles Kao's 1966 paper argued that the attenuation of contemporary glass fibers (around 1000 dB/km) could be reduced by orders of magnitude. What was the single most important step his analysis identified as necessary?",
+        "options": [
+          "Replacing silica glass with a fundamentally different transparent material",
+          "Increasing the difference between core and cladding refractive indices",
+          "Removing trace transition-metal impurities (iron, copper, chromium) from the silica",
+          "Wrapping the fiber in a metal shield to suppress leakage of the evanescent field"
+        ],
+        "correctIndex": 2,
+        "explanation": "Kao computed that pure silica has an intrinsic attenuation near 20 dB/km, two orders of magnitude below contemporary practice. The bottleneck was not the material; it was sub-part-per-million transition-metal contamination absorbing along the path. Four years later Corning purified silica to under a part per billion of iron and demonstrated 20 dB/km, exactly as Kao had predicted. Option B improves the trapping (a larger acceptance cone) but does nothing about absorption inside the glass. Option D is meaningless: TIR carries no time-averaged energy into the cladding, so there is nothing for a metal shield to catch. Option A would have been a dead end, no rival material is competitive with purified silica at telecom wavelengths."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The leak that isn't a leak",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "At the level of geometric optics, TIR is total: zero energy crosses the boundary into the second medium. But Maxwell's equations are continuous, and the field cannot simply terminate at the interface. Match the boundary conditions carefully for an incident angle past θ_c and a surprising solution falls out. On the air side of the boundary there is still a wave, oscillating in the plane of the interface and decaying exponentially with depth into the air:" },
+        { "type": "math", "tex": "E(z) = E_0 \\, e^{-z/d}, \\qquad d = \\frac{\\lambda_0}{2\\pi \\sqrt{n_1^2 \\sin^2\\theta - n_2^2}}", "display": true, "caption": "E(z) is the amplitude of the evanescent field in the lighter medium, at depth z from the interface; E_0 is its value at the surface. λ_0 is the vacuum wavelength of the light, θ is the (super-critical) angle of incidence inside the denser medium, n₁ and n₂ are the two refractive indices. d is the decay length: the depth at which the field has dropped by a factor of e. Read aloud: there is a field on the air side even though no ray gets through, and its depth d is of order a wavelength." },
+        { "type": "p", "text": "The evanescent field carries no time-averaged energy across the boundary on its own, so TIR really is total in the ordinary sense. But the field is there. Bring a second piece of glass within a wavelength of the surface and the evanescent wave can drive a propagating wave inside it. Light tunnels across the gap, with an intensity that falls off exponentially with separation, and the first prism's reflection is no longer 100%. This is called frustrated TIR. Newton observed it without naming it in 1675 (the bright spot where a curved lens contacted a flat plate); modern proximity sensors and fingerprint readers use it; in the 1920s it gave Erwin Schrödinger his clearest classical analogy for the quantum tunneling that he was about to discover in atomic potential wells." },
+        { "type": "p", "text": "So the angle past which light cannot escape is, on closer inspection, the angle past which light cannot escape unless something is close enough to reach into the field that should not be there. TIR is total only as long as the second medium is alone with itself. Most of the time this distinction is invisible, and that is why fiber optics work and why diamonds sparkle and why a swimming pool ceiling is so cleanly silvered. But the leak that isn't a leak is detectable at the wavelength scale, and physics has a habit of putting its most important phenomena exactly where you assumed nothing was happening." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Two right-angle glass prisms (n = 1.50) are placed with their hypotenuses facing each other across a small gap. Light entering one prism strikes the hypotenuse at 45°, well past the critical angle 41.8°, and would normally undergo total internal reflection. Slowly press the prisms together. At what separation does a measurable amount of light begin appearing in the second prism, and which mechanism is responsible?",
+    "options": [
+      "Only when the prisms touch; at any nonzero gap, TIR is exactly 100% and no light crosses",
+      "When the gap is small compared with a wavelength (a few hundred nanometers); the evanescent field in the first prism drives a propagating wave in the second, an effect called frustrated TIR",
+      "When the gap drops below 1 mm; air at sub-mm scales develops anomalous transparency",
+      "Only above a frequency-dependent gap; this is a quantum effect with no classical analogue"
+    ],
+    "correctIndex": 1,
+    "explanation": "TIR generates an evanescent field on the air side that decays exponentially over a distance d ≈ λ/(2π√(n₁² sin²θ − n₂²)), of order a wavelength. Bring a second medium within that distance and the field has somewhere to deliver energy, so a propagating wave appears inside it; the first prism's reflection drops below 100% by the corresponding amount. This is frustrated TIR. Option A is geometric optics's answer and is wrong at the wavelength scale. Option C invents a property of air. Option D is the most tempting wrong answer because tunneling-like behavior feels quantum mechanical, but Maxwell's equations alone produce the effect; Schrödinger was inspired by it, not the other way around."
+  },
+  "suggestedNodes": [
+    {
+      "id": "evanescent_wave",
+      "label": "Evanescent",
+      "subtitle": "exp(-z/d) tail",
+      "edgeType": "extends"
+    },
+    {
+      "id": "numerical_aperture",
+      "label": "Num. aperture",
+      "subtitle": "NA = √(n₁²-n₂²)",
+      "edgeType": "applied"
+    },
+    {
+      "id": "frustrated_tir",
+      "label": "Frustrated TIR",
+      "subtitle": "tunneling light",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-11T09:30:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["refraction", "wavelength", "interference_diffraction"]
+  }
+}

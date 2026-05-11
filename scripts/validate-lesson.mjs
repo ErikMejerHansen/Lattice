@@ -73,7 +73,10 @@ function validateLesson(path) {
           if (b.type === 'math') {
             check(typeof b.tex === 'string', `sections[${i}].blocks[${j}].tex must be a string`);
             check(typeof b.display === 'boolean', `sections[${i}].blocks[${j}].display must be a boolean`);
-            if (b.caption !== undefined) {
+            if (b.display === true) {
+              check(typeof b.caption === 'string' && b.caption.length > 0,
+                `sections[${i}].blocks[${j}] is a display-math block and must include a non-empty "caption" naming every symbol introduced`);
+            } else if (b.caption !== undefined) {
               check(typeof b.caption === 'string', `sections[${i}].blocks[${j}].caption must be a string when present`);
             }
           }

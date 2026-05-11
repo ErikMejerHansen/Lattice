@@ -159,6 +159,16 @@
       "createdAt": "2026-05-10T10:00:00Z",
       "col": 1,
       "row": 7
+    },
+    {
+      "id": "total_internal_reflection",
+      "label": "TIR",
+      "subtitle": "sin θ_c = n₂/n₁",
+      "state": "available",
+      "lesson": "2026-05-11-total-internal-reflection",
+      "createdAt": "2026-05-11T09:30:00Z",
+      "col": 0,
+      "row": 8
     }
   ],
   "edges": [
@@ -197,6 +207,8 @@
     { "from": "diffraction_gratings", "to": "spectroscopy_basics", "kind": "related" },
     { "from": "least_action", "to": "refraction", "kind": "extends" },
     { "from": "least_action", "to": "wave_particle_duality", "kind": "related" },
-    { "from": "least_action", "to": "photon_energy", "kind": "related" }
+    { "from": "least_action", "to": "photon_energy", "kind": "related" },
+    { "from": "total_internal_reflection", "to": "refraction", "kind": "extends" },
+    { "from": "total_internal_reflection", "to": "wavelength", "kind": "related" }
   ]
 }

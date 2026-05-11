@@ -17,3 +17,4 @@
 2026-05-08T08:00Z  ok  coherence  5sec, 1 viz, 3 edges, 3 auto-suggestions; pushed to claude/funny-faraday-228lp per session branch policy (routine spec asks for main)
 2026-05-09T09:00Z  ok  diffraction-gratings  5sec, 1 viz, 3 edges, 3 auto-suggestions; pushed to claude/funny-faraday-OjEsS per session branch policy (routine spec asks for main)
 2026-05-10T10:00Z  ok  principle-of-least-action  5sec, 1 viz, 3 edges, 3 auto-suggestions; pushed to claude/funny-faraday-hittM per session branch policy (routine spec asks for main)
+2026-05-11T09:30Z  ok  total-internal-reflection  5sec, 1 viz, 2 edges, 3 auto-suggestions; acted on 2026-05-11 feedback by tightening scripts/validate-lesson.mjs to require captions on display math and backfilling captions on 7 prior lessons that previously lacked them; pushed to claude/brave-curie-yAUpg per session branch policy

@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-04 from refraction
-Total internal reflection — fiber optics, the angle past which light cannot escape
 Dispersion — n(λ), why prisms make rainbows, why old glass distorts color
 
 # auto-suggested 2026-05-05 from photoelectric-effect
@@ -48,3 +47,8 @@ Helium discovery 1868 — Janssen and Lockyer, an element found in the corona tw
 Lagrangian mechanics — L = T − V, generalized coordinates, the framework that ate classical mechanics
 Noether's theorem — every continuous symmetry of the action gives a conservation law (time → energy, space → momentum)
 Brachistochrone — the cycloid that gets a bead from A to B in the least time, the variational problem that started it all
+
+# auto-suggested 2026-05-11 from total-internal-reflection
+Evanescent wave — the exp(-z/d) field that lives in the medium where no ray penetrates, and why a wavelength-thin gap can leak energy across it
+Numerical aperture — NA = √(n₁² − n₂²), the acceptance cone of a step-index fiber and why bigger NA is not always better
+Frustrated TIR — pressing two prisms within a wavelength: optical tunneling that beat Schrödinger to the idea by half a century
