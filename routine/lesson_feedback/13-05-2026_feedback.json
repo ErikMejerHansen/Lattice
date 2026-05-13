@@ -1,0 +1,100 @@
+
+
+{
+  "lesson": "Refraction: how Fermat made light take the lazy way home",
+  "highlights": [
+    {
+      "rating": "insight",
+      "section": 1,
+      "text": "Hero of Alexandria, around 50 CE, had already proved one half of the puzzle. For a flat mirror he showed that the path light actually takes (the angle of incidence equal to the angle of reflection) is the shortest path between source and observer that touches the mirror. This was suggestive: light might be lazy. But reflection is the easy case, where the medium is the same on both sides and shortest path is also fastest path. Refraction, where light crosses between media, refused to give up its rule."
+    },
+    {
+      "rating": "insight",
+      "section": 1,
+      "text": "Ptolemy, around 150 CE, did the obvious experiment. He measured incidence and refraction angles between air, water, and glass, and tabulated them. He saw that for small angles the ratio θ₁/θ₂ was roughly constant, and for large angles it drifted, and he never figured out why. The error was in writing down the wrong quantity. The constancy is in the sines of the angles, not the angles themselves; for the small angles Ptolemy could measure cleanly the two are nearly identical, and the truth slipped past him. Sometimes a discovery waits not for a better experiment but for a better thing to measure."
+    },
+    {
+      "rating": "insight",
+      "section": 2,
+      "text": "The right thing to measure was first written down in Baghdad. In 984, Ibn Sahl, working in the House of Wisdom on a treatise about burning lenses, drew a diagram of a ray crossing a glass interface and labeled the geometry with a constant ratio that, in modern notation, is exactly the ratio of sines. His manuscript was rediscovered only in 1990, by which time European textbooks had been calling the rule Snell's law for three hundred years. Willebrord Snellius arrived at it in Leiden in 1621, never published, and was scooped by René Descartes, who put it in print in La Dioptrique in 1637 with no credit to Snell at all. Names stick by accident."
+    },
+    {
+      "rating": "insight",
+      "section": 2,
+      "tex": "n_1 \\sin\\theta_1 = n_2 \\sin\\theta_2"
+    },
+    {
+      "rating": "insight",
+      "section": 2,
+      "text": "The product n sin θ is conserved across the interface. Light going from a low-n medium into a higher-n medium bends toward the normal (θ₂ < θ₁); going the other way, it bends away. Push the angle far enough on the way out and sin θ₂ would have to exceed 1, which it cannot, and the light is reflected entirely back. That is the cleanest geometric fact to come out of Snell's law: total internal reflection, the principle that traps light inside fiber optic cables and keeps the modern internet running."
+    },
+    {
+      "rating": "insight",
+      "section": 3,
+      "text": "The intuition is the lifeguard. You stand on a beach and see a swimmer in distress out in the water. You can run on sand at ten meters per second and swim at two. The shortest path (a straight line) wastes too much time in the slow medium; the fastest path bends, putting more length on the sand and less in the water. The optimal crossing point is the one where, if you tried to shift it left or right by an inch, the time you saved on one side would exactly equal the time you lost on the other. That balance condition, written out in geometry, is Snell's law."
+    },
+    {
+      "rating": "insight",
+      "section": 4,
+      "text": "Fermat's derivation and Descartes's derivation gave the same final equation, but they disagreed about a measurable physical fact. For Fermat, light bending toward the normal in glass meant light was slower in glass: the ray spent less of its length in the slow medium, exactly as the lifeguard runs more on sand than in water. For Descartes (and later Newton, who built on him), light bending toward the normal meant light was faster in glass: the medium attracted the corpuscles perpendicular to the surface, speeding them up in the same way a ball rolling off a table accelerates downward at the edge."
+    },
+    {
+      "rating": "insight",
+      "section": 4,
+      "text": "Newton's particle theory and Huygens's wave theory thus made opposite predictions for v_glass / v_air. Newton said greater than one; Huygens, treating light as a disturbance whose wavefronts crowd together when they slow down, said less than one. Settling the argument required measuring the speed of light inside a piece of glass or water, an experiment which in the seventeenth century was simply not possible. Roemer had not yet measured the speed of light in air, let alone in a denser medium, and the question stayed open for almost two centuries."
+    },
+    {
+      "rating": "insight",
+      "section": 4,
+      "text": "The decisive measurement came in 1850. Léon Foucault, in Paris, set up a rotating-mirror apparatus and ran two parallel beams of light, one through air and one through a tube of water, and bounced them off a distant mirror back through the rotating one. The rotating mirror had moved a tiny amount during the round trip, and the angular displacement of the returning beam was a direct measure of how long the light had taken. The water beam came back having lagged the air beam by exactly the factor n_water = 1.33. Light is slower in dense media. Huygens won; Newton lost; and Fermat, who had asserted the answer two centuries earlier on the basis of a principle, was vindicated."
+    },
+    {
+      "rating": "insight",
+      "section": 5,
+      "text": "Fermat's principle has the unusual property of not feeling like a physics law at all. It says light somehow knows, before it sets out, which path will get it there fastest. That this kind of statement could be physics scandalized many of his contemporaries, and the unease never quite went away. Newton's laws are local: a ball rolls forward because of the forces on it right now. Fermat's principle is global: the path is selected as a whole, by comparison to alternatives. The two pictures are mathematically equivalent, as Euler later showed, but they read like different worlds."
+    },
+    {
+      "rating": "insight",
+      "section": 5,
+      "text": "Quantum mechanics gave the cleanest answer to the original puzzle. In Feynman's path-integral formulation, a particle does not, in fact, take the path of least time or least action. It takes every possible path simultaneously, with each path contributing a complex amplitude e^(iS/ℏ) where S is the action along that path. For most paths the phases cancel out by interference. Only near the path of stationary action do neighboring paths share roughly the same phase and add constructively, and what we see classically is the line where the contributions did not cancel. The bent stick in the bucket of water carries inside it the entire variational tradition: optics with Fermat, mechanics with Lagrange, the quantum world with Feynman, the same principle each time, larger every century."
+    }
+  ]
+}
+
+{
+  "lesson": "Stellar classification: the Harvard letters that hide a temperature scale",
+  "highlights": [
+    {
+      "rating": "insight",
+      "section": 1,
+      "text": "Mary Anna Draper, the widow of the astronomer Henry Draper, endowed a stellar spectroscopy program at Harvard in 1886. The plan was simple: photograph as many stellar spectra as possible, then sort them by what you saw. The 'sort them' step was the hard one. Pickering put Williamina Fleming in charge, then over the next decade hired Antonia Maury, Annie Jump Cannon, and dozens of others. They worked at 25 to 50 cents an hour, less than the men doing janitorial work in the same building, and they were the most accurate spectral classifiers anyone had ever assembled."
+    },
+    {
+      "rating": "insight",
+      "section": 2,
+      "text": "The mnemonic 'Oh Be A Fine Girl, Kiss Me' is apocryphally Cannon's own, more likely a backronym her students retrofitted to make the order memorable. The deeper point is that hydrogen line strength is not monotonic across her sequence: it climbs from O to A, peaks at A, and falls toward M. Whatever continuous parameter Cannon had stumbled onto, it could not be hydrogen content. It had to be something that pushed atoms into and out of different states across the sequence."
+    },
+    {
+      "rating": "insight",
+      "section": 4,
+      "text": "Plug in a class O star at T ≈ 30,000 K: λ_max ≈ 97 nm, deep in the ultraviolet. We see only the long-wavelength tail in visible light, which is why O and B stars look bluish-white. Plug in an M star at T ≈ 3,500 K: λ_max ≈ 830 nm, in the near-infrared, with the visible tail reading red-orange. The colors of stars across OBAFGKM are not a coincidence with the order. They are the order, viewed as a Wien peak walking across the visible window."
+    },
+    {
+      "rating": "insight",
+      "section": 4,
+      "text": "Two practical consequences follow. First, photometry (a broadband color measurement, e.g. B − V) can substitute for full spectroscopy when only a crude temperature is needed: B − V ≈ 0.0 puts a star near 9500 K, in class A. Second, two stars of identical luminosity but very different temperatures must have very different sizes, because the radiated flux per unit area scales as σT⁴. A red M giant has to be enormous to be as bright as a blue main-sequence B star, and that mismatch is what eventually pried the Hertzsprung-Russell diagram apart into giants, dwarfs, and main sequence."
+    },
+    {
+      "rating": "insight",
+      "section": 5,
+      "text": "Payne ran the calculation across the entire Harvard plate library. The temperatures came out beautifully: a tidy monotonic ladder, in agreement with Cannon's order. The abundances came out wrong in a way that startled her. Hydrogen was not a few percent of stellar matter, the way it was a few percent of Earth's crust. Hydrogen was, by number, more than 90 percent of every star she could analyze. Helium was most of the rest. The everyday elements (iron, silicon, carbon, oxygen) were trace contaminants by comparison."
+    }
+  ],
+  "notes": [
+    {
+      "section": 4,
+      "heading": "4. Reading temperature off color",
+      "text": "What is Herzsprung-Russell?"
+    }
+  ]
+}
