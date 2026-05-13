@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 10px;
+  line-height: 1.7;
+}
+.readout .v { color: var(--text); }
+.readout .lbl { color: var(--text-muted); }
+.legend {
+  font-size: 11px; color: var(--text-muted); margin-top: 8px;
+  display: flex; gap: 14px; flex-wrap: wrap;
+}
+.legend .swatch {
+  display: inline-block; width: 18px; height: 2px; vertical-align: middle;
+  margin-right: 5px; position: relative; top: -3px;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <div style="padding: 14px 18px;">
+    <svg id="svg" width="100%" viewBox="0 0 700 340" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <marker id="head-photon-in" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#9c3a22"/>
+        </marker>
+        <marker id="head-photon-out" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#c47558"/>
+        </marker>
+        <marker id="head-electron" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#1a1a18"/>
+        </marker>
+      </defs>
+      <g id="scene"></g>
+    </svg>
+    <div class="legend">
+      <span><span class="swatch" style="background:#9c3a22"></span>incoming photon p = h/&lambda;</span>
+      <span><span class="swatch" style="background:#c47558"></span>scattered photon p' = h/&lambda;'</span>
+      <span><span class="swatch" style="background:#1a1a18"></span>recoil electron p<sub>e</sub></span>
+    </div>
+    <div class="viz-slider-row">
+      <label>&lambda;</label>
+      <input type="range" id="lambda" min="10" max="200" step="1" value="71">
+      <span class="value" id="lambdaval">71 pm</span>
+    </div>
+    <div class="viz-slider-row">
+      <label>&theta;</label>
+      <input type="range" id="theta" min="0" max="180" step="1" value="90">
+      <span class="value" id="thetaval">90&deg;</span>
+    </div>
+    <div class="readout" id="readout"></div>
+    <div class="viz-caption" style="margin-top: 12px;">
+      An incoming photon of wavelength &lambda; strikes a stationary electron at the origin. Drag the lower slider to choose the photon's scattering angle &theta;. The scattered wavelength follows &lambda;' = &lambda; + (h/m<sub>e</sub>c)(1 &minus; cos &theta;); the recoil electron's angle &phi; and kinetic energy fall out of energy and momentum conservation. The three arrows are drawn to scale in momentum. Sweep &theta; from 0&deg; to 180&deg; and watch &Delta;&lambda; trace the (1 &minus; cos &theta;) curve Compton saw in his graphite spectra.
+    </div>
+  </div>
+</div>
+<script>
+(function() {
+  // Constants
+  var LAMBDA_C = 2.4263102; // Compton wavelength of electron, in picometres
+  var HC_KEVPM = 1239.842;  // h*c in keV*pm (so E[keV] = HC_KEVPM / lambda[pm])
+  var MC2_KEV = 510.999;    // electron rest mass-energy in keV
+
+  // SVG geometry
+  var SVG_W = 700, SVG_H = 340;
+  var ORIGIN_X = 280, ORIGIN_Y = 170;
+  var IN_LEN = 130;   // pixel length of incoming photon arrow
+  // (other arrows scale relative to this by their momentum ratio)
+
+  var scene = document.getElementById('scene');
+  var lambdaSlider = document.getElementById('lambda');
+  var thetaSlider = document.getElementById('theta');
+  var lambdaVal = document.getElementById('lambdaval');
+  var thetaVal = document.getElementById('thetaval');
+  var readout = document.getElementById('readout');
+
+  function svgEl(name, attrs) {
+    var el = document.createElementNS('http://www.w3.org/2000/svg', name);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  function arrow(x1, y1, x2, y2, color, markerId, dash) {
+    var line = svgEl('line', {
+      x1: x1, y1: y1, x2: x2, y2: y2,
+      stroke: color, 'stroke-width': 2.5,
+      'marker-end': 'url(#' + markerId + ')'
+    });
+    if (dash) line.setAttribute('stroke-dasharray', dash);
+    return line;
+  }
+
+  function text(x, y, str, opts) {
+    var t = svgEl('text', {
+      x: x, y: y,
+      'font-family': 'Source Serif 4, Iowan Old Style, Palatino, Georgia, serif',
+      'font-style': 'italic',
+      'font-size': (opts && opts.size) || 13,
+      fill: (opts && opts.color) || '#1a1a18',
+      'text-anchor': (opts && opts.anchor) || 'start'
+    });
+    t.textContent = str;
+    return t;
+  }
+
+  function draw() {
+    while (scene.firstChild) scene.removeChild(scene.firstChild);
+
+    var lam = parseFloat(lambdaSlider.value);          // pm
+    var thetaDeg = parseFloat(thetaSlider.value);
+    var theta = thetaDeg * Math.PI / 180;
+
+    // Compton shift
+    var dLam = LAMBDA_C * (1 - Math.cos(theta));        // pm
+    var lamP = lam + dLam;                              // pm
+
+    // Energies
+    var E = HC_KEVPM / lam;                             // incoming photon energy, keV
+    var EP = HC_KEVPM / lamP;                           // scattered photon energy, keV
+    var T = E - EP;                                     // electron kinetic energy, keV
+
+    // Momentum magnitudes (in arbitrary units; we only need ratios)
+    // p = h/lambda, so p/p_in = lam/lambda
+    var p_in = 1;
+    var p_out = lam / lamP;
+    // p_e^2 = p^2 + p'^2 - 2 p p' cos(theta)
+    var pe2 = p_in*p_in + p_out*p_out - 2*p_in*p_out*Math.cos(theta);
+    var pe = Math.sqrt(Math.max(pe2, 0));
+
+    // Recoil angle phi (below x-axis if photon scatters above x-axis)
+    // tan(phi) = p_out * sin(theta) / (p_in - p_out * cos(theta))
+    var phi = 0;
+    if (pe > 1e-9) {
+      phi = Math.atan2(p_out * Math.sin(theta), p_in - p_out * Math.cos(theta));
+    }
+
+    // Pixel lengths (scale so incoming arrow = IN_LEN px)
+    var L_in = IN_LEN;
+    var L_out = IN_LEN * p_out;
+    var L_e = IN_LEN * pe;
+
+    // Vertical axis: SVG y is down. We want scattered photon ABOVE the x-axis
+    // (angle theta measured counterclockwise from +x in math, so y = -sin(theta) in SVG).
+    var ox = ORIGIN_X, oy = ORIGIN_Y;
+
+    // Incoming photon arrow: ends at origin, comes from the left
+    scene.appendChild(arrow(ox - L_in, oy, ox - 8, oy, '#9c3a22', 'head-photon-in'));
+
+    // Scattered photon arrow: starts at origin, goes at angle theta (above x-axis)
+    var sxOut = ox + L_out * Math.cos(theta);
+    var syOut = oy - L_out * Math.sin(theta);
+    if (L_out > 4) {
+      scene.appendChild(arrow(ox, oy, sxOut, syOut, '#c47558', 'head-photon-out'));
+    } else {
+      // Degenerate: draw a tiny dot
+      scene.appendChild(svgEl('circle', { cx: ox, cy: oy, r: 3, fill: '#c47558' }));
+    }
+
+    // Recoil electron arrow: goes at angle -phi (below x-axis, since photon went up)
+    var sxE = ox + L_e * Math.cos(-phi);
+    var syE = oy - L_e * Math.sin(-phi);
+    if (L_e > 4) {
+      scene.appendChild(arrow(ox, oy, sxE, syE, '#1a1a18', 'head-electron'));
+    }
+
+    // x-axis dashed reference line
+    var xAxis = svgEl('line', {
+      x1: ox - L_in, y1: oy, x2: ox + 180, y2: oy,
+      stroke: '#a89e90', 'stroke-width': 1, 'stroke-dasharray': '3 4'
+    });
+    scene.insertBefore(xAxis, scene.firstChild);
+
+    // Electron marker at origin
+    var elec = svgEl('circle', { cx: ox, cy: oy, r: 4, fill: '#1a1a18' });
+    scene.appendChild(elec);
+    scene.appendChild(text(ox + 8, oy + 16, 'electron (at rest before)', { size: 11, color: '#6b6359' }));
+
+    // Angle arc for theta (scattered photon)
+    if (L_out > 4 && thetaDeg > 2) {
+      var rArc = 36;
+      var arcPath = 'M ' + (ox + rArc) + ' ' + oy +
+                    ' A ' + rArc + ' ' + rArc + ' 0 0 0 ' +
+                    (ox + rArc * Math.cos(theta)) + ' ' +
+                    (oy - rArc * Math.sin(theta));
+      scene.appendChild(svgEl('path', {
+        d: arcPath, fill: 'none', stroke: '#c47558', 'stroke-width': 1.2
+      }));
+      var tlx = ox + (rArc + 14) * Math.cos(theta / 2);
+      var tly = oy - (rArc + 14) * Math.sin(theta / 2);
+      scene.appendChild(text(tlx, tly + 4, 'θ', { color: '#c47558', anchor: 'middle' }));
+    }
+
+    // Angle arc for phi (electron, below x-axis)
+    if (L_e > 4 && phi > 0.02) {
+      var rPhi = 28;
+      var arcPathE = 'M ' + (ox + rPhi) + ' ' + oy +
+                     ' A ' + rPhi + ' ' + rPhi + ' 0 0 1 ' +
+                     (ox + rPhi * Math.cos(-phi)) + ' ' +
+                     (oy - rPhi * Math.sin(-phi));
+      scene.appendChild(svgEl('path', {
+        d: arcPathE, fill: 'none', stroke: '#1a1a18', 'stroke-width': 1.2
+      }));
+      var elx = ox + (rPhi + 14) * Math.cos(-phi / 2);
+      var ely = oy - (rPhi + 14) * Math.sin(-phi / 2);
+      scene.appendChild(text(elx, ely + 4, 'φ', { color: '#1a1a18', anchor: 'middle' }));
+    }
+
+    // Vector labels at arrow tips
+    scene.appendChild(text(ox - L_in - 6, oy - 8, 'p = h/λ', { color: '#9c3a22', anchor: 'start' }));
+    if (L_out > 18) {
+      scene.appendChild(text(sxOut + 8 * Math.cos(theta), syOut - 8 * Math.sin(theta) - 4,
+        "p' = h/λ'", { color: '#c47558' }));
+    }
+    if (L_e > 18) {
+      scene.appendChild(text(sxE + 6, syE + 14, 'pₑ', { color: '#1a1a18' }));
+    }
+
+    // Readout
+    lambdaVal.textContent = lam.toFixed(0) + ' pm';
+    thetaVal.textContent = thetaDeg.toFixed(0) + '°';
+
+    var phiDeg = phi * 180 / Math.PI;
+    var dLamStr = dLam < 0.01 ? '0.000' : dLam.toFixed(3);
+    var phiStr = phiDeg < 0.05 ? '—' : phiDeg.toFixed(1) + '°';
+    var TStr = T < 0.001 ? '0.000' : T.toFixed(3);
+
+    readout.innerHTML =
+      '<span class="lbl">&lambda;       </span> <span class="v">' + lam.toFixed(1) + ' pm</span>' +
+      '   <span class="lbl">&lambda;\'      </span> <span class="v">' + lamP.toFixed(3) + ' pm</span>' +
+      '   <span class="lbl">&Delta;&lambda;     </span> <span class="v">' + dLamStr + ' pm</span><br>' +
+      '<span class="lbl">E&#x03B3;     </span> <span class="v">' + E.toFixed(2) + ' keV</span>' +
+      '   <span class="lbl">E\'&#x03B3;     </span> <span class="v">' + EP.toFixed(2) + ' keV</span>' +
+      '   <span class="lbl">T&#x2091;     </span> <span class="v">' + TStr + ' keV</span>' +
+      '   <span class="lbl">&phi;      </span> <span class="v">' + phiStr + '</span>';
+  }
+
+  lambdaSlider.addEventListener('input', draw);
+  thetaSlider.addEventListener('input', draw);
+  draw();
+})();
+</script>
+</body>
+</html>

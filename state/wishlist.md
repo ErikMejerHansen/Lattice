@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-05 from photoelectric-effect
-Compton scattering — photon momentum p = h/λ, the experiment that closed off the alternatives to the photon
 Work function — what binds electrons to a metal, surface chemistry, why some metals ionize easier than others
 
 # auto-suggested 2026-05-06 from wave-particle-duality
@@ -54,3 +53,8 @@ Frustrated TIR — pressing two prisms within a wavelength: optical tunneling th
 Sellmeier equation — n²(λ) = 1 + Σ Bᵢλ²/(λ² − Cᵢ²), the multi-resonance refinement of Cauchy that fits glass across a broader band
 Chromatic aberration — why a single-element lens cannot focus all colors at one point, and how the achromatic doublet kills it
 Group velocity vs phase velocity — vg = vp − λ(dvp/dλ), why a wave packet in a dispersive medium moves at a different speed from its carrier
+
+# auto-suggested 2026-05-13 from compton-scattering
+Pair production — γ → e⁺e⁻, the 1.022 MeV threshold and the cleanest demonstration that energy and mass interconvert
+Klein-Nishina formula — QED's relativistic Compton cross section, interpolating between Thomson at low energies and Compton at high
+Inverse Compton scattering — relativistic electrons kicking low-energy photons up to X-rays and γ-rays, the cooling mechanism in AGN jets and the CMB up-scattering behind the Sunyaev-Zel'dovich effect

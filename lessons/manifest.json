@@ -124,5 +124,12 @@
     "subtitle": "n = n(λ)",
     "date": "2026-05-11",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-05-13-compton-scattering",
+    "title": "Compton scattering: the experiment that gave the photon its momentum",
+    "subtitle": "p = h/λ",
+    "date": "2026-05-13",
+    "estimatedReadingMinutes": 24
   }
 ]

@@ -1,0 +1,220 @@
+{
+  "slug": "2026-05-13-compton-scattering",
+  "title": "Compton scattering: the experiment that gave the photon its momentum",
+  "node": {
+    "id": "compton_scattering",
+    "label": "Compton",
+    "subtitle": "p = h/λ"
+  },
+  "intro": "By 1923 Einstein's light quanta were eighteen years old and still not entirely real. Most physicists accepted hν as a useful bookkeeping rule for emission and absorption but refused to picture light in free flight as a swarm of tiny bullets. Arthur Compton, scattering X-rays off a graphite block in a basement laboratory at Washington University in St. Louis, found a way to force the question. The scattered light came back at a longer wavelength, and the shift had exactly the form a billiard-ball collision with a photon carrying momentum p = h/λ would predict.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. A reluctant photon",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Einstein's 1905 paper on the photoelectric effect was the first place anyone had written E = hν for a free quantum of light and meant it as a particle rather than as a counting device. The reception was cold. Robert Millikan, ten years younger than Einstein, spent a decade trying to disprove the formula with finer apparatus and finer technique. When his measurements in 1916 finally confirmed it to three significant figures, Millikan reported the experimental triumph and called the photon hypothesis on which it rested 'untenable' in the same paper. Niels Bohr, accepting his Nobel Prize in Stockholm in 1922, still told the audience that light quanta could not be a satisfactory solution."
+        },
+        {
+          "type": "p",
+          "text": "The wave theory had a century of credit on its side. Young's interference patterns from 1801 (covered earlier in the interference lesson), Maxwell's electromagnetic equations of 1865, Hertz's transmitter of 1888: each said light was a continuous oscillating field, not a hail of bullets. The photoelectric formula could be patched. Half a dozen ingenious schemes existed in the literature for how bound electrons in a metal might gradually accumulate enough wave energy to escape, and none of them was, in the end, correct, but none had been ruled out either."
+        },
+        {
+          "type": "p",
+          "text": "What was missing was a second prediction. The photoelectric effect tells you how light packages energy and nothing about how it packages momentum. A particle, if it deserves the name, should carry both, and the relationship between them should be exactly what relativity demands of a particle with zero rest mass. Compton's X-ray scattering experiment was about to supply the missing half, and with it the closing argument."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. X-rays on graphite",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The apparatus was crude in a way Hamming would have appreciated. A sealed tube produced characteristic molybdenum Kα X-rays at λ ≈ 71 picometres. The beam struck a small block of graphite. A Bragg-crystal spectrometer arm, free to pivot around the block, intercepted whatever X-rays scattered at angle θ from the original beam direction and measured their wavelength by diffraction from a calcite crystal. Compton ran the arm through angles from 45° to 135° and recorded the spectrum at each."
+        },
+        {
+          "type": "p",
+          "text": "The data showed two peaks at every angle. One peak sat at the original 71 pm, the wavelength the classical wave theory predicted. The other peak sat at a slightly longer wavelength, and as θ grew the second peak moved farther from the first. The size of the shift, call it Δλ, was zero in the forward direction, about 2.4 pm at θ = 90°, and grew to a maximum near 4.8 pm at backscattering."
+        },
+        {
+          "type": "p",
+          "text": "What did the wave theory predict? J. J. Thomson had worked it out in 1906. Each bound electron in the graphite oscillates at the driving frequency of the incoming X-ray (the same way a child on a swing oscillates at the frequency you push) and re-radiates a spherical wave at exactly that same frequency. Wavelength in, identical wavelength out. The intensity at each angle followed a clean dipole pattern, peaked forward and backward, but the wavelength was supposed to be preserved exactly. A systematic wavelength shift, growing with angle, had no place in the picture at all."
+        },
+        {
+          "type": "p",
+          "text": "Compton's measurements were tight enough to rule out hidden geometrical artifacts (the unshifted peak in the same spectrum served as an in-frame calibration of the spectrometer, since it had not moved). The wave theory was making a definite prediction, and the data was definitely contradicting it. The next section writes down the new picture that fits."
+        }
+      ],
+      "quiz": {
+        "question": "Compton's data showed a wavelength shift Δλ that grew monotonically with scattering angle θ. What did J. J. Thomson's 1906 classical scattering theory predict for Δλ at any angle, and what assumption produced that prediction?",
+        "options": [
+          "Thomson predicted Δλ grew linearly with θ, by treating the electron as a free relativistic particle absorbing recoil momentum from the wave.",
+          "Thomson predicted Δλ = 0 at every angle, by treating each bound electron as a driven oscillator that re-radiates at the driving frequency of the incoming wave.",
+          "Thomson predicted Δλ proportional to sin²θ, by averaging over the random orientations of bound electrons in the graphite lattice.",
+          "Thomson predicted a wavelength shift only at θ = 90°, where the polarization of the scattered wave flips, but zero shift everywhere else."
+        ],
+        "correctIndex": 1,
+        "explanation": "Thomson scattering treats each bound electron as a small driven oscillator. The incoming wave shakes it at frequency ν, and at steady state a driven oscillator radiates at exactly the driving frequency, the same way a child on a swing oscillates at the rate you push. Wavelength in, identical wavelength out, at every angle. Thomson's theory does get the angular distribution of intensity right (the famous (1 + cos²θ)/2 dipole pattern), but it predicts Δλ = 0 across the board. Compton's growing shift had no place in this picture, which is exactly what made the data decisive: a definite prediction met a definite contradiction. Options A and C give shifts in fanciful angular forms but with no mechanism behind them. Option D confuses polarization with wavelength."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The billiard-ball derivation",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The simplest hypothesis worth testing is that each scattering event is a single elastic collision between one photon and one electron, the electron initially at rest in the graphite. The photon brings in an energy E = hν, already familiar from the photon-energy lesson, and a momentum we have not yet pinned down. Relativity supplies it. Every particle obeys E² = (pc)² + (mc²)². For a photon, with rest mass m = 0, the relation collapses to E = pc, and combining with E = hν = hc/λ gives the momentum of a photon in terms of its wavelength."
+        },
+        {
+          "type": "math",
+          "tex": "p \\;=\\; \\frac{h}{\\lambda}",
+          "display": true,
+          "caption": "p is the magnitude of the photon's momentum. h is Planck's constant. λ is the photon's wavelength. The relation says every photon of wavelength λ carries the same chunk of momentum, regardless of how many photons share the beam. It is the natural companion to E = hν: where the photoelectric effect pinned down how light packages energy, this line pins down how it packages momentum."
+        },
+        {
+          "type": "p",
+          "text": "Set the geometry. The incoming photon moves along the x-axis with momentum p = h/λ. The scattered photon flies off at angle θ from the x-axis with momentum p' = h/λ', where λ' is the (so far unknown) outgoing wavelength. The recoil electron carries off the rest, with some momentum p_e and some total energy E_e (rest plus kinetic). Conservation of energy balances the photon energies against the electron's, and conservation of momentum is a vector equation that, when squared and combined with the law of cosines on the two photon-momentum vectors meeting at angle θ, gives a scalar equation for p_e²."
+        },
+        {
+          "type": "math",
+          "tex": "\\begin{aligned} h\\nu + m_{e} c^{2} \\;&=\\; h\\nu' + E_{e} \\\\ p_{e}^{2} \\;&=\\; p^{2} + p'^{2} - 2 p p' \\cos\\theta \\end{aligned}",
+          "display": true,
+          "caption": "ν is the incoming photon's frequency and ν' is the scattered photon's frequency. m_e is the electron's rest mass. c is the speed of light. E_e is the total relativistic energy (rest plus kinetic) the electron carries off after the collision. p = h/λ and p' = h/λ' are the magnitudes of the incoming and scattered photon momenta. p_e is the magnitude of the recoiling electron's momentum. θ is the photon's scattering angle, measured from its original direction. The first line is energy conservation: photon-plus-stationary-electron in equals photon-plus-moving-electron out. The second line is momentum conservation after taking magnitudes squared, with the cos θ term coming from the angle between the two photon-momentum vectors."
+        },
+        {
+          "type": "p",
+          "text": "Two relativistic identities close the system. Substitute E_e² = p_e² c² + (m_e c²)² for the electron's energy, square the energy-conservation line to get an expression for E_e², and use the momentum line to eliminate p_e². The (m_e c²)² terms cancel against the m_e² c⁴ that already sat on both sides, the p²c² and p'²c² terms cancel against the h²ν² and h²ν'² they reproduce (since p c = hν for a photon), and the cross-terms collect themselves into a single line involving only the two frequencies, the electron mass, and the scattering angle."
+        },
+        {
+          "type": "math",
+          "tex": "h\\, \\nu\\, \\nu'\\, (1 - \\cos\\theta) \\;=\\; m_{e} c^{2}\\, (\\nu - \\nu')",
+          "display": true,
+          "caption": "ν is the incoming photon's frequency. ν' is the scattered photon's frequency. m_e is the electron's rest mass. c is the speed of light. θ is the photon's scattering angle. The equation is the algebraic residue of conservation, with every electron variable eliminated. The factor (1 − cos θ) is zero in the forward direction (θ = 0) and reaches its maximum of 2 in backscattering (θ = 180°), which already shows where the wavelength shift will be smallest and largest."
+        },
+        {
+          "type": "p",
+          "text": "Convert frequencies to wavelengths with ν = c/λ. The left side becomes h c² (1 − cos θ) / (λ λ'), the right side becomes m_e c² (c/λ − c/λ') = m_e c³ (λ' − λ) / (λ λ'). The λ λ' factors and one factor of c² cancel from both sides, and the result is the equation Compton published in May 1923."
+        },
+        {
+          "type": "math",
+          "tex": "\\Delta\\lambda \\;\\equiv\\; \\lambda' - \\lambda \\;=\\; \\frac{h}{m_{e} c}\\, \\bigl(1 - \\cos\\theta\\bigr)",
+          "display": true,
+          "caption": "λ is the wavelength of the incoming photon. λ' is the wavelength of the scattered photon. Δλ ≡ λ' − λ is the wavelength shift produced by the collision. h is Planck's constant. m_e is the electron's rest mass. c is the speed of light. θ is the scattering angle of the photon. The combination h/(m_e c) is a fixed length, set by the electron alone, and is called the Compton wavelength of the electron; numerically it is 2.426 picometres."
+        },
+        {
+          "type": "viz",
+          "src": "2026-05-13-compton-scattering.html",
+          "height": 460,
+          "caption": "An incoming photon of wavelength λ (set by the upper slider) strikes a stationary electron at the origin. Drag the lower slider to choose the photon's scattering angle θ. The viz draws the three momentum vectors to scale (incoming photon, scattered photon, recoil electron) and computes the scattered wavelength λ' from Δλ = (h/m_e c)(1 − cos θ) and the electron recoil angle φ from momentum conservation. The readout under the diagram gives λ, λ', Δλ, and the electron's kinetic energy. Sweep θ from 0° to 180° and watch Δλ trace out the (1 − cos θ) curve Compton saw in his graphite spectra."
+        },
+        {
+          "type": "p",
+          "text": "Compton's measurements at Mo Kα (λ ≈ 71 pm) showed shifts of essentially zero at small angles, about 2.4 pm at θ = 90°, and about 4.8 pm at backscattering. The formula gives 0, 2.43 pm, and 4.85 pm at those three angles. The match was exact across every angle the apparatus could reach, and the assumption that fed it (one photon, one electron, p = h/λ, billiard-ball collision) had to be taken seriously."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The coincidence experiment",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Compton's paper appeared in May 1923. The data was clean, the derivation was four lines, and the photon hypothesis still had a year of life left in it as the unaccepted explanation, because there was one alternative that mattered."
+        },
+        {
+          "type": "p",
+          "text": "In early 1924 Niels Bohr, with Hendrik Kramers and John Slater, tried one last rescue of the wave theory. The BKS proposal (after the authors' initials) granted that emission and absorption looked like discrete jumps but argued that energy and momentum are conserved only statistically, on average over many events, never in any single one. A virtual radiation field, classical and continuous, mediated between atoms; the photon was a long-time average, not an entity flying between them. The price was high. BKS gave up exact conservation, which had been a non-negotiable axiom of physics since Lavoisier. The reward, had it worked, would have been to keep light wavelike all the way down."
+        },
+        {
+          "type": "p",
+          "text": "Walther Bothe and Hans Geiger killed it in April 1925. The experiment was a coincidence measurement, the first of its kind. They built two Geiger counters, one positioned to catch the scattered photon at angle θ from a Compton event, the other positioned at the matching electron-recoil angle φ predicted by the same kinematics. A bright X-ray source illuminated a target between them. The question was: when the photon counter clicked, did the electron counter click at the same instant, or at uncorrelated times?"
+        },
+        {
+          "type": "p",
+          "text": "If energy and momentum were conserved on every event, the two counters should fire in lock-step, photon by photon. If BKS were right, coincidences should occur only at the chance rate expected from two independent random click sequences. Bothe and Geiger watched 66 hours of data. The coincidence rate was eleven times the chance rate, well above any conceivable statistical fluctuation. Every Compton scattering event paired one scattered photon with one recoil electron, in real time, with conservation enforced individually. BKS died the same week. Heisenberg, two months later, wrote down matrix mechanics, the first equations of the new quantum theory that took the photon as a real entity from the start."
+        }
+      ],
+      "quiz": {
+        "question": "The Bohr-Kramers-Slater theory of 1924 was an alternative to the photon picture that explained Compton's wavelength shift without insisting that individual scattering events conserve energy and momentum exactly. What specific observation by Bothe and Geiger in 1925 made BKS impossible to maintain?",
+        "options": [
+          "Bothe and Geiger measured the absolute wavelength shift Δλ more accurately than Compton had and found a slightly different numerical value than (h/m_e c)(1 − cos θ).",
+          "Bothe and Geiger showed that the wavelength shift varied with the chemical composition of the scatterer, ruling out a universal electron-mass-set length scale.",
+          "Bothe and Geiger placed two Geiger counters at the predicted photon and electron angles and found a coincidence rate eleven times the chance rate, showing every scattering event paired one scattered photon with one recoil electron in real time, not on statistical average.",
+          "Bothe and Geiger detected the recoil electrons but not the scattered photons, suggesting the photons were absorbed inside the target."
+        ],
+        "correctIndex": 2,
+        "explanation": "BKS allowed Compton's wavelength shift to come out right on average, by treating energy and momentum conservation as statistical rather than per-event. The decisive question was therefore not the average shift (which both theories explained) but the timing of individual events. Bothe and Geiger placed one counter to catch scattered photons at angle θ and a second counter at the recoil-electron angle φ predicted by the same kinematics, then asked whether the clicks came in lock-step. Over 66 hours they recorded a coincidence rate eleven times the chance rate, far above any statistical fluctuation. Every Compton event paired one scattered photon with one recoil electron at the same instant, exactly as the photon picture demanded and BKS could not accommodate. Option A is wrong: Bothe and Geiger were not in the wavelength-measurement business. Option B has no factual basis. Option D inverts what the experiment actually saw."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The Compton wavelength as a yardstick",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The length h/(m_e c) = 2.426 picometres is set by Planck's constant, the electron mass, and the speed of light. Three of nature's most fundamental constants combine to give a length that belongs to the electron alone, and that length has now leaked out of Compton's graphite block into half a dozen other corners of physics."
+        },
+        {
+          "type": "p",
+          "text": "Physically, h/(m_e c) is the wavelength a photon would carry if its energy equalled the electron's rest mass-energy m_e c² = 511 keV. Below that scale, light scatters off electrons the way Maxwell described, with Δλ a tiny correction to a much longer λ. Above it, individual photons carry enough punch that the wavelength shift becomes comparable to the wavelength itself, and the entire scattering picture changes character. Quantum electrodynamics, in the Klein-Nishina formula of 1928, generalized Compton's billiard-ball calculation into a full relativistic cross section that interpolates between Thomson scattering at low energies and Compton scattering at high ones, and the cross-over happens, naturally, around the energy 511 keV."
+        },
+        {
+          "type": "p",
+          "text": "The same length is the size of the cloud of virtual electron-positron pairs that QED says surrounds every electron. Try to localize an electron to better than h/(m_e c) and the energy in your localizing field exceeds the pair-creation threshold of 1.022 MeV; you end up making new electrons rather than pinning the one you started with. The 'point' electron of classical electrodynamics is, on this scale, a smeared object, and any attempt to look at finer structure breaks the picture entirely."
+        },
+        {
+          "type": "p",
+          "text": "The shift Compton found in 1923 turns up at the heart of medical imaging today. In a PET scanner (positron-emission tomography, the device that uses 511 keV gamma rays from positron-electron annihilation in the patient to locate metabolically active tissue), every annihilation photon must travel a few centimetres of tissue to reach the detector ring. About half of those photons Compton-scatter off an electron along the way. The scattered photon arrives at the detector with the wrong direction and the wrong energy, and the wrong energy is calculable, photon by photon, from Δλ = (h/m_e c)(1 − cos θ). Modern scanners read out each detected photon's energy and apply a window cut that rejects everything shifted by more than a chosen amount. That cut, derived directly from Compton's 1923 formula, is what lets the device localize a tumour the size of a grape inside a torso of soft tissue. The experimentum crucis Compton ran in a Washington University basement now decides, every working day, whether a clinician can see something worth seeing."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "The Compton scattering experiment of 1923 is sometimes summarized as 'the experiment that proved the photon was real.' What new piece of information did it add to what was already established by Einstein's 1905 photoelectric paper and Millikan's 1916 confirmation of it?",
+    "options": [
+      "It established that light has a definite frequency ν, which the photoelectric effect had left undetermined.",
+      "It measured the speed of light in a dense medium, settling the Newton-versus-Huygens question about whether light slows or speeds up in glass.",
+      "It established that a photon carries a definite momentum p = h/λ in addition to energy E = hν, and that energy and momentum are conserved on every individual scattering event, not merely on statistical average over many. The wavelength shift Δλ = (h/m_e c)(1 − cos θ) follows from treating the scattering as a relativistic billiard-ball collision, and Bothe-Geiger then ruled out the only remaining wave-theory alternative.",
+      "It demonstrated the wave nature of matter, the relation λ = h/p applied to electrons, by detecting an electron interference pattern."
+    ],
+    "correctIndex": 2,
+    "explanation": "Einstein and Millikan had established that light packages energy in chunks of hν, and that those chunks behave like particles in the photoemission of electrons from a metal. They had not measured how light packages momentum. Compton's contribution was to show that a single photon, treated as a relativistic particle with energy E = hν and momentum p = h/λ, gives the observed wavelength shift exactly: Δλ = (h/m_e c)(1 − cos θ). The Bohr-Kramers-Slater theory of 1924 attempted to keep the wave picture by giving up per-event conservation, and the Bothe-Geiger coincidence experiment of 1925 ruled that escape route out. Option A reverses the historical order. Option B is the Foucault water experiment of 1850, not Compton. Option D is the Davisson-Germer experiment of 1927, which closed the duality loop in the opposite direction."
+  },
+  "suggestedNodes": [
+    {
+      "id": "pair_production",
+      "label": "Pair production",
+      "subtitle": "γ → e⁺e⁻",
+      "edgeType": "extends"
+    },
+    {
+      "id": "klein_nishina",
+      "label": "Klein-Nishina",
+      "subtitle": "QED cross sec.",
+      "edgeType": "extends"
+    },
+    {
+      "id": "inverse_compton",
+      "label": "Inverse Compton",
+      "subtitle": "low γ + fast e⁻",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-13T10:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 24,
+    "previouslyMastered": [
+      "photon_energy",
+      "photoelectric_effect",
+      "wave_particle_duality"
+    ]
+  }
+}
