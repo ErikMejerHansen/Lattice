@@ -179,6 +179,16 @@
       "createdAt": "2026-05-11T12:00:00Z",
       "col": 1,
       "row": 8
+    },
+    {
+      "id": "compton_scattering",
+      "label": "Compton",
+      "subtitle": "p = h/λ",
+      "state": "available",
+      "lesson": "2026-05-13-compton-scattering",
+      "createdAt": "2026-05-13T10:00:00Z",
+      "col": 0,
+      "row": 9
     }
   ],
   "edges": [
@@ -222,6 +232,9 @@
     { "from": "total_internal_reflection", "to": "wavelength", "kind": "related" },
     { "from": "dispersion", "to": "refraction", "kind": "extends" },
     { "from": "dispersion", "to": "wavelength", "kind": "related" },
-    { "from": "dispersion", "to": "diffraction_gratings", "kind": "related" }
+    { "from": "dispersion", "to": "diffraction_gratings", "kind": "related" },
+    { "from": "compton_scattering", "to": "photon_energy", "kind": "extends" },
+    { "from": "compton_scattering", "to": "photoelectric_effect", "kind": "related" },
+    { "from": "compton_scattering", "to": "wave_particle_duality", "kind": "related" }
   ]
 }
