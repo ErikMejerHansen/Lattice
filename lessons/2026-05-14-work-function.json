@@ -1,0 +1,208 @@
+{
+  "slug": "2026-05-14-work-function",
+  "title": "Work function: the surface number that built the vacuum-tube century",
+  "node": {
+    "id": "work_function",
+    "label": "Work function",
+    "subtitle": "φ = E_vac − E_F"
+  },
+  "intro": "The photoelectric lesson treated the work function φ as a known constant you looked up in a table, hν minus φ giving the kinetic energy of the freed electron. This lesson asks where φ comes from. The textbook answer ('the energy needed to remove an electron from a metal') hides almost everything interesting, because a metal has many electrons, none of them bound to any one atom, and yet they do not leak into the room. The number that keeps them in is a property of the surface, not of the metal alone, and the difference between three eV and one eV in this single quantity is the difference between a cold cathode and an industry.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The y-intercept Millikan could not stabilize",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Einstein's 1905 paper put the work function into physics with a single equation: the maximum kinetic energy of a photoemitted electron equals the photon energy minus the cost of escaping the metal. We have seen the formula already in the photoelectric lesson; it is reproduced here because what follows turns entirely on what sits in the φ slot."
+        },
+        {
+          "type": "math",
+          "tex": "K_{\\max} \\;=\\; h\\nu - \\varphi",
+          "display": true,
+          "caption": "K_max is the maximum kinetic energy of the electron freed from the metal surface. h is Planck's constant. ν is the frequency of the incident light. φ is the work function of the metal surface, the energy cost of escape. The slope of K_max against ν gives h alone; the y-intercept gives φ alone. Two unknowns, two geometric features of one straight line."
+        },
+        {
+          "type": "p",
+          "text": "Millikan, in the ten-year campaign that confirmed Einstein's equation between 1907 and 1916, treated h as the prize and φ as a nuisance. The slope of K_max versus ν was reproducible across metals to three decimal places, which let him pin down Planck's constant to one percent. The y-intercept was not. A clean sodium surface, machined inside the vacuum tube by a remote shaving arm, gave φ ≈ 2.3 eV one day and 2.0 eV three hours later. A single millisecond of air exposure was enough to shift the number by half a volt. The slope was Einstein; the intercept was surface chemistry."
+        },
+        {
+          "type": "p",
+          "text": "What the surface chemistry was actually doing took two decades to clarify. The modern picture, built on Sommerfeld's free-electron model of 1928 (the first quantum-mechanical theory of conduction electrons in a metal, treating them as a degenerate Fermi gas) and refined by Wigner and Bardeen through the 1930s, says that φ is not the binding energy of any single electron. It is the difference between two energy levels of the whole solid: one inside the metal, one just outside. The next section writes both of them down."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The Fermi sea meets the vacuum",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Inside a metal at absolute zero, conduction electrons occupy single-particle quantum states stacked by energy. The Pauli exclusion principle (no two fermions in the same quantum state) allows two electrons per spatial state, one of each spin, and the available states are filled from the bottom upward. The highest occupied state defines the Fermi energy E_F, the chemical potential of an electron inside the bulk. Adding one more electron to the interior costs energy E_F; removing one releases E_F. Picture it as the sea level of the conduction electrons, a few eV above the bottom of the conduction band."
+        },
+        {
+          "type": "p",
+          "text": "Now leave the metal. Walk into the vacuum just outside the surface, far enough that the metal's local fields have faded but close enough that the laboratory chamber's potential is still zero. An electron sitting at rest at that point has some energy, called the vacuum level E_vac. The work function is the gap between the two levels."
+        },
+        {
+          "type": "math",
+          "tex": "\\varphi \\;=\\; E_{\\text{vac}} - E_{F}",
+          "display": true,
+          "caption": "φ is the work function of the metal surface. E_vac is the energy of an electron at rest just outside the surface, in field-free vacuum. E_F is the Fermi energy, the chemical potential of an electron inside the bulk metal. The work function is the difference between the highest filled state inside and a free electron just beyond the surface; it makes no reference to any particular atomic orbital."
+        },
+        {
+          "type": "p",
+          "text": "Two consequences. First, φ has nothing to do with the binding energy of any single electron. It is a property of two macroscopic regions (the bulk metal and the nearby vacuum), so it depends on everything that distinguishes them, including the surface that separates them. Second, φ is positive and almost always falls between 2 and 6 eV: cesium near 2.1 eV at the low end, platinum near 5.6 eV at the high end. The Fermi sea is always a few eV below the vacuum, which is why metals at room temperature do not spontaneously rain electrons into the room."
+        },
+        {
+          "type": "viz",
+          "src": "2026-05-14-work-function.html",
+          "height": 480,
+          "caption": "An energy-level diagram of the metal-vacuum interface. The shaded column on the left is the Fermi sea inside the metal, filled up to E_F (top slider sets the bulk Fermi energy). The horizontal line on the right is the vacuum level E_vac (set indirectly by the metal-selector buttons, which set φ). The gap between them is the work function φ. The lower slider is temperature T, which broadens the Fermi-Dirac edge so a tiny tail of electrons sits above E_F; the readout reports the Richardson-Dushman thermionic current density J that follows from that tail. Switch between Cs, Na, Cu, W, and Pt and watch φ jump by a factor of three; at T = 2500 K the change in J across that range spans fifteen orders of magnitude."
+        }
+      ],
+      "quiz": {
+        "question": "A first-year student reads that 'the work function is the energy needed to remove an electron from a metal' and concludes that φ must equal the binding energy of a conduction electron near the Fermi level. Why is this wrong, and what does φ actually measure?",
+        "options": [
+          "It is right: φ is the binding energy of any individual conduction electron, and the Fermi level is irrelevant to the photoelectric formula.",
+          "It is wrong because φ is the binding energy of a tightly bound core electron, not a conduction electron; the Fermi level is far below the photoemission threshold.",
+          "It is wrong because φ = E_vac − E_F is the gap between two energy levels of the whole solid, not the binding energy of any one electron. Removing an electron from the Fermi level costs φ because E_F is its starting energy inside the metal and E_vac is its rest energy just outside; the conduction electron is not bound to any one atom.",
+          "It is wrong because φ depends on the temperature of the metal, and the binding energy of a conduction electron does not."
+        ],
+        "correctIndex": 2,
+        "explanation": "The conduction electrons in a metal are not bound to particular atoms; they are shared among the entire lattice and form a degenerate Fermi gas whose highest occupied energy is E_F. The work function is the difference E_vac − E_F between two energy levels of the whole solid, the chemical potential of an electron inside and the rest energy of one outside. Photoemission promotes an electron from the Fermi level (the easiest electrons to remove) up to and beyond E_vac, and the cost of that promotion is exactly φ. Option A misses the Fermi-level reference entirely. Option B confuses core-level photoemission (which exists, and is a related XPS technique, but is not what 'work function' names) with valence emission at the Fermi edge. Option D is wrong: φ has a very weak T dependence in practice, much weaker than the temperature dependence of, say, a thermal current."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The surface dipole",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The clean part of the story ends where the bulk model meets the actual outermost atomic layer. The conduction electrons inside a metal are not perfectly contained by the last row of ion cores. Their wavefunctions spill a fraction of an angstrom into the vacuum, leaving a thin layer of slight negative excess just outside the surface and a corresponding positive layer just inside. That sandwich of opposite-sign charge sheets is a surface dipole, and like any dipole layer it produces an electrostatic step in potential. An electron crossing the surface has to climb over (or be lifted by) that step in addition to whatever the bulk Fermi level cost it."
+        },
+        {
+          "type": "p",
+          "text": "The size of the surface dipole depends on the geometry of the topmost atomic layer, which depends in turn on which crystallographic face is exposed. Tungsten cleaved to expose the (110) face has φ ≈ 5.3 eV; the same metal cleaved on (100) has φ ≈ 4.6 eV; on (111), φ ≈ 4.5 eV. The bulk E_F is identical in all three cases (it is the same piece of tungsten). The vacuum level differs by almost a full volt between the densely packed (110) face and the more open (111). Same atoms, same chemistry, same Fermi energy. Different surfaces give different work functions."
+        },
+        {
+          "type": "p",
+          "text": "That sensitivity makes φ the most exposed of any 'bulk' number in solid-state physics. A monolayer of cesium deposited onto tungsten drops φ from 4.5 eV to 1.5 eV, because cesium is so electropositive that its lone valence electron is donated into the substrate, leaving a sheet of Cs⁺ ions outside surrounded by an enhanced electron cloud. The reinforced surface dipole pulls E_vac down by three volts. A monolayer of oxygen on the same surface does the opposite (O is electronegative; it pulls electrons up from the metal into surface O²⁻ ions, raising E_vac and pushing φ up by half a volt). The Edison-era trick of 'thoriating' a tungsten filament for a radio tube (depositing a fraction of a monolayer of thorium oxide) drops the operating temperature for a given electron current by hundreds of degrees, because every step down in φ shows up in the exponent of the thermionic emission formula coming in the next section."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Three ways to weigh the work function",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The work function can be measured directly. Three independent methods exist, each tied to a different physical process, and on a clean surface they agree to within about 0.1 eV."
+        },
+        {
+          "type": "p",
+          "text": "The first is photoemission. Tune the frequency ν of incident light downward until the electron current just vanishes; the threshold frequency ν₀ satisfies hν₀ = φ. This is the most direct method, and it is what Millikan was doing, but it is sensitive to whether the surface stays clean during the measurement, because adsorbed gas can alter φ on a timescale of seconds in lab-grade vacuum."
+        },
+        {
+          "type": "p",
+          "text": "The second is thermionic emission, the Edison effect. Heat the metal. The Fermi-Dirac distribution has a high-energy tail; some electrons in that tail sit above E_vac and escape into the surrounding vacuum. Owen Richardson worked out the current in 1901 and Saul Dushman refined the prefactor in 1923. Let J be the saturated emission current density (the current that boils off per unit area, when no electric field opposes the emitted electrons), T the absolute temperature of the cathode, k Boltzmann's constant, φ the work function, and A the Richardson constant 4π m_e e k² / h³ ≈ 1.2 × 10⁶ A m⁻² K⁻², built out of fundamental constants alone."
+        },
+        {
+          "type": "math",
+          "tex": "J \\;=\\; A\\, T^{2}\\, \\exp\\!\\left(-\\frac{\\varphi}{kT}\\right)",
+          "display": true,
+          "caption": "J is the saturated thermionic emission current density, in amperes per square metre. A is the Richardson constant, 4π m_e e k² / h³ ≈ 1.2 × 10⁶ A m⁻² K⁻², set by fundamental constants alone (m_e is the electron mass, e the electron charge, k Boltzmann's constant, h Planck's constant). T is the absolute temperature of the metal. φ is the work function. The T² prefactor is mild; the exponential is fierce. At T = 2000 K, dropping φ by one eV raises J by a factor of about 300; dropping φ by three eV (the cesium-on-tungsten trick) raises J by a factor near 10⁷."
+        },
+        {
+          "type": "p",
+          "text": "The third is the contact potential difference, due to Lord Kelvin in 1898. Wire two different metals together. Electrons flow from the lower-φ metal to the higher-φ metal until their Fermi levels equalize (chemical equilibrium demands it: at equilibrium the chemical potential of the electron must be the same everywhere along the wire). But the surface dipoles on the two metals are unchanged by the wiring, so E_vac just outside one surface no longer matches E_vac just outside the other. The two surfaces sit at different electrostatic potentials in the lab frame, and the difference, called the contact potential difference V_CPD, is the work-function difference divided by the electron charge."
+        },
+        {
+          "type": "math",
+          "tex": "V_{\\text{CPD}} \\;=\\; \\frac{\\varphi_{1} - \\varphi_{2}}{e}",
+          "display": true,
+          "caption": "V_CPD is the contact potential difference between two metals connected by a wire and held face to face. φ_1 and φ_2 are the work functions of the two surfaces. e is the magnitude of the electron charge. A Kelvin probe (a modern instrument that vibrates one of the two surfaces mechanically and senses the AC current produced by the changing capacitance) nulls that current with an external bias voltage; the bias at null reads V_CPD directly, to a millivolt or better. Scanning the probe across a sample gives a contact-potential map, which is exactly a map of φ minus a reference."
+        },
+        {
+          "type": "p",
+          "text": "Three independent doors into the same number. On a clean tungsten (110) surface in ultra-high vacuum, all three give φ = 5.25 ± 0.05 eV. On a contaminated surface they can disagree by half an eV in three different directions, and the disagreement is itself diagnostic of how much surface chemistry the sample is hiding."
+        }
+      ],
+      "quiz": {
+        "question": "A thermionic-emission cathode of bare tungsten is run at 2500 K and produces a saturated emission current density J₀. The cathode is then coated with a fraction of a monolayer of cesium, dropping φ from 4.5 eV to 1.5 eV. The temperature is held fixed. By roughly what factor does J change, and which feature of the Richardson-Dushman formula is doing the work?",
+        "options": [
+          "J grows by about a factor of 3, because the T² prefactor is what dominates current density at high temperatures.",
+          "J grows by a factor of order 10¹⁴, because the work function appears in the exponent of the Richardson-Dushman formula and a 3 eV change at kT ≈ 0.22 eV produces exp(3/0.22) ≈ 10⁶. (Off by orders of magnitude is not crucial here; the exponential is the right answer.)",
+          "J is unchanged, because the Richardson constant A includes only fundamental constants and is not sensitive to surface chemistry.",
+          "J decreases, because cesium contamination always increases the work function of refractory metals."
+        ],
+        "correctIndex": 1,
+        "explanation": "The Richardson-Dushman formula J = A T² exp(−φ/kT) puts φ inside an exponential whose argument is φ/kT. At T = 2500 K, kT ≈ 0.215 eV, so dropping φ by 3 eV reduces the exponent by 3/0.215 ≈ 14, and exp(14) ≈ 1.2 × 10⁶. The T² factor is unchanged at fixed T. The current grows by something between six and seven orders of magnitude, and that gain is exactly what made cesium-coated and oxide-coated cathodes practical for radio tubes and CRTs at temperatures a thousand degrees below what bare tungsten required. Option A confuses the polynomial prefactor with the exponential. Option C ignores the φ-dependence entirely. Option D inverts the cesium effect (cesium is the canonical work-function lowerer; oxygen is the raiser)."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The number that built the vacuum-tube century",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "From Edison's incandescent filaments in the 1880s through the radio receivers of the 1930s and the CRT televisions of the 1950s, picking the right work function was a multibillion-dollar industry. Edison had patented his filament leak in 1883 without understanding it; J. J. Thomson identified the leakage as electrons in 1897; John Ambrose Fleming turned the asymmetry of the leak (electrons boiling off a hot cathode toward a cool anode, never the other way) into the first vacuum-tube diode in 1904. Lee de Forest added a third electrode, the control grid, in 1906, and the entire age of electronics followed from a heated piece of wire whose emission obeyed Richardson-Dushman."
+        },
+        {
+          "type": "p",
+          "text": "The cathode in each of these tubes was a stretch of tungsten heated to a thousand kelvin or more, and the brightness of the glow, plus the power needed to maintain it, was set by φ through the formula in the previous section. A pure tungsten cathode at 2500 K emits about 0.3 A/cm². The same cathode coated with a barium oxide layer (φ ≈ 1.4 eV instead of 4.5 eV) emits 1 A/cm² at 1100 K, fourteen hundred degrees cooler. That single drop in φ was the difference between a glowing red filament that wore out in months and a dull-warm cathode that lasted decades in a home television. The technology to lower φ by three eV is what made the vacuum tube bearable as a mass-market component for as long as it lasted."
+        },
+        {
+          "type": "p",
+          "text": "The same number lives on inside the photocathodes of every photomultiplier tube and night-vision sensor in service today. A bialkali photocathode (the engineered Cs-K-Sb alloy known in the trade as 'S-20') has φ ≈ 1.4 eV, low enough that a red photon at λ ≈ 700 nm carries hν ≈ 1.77 eV, comfortably above threshold. Each photon that frees a photoelectron is amplified through a chain of secondary-emission dynodes (electron-multiplying surfaces) into a measurable current pulse, so a single photon from a distant source becomes a recorded click in a counting circuit. The Hubble Telescope's faint-object camera, the Pierre Auger cosmic-ray array, and the Super-Kamiokande neutrino detector lining a tank of 50,000 tons of pure water with 11,200 photomultipliers: each is, when you trace its signal back to where it begins, a piece of metal whose work function set what a photon had to pay to be seen. The y-intercept of Millikan's straight line, the nuisance that refused to stabilize on his sodium block in 1912, turns out to be the gateway between optical photons and electrical signals, and after a hundred years we have not found a better one."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "An undergraduate, asked to summarize what the work function is, answers 'φ is the binding energy of an electron in a metal.' What is the single most important thing this answer gets wrong, and what is the cleanest one-sentence replacement?",
+    "options": [
+      "The answer is essentially correct; the more precise statement is that φ is the binding energy of a conduction electron near the bottom of the conduction band.",
+      "The answer is wrong because φ is the binding energy of a core electron, not a conduction electron; the cleaner replacement is 'φ is the energy of the deepest atomic orbital in the metal.'",
+      "The answer is wrong because it treats φ as a property of an electron, when φ is the difference E_vac − E_F between two energy levels of the entire solid; a cleaner replacement is 'φ is the minimum energy required to take an electron from the Fermi level inside the metal to a point at rest just outside the surface.' This makes the role of the surface dipole (and hence the dependence on crystal face and adsorbates) visible.",
+      "The answer is wrong because φ is a thermodynamic quantity defined only at nonzero temperature, and so cannot be called any kind of binding energy at all."
+    ],
+    "correctIndex": 2,
+    "explanation": "The framing 'binding energy of an electron' makes φ sound like a single-particle quantity, the way an ionization energy is for an isolated atom. But the conduction electrons in a metal are not bound to particular atoms; they are shared among the entire lattice, and the right reference points are two levels of the whole solid: the Fermi energy E_F inside and the vacuum level E_vac outside. Their difference, φ = E_vac − E_F, has the unit of energy and looks like a binding energy, but the surface contributes through the dipole sheet built up by spilled-out conduction electrons. That contribution is why φ depends on crystal face (W(110) at 5.3 eV versus W(111) at 4.5 eV), on adsorbates (cesium drops, oxygen raises), and on contamination during the measurement, and none of that dependence is comprehensible if you start from 'binding energy of an electron.' Option A doubles down on the single-particle framing. Option B mistakes the work function for a core-level energy. Option D is wrong: φ is well-defined at T = 0 (it is what the K_max = hν − φ intercept reads off at zero temperature)."
+  },
+  "suggestedNodes": [
+    {
+      "id": "thermionic_emission",
+      "label": "Thermionic",
+      "subtitle": "J = AT² e^(−φ/kT)",
+      "edgeType": "applied"
+    },
+    {
+      "id": "contact_potential",
+      "label": "Kelvin probe",
+      "subtitle": "V = Δφ/e",
+      "edgeType": "applied"
+    },
+    {
+      "id": "fermi_dirac",
+      "label": "Fermi-Dirac",
+      "subtitle": "f(E,T)",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-14T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": [
+      "photoelectric_effect",
+      "photon_energy",
+      "wave_particle_duality"
+    ]
+  }
+}

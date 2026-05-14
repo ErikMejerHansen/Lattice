@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.metal-row {
+  display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;
+}
+.metal-btn {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  padding: 6px 12px;
+  min-height: 36px; min-width: 56px;
+  background: var(--bg-raised);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+.metal-btn.active {
+  background: var(--accent);
+  color: #f4eee2;
+  border-color: var(--accent);
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 12px;
+  line-height: 1.7;
+}
+.readout .v { color: var(--text); }
+.readout .lbl { color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div style="padding: 14px 18px;">
+    <svg id="svg" width="100%" viewBox="0 0 700 360" preserveAspectRatio="xMidYMid meet">
+      <g id="scene"></g>
+    </svg>
+    <div class="metal-row" id="metals"></div>
+    <div class="viz-slider-row">
+      <label>T</label>
+      <input type="range" id="tempSlider" min="300" max="3000" step="10" value="2500">
+      <span class="value" id="tempVal">2500 K</span>
+    </div>
+    <div class="readout" id="readout"></div>
+    <div class="viz-caption" style="margin-top: 12px;">
+      The shaded column on the left is the conduction band of the metal, filled up to the Fermi energy E<sub>F</sub>. At nonzero temperature the Fermi-Dirac distribution f(E,T) = 1 / (1 + exp((E &minus; E<sub>F</sub>)/kT)) smears the cutoff over a few kT around E<sub>F</sub>; the faint tail just above E<sub>F</sub> is the few electrons sitting above the Fermi level. The dashed line is the vacuum level E<sub>vac</sub>, set by the chosen metal's work function &phi; = E<sub>vac</sub> &minus; E<sub>F</sub>. Electrons in the Fermi-Dirac tail above E<sub>vac</sub> can escape into the vacuum, giving the thermionic emission current J = AT&sup2; exp(&minus;&phi;/kT). Switch metals to see &phi; change by a factor of three; J spans fifteen orders of magnitude across the same temperature.
+    </div>
+  </div>
+</div>
+<script>
+(function() {
+  // Physical constants
+  var KB_EV = 8.617333e-5;        // Boltzmann constant in eV/K
+  var A_RICH = 120.0;             // Richardson constant in A/(cm^2 K^2)
+
+  // Metals: (name, work function in eV)
+  var METALS = [
+    { name: "Cs", phi: 2.10 },
+    { name: "Na", phi: 2.36 },
+    { name: "W",  phi: 4.55 },
+    { name: "Cu", phi: 4.70 },
+    { name: "Pt", phi: 5.65 }
+  ];
+
+  // SVG geometry
+  var SVG_W = 700, SVG_H = 360;
+  // Energy axis: spans E_F - 12 eV to E_F + 7 eV (19 eV total).
+  var EV_TOP = 7;
+  var EV_BOT = -12;
+  var PLOT_TOP = 28;
+  var PLOT_BOT = 320;
+  var PX_PER_EV = (PLOT_BOT - PLOT_TOP) / (EV_TOP - EV_BOT);  // ~15.4
+
+  // x layout
+  var METAL_X1 = 90;
+  var METAL_X2 = 320;
+  var VAC_X1 = 320;
+  var VAC_X2 = 660;
+
+  function eToY(eV) {
+    // eV is measured relative to E_F (so 0 means E_F).
+    return PLOT_TOP + (EV_TOP - eV) * PX_PER_EV;
+  }
+
+  var scene = document.getElementById('scene');
+  var tempSlider = document.getElementById('tempSlider');
+  var tempVal = document.getElementById('tempVal');
+  var readout = document.getElementById('readout');
+  var metalsRow = document.getElementById('metals');
+
+  var currentMetalIdx = 2; // default to W
+
+  // Build metal buttons
+  METALS.forEach(function(m, i) {
+    var b = document.createElement('button');
+    b.className = 'metal-btn' + (i === currentMetalIdx ? ' active' : '');
+    b.textContent = m.name;
+    b.addEventListener('click', function() {
+      currentMetalIdx = i;
+      Array.prototype.forEach.call(metalsRow.children, function(c, j) {
+        c.className = 'metal-btn' + (j === i ? ' active' : '');
+      });
+      draw();
+    });
+    metalsRow.appendChild(b);
+  });
+
+  function svgEl(name, attrs) {
+    var el = document.createElementNS('http://www.w3.org/2000/svg', name);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  function text(x, y, str, opts) {
+    opts = opts || {};
+    var t = svgEl('text', {
+      x: x, y: y,
+      'font-family': opts.mono
+        ? 'IBM Plex Mono, SF Mono, Menlo, monospace'
+        : 'Source Serif 4, Iowan Old Style, Palatino, Georgia, serif',
+      'font-style': opts.upright ? 'normal' : 'italic',
+      'font-size': opts.size || 13,
+      fill: opts.color || '#1a1a18',
+      'text-anchor': opts.anchor || 'start'
+    });
+    t.textContent = str;
+    return t;
+  }
+
+  function fd(eRel, kT) {
+    // Fermi-Dirac occupation at energy eRel above E_F, with thermal energy kT (both in eV).
+    if (kT < 1e-9) return eRel < 0 ? 1 : (eRel > 0 ? 0 : 0.5);
+    var x = eRel / kT;
+    if (x > 40) return 0;
+    if (x < -40) return 1;
+    return 1 / (1 + Math.exp(x));
+  }
+
+  function draw() {
+    while (scene.firstChild) scene.removeChild(scene.firstChild);
+
+    var metal = METALS[currentMetalIdx];
+    var phi = metal.phi;                                  // eV
+    var T = parseFloat(tempSlider.value);                 // K
+    var kT = KB_EV * T;                                   // eV
+
+    // Background panels
+    scene.appendChild(svgEl('rect', {
+      x: METAL_X1, y: PLOT_TOP,
+      width: METAL_X2 - METAL_X1, height: PLOT_BOT - PLOT_TOP,
+      fill: '#faf5e9', stroke: '#d8cfb8', 'stroke-width': 1
+    }));
+    scene.appendChild(svgEl('rect', {
+      x: VAC_X1, y: PLOT_TOP,
+      width: VAC_X2 - VAC_X1, height: PLOT_BOT - PLOT_TOP,
+      fill: '#f4eee2', stroke: '#d8cfb8', 'stroke-width': 1
+    }));
+
+    // Region labels
+    scene.appendChild(text((METAL_X1 + METAL_X2) / 2, PLOT_TOP - 8, 'metal',
+      { size: 12, color: '#6b6359', anchor: 'middle' }));
+    scene.appendChild(text((VAC_X1 + VAC_X2) / 2, PLOT_TOP - 8, 'vacuum',
+      { size: 12, color: '#6b6359', anchor: 'middle' }));
+
+    // Conduction band bottom at E_F - 11 eV (typical bulk band-bottom).
+    var BAND_BOTTOM = -11;
+    var yBand = eToY(BAND_BOTTOM);
+
+    // Draw the Fermi sea as horizontal slices, each with opacity = f(E, T).
+    // Slices from band bottom up to a few kT above E_F.
+    var sliceCount = 90;
+    var eLo = BAND_BOTTOM;
+    var eHi = Math.max(0.8, 6 * kT);
+    var dE = (eHi - eLo) / sliceCount;
+    for (var i = 0; i < sliceCount; i++) {
+      var eMid = eLo + (i + 0.5) * dE;
+      var occ = fd(eMid, kT);
+      if (occ < 0.005) continue;
+      var ySliceTop = eToY(eMid + dE / 2);
+      var ySliceBot = eToY(eMid - dE / 2);
+      scene.appendChild(svgEl('rect', {
+        x: METAL_X1 + 1, y: ySliceTop,
+        width: METAL_X2 - METAL_X1 - 2,
+        height: Math.max(0.6, ySliceBot - ySliceTop),
+        fill: '#9c3a22', opacity: occ.toFixed(3)
+      }));
+    }
+
+    // Band-bottom hatched line
+    scene.appendChild(svgEl('line', {
+      x1: METAL_X1, y1: yBand, x2: METAL_X2, y2: yBand,
+      stroke: '#6b6359', 'stroke-width': 1, 'stroke-dasharray': '2 3'
+    }));
+    scene.appendChild(text(METAL_X1 - 8, yBand + 4, 'band bottom',
+      { size: 11, color: '#6b6359', anchor: 'end' }));
+
+    // E_F line across the metal
+    var yEF = eToY(0);
+    scene.appendChild(svgEl('line', {
+      x1: METAL_X1 - 6, y1: yEF, x2: METAL_X2, y2: yEF,
+      stroke: '#1a1a18', 'stroke-width': 1.5
+    }));
+    scene.appendChild(text(METAL_X1 - 8, yEF + 4, 'E_F',
+      { size: 13, color: '#1a1a18', anchor: 'end', mono: true, upright: true }));
+
+    // E_vac line across both regions
+    var yEvac = eToY(phi);
+    scene.appendChild(svgEl('line', {
+      x1: METAL_X1 - 6, y1: yEvac, x2: VAC_X2, y2: yEvac,
+      stroke: '#1a1a18', 'stroke-width': 1.5, 'stroke-dasharray': '5 4'
+    }));
+    scene.appendChild(text(METAL_X1 - 8, yEvac + 4, 'E_vac',
+      { size: 13, color: '#1a1a18', anchor: 'end', mono: true, upright: true }));
+
+    // Phi double-headed arrow on the right edge of the metal column
+    var xArrow = METAL_X2 + 22;
+    scene.appendChild(svgEl('line', {
+      x1: xArrow, y1: yEF, x2: xArrow, y2: yEvac,
+      stroke: '#9c3a22', 'stroke-width': 1.5
+    }));
+    // Arrowheads (small triangles)
+    scene.appendChild(svgEl('polygon', {
+      points: (xArrow - 4) + ',' + (yEvac + 6) + ' ' +
+              (xArrow + 4) + ',' + (yEvac + 6) + ' ' +
+              xArrow + ',' + yEvac,
+      fill: '#9c3a22'
+    }));
+    scene.appendChild(svgEl('polygon', {
+      points: (xArrow - 4) + ',' + (yEF - 6) + ' ' +
+              (xArrow + 4) + ',' + (yEF - 6) + ' ' +
+              xArrow + ',' + yEF,
+      fill: '#9c3a22'
+    }));
+    scene.appendChild(text(xArrow + 8, (yEF + yEvac) / 2 + 4, 'φ',
+      { size: 16, color: '#9c3a22' }));
+    scene.appendChild(text(xArrow + 22, (yEF + yEvac) / 2 + 4,
+      '= ' + phi.toFixed(2) + ' eV',
+      { size: 12, color: '#9c3a22', mono: true, upright: true }));
+
+    // Escapees: the FD tail above E_vac, drawn as small dots leaking right into vacuum.
+    // Probability that an electron is above E_vac, very roughly: exp(-phi/kT).
+    var pEscape = Math.exp(-phi / kT);
+    var dotCount = Math.min(40, Math.max(0, Math.round(40 * Math.log10(pEscape * 1e15 + 1) / 15)));
+    var rng = mulberry32(currentMetalIdx * 1000 + Math.round(T));
+    for (var d = 0; d < dotCount; d++) {
+      var ex = VAC_X1 + 8 + rng() * (VAC_X2 - VAC_X1 - 16);
+      var trail = (ex - VAC_X1) / (VAC_X2 - VAC_X1);
+      // Higher above E_vac the farther they have travelled
+      var dy = (1 - trail) * 18 + rng() * 8;
+      var ey = yEvac - dy * 0.5;
+      scene.appendChild(svgEl('circle', {
+        cx: ex, cy: ey, r: 1.8, fill: '#9c3a22',
+        opacity: (0.85 - trail * 0.5).toFixed(2)
+      }));
+    }
+
+    // Title for vacuum side
+    if (dotCount > 0) {
+      scene.appendChild(text(VAC_X1 + 12, yEvac + 18, 'thermionic emission',
+        { size: 11, color: '#9c3a22' }));
+    }
+
+    // y-axis tick: a small "+ φ" marker at the side
+    scene.appendChild(text(METAL_X1 - 8, PLOT_TOP - 6, 'Energy →',
+      { size: 11, color: '#6b6359', anchor: 'end' }));
+
+    // Readout: phi, T, kT, J
+    var J = A_RICH * T * T * Math.exp(-phi / kT);
+    var jStr;
+    if (J < 1e-30) {
+      jStr = '< 10⁻³⁰ A/cm²';
+    } else if (J < 1e-3) {
+      var exp = Math.floor(Math.log10(J));
+      var mant = J / Math.pow(10, exp);
+      jStr = mant.toFixed(2) + ' × 10' + supDigits(exp) + ' A/cm²';
+    } else if (J < 1e3) {
+      jStr = J.toFixed(3) + ' A/cm²';
+    } else {
+      var exp2 = Math.floor(Math.log10(J));
+      var mant2 = J / Math.pow(10, exp2);
+      jStr = mant2.toFixed(2) + ' × 10' + supDigits(exp2) + ' A/cm²';
+    }
+
+    tempVal.textContent = T.toFixed(0) + ' K';
+    readout.innerHTML =
+      '<span class="lbl">metal  </span> <span class="v">' + metal.name + '</span>' +
+      '   <span class="lbl">&phi;  </span> <span class="v">' + phi.toFixed(2) + ' eV</span>' +
+      '   <span class="lbl">T  </span> <span class="v">' + T.toFixed(0) + ' K</span>' +
+      '   <span class="lbl">kT  </span> <span class="v">' + (kT * 1000).toFixed(1) + ' meV</span><br>' +
+      '<span class="lbl">J = AT&sup2; exp(&minus;&phi;/kT)  </span> <span class="v">' + jStr + '</span>';
+  }
+
+  function supDigits(n) {
+    var s = String(n);
+    var supMap = { '0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻','+':'⁺' };
+    var out = '';
+    for (var i = 0; i < s.length; i++) out += supMap[s[i]] || s[i];
+    return out;
+  }
+
+  function mulberry32(seed) {
+    var a = seed >>> 0;
+    return function() {
+      a = (a + 0x6D2B79F5) >>> 0;
+      var t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  tempSlider.addEventListener('input', draw);
+  draw();
+})();
+</script>
+</body>
+</html>

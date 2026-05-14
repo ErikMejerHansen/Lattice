@@ -1,6 +1,3 @@
-# auto-suggested 2026-05-05 from photoelectric-effect
-Work function — what binds electrons to a metal, surface chemistry, why some metals ionize easier than others
-
 # auto-suggested 2026-05-06 from wave-particle-duality
 Schrödinger equation — what the wave function is and how it evolves in time
 Heisenberg uncertainty principle — Δx·Δp ≥ ℏ/2, the noncommutative price of being a wave
@@ -58,3 +55,8 @@ Group velocity vs phase velocity — vg = vp − λ(dvp/dλ), why a wave packet 
 Pair production — γ → e⁺e⁻, the 1.022 MeV threshold and the cleanest demonstration that energy and mass interconvert
 Klein-Nishina formula — QED's relativistic Compton cross section, interpolating between Thomson at low energies and Compton at high
 Inverse Compton scattering — relativistic electrons kicking low-energy photons up to X-rays and γ-rays, the cooling mechanism in AGN jets and the CMB up-scattering behind the Sunyaev-Zel'dovich effect
+
+# auto-suggested 2026-05-14 from work-function
+Thermionic emission — J = AT² exp(−φ/kT), Richardson and Dushman, the equation that designed every vacuum-tube cathode and now decides the rim temperature of every solid-oxide fuel cell
+Contact potential difference / Kelvin probe — wire two metals, watch their Fermi levels lock, read the surface-dipole step as a voltage; the technique that maps φ across a sample to the millivolt
+Fermi-Dirac distribution — f(E,T) = 1/(1 + exp((E−μ)/kT)), why filling identical particles into states changes statistical mechanics from Boltzmann to something thicker
