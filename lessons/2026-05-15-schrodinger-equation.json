@@ -1,0 +1,232 @@
+{
+  "slug": "2026-05-15-schrodinger-equation",
+  "title": "The Schrödinger equation: how a wave got its equation of motion",
+  "node": {
+    "id": "schrodinger_equation",
+    "label": "Schrödinger",
+    "subtitle": "iℏ∂ψ/∂t = Ĥψ"
+  },
+  "intro": "By the end of 1925, physics had two incompatible quantum theories: Heisenberg's matrix mechanics, which predicted spectra brilliantly but refused to be visualized, and de Broglie's matter wave, which was a picture without an equation of motion. The wave had a wavelength but no rule for how that wavelength evolved when a particle ran through a varying potential. Erwin Schrödinger took de Broglie's thesis on a Christmas holiday in Arosa, came back in January 1926 with the equation, and within six months had to live with someone else's interpretation of what its solutions meant. This lesson is the equation, and the price physics paid to keep it.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The crisis of 1925",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In June 1925, Werner Heisenberg, 23 and suffering badly from hay fever, fled to the windswept island of Helgoland in the North Sea. He came back with a calculation that organized the spectroscopic transitions of an atom into an infinite square table and multiplied two of these tables together by a rule that Max Born, when he saw it, recognized as matrix multiplication. The result, matrix mechanics (a quantum theory in which observables are infinite matrices acting on a state vector), reproduced the hydrogen spectrum and the anomalous Zeeman effect. It also flatly refused to be visualized. There were no waves, no particles, no trajectories, only rules for predicting numbers."
+        },
+        {
+          "type": "p",
+          "text": "Meanwhile the wave picture had been sitting on Louis de Broglie's 1924 thesis since the previous autumn, the conjecture that λ = h/p applies to electrons as well as to photons. The de Broglie wave existed, and Davisson and Germer were a year from accidentally photographing one at Bell Labs, but the wave had no equation of motion. It was a noun with no verb. A pure wavelength does not tell you how the wave evolves when a particle moves through a varying potential, and Heisenberg's matrices, for all their predictive bite, could not draw a hydrogen orbital."
+        },
+        {
+          "type": "p",
+          "text": "Erwin Schrödinger, 38, an Austrian theorist whose career had stalled and whose marriage was unhappy, took de Broglie's thesis to a chalet in Arosa, Switzerland, over the Christmas holiday of 1925. He brought a girlfriend whose identity history has never recovered. He came back in mid-January with a partial differential equation for ψ, the wave function, and through 1926 he poured out six papers on it. The equation now bears his name. It is the equation of motion that the de Broglie wave needed, and it has been the entire backbone of nonrelativistic quantum mechanics for a hundred years."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Building the equation from a plane wave",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Schrödinger's actual derivation, fittingly for a man in a chalet, was geometric and ran through the Hamilton-Jacobi equation (a 19th-century reformulation of classical mechanics in which trajectories follow the gradient of a generating function called the action). The shortest route from de Broglie to an equation, the one a physics student now meets first, is more direct. Take the simplest possible wave that carries a definite energy E and a definite momentum p, namely a plane wave moving in one dimension."
+        },
+        {
+          "type": "math",
+          "tex": "\\psi(x, t) \\;=\\; e^{i(kx - \\omega t)}",
+          "display": true,
+          "caption": "ψ is the wave function. x is the position coordinate. t is time. k is the wavenumber, the spatial frequency 2π/λ. ω is the angular frequency, the temporal frequency 2πν. The complex exponential is the building block of every wave in this lesson; its real and imaginary parts are cosines and sines of the same phase."
+        },
+        {
+          "type": "p",
+          "text": "de Broglie's λ = h/p says k = p/ℏ, where ℏ is the reduced Planck constant h/2π. Planck's E = hν says ω = E/ℏ. We now ask the question Schrödinger asked: what differential operator, applied to this plane wave, returns the energy E times the wave? Take one derivative with respect to time. The exponent picks up a factor of -iω, which when multiplied by iℏ becomes ℏω, which is E."
+        },
+        {
+          "type": "math",
+          "tex": "i\\hbar\\, \\frac{\\partial \\psi}{\\partial t} \\;=\\; \\hbar \\omega\\, \\psi \\;=\\; E\\, \\psi",
+          "display": true,
+          "caption": "i is the imaginary unit. ℏ is the reduced Planck constant. ∂ψ/∂t is the first time derivative of the wave function. E is the energy carried by the plane wave. Reading the equation says: the operator iℏ ∂/∂t, applied to a plane wave of definite energy, returns that energy as a multiplicative constant."
+        },
+        {
+          "type": "p",
+          "text": "Take two derivatives with respect to space. Each one pulls down an ik, so two of them give -k². Multiplying by -ℏ²/(2m), where m is the particle's mass, converts -k² into ℏ²k²/(2m), which is p²/(2m), the kinetic energy of a free particle."
+        },
+        {
+          "type": "math",
+          "tex": "-\\frac{\\hbar^{2}}{2m}\\, \\frac{\\partial^{2}\\psi}{\\partial x^{2}} \\;=\\; \\frac{(\\hbar k)^{2}}{2m}\\, \\psi \\;=\\; \\frac{p^{2}}{2m}\\, \\psi",
+          "display": true,
+          "caption": "m is the particle's mass. ∂²ψ/∂x² is the second space derivative of the wave function. p = ℏk is the momentum of the plane wave. p²/(2m) is the classical kinetic energy of a free particle. Reading the equation says: the operator -ℏ²/(2m) ∂²/∂x², applied to a plane wave of definite momentum, returns the kinetic energy as a multiplicative constant."
+        },
+        {
+          "type": "p",
+          "text": "For a free particle (no potential), the total energy is the kinetic energy, so both expressions equal Eψ. Setting them equal gives the free-particle Schrödinger equation: a wave equation that has E = ℏω and p = ℏk built into its skeleton, by construction."
+        },
+        {
+          "type": "math",
+          "tex": "i\\hbar\\, \\frac{\\partial \\psi}{\\partial t} \\;=\\; -\\frac{\\hbar^{2}}{2m}\\, \\frac{\\partial^{2}\\psi}{\\partial x^{2}}",
+          "display": true,
+          "caption": "All symbols are as defined above. This is the free-particle Schrödinger equation in one dimension. It is the equation you get by demanding that a single plane wave with E = ℏω and p = ℏk satisfies it; that plane wave is, accordingly, its simplest solution."
+        }
+      ],
+      "quiz": {
+        "question": "The Schrödinger equation, unlike Newton's second law or Maxwell's wave equation, has a single time derivative on one side and a second space derivative on the other. Why does this asymmetry force the wave function ψ to be complex-valued rather than real?",
+        "options": [
+          "ψ must be complex because the eigenvalues of momentum and energy are themselves complex numbers.",
+          "A real wave such as cos(kx − ωt) is not an eigenfunction of both ∂/∂t and ∂²/∂x²: differentiating it once in time produces a sine, while differentiating it twice in space produces a cosine. The two sides of the equation would then be multiples of different functions and could not be equal. Only the complex exponential e^{i(kx − ωt)} is sent to itself (up to a constant) by both derivatives, so ψ must be complex for plane waves to satisfy the equation at all.",
+          "The factor i is a notational convenience that can be absorbed by a sign flip on the right-hand side; ψ can then be taken real.",
+          "ψ must be complex only when an external magnetic field is present; for a free particle in vacuum, ψ can be taken real."
+        ],
+        "correctIndex": 1,
+        "explanation": "The cleanest way to see this is to substitute a real plane wave. The left side iℏ ∂/∂t of cos(kx − ωt) gives iℏ · ω · sin(kx − ωt), a sine. The right side -ℏ²/(2m) ∂²/∂x² gives ℏ²k²/(2m) · cos(kx − ωt), a cosine. A sine cannot equal a constant times a cosine, so the real wave is not a solution. The complex exponential is special precisely because both operators send it to a number times itself: ∂_t e^{-iωt} = -iω · e^{-iωt} and ∂_x² e^{ikx} = -k² · e^{ikx}. This 'eigenfunction-of-both' property is what makes the Schrödinger equation a wave equation. Option A confuses observable values with the eigenfunctions: energies and momenta are real eigenvalues; the eigenfunctions are complex. Option C is wrong because no sign flip turns a sine into a cosine. Option D inverts the rule: even a free electron in empty space requires complex ψ."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The packet that does not stand still",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The free equation has the plane wave as a solution, but a plane wave is not a particle. It is spread evenly over all space, with the same |ψ|² everywhere. A real electron is localized at first, so we superpose many plane waves of slightly different k and weight them by a Gaussian envelope. The result is a wave packet (a clump of oscillation with a definite center and a spatial width Δx, built out of a spread Δk in wavenumber roughly equal to 1/Δx)."
+        },
+        {
+          "type": "p",
+          "text": "Two velocities now appear, and they are not equal. The carrier inside the envelope, the visible ripples, moves at the phase velocity v_p = ω/k (the speed of constant-phase points of one plane-wave component). The envelope as a whole, the center of the |ψ|² blob, moves at the group velocity v_g = dω/dk (the speed at which the superposition's amplitude peak slides along). For the free Schrödinger equation, ω = ℏk²/(2m), and the two velocities differ by exactly a factor of two."
+        },
+        {
+          "type": "math",
+          "tex": "v_{g} \\;=\\; \\frac{d\\omega}{dk} \\;=\\; \\frac{\\hbar k}{m}, \\qquad v_{p} \\;=\\; \\frac{\\omega}{k} \\;=\\; \\frac{\\hbar k}{2m}",
+          "display": true,
+          "caption": "v_g is the group velocity, the speed of the envelope and hence the speed of the |ψ|² blob's center. v_p is the phase velocity, the speed of the carrier ripples inside the envelope. k is the central wavenumber of the packet. m is the particle's mass. ℏ is the reduced Planck constant. For a free quantum particle the group velocity equals the classical p/m, and the phase velocity is exactly half of that."
+        },
+        {
+          "type": "p",
+          "text": "The ripples slide backward through the envelope as the packet moves, and that mismatch is the first crisp signal that ψ itself is not the particle. The packet also widens with time. Different k components inside the superposition travel at different group velocities (since v_g depends on k), so the leading edge runs ahead and the trailing edge falls behind. The width Δx(t) grows without bound. A free quantum particle does not stay localized: an electron whose position is known to within an angstrom at t = 0 spreads over a kilometer in roughly a millisecond."
+        },
+        {
+          "type": "viz",
+          "src": "2026-05-15-schrodinger-equation.html",
+          "height": 460,
+          "caption": "A Gaussian wave packet for a free particle in natural units (ℏ = m = 1), with the initial position spread σ₀ = 1 about the origin. The filled rust curve is the probability density |ψ(x,t)|²; the thin red line is Re(ψ(x,t)), the visible carrier. The k₀ slider sets the central wavenumber (equivalently the central momentum), so the envelope drifts to the right at the group velocity v_g = k₀ while the ripples inside slide at v_p = k₀/2. The t slider scrubs forward in time. Watch the envelope drift, the carrier slide backwards through it, and the width grow as σ(t) = √(1 + t²/4). Set k₀ = 0 and the packet stands still while still widening: the particle has zero average momentum but its position becomes more uncertain anyway."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Adding a potential and the stationary states",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The free equation tells you how a wave packet moves through empty space. A real particle moves through a potential V(x): the electron in a hydrogen atom feels the Coulomb attraction of the proton, a confined electron in a wire feels the box walls. The natural generalization is to add V(x)ψ to the right-hand side, giving the time-dependent Schrödinger equation."
+        },
+        {
+          "type": "math",
+          "tex": "i\\hbar\\, \\frac{\\partial \\psi}{\\partial t} \\;=\\; \\left[ -\\frac{\\hbar^{2}}{2m}\\, \\frac{\\partial^{2}}{\\partial x^{2}} \\;+\\; V(x) \\right]\\, \\psi \\;\\equiv\\; \\hat{H}\\, \\psi",
+          "display": true,
+          "caption": "V(x) is the potential energy as a function of position. The bracket on the right is the Hamiltonian operator Ĥ, the quantum sum of kinetic and potential energy, written as a recipe that acts on ψ. The hat over H signals that it is an operator, not a number: applying Ĥ to ψ does not multiply ψ by anything, it differentiates ψ twice and adds V(x)ψ. Reading the equation says: the rate at which ψ rotates in the complex plane is set, at every point, by the Hamiltonian's action on ψ at that point."
+        },
+        {
+          "type": "p",
+          "text": "Most states are not states of definite energy. A generic ψ has an uncertain energy, the way a wave packet has an uncertain position. The exceptions, called stationary states, have the special form ψ(x, t) = φ(x) e^{-iEt/ℏ}: a single complex frequency E/ℏ riding on a spatial pattern φ(x) that does not change shape over time. Substitute this form into the equation, divide both sides by e^{-iEt/ℏ}, and the time dependence disappears entirely. What is left is an equation in φ(x) alone."
+        },
+        {
+          "type": "math",
+          "tex": "-\\frac{\\hbar^{2}}{2m}\\, \\varphi''(x) \\;+\\; V(x)\\, \\varphi(x) \\;=\\; E\\, \\varphi(x)",
+          "display": true,
+          "caption": "φ(x) is the spatial pattern of the stationary state. φ''(x) is its second derivative with respect to x. V(x) is the potential. m is the mass. ℏ is the reduced Planck constant. E is the energy of this particular state, no longer a free parameter but an eigenvalue (a constant that comes out when the operator is applied) fixed by the boundary conditions on φ. This is the time-independent Schrödinger equation, the eigenvalue problem of the Hamiltonian: find the spatial patterns that Ĥ returns unchanged except for a multiplicative constant E."
+        },
+        {
+          "type": "p",
+          "text": "For potentials that confine the particle (a hydrogen well, a finite box, a harmonic oscillator), only a discrete set of E values has solutions φ(x) that stay finite as x → ±∞. The integer quantum numbers of the Bohr atomic model fall out of Schrödinger's equation as a mathematical theorem rather than as a separate quantization postulate. Bohr in 1913 had to assume angular momentum was quantized in units of ℏ; Schrödinger in 1926 derived that quantization, and a great deal else besides, as the eigenvalue spectrum of a second-order differential equation with boundary conditions."
+        }
+      ],
+      "quiz": {
+        "question": "A common student question is why ψ(x, t) = φ(x) e^{-iEt/ℏ} is called a 'stationary' state when ψ obviously contains time. What stays still, and why is it the thing that matters?",
+        "options": [
+          "ψ itself stays still; the e^{-iEt/ℏ} phase factor equals 1 for all physical states.",
+          "The probability density |ψ(x, t)|² stays still. Because |e^{-iEt/ℏ}| = 1, we have |ψ|² = |φ(x)|², independent of t. Every observable computed from |ψ|² alone (the probability of finding the particle in a region, the expectation of its position) is therefore time-independent. The wave function rotates in the complex plane at frequency E/ℏ, but the rotation is invisible to a position measurement, which is why these states are called stationary.",
+          "The energy E stays still while position observables continue to evolve; 'stationary' refers to the constancy of E.",
+          "ψ stays still in the rest frame of the particle but is time-dependent in the lab frame."
+        ],
+        "correctIndex": 1,
+        "explanation": "The full ψ(x, t) = φ(x) e^{-iEt/ℏ} rotates in the complex plane at angular frequency E/ℏ; ψ does not literally stand still. But the modulus of e^{-iEt/ℏ} is 1, so |ψ(x, t)|² = |φ(x)|² · 1 = |φ(x)|², which has no time dependence at all. Every position-space observable (where the particle is on average, the spread of its position, the probability of finding it in a region) is built from |ψ|² and therefore frozen. Option A is wrong because the phase factor is not literally 1 (only its magnitude is). Option C confuses the constancy of E with the constancy of |ψ|²: both happen to be true, but the name refers to the position-space distribution being frozen, not to E being conserved (which is true of any closed system, stationary or not). Option D mixes up relativistic frame-dependence with the structure of the SE, which is nonrelativistic."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The footnote that ate physics",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "For the first six months of 1926, Schrödinger believed his own theory said something different from what Bohr and Heisenberg said it said. He read ψ as a real, smeared-out field of electric charge: an electron in a stationary state was, on this reading, a literal cloud of negative charge with density e|ψ(x)|² hugging the nucleus, no longer a point particle but a standing wave. The interpretation was geometrically beautiful and saved physics from its discomfort with random outcomes. It failed within months."
+        },
+        {
+          "type": "p",
+          "text": "Two facts killed it. First, a wave packet for a free electron spreads to galactic dimensions in microseconds (the calculation from section 3), yet electrons in a cathode-ray tube arrive at a phosphor screen as single sharp dots, not smeared clouds. The dot does not get fuzzier with longer flight times. Second, the wave function for the helium atom lives not in 3D space but in the 6-dimensional configuration space of two electrons (a mathematical space in which each axis labels one degree of freedom of the system, here three coordinates per electron). A real physical charge cloud cannot inhabit six dimensions."
+        },
+        {
+          "type": "p",
+          "text": "Max Born, in a short paper submitted on 25 June 1926 on the quantum mechanics of scattering, proposed the alternative in a footnote added in proof. Born had calculated the probability of an electron scattering into a particular direction and arrived at an expression containing ψ. He wrote in the body of the paper that the probability is proportional to ψ, then corrected himself in proof: 'More careful consideration shows that the probability is proportional to the square of the magnitude of [ψ].' Not ψ, but |ψ|². In the time it took to make that correction, ψ stopped being a thing in space and became a probability amplitude (a complex-valued accountant whose squared magnitude tells you how likely each outcome is)."
+        },
+        {
+          "type": "math",
+          "tex": "P(x, t)\\, dx \\;=\\; |\\psi(x, t)|^{2}\\, dx",
+          "display": true,
+          "caption": "P(x, t) dx is the probability of finding the particle in the small interval (x, x + dx) at time t. ψ(x, t) is the wave function. |ψ(x, t)|² is its squared modulus, ψ*ψ, where ψ* is the complex conjugate of ψ. The wave function itself is never directly measured; its squared magnitude is the only link the formalism offers between the equation and any experiment."
+        },
+        {
+          "type": "p",
+          "text": "Schrödinger never accepted this reading. Einstein never accepted it. Born got the Nobel Prize in 1954, twenty-eight years after his footnote and after most of his contemporaries had retired into emeritus disagreement. The price of accepting Born's interpretation was high: the deterministic Schrödinger equation describes ψ as evolving smoothly and reversibly in time, but what ψ predicts is no longer a state of affairs, only a probability distribution over states of affairs, and the act of measurement collapses the distribution to a single outcome that the equation did not pick. From 1926 onward, that price has been the unmentioned line item on every successful application of quantum mechanics, from the helium spectrum to the laser to the silicon transistor."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A student who has just met the Schrödinger equation asks what ψ 'is', whether it is the particle, whether |ψ|² is a charge density, whether ψ exists somewhere physical the way a sound wave does in air. Which statement most cleanly resolves the confusion in light of how ψ enters and leaves the formalism?",
+    "options": [
+      "ψ is the particle. The Schrödinger equation describes a particle, now correctly conceived as a wave, propagating through space; the apparent spreading of a wave packet is the particle physically growing larger over time.",
+      "|ψ(x, t)|² is a literal charge density. An electron in a stationary state is a cloud of negative charge of density e|ψ|² distributed in three-dimensional space, and chemistry is the geometry of these clouds.",
+      "ψ is a probability amplitude: a complex-valued function on the configuration space of the system (3D for one particle, 6D for two, and so on) whose only physical content is the rule |ψ|² dV = probability of finding the particles in that volume element. The deterministic Schrödinger equation evolves ψ smoothly in time, but what ψ predicts is a probability distribution over outcomes, not a single definite outcome, and that probabilistic step is irreducible.",
+      "ψ is whatever the practitioner wants it to be. The formalism is silent on its ontological status, and physicists agreed to stop asking the question around 1930."
+    ],
+    "correctIndex": 2,
+    "explanation": "Option C is what Born's interpretation, ratified by every successful application of quantum mechanics since 1926, actually says. ψ is a complex amplitude on configuration space, and the rule |ψ|² dV = probability is what connects it to experiment. Option A is Schrödinger's own first reading, which failed for two independent reasons: free packets spread to galactic dimensions in microseconds but particles arrive at detectors as sharp dots, and multi-particle ψ lives in configuration space rather than physical space. Option B is the static version of the same failed reading: the smeared-cloud picture works as an approximate visualization for a single bound electron in three dimensions, but it cannot be taken literally without contradicting the dot-by-dot pattern that builds up on a double-slit detector. Option D is a caricature: most foundations physicists do not think the question is meaningless, they accept that the formalism agrees on |ψ|² and disagrees on what happens beneath it. The shared, formalism-level answer is C."
+  },
+  "suggestedNodes": [
+    {
+      "id": "particle_in_box",
+      "label": "Box states",
+      "subtitle": "E_n ∝ n²",
+      "edgeType": "applied"
+    },
+    {
+      "id": "quantum_tunneling",
+      "label": "Tunneling",
+      "subtitle": "T ≈ e^(−2κL)",
+      "edgeType": "applied"
+    },
+    {
+      "id": "born_rule",
+      "label": "Born rule",
+      "subtitle": "P = |ψ|²",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-15T09:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 24,
+    "previouslyMastered": [
+      "wave_particle_duality",
+      "photon_energy",
+      "least_action"
+    ]
+  }
+}

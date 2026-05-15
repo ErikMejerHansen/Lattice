@@ -138,5 +138,12 @@
     "subtitle": "φ = E_vac − E_F",
     "date": "2026-05-14",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-05-15-schrodinger-equation",
+    "title": "The Schrödinger equation: how a wave got its equation of motion",
+    "subtitle": "iℏ∂ψ/∂t = Ĥψ",
+    "date": "2026-05-15",
+    "estimatedReadingMinutes": 24
   }
 ]
