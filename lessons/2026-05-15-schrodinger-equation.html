@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 12px;
+  line-height: 1.7;
+}
+.readout .v { color: var(--text); }
+.readout .lbl { color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div style="padding: 14px 18px;">
+    <svg id="svg" width="100%" viewBox="0 0 720 380" preserveAspectRatio="xMidYMid meet">
+      <g id="scene"></g>
+    </svg>
+    <div class="viz-slider-row">
+      <label>k&#8320;</label>
+      <input type="range" id="kSlider" min="0" max="2" step="0.05" value="1">
+      <span class="value" id="kVal">1.00</span>
+    </div>
+    <div class="viz-slider-row">
+      <label>t</label>
+      <input type="range" id="tSlider" min="0" max="10" step="0.1" value="0">
+      <span class="value" id="tVal">0.0</span>
+    </div>
+    <div class="readout" id="readout"></div>
+    <div class="viz-caption" style="margin-top: 12px;">
+      A free-particle Gaussian wave packet in natural units (&hbar; = m = 1, initial width &sigma;<sub>0</sub> = 1). The thin red line in the upper panel is Re &psi;(x, t), the carrier ripples. The filled rust curve in the lower panel is &#124;&psi;(x, t)&#124;&sup2;, the probability density (Born's reading from section 5). Drag k&#8320; to set the central momentum and t to scrub forward in time. Watch the envelope drift at the group velocity v<sub>g</sub> = k&#8320; while the carrier inside slides at v<sub>p</sub> = k&#8320;/2: the ripples crawl backward relative to the blob. Set k&#8320; = 0 and the packet stands still but still widens, because &Delta;x &middot; &Delta;p &ge; &hbar;/2 means a position-localized state cannot also be momentum-localized.
+    </div>
+  </div>
+</div>
+<script>
+(function() {
+  var scene = document.getElementById('scene');
+  var kSlider = document.getElementById('kSlider');
+  var tSlider = document.getElementById('tSlider');
+  var kVal = document.getElementById('kVal');
+  var tVal = document.getElementById('tVal');
+  var readout = document.getElementById('readout');
+
+  // Plot layout
+  var X_LEFT = 70, X_RIGHT = 700;
+  var X_MIN = -10, X_MAX = 25;
+  var TOP_Y_MIN = 30, TOP_Y_MAX = 160;
+  var BOT_Y_MIN = 200, BOT_Y_MAX = 330;
+  var RE_HALF = 0.8;
+  var P_MAX_SCALE = 0.42;
+
+  function xToPx(x) {
+    return X_LEFT + (x - X_MIN) / (X_MAX - X_MIN) * (X_RIGHT - X_LEFT);
+  }
+  function reToPx(v) {
+    var mid = (TOP_Y_MIN + TOP_Y_MAX) / 2;
+    var half = (TOP_Y_MAX - TOP_Y_MIN) / 2;
+    return mid - (v / RE_HALF) * half;
+  }
+  function pToPx(p) {
+    return BOT_Y_MAX - (p / P_MAX_SCALE) * (BOT_Y_MAX - BOT_Y_MIN);
+  }
+
+  function svgEl(name, attrs) {
+    var el = document.createElementNS('http://www.w3.org/2000/svg', name);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+  function text(x, y, str, opts) {
+    opts = opts || {};
+    var t = svgEl('text', {
+      x: x, y: y,
+      'font-family': opts.mono
+        ? 'IBM Plex Mono, SF Mono, Menlo, monospace'
+        : 'Source Serif 4, Iowan Old Style, Palatino, Georgia, serif',
+      'font-style': opts.upright ? 'normal' : 'italic',
+      'font-size': opts.size || 12,
+      fill: opts.color || '#6b6359',
+      'text-anchor': opts.anchor || 'start'
+    });
+    if (opts.transform) t.setAttribute('transform', opts.transform);
+    t.textContent = str;
+    return t;
+  }
+
+  // Free-particle Gaussian wave packet, sigma_0 = 1, hbar = m = 1.
+  // psi(x,t) = NORM * (1/sqrt(alpha)) * exp(i(k0 x - k0^2 t / 2)) * exp(-(x - k0 t)^2 / (4 alpha))
+  // alpha = 1 + i t / 2
+  var NORM = Math.pow(2 * Math.PI, -0.25);
+
+  function psi(x, t, k0) {
+    var aRe = 1, aIm = t / 2;
+    var aMag2 = aRe * aRe + aIm * aIm;
+    var invRe = aRe / (4 * aMag2);
+    var invIm = -aIm / (4 * aMag2);
+    var z = x - k0 * t;
+    var e1Re = -z * z * invRe;
+    var e1Im = -z * z * invIm;
+    var e2Im = k0 * x - k0 * k0 * t / 2;
+    var expRe = e1Re;
+    var expIm = e1Im + e2Im;
+    var M = Math.exp(expRe);
+    var expValRe = M * Math.cos(expIm);
+    var expValIm = M * Math.sin(expIm);
+    var r = Math.sqrt(aMag2);
+    var theta = Math.atan2(aIm, aRe);
+    var sqrtInvMag = 1 / Math.sqrt(r);
+    var phase = -theta / 2;
+    var preRe = sqrtInvMag * Math.cos(phase);
+    var preIm = sqrtInvMag * Math.sin(phase);
+    var pRe = preRe * expValRe - preIm * expValIm;
+    var pIm = preRe * expValIm + preIm * expValRe;
+    return [NORM * pRe, NORM * pIm];
+  }
+
+  function draw() {
+    while (scene.firstChild) scene.removeChild(scene.firstChild);
+
+    var k0 = parseFloat(kSlider.value);
+    var t = parseFloat(tSlider.value);
+    var sigma = Math.sqrt(1 + t * t / 4);
+    var xc = k0 * t;
+
+    kVal.textContent = k0.toFixed(2);
+    tVal.textContent = t.toFixed(1);
+
+    // Panel backgrounds
+    scene.appendChild(svgEl('rect', {
+      x: X_LEFT, y: TOP_Y_MIN,
+      width: X_RIGHT - X_LEFT, height: TOP_Y_MAX - TOP_Y_MIN,
+      fill: '#faf5e9', stroke: '#d8cfb8', 'stroke-width': 1
+    }));
+    scene.appendChild(svgEl('rect', {
+      x: X_LEFT, y: BOT_Y_MIN,
+      width: X_RIGHT - X_LEFT, height: BOT_Y_MAX - BOT_Y_MIN,
+      fill: '#faf5e9', stroke: '#d8cfb8', 'stroke-width': 1
+    }));
+
+    // Zero line in top panel
+    var midY = (TOP_Y_MIN + TOP_Y_MAX) / 2;
+    scene.appendChild(svgEl('line', {
+      x1: X_LEFT, y1: midY, x2: X_RIGHT, y2: midY,
+      stroke: '#d8cfb8', 'stroke-width': 1, 'stroke-dasharray': '2 3'
+    }));
+
+    // X-axis ticks
+    var ticks = [-10, 0, 10, 20];
+    for (var i = 0; i < ticks.length; i++) {
+      var tx = xToPx(ticks[i]);
+      scene.appendChild(svgEl('line', {
+        x1: tx, y1: BOT_Y_MAX, x2: tx, y2: BOT_Y_MAX + 4,
+        stroke: '#6b6359', 'stroke-width': 1
+      }));
+      scene.appendChild(text(tx, BOT_Y_MAX + 16, String(ticks[i]),
+        { anchor: 'middle', color: '#6b6359', size: 10, mono: true, upright: true }));
+    }
+    scene.appendChild(text((X_LEFT + X_RIGHT) / 2, BOT_Y_MAX + 32,
+      'x (natural units, ℏ = m = 1)',
+      { anchor: 'middle', color: '#6b6359', size: 12 }));
+
+    // Panel labels (left)
+    scene.appendChild(text(X_LEFT - 10, midY + 4, 'Re ψ',
+      { anchor: 'end', color: '#9c3a22', size: 13, mono: true, upright: true }));
+    scene.appendChild(text(X_LEFT - 10, (BOT_Y_MIN + BOT_Y_MAX) / 2 + 4, '|ψ|²',
+      { anchor: 'end', color: '#9c3a22', size: 13, mono: true, upright: true }));
+
+    // Y-axis zero markers
+    scene.appendChild(text(X_LEFT - 5, midY + 4, '0',
+      { anchor: 'end', color: '#a89e90', size: 9, mono: true, upright: true }));
+    scene.appendChild(text(X_LEFT - 5, pToPx(0) + 4, '0',
+      { anchor: 'end', color: '#a89e90', size: 9, mono: true, upright: true }));
+
+    // Sample
+    var N = 360;
+    var dx = (X_MAX - X_MIN) / N;
+    var rePts = [];
+    var probPts = [];
+    var probMax = 0;
+    for (var i = 0; i <= N; i++) {
+      var x = X_MIN + i * dx;
+      var c = psi(x, t, k0);
+      rePts.push([xToPx(x), reToPx(c[0])]);
+      var pr = c[0] * c[0] + c[1] * c[1];
+      if (pr > probMax) probMax = pr;
+      probPts.push([xToPx(x), pToPx(pr)]);
+    }
+
+    // |psi|^2 filled polygon
+    var polyP = xToPx(X_MIN) + ',' + pToPx(0);
+    for (var i = 0; i < probPts.length; i++) {
+      polyP += ' ' + probPts[i][0] + ',' + probPts[i][1];
+    }
+    polyP += ' ' + xToPx(X_MAX) + ',' + pToPx(0);
+    scene.appendChild(svgEl('polygon', {
+      points: polyP,
+      fill: '#9c3a22',
+      'fill-opacity': '0.42',
+      stroke: '#9c3a22',
+      'stroke-width': 1.2
+    }));
+
+    // Re(psi) polyline
+    var pathRe = 'M' + rePts[0][0].toFixed(1) + ',' + rePts[0][1].toFixed(1);
+    for (var i = 1; i < rePts.length; i++) {
+      pathRe += ' L' + rePts[i][0].toFixed(1) + ',' + rePts[i][1].toFixed(1);
+    }
+    scene.appendChild(svgEl('path', {
+      d: pathRe,
+      fill: 'none',
+      stroke: '#9c3a22',
+      'stroke-width': 1.4
+    }));
+
+    // Centroid line on both panels
+    var xcPx = xToPx(xc);
+    if (xcPx >= X_LEFT && xcPx <= X_RIGHT) {
+      scene.appendChild(svgEl('line', {
+        x1: xcPx, y1: TOP_Y_MIN, x2: xcPx, y2: TOP_Y_MAX,
+        stroke: '#1a1a18', 'stroke-width': 0.8, 'stroke-dasharray': '3 3', 'stroke-opacity': '0.45'
+      }));
+      scene.appendChild(svgEl('line', {
+        x1: xcPx, y1: BOT_Y_MIN, x2: xcPx, y2: BOT_Y_MAX,
+        stroke: '#1a1a18', 'stroke-width': 0.8, 'stroke-dasharray': '3 3', 'stroke-opacity': '0.45'
+      }));
+      scene.appendChild(text(xcPx, TOP_Y_MIN - 6, 'x₀ = k₀ t',
+        { anchor: 'middle', color: '#1a1a18', size: 11, mono: true, upright: true }));
+    }
+
+    // Width marker: horizontal bar at +/- sigma on the |psi|^2 panel, at half-peak height (peak * e^{-1/2})
+    var peak = 1 / (sigma * Math.sqrt(2 * Math.PI));
+    var halfPeak = peak * Math.exp(-0.5);
+    var xL = xc - sigma, xR = xc + sigma;
+    var xLpx = xToPx(xL), xRpx = xToPx(xR);
+    var hpY = pToPx(halfPeak);
+    if (xLpx >= X_LEFT && xRpx <= X_RIGHT) {
+      scene.appendChild(svgEl('line', {
+        x1: xLpx, y1: hpY, x2: xRpx, y2: hpY,
+        stroke: '#1a1a18', 'stroke-width': 1
+      }));
+      scene.appendChild(svgEl('line', {
+        x1: xLpx, y1: hpY - 5, x2: xLpx, y2: hpY + 5,
+        stroke: '#1a1a18', 'stroke-width': 1
+      }));
+      scene.appendChild(svgEl('line', {
+        x1: xRpx, y1: hpY - 5, x2: xRpx, y2: hpY + 5,
+        stroke: '#1a1a18', 'stroke-width': 1
+      }));
+      scene.appendChild(text((xLpx + xRpx) / 2, hpY - 6, '2σ(t)',
+        { anchor: 'middle', color: '#1a1a18', size: 10, mono: true, upright: true }));
+    }
+
+    // Panel titles
+    scene.appendChild(text(X_LEFT + 8, TOP_Y_MIN + 14, 'carrier (real part)',
+      { color: '#6b6359', size: 11 }));
+    scene.appendChild(text(X_LEFT + 8, BOT_Y_MIN + 14, 'probability density',
+      { color: '#6b6359', size: 11 }));
+
+    // Readout
+    var vg = k0;
+    var vp = k0 / 2;
+    readout.innerHTML =
+      '<span class="lbl">k₀ </span><span class="v">' + k0.toFixed(2) + '</span>' +
+      '   <span class="lbl">t </span><span class="v">' + t.toFixed(1) + '</span>' +
+      '   <span class="lbl">x₀ = k₀ t </span><span class="v">' + xc.toFixed(2) + '</span>' +
+      '   <span class="lbl">σ(t) = √(1+t²/4) </span><span class="v">' + sigma.toFixed(3) + '</span><br>' +
+      '<span class="lbl">v_g = dω/dk = k₀ </span><span class="v">' + vg.toFixed(2) + '</span>' +
+      '   <span class="lbl">v_p = ω/k = k₀/2 </span><span class="v">' + vp.toFixed(2) + '</span>' +
+      '   <span class="lbl">v_g / v_p </span><span class="v">' + (k0 > 0.01 ? '2.00' : '—') + '</span>';
+  }
+
+  kSlider.addEventListener('input', draw);
+  tSlider.addEventListener('input', draw);
+  draw();
+})();
+</script>
+</body>
+</html>

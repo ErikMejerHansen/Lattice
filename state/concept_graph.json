@@ -199,6 +199,16 @@
       "createdAt": "2026-05-14T08:00:00Z",
       "col": 1,
       "row": 9
+    },
+    {
+      "id": "schrodinger_equation",
+      "label": "Schrödinger",
+      "subtitle": "iℏ∂ψ/∂t = Ĥψ",
+      "state": "available",
+      "lesson": "2026-05-15-schrodinger-equation",
+      "createdAt": "2026-05-15T09:00:00Z",
+      "col": 0,
+      "row": 10
     }
   ],
   "edges": [
@@ -247,6 +257,9 @@
     { "from": "compton_scattering", "to": "photoelectric_effect", "kind": "related" },
     { "from": "compton_scattering", "to": "wave_particle_duality", "kind": "related" },
     { "from": "work_function", "to": "photoelectric_effect", "kind": "extends" },
-    { "from": "work_function", "to": "photon_energy", "kind": "related" }
+    { "from": "work_function", "to": "photon_energy", "kind": "related" },
+    { "from": "schrodinger_equation", "to": "wave_particle_duality", "kind": "extends" },
+    { "from": "schrodinger_equation", "to": "photon_energy", "kind": "related" },
+    { "from": "schrodinger_equation", "to": "least_action", "kind": "related" }
   ]
 }

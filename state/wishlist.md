@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-06 from wave-particle-duality
-Schrödinger equation — what the wave function is and how it evolves in time
 Heisenberg uncertainty principle — Δx·Δp ≥ ℏ/2, the noncommutative price of being a wave
 Bohr atom — quantized angular momentum recovered from de Broglie standing waves on the orbit
 
@@ -60,3 +59,8 @@ Inverse Compton scattering — relativistic electrons kicking low-energy photons
 Thermionic emission — J = AT² exp(−φ/kT), Richardson and Dushman, the equation that designed every vacuum-tube cathode and now decides the rim temperature of every solid-oxide fuel cell
 Contact potential difference / Kelvin probe — wire two metals, watch their Fermi levels lock, read the surface-dipole step as a voltage; the technique that maps φ across a sample to the millivolt
 Fermi-Dirac distribution — f(E,T) = 1/(1 + exp((E−μ)/kT)), why filling identical particles into states changes statistical mechanics from Boltzmann to something thicker
+
+# auto-suggested 2026-05-15 from schrodinger-equation
+Particle in a box — the simplest TISE: ψ_n(x) = sin(nπx/L), E_n ∝ n², where the integer quantum numbers fall out of boundary conditions alone
+Quantum tunneling — exp(−2κL) leakage of a wave through a classically forbidden barrier, the principle behind every flash drive and STM tip
+Born rule — |ψ|² as the probability density, Max Born's June 1926 footnote that turned the wave function from a thing into an accountant
