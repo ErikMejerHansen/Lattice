@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-06 from wave-particle-duality
-Schrödinger equation — what the wave function is and how it evolves in time
 Heisenberg uncertainty principle — Δx·Δp ≥ ℏ/2, the noncommutative price of being a wave
 Bohr atom — quantized angular momentum recovered from de Broglie standing waves on the orbit
 
@@ -60,3 +59,8 @@ Inverse Compton scattering — relativistic electrons kicking low-energy photons
 Thermionic emission — J = AT² exp(−φ/kT), Richardson and Dushman, the equation that designed every vacuum-tube cathode and now decides the rim temperature of every solid-oxide fuel cell
 Contact potential difference / Kelvin probe — wire two metals, watch their Fermi levels lock, read the surface-dipole step as a voltage; the technique that maps φ across a sample to the millivolt
 Fermi-Dirac distribution — f(E,T) = 1/(1 + exp((E−μ)/kT)), why filling identical particles into states changes statistical mechanics from Boltzmann to something thicker
+
+# auto-suggested 2026-05-16 from schrodinger-equation
+Hydrogen atom — solving Ĥψ = Eψ with V(r) = −e²/4πε₀r, the eigenvalue problem that recovered the Balmer ladder and gave the integer n its mechanism
+Quantum tunneling — finite barrier, exponential decay inside the classically forbidden region, the surprise the infinite-well box could not show and the principle behind α decay and the STM
+Quantum harmonic oscillator — V(x) = ½mω²x², the second classic stationary-state problem, with E_n = (n+½)ℏω and a zero-point energy that lasts to the lowest temperature

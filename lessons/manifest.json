@@ -138,5 +138,12 @@
     "subtitle": "φ = E_vac − E_F",
     "date": "2026-05-14",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-05-16-schrodinger-equation",
+    "title": "The Schrödinger equation: the wave equation Debye asked for and Schrödinger guessed",
+    "subtitle": "iℏ ∂_t Ψ = HΨ",
+    "date": "2026-05-16",
+    "estimatedReadingMinutes": 24
   }
 ]
