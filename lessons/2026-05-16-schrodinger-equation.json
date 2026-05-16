@@ -1,0 +1,275 @@
+{
+  "slug": "2026-05-16-schrodinger-equation",
+  "title": "The Schrödinger equation: the wave equation Debye asked for and Schrödinger guessed",
+  "node": {
+    "id": "schrodinger_equation",
+    "label": "Schrödinger",
+    "subtitle": "iℏ ∂_t Ψ = HΨ"
+  },
+  "intro": "The duality lesson told you that every particle of matter is also a wave, with wavelength λ = h/p, and that Davisson and Germer had photographed the electron diffraction pattern in 1927. It did not tell you what the wave does between observations, or what symbol you write down to represent it. This lesson is the answer to both questions, in the form of one partial differential equation Erwin Schrödinger wrote down over the 1925 Christmas holiday in a hotel in the Swiss Alps. The equation has no derivation in the textbook sense (you cannot deduce it from anything more fundamental than itself), but a heuristic that almost forces its shape, plus a track record over a century of getting the right answer for every bound state anyone has thought to compute, is what made physics surrender and call it a law.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Where is the wave equation?",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "By 1924 quantum theory was a successful collection of recipes with no engine underneath. The Bohr model of the atom (Niels Bohr, 1913: a planetary picture in which the electron orbits the nucleus only along certain allowed circles, with angular momentum forced to be an integer multiple of ℏ) gave the hydrogen spectrum to four decimal places. Nobody knew why. The quantization condition L = nℏ was a postulate, defended on the single ground that it worked. Sommerfeld had extended it to elliptical orbits. Heisenberg had reformulated the whole thing in 1925 as matrix mechanics, an abstract algebra of observables that gave the right answers without ever asking what the electron was doing between observations. The recipes were piling up. A mechanism was not."
+        },
+        {
+          "type": "p",
+          "text": "Louis de Broglie, in his 1924 doctoral thesis, had proposed that every massive particle carries a wavelength λ = h/p. Apply that to the Bohr atom: an electron going around a circular orbit traces a path of circumference 2πr, and if the electron is a wave then a stable orbit ought to be one whose wavelength fits an integer number of times around the loop. Set n λ = 2πr, substitute λ = h/p, rearrange, and out drops pr = nℏ, which is Bohr's quantization condition. For the first time the integer n had a reason: it was the number of wavelengths in the standing wave. But the picture only worked for a literal ring. For any other geometry (a square well, a harmonic oscillator, the actual three-dimensional Coulomb problem of hydrogen) you had no machinery, only an analogy that hinted there should be one."
+        },
+        {
+          "type": "p",
+          "text": "Peter Debye, Schrödinger's senior colleague at ETH Zürich, ran a physics colloquium in late 1925 at which a graduate student presented de Broglie's thesis. Debye listened, was unimpressed by the standing-wave hand-waving, and said something close to: 'If there are waves, there ought to be a wave equation. Has anyone tried to write one down?' Schrödinger took the remark personally. Over the Christmas break he went to a hotel in Arosa, in the Swiss Alps, with a companion whose identity history has never settled, and came back with what he called the wave equation. His first version was relativistic (it is now called the Klein-Gordon equation, after Klein and Gordon who published it independently in 1926; it ignores electron spin and gave wrong fine structure for hydrogen), so he set it aside, wrote the nonrelativistic version, and on the first try got the Balmer series exactly. Six papers in 1926 founded wave mechanics. Schrödinger and Dirac, within a year, proved that Heisenberg's matrices and Schrödinger's wave functions were two languages for the same theory."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. From a de Broglie plane wave to a differential equation",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The strategy is not to derive the equation from first principles, which cannot be done, but to write down the simplest differential equation a de Broglie plane wave is forced to satisfy. A free particle of definite momentum p and definite energy E is, by de Broglie and Planck, a plane wave with wavenumber k = p/ℏ and angular frequency ω = E/ℏ. Write that wave with a complex exponential rather than a sine or cosine; the reason for the complex form will be clear in a moment."
+        },
+        {
+          "type": "math",
+          "tex": "\\Psi(x, t) \\;=\\; e^{\\,i(kx - \\omega t)}",
+          "display": true,
+          "caption": "Ψ is the wave function, a complex-valued function of position and time. k is the wavenumber, equal to p/ℏ where p is the particle's momentum. ω is the angular frequency, equal to E/ℏ where E is the particle's energy. x is position. t is time. The exponential is the cleanest way to package both the sin and cos pieces of a wave into a single object."
+        },
+        {
+          "type": "p",
+          "text": "A free particle in classical mechanics obeys the energy-momentum relation E = p²/2m, where m is the particle's mass. The plan is to translate that relation into a statement about Ψ by noticing how derivatives of Ψ pull out the energy and momentum. Differentiate Ψ once in t: ∂Ψ/∂t = −iω Ψ. Multiply both sides by iℏ. The right side becomes iℏ(−iω)Ψ = ℏω Ψ = E Ψ. The operator iℏ ∂/∂t, applied to Ψ, returns the energy times Ψ."
+        },
+        {
+          "type": "math",
+          "tex": "i\\hbar\\,\\frac{\\partial \\Psi}{\\partial t} \\;=\\; \\hbar\\omega\\,\\Psi \\;=\\; E\\,\\Psi",
+          "display": true,
+          "caption": "iℏ ∂/∂t is the energy operator; applied to a state of definite energy E, it returns E times that state. ℏ is the reduced Planck constant. The two factors of i (one from differentiating the complex exponential, one in front of ∂/∂t) cancel to give a real positive coefficient."
+        },
+        {
+          "type": "p",
+          "text": "Do the same trick on x. Differentiate Ψ twice: ∂²Ψ/∂x² = (ik)²Ψ = −k²Ψ. Multiply both sides by −ℏ²/2m. The right side becomes (ℏ²k²/2m)Ψ = (p²/2m)Ψ, the kinetic energy. So the operator −(ℏ²/2m) ∂²/∂x² returns the kinetic energy times Ψ."
+        },
+        {
+          "type": "math",
+          "tex": "-\\frac{\\hbar^{2}}{2m}\\,\\frac{\\partial^{2} \\Psi}{\\partial x^{2}} \\;=\\; \\frac{\\hbar^{2} k^{2}}{2m}\\,\\Psi \\;=\\; \\frac{p^{2}}{2m}\\,\\Psi",
+          "display": true,
+          "caption": "−(ℏ²/2m) ∂²/∂x² is the kinetic-energy operator. m is the particle's mass. p²/2m is the kinetic energy of a classical free particle. The two factors of i from the second derivative of the complex exponential combine into the minus sign, which cancels the explicit minus in the prefactor."
+        },
+        {
+          "type": "p",
+          "text": "Now demand that the classical relation E = p²/2m hold as an operator equation on Ψ. The left side becomes iℏ ∂Ψ/∂t. The right side becomes −(ℏ²/2m) ∂²Ψ/∂x². Setting them equal gives the free-particle Schrödinger equation."
+        },
+        {
+          "type": "math",
+          "tex": "i\\hbar\\,\\frac{\\partial \\Psi}{\\partial t} \\;=\\; -\\frac{\\hbar^{2}}{2m}\\,\\frac{\\partial^{2} \\Psi}{\\partial x^{2}}",
+          "display": true,
+          "caption": "The free-particle Schrödinger equation in one spatial dimension. The left side is iℏ times the time derivative of Ψ. The right side is the kinetic-energy operator acting on Ψ. There is no potential here; the particle is floating in empty space."
+        },
+        {
+          "type": "p",
+          "text": "For a particle in an external potential V(x), the total energy is kinetic plus potential: E = p²/2m + V(x). Translate the new term: V(x) is already a function of x, so it acts on Ψ simply by multiplication. Add V(x)Ψ to the right side of the equation above. The result is the time-dependent Schrödinger equation in its general one-dimensional form."
+        },
+        {
+          "type": "math",
+          "tex": "i\\hbar\\,\\frac{\\partial \\Psi}{\\partial t} \\;=\\; \\left[\\,-\\frac{\\hbar^{2}}{2m}\\,\\frac{\\partial^{2}}{\\partial x^{2}} \\;+\\; V(x)\\,\\right]\\Psi \\;\\equiv\\; \\hat{H}\\,\\Psi",
+          "display": true,
+          "caption": "The time-dependent Schrödinger equation in one spatial dimension. V(x) is the potential energy at position x. The bracket on the right is called the Hamiltonian operator Ĥ, the quantum analog of the classical energy function E = p²/2m + V. The whole equation reads: applying the energy operator iℏ ∂/∂t to Ψ gives the same answer as applying the Hamiltonian Ĥ to Ψ."
+        },
+        {
+          "type": "p",
+          "text": "This is not a derivation; it is a guess constrained by demanding that plane waves satisfy the equation. The equation could in principle have higher-order time derivatives or non-linear pieces consistent with that demand. The justification is empirical: when Schrödinger plugged in the Coulomb potential of the hydrogen atom and solved for stationary states (next sections), the energies came out as the Bohr ladder, accurate to part-per-thousand. That is what convinced everyone, then and now."
+        }
+      ],
+      "quiz": {
+        "question": "The time-dependent Schrödinger equation has a first-order derivative in time and a second-order derivative in space, with an explicit factor of i in front of the time derivative. A classical wave equation (for example a vibrating string, ∂²u/∂t² = c² ∂²u/∂x²) has second-order derivatives in both, no i, and admits real-valued solutions. What is the deepest single consequence of the i and the first-order time derivative in the Schrödinger equation?",
+        "options": [
+          "It makes the equation easier to solve numerically, because first-order time stepping is cheaper than second-order; the i is conventional and could be absorbed by redefining t.",
+          "It forces Ψ to be complex-valued, which lets |Ψ|² stay constant in time (a probability density that does not oscillate to zero) while Ψ itself rotates in the complex plane; a real-valued field cannot satisfy iℏ ∂_t Ψ = ĤΨ except by being identically zero.",
+          "It makes the equation Lorentz-invariant, which is why it gives the right relativistic spectrum of hydrogen with no further modification.",
+          "It is required to make the Hamiltonian Hermitian; without the i the operator Ĥ would have complex eigenvalues and the energies would not be real."
+        ],
+        "correctIndex": 1,
+        "explanation": "The factor of i is what makes Ψ inherently complex. If Ψ were real, then iℏ ∂_t Ψ would be imaginary while ĤΨ would be real, and equality would force ∂_t Ψ = 0 (a static wave function, no dynamics). With Ψ complex, the time derivative is allowed to be imaginary, which means Ψ rotates in the complex plane as time advances: Ψ(x, t) = ψ(x) exp(−iEt/ℏ) for a state of definite energy. The squared modulus |Ψ|² is unchanged by that rotation, so the probability density is steady even though Ψ itself moves. A real-valued classical wave (a vibrating string) has its squared amplitude oscillate to zero twice per period, which is fine for displacement but would be nonsense for a probability that has to integrate to 1. Option A is wrong on the second clause: i cannot be absorbed by a real rescaling of t. Option C is wrong: the Schrödinger equation is not Lorentz-invariant; the Klein-Gordon and Dirac equations are. Option D inverts the logic: Ĥ is Hermitian because it is built from real V and the symmetric −∂²/∂x², not because of the i out front."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. What Ψ is, and what it isn't",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Schrödinger himself thought, for a few months in 1926, that |Ψ|² was a literal density of electric charge: that an electron in the ground state of hydrogen was not a point particle but a smeared cloud of charge whose distribution was given by his wave function. The picture broke quickly. The wave packet of a free electron spreads with time (the viz below makes this visible), so a single localized electron, on the smeared-charge picture, should diffuse outward across the lab over a fraction of a second. But every detector that has ever caught an electron has caught it at a point: a single click in a Geiger counter, a single dot on a photographic plate, a single flash on a phosphor screen. Whatever Ψ is, it is not the electron's substance distributed in space."
+        },
+        {
+          "type": "p",
+          "text": "Max Born proposed the resolution in July 1926, in a paper analyzing scattering experiments. The probability of finding the particle in a small interval dx around position x, at time t, is |Ψ(x, t)|² dx. The wave function is a probability amplitude, not a physical density; the squared modulus is the density. For this to make sense the total probability of finding the particle anywhere must equal one."
+        },
+        {
+          "type": "math",
+          "tex": "\\int_{-\\infty}^{\\infty} |\\Psi(x, t)|^{2}\\, dx \\;=\\; 1",
+          "display": true,
+          "caption": "|Ψ(x, t)|² is the probability density at position x and time t. The integral is the total probability that the particle is somewhere on the real line. It must equal 1, because the particle does exist. A direct calculation from the Schrödinger equation shows that if this integral is 1 at one time, it stays 1 forever; the equation conserves the norm of Ψ, which is what makes the probability interpretation consistent."
+        },
+        {
+          "type": "p",
+          "text": "Now the reason the equation needs to be complex becomes physical, not formal. If Ψ were real-valued, |Ψ|² would oscillate the way a sine squared does: zero, peak, zero, peak. The probability of finding the particle would dip to zero everywhere, twice per period, which is meaningless. A complex Ψ rotates in the complex plane as time passes (multiply by e^(−iEt/ℏ) and the modulus stays fixed while the phase winds). The complex amplitude moves; the squared amplitude, the thing the lab actually measures, sits still."
+        },
+        {
+          "type": "viz",
+          "src": "2026-05-16-schrodinger-equation.html",
+          "height": 460,
+          "caption": "A Gaussian wave packet for a free particle, centered at x = 0 with initial width σ₀. The shaded curve is the probability density |Ψ(x, t)|² at the current time t. The dashed gray curve is the initial density |Ψ(x, 0)|². Drag σ₀ to set the initial localization, and drag t to advance the evolution. The packet stays Gaussian, stays centered (the particle has no average momentum), and spreads with width σ(t) = √(σ₀² + (ℏt/2mσ₀)²). The narrower you make σ₀, the faster the spreading: pinning down position tightly forces a broad distribution of momenta, and momentum makes the wave move. This is the Heisenberg uncertainty principle, encoded in a single equation of motion."
+        },
+        {
+          "type": "p",
+          "text": "Schrödinger never accepted Born's interpretation. He wrote later, with characteristic bluntness, 'I do not like it, and I am sorry I ever had anything to do with it.' Einstein, who had nominated him for the Nobel Prize, agreed in spirit: 'the theory says a lot, but does not really bring us any closer to the secret of the Old One. I, at any rate, am convinced that He is not playing at dice.' The fight between deterministic and probabilistic readings of Ψ has not closed in a century. The |Ψ|² rule, for every experiment ever performed, has given the right numbers."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Stationary states and the time-independent equation",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The time-dependent Schrödinger equation tells you how Ψ evolves once you know it at one instant, but solving it for an arbitrary initial Ψ is hard work in general. There is a special class of solutions that are easy to find and that turn out to organize all the others: the stationary states, in which the spatial shape of Ψ is fixed and only its overall phase rotates with time. Finding them reduces the problem from a partial differential equation in two variables to an ordinary differential equation in one."
+        },
+        {
+          "type": "p",
+          "text": "Try Ψ(x, t) = ψ(x) φ(t) (separation of variables: assume the wave function factors into a piece that depends only on x and a piece that depends only on t). Substitute into iℏ ∂_t Ψ = ĤΨ. The left side becomes iℏ ψ(x) φ'(t). The right side becomes [Ĥψ(x)] φ(t), because Ĥ contains only x-derivatives and V(x), and is therefore blind to φ(t). Divide both sides by ψ(x) φ(t)."
+        },
+        {
+          "type": "math",
+          "tex": "i\\hbar\\,\\frac{\\varphi'(t)}{\\varphi(t)} \\;=\\; \\frac{\\hat{H}\\,\\psi(x)}{\\psi(x)}",
+          "display": true,
+          "caption": "The left side depends only on t. The right side depends only on x. Two functions of independent variables can be equal for all (x, t) only if they both equal the same constant. Call that constant E (it will turn out to be the energy of the state). This is the standard separation-of-variables trick from ordinary differential equations, applied to the simplest case where the potential V does not depend on time."
+        },
+        {
+          "type": "p",
+          "text": "The time equation iℏ φ'(t) = E φ(t) integrates immediately to φ(t) = exp(−iEt/ℏ), a pure phase rotation. The space equation is the time-independent Schrödinger equation, an eigenvalue problem for the Hamiltonian."
+        },
+        {
+          "type": "math",
+          "tex": "\\hat{H}\\,\\psi(x) \\;=\\; E\\,\\psi(x)",
+          "display": true,
+          "caption": "Ĥ is the Hamiltonian operator, the same energy operator that appears on the right side of the time-dependent equation. ψ is the spatial part of Ψ. E is the energy of the state, a real number. This is an eigenvalue equation: ψ is an eigenfunction of Ĥ with eigenvalue E. The allowed energies of the system are exactly the eigenvalues, and the wave functions of definite energy are exactly the eigenfunctions."
+        },
+        {
+          "type": "p",
+          "text": "The word 'stationary' refers to probability, not to motion. The full wave function is Ψ(x, t) = ψ(x) exp(−iEt/ℏ), and |Ψ|² = |ψ(x)|² × |exp(−iEt/ℏ)|² = |ψ(x)|², because the complex exponential has unit modulus. The state oscillates in phase but the probability density stands still: an electron in a stationary state of hydrogen is not orbiting in any classical sense, and a position measurement repeated at any time draws from the same distribution |ψ(x)|²."
+        },
+        {
+          "type": "p",
+          "text": "In January 1926 Schrödinger plugged V(r) = −e²/(4πε₀ r), the Coulomb potential binding an electron of charge −e to a proton of charge +e at distance r, into the three-dimensional version of the eigenvalue equation. The mathematics is harder (you separate angular and radial pieces, the angular part gives spherical harmonics, the radial part gives Laguerre polynomials, the boundary condition at infinity discretizes the energies), but the eigenvalues fall out as E_n = −13.6 eV / n² for positive integer n. These are exactly the Bohr energies. The integer n was not put in; it was forced by the requirement that ψ remain finite at the origin and decay at infinity. Bohr had postulated quantization in 1913. Schrödinger derived it in 1926. That is what made wave mechanics."
+        }
+      ],
+      "quiz": {
+        "question": "A student asks: 'If Ψ(x, t) = ψ(x) exp(−iEt/ℏ) is a stationary state, the time-dependent factor still varies. Why is the electron in this state called stationary, and what observable would actually distinguish two stationary states with different energies E₁ and E₂?'",
+        "options": [
+          "It is called stationary because ψ(x) does not change with time; the time factor exp(−iEt/ℏ) is a mathematical bookkeeping device with no measurable consequences, so two stationary states with different E are indistinguishable.",
+          "It is called stationary because the probability density |Ψ|² = |ψ(x)|² is independent of time; a single measurement on one stationary state cannot reveal E directly, but a superposition Ψ = a ψ₁ exp(−iE₁t/ℏ) + b ψ₂ exp(−iE₂t/ℏ) has a probability density that beats at the frequency (E₂ − E₁)/ℏ, and that beat (or the photon emitted at that frequency in a transition) is the energy difference.",
+          "It is called stationary because the wave function does not depend on x; only the time factor matters, and the energy is read off as the rate of rotation of the global phase.",
+          "It is called stationary because in such a state the position of the electron is fixed, which is what makes the energy precisely defined; measuring the position twice at different times always returns the same value."
+        ],
+        "correctIndex": 1,
+        "explanation": "Stationary refers to the probability density, not to Ψ itself. The full wave function rotates in the complex plane at rate ω = E/ℏ, but |Ψ|² = |ψ(x)|² is constant in time, so any single-time position measurement on the pure state cannot see E. The overall phase of a single quantum state is unobservable; relative phases between different states are observable. Take a superposition of two stationary states with energies E₁ and E₂. Compute |aψ₁ exp(−iE₁t/ℏ) + bψ₂ exp(−iE₂t/ℏ)|² and the cross term carries a factor cos((E₂ − E₁)t/ℏ + phases), so the probability density oscillates at the Bohr frequency ω₂₁ = (E₂ − E₁)/ℏ. That is exactly the frequency of the photon emitted when the atom drops from the higher to the lower state, the Bohr frequency rule for spectral lines. Option A is wrong about indistinguishability (the energy difference is measurable). Option C inverts the role of x and t. Option D confuses stationary with static; the electron in a stationary state has no definite position."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. A particle in a box",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The cleanest example, where the entire machinery is visible end to end on a single page, is the infinite square well: a particle of mass m confined to the interval 0 ≤ x ≤ L by walls at which the potential V(x) jumps from 0 to infinity. The particle cannot exist where V is infinite, so ψ(x) must vanish at x = 0 and x = L. Inside the box V = 0, and the time-independent Schrödinger equation reduces to the equation of an ordinary harmonic oscillator in the spatial variable."
+        },
+        {
+          "type": "math",
+          "tex": "-\\frac{\\hbar^{2}}{2m}\\,\\frac{d^{2}\\psi}{dx^{2}} \\;=\\; E\\,\\psi",
+          "display": true,
+          "caption": "The time-independent Schrödinger equation inside the well, where V(x) = 0. m is the particle's mass. E is the (unknown) energy eigenvalue. The equation says ψ has a second derivative proportional to negative ψ, the defining property of sinusoidal functions, so the solutions inside the box are sines and cosines."
+        },
+        {
+          "type": "p",
+          "text": "Define k = √(2mE)/ℏ, so the equation becomes ψ'' = −k² ψ, whose general solution is a linear combination of sin(kx) and cos(kx)."
+        },
+        {
+          "type": "math",
+          "tex": "\\psi(x) \\;=\\; A\\sin(kx) \\;+\\; B\\cos(kx)",
+          "display": true,
+          "caption": "ψ is the spatial wave function inside the box. A and B are constants to be fixed by the boundary conditions. k is √(2mE)/ℏ, the spatial wavenumber, and E is the energy eigenvalue we are trying to determine. The form is identical to a vibrating string: the same differential equation governs both, and the same boundary conditions will produce the same discrete spectrum."
+        },
+        {
+          "type": "p",
+          "text": "Now apply the walls. At x = 0, ψ(0) = B = 0, so the cosine drops out and only the sine survives. At x = L, ψ(L) = A sin(kL) = 0. Either A = 0 (which gives the trivial ψ ≡ 0, no particle at all) or sin(kL) = 0, which requires kL to be an integer multiple of π. Discard the trivial case. We are left with k_n L = nπ for a positive integer n, and from k = √(2mE)/ℏ we read off the allowed energies."
+        },
+        {
+          "type": "math",
+          "tex": "k_{n} \\;=\\; \\frac{n\\pi}{L}, \\qquad E_{n} \\;=\\; \\frac{\\hbar^{2} k_{n}^{2}}{2m} \\;=\\; \\frac{n^{2}\\pi^{2}\\hbar^{2}}{2mL^{2}}",
+          "display": true,
+          "caption": "k_n is the n-th allowed wavenumber inside the box. E_n is the n-th allowed energy. n is a positive integer (n = 1, 2, 3, ...), the quantum number. L is the width of the box. m is the particle's mass. Energies grow as n², so spacings widen as n increases. The ground state n = 1 sits at finite energy above zero (no particle in a finite box can have zero kinetic energy, the first encounter with a phenomenon called zero-point energy). Normalize ψ_n with the integral ∫₀^L |ψ_n|² dx = 1; the answer is ψ_n(x) = √(2/L) sin(nπx/L)."
+        },
+        {
+          "type": "p",
+          "text": "The integer n was not assumed. It was forced. We wrote down a second-order differential equation, imposed boundary conditions that a stretched string with both ends fixed would also need to satisfy, and the discrete set of allowed energies appeared with no further input. Quantization, the postulate Bohr had defended in 1913 on the single ground that it worked, dropped out for free the moment matter was treated as a wave in a bounded region. The recipe became a theorem."
+        },
+        {
+          "type": "p",
+          "text": "The same logic reads the Bohr atom backwards into the new framework. The Bohr orbit, in retrospect, is a particle on a ring of circumference 2πr: the boundary condition is periodicity (ψ must return to its starting value after going once around), and this forces an integer number of de Broglie wavelengths to fit on the ring. That requirement, in disguise, was pr = nℏ. The hydrogen atom of 1913 was a particle in a circular box. Schrödinger's equation generalized 'circular box' to 'any bounded region with any potential' and read off the eigenvalues by solving the differential equation. The crisis Bohr had opened by hand in 1913 was closed in 1926 by an eigenvalue problem, and physics has been writing down Ĥψ = Eψ for the next problem ever since."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "The Schrödinger equation differs from Newton's F = ma in more than just notation. Which of the following best captures the deepest single difference between the two, the one that is forced by the wave nature of matter and that you have seen most explicitly in the particle-in-a-box example?",
+    "options": [
+      "Newton's equation is deterministic and Schrödinger's is probabilistic; once you accept that |Ψ|² is a probability density, every other difference (linearity, complex values, energy quantization) is a corollary of that single shift.",
+      "Newton's equation is second-order in time, Schrödinger's is first-order in time, so the Schrödinger equation requires only the initial Ψ rather than the initial Ψ and its time derivative; this is the deepest difference, and bound-state quantization is a side effect.",
+      "The Schrödinger equation is a linear partial differential equation, and bound states are eigenfunctions of a linear operator (the Hamiltonian) on a function space; the discrete spectrum of allowed energies is then the discrete set of eigenvalues forced by boundary conditions, just as the discrete set of standing-wave frequencies of a string is forced by its fixed ends. Newton's equation has no analog of this: a classical particle in a box can have any energy at all.",
+      "The Schrödinger equation is non-local, in that ψ at one point depends on ψ everywhere else; Newton's equation is local, depending only on the force at the particle's current position. The non-locality of Ψ is the source of quantization."
+    ],
+    "correctIndex": 2,
+    "explanation": "The deepest structural difference is that the time-independent Schrödinger equation is an eigenvalue problem for a linear operator (the Hamiltonian) acting on a function space, and the allowed energies of a bound state are exactly the discrete eigenvalues that emerge when boundary conditions select a discrete subset of solutions. The particle-in-a-box is the cleanest demonstration: writing down the equation and imposing ψ(0) = ψ(L) = 0 forces k_n L = nπ, hence E_n = n²π²ℏ²/2mL², a discrete ladder. The same logic gives the hydrogen spectrum and every other bound-state spectrum in quantum mechanics. Newton's equation has no such mechanism: a classical particle of any energy can rattle around inside the same box, because no boundary condition on a smooth trajectory selects discrete values of E. Option A is right that probability is a key shift but understates the role of the eigenvalue structure; quantization is not a corollary of probability but of linearity plus boundary conditions. Option B is true about the order in time but is not the deepest difference (Maxwell's equations are also first order in some formulations; that alone does not produce a discrete spectrum). Option D is wrong: the Schrödinger equation is local in the same sense Newton's is (it involves ψ and its derivatives at one point), and what produces quantization is the boundary conditions on a continuous local equation, not non-locality."
+  },
+  "suggestedNodes": [
+    {
+      "id": "hydrogen_atom",
+      "label": "Hydrogen",
+      "subtitle": "E_n = -13.6 eV/n²",
+      "edgeType": "extends"
+    },
+    {
+      "id": "quantum_tunneling",
+      "label": "Tunneling",
+      "subtitle": "T ≈ e^(-2κa)",
+      "edgeType": "extends"
+    },
+    {
+      "id": "harmonic_oscillator",
+      "label": "QHO",
+      "subtitle": "E_n = (n+½)ℏω",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-16T09:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 24,
+    "previouslyMastered": [
+      "wave_particle_duality",
+      "wavelength",
+      "photon_energy",
+      "interference_diffraction"
+    ]
+  }
+}
