@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 12px;
+  line-height: 1.7;
+}
+.axlabel {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; fill: var(--text-muted);
+}
+.axtitle {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; fill: var(--text-muted);
+}
+.legend {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <div style="padding: 14px 18px;">
+    <svg id="svg" width="100%" viewBox="0 0 720 380" preserveAspectRatio="xMidYMid meet">
+      <g id="plot"></g>
+      <g id="ladder"></g>
+    </svg>
+    <div class="viz-slider-row">
+      <label>n</label>
+      <input type="range" id="nSlider" min="1" max="6" step="1" value="2">
+      <span class="value" id="nVal">n = 2</span>
+    </div>
+    <div class="readout" id="readout"></div>
+    <div class="viz-caption" style="margin-top: 12px;">
+      A particle in an infinite square well of width L. The orange curve is Re &psi;<sub>n</sub>(x,t), the real part of the wave function, animated forward in time; it rocks between positive and negative like a standing wave on a string, rotating at angular frequency &omega;<sub>n</sub> = E<sub>n</sub>/&hbar; in the complex plane. The cream-shaded region is |&psi;<sub>n</sub>(x)|<sup>2</sup>, the Born-rule probability density. Even as the orange wave oscillates, |&psi;|<sup>2</sup> sits perfectly still. That is what a stationary state is. The right column shows the energy ladder E<sub>n</sub> = n<sup>2</sup>&pi;<sup>2</sup>&hbar;<sup>2</sup>/(2mL<sup>2</sup>); the level for the current n is highlighted, and the rocking of the orange curve speeds up as n<sup>2</sup>.
+    </div>
+  </div>
+</div>
+<script>
+(function() {
+  var PLOT = { x0: 70, y0: 40, x1: 500, y1: 290 };
+  var LADDER = { x0: 575, y0: 40, x1: 660, y1: 290 };
+  var N_MAX = 6;
+
+  var plotG = document.getElementById('plot');
+  var ladderG = document.getElementById('ladder');
+  var slider = document.getElementById('nSlider');
+  var nVal = document.getElementById('nVal');
+  var readout = document.getElementById('readout');
+
+  function drawFrame() {
+    var yMid = (PLOT.y0 + PLOT.y1) / 2;
+    var html = '';
+    html += '<rect x="' + PLOT.x0 + '" y="' + PLOT.y0 + '" width="' + (PLOT.x1 - PLOT.x0) + '" height="' + (PLOT.y1 - PLOT.y0) + '" fill="var(--bg-raised)" stroke="var(--border)"/>';
+    html += '<line x1="' + PLOT.x0 + '" y1="' + PLOT.y0 + '" x2="' + PLOT.x0 + '" y2="' + PLOT.y1 + '" stroke="var(--accent)" stroke-width="3"/>';
+    html += '<line x1="' + PLOT.x1 + '" y1="' + PLOT.y0 + '" x2="' + PLOT.x1 + '" y2="' + PLOT.y1 + '" stroke="var(--accent)" stroke-width="3"/>';
+    html += '<line x1="' + PLOT.x0 + '" y1="' + yMid + '" x2="' + PLOT.x1 + '" y2="' + yMid + '" stroke="var(--border-strong)" stroke-dasharray="3,3"/>';
+    // x-axis label and ticks
+    html += '<text class="axlabel" x="' + PLOT.x0 + '" y="' + (PLOT.y1 + 16) + '" text-anchor="middle">0</text>';
+    html += '<text class="axlabel" x="' + PLOT.x1 + '" y="' + (PLOT.y1 + 16) + '" text-anchor="middle">L</text>';
+    html += '<text class="axlabel" x="' + ((PLOT.x0+PLOT.x1)/2) + '" y="' + (PLOT.y1 + 32) + '" text-anchor="middle">x  (position, units of L)</text>';
+    // y-axis: amplitude label (rotated)
+    var yLabelX = PLOT.x0 - 36;
+    html += '<text class="axlabel" text-anchor="middle" transform="translate(' + yLabelX + ',' + yMid + ') rotate(-90)">amplitude  (Re &#968; in units &#8730;(1/L);  |&#968;|&#178; in units 1/L)</text>';
+    // y-axis tick marks at + and -
+    html += '<text class="axlabel" x="' + (PLOT.x0 - 8) + '" y="' + (PLOT.y0 + 5) + '" text-anchor="end">+&#8730;(2/L)</text>';
+    html += '<text class="axlabel" x="' + (PLOT.x0 - 8) + '" y="' + (yMid + 4) + '" text-anchor="end">0</text>';
+    html += '<text class="axlabel" x="' + (PLOT.x0 - 8) + '" y="' + (PLOT.y1 - 2) + '" text-anchor="end">&#8722;&#8730;(2/L)</text>';
+    // Legend (inside plot, top-left)
+    html += '<g class="legend" transform="translate(' + (PLOT.x0 + 12) + ',' + (PLOT.y0 + 18) + ')">';
+    html += '<rect width="16" height="3" y="-2" fill="var(--accent)"/>';
+    html += '<text x="22" y="3" fill="var(--text-muted)">Re &#968;(x, t)</text>';
+    html += '<rect width="16" height="11" x="110" y="-8" fill="var(--accent-soft)" fill-opacity="0.35"/>';
+    html += '<text x="132" y="3" fill="var(--text-muted)">|&#968;(x)|&#178;</text>';
+    html += '</g>';
+    // Wall labels
+    html += '<text class="axlabel" x="' + (PLOT.x0 - 4) + '" y="' + (PLOT.y0 - 6) + '" text-anchor="end" fill="var(--accent)">V = &#8734;</text>';
+    html += '<text class="axlabel" x="' + (PLOT.x1 + 4) + '" y="' + (PLOT.y0 - 6) + '" text-anchor="start" fill="var(--accent)">V = &#8734;</text>';
+    // The dynamic paths (initially empty)
+    html += '<path id="probPath" fill="var(--accent-soft)" fill-opacity="0.35" stroke="none"/>';
+    html += '<path id="wavePath" fill="none" stroke="var(--accent)" stroke-width="2.25"/>';
+    plotG.innerHTML = html;
+
+    // Energy ladder
+    var lh = '';
+    var ladderXmid = (LADDER.x0 + LADDER.x1) / 2;
+    lh += '<text class="axtitle" x="' + ladderXmid + '" y="' + (LADDER.y0 - 18) + '" text-anchor="middle">E<tspan dy="-2" font-size="9">n</tspan></text>';
+    lh += '<text class="axtitle" x="' + ladderXmid + '" y="' + (LADDER.y0 - 4) + '" text-anchor="middle">(units &#960;&#178;&#295;&#178;/2mL&#178;)</text>';
+    lh += '<line x1="' + LADDER.x0 + '" y1="' + LADDER.y0 + '" x2="' + LADDER.x0 + '" y2="' + LADDER.y1 + '" stroke="var(--border-strong)"/>';
+    lh += '<text class="axlabel" x="' + (LADDER.x0 - 4) + '" y="' + (LADDER.y1 + 4) + '" text-anchor="end">0</text>';
+    lh += '<text class="axlabel" x="' + (LADDER.x0 - 4) + '" y="' + (LADDER.y0 + 4) + '" text-anchor="end">' + (N_MAX*N_MAX) + '</text>';
+    var maxE = N_MAX * N_MAX;
+    for (var i = 1; i <= N_MAX; i++) {
+      var Erel = (i * i) / maxE;
+      var y = LADDER.y1 - Erel * (LADDER.y1 - LADDER.y0);
+      lh += '<line id="lvl' + i + '" x1="' + (LADDER.x0 + 4) + '" y1="' + y + '" x2="' + LADDER.x1 + '" y2="' + y + '" stroke="var(--text-ghost)" stroke-width="1.5"/>';
+      lh += '<text class="axlabel" id="lvllbl' + i + '" x="' + (LADDER.x1 + 6) + '" y="' + (y + 4) + '" fill="var(--text-muted)">n=' + i + ' (' + (i*i) + ')</text>';
+    }
+    ladderG.innerHTML = lh;
+  }
+
+  var n = 2;
+  var t = 0;
+  var lastFrame = performance.now();
+
+  function update() {
+    var Nsamp = 200;
+    var yMid = (PLOT.y0 + PLOT.y1) / 2;
+    var halfH = (PLOT.y1 - PLOT.y0) / 2;
+    // Re psi maximum is sqrt(2/L) when cos(phase)=1; map sqrt(2) (in L=1 units) -> halfH px
+    var ampScale = halfH / Math.sqrt(2);
+    var phase = (n * n) * t * 0.7; // n^2 scaling of angular frequency
+    var cosP = Math.cos(phase);
+    // |psi|^2 max is 2/L = 2 (in L=1 units). Map it to occupy up to ~70 px of upward height.
+    var probScale = 70 / 2;
+
+    var wavePts = '';
+    var probPts = 'M ' + PLOT.x0 + ' ' + PLOT.y1 + ' ';
+    for (var i = 0; i <= Nsamp; i++) {
+      var xN = i / Nsamp;
+      var px = PLOT.x0 + xN * (PLOT.x1 - PLOT.x0);
+      var psi0 = Math.sqrt(2) * Math.sin(n * Math.PI * xN);
+      var rePsi = psi0 * cosP;
+      var psiSq = psi0 * psi0;
+      var py = yMid - rePsi * ampScale;
+      wavePts += (i === 0 ? 'M ' : 'L ') + px.toFixed(2) + ' ' + py.toFixed(2) + ' ';
+      var probY = PLOT.y1 - psiSq * probScale;
+      probPts += 'L ' + px.toFixed(2) + ' ' + probY.toFixed(2) + ' ';
+    }
+    probPts += 'L ' + PLOT.x1 + ' ' + PLOT.y1 + ' Z';
+    document.getElementById('wavePath').setAttribute('d', wavePts);
+    document.getElementById('probPath').setAttribute('d', probPts);
+
+    for (var i = 1; i <= N_MAX; i++) {
+      var lvl = document.getElementById('lvl' + i);
+      var lbl = document.getElementById('lvllbl' + i);
+      if (i === n) {
+        lvl.setAttribute('stroke', 'var(--accent)');
+        lvl.setAttribute('stroke-width', '3');
+        lbl.setAttribute('fill', 'var(--accent)');
+      } else {
+        lvl.setAttribute('stroke', 'var(--text-ghost)');
+        lvl.setAttribute('stroke-width', '1.5');
+        lbl.setAttribute('fill', 'var(--text-muted)');
+      }
+    }
+
+    var phaseDisp = phase % (2 * Math.PI);
+    if (phaseDisp < 0) phaseDisp += 2 * Math.PI;
+    readout.innerHTML =
+      '<span style="color:var(--text-muted)">n =</span> <span style="color:var(--text)">' + n + '</span>' +
+      '  &nbsp;|&nbsp;  <span style="color:var(--text-muted)">E_n/E_1 =</span> <span style="color:var(--text)">' + (n*n) + '</span>' +
+      '  &nbsp;|&nbsp;  <span style="color:var(--text-muted)">nodes inside =</span> <span style="color:var(--text)">' + (n - 1) + '</span>' +
+      '  &nbsp;|&nbsp;  <span style="color:var(--text-muted)">phase =</span> <span style="color:var(--text)">' + phaseDisp.toFixed(2) + ' rad</span>' +
+      '<br><span style="color:var(--text-muted)">Re &psi; (orange) rotates at &omega;_n = E_n/&hbar;.  |&psi;|&#178; (cream) does not move; that is the Born density of a stationary state.</span>';
+  }
+
+  function tick(now) {
+    var dt = Math.min(0.06, (now - lastFrame) / 1000);
+    lastFrame = now;
+    t += dt;
+    if (t > 1e6) t = 0;
+    update();
+    requestAnimationFrame(tick);
+  }
+
+  slider.addEventListener('input', function() {
+    n = parseInt(slider.value, 10);
+    nVal.textContent = 'n = ' + n;
+    update();
+  });
+
+  drawFrame();
+  update();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+{
+  "slug": "2026-05-17-schrodinger-equation",
+  "title": "The Schrödinger equation: an equation of motion for matter waves",
+  "node": {
+    "id": "schrodinger_equation",
+    "label": "Schrödinger",
+    "subtitle": "iℏ∂ψ/∂t = Ĥψ"
+  },
+  "intro": "De Broglie's 1924 thesis announced that matter, like light, has a wave character, with wavelength λ = h/p. That left a problem of motion. If matter is a wave, what equation governs it? Erwin Schrödinger answered in a four-paper burst across the first months of 1926, and the answer turned out to be stranger than anyone expected: a complex-valued field whose squared modulus tells you where the particle is likely to be, and whose evolution is dictated by one first-order-in-time partial differential equation.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The wave that had no equation",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Louis de Broglie's 1924 doctoral thesis at the Sorbonne proposed that any particle of momentum p has an associated wavelength λ = h/p (where h is Planck's constant). The proposal extended Einstein's photon idea backwards: if light, long thought to be a wave, could also be a particle, then matter, long thought to be particles, ought also to be a wave. The Davisson-Germer experiment of 1927 (electrons scattered off a nickel crystal, producing a diffraction pattern) would soon confirm this. But the thesis left an obvious gap. The wavelength tells you the spatial scale of the wave. It tells you nothing about how the wave moves. What is the equation of motion for a de Broglie wave?"
+        },
+        {
+          "type": "p",
+          "text": "The story breaks in Zurich, late November 1925. Peter Debye (the Dutch-Swiss physicist who chaired the ETH physics department; a Nobel laureate the next year) ran a weekly seminar with Erwin Schrödinger, then thirty-eight and a professor at the University of Zurich. Debye assigned Schrödinger to summarize de Broglie's thesis. Schrödinger did. Debye listened, and afterwards remarked that talking about a wave without writing a wave equation was childish, and that one really ought to look for the equation. The remark stung enough that Schrödinger took the Christmas holiday at a chalet in Arosa in the Swiss Alps (with a former lover whose name no biographer has ever recovered) and came back to Zurich in January 1926 with the equation that now bears his name. Four papers followed in twelve weeks, and wave mechanics was born."
+        },
+        {
+          "type": "p",
+          "text": "Schrödinger was not the only player. Werner Heisenberg, twenty-three years old and at Göttingen, had published his own quantum mechanics in July 1925: matrix mechanics, a more abstract formalism in which observable quantities (position, momentum, energy) were represented as infinite matrices and time evolution was matrix multiplication. The Göttingen and Zurich groups argued for several months about which formulation was correct, because they did not look alike at all. By the end of 1926, both Schrödinger and Wolfgang Pauli had independently proven that matrix mechanics and wave mechanics give the same predictions for every measurable quantity. They are two languages for one theory. Wave mechanics caught on faster because most physicists in 1926 knew how to solve partial differential equations and almost none of them knew how to multiply infinite matrices."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Building the equation out of plane waves",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "How do you guess an equation? Schrödinger's path was the simplest possible one. Take a free particle moving in one dimension with momentum p and energy E. De Broglie says it travels as a wave with wavenumber k = p/ℏ, where ℏ = h/2π is the reduced Planck constant (the constant of integration that appears whenever the natural variable is the angular frequency rather than the ordinary frequency). Einstein, generalizing his 1905 photon relation, says the angular frequency of the wave is ω = E/ℏ. The simplest wave with that k and ω is a complex exponential. Let ψ stand for the wave function and write it down:"
+        },
+        {
+          "type": "math",
+          "tex": "\\psi(x, t) \\;=\\; e^{\\,i\\,(k x \\,-\\, \\omega t)}",
+          "display": true,
+          "caption": "ψ is the wave function of the free particle. x is position; t is time. k is the wavenumber, equal to p/ℏ, where p is the momentum. ω is the angular frequency, equal to E/ℏ, where E is the energy. The factor i = √−1 is essential; the wave is complex-valued. This is the only one-dimensional travelling wave whose magnitude is the same everywhere and whose phase advances with phase velocity ω/k = E/p."
+        },
+        {
+          "type": "p",
+          "text": "This plane wave has a useful property: differentiation pulls out the energy and the momentum. Take the time derivative of ψ. The exponential brings down a factor of −iω, so ∂ψ/∂t = −iω ψ. Multiply both sides by iℏ and the −iω becomes ℏω, which is E. So iℏ ∂ψ/∂t = E ψ. Now take two spatial derivatives. The first brings down ik; the second brings down (ik)² = −k². So ∂²ψ/∂x² = −k² ψ. Multiply both sides by −ℏ²/(2m), where m is the particle mass. The −k² becomes ℏ²k²/(2m) = p²/(2m), which is the kinetic energy of a non-relativistic free particle. So −(ℏ²/2m) ∂²ψ/∂x² = (p²/2m) ψ. For a free particle, the total energy E equals the kinetic energy p²/(2m), so the two operations applied to ψ must give the same answer:"
+        },
+        {
+          "type": "math",
+          "tex": "i\\hbar\\,\\frac{\\partial \\psi}{\\partial t} \\;=\\; -\\frac{\\hbar^{2}}{2 m}\\,\\frac{\\partial^{2} \\psi}{\\partial x^{2}} \\quad\\text{(free particle)}",
+          "display": true,
+          "caption": "ψ is the wave function. ℏ is the reduced Planck constant, equal to h/2π. m is the mass of the particle. The left side is iℏ times the partial derivative of ψ with respect to time t. The right side is −ℏ²/(2m) times the second partial derivative of ψ with respect to position x. Read on a plane wave, the left side returns E ψ and the right side returns (p²/2m) ψ; the equation thus encodes the kinetic-energy relation E = p²/(2m)."
+        },
+        {
+          "type": "p",
+          "text": "The full equation, with a potential V(x) added, is the textbook Schrödinger equation. The potential V is an extra energy at each position, so it multiplies ψ on the right alongside the kinetic-energy operator. Let Ĥ stand for the Hamiltonian, the total-energy operator that adds kinetic and potential energy together (the hat means it acts on the wave function rather than being a number). Then:"
+        },
+        {
+          "type": "math",
+          "tex": "i\\hbar\\,\\frac{\\partial \\psi}{\\partial t} \\;=\\; \\hat{H}\\,\\psi \\;=\\; -\\frac{\\hbar^{2}}{2m}\\,\\frac{\\partial^{2} \\psi}{\\partial x^{2}} \\,+\\, V(x)\\,\\psi",
+          "display": true,
+          "caption": "ψ is the wave function. ℏ is the reduced Planck constant. m is the particle mass. V(x) is the potential energy as a function of position. Ĥ is the Hamiltonian operator, the sum of the kinetic-energy operator −(ℏ²/2m) ∂² and the potential energy V(x). The equation reads: iℏ times the rate of phase change of ψ equals the Hamiltonian applied to ψ. In words: the rate of phase rotation equals the total energy."
+        },
+        {
+          "type": "p",
+          "text": "This is not, strictly, a derivation. It is a construction: we have written one equation that a free plane wave satisfies, then guessed how the potential should enter by reading energies off both sides. The equation's authority is its agreement with experiment, not its descent from prior axioms. Like Newton's F = ma, it is a postulate of the theory."
+        }
+      ],
+      "quiz": {
+        "question": "The Schrödinger equation has an explicit factor of i = √−1 on the left side and is first-order in the time derivative. A natural question is whether the wave function could not, instead, be real-valued, like the displacement of a vibrating string. Why must ψ be complex?",
+        "options": [
+          "It is not strictly required: a real-valued ψ would also be a solution, and the textbook simply prefers complex notation for elegance.",
+          "Because the equation is first-order in time and contains a factor of i, a real-valued ψ would either grow or decay exponentially in time (like the heat equation, which is real and first-order in time). The factor of i converts what would otherwise be exponential growth or decay into rotation in the complex plane, so |ψ|² stays well-behaved and the probability of finding the particle somewhere remains constant in time.",
+          "Because ψ must be complex in order to describe particles with spin, and all elementary particles have nonzero spin.",
+          "Because Schrödinger wanted to use techniques from complex analysis, and the i was added later by Born to make the boundary conditions match those of a vibrating string."
+        ],
+        "correctIndex": 1,
+        "explanation": "A real-valued field obeying a first-order-in-time equation behaves like the heat equation: solutions evolve by exponential decay (or growth) rather than oscillation. That would mean the total probability ∫|ψ|² dx would not be conserved, which is fatal for any equation that is supposed to describe where a particle is. The factor of i turns the exponential decay into a rotating phase: ψ ∝ exp(−iEt/ℏ) has constant modulus, so |ψ|² is preserved. Option A is wrong because real-valued solutions of the equation simply do not exist for stationary states (they would have to oscillate, which a real solution of a first-order-in-t equation cannot do). Option C confuses the scalar Schrödinger equation with the Pauli or Dirac equations, which describe spin separately. Option D is a fiction; the i is present in Schrödinger's 1926 papers."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The probability amplitude and the stationary cloud",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The plane wave ψ = exp(i(kx − ωt)) has constant magnitude everywhere: |ψ|² = 1 at every point in space. This is bizarre. A free particle has equal probability of being found anywhere? Schrödinger himself did not like that consequence, and his first interpretation was different. In a March 1926 paper he proposed that |ψ(x)|² represented a continuous distribution of electric charge: the electron is not a point that is somewhere, but a smear of charge spread out across space, with density set by the wave."
+        },
+        {
+          "type": "p",
+          "text": "Max Born, working at Göttingen, found this untenable for a different reason. In a scattering problem (an incoming particle hitting a target), ψ spreads out spherically after the collision. The charge-density picture predicts that the detector should pick up a faint signal everywhere around the target, scaled by |ψ|². But a real detector clicks once, at one location, at one moment. Born proposed in two short 1926 papers that the wave function is not a physical density at all but a probability amplitude: |ψ(x, t)|² dx is the probability of finding the particle in the interval (x, x+dx) at time t. The wave tells you the odds; the particle, when looked for, is found at a single point selected from those odds."
+        },
+        {
+          "type": "math",
+          "tex": "|\\psi(x, t)|^{2}\\, dx \\;=\\; \\Pr\\big(x' \\in [x,\\, x + dx]\\,\\big|\\,\\text{measurement at time } t\\big)",
+          "display": true,
+          "caption": "|ψ|² is the squared modulus of the wave function, equal to ψ ψ* where ψ* is the complex conjugate of ψ. dx is an infinitesimal interval centred on x. The left side is the probability of finding the particle in that interval if a position measurement is performed at time t. The integral of |ψ|² over all of space must equal one, because the particle must be somewhere. This is the Born rule: the wave function is a probability amplitude, and its squared modulus is a probability density."
+        },
+        {
+          "type": "p",
+          "text": "Einstein never accepted this. His May 1926 letter to Born contains the often-quoted line that 'the theory says a lot, but does not really bring us any closer to the secret of the Old One. I, at any rate, am convinced that He does not throw dice.' The remark is sometimes treated as theological flavor; in context it is a precise rejection of the Born interpretation specifically, not of quantum theory in general. Einstein wanted a deterministic field that produced the probabilistic outcomes as a statistical limit. He never found one. Born and Schrödinger eventually shared the same Nobel committee's attention (Schrödinger 1933, Born 1954, separated by twenty-one years that mostly reflect how unpopular the probabilistic reading was even after the equation had won)."
+        },
+        {
+          "type": "p",
+          "text": "One feature of the Born rule deserves underlining. A stationary state has the special form ψ(x, t) = φ(x) exp(−iEt/ℏ): the spatial part φ(x) is fixed in time, and the time dependence is just a rotating phase. Therefore |ψ(x, t)|² = |φ(x)|² has no time dependence at all. The probability cloud sits still even though the wave is rotating in the complex plane at angular frequency E/ℏ. The next viz shows this explicitly. The hydrogen atom in its ground state is 'stationary' in this technical sense: the electron's probability density is fixed, and the underlying ψ is rotating at about 10¹⁶ radians per second. The old classical objection (an orbiting electron should radiate and spiral in) does not apply, because the cloud is not orbiting. It is not moving at all."
+        },
+        {
+          "type": "viz",
+          "src": "2026-05-17-schrodinger-equation.html",
+          "height": 500,
+          "caption": "A particle in an infinite square well of width L. The slider sets the quantum number n. The orange curve is the real part of ψ_n(x, t) = √(2/L) sin(nπx/L) · exp(−iE_n t/ℏ), animated forward in time so you can see the phase rotation. The cream-shaded region is |ψ_n(x)|², the probability density (Born rule). Watch the orange curve rock back and forth as the phase advances, and watch the shaded |ψ|² sit completely still: this is what 'stationary state' means. The right-hand column shows the energy ladder E_n ∝ n²; pick a larger n and the wave function grows more wiggles and the energy jumps by a factor (n+1)²/n²."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Eigenstates, eigenvalues, and a particle in a box",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "When the potential V does not depend on time, the equation admits separable solutions of the form ψ(x, t) = φ(x) f(t). Plug this into the equation, divide both sides by φ(x) f(t), and the left side depends only on t while the right side depends only on x. The only way two expressions in independent variables can be equal everywhere is if each is the same constant. Call that constant E. The time part then says iℏ df/dt = E f, whose solution is f(t) = exp(−iEt/ℏ), the rotating phase we have already met. The spatial part is the time-independent Schrödinger equation:"
+        },
+        {
+          "type": "math",
+          "tex": "-\\frac{\\hbar^{2}}{2m}\\,\\frac{d^{2} \\varphi}{dx^{2}} \\,+\\, V(x)\\,\\varphi \\;=\\; E\\,\\varphi",
+          "display": true,
+          "caption": "φ(x) is the spatial part of a stationary state. V(x) is the potential energy. E is the energy of the stationary state, a constant to be determined by the boundary conditions. m is the particle mass and ℏ is the reduced Planck constant. The equation says that applying the Hamiltonian Ĥ = −(ℏ²/2m) d²/dx² + V to φ returns E times φ; in linear-algebra language, φ is an eigenfunction of Ĥ with eigenvalue E."
+        },
+        {
+          "type": "p",
+          "text": "Boundary conditions then pick out which values of E are allowed. The cleanest example is a particle confined to a one-dimensional box: V = 0 inside an interval of length L, V = ∞ outside (this is the infinite square well, the simplest potential in any introductory quantum-mechanics course). The wave function must vanish at both walls because the probability of finding the particle in the wall is zero. Inside the box V = 0, so the equation reduces to d²φ/dx² = −(2mE/ℏ²) φ, whose solutions are sines and cosines. The boundary condition φ(0) = 0 throws out the cosines; the boundary condition φ(L) = 0 forces the sine to fit an integer number of half-cycles into L. That selection is the source of quantization:"
+        },
+        {
+          "type": "math",
+          "tex": "\\varphi_{n}(x) \\;=\\; \\sqrt{\\tfrac{2}{L}}\\,\\sin\\!\\left(\\tfrac{n \\pi x}{L}\\right), \\quad E_{n} \\;=\\; \\frac{n^{2}\\,\\pi^{2}\\,\\hbar^{2}}{2\\,m\\,L^{2}}, \\quad n = 1,\\,2,\\,3,\\,\\ldots",
+          "display": true,
+          "caption": "φ_n is the spatial wave function of the nth stationary state inside the box. L is the width of the box. n is the quantum number, a positive integer that counts which standing wave the state is. E_n is the energy of the nth state. m is the particle mass; ℏ is the reduced Planck constant. The prefactor √(2/L) normalizes the wave function so that ∫₀^L |φ_n|² dx = 1. The energy is proportional to n²: the spacing between consecutive levels grows linearly with n."
+        },
+        {
+          "type": "p",
+          "text": "Three facts come out for free that classical mechanics could never explain. First, the energy is quantized: only n = 1, 2, 3, ... are allowed, with all intermediate values forbidden by the boundary conditions. Second, the ground state has nonzero energy E_1 = π²ℏ²/(2mL²); no amount of cooling can remove this 'zero-point' kinetic energy. (This is why liquid helium does not solidify under its own vapor pressure at any temperature; the helium atom's zero-point motion in the lattice exceeds the cohesive energy of the would-be solid.) Third, the spectrum is discrete: between E_1 and E_2 there are no allowed energies at all. Every feature that we associate with 'quantum behavior' (discrete levels, ground-state energy, no continuous spectrum) follows from one linear wave equation and a boundary."
+        }
+      ],
+      "quiz": {
+        "question": "A student notes that for a classical particle bouncing inside a one-dimensional box, the minimum energy is zero: just sit at rest. Yet the quantum particle in the same box has a minimum energy E_1 = π²ℏ²/(2mL²) that cannot be reduced. What forces the quantum ground-state energy to be nonzero, and what would have to change for it to vanish?",
+        "options": [
+          "Zero-point energy is a separate physical effect, unrelated to the Schrödinger equation; it is added by hand to fix divergences elsewhere in the theory.",
+          "Nothing forces E_1 > 0. The wave equation does have a φ = 0 solution at E = 0, and the student's classical intuition is correct that the quantum particle can sit at rest if you cool it enough.",
+          "The boundary conditions require φ to vanish at both walls but be nonzero inside, so φ cannot be a constant. The smallest sinusoidal standing wave that satisfies φ(0) = φ(L) = 0 has half-wavelength L, hence wavelength 2L. By the de Broglie relation p_1 = h/(2L), and the kinetic energy E_1 = p_1²/(2m) = π²ℏ²/(2mL²) follows. To make E_1 → 0 you would have to take L → ∞ (a free particle, where any momentum is allowed including p = 0).",
+          "E_1 > 0 because the box is never truly infinite-well in any real experiment, and quantum tunneling raises the effective ground-state energy."
+        ],
+        "correctIndex": 2,
+        "explanation": "The Schrödinger equation in the box, together with the boundary conditions φ(0) = φ(L) = 0, allows only sinusoidal standing waves with wavelengths 2L/n. The longest such wavelength is 2L (the n = 1 mode); by p = h/λ this corresponds to the minimum momentum h/(2L), and the kinetic energy p²/(2m) gives E_1. A constant φ would satisfy the equation at E = 0 but would not satisfy the boundary conditions except by being identically zero (which is not a normalizable wave function: the particle is nowhere). Option A inverts the relationship: zero-point energy is a consequence of the equation, not a patch to it. Option B is wrong: φ ≡ 0 is not a physical state because |ψ|² must integrate to 1. Option D confuses zero-point energy with tunneling; the two are distinct, and zero-point energy persists even in an ideal infinite well where tunneling cannot occur."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Helium, six dimensions, and why Schrödinger lost",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Schrödinger's first paper of 1926 solves the hydrogen atom: one electron, one proton, a Coulomb potential. The wave function ψ(x, y, z, t) lives on ordinary three-dimensional space, and Schrödinger initially read |ψ|² as a smeared-out charge density of the electron, a static cloud of negative charge around the nucleus. The hydrogen spectrum came out correctly to many decimal places, and the picture was seductive: no orbits, no quantum jumps, just a continuous wave that explained why atoms have discrete energy levels."
+        },
+        {
+          "type": "p",
+          "text": "The next problem on his list was helium. Helium has two electrons. Schrödinger sat down to write the wave function and found that it was not a function of one position but of two: ψ(x₁, y₁, z₁, x₂, y₂, z₂, t), a complex-valued field defined on a six-dimensional space (the configuration space of two particles, in which one point specifies where both electrons are at once). And the equation he was forced to write for it required the wave to live in that six-dimensional space; you cannot separate ψ into a product of two independent three-dimensional waves except in the special case where the electrons are uncorrelated (which they generally are not, because they repel one another)."
+        },
+        {
+          "type": "p",
+          "text": "This was fatal for the charge-density interpretation. A real physical wave (a sound wave, a water wave, a Maxwellian electromagnetic wave) lives in the same three-dimensional space we do. Two such waves can coexist there, two amplitudes at each point of three-space. They cannot be combined into a single amplitude defined on a six-dimensional space; that mathematical object simply does not have a 3D-space picture you can draw. Schrödinger's helium wave function carries correlations (the chance of finding electron 1 here given that electron 2 is there) that cannot be expressed as anything happening at any single point in real space. The wave is irreducibly six-dimensional, and for atoms with more electrons it becomes irreducibly 9-, 12-, 15-, ... dimensional. There is no version of 'smeared charge in 3D' that survives the move past hydrogen."
+        },
+        {
+          "type": "p",
+          "text": "Born's probability interpretation survives the move, and that is why it won. |ψ(x₁, x₂)|² is a probability density in the six-dimensional configuration space: the joint probability that electron 1 sits near a certain place and electron 2 sits near another. It makes no claim about 'the wave amplitude at a point in real space'; it makes claims about joint configurations of all the particles. The Born rule scales effortlessly to n particles in 3n dimensions. Schrödinger never accepted it. He spent his remaining forty years looking for a way back to a deterministic field theory, and the 1935 cat thought experiment (a quantum system entangled with a macroscopic one such that the cat's life or death depends on a single nuclear decay) was an attempt to make the probabilistic reading visibly absurd. It did not dislodge the Born interpretation; it sharpened everyone's sense of how strange the theory had become. The same equation that gives the hydrogen spectrum to six decimal places also tells us, the moment we look at helium, that the wave function lives outside ordinary space. We have not found a way to undo that, and after a hundred years of trying, the field has mostly stopped trying."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Schrödinger's first interpretation of |ψ|² was that it represented a smeared-out distribution of electric charge: the electron is a continuous cloud rather than a point. This reading was consistent with his treatment of the hydrogen atom in early 1926 but was abandoned within a year. What killed the charge-density interpretation, and what replaced it?",
+    "options": [
+      "It was killed by the discovery of antiparticles (Dirac 1928), which required ψ to be a four-component spinor rather than a single complex field; the replacement was the Dirac wave function.",
+      "It was killed by the Stern-Gerlach experiment, which showed that ψ must include a spin index; the replacement was Pauli's two-component spinor.",
+      "It was killed by the move to systems of more than one particle. For an n-electron atom the wave function lives on a 3n-dimensional configuration space, not on ordinary 3D space, and there is no way to read a 6-dimensional (or 9-dimensional, ...) object as a charge density in 3D. Max Born's probability interpretation (|ψ|² is a probability density in configuration space) survives the move to n > 1; Schrödinger's reading does not.",
+      "It was killed by the photoelectric effect, which showed that electrons arrive at the detector as discrete clicks rather than as continuous fluxes; the replacement was Heisenberg's matrix mechanics."
+    ],
+    "correctIndex": 2,
+    "explanation": "Hydrogen is the misleading case. For one electron, ψ is a function on three-dimensional space, and a charge-density reading is at least dimensionally possible. The moment Schrödinger turned to helium (two electrons) the wave function became a function of six coordinates, defined on configuration space rather than on 3-space. A 6D wave cannot be re-projected onto 3-space as any kind of physical density without losing the correlations that the equation requires. The Born rule, |ψ(x₁, x₂)|² as a joint probability density in configuration space, handles any n electrons without breaking. Option A confuses the non-relativistic Schrödinger equation with the Dirac equation, a separate later development. Option B confuses configuration-space dimensionality with internal spin structure; the two are distinct (a spinless many-particle wave function still has the 3n-dimensional problem). Option D is anachronistic: the photoelectric effect predates the equation by twenty years and was part of the motivation for it, not the cause of its reinterpretation."
+  },
+  "suggestedNodes": [
+    {
+      "id": "born_rule",
+      "label": "Born rule",
+      "subtitle": "|ψ|² = P(x)",
+      "edgeType": "related"
+    },
+    {
+      "id": "hydrogen_atom",
+      "label": "Hydrogen atom",
+      "subtitle": "Ĥψ = −E_R/n² ψ",
+      "edgeType": "applied"
+    },
+    {
+      "id": "quantum_tunneling",
+      "label": "Tunneling",
+      "subtitle": "T ∝ exp(−κL)",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-17T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 25,
+    "previouslyMastered": [
+      "wave_particle_duality",
+      "photon_energy",
+      "photoelectric_effect"
+    ]
+  }
+}
