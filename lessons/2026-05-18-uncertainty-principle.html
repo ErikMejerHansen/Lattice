@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 10px;
+  line-height: 1.7;
+}
+.readout .v { color: var(--text); }
+.readout .lbl { color: var(--text-muted); }
+.readout .product { color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div style="padding: 14px 18px;">
+    <svg id="svg" width="100%" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet">
+      <g id="scene"></g>
+    </svg>
+    <div class="viz-slider-row">
+      <label>σ<tspan style="font-style:normal">ₓ</tspan></label>
+      <input type="range" id="sigSlider" min="0.30" max="3.00" step="0.01" value="1.00">
+      <span class="value" id="sigVal">1.00</span>
+    </div>
+    <div class="readout" id="readout"></div>
+    <div class="viz-caption" style="margin-top: 12px;">
+      Left panel: a Gaussian wave packet |ψ(x)|² in position, with width σ<sub>x</sub>. Right panel: its Fourier transform |ψ̃(p)|² in momentum, with width σ<sub>p</sub>. The slider sets σ<sub>x</sub> (in arbitrary length units, with ℏ = 1). As you shrink the packet in x the momentum distribution broadens; as you widen it in x the momentum distribution narrows. Their product σ<sub>x</sub>·σ<sub>p</sub> stays pinned at exactly ℏ/2: the Gaussian is the unique state that saturates the Heisenberg inequality. Any non-Gaussian wave packet sits strictly above this bound.
+    </div>
+  </div>
+</div>
+<script>
+(function() {
+  // Conventions: arbitrary length units; hbar = 1.
+  // ψ(x) = (1/(2π σ²))^(1/4) exp(-x²/(4σ²)),  σ_x = σ.
+  // Its FT: ψ̃(p) = (2σ²/π)^(1/4) exp(-p² σ²),   σ_p = 1/(2σ).  (with ℏ=1)
+  // Then σ_x σ_p = 1/2 = ℏ/2.
+
+  var HBAR = 1.0;
+  var SVG_W = 720, SVG_H = 320;
+  var PAD_TOP = 26, PAD_BOT = 64;
+  var PLOT_H = SVG_H - PAD_TOP - PAD_BOT;        // 230
+  var PLOT_Y0 = PAD_TOP + PLOT_H;                // baseline y
+
+  // Two side-by-side plot regions
+  var PLOT_X_LEFT = 60,  PLOT_X_RIGHT = 350;     // position plot
+  var PLOT_P_LEFT = 410, PLOT_P_RIGHT = 700;     // momentum plot
+  var PLOT_X_W = PLOT_X_RIGHT - PLOT_X_LEFT;     // 290
+  var PLOT_P_W = PLOT_P_RIGHT - PLOT_P_LEFT;     // 290
+
+  // Display ranges (arbitrary units): x in [-6, 6], p in [-6, 6].
+  var X_LO = -6, X_HI = 6;
+  var P_LO = -6, P_HI = 6;
+
+  function xToPx(x) { return PLOT_X_LEFT + (x - X_LO) / (X_HI - X_LO) * PLOT_X_W; }
+  function pToPx(p) { return PLOT_P_LEFT + (p - P_LO) / (P_HI - P_LO) * PLOT_P_W; }
+  function yToPx(y, ymax) {
+    // y in [0, ymax]; baseline at PLOT_Y0
+    var frac = ymax > 0 ? (y / ymax) : 0;
+    return PLOT_Y0 - frac * PLOT_H;
+  }
+
+  var scene = document.getElementById('scene');
+  var sigSlider = document.getElementById('sigSlider');
+  var sigVal = document.getElementById('sigVal');
+  var readout = document.getElementById('readout');
+
+  function svgEl(name, attrs) {
+    var el = document.createElementNS('http://www.w3.org/2000/svg', name);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  function text(x, y, str, opts) {
+    opts = opts || {};
+    var t = svgEl('text', {
+      x: x, y: y,
+      'font-family': opts.mono
+        ? 'IBM Plex Mono, SF Mono, Menlo, monospace'
+        : 'Source Serif 4, Iowan Old Style, Palatino, Georgia, serif',
+      'font-style': opts.upright ? 'normal' : 'italic',
+      'font-size': opts.size || 12,
+      fill: opts.color || '#1a1a18',
+      'text-anchor': opts.anchor || 'start'
+    });
+    if (opts.transform) t.setAttribute('transform', opts.transform);
+    t.textContent = str;
+    return t;
+  }
+
+  function pdfX(x, sigma) {
+    // |ψ(x)|² for a Gaussian: (1/(σ √(2π))) exp(-x²/(2σ²))  (normalized in x)
+    var pref = 1.0 / (sigma * Math.sqrt(2 * Math.PI));
+    return pref * Math.exp(-(x * x) / (2 * sigma * sigma));
+  }
+
+  function pdfP(p, sigma) {
+    // |ψ̃(p)|² with σ_p = ℏ/(2σ); normalized.
+    var sigP = HBAR / (2 * sigma);
+    var pref = 1.0 / (sigP * Math.sqrt(2 * Math.PI));
+    return pref * Math.exp(-(p * p) / (2 * sigP * sigP));
+  }
+
+  function pathFromSamples(xs, ys, xToPx, yToPx) {
+    var d = '';
+    for (var i = 0; i < xs.length; i++) {
+      var X = xToPx(xs[i]);
+      var Y = yToPx(ys[i]);
+      d += (i === 0 ? 'M' : 'L') + X.toFixed(2) + ',' + Y.toFixed(2) + ' ';
+    }
+    return d;
+  }
+
+  function draw() {
+    while (scene.firstChild) scene.removeChild(scene.firstChild);
+
+    var sigma = parseFloat(sigSlider.value);
+    var sigP = HBAR / (2 * sigma);
+    var product = sigma * sigP;  // always ℏ/2
+
+    // Peak heights (for y-scale)
+    var peakX = 1.0 / (sigma * Math.sqrt(2 * Math.PI));
+    var peakP = 1.0 / (sigP * Math.sqrt(2 * Math.PI));
+    // Use a common y-scale ratio per panel: a fixed visual height regardless of slider
+    var Y_MAX_X = Math.max(peakX, 0.15) * 1.15;
+    var Y_MAX_P = Math.max(peakP, 0.15) * 1.15;
+
+    // --- Background panels ---
+    scene.appendChild(svgEl('rect', {
+      x: PLOT_X_LEFT, y: PAD_TOP,
+      width: PLOT_X_W, height: PLOT_H,
+      fill: '#faf5e9', stroke: '#d8cfb8', 'stroke-width': 1
+    }));
+    scene.appendChild(svgEl('rect', {
+      x: PLOT_P_LEFT, y: PAD_TOP,
+      width: PLOT_P_W, height: PLOT_H,
+      fill: '#faf5e9', stroke: '#d8cfb8', 'stroke-width': 1
+    }));
+
+    // --- Sample and draw the position pdf ---
+    var SAMPLES = 200;
+    var xs = [], ysX = [];
+    for (var i = 0; i <= SAMPLES; i++) {
+      var x = X_LO + (X_HI - X_LO) * i / SAMPLES;
+      xs.push(x);
+      ysX.push(pdfX(x, sigma));
+    }
+    // Shaded fill region: ±σ_x band
+    var bandPath = '';
+    // start at baseline at x=-σ
+    bandPath += 'M' + xToPx(-sigma).toFixed(2) + ',' + PLOT_Y0.toFixed(2) + ' ';
+    var stepsBand = 60;
+    for (var k = 0; k <= stepsBand; k++) {
+      var xb = -sigma + (2 * sigma) * k / stepsBand;
+      bandPath += 'L' + xToPx(xb).toFixed(2) + ',' + yToPx(pdfX(xb, sigma), Y_MAX_X).toFixed(2) + ' ';
+    }
+    bandPath += 'L' + xToPx(sigma).toFixed(2) + ',' + PLOT_Y0.toFixed(2) + ' Z';
+    scene.appendChild(svgEl('path', {
+      d: bandPath, fill: '#9c3a22', 'fill-opacity': '0.13', stroke: 'none'
+    }));
+
+    // Curve
+    scene.appendChild(svgEl('path', {
+      d: pathFromSamples(xs, ysX, xToPx, function(y) { return yToPx(y, Y_MAX_X); }),
+      fill: 'none', stroke: '#9c3a22', 'stroke-width': 2
+    }));
+
+    // Width markers ±σ on x axis
+    scene.appendChild(svgEl('line', {
+      x1: xToPx(-sigma), y1: PLOT_Y0 - 4, x2: xToPx(-sigma), y2: PLOT_Y0 + 6,
+      stroke: '#9c3a22', 'stroke-width': 1.5
+    }));
+    scene.appendChild(svgEl('line', {
+      x1: xToPx(sigma), y1: PLOT_Y0 - 4, x2: xToPx(sigma), y2: PLOT_Y0 + 6,
+      stroke: '#9c3a22', 'stroke-width': 1.5
+    }));
+    // σ_x bracket
+    scene.appendChild(svgEl('line', {
+      x1: xToPx(-sigma), y1: PLOT_Y0 + 18, x2: xToPx(sigma), y2: PLOT_Y0 + 18,
+      stroke: '#9c3a22', 'stroke-width': 1
+    }));
+    scene.appendChild(svgEl('line', {
+      x1: xToPx(-sigma), y1: PLOT_Y0 + 14, x2: xToPx(-sigma), y2: PLOT_Y0 + 22,
+      stroke: '#9c3a22', 'stroke-width': 1
+    }));
+    scene.appendChild(svgEl('line', {
+      x1: xToPx(sigma), y1: PLOT_Y0 + 14, x2: xToPx(sigma), y2: PLOT_Y0 + 22,
+      stroke: '#9c3a22', 'stroke-width': 1
+    }));
+    scene.appendChild(text((xToPx(-sigma) + xToPx(sigma)) / 2, PLOT_Y0 + 33,
+      '2σₓ', { size: 11, color: '#9c3a22', anchor: 'middle', mono: true, upright: true }));
+
+    // x axis (baseline + ticks)
+    scene.appendChild(svgEl('line', {
+      x1: PLOT_X_LEFT, y1: PLOT_Y0, x2: PLOT_X_RIGHT, y2: PLOT_Y0,
+      stroke: '#1a1a18', 'stroke-width': 1
+    }));
+    for (var tx = X_LO; tx <= X_HI; tx += 2) {
+      scene.appendChild(svgEl('line', {
+        x1: xToPx(tx), y1: PLOT_Y0, x2: xToPx(tx), y2: PLOT_Y0 + 4,
+        stroke: '#1a1a18', 'stroke-width': 1
+      }));
+      scene.appendChild(text(xToPx(tx), PLOT_Y0 + 50, String(tx),
+        { size: 10, color: '#6b6359', anchor: 'middle', mono: true, upright: true }));
+    }
+    // x-axis label
+    scene.appendChild(text((PLOT_X_LEFT + PLOT_X_RIGHT) / 2, SVG_H - 8, 'x (length units, ℏ = 1)',
+      { size: 11, color: '#6b6359', anchor: 'middle' }));
+
+    // Panel title
+    scene.appendChild(text(PLOT_X_LEFT, PAD_TOP - 8, '|ψ(x)|²  position density',
+      { size: 12, color: '#6b6359' }));
+
+    // y-axis label (rotated)
+    scene.appendChild(text(PLOT_X_LEFT - 38, (PAD_TOP + PLOT_Y0) / 2, '|ψ(x)|²',
+      { size: 11, color: '#6b6359', anchor: 'middle',
+        transform: 'rotate(-90 ' + (PLOT_X_LEFT - 38) + ' ' + ((PAD_TOP + PLOT_Y0) / 2) + ')' }));
+
+    // --- Sample and draw the momentum pdf ---
+    var ps = [], ysP = [];
+    for (var j = 0; j <= SAMPLES; j++) {
+      var p = P_LO + (P_HI - P_LO) * j / SAMPLES;
+      ps.push(p);
+      ysP.push(pdfP(p, sigma));
+    }
+    // Shaded ±σ_p band
+    var bandPathP = '';
+    bandPathP += 'M' + pToPx(-sigP).toFixed(2) + ',' + PLOT_Y0.toFixed(2) + ' ';
+    for (var kk = 0; kk <= stepsBand; kk++) {
+      var pb = -sigP + (2 * sigP) * kk / stepsBand;
+      if (pb < P_LO) pb = P_LO;
+      if (pb > P_HI) pb = P_HI;
+      bandPathP += 'L' + pToPx(pb).toFixed(2) + ',' + yToPx(pdfP(pb, sigma), Y_MAX_P).toFixed(2) + ' ';
+    }
+    bandPathP += 'L' + pToPx(Math.min(sigP, P_HI)).toFixed(2) + ',' + PLOT_Y0.toFixed(2) + ' Z';
+    scene.appendChild(svgEl('path', {
+      d: bandPathP, fill: '#9c3a22', 'fill-opacity': '0.13', stroke: 'none'
+    }));
+
+    // Curve
+    scene.appendChild(svgEl('path', {
+      d: pathFromSamples(ps, ysP, pToPx, function(y) { return yToPx(y, Y_MAX_P); }),
+      fill: 'none', stroke: '#9c3a22', 'stroke-width': 2
+    }));
+
+    // Width markers ±σ_p
+    var sigPClip = Math.max(P_LO, Math.min(P_HI, sigP));
+    var sigPNeg = Math.max(P_LO, Math.min(P_HI, -sigP));
+    scene.appendChild(svgEl('line', {
+      x1: pToPx(sigPNeg), y1: PLOT_Y0 - 4, x2: pToPx(sigPNeg), y2: PLOT_Y0 + 6,
+      stroke: '#9c3a22', 'stroke-width': 1.5
+    }));
+    scene.appendChild(svgEl('line', {
+      x1: pToPx(sigPClip), y1: PLOT_Y0 - 4, x2: pToPx(sigPClip), y2: PLOT_Y0 + 6,
+      stroke: '#9c3a22', 'stroke-width': 1.5
+    }));
+    scene.appendChild(svgEl('line', {
+      x1: pToPx(sigPNeg), y1: PLOT_Y0 + 18, x2: pToPx(sigPClip), y2: PLOT_Y0 + 18,
+      stroke: '#9c3a22', 'stroke-width': 1
+    }));
+    scene.appendChild(svgEl('line', {
+      x1: pToPx(sigPNeg), y1: PLOT_Y0 + 14, x2: pToPx(sigPNeg), y2: PLOT_Y0 + 22,
+      stroke: '#9c3a22', 'stroke-width': 1
+    }));
+    scene.appendChild(svgEl('line', {
+      x1: pToPx(sigPClip), y1: PLOT_Y0 + 14, x2: pToPx(sigPClip), y2: PLOT_Y0 + 22,
+      stroke: '#9c3a22', 'stroke-width': 1
+    }));
+    scene.appendChild(text((pToPx(sigPNeg) + pToPx(sigPClip)) / 2, PLOT_Y0 + 33,
+      '2σₚ', { size: 11, color: '#9c3a22', anchor: 'middle', mono: true, upright: true }));
+
+    // momentum axis
+    scene.appendChild(svgEl('line', {
+      x1: PLOT_P_LEFT, y1: PLOT_Y0, x2: PLOT_P_RIGHT, y2: PLOT_Y0,
+      stroke: '#1a1a18', 'stroke-width': 1
+    }));
+    for (var tp = P_LO; tp <= P_HI; tp += 2) {
+      scene.appendChild(svgEl('line', {
+        x1: pToPx(tp), y1: PLOT_Y0, x2: pToPx(tp), y2: PLOT_Y0 + 4,
+        stroke: '#1a1a18', 'stroke-width': 1
+      }));
+      scene.appendChild(text(pToPx(tp), PLOT_Y0 + 50, String(tp),
+        { size: 10, color: '#6b6359', anchor: 'middle', mono: true, upright: true }));
+    }
+    // p-axis label
+    scene.appendChild(text((PLOT_P_LEFT + PLOT_P_RIGHT) / 2, SVG_H - 8, 'p (momentum units, ℏ = 1)',
+      { size: 11, color: '#6b6359', anchor: 'middle' }));
+
+    // Panel title
+    scene.appendChild(text(PLOT_P_LEFT, PAD_TOP - 8, '|ψ̃(p)|²  momentum density',
+      { size: 12, color: '#6b6359' }));
+
+    // y-axis label (rotated)
+    scene.appendChild(text(PLOT_P_LEFT - 38, (PAD_TOP + PLOT_Y0) / 2, '|ψ̃(p)|²',
+      { size: 11, color: '#6b6359', anchor: 'middle',
+        transform: 'rotate(-90 ' + (PLOT_P_LEFT - 38) + ' ' + ((PAD_TOP + PLOT_Y0) / 2) + ')' }));
+
+    // --- Readout ---
+    sigVal.textContent = sigma.toFixed(2);
+    readout.innerHTML =
+      '<span class="lbl">σₓ </span><span class="v">' + sigma.toFixed(3) + '</span>' +
+      '    <span class="lbl">σₚ </span><span class="v">' + sigP.toFixed(3) + '</span>' +
+      '    <span class="lbl">σₓ · σₚ </span><span class="product">' + product.toFixed(3) +
+      ' = ℏ/2</span>';
+  }
+
+  sigSlider.addEventListener('input', draw);
+  draw();
+})();
+</script>
+</body>
+</html>

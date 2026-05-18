@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-06 from wave-particle-duality
-Heisenberg uncertainty principle — Δx·Δp ≥ ℏ/2, the noncommutative price of being a wave
 Bohr atom — quantized angular momentum recovered from de Broglie standing waves on the orbit
 
 # auto-suggested 2026-05-06 from stefan-boltzmann-law
@@ -64,3 +63,8 @@ Fermi-Dirac distribution — f(E,T) = 1/(1 + exp((E−μ)/kT)), why filling iden
 Born rule — |ψ|² as a probability density on configuration space, the interpretation Schrödinger never accepted and that survived him anyway
 Hydrogen atom — Coulomb potential plus spherical-harmonic angular factors, the bound-state spectrum E_n = −13.6 eV / n² that fell out of the equation in three pages
 Quantum tunneling — exponential leakage through a classically forbidden barrier, T ∝ exp(−2κL), the effect that explains α-decay rates spanning twenty orders of magnitude
+
+# auto-suggested 2026-05-18 from uncertainty-principle
+Robertson inequality — ΔAΔB ≥ ½|⟨[Â, B̂]⟩|, the general-operator version of Heisenberg from which the position-momentum case is a special case
+Energy-time uncertainty — ΔEΔt ≥ ℏ/2, not a Robertson inequality (time is not an operator) but a separate statement about state lifetimes and natural linewidths
+Gaussian wave packet — the unique minimum-uncertainty state σ_x σ_p = ℏ/2, and how it spreads in free space (Δx grows linearly with t at large t)
