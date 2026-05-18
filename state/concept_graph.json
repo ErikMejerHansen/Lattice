@@ -209,6 +209,16 @@
       "createdAt": "2026-05-17T08:00:00Z",
       "col": 0,
       "row": 10
+    },
+    {
+      "id": "uncertainty_principle",
+      "label": "Uncertainty",
+      "subtitle": "ΔxΔp ≥ ℏ/2",
+      "state": "available",
+      "lesson": "2026-05-18-uncertainty-principle",
+      "createdAt": "2026-05-18T08:00:00Z",
+      "col": 1,
+      "row": 10
     }
   ],
   "edges": [
@@ -259,6 +269,9 @@
     { "from": "work_function", "to": "photoelectric_effect", "kind": "extends" },
     { "from": "work_function", "to": "photon_energy", "kind": "related" },
     { "from": "schrodinger_equation", "to": "wave_particle_duality", "kind": "extends" },
-    { "from": "schrodinger_equation", "to": "photon_energy", "kind": "related" }
+    { "from": "schrodinger_equation", "to": "photon_energy", "kind": "related" },
+    { "from": "uncertainty_principle", "to": "schrodinger_equation", "kind": "extends" },
+    { "from": "uncertainty_principle", "to": "wave_particle_duality", "kind": "extends" },
+    { "from": "uncertainty_principle", "to": "compton_scattering", "kind": "related" }
   ]
 }

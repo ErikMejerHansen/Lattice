@@ -145,5 +145,12 @@
     "subtitle": "iℏ∂ψ/∂t = Ĥψ",
     "date": "2026-05-17",
     "estimatedReadingMinutes": 25
+  },
+  {
+    "slug": "2026-05-18-uncertainty-principle",
+    "title": "The Heisenberg uncertainty principle: the noncommutative price of being a wave",
+    "subtitle": "ΔxΔp ≥ ℏ/2",
+    "date": "2026-05-18",
+    "estimatedReadingMinutes": 24
   }
 ]

@@ -22,3 +22,4 @@
 2026-05-13T10:00Z  ok  compton-scattering  5sec, 1 viz, 3 edges, 3 auto-suggestions; acted on 2026-05-13 note ("What is Herzsprung-Russell?") by amending routine/CLAUDE.md system prompt to require a one-clause definition on first mention of any named concept; pushed to claude/gracious-franklin-yEomK per session branch policy (routine spec asks for main)
 2026-05-14T08:00Z  ok  work-function  5sec, 1 viz, 2 edges, 3 auto-suggestions; pushed to claude/gracious-franklin-sVlrT per session branch policy (routine spec asks for main)
 2026-05-17T08:00Z  ok  schrodinger-equation  5sec, 1 viz, 2 edges, 3 auto-suggestions; pushed to claude/gracious-franklin-gQvUv per session branch policy (routine spec asks for main)
+2026-05-18T08:00Z  ok  uncertainty-principle  5sec, 1 viz, 3 edges, 3 auto-suggestions; pushed to claude/gracious-franklin-Xpvlr per session branch policy (routine spec asks for main)
