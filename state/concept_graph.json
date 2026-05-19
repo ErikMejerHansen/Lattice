@@ -219,6 +219,16 @@
       "createdAt": "2026-05-18T08:00:00Z",
       "col": 1,
       "row": 10
+    },
+    {
+      "id": "bohr_atom",
+      "label": "Bohr atom",
+      "subtitle": "L = nℏ",
+      "state": "available",
+      "lesson": "2026-05-19-bohr-atom",
+      "createdAt": "2026-05-19T08:00:00Z",
+      "col": 0,
+      "row": 11
     }
   ],
   "edges": [
@@ -272,6 +282,9 @@
     { "from": "schrodinger_equation", "to": "photon_energy", "kind": "related" },
     { "from": "uncertainty_principle", "to": "schrodinger_equation", "kind": "extends" },
     { "from": "uncertainty_principle", "to": "wave_particle_duality", "kind": "extends" },
-    { "from": "uncertainty_principle", "to": "compton_scattering", "kind": "related" }
+    { "from": "uncertainty_principle", "to": "compton_scattering", "kind": "related" },
+    { "from": "bohr_atom", "to": "wave_particle_duality", "kind": "extends" },
+    { "from": "bohr_atom", "to": "photon_energy", "kind": "extends" },
+    { "from": "bohr_atom", "to": "spectroscopy_basics", "kind": "related" }
   ]
 }

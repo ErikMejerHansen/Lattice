@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-06 from wave-particle-duality
-Bohr atom — quantized angular momentum recovered from de Broglie standing waves on the orbit
 
 # auto-suggested 2026-05-06 from stefan-boltzmann-law
 Planetary equilibrium temperature — solar input vs σT⁴ output, why Mars is colder than Earth but not by as much as you would guess
@@ -68,3 +67,7 @@ Quantum tunneling — exponential leakage through a classically forbidden barrie
 Robertson inequality — ΔAΔB ≥ ½|⟨[Â, B̂]⟩|, the general-operator version of Heisenberg from which the position-momentum case is a special case
 Energy-time uncertainty — ΔEΔt ≥ ℏ/2, not a Robertson inequality (time is not an operator) but a separate statement about state lifetimes and natural linewidths
 Gaussian wave packet — the unique minimum-uncertainty state σ_x σ_p = ℏ/2, and how it spreads in free space (Δx grows linearly with t at large t)
+
+# auto-suggested 2026-05-19 from bohr-atom
+Bohr-Sommerfeld quantization — ∮p dq = nh, the elliptical-orbit generalization that bought the old quantum theory another decade and explained fine structure
+Correspondence principle — in the large-n limit the spacing of quantum transitions reduces to the classical orbital frequency, the heuristic Bohr used to guide his theory
