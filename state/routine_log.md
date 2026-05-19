@@ -23,3 +23,4 @@
 2026-05-14T08:00Z  ok  work-function  5sec, 1 viz, 2 edges, 3 auto-suggestions; pushed to claude/gracious-franklin-sVlrT per session branch policy (routine spec asks for main)
 2026-05-17T08:00Z  ok  schrodinger-equation  5sec, 1 viz, 2 edges, 3 auto-suggestions; pushed to claude/gracious-franklin-gQvUv per session branch policy (routine spec asks for main)
 2026-05-18T08:00Z  ok  uncertainty-principle  5sec, 1 viz, 3 edges, 3 auto-suggestions; pushed to claude/gracious-franklin-Xpvlr per session branch policy (routine spec asks for main)
+2026-05-19T08:00Z  ok  bohr-atom  5sec, 1 viz, 3 edges, 2 auto-suggestions; pushed to claude/gracious-franklin-NonHq per session branch policy (routine spec asks for main)

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 10px;
+  line-height: 1.7;
+}
+.readout .v { color: var(--text); }
+.readout .lbl { color: var(--text-muted); }
+.readout .status-ok { color: #4f6b35; }
+.readout .status-off { color: var(--accent); }
+.snap-row {
+  display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;
+}
+.snap-btn {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted);
+  background: var(--bg-raised); border: 1px solid var(--border);
+  padding: 6px 12px; cursor: pointer; min-width: 36px;
+}
+.snap-btn:hover { color: var(--accent); border-color: var(--border-strong); }
+.snap-btn.active { color: var(--accent); border-color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div style="padding: 14px 18px;">
+    <svg id="svg" width="100%" viewBox="0 0 720 380" preserveAspectRatio="xMidYMid meet">
+      <g id="scene"></g>
+    </svg>
+    <div class="viz-slider-row">
+      <label>n</label>
+      <input type="range" id="nSlider" min="0.5" max="6.0" step="0.02" value="3.00">
+      <span class="value" id="nVal">3.00</span>
+    </div>
+    <div class="snap-row" id="snapRow"></div>
+    <div class="readout" id="readout"></div>
+    <div class="viz-caption" style="margin-top: 12px;">
+      A de Broglie matter wave wrapped around a Bohr orbit. The dashed circle is the orbit, the dark dot is the proton, and the rust curve is the electron's matter wave, with its amplitude shown as a radial displacement from the orbit. The slider sets the number of wavelengths n that fit around the circumference. The green dot marks where the wave starts (at the right, θ = 0); the second dot, also at θ = 0 but now reached after one full lap, marks where the wave ends. At integer n the end lands on the start in phase, the wave closes, and the orbit is a standing wave (resonant). At non-integer n the end misses the start, the dashed segment between them is the residual mismatch, and on successive laps the wave interferes destructively with itself.
+    </div>
+  </div>
+</div>
+<script>
+(function() {
+  var scene = document.getElementById('scene');
+  var nSlider = document.getElementById('nSlider');
+  var nVal = document.getElementById('nVal');
+  var readout = document.getElementById('readout');
+  var snapRow = document.getElementById('snapRow');
+
+  var W = 720, H = 380;
+  var CX = W / 2, CY = H / 2 + 8;
+  var R = 110;          // orbit radius (px)
+  var A = 28;           // wave amplitude (px)
+
+  function svgEl(name, attrs) {
+    var el = document.createElementNS('http://www.w3.org/2000/svg', name);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  function text(x, y, str, opts) {
+    opts = opts || {};
+    var t = svgEl('text', {
+      x: x, y: y,
+      'font-family': opts.mono
+        ? 'IBM Plex Mono, SF Mono, Menlo, monospace'
+        : 'Source Serif 4, Iowan Old Style, Palatino, Georgia, serif',
+      'font-style': opts.upright ? 'normal' : 'italic',
+      'font-size': opts.size || 12,
+      'font-weight': opts.weight || 'normal',
+      fill: opts.color || '#1a1a18',
+      'text-anchor': opts.anchor || 'start'
+    });
+    t.textContent = str;
+    return t;
+  }
+
+  // Snap buttons for the canonical integers n = 1..5
+  for (var nb = 1; nb <= 5; nb++) {
+    (function(val) {
+      var b = document.createElement('button');
+      b.className = 'snap-btn';
+      b.textContent = 'n = ' + val;
+      b.addEventListener('click', function() {
+        nSlider.value = val.toFixed(2);
+        draw();
+      });
+      snapRow.appendChild(b);
+    })(nb);
+  }
+
+  function draw() {
+    while (scene.firstChild) scene.removeChild(scene.firstChild);
+
+    var n = parseFloat(nSlider.value);
+    nVal.textContent = n.toFixed(2);
+
+    // Residual phase mismatch at θ = 2π: the wave's value at the end is
+    // A · sin(n · 2π). For integer n this is zero, for half-integers it
+    // is also zero in amplitude but the sign flips; the cleanest measure
+    // of closure is the angular residual (n · 2π) mod 2π wrapped to (-π, π].
+    var rawResidual = (n * 2 * Math.PI) % (2 * Math.PI);
+    if (rawResidual > Math.PI) rawResidual -= 2 * Math.PI;
+    var residualDeg = Math.abs(rawResidual * 180 / Math.PI);
+    var nearest = Math.round(n);
+    var isResonant = Math.abs(n - nearest) < 0.015;
+
+    // --- Orbit (dashed circle) ---
+    scene.appendChild(svgEl('circle', {
+      cx: CX, cy: CY, r: R,
+      fill: 'none', stroke: '#b8ac8e',
+      'stroke-width': 1, 'stroke-dasharray': '3,3'
+    }));
+
+    // Inner amplitude bounds (light hint of where the wave can swing)
+    scene.appendChild(svgEl('circle', {
+      cx: CX, cy: CY, r: R - A,
+      fill: 'none', stroke: '#d8cfb8',
+      'stroke-width': 0.5, 'stroke-dasharray': '2,4'
+    }));
+    scene.appendChild(svgEl('circle', {
+      cx: CX, cy: CY, r: R + A,
+      fill: 'none', stroke: '#d8cfb8',
+      'stroke-width': 0.5, 'stroke-dasharray': '2,4'
+    }));
+
+    // --- Proton at center ---
+    scene.appendChild(svgEl('circle', {
+      cx: CX, cy: CY, r: 5,
+      fill: '#1a1a18'
+    }));
+    scene.appendChild(text(CX, CY + 22, 'proton',
+      { size: 10, color: '#6b6359', anchor: 'middle', upright: true }));
+
+    // --- The matter wave (one lap, θ from 0 to 2π) ---
+    var SAMPLES = 600;
+    var d = '';
+    for (var i = 0; i <= SAMPLES; i++) {
+      var theta = (i / SAMPLES) * 2 * Math.PI;
+      var rr = R + A * Math.sin(n * theta);
+      var x = CX + rr * Math.cos(theta);
+      var y = CY + rr * Math.sin(theta);
+      d += (i === 0 ? 'M' : 'L') + x.toFixed(2) + ',' + y.toFixed(2) + ' ';
+    }
+    scene.appendChild(svgEl('path', {
+      d: d, fill: 'none',
+      stroke: '#9c3a22', 'stroke-width': 2,
+      'stroke-linecap': 'round', 'stroke-linejoin': 'round'
+    }));
+
+    // --- Start and end markers ---
+    // Start at θ = 0: displacement is A · sin(0) = 0, so position is on the orbit.
+    var xStart = CX + R, yStart = CY;
+    // End: same θ direction (rightward), but radial value after one lap.
+    var dispEnd = A * Math.sin(n * 2 * Math.PI);
+    var xEnd = CX + (R + dispEnd), yEnd = CY;
+
+    // Dashed connector if mismatched
+    if (!isResonant) {
+      scene.appendChild(svgEl('line', {
+        x1: xStart, y1: yStart, x2: xEnd, y2: yEnd,
+        stroke: '#9c3a22', 'stroke-width': 2.5, 'stroke-dasharray': '5,3'
+      }));
+    }
+
+    // Start marker (always sage green)
+    scene.appendChild(svgEl('circle', {
+      cx: xStart, cy: yStart, r: 6,
+      fill: '#6c8a4a', stroke: '#1a1a18', 'stroke-width': 1
+    }));
+    scene.appendChild(text(xStart + 14, yStart + 4, 'start (θ=0)',
+      { size: 10, color: '#6b6359', upright: true }));
+
+    // End marker: green if resonant, rust if not
+    scene.appendChild(svgEl('circle', {
+      cx: xEnd, cy: yEnd, r: 6,
+      fill: isResonant ? '#6c8a4a' : '#9c3a22',
+      stroke: '#1a1a18', 'stroke-width': 1
+    }));
+    if (!isResonant) {
+      var endLabel = 'end (after one lap)';
+      scene.appendChild(text(xEnd + 14, yEnd + 18, endLabel,
+        { size: 10, color: '#9c3a22', upright: true }));
+    }
+
+    // --- Status banner ---
+    var status = isResonant
+      ? ('n = ' + nearest + ': standing wave closes in phase (resonant orbit)')
+      : ('n = ' + n.toFixed(2) + ': wave does not close on itself');
+    scene.appendChild(text(CX, 28, status, {
+      size: 14, anchor: 'middle',
+      color: isResonant ? '#4f6b35' : '#9c3a22',
+      upright: true, weight: '500'
+    }));
+
+    // --- Readout ---
+    var statusClass = isResonant ? 'status-ok' : 'status-off';
+    var statusText = isResonant
+      ? 'standing wave: 2πr = nλ satisfied, orbit is allowed'
+      : 'destructive interference on successive laps: orbit is forbidden';
+    readout.innerHTML =
+      '<span class="lbl">n </span><span class="v">' + n.toFixed(2) + '</span>' +
+      '    <span class="lbl">wavelengths around circle </span><span class="v">' + n.toFixed(2) + '</span>' +
+      '    <span class="lbl">phase residual at θ=2π </span><span class="v">' + residualDeg.toFixed(0) + '°</span>' +
+      '<br><span class="' + statusClass + '">' + statusText + '</span>';
+  }
+
+  nSlider.addEventListener('input', draw);
+  draw();
+})();
+</script>
+</body>
+</html>

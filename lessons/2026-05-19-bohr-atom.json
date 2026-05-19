@@ -1,0 +1,254 @@
+{
+  "slug": "2026-05-19-bohr-atom",
+  "title": "The Bohr atom: a postulate, a standing wave, and the second electron that broke them",
+  "node": {
+    "id": "bohr_atom",
+    "label": "Bohr atom",
+    "subtitle": "L = nℏ"
+  },
+  "intro": "Niels Bohr arrived in Manchester in 1912 to work under Ernest Rutherford, the New Zealander whose alpha-particle scattering experiments had just placed almost all of an atom's mass into a nucleus a hundred-thousandth its size. Bohr left seven months later with a question stuck in his head: a Rutherford atom, with electrons orbiting a tiny dense center, should radiate its energy away in 10⁻¹¹ seconds and collapse, and yet atoms do not. In March 1913 he sent Rutherford a paper that fixed the problem by brute force, three postulates that asserted what classical physics forbade, and out fell the hydrogen spectrum to the digit. Eleven years later, Louis de Broglie reread the second postulate and saw what Bohr had not: the quantization of angular momentum is the standing-wave condition for a matter wave on a circular orbit.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Rutherford's nucleus and the radiation that did not happen",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Rutherford's 1909 to 1911 experiments at Manchester had Hans Geiger and Ernest Marsden firing alpha particles (helium nuclei, ejected at high speed from radium decay) at a thin gold foil and counting the scattering angles. Most alpha particles went almost straight through, but about one in eight thousand bounced back at angles greater than ninety degrees. Rutherford famously said it was as surprising as if you had fired a fifteen-inch artillery shell at a sheet of tissue paper and the shell had come back and hit you. The only model that fit the data was an atom whose positive charge and almost all of whose mass were concentrated in a nucleus about 10⁻¹⁵ metres across, with electrons somewhere in the surrounding 10⁻¹⁰ metre volume. The atom was mostly empty space."
+        },
+        {
+          "type": "p",
+          "text": "That picture had a fatal problem inherited from classical electrodynamics. An electron in a circular orbit around the nucleus is constantly accelerating: centripetal acceleration, directed inward. Joseph Larmor (the Cambridge theorist whose 1897 paper had derived the formula for how fast an accelerating charge radiates electromagnetic energy) had shown that the radiated power is proportional to the square of the acceleration. Plug the numbers for an electron in a hydrogen-sized orbit and you get a radiated power that drains the electron's kinetic energy in about 10⁻¹¹ seconds; the electron spirals into the nucleus and the atom collapses. The fact that hydrogen sits stably in a flask for years rather than glowing itself out in a tenth of a nanosecond is the cleanest experimental refutation of the planetary atom one could ask for."
+        },
+        {
+          "type": "p",
+          "text": "Bohr's response, when he arrived in Copenhagen in 1913 after seven months in Manchester, was a tactical retreat from the question itself. He stopped asking why classical electrodynamics permits the atom and started asking what postulates would force the right answer out. The experimental facts (atoms are stable, they absorb and emit at discrete wavelengths, the wavelengths obey a numerical pattern Johann Balmer had written down for hydrogen in 1885) became axioms. The paper he submitted to the Philosophical Magazine in April 1913 began by simply asserting the rules. The rest of the paper was the arithmetic that followed."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The three postulates and what each one bought",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bohr's first postulate was the boldest. He simply asserted that among all the orbits the Coulomb attraction allows (classically a continuum, indexed by any positive radius), only a discrete set are physically realized, and in those stationary states the electron does not radiate. There was no first-principles justification. It was an experimental fact (atoms are stable) promoted to an axiom. Note that this is really two claims welded together: discrete orbits exist, and inside them the Larmor formula is suspended."
+        },
+        {
+          "type": "p",
+          "text": "The second postulate selected which orbits. Bohr's choice was that the angular momentum of the electron in any allowed orbit is an integer multiple of ℏ, the reduced Planck constant (defined as ℏ = h/(2π), where h is the constant Planck had introduced in 1900 to fit the blackbody spectrum). Let m be the electron's mass, v its orbital speed, and r the orbital radius. Their product mvr is the angular momentum of a particle on a circle, conventionally called L. The selection rule is:"
+        },
+        {
+          "type": "math",
+          "tex": "L \\;=\\; m\\,v\\,r \\;=\\; n\\,\\hbar",
+          "display": true,
+          "caption": "L is the orbital angular momentum of the electron. m is the electron mass. v is its orbital speed. r is the orbital radius. n is a positive integer (n = 1, 2, 3, ...), called the principal quantum number. ℏ is the reduced Planck constant, equal to h/(2π), where h is Planck's constant. The product mvr is what classical mechanics calls the angular momentum of a particle of mass m moving on a circle of radius r at speed v. The postulate is that this product, which classical mechanics allows to be any non-negative real number, is in nature restricted to integer multiples of ℏ."
+        },
+        {
+          "type": "p",
+          "text": "The third postulate handled emission and absorption. When the electron drops from a higher stationary orbit (of energy E_i) to a lower one (of energy E_f), it emits a single photon whose frequency ν satisfies energy conservation: the photon carries away the energy gap between the two orbits, in a single quantum of size hν, exactly as in Einstein's 1905 photoelectric account. The rule is:"
+        },
+        {
+          "type": "math",
+          "tex": "h\\,\\nu \\;=\\; E_{i} \\;-\\; E_{f}",
+          "display": true,
+          "caption": "h is Planck's constant. ν is the frequency of the emitted (or absorbed) photon. E_i is the energy of the initial stationary state, the higher orbit. E_f is the energy of the final stationary state, the lower orbit. The difference E_i − E_f is the energy gap between two allowed orbits. The postulate is that this gap appears in the radiation field as a single photon of energy hν, never as a continuum and never as a partial transition."
+        },
+        {
+          "type": "p",
+          "text": "These three statements are not three claims about the atom but three different kinds of claim. The first is a stability axiom: I will stop demanding that bound orbits radiate. The second is a selection rule: only orbits of a certain L are realized. The third is a spectral rule: the radiation we see comes only from transitions between the allowed levels, never from the orbits themselves. Bohr gave no reason for any of them. He gave one prediction (the numerical pattern of hydrogen's spectral lines), and the prediction was the test."
+        }
+      ],
+      "quiz": {
+        "question": "What did Bohr's second postulate, L = nℏ, accomplish that the first postulate did not?",
+        "options": [
+          "It explained why electrons do not radiate in stationary orbits, by replacing classical electrodynamics with quantum mechanics.",
+          "It selected, from the continuous family of orbits the Coulomb attraction permits, the discrete set actually realized in nature. The first postulate had only asserted that some discrete set existed and was non-radiating; the second specified which ones, in terms of a single integer n.",
+          "It predicted the wavelengths of the hydrogen emission lines directly, which the first postulate could not.",
+          "It introduced Planck's constant ℏ into atomic physics; the first postulate did not mention ℏ at all."
+        ],
+        "correctIndex": 1,
+        "explanation": "Bohr's first postulate asserted only that stationary, non-radiating orbits exist, not which orbits. The second picks them out by an angular-momentum quantization rule, L = nℏ, indexing them by a single positive integer n. Option A overstates the case: Bohr did not replace classical electrodynamics, he suspended its application inside stationary orbits, a much weaker move. Option C confuses two stages: the wavelengths come from postulates two and three together (the second sets the orbits and so the energies; the third turns energy differences into photon frequencies), not from the second alone. Option D is technically true but trivial; the first postulate also needs ℏ as soon as one supplies any quantization rule, since ℏ is the natural unit of action."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Hydrogen's spectrum falls out in two pages of algebra",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "With the three postulates in hand, Bohr did the calculation. Treat the electron, of mass m and charge −e (where e is the elementary charge, 1.602 × 10⁻¹⁹ coulombs), as a classical particle in a circular orbit around a proton of charge +e at the center. A circular orbit requires a centripetal force, mv²/r, directed inward; the Coulomb attraction supplies it. Let k = 1/(4πε₀) be the Coulomb constant (ε₀ is the permittivity of free space; packaging the prefactor as k makes the algebra cleaner). The force balance for a circular orbit is:"
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{m\\,v^{2}}{r} \\;=\\; \\frac{k\\,e^{2}}{r^{2}}",
+          "display": true,
+          "caption": "m is the electron mass. v is its orbital speed. r is the orbital radius. e is the elementary charge (the proton's charge is +e and the electron's is −e, so their product is −e², and the attractive force magnitude is ke²/r²). k = 1/(4πε₀) is the Coulomb constant. The left side is the centripetal force needed to hold a particle of mass m on a circle of radius r at speed v. The right side is the Coulomb attraction between two charges of magnitude e separated by distance r. Setting them equal is the condition for a stable circular orbit."
+        },
+        {
+          "type": "p",
+          "text": "Multiply both sides by r and the left side becomes mv², twice the kinetic energy T = ½mv². The right side becomes ke²/r. So 2T = ke²/r, and the kinetic energy of the orbit is T = ke²/(2r). The potential energy of an electron in the proton's Coulomb field is V = −ke²/r, the standard attractive Coulomb potential (negative because the electron is bound, and we conventionally take V = 0 at infinity). The total energy is the sum:"
+        },
+        {
+          "type": "math",
+          "tex": "E \\;=\\; T \\;+\\; V \\;=\\; \\frac{k\\,e^{2}}{2\\,r} \\;-\\; \\frac{k\\,e^{2}}{r} \\;=\\; -\\,\\frac{k\\,e^{2}}{2\\,r}",
+          "display": true,
+          "caption": "E is the total energy of the electron in a circular orbit of radius r. T = ke²/(2r) is the kinetic energy, from the force balance. V = −ke²/r is the Coulomb potential energy of the electron in the proton's field. The sum is half the magnitude of the potential energy with a minus sign, a specific instance of the virial theorem (the general statement that for an inverse-square attractive force, the kinetic energy is half the magnitude of the potential energy). E is negative, as it must be for a bound state."
+        },
+        {
+          "type": "p",
+          "text": "Now apply the second postulate. From L = mvr = nℏ, solve for v: v = nℏ/(mr). The force balance also gives an expression for v², namely v² = ke²/(mr) (just multiply both sides of mv²/r = ke²/r² by r/m). Set the squared-quantized v² equal to the force-balance v²:"
+        },
+        {
+          "type": "math",
+          "tex": "\\left(\\frac{n\\,\\hbar}{m\\,r}\\right)^{\\!2} \\;=\\; \\frac{k\\,e^{2}}{m\\,r}",
+          "display": true,
+          "caption": "The left side is v² with v replaced by nℏ/(mr), using the quantization condition L = mvr = nℏ. The right side is v² from the force balance, mv²/r = ke²/r² rearranged. n is the principal quantum number. ℏ is the reduced Planck constant. m is the electron mass. r is the orbital radius. k is the Coulomb constant. e is the elementary charge. Equating the two expressions for v² constrains r to a single value for each n."
+        },
+        {
+          "type": "p",
+          "text": "Multiply out the left side to get n²ℏ²/(m²r²) = ke²/(mr), then multiply both sides by m²r²/(ke²) and the r²'s collapse to one factor of r on the left: n²ℏ²/(ke²) = mr. Divide by m. Call the n = 1 value a₀; the radii are r_n = n² a₀:"
+        },
+        {
+          "type": "math",
+          "tex": "r_{n} \\;=\\; n^{2}\\,\\frac{\\hbar^{2}}{m\\,k\\,e^{2}} \\;\\equiv\\; n^{2}\\,a_{0}",
+          "display": true,
+          "caption": "r_n is the radius of the nth allowed Bohr orbit. n is the principal quantum number (n = 1, 2, 3, ...). ℏ is the reduced Planck constant. m is the electron mass. k = 1/(4πε₀) is the Coulomb constant. e is the elementary charge. The combination ℏ²/(mke²) evaluates to 0.529 × 10⁻¹⁰ metres, conventionally written a₀ and called the Bohr radius. The radii grow as n²: the n = 2 orbit is four times the n = 1 size, the n = 3 orbit nine times, and so on."
+        },
+        {
+          "type": "p",
+          "text": "Substitute r_n back into E = −ke²/(2r). The result is E_n = −ke²/(2n²a₀), and substituting a₀ = ℏ²/(mke²) the prefactor collapses to mk²e⁴/(2ℏ²), the Rydberg energy. Evaluated for the electron and proton, it is 13.6 electron-volts (an electron-volt is the energy an electron gains crossing a one-volt potential, equal to 1.6 × 10⁻¹⁹ joules):"
+        },
+        {
+          "type": "math",
+          "tex": "E_{n} \\;=\\; -\\,\\frac{m\\,k^{2}\\,e^{4}}{2\\,\\hbar^{2}} \\cdot \\frac{1}{n^{2}} \\;\\approx\\; -\\,\\frac{13.6\\;\\text{eV}}{n^{2}}",
+          "display": true,
+          "caption": "E_n is the energy of the nth allowed Bohr orbit, measured relative to a free electron at rest at infinity (which has energy zero). m is the electron mass. k is the Coulomb constant. e is the elementary charge. ℏ is the reduced Planck constant. n is the principal quantum number. The combination mk²e⁴/(2ℏ²) is the Rydberg energy, 13.6 electron-volts; it is the energy required to ionize a hydrogen atom from its ground state n = 1. The full spectrum is a discrete ladder: −13.6, −3.40, −1.51, −0.85, ... electron-volts."
+        },
+        {
+          "type": "p",
+          "text": "Take a transition from n_i to n_f. By the third postulate, hν = E_i − E_f = 13.6 eV · (1/n_f² − 1/n_i²). Convert frequency to wavelength using ν = c/λ (c is the speed of light) and divide through: 1/λ = (13.6 eV)/(hc) · (1/n_f² − 1/n_i²). The prefactor 13.6 eV/(hc) evaluates to 1.097 × 10⁷ m⁻¹, the Rydberg constant. That was the empirical number Johann Balmer, a Swiss schoolteacher, had extracted in 1885 from hydrogen's four visible lines by sheer pattern-fitting, twenty-eight years before Bohr's paper. Setting n_f = 2 in Bohr's formula reproduced Balmer's visible series exactly; setting n_f = 1 predicted the Lyman ultraviolet series (confirmed by Theodore Lyman in 1914); setting n_f = 3 predicted the Paschen infrared series (already observed by Friedrich Paschen in 1908 and matching Bohr's numbers). The hydrogen spectrum was solved."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. De Broglie's standing wave on a circle",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bohr's second postulate, L = nℏ, sat in the literature for eleven years as a brute fact. It worked, it was integer-indexed, and no one knew why. The answer arrived in 1924 in the Paris doctoral thesis of Louis de Broglie, a thirty-two-year-old aristocrat who had served as a radio operator at the Eiffel Tower during the First World War and turned to theoretical physics after it. His thesis applied Einstein's 1905 photon idea in reverse: if light, classically a wave, carries momentum p = h/λ as a particle, then matter, classically a particle, should also have a wavelength λ = h/p as a wave. The wavelength λ_dB associated with a moving particle of momentum p was called the de Broglie wavelength. Einstein read the thesis, wrote to Max Born that 'a young man, the brother of the Duc de Broglie, has lifted a corner of the great veil,' and the idea moved from a curiosity into the mainstream of European physics within a year."
+        },
+        {
+          "type": "p",
+          "text": "Now picture Bohr's electron orbit as a circle of radius r. The electron, having momentum p = mv, also has a de Broglie wavelength λ = h/(mv). For the orbit to be stable, the wave that travels around the circle must rejoin itself in phase after one revolution; otherwise the wave would interfere destructively with itself on every successive lap and average to nothing. The phase-closure condition is the standing-wave condition: an integer number of wavelengths must fit around the circumference."
+        },
+        {
+          "type": "math",
+          "tex": "2\\,\\pi\\,r \\;=\\; n\\,\\lambda",
+          "display": true,
+          "caption": "2πr is the circumference of the circular orbit. r is the orbital radius. n is a positive integer (the number of complete wavelengths that fit around the circle). λ is the de Broglie wavelength of the electron. The condition asserts that the wave, after traveling once around the orbit, has gone through an integer number of cycles and so meets itself in phase; this is the standing-wave condition for a wave constrained to a closed loop."
+        },
+        {
+          "type": "p",
+          "text": "Substitute the de Broglie relation λ = h/(mv): the circumference is 2πr = n · h/(mv). Multiply both sides by mv and divide by 2π: mvr = nh/(2π). The combination h/(2π) is exactly ℏ. So:"
+        },
+        {
+          "type": "math",
+          "tex": "m\\,v\\,r \\;=\\; n\\,\\frac{h}{2\\pi} \\;=\\; n\\,\\hbar",
+          "display": true,
+          "caption": "m is the electron mass. v is its orbital speed. r is the orbital radius. The product mvr is the orbital angular momentum L. n is a positive integer, the same integer that counts wavelengths around the orbit in the standing-wave condition. h is Planck's constant. ℏ = h/(2π) is the reduced Planck constant. The right-hand side is exactly Bohr's second postulate, L = nℏ. The de Broglie derivation has not added new physics: it has given Bohr's brute quantization a physical interpretation as a standing-wave condition on a circular orbit."
+        },
+        {
+          "type": "p",
+          "text": "The quantum number n is no longer mysterious. It is just the number of de Broglie wavelengths that fit around the orbit. In the ground state, n = 1, exactly one wavelength wraps the circle; in the first excited state, n = 2, two wavelengths; and so on. Try a non-integer n and the wave returns out of phase with itself, the interference is destructive on average, and there is no stable orbit. Slide n through the values 1, 2, 3, ... in the viz below and watch the wave click into resonance at the integers and smear into incoherence in between."
+        },
+        {
+          "type": "viz",
+          "src": "2026-05-19-bohr-atom.html",
+          "height": 480,
+          "caption": "A de Broglie matter wave wrapped around a circular Bohr orbit. The slider sets the number of wavelengths n around the circumference. At integer n (n = 1, 2, 3, ...) the wave closes on itself in phase and the orbit is stable, the standing-wave condition that recovers L = nℏ. At non-integer n the wave returns out of phase after one revolution; the two ends do not match and the resulting interference, on successive laps, would destroy the wave. Only integer n survives, which is Bohr's quantization condition derived from a wave."
+        }
+      ],
+      "quiz": {
+        "question": "The de Broglie derivation in this section starts from the standing-wave condition 2πr = nλ and ends at the Bohr quantization L = nℏ. Which of the following is the correct way to describe what this derivation has accomplished?",
+        "options": [
+          "It has proved that Bohr's second postulate was wrong, since the real condition is on the wavelength rather than on the angular momentum.",
+          "It has added new physics to Bohr's model: the standing-wave condition implies further restrictions on the orbits that L = nℏ alone does not.",
+          "It has given Bohr's postulate a physical interpretation. The two conditions are mathematically equivalent once one substitutes the de Broglie relation λ = h/p, so the derivation does not add new physics but explains where the integer n in L = nℏ comes from: it is the number of wavelengths that fit around the orbit.",
+          "It has reduced the Bohr atom to a classical problem, since standing waves on a string are described by classical wave equations."
+        ],
+        "correctIndex": 2,
+        "explanation": "The derivation is a substitution: 2πr = nλ becomes mvr = nh/(2π) = nℏ once you plug in λ = h/(mv). It does not add new physics, change Bohr's predictions, or affect the calculation of the hydrogen spectrum. What it does is supply an interpretation: the integer n in L = nℏ is the same integer that counts wavelengths around the orbit, which makes Bohr's postulate look less arbitrary. Option A is wrong because the two conditions are equivalent, not contradictory; Bohr's postulate is right, not wrong. Option B is wrong because no new restrictions appear. Option D is wrong because the matter wave that wraps the orbit is itself a quantum object (with λ set by p = mv, a relation Einstein and de Broglie had to introduce); the derivation does not classicalize the atom."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Two electrons and the picture that broke",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The Bohr atom recovered the entire hydrogen spectrum, and over the next decade Arnold Sommerfeld (the Munich theorist who had taught most of the next quantum generation, Heisenberg and Pauli among them) generalized the postulate to elliptical orbits by replacing the single condition L = nℏ with a more general phase-integral rule, ∮p dq = nh, integrated once around any closed orbit. The Bohr-Sommerfeld theory, as the combination was called, even reproduced the small splittings between spectral lines that had been observed in the 1890s, the so-called fine structure. By 1920 the theory was sitting at a peculiar peak: it worked perfectly for one-electron systems (hydrogen, singly ionized helium, doubly ionized lithium, every hydrogenic ion) and was at the same time visibly stuck on the next problem in line."
+        },
+        {
+          "type": "p",
+          "text": "That next problem was neutral helium, an atom with two electrons. Helium had been discovered in the solar spectrum in 1868 (Pierre Janssen during an eclipse in India, Norman Lockyer in London weeks later) and isolated on Earth in 1895. By 1922 its ionization energy was known experimentally to high precision: 24.587 electron-volts, the energy required to strip one electron off and leave a He⁺ ion. Bohr, his student Hendrik Kramers, and Max Born in Göttingen all attempted Bohr-Sommerfeld calculations of this number. The best they could do was around 20.4 electron-volts, with no clear way to push it higher. The miss was about 17 percent, enormous by the standards of a theory that had matched hydrogen to four significant figures. Worse, there was no parameter to tune: the postulates left no slack."
+        },
+        {
+          "type": "p",
+          "text": "The trouble traced back to a single physical fact the postulates could not accommodate: in helium, the two electrons interact with each other through their own Coulomb repulsion, and the very idea of a definite stationary orbit for one electron breaks down when its energy depends, instant by instant, on where the other electron happens to be. Bohr's framework had asked you to specify an orbit r_n with a quantum number n, but in helium the two coupled bodies make the orbital concept itself untenable. Bohr understood this clearly by 1923 and said so in his Nobel lecture that year. The old quantum theory had reached its ceiling."
+        },
+        {
+          "type": "p",
+          "text": "Two years later, in June 1925, Werner Heisenberg, twenty-three and Born's assistant in Göttingen, took refuge from hay fever on the treeless island of Helgoland in the North Sea and wrote down a theory of the atom that referred only to the frequencies and intensities of the spectral lines, not to orbits at all. The orbit, in his new scheme, was the fiction that had to be discarded; the energy levels and the transitions between them were the only physical content. That paper became matrix mechanics. The Bohr atom had bought its decade by promoting an experimental fact to an axiom; the axiom worked for the one-body case it was tuned to and broke at the first two-body case, and that breakage is the most instructive fact about it. A model that fits one case perfectly and another not at all is usually telling you that the picture (the orbit, in Bohr's case), not the equations, is wrong."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A friend who has read about the Bohr atom in a popular book tells you, 'The whole thing was just postulates Bohr pulled out of thin air; even after de Broglie there is nothing in the model that is not arbitrary.' Using what you learned in this lesson, which of the following is the best response?",
+    "options": [
+      "Your friend is right: the model is a pile of postulates with no theoretical content, and modern physics dismisses it as historical clutter.",
+      "Your friend is wrong because the Bohr atom is logically derivable from Maxwell's equations once you add Planck's constant; the postulates are not assumptions but theorems of classical electrodynamics with h included.",
+      "Your friend is half-right. The 1913 postulates were genuinely arbitrary, in particular the second one, L = nℏ. De Broglie's 1924 derivation removed the arbitrariness of the second postulate by showing it is equivalent to the standing-wave condition 2πr = nλ for the electron's matter wave; the integer n is then just the number of wavelengths fitting around the orbit. The first postulate (stationary orbits do not radiate) and the third (radiation is emitted only on transitions) remained postulates within the Bohr framework, and the whole picture broke at helium because two coupled electrons cannot have definite orbits. The model's value was that it got hydrogen exactly right and that its failure at helium pointed at where the orbit concept itself had to be abandoned.",
+      "Your friend is wrong because the Bohr atom is mathematically equivalent to modern quantum mechanics; the postulates were just an early notation for the Schrödinger equation."
+    ],
+    "correctIndex": 2,
+    "explanation": "The 1913 postulates were postulates: Bohr did not derive them, he asserted them. De Broglie's 1924 derivation, shown in section 4, reinterprets the second postulate as a standing-wave condition on a circular orbit (2πr = nλ becomes mvr = nh/(2π) = nℏ once the de Broglie relation λ = h/p is substituted), so the integer n is no longer mysterious. The first and third postulates remained brute claims about non-radiation in stationary states and about photon-mediated transitions, and the failure of the model at helium (section 5) showed that the orbit concept itself was wrong for any atom with more than one electron. Option A overstates: the model is not historical clutter, it got hydrogen exactly right and located the breakdown precisely. Option B is wrong: the postulates are not theorems of classical electrodynamics in any sense, they suspend classical electrodynamics inside stationary orbits. Option D is wrong: the Bohr atom and Schrödinger quantum mechanics give the same hydrogen energy levels but are not mathematically equivalent (Schrödinger has full wave functions, angular distributions, and many-electron solutions that Bohr could not access)."
+  },
+  "suggestedNodes": [
+    {
+      "id": "hydrogen_atom",
+      "label": "H atom",
+      "subtitle": "Schrödinger H",
+      "edgeType": "extends"
+    },
+    {
+      "id": "bohr_sommerfeld",
+      "label": "Bohr-Somm.",
+      "subtitle": "∮p dq = nh",
+      "edgeType": "extends"
+    },
+    {
+      "id": "correspondence_principle",
+      "label": "Correspondence",
+      "subtitle": "n → ∞ classical",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-19T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 24,
+    "previouslyMastered": [
+      "wave_particle_duality",
+      "photon_energy",
+      "schrodinger_equation"
+    ]
+  }
+}
