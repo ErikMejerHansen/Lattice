@@ -152,5 +152,12 @@
     "subtitle": "ΔxΔp ≥ ℏ/2",
     "date": "2026-05-18",
     "estimatedReadingMinutes": 24
+  },
+  {
+    "slug": "2026-05-20-bohr-atom",
+    "title": "The Bohr atom: a rule pulled from nowhere that the wave later explained",
+    "subtitle": "E_n = −13.6/n²",
+    "date": "2026-05-20",
+    "estimatedReadingMinutes": 24
   }
 ]
