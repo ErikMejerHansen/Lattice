@@ -1,0 +1,278 @@
+{
+  "slug": "2026-05-20-bohr-atom",
+  "title": "The Bohr atom: a rule pulled from nowhere that the wave later explained",
+  "node": {
+    "id": "bohr_atom",
+    "label": "Bohr atom",
+    "subtitle": "E_n = −13.6/n²"
+  },
+  "intro": "In the spring of 1913 a twenty-seven-year-old Dane named Niels Bohr did something that looked, to his contemporaries, like cheating. The Rutherford atom he had been handed was a catastrophe: a tiny nucleus with electrons circling it, which the known laws of electromagnetism said must radiate their energy away and spiral into the nucleus in about a hundred-billionth of a second. Bohr's escape was to forbid the catastrophe by decree, declaring that only certain orbits were allowed and that on them the electron did not radiate at all. The decree had no justification anyone could see, and yet it reproduced the hydrogen spectrum to four decimal places, and eleven years later Louis de Broglie showed that the strange rule was hiding a wave.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The atom that could not last a microsecond",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In 1911 Ernest Rutherford, in Manchester, fired alpha particles at a thin gold foil and found that a few of them bounced almost straight back, which he famously compared to a fifteen-inch shell rebounding off tissue paper. The only way to explain it was that the atom's positive charge and nearly all its mass sit in a minuscule central nucleus, with the electrons somewhere outside. This was the nuclear atom, and it had a fatal flaw. An electron held in a circular orbit is constantly accelerating toward the center, and James Clerk Maxwell's electromagnetism, settled physics for forty years, said without ambiguity that an accelerating charge radiates electromagnetic waves."
+        },
+        {
+          "type": "p",
+          "text": "Radiating means losing energy. A classical orbiting electron would lose energy continuously, spiral inward, and crash into the nucleus in roughly 10⁻¹¹ seconds, emitting a smear of every frequency on the way down. Two things were wrong with this. Atoms plainly do not collapse, and when hydrogen does emit light it emits only a few sharp, discrete wavelengths, not a continuous smear. The discreteness was the deeper scandal, because nothing in classical physics says a system should prefer particular frequencies."
+        },
+        {
+          "type": "p",
+          "text": "The pattern in those wavelengths had been found, with no physics at all, by Johann Balmer, a Swiss schoolteacher who in 1885 noticed that the four visible hydrogen lines fit one tidy formula. Let λ be the wavelength of a line. Let R_H be a constant Balmer fit to the data. Let n be a whole number bigger than 2 that labels which line you mean. Then:"
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{1}{\\lambda} = R_H\\left(\\frac{1}{2^{2}} - \\frac{1}{n^{2}}\\right), \\quad n = 3, 4, 5, \\dots",
+          "display": true,
+          "caption": "λ is the wavelength of an emitted spectral line. R_H is the Rydberg constant for hydrogen, an empirical number Balmer fit by hand (about 1.097 × 10⁷ per metre). n is an integer greater than 2 that labels which line you are looking at. The fixed 2 in the first fraction is what makes this the Balmer series specifically."
+        },
+        {
+          "type": "p",
+          "text": "Johannes Rydberg soon saw that the 2 was not special. Replace it by any lower integer m and you get a whole family of series, one of which (m = 1) Theodore Lyman later found in the ultraviolet. Let m be the integer labelling the lower level and n the larger integer labelling the higher one:"
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{1}{\\lambda} = R_H\\left(\\frac{1}{m^{2}} - \\frac{1}{n^{2}}\\right), \\quad n > m",
+          "display": true,
+          "caption": "λ is the emitted wavelength. R_H is the same Rydberg constant as before. m is the integer labelling the lower level (m = 2 recovers Balmer, m = 1 gives the Lyman series). n is the integer labelling the higher level, always larger than m. The formula fit the data beautifully and explained nothing: no one knew why two integers should govern the colors of a gas."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Bohr's two decrees",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bohr's move was to stop trying to save classical physics and instead bolt two unexplained postulates onto it. First: an electron can occupy only certain special orbits, called stationary states, and while it sits in one it does not radiate at all, Maxwell notwithstanding. Second: the allowed orbits are exactly those for which the electron's orbital angular momentum is a whole-number multiple of ℏ, the reduced Planck constant (ℏ = h/2π, where h is Planck's constant). Let L be the angular momentum, m_e the electron mass, v its orbital speed, and r the orbit radius:"
+        },
+        {
+          "type": "math",
+          "tex": "L = m_e\\, v\\, r = n\\,\\hbar, \\quad n = 1, 2, 3, \\dots",
+          "display": true,
+          "caption": "L is the orbital angular momentum of the electron. m_e is the electron mass. v is the electron's orbital speed. r is the orbit radius. n is a positive integer, the quantum number. ℏ is the reduced Planck constant, equal to h/2π. The postulate is that L can only be an integer times ℏ, never anything in between."
+        },
+        {
+          "type": "p",
+          "text": "Everything else is ordinary mechanics. The electron is held on its circle by the electrostatic pull of the proton, and that pull must supply exactly the centripetal force a circular orbit requires. Let k be the Coulomb constant, 1/(4πε₀), and e the elementary charge:"
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{k e^{2}}{r^{2}} = \\frac{m_e v^{2}}{r}",
+          "display": true,
+          "caption": "k is the Coulomb constant, equal to 1/(4πε₀). e is the elementary charge. r is the orbit radius. m_e is the electron mass. v is the orbital speed. The left side is the electrostatic attraction between electron and proton; the right side is the centripetal force needed to hold the electron on a circle of radius r."
+        },
+        {
+          "type": "p",
+          "text": "Now we have two equations and we can eliminate the speed. From the quantization rule, v = nℏ/(m_e r). Substitute that into the force-balance equation, written as ke² = m_e v² r, and the speed disappears:"
+        },
+        {
+          "type": "math",
+          "tex": "k e^{2} = m_e v^{2} r = m_e\\left(\\frac{n\\hbar}{m_e r}\\right)^{2} r = \\frac{n^{2}\\hbar^{2}}{m_e r}",
+          "display": true,
+          "caption": "k is the Coulomb constant. e is the elementary charge. m_e is the electron mass. v is the orbital speed, here replaced using v = nℏ/(m_e r) from the quantization rule. n is the quantum number. ℏ is the reduced Planck constant. r is the orbit radius. The orbital speed has been eliminated, leaving an equation in r alone."
+        },
+        {
+          "type": "p",
+          "text": "Solve that last line for r and you get the allowed radii. The smallest, for n = 1, has a name and a measured value:"
+        },
+        {
+          "type": "math",
+          "tex": "r_n = \\frac{n^{2}\\hbar^{2}}{m_e k e^{2}} = n^{2} a_0, \\quad a_0 \\approx 0.529\\,\\text{Å}",
+          "display": true,
+          "caption": "r_n is the radius of the n-th allowed orbit. n is the quantum number. ℏ is the reduced Planck constant. m_e is the electron mass. k is the Coulomb constant. e is the elementary charge. a₀ is the Bohr radius, the n = 1 orbit, equal to ℏ²/(m_e k e²) ≈ 0.529 Ångström (1 Å = 10⁻¹⁰ metre). The allowed radii grow as n², so the orbits sit at 1, 4, 9, 16 times the smallest."
+        }
+      ],
+      "quiz": {
+        "question": "Bohr combined the classical force-balance condition (Coulomb attraction equals centripetal force) with the quantization rule L = nℏ. Suppose he had kept only the force-balance condition and dropped the quantization rule. What would classical physics alone predict for the allowed orbit radii?",
+        "options": [
+          "Only r = a₀ would be allowed: the force-balance condition by itself fixes a single unique radius.",
+          "Any radius at all would be allowed. Force balance only ties the speed v to the radius r through v² = ke²/(m_e r); it places no restriction on which r values can occur. That is exactly why a separate quantization rule was needed to carve out discrete orbits, and discrete orbits are what give discrete spectral lines.",
+          "Radii would still come out quantized as n² a₀ on their own, which makes Bohr's quantization rule mathematically redundant.",
+          "No stable orbit would exist at any radius, because a circular orbit in a Coulomb field is always unstable."
+        ],
+        "correctIndex": 1,
+        "explanation": "The force-balance equation ke²/r² = m_e v²/r rearranges to v² = ke²/(m_e r): for every radius there is a corresponding speed that keeps the electron on that circle. Classically, then, all radii are permitted, which is precisely the problem, because a continuum of orbits would radiate a continuum of frequencies and the atom would collapse. Bohr's quantization rule L = nℏ is the extra ingredient that selects a discrete set of radii out of that continuum. Option A is wrong: nothing in force balance alone singles out a₀. Option C inverts the logic: the n² scaling appears only after the quantization rule is imposed. Option D is wrong: circular Coulomb orbits are mechanically stable; the classical instability is the slow radiative spiral, a separate effect."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The spectrum falls out",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The radii are not what we observe; the light is. To get the light we need the energy of each orbit. The total energy is the kinetic energy of the moving electron plus the potential energy of its attraction to the proton. The kinetic energy is ½ m_e v² and the Coulomb potential energy is −ke²/r (negative because the electron is bound). Using the force-balance result m_e v² = ke²/r to rewrite the kinetic part, the two terms collapse into one:"
+        },
+        {
+          "type": "math",
+          "tex": "E = \\tfrac{1}{2} m_e v^{2} - \\frac{k e^{2}}{r} = \\frac{k e^{2}}{2 r} - \\frac{k e^{2}}{r} = -\\frac{k e^{2}}{2 r}",
+          "display": true,
+          "caption": "E is the total energy of the orbiting electron. m_e is the electron mass. v is the orbital speed. k is the Coulomb constant. e is the elementary charge. r is the orbit radius. The first step uses m_e v² = ke²/r to turn the kinetic energy into ke²/(2r). The total is negative, meaning the electron is bound: it would take energy to pull it free."
+        },
+        {
+          "type": "p",
+          "text": "Now put in the quantized radius r_n = n² a₀ from the previous section. The energy of the n-th orbit becomes a single clean expression:"
+        },
+        {
+          "type": "math",
+          "tex": "E_n = -\\frac{k e^{2}}{2 r_n} = -\\frac{m_e k^{2} e^{4}}{2 \\hbar^{2}}\\,\\frac{1}{n^{2}} = -\\frac{13.6\\,\\text{eV}}{n^{2}}",
+          "display": true,
+          "caption": "E_n is the energy of the n-th allowed level. k is the Coulomb constant. e is the elementary charge. r_n is the n-th orbit radius, substituted from the previous result. m_e is the electron mass. ℏ is the reduced Planck constant. n is the quantum number. The value 13.6 electron-volts (1 eV = 1.602 × 10⁻¹⁹ joule) is the ground-state binding energy of hydrogen, the Rydberg energy."
+        },
+        {
+          "type": "p",
+          "text": "Bohr's second postulate now does its work. When the electron drops from a higher level n to a lower level m, the lost energy leaves as a single photon, and by Einstein's relation that photon's frequency ν is fixed by the energy gap (h is Planck's constant):"
+        },
+        {
+          "type": "math",
+          "tex": "h\\nu = E_n - E_m = 13.6\\,\\text{eV}\\left(\\frac{1}{m^{2}} - \\frac{1}{n^{2}}\\right)",
+          "display": true,
+          "caption": "h is Planck's constant. ν is the frequency of the emitted photon. E_n is the energy of the higher level the electron falls from. E_m is the energy of the lower level it lands on. m and n are the two quantum numbers, with n greater than m. The photon carries away exactly the energy difference between the two levels."
+        },
+        {
+          "type": "p",
+          "text": "Divide through by hc to convert frequency to inverse wavelength, and Balmer's mysterious formula reappears, with two integers m and n exactly where Balmer and Rydberg had put them by hand. The constant out front is no longer fitted: it is built from the electron's own properties. Let R_H be the Rydberg constant and c the speed of light:"
+        },
+        {
+          "type": "math",
+          "tex": "R_H = \\frac{m_e k^{2} e^{4}}{4\\pi \\hbar^{3} c} \\approx 1.097 \\times 10^{7}\\ \\text{m}^{-1}",
+          "display": true,
+          "caption": "R_H is the Rydberg constant, the same number Balmer had to fit by hand. m_e is the electron mass. k is the Coulomb constant. e is the elementary charge. ℏ is the reduced Planck constant. c is the speed of light. Every quantity on the right was already measured by 1913, and plugging them in reproduced the empirical value to within a fraction of a percent."
+        },
+        {
+          "type": "p",
+          "text": "There was a final flourish. Certain lines seen in stars and in discharge tubes, the Pickering series (named for the Harvard astronomer Edward Pickering, who found them in the spectrum of a star in 1896), had been assigned to hydrogen but did not quite fit. Bohr realized they came from ionized helium, written He⁺, a helium atom stripped of one of its two electrons so that one electron orbits a nucleus of charge 2. His formula handled that case by inserting the larger nuclear charge, and it even predicted the tiny shift caused by the heavier helium nucleus tugging on the shared center of mass. When the experimentalist Alfred Fowler pointed out a small discrepancy, Bohr fixed it with that nuclear-mass correction and Fowler conceded. A theory that can correct its own challenger's data is hard to argue with."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Why nℏ? de Broglie's standing wave",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "For eleven years the quantization rule L = nℏ sat there working perfectly and meaning nothing. Why integer multiples of ℏ, and not halves, or some other ladder? The answer came in 1924 from Louis de Broglie, a French aristocrat writing a doctoral thesis so audacious his committee had to ask Einstein whether to pass it. De Broglie proposed that every particle is also a wave, with a wavelength set by its momentum. Let λ be that wavelength, h Planck's constant, p the momentum, m_e the electron mass, and v its speed:"
+        },
+        {
+          "type": "math",
+          "tex": "\\lambda = \\frac{h}{p} = \\frac{h}{m_e v}",
+          "display": true,
+          "caption": "λ is the de Broglie wavelength of the electron. h is Planck's constant. p is the electron's momentum. m_e is the electron mass. v is its orbital speed. This is the matter-wave relation de Broglie proposed in 1924: every particle carries a wavelength inversely proportional to its momentum."
+        },
+        {
+          "type": "p",
+          "text": "Now picture that wave running around the circular orbit. For it to survive, it has to join back onto itself after one full loop: the crest that starts the journey must line up with the crest that returns, or the wave on its second trip will fall out of step with itself and cancel by interference. That condition is simply that a whole number of wavelengths fit exactly around the circumference. Let r_n be the orbit radius and n a positive integer:"
+        },
+        {
+          "type": "math",
+          "tex": "2\\pi r_n = n\\,\\lambda, \\quad n = 1, 2, 3, \\dots",
+          "display": true,
+          "caption": "2π r_n is the circumference of the n-th orbit. r_n is the orbit radius. λ is the electron's de Broglie wavelength. n is a positive integer. The condition says a whole number of wavelengths must fit around the orbit so the wave rejoins itself smoothly instead of cancelling."
+        },
+        {
+          "type": "viz",
+          "src": "2026-05-20-bohr-atom.html",
+          "height": 540,
+          "caption": "An electron's de Broglie wave wrapped around a circular orbit. The slider sets how many wavelengths span the circumference. When that number is a whole integer the wave closes seamlessly onto itself (a standing wave, a stable Bohr orbit); when it is not, the end of the wave fails to meet its beginning and the seam shows a visible gap, the signature of destructive cancellation. Only the integer settings survive, which is exactly why only integer n, and therefore L = nℏ, are allowed."
+        },
+        {
+          "type": "p",
+          "text": "Substitute de Broglie's λ = h/(m_e v) into the fitting condition and rearrange. The factor h/(2π) is just ℏ, and what falls out is Bohr's postulate, no longer postulated:"
+        },
+        {
+          "type": "math",
+          "tex": "2\\pi r_n = n\\frac{h}{m_e v} \\;\\Rightarrow\\; m_e v\\, r_n = \\frac{n h}{2\\pi} = n\\hbar",
+          "display": true,
+          "caption": "2π r_n is the orbit circumference. r_n is the radius. n is the integer number of wavelengths around the loop. h is Planck's constant. m_e is the electron mass. v is the orbital speed. ℏ is the reduced Planck constant, h/2π. Rearranging the standing-wave condition gives m_e v r_n = nℏ, which is exactly Bohr's angular-momentum rule. The arbitrary quantization of 1913 was the statement that the electron's wave fits its own orbit."
+        },
+        {
+          "type": "p",
+          "text": "Einstein, reading de Broglie's thesis, wrote that the young man had lifted a corner of the great veil. Within three years Clinton Davisson and Lester Germer at Bell Labs, almost by accident, scattered electrons off a nickel crystal and saw a diffraction pattern, direct proof that electrons really do have a wavelength. Bohr's rule had been right because it was secretly a wave condition all along."
+        }
+      ],
+      "quiz": {
+        "question": "The de Broglie picture requires a whole number of wavelengths around the orbit, 2πr_n = nλ. Consider an orbit whose circumference happens to be 3.5 de Broglie wavelengths. What does the wave picture say about it, and what does this explain?",
+        "options": [
+          "The wave would travel faster to make up the half-wavelength, raising the electron's energy; such orbits are allowed but decay quickly.",
+          "After one trip around, the returning wave is half a wavelength out of step with where it started, so on successive loops it interferes destructively with itself and cancels. No standing wave, and therefore no stable orbit, can exist there. This is why only integer numbers of wavelengths (integer n) survive, which is identical to Bohr's L = nℏ.",
+          "The electron would radiate energy continuously, exactly as classical electromagnetism predicts, until it reached the nearest integer orbit.",
+          "Nothing physical distinguishes it; the integer condition is an independent assumption that the de Broglie picture neither requires nor explains."
+        ],
+        "correctIndex": 1,
+        "explanation": "A wave that does not close on itself after one circuit returns out of phase with its own starting value (half a cycle off, for 3.5 wavelengths). Each successive loop adds the same mismatch, and summed over many loops the contributions cancel: there is no self-consistent standing wave, hence no allowed orbit. Only when an exact integer number of wavelengths fits does the wave reinforce itself, which is the standing-wave condition 2πr_n = nλ. Substituting λ = h/(m_e v) turns this directly into m_e v r_n = nℏ, so the integer condition and Bohr's angular-momentum rule are the same statement. Option A misattributes a speed change. Option C imports the classical radiative spiral, which the wave picture replaces. Option D is wrong: the integer condition is forced by the wave's need to rejoin itself, not assumed."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Where the model breaks: helium",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The Bohr model's triumph with hydrogen and with the one-electron ion He⁺ made its failure with neutral helium all the more glaring. Helium has two electrons, and from 1913 onward Bohr, Sommerfeld, and their students poured years into computing its ground-state energy from orbiting electrons. Every attempt gave a number that disagreed with the measured ionization energy by a large margin, and no arrangement of circles could be made to fit. The model that had nailed hydrogen to four decimals simply could not handle the very next element in the periodic table."
+        },
+        {
+          "type": "p",
+          "text": "Arnold Sommerfeld had already extended the model in 1916, allowing elliptical orbits and adding a second quantum number, plus a relativistic correction that explained the fine structure (the tiny splitting of spectral lines into close pairs, named for the small energy differences it describes). This was real progress for hydrogen and bought the orbit picture several more years of life. But ellipses are still definite classical paths, and the two-electron problem has no stable set of them: two electrons orbiting and repelling each other in a shared field trace out trajectories that never settle. The trouble was not a missing correction. It was the orbit itself."
+        },
+        {
+          "type": "p",
+          "text": "That specific dead end, helium refusing to yield no matter how the orbits were drawn, is what convinced the next generation that definite trajectories had to be abandoned entirely. Werner Heisenberg in 1925 built a mechanics referring only to observable transition frequencies, with no orbits at all; Erwin Schrödinger in 1926 replaced the orbiting point with a smeared standing wave filling all of space at once. When Schrödinger's equation is solved for hydrogen, the energy levels come out as E_n = −13.6 eV/n², exactly Bohr's result, but there are no orbits in the answer, only clouds of probability."
+        },
+        {
+          "type": "p",
+          "text": "That is the precise sense in which the Bohr model was a way station. It got the energies of hydrogen exactly right and the picture of how they arise completely wrong, and the single feature it most depended on, the electron tracing a definite circle, is exactly the feature the successful theory threw away. The de Broglie standing wave was the hinge: it justified Bohr's rule and, in the same stroke, pointed past orbits toward a wave that fills the whole atom. A right answer reached through a wrong picture is not a lucky guess. It is a sign that the right picture is close, and that some piece of the wrong one, here the integer fitting a wave to its own confinement, is worth keeping."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "The Bohr model is often called a 'way station' between classical physics and quantum mechanics. Which statement best captures what it got right, what it got wrong, and why de Broglie's 1924 work mattered?",
+    "options": [
+      "It got the hydrogen spectrum right purely by luck, and de Broglie's standing-wave argument was a coincidental numerical match with no deeper significance; modern quantum mechanics discards both.",
+      "It got the hydrogen energy levels E_n = −13.6 eV/n² right (they survive unchanged when Schrödinger's equation is solved for hydrogen), but its picture of electrons on definite circular orbits was wrong, as its failure on two-electron helium exposed. De Broglie's 1924 standing-wave condition explained Bohr's previously unjustified L = nℏ postulate by showing it is the requirement that the electron's matter wave fit its orbit, foreshadowing the wave mechanics that replaced orbits with probability clouds.",
+      "It got everything right for every atom, and the only reason it was later reformulated was mathematical convenience; no physical prediction of the Bohr model is wrong.",
+      "Both the energy levels and the definite circular-orbit picture survive intact in modern quantum mechanics, and de Broglie merely supplied a visualization that added no new physical content."
+    ],
+    "correctIndex": 1,
+    "explanation": "The hydrogen energy levels E_n = −13.6 eV/n² are reproduced exactly by the full Schrödinger treatment, so that part of Bohr's result is permanent. The circular-orbit picture is not: the modern atom has no definite electron trajectory, only a probability distribution, and the model's inability to handle neutral helium (two interacting electrons) was the concrete signal that orbits had to go. De Broglie's contribution was to derive Bohr's bolted-on rule L = nℏ from the requirement that the electron's wave close on itself around the orbit, which both justified the 1913 postulate and pointed toward wave mechanics. Option A denies the deep structure de Broglie revealed. Option C ignores the helium failure and the multi-electron breakdown. Option D is wrong because orbits do not survive; they are replaced by standing waves filling the atom."
+  },
+  "suggestedNodes": [
+    {
+      "id": "franck_hertz_experiment",
+      "label": "Franck-Hertz",
+      "subtitle": "4.9 eV steps",
+      "edgeType": "applied"
+    },
+    {
+      "id": "sommerfeld_model",
+      "label": "Sommerfeld",
+      "subtitle": "elliptical orbits",
+      "edgeType": "extends"
+    },
+    {
+      "id": "correspondence_principle",
+      "label": "Corresp. princ.",
+      "subtitle": "large-n classical",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-20T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 24,
+    "previouslyMastered": [
+      "wave_particle_duality",
+      "photon_energy",
+      "spectroscopy_basics"
+    ]
+  }
+}

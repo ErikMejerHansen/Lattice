@@ -1,6 +1,3 @@
-# auto-suggested 2026-05-06 from wave-particle-duality
-Bohr atom — quantized angular momentum recovered from de Broglie standing waves on the orbit
-
 # auto-suggested 2026-05-06 from stefan-boltzmann-law
 Planetary equilibrium temperature — solar input vs σT⁴ output, why Mars is colder than Earth but not by as much as you would guess
 Stellar luminosity — L = 4πR²σT⁴, how stars are weighed and timed by their surface alone
@@ -68,3 +65,8 @@ Quantum tunneling — exponential leakage through a classically forbidden barrie
 Robertson inequality — ΔAΔB ≥ ½|⟨[Â, B̂]⟩|, the general-operator version of Heisenberg from which the position-momentum case is a special case
 Energy-time uncertainty — ΔEΔt ≥ ℏ/2, not a Robertson inequality (time is not an operator) but a separate statement about state lifetimes and natural linewidths
 Gaussian wave packet — the unique minimum-uncertainty state σ_x σ_p = ℏ/2, and how it spreads in free space (Δx grows linearly with t at large t)
+
+# auto-suggested 2026-05-20 from bohr-atom
+Franck-Hertz experiment — electrons losing energy in 4.9 eV steps through mercury vapor, the 1914 collision experiment that confirmed quantized atomic energy levels directly, without any spectroscopy
+Sommerfeld model — elliptical orbits and a second quantum number, plus the relativistic correction that explained the fine structure of the hydrogen lines
+Correspondence principle — Bohr's bridge that quantum predictions must reproduce classical physics in the limit of large quantum numbers, the rule he used to pin down transition rules
