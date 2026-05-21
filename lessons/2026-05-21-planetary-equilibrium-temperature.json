@@ -1,0 +1,134 @@
+{
+  "slug": "2026-05-21-planetary-equilibrium-temperature",
+  "title": "Planetary equilibrium temperature: the one line that prices a planet's heat",
+  "node": {
+    "id": "planetary_equilibrium",
+    "label": "Planet T_eq",
+    "subtitle": "(S/4σ)^¼"
+  },
+  "intro": "In 1824 Joseph Fourier, already famous for the equation that describes how heat spreads through a solid, asked a question no one had posed cleanly before: what fixes the temperature of an entire planet? His answer was a balance sheet. Sunlight arrives, infrared radiation departs, and the temperature settles at whatever value makes the two columns equal. The calculation fits on one line, lands within about thirty kelvin of Earth's real average, and where it misses it misses for a single instructive reason that took another century to name.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Fourier draws up the balance sheet",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Joseph Fourier had just spent a decade on how heat moves through solid bodies, the work that gave us the heat equation and the series that bears his name. Around 1824 he turned the same accountant's eye on the Earth as a whole. A planet, he reasoned, is warmed by the sun and cooled by radiating heat back into space, what he called chaleur obscure, dark heat, the invisible radiation William Herschel had stumbled on in 1800 by laying a thermometer just past the red end of a spectrum. Whatever temperature the Earth holds must be the one where incoming and outgoing exactly balance." },
+        { "type": "p", "text": "Fourier could frame the ledger but not close it, because the law telling you how much a warm body radiates did not yet exist. Josef Stefan would not publish the fourth-power emission law until 1879, fifty-five years later, and Boltzmann would not derive it until 1884. So Fourier reasoned qualitatively, and noticed something that bothered him: by his estimate the sun alone seemed too feeble to keep the Earth as warm as it plainly was. He cast about for extra heat sources, the planet's hot interior and a supposed warmth of interplanetary space, and in the course of arguing he reached for an analogy that outlived every number in the memoir." },
+        { "type": "p", "text": "The analogy was a hotbox, specifically the heliothermometer built by the Genevan naturalist Horace-Benedict de Saussure: a wooden box with a glass lid, left in the sun, whose inside ran far hotter than the open air because the glass let sunlight in and slowed the heat trying to leave. Fourier suggested the atmosphere might do for the planet what the glass did for the box. The mechanism he guessed at is not quite how the atmosphere actually works, but the name stuck, and a hundred and seventy years later we still call it the greenhouse effect. First, though, we need the number Fourier could not compute: the temperature a bare, airless planet would settle at." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Setting incoming equal to outgoing",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Strip the atmosphere away and treat the planet as a plain absorber and emitter sitting in the sun's glare. Two numbers govern the incoming side. The first is the solar constant S, the radiant power crossing each square metre at the planet's distance, about 1361 watts per square metre at Earth's orbit. The second is the albedo A, the fraction of that sunlight the planet reflects straight back to space without absorbing, close to 0.30 for Earth thanks to clouds, ice and ocean glint. The planet absorbs only the remaining fraction (1 − A)." },
+        { "type": "p", "text": "How much sunlight does the planet catch? Not its whole surface. Sunlight arrives in nearly parallel rays, so the planet intercepts only as much as its shadow would cover, a flat disk of area πR² where R is the planet's radius. Multiply the absorbed flux by that catching area and you have the total power coming in." },
+        { "type": "math", "tex": "P_{\\text{in}} = S\\,(1 - A)\\,\\pi R^{2}", "display": true, "caption": "P_in is the total solar power the planet absorbs. S is the solar constant, the sunlight power per square metre at the planet's distance. A is the albedo, the reflected fraction, so (1 − A) is the absorbed fraction. R is the planet's radius, and πR² is the area of the disk the planet presents to the incoming rays." },
+        { "type": "p", "text": "The outgoing side uses Stefan's law, the rule that a blackbody at absolute temperature T radiates σT⁴ watts from every square metre of its surface, with σ the Stefan-Boltzmann constant, 5.67 × 10⁻⁸ in SI units. Unlike the intercepted sunlight, this radiation leaves from the entire surface of the sphere, area 4πR², because the whole globe is warm and glowing in the infrared, day side and night side alike." },
+        { "type": "math", "tex": "P_{\\text{out}} = 4\\pi R^{2}\\,\\sigma T^{4}", "display": true, "caption": "P_out is the total infrared power the planet radiates. σ is the Stefan-Boltzmann constant, 5.67 × 10⁻⁸ W m⁻² K⁻⁴. T is the planet's absolute temperature. 4πR² is the full surface area of the sphere, the area the planet radiates from, four times the disk it absorbs over." },
+        { "type": "p", "text": "Equilibrium means the planet is neither heating up nor cooling down, so the two powers match. Set them equal:" },
+        { "type": "math", "tex": "S\\,(1 - A)\\,\\pi R^{2} = 4\\pi R^{2}\\,\\sigma T^{4}", "display": true, "caption": "The left side is absorbed solar power, the right side is emitted infrared power. Setting them equal is the statement that the planet holds a steady temperature, gaining exactly as much energy as it loses." },
+        { "type": "p", "text": "Both sides carry a factor of πR², and it cancels cleanly, which is the first surprise: the planet's size drops out entirely. A pebble and a gas giant at the same distance with the same albedo settle at the same temperature. What remains is the flux balance per square metre:" },
+        { "type": "math", "tex": "\\sigma T^{4} = \\frac{S\\,(1 - A)}{4}", "display": true, "caption": "σT⁴ is the radiated flux per square metre of surface. S(1 − A) is the absorbed flux per square metre of the intercepting disk. The 4 is the ratio of the sphere's area to the disk's area, 4πR² divided by πR², spreading the captured sunlight over the whole globe." },
+        { "type": "p", "text": "Solve for T by taking the fourth root, and you have the equilibrium temperature of a bare planet." },
+        { "type": "math", "tex": "T_{\\text{eq}} = \\left[\\frac{S\\,(1 - A)}{4\\sigma}\\right]^{1/4}", "display": true, "caption": "T_eq is the equilibrium temperature. The fourth root appears because emission goes as the fourth power of temperature, so undoing it means taking a fourth root. Everything inside the bracket is measurable: the sunlight S at the planet's orbit, the reflected fraction A, and the constant σ." }
+      ],
+      "quiz": {
+        "question": "A newly discovered planet has exactly twice the radius of Earth but orbits at the same distance from an identical star and shares Earth's albedo. Compared with Earth, what is its equilibrium temperature?",
+        "options": [
+          "The same",
+          "Twice as high",
+          "Half as high",
+          "Lower by a factor of √2"
+        ],
+        "correctIndex": 0,
+        "explanation": "The radius enters as πR² on the absorbing side and 4πR² on the emitting side, and the R² cancels exactly when you set the two powers equal. Equilibrium temperature depends only on the incident flux and the albedo, never on size. The tempting wrong answers assume the bigger planet either runs hotter because it catches more sun (it does, but it also radiates proportionally more) or that doubling some length must double or halve the temperature. It does neither: a boulder and a planet at Earth's orbit, same albedo, sit at the same 255 K."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The factor of four, and the distance under the root",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "That factor of 4 deserves a closer look, because it is the whole geometry of the problem compressed into a single digit. The sunlight a planet catches is set by its silhouette, the disk πR². The infrared it emits comes off its whole skin, the sphere 4πR². A sphere has exactly four times the surface area of its own shadow, so the captured sunlight, smeared evenly over the entire globe, is diluted to one quarter of the flux striking the sunlit point directly beneath the sun." },
+        { "type": "p", "text": "Put Earth's numbers in. With S = 1361 W/m², A = 0.30, and σ = 5.67 × 10⁻⁸, the bracket comes to about 4.2 × 10⁹, and its fourth root is 255 K, or roughly −18 °C. That is the temperature of a bare Earth, and it is the number Fourier was missing. The actual global average is about 288 K, some 33 K warmer, and that gap is the real greenhouse effect, the part de Saussure's glass box only metaphorically captured." },
+        { "type": "p", "text": "The solar constant is not constant across the solar system. It falls off as the inverse square of distance, because the sun's fixed output spreads over an ever larger sphere. A planet at distance d, measured in astronomical units with Earth at d = 1, feels a flux S = S₀/d² where S₀ is the value at Earth's orbit. Fold that into the equilibrium temperature. The d² lands inside the fourth root, and since (d²) raised to the one-fourth power is just √d, the distance comes out as d^(−1/2):" },
+        { "type": "math", "tex": "T_{\\text{eq}}(d) = \\left[\\frac{S_{0}\\,(1 - A)}{4\\sigma}\\right]^{1/4} \\cdot d^{-1/2}", "display": true, "caption": "S₀ is the solar flux at Earth's distance, 1361 W/m². d is the orbital distance in astronomical units, so d = 1 is Earth and d = 1.52 is Mars. The exponent −1/2 on d is the punch line: a factor of four in distance squared, run through a fourth root, becomes only a square root, so temperature falls far more slowly than the raw sunlight does." },
+        { "type": "viz", "src": "2026-05-21-planetary-equilibrium-temperature.html", "height": 420, "caption": "The curve is equilibrium temperature against orbital distance, T_eq ∝ d^(−1/2). Drag the distance slider to slide the marker along it, and watch the readout in kelvin and °C. The albedo slider darkens or brightens the planet, lifting or lowering the whole curve. Ghost ticks mark the real planets at their own distances. Notice how gently the curve sags: pushing a planet from Earth's orbit out to Jupiter's, more than five times farther, cuts sunlight by a factor of twenty-seven but barely more than halves the temperature." },
+        { "type": "p", "text": "Slide the planet outward and the curve sags gently, not steeply. Double the distance and the incident sunlight drops to a quarter, but the temperature drops only by 1/√2, to about 71% of its value. The fourth root is a great flattener: it takes enormous swings in sunlight and returns modest swings in temperature. That single fact is why the outer solar system is cold, but not as catastrophically cold as the bare inverse-square law would threaten." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Why Mars is cold, but not as cold as you would guess",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Mars is the case the back-of-envelope was made for. It orbits at 1.52 astronomical units, so by the inverse-square law it receives 1/1.52², about 0.43, of the sunlight Earth gets. Intuition, reaching for proportionality, expects Mars to be roughly 0.43 times as warm, which from Earth's 255 K would be a brutal 110 K, colder than liquid nitrogen. Mars is nowhere near that cold." },
+        { "type": "p", "text": "The fourth root intervenes. Temperature scales not as the flux but as the fourth root of the flux, so the ratio of Mars's temperature to Earth's is 0.43 raised to the one-fourth power. Holding the albedo fixed for the moment, the ratio is:" },
+        { "type": "math", "tex": "\\frac{T_{\\text{Mars}}}{T_{\\text{Earth}}} = \\left(\\frac{S_{\\text{Mars}}}{S_{\\text{Earth}}}\\right)^{1/4} = \\left(\\frac{1}{1.52^{2}}\\right)^{1/4} \\approx 0.81", "display": true, "caption": "T_Mars and T_Earth are the two equilibrium temperatures. S_Mars/S_Earth is the ratio of sunlight they receive, equal to 1/1.52² because Mars is 1.52 times farther and flux falls as distance squared. Raising that ratio to the one-fourth power, because temperature goes as the fourth root of flux, gives 0.81." },
+        { "type": "p", "text": "Multiply through: 255 K × 0.81 ≈ 207 K. Feed Mars its own slightly darker albedo of about 0.25, in place of Earth's 0.30, and the estimate nudges up to near 210 K. The measured global mean of Mars is about 210 K. The one-line formula nails it, and the reason it nails it is almost as important as the number. Mars has an atmosphere, but a thin one, mostly carbon dioxide at less than a hundredth of Earth's surface pressure, too feeble to trap much infrared. Its greenhouse warming is only about 5 K, so the bare-rock equilibrium temperature, which assumes no trapping at all, is very nearly the whole story. Mars is the solar system's cleanest demonstration that sunlight in equals infrared out really does set a planet's temperature." }
+      ],
+      "quiz": {
+        "question": "An exoplanet orbits a sun-like star at 4 AU, so it receives 1/16 of the sunlight Earth does. Assuming it shares Earth's albedo (for which T_eq ≈ 255 K), what is its equilibrium temperature?",
+        "options": [
+          "About 128 K",
+          "About 16 K",
+          "About 64 K",
+          "About 240 K"
+        ],
+        "correctIndex": 0,
+        "explanation": "Temperature goes as the fourth root of the incident flux. A flux of 1/16 means a temperature factor of (1/16)^(1/4) = 1/2, so the planet sits near 255/2 ≈ 128 K. The tempting wrong answer is 16 K, which scales temperature linearly with flux and lands wildly too cold; another trap is 64 K, which takes a square root instead of a fourth root. The fourth root is forgiving: it turned a sixteen-fold cut in sunlight into a mere halving of temperature, the same softening that keeps Mars near 210 K instead of 110 K."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The temperature of the face that meets space",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Run the same arithmetic on Venus and something strange happens. Venus is closer to the sun, at 0.72 AU, so it catches almost twice Earth's raw sunlight. But Venus is wrapped in brilliant white sulfuric-acid clouds that reflect most of it straight back, giving it a Bond albedo near 0.77, far higher than Earth's 0.30. The Bond albedo is the fraction of all incident sunlight a body throws back across every wavelength and every direction, which is exactly the quantity the (1 − A) term wants. With so little sunlight absorbed, Venus's equilibrium temperature comes out around 230 K, actually cooler than Earth's 255 K." },
+        { "type": "p", "text": "Yet the surface of Venus is 737 K, hot enough to melt lead, the hottest planetary surface in the solar system. The equilibrium temperature is wrong by more than five hundred kelvin. This is not a small correction like Earth's 33 K or Mars's 5 K; it is a catastrophic miss. The formula did not break. We were quietly assuming something false: that the surface is the part of the planet doing the radiating." },
+        { "type": "p", "text": "On an airless world the assumption holds, because the ground itself faces space and its infrared streams straight out. On Venus the thick carbon-dioxide atmosphere is nearly opaque to infrared, so the radiation that finally escapes does not leave from the ground at all. It leaves from high in the atmosphere, tens of kilometres up, at an altitude where the gas is at last thin enough to be transparent. That radiating level is genuinely near 230 K, exactly as the formula predicts. The equilibrium temperature was never lying. It was telling you the temperature of whatever surface actually meets space, and on Venus that surface floats far above the ground, with a deep blanket of atmosphere pressing the real ground up to 737 K beneath it." },
+        { "type": "p", "text": "This reframes the whole calculation. The equilibrium temperature is not the reading you would get from a thermometer in the dirt; it is the temperature of the planet's radiating level, the effective surface from which infrared leaks out to balance the sun. For the Moon or Mars that level sits on the rock, and the two temperatures nearly coincide. For Earth it sits a few kilometres up, and the 33 K difference is the depth of atmosphere between there and our faces. For Venus the level is so high, and the blanket beneath it so deep, that the ground and the radiating layer have almost nothing to say to each other. One equation, honestly applied, tells you a planet's temperature; the same equation, honestly questioned, tells you how far that temperature lives from the ground." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Venus has a higher albedo than Earth and works out to an equilibrium temperature of about 230 K, cooler than Earth's 255 K, yet its surface sits at 737 K. What does that 230 K equilibrium temperature actually describe?",
+    "options": [
+      "The temperature of the high-altitude layer from which Venus's infrared finally escapes to space",
+      "An error, since the formula does not apply to planets with thick atmospheres",
+      "The temperature of Venus's surface at night, before the sun reheats it",
+      "The temperature of the cloud tops as measured in reflected visible light"
+    ],
+    "correctIndex": 0,
+    "explanation": "Equilibrium temperature is fixed by balancing absorbed sunlight against emitted infrared, and that balance happens at whatever level the infrared can actually escape from. On Venus the dense CO₂ atmosphere is opaque to infrared, so radiation leaves only from high up where the gas thins out, and that radiating level genuinely sits near 230 K. The surface, buried under a hundred kilometres of greenhouse-trapping atmosphere, is heated far above it to 737 K. The formula is neither in error nor about reflected visible light nor a nighttime low: it always describes the temperature of whatever layer faces open space, which on an airless world is the ground and on Venus is tens of kilometres above it."
+  },
+  "suggestedNodes": [
+    {
+      "id": "greenhouse_effect",
+      "label": "Greenhouse",
+      "subtitle": "IR back-emission",
+      "edgeType": "extends"
+    },
+    {
+      "id": "bond_albedo",
+      "label": "Bond albedo",
+      "subtitle": "reflected fraction",
+      "edgeType": "applied"
+    },
+    {
+      "id": "runaway_greenhouse",
+      "label": "Runaway GH",
+      "subtitle": "Venus, 737 K",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-21T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["blackbody", "wien_displacement", "stefan_boltzmann"]
+  }
+}
