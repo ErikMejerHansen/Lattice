@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-06 from stefan-boltzmann-law
-Planetary equilibrium temperature — solar input vs σT⁴ output, why Mars is colder than Earth but not by as much as you would guess
 Stellar luminosity — L = 4πR²σT⁴, how stars are weighed and timed by their surface alone
 Greenhouse effect — atmospheric IR absorption and the 34 K gap between Earth's blackbody and observed temperature
 
@@ -70,3 +69,7 @@ Gaussian wave packet — the unique minimum-uncertainty state σ_x σ_p = ℏ/2,
 Franck-Hertz experiment — electrons losing energy in 4.9 eV steps through mercury vapor, the 1914 collision experiment that confirmed quantized atomic energy levels directly, without any spectroscopy
 Sommerfeld model — elliptical orbits and a second quantum number, plus the relativistic correction that explained the fine structure of the hydrogen lines
 Correspondence principle — Bohr's bridge that quantum predictions must reproduce classical physics in the limit of large quantum numbers, the rule he used to pin down transition rules
+
+# auto-suggested 2026-05-21 from planetary-equilibrium-temperature
+Bond albedo — the fraction of all incident sunlight a body reflects across every wavelength and direction, the number that sets how much energy a planet has to work with
+Runaway greenhouse — Venus, the positive feedback where an IR-opaque atmosphere lifts the radiating level so high the surface beneath bakes to 737 K

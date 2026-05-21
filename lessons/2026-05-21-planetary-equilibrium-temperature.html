@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planetary equilibrium temperature</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+.readout .pin { color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+  <canvas id="plot" height="300" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);background:var(--bg-raised);"></canvas>
+  <div class="viz-slider-row">
+    <label>d</label>
+    <input type="range" id="distSlider" min="0.3" max="5.5" step="0.01" value="1.52" style="min-height:36px;">
+    <span class="value" id="distVal">1.52 AU</span>
+  </div>
+  <div class="viz-slider-row">
+    <label>A</label>
+    <input type="range" id="albSlider" min="0" max="0.9" step="0.01" value="0.25" style="min-height:36px;">
+    <span class="value" id="albVal">0.25</span>
+  </div>
+  <div class="readout" id="readout"></div>
+  <p class="viz-caption" style="margin-top:10px;">Equilibrium temperature against orbital distance, T_eq &#8733; d<sup>&#8722;1/2</sup>. Drag the distance slider to slide the marker along the curve; drag the albedo slider to darken or brighten the planet, lifting or lowering the whole curve. Faint ticks mark the real planets at their own distances. The curve sags gently: a four-fold drop in distance-squared sunlight, run through a fourth root, becomes only a square-root drop in temperature, which is why Mars near 1.5 AU is cold but not frozen solid.</p>
+</div>
+
+<script>
+const SIGMA = 5.670374419e-8;
+const S0 = 1361; // solar constant at 1 AU, W/m^2
+
+const planets = [
+  { name: "Mercury", d: 0.39 },
+  { name: "Venus",   d: 0.72 },
+  { name: "Earth",   d: 1.00 },
+  { name: "Mars",    d: 1.52 },
+  { name: "Jupiter", d: 5.20 }
+];
+
+const D_MIN = 0.3, D_MAX = 5.5;
+
+const canvas = document.getElementById("plot");
+const distSlider = document.getElementById("distSlider");
+const albSlider = document.getElementById("albSlider");
+const distVal = document.getElementById("distVal");
+const albVal = document.getElementById("albVal");
+const readoutEl = document.getElementById("readout");
+
+function teq(d, A) {
+  const S = S0 / (d * d);
+  return Math.pow(S * (1 - A) / (4 * SIGMA), 0.25);
+}
+
+function makeField(parent, label, pinned) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  const lbl = document.createElement("span");
+  lbl.className = "lbl";
+  lbl.textContent = label;
+  const val = document.createElement("span");
+  if (pinned) val.className = "pin";
+  wrap.appendChild(lbl);
+  wrap.appendChild(val);
+  parent.appendChild(wrap);
+  return val;
+}
+
+const fDist = makeField(readoutEl, "distance");
+const fFlux = makeField(readoutEl, "S = S₀/d²");
+const fTk = makeField(readoutEl, "T_eq", true);
+const fTc = makeField(readoutEl, "T_eq (°C)", true);
+
+function draw() {
+  const d = parseFloat(distSlider.value);
+  const A = parseFloat(albSlider.value);
+  distVal.textContent = d.toFixed(2) + " AU";
+  albVal.textContent = A.toFixed(2);
+
+  const W = canvas.offsetWidth || 320;
+  canvas.width = W;
+  const H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const padL = 48, padR = 14, padT = 14, padB = 40;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  // y-axis fixed range so the albedo slider visibly raises/lowers the curve
+  const T_LO = 80, T_HI = 360;
+  function xFor(dd) { return padL + ((dd - D_MIN) / (D_MAX - D_MIN)) * plotW; }
+  function yFor(T) { return padT + plotH - ((Math.min(Math.max(T, T_LO), T_HI) - T_LO) / (T_HI - T_LO)) * plotH; }
+
+  // Axes
+  ctx.strokeStyle = "rgba(26,26,24,0.45)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, padT);
+  ctx.lineTo(padL, padT + plotH);
+  ctx.lineTo(padL + plotW, padT + plotH);
+  ctx.stroke();
+
+  // Y gridlines + labels
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.fillStyle = "rgba(26,26,24,0.6)";
+  ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
+  for (let T = 100; T <= 350; T += 50) {
+    const y = yFor(T);
+    ctx.strokeStyle = "rgba(26,26,24,0.10)";
+    ctx.beginPath();
+    ctx.moveTo(padL, y);
+    ctx.lineTo(padL + plotW, y);
+    ctx.stroke();
+    ctx.fillStyle = "rgba(26,26,24,0.6)";
+    ctx.fillText(T + " K", padL - 6, y);
+  }
+
+  // X ticks at whole AU
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  for (let dd = 1; dd <= 5; dd++) {
+    const x = xFor(dd);
+    ctx.strokeStyle = "rgba(26,26,24,0.45)";
+    ctx.beginPath();
+    ctx.moveTo(x, padT + plotH);
+    ctx.lineTo(x, padT + plotH + 3);
+    ctx.stroke();
+    ctx.fillStyle = "rgba(26,26,24,0.6)";
+    ctx.fillText(dd + " AU", x, padT + plotH + 6);
+  }
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("orbital distance d", padL + plotW / 2, padT + plotH + 22);
+
+  // Y axis label
+  ctx.save();
+  ctx.translate(13, padT + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("equilibrium T", 0, 0);
+  ctx.restore();
+
+  // Planet reference ticks (at current albedo)
+  ctx.textAlign = "center";
+  ctx.textBaseline = "bottom";
+  for (const p of planets) {
+    if (p.d < D_MIN || p.d > D_MAX) continue;
+    const x = xFor(p.d);
+    const y = yFor(teq(p.d, A));
+    ctx.fillStyle = "rgba(168,158,144,0.9)";
+    ctx.beginPath();
+    ctx.arc(x, y, 2.6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.font = "9px 'IBM Plex Mono',monospace";
+    ctx.fillStyle = "rgba(107,99,89,0.85)";
+    ctx.fillText(p.name, x, y - 5);
+  }
+
+  // T_eq curve
+  ctx.strokeStyle = "#9c3a22";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  const N = 240;
+  for (let i = 0; i <= N; i++) {
+    const dd = D_MIN + (i / N) * (D_MAX - D_MIN);
+    const x = xFor(dd);
+    const y = yFor(teq(dd, A));
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Current marker
+  const T = teq(d, A);
+  const mx = xFor(d), my = yFor(T);
+  ctx.strokeStyle = "rgba(156,58,34,0.35)";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 3]);
+  ctx.beginPath();
+  ctx.moveTo(mx, my); ctx.lineTo(mx, padT + plotH);
+  ctx.moveTo(mx, my); ctx.lineTo(padL, my);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = "#9c3a22";
+  ctx.beginPath();
+  ctx.arc(mx, my, 5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Readout
+  fDist.textContent = d.toFixed(2) + " AU";
+  fFlux.textContent = (S0 / (d * d)).toFixed(0) + " W/m²";
+  fTk.textContent = T.toFixed(1) + " K";
+  fTc.textContent = (T - 273.15).toFixed(1) + " °C";
+}
+
+distSlider.addEventListener("input", draw);
+albSlider.addEventListener("input", draw);
+window.addEventListener("load", draw);
+setTimeout(draw, 80);
+</script>
+</body>
+</html>

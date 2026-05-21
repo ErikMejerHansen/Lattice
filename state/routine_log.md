@@ -24,3 +24,4 @@
 2026-05-17T08:00Z  ok  schrodinger-equation  5sec, 1 viz, 2 edges, 3 auto-suggestions; pushed to claude/gracious-franklin-gQvUv per session branch policy (routine spec asks for main)
 2026-05-18T08:00Z  ok  uncertainty-principle  5sec, 1 viz, 3 edges, 3 auto-suggestions; pushed to claude/gracious-franklin-Xpvlr per session branch policy (routine spec asks for main)
 2026-05-20T08:00Z  ok  bohr-atom  5sec, 1 viz, 3 edges, 3 auto-suggestions; de Broglie standing-wave derivation of L=nℏ per wishlist hint; pushed to claude/gracious-franklin-Jusrp per session branch policy (routine spec asks for main)
+2026-05-21T08:00Z  ok  planetary-equilibrium-temperature  5sec, 1 viz, 3 edges, 2 auto-suggestions; both feedback files (05-11, 05-13) already addressed in prior runs, no prompt change needed; pushed to claude/gracious-franklin-bBohK per session branch policy (routine spec asks for main)
