@@ -1,0 +1,134 @@
+{
+  "slug": "2026-05-22-stellar-luminosity",
+  "title": "Stellar luminosity: the size and the lifespan read off a point of light",
+  "node": {
+    "id": "stellar_luminosity",
+    "label": "Luminosity",
+    "subtitle": "L = 4πR²σT⁴"
+  },
+  "intro": "A star, in every telescope ever built, is a point: a dot of light with no disk to measure, no matter how much glass you point at it. And yet astronomers quote stellar radii to two significant figures and stellar ages in billions of years, for objects they have never seen as anything but a speck. The bridge is a single line, L = 4πR²σT⁴, that turns the brightness and the color of a star into its size, and the size into the time it has left to live. This lesson is about how much one equation can wring out of an object that refuses to show you its face.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The point that has no disk",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Begin with the frustration. The nearest star beyond the sun, Proxima Centauri, sits about four light years away, and a respectable star is something like a million kilometers across. Do the trigonometry and the disk of even a nearby star subtends an angle of a few thousandths of an arcsecond, far below what a telescope can resolve through the wobbling air. (An arcsecond is 1/3600 of a degree, about the apparent width of a coin seen from a few kilometers off.) For three centuries after Galileo, the physical size of a star was simply not a measurable quantity. It was a forbidden number." },
+        { "type": "p", "text": "Two things about a star's light are measurable, though. The first is how much energy it pours out, its luminosity, which you can get from how bright it looks once you know how far away it is. The second is its color, or more finely its spectrum, which fixes the temperature of its glowing surface. The wager of this lesson is that those two humble measurements, brightness and color, are enough to recover the size you were forbidden to see. You do not always need to look at a thing to measure it. You need a law connecting what you can see to what you cannot." },
+        { "type": "p", "text": "The law is the one that says a star radiates very nearly like a blackbody, an idealized surface that absorbs all the light falling on it and re-emits a spectrum determined by nothing but its temperature. A real star is not a perfect blackbody, but it is a remarkably good one: its dense outer gas swallows and re-radiates light so many times before it escapes that the emerging spectrum is set, to first approximation, by the temperature of the layer it leaves from. That single approximation is what makes the surface of a star, the only part we ever see, into a thermometer and a power meter at once." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Multiplying the skin by the flux",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The amount of power a blackbody radiates from each square meter of its surface was pinned down in 1879 by Josef Stefan, who guessed it from the data, and derived from thermodynamics in 1884 by his former student Ludwig Boltzmann. Their result, the Stefan-Boltzmann law, says the radiated flux, the power leaving each square meter, is proportional to the fourth power of the absolute temperature. Write the flux as j, the surface temperature as T, and the constant of proportionality as σ." },
+        { "type": "math", "tex": "j = \\sigma T^{4}", "display": true, "caption": "j is the radiated flux, the power leaving each square meter of surface, in watts per square meter. σ is the Stefan-Boltzmann constant, 5.67 × 10⁻⁸ W m⁻² K⁻⁴, a fixed number of nature. T is the absolute temperature of the surface in kelvin, and the fourth power on it is the steepness that lets a hot star outshine a cool one so dramatically." },
+        { "type": "p", "text": "That is the power leaving each square meter. To get the total power you multiply by the number of square meters. A star is very nearly a sphere of radius R, and the surface area of a sphere is 4πR². The whole globe glows, every patch of surface facing outward into space, so the entire area counts." },
+        { "type": "math", "tex": "A = 4\\pi R^{2}", "display": true, "caption": "A is the total surface area of the star. R is the radius of the star, the very quantity we cannot see directly. 4π is the geometric factor that turns a radius into the area of a complete sphere." },
+        { "type": "p", "text": "Multiply the flux from each square meter by the total number of square meters and you have the star's luminosity L, the total radiant power it sends out in every direction, measured in watts. This is the equation the whole lesson hangs on." },
+        { "type": "math", "tex": "L = 4\\pi R^{2}\\,\\sigma T^{4}", "display": true, "caption": "L is the luminosity, the total power the star radiates, in watts. R is the star's radius, so 4πR² is its surface area. σ is the Stefan-Boltzmann constant. T is the surface temperature, entering as the fourth power exactly as it did in Stefan's law for a single square meter." },
+        { "type": "p", "text": "One honest caveat travels with the T in that formula. A real star is not a perfect blackbody, and different wavelengths leak out from slightly different depths at slightly different temperatures. So astronomers define T here as the effective temperature: the temperature a perfect blackbody would need in order to radiate the star's actual luminosity from the star's actual area. It is a single, well-behaved number standing in for a messy reality, and it is the temperature every other equation in this lesson means." }
+      ],
+      "quiz": {
+        "question": "Two stars have exactly the same radius, but one has a surface temperature twice that of the other. How much more luminous is the hotter star?",
+        "options": [
+          "16 times",
+          "2 times",
+          "4 times",
+          "8 times"
+        ],
+        "correctIndex": 0,
+        "explanation": "Luminosity goes as 4πR²σT⁴, and with the radius held equal the only thing that changes is the T⁴ factor. Doubling the temperature multiplies the luminosity by 2⁴ = 16. The tempting answers come from forgetting the fourth power: 2 lets luminosity scale linearly with temperature, 4 squares it as if it followed area, and 8 cubes it. It is the fourth power, inherited straight from Stefan's law, that turns a modest jump in surface temperature into a star that blazes more than an order of magnitude brighter."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Reading the radius off the sky",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Now turn the equation around. We do not actually measure a star's radius and ask for its luminosity; we measure the luminosity and the temperature and want the radius. So solve L = 4πR²σT⁴ for R. Divide both sides by 4πσT⁴ to leave the R² by itself." },
+        { "type": "math", "tex": "R^{2} = \\frac{L}{4\\pi\\sigma T^{4}}", "display": true, "caption": "R² is the square of the star's radius. L is the measured luminosity. σ is the Stefan-Boltzmann constant and T the measured surface temperature, so 4πσT⁴ is the power each unit of surface emits folded together with the sphere factor. Dividing a total power by a power-per-area leaves an area, and here that area is written as R²." },
+        { "type": "p", "text": "Take the square root of both sides and the radius stands alone, expressed entirely in things you can measure from the ground." },
+        { "type": "math", "tex": "R = \\sqrt{\\dfrac{L}{4\\pi\\sigma T^{4}}}", "display": true, "caption": "R is the radius of the star, now recovered without ever resolving its disk. L is its luminosity, from brightness and distance. T is its surface temperature, from its color. σ is the Stefan-Boltzmann constant, and the square root undoes the squaring of the radius that the area introduced." },
+        { "type": "p", "text": "This is what it means to weigh a star by its surface alone. Measure how bright it looks and how far away it is, and you have L. Measure its color, and you have T. The equation hands back R, the diameter of a body you could never magnify into a disk. And it quietly reorganizes the most famous chart in astronomy. The Hertzsprung-Russell diagram, a plot of luminosity up the side against surface temperature along the bottom, named for Ejnar Hertzsprung and Henry Norris Russell who drew its first versions around 1911, turns out to be secretly a map of radius." },
+        { "type": "viz", "src": "2026-05-22-stellar-luminosity.html", "height": 460, "caption": "The Hertzsprung-Russell plane: luminosity in solar units up the side, surface temperature along the bottom and running hot to cool from left to right, both on logarithmic scales. The faint diagonals are lines of constant radius, each a tenfold step in size, drawn straight from L = 4πR²σT⁴. Drag the temperature and luminosity sliders to move the star and read its inferred radius off the panel. Ghost markers fix the sun, the white dwarf Sirius B, and the supergiant Betelgeuse. Notice that holding the temperature fixed and climbing a thousandfold in luminosity carries you up by only a thirtyfold in radius: the dwarfs, giants, and supergiants are nothing but constant-radius stripes laid across this sheet." },
+        { "type": "p", "text": "That is why the diagram is not a featureless scatter but splits into distinct families. Two stars can share a temperature and differ in luminosity by a factor of ten thousand, and the equation says the brighter one must be a hundred times larger in radius. The cool, dim corner holds white dwarfs no bigger than the Earth; the cool, brilliant corner holds red giants and supergiants that would engulf the inner planets. Russell and Hertzsprung did not impose those groupings by hand; L = 4πR²σT⁴ drew the contour lines, and the stars fell onto them." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. From size to lifespan",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The same surface that gives up a star's size also gives up its lifespan, and the chain is short. A star shines by fusing hydrogen in its core, and its luminosity is precisely the rate at which it spends that fuel: a brighter star is burning faster. The size of the fuel tank, meanwhile, is set mostly by the star's mass M, since the mass is very nearly the supply of hydrogen available to burn. The time a star can keep shining is therefore the fuel divided by the burn rate, the mass divided by the luminosity." },
+        { "type": "math", "tex": "\\tau \\propto \\frac{M}{L}", "display": true, "caption": "τ is the star's lifetime, how long it can sustain fusion before the fuel runs short. M is the star's mass, standing in for the total amount of fuel. L is the luminosity, the rate at which that fuel is consumed. The proportionality sign absorbs the fixed fraction of the mass that is actually burnable and the energy released per kilogram." },
+        { "type": "p", "text": "If luminosity rose only in step with mass, every star would last about the same span and the story would end here. It does not. Arthur Eddington, the astrophysicist who in the 1920s first worked out the physics holding a star up against its own gravity, found that luminosity climbs far steeper than mass. Across most of the main run of stars the mass-luminosity relation goes roughly as the three-and-a-half power of the mass." },
+        { "type": "math", "tex": "L \\propto M^{3.5}", "display": true, "caption": "L is the luminosity. M is the stellar mass. The exponent 3.5 is empirical, read off the many binary stars whose masses can be measured directly from their orbits, and it says a star ten times heavier than the sun is not ten but about three thousand times brighter." },
+        { "type": "p", "text": "Now substitute the second relation into the first. The lifetime goes as M divided by L, and L goes as M raised to the 3.5 power, so the lifetime goes as M divided by M to the 3.5. Dividing powers of the same base means subtracting the exponents, 1 minus 3.5, which is minus 2.5." },
+        { "type": "math", "tex": "\\tau \\propto \\frac{M}{M^{3.5}} = M^{-2.5}", "display": true, "caption": "τ is the stellar lifetime. M is the mass. The middle step divides the fuel M by the burn rate M^3.5, and subtracting the exponents (1 − 3.5 = −2.5) gives the result. The negative exponent is the whole moral: more massive stars live shorter, not longer, lives." },
+        { "type": "p", "text": "The consequence is severe and a little unfair. A star ten times the sun's mass carries ten times the fuel but burns it some three thousand times faster, and so lives only about a thirty-thousandth as long: tens of millions of years against the sun's ten billion. The bright blue stars that dominate a night sky are therefore necessarily young, cosmic mayflies that cannot have existed for long. The faint red dwarfs, hoarding their fuel, will still be burning long after the sun is a cinder. A star's brightness, the very thing that makes it conspicuous, is the measure of how quickly it is killing itself." }
+      ],
+      "quiz": {
+        "question": "A main-sequence star has four times the mass of the sun. Using τ ∝ M⁻²·⁵ and the sun's lifetime of about 10 billion years, roughly how long will it live?",
+        "options": [
+          "About 300 million years",
+          "About 40 billion years",
+          "About 2.5 billion years",
+          "About 10 billion years"
+        ],
+        "correctIndex": 0,
+        "explanation": "Lifetime scales as M⁻²·⁵, so four times the mass means a factor of 4⁻²·⁵ = 1/32 in lifetime. Ten billion years divided by 32 is about 300 million years. The trap answer of 40 billion years scales lifetime as the fuel M alone and ignores that the burn rate, the luminosity, climbs as M³·⁵. The heavier star has four times the fuel but burns it roughly a hundred times faster, and the burn rate wins decisively."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Betelgeuse, the first star with a measured face",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Take the equation to a real and famous star: Betelgeuse, the red shoulder of Orion. Its surface is cool as stars go, an effective temperature near 3500 K, which by its color alone would suggest a modest, dim ember. Yet Betelgeuse is one of the brightest stars in the sky, pouring out something like 100,000 times the sun's luminosity. Feed those two numbers, a low T and an enormous L, into R = √(L / 4πσT⁴), and the radius that comes back is staggering: close to 800 times the radius of the sun. Set Betelgeuse where the sun is and its surface would reach out past the orbit of Mars, toward the orbit of Jupiter." },
+        { "type": "p", "text": "For most of history that number would have been pure inference, a size deduced for a body no one could see as anything but a point. Then in December 1920 Albert Michelson and Francis Pease bolted a twenty-foot steel beam carrying mirrors across the front of the 100-inch Hooker telescope on Mount Wilson, turning it into an interferometer (a device that measures a source by how the light gathered at two separated mirrors interferes, rather than by forming an ordinary image). They aimed it at Betelgeuse and measured its angular diameter directly, about 0.047 arcseconds, the first time in history that any star's disk had been measured at all. Combined with its distance, that angle gave a physical radius in close agreement with what L = 4πR²σT⁴ had already demanded. The equation that needed no disk was confirmed the moment the first disk was finally resolved." },
+        { "type": "p", "text": "And the same surface betrays the clock. A star as luminous as Betelgeuse must be massive, somewhere around fifteen to twenty solar masses, and the lifetime law is merciless to the massive: such a star runs through its hydrogen in roughly ten million years, an eyeblink beside the sun's ten billion. Betelgeuse is near the end. It has exhausted the hydrogen in its core, swollen into a supergiant, and is now fusing heavier elements toward an inert iron center, the last stop before a star this heavy collapses and detonates as a supernova. When Betelgeuse dimmed sharply through the winter of 2019 into 2020, watchers wondered whether the end had come; it turned out to be a cloud of dust the star had coughed out, dimming our view, not the death itself. Not yet." },
+        { "type": "p", "text": "Stand back and notice what one conservation statement has bought. Energy in equals energy out, accounted square meter by square meter over a surface no telescope could resolve until the year the star was already old, and from that single ledger fall both the size of Betelgeuse and the time it has left. The two facts you would think you most need to stand beside a star to learn, how big it is and how long it lasts, are written plainly in the brightness and the color of a point of light. The skin of a star, the only part it ever shows us, turns out to be telling us very nearly everything." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Two stars sit at the same point along the temperature axis of the Hertzsprung-Russell diagram, but one is a faint white dwarf and the other a brilliant supergiant, differing in luminosity by a factor of about a million. Sharing a temperature, what must be true of them, and why?",
+    "options": [
+      "The supergiant has about a thousand times the radius of the white dwarf, because at fixed temperature luminosity scales as R²",
+      "The supergiant is about a million times hotter, since luminosity is set by temperature alone",
+      "They have the same radius, since temperature alone fixes a star's size",
+      "The supergiant has about a million times the radius, since luminosity scales directly with surface area"
+    ],
+    "correctIndex": 0,
+    "explanation": "With the temperature equal, the σT⁴ flux from each square meter is identical for both stars, so the entire million-fold gap in luminosity has to come from surface area, and L = 4πR²σT⁴ makes luminosity scale as R². A factor of a million in luminosity is therefore a factor of √(10⁶) = 1000 in radius. That is exactly why the Hertzsprung-Russell diagram separates into dwarfs and giants: equal-temperature stars strung vertically up the luminosity axis are the same kind of surface wrapped around radii that grow as the square root of the brightness. The answer giving a million-fold radius forgets the square root; the others ignore that the two stars were specified to share a temperature."
+  },
+  "suggestedNodes": [
+    {
+      "id": "mass_luminosity_relation",
+      "label": "Mass-lum",
+      "subtitle": "L ∝ M^3.5",
+      "edgeType": "extends"
+    },
+    {
+      "id": "hertzsprung_russell",
+      "label": "HR diagram",
+      "subtitle": "L vs T",
+      "edgeType": "applied"
+    },
+    {
+      "id": "main_sequence",
+      "label": "Main seq",
+      "subtitle": "H-burning life",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-22T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": ["stefan_boltzmann", "blackbody", "stellar_classification", "wien_displacement"]
+  }
+}

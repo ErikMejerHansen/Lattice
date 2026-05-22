@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stellar luminosity</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+.readout .pin { color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+  <canvas id="plot" height="320" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);background:var(--bg-raised);"></canvas>
+  <div class="viz-slider-row">
+    <label>T</label>
+    <input type="range" id="tSlider" min="3.398" max="4.602" step="0.001" value="3.544" style="min-height:36px;">
+    <span class="value" id="tVal">3500 K</span>
+  </div>
+  <div class="viz-slider-row">
+    <label>L</label>
+    <input type="range" id="lSlider" min="-4" max="6" step="0.01" value="5" style="min-height:36px;">
+    <span class="value" id="lVal">1e5 L&#9737;</span>
+  </div>
+  <div class="readout" id="readout"></div>
+  <p class="viz-caption" style="margin-top:10px;">The Hertzsprung-Russell plane. Luminosity (in suns) up the side, surface temperature along the bottom and running hot to cool from left to right, both logarithmic. Faint diagonals are lines of constant radius, each a tenfold step, drawn from L = 4&#960;R&#178;&#963;T&#8308;. Drag the sliders to move the star and read its inferred radius. The constant-radius stripes are exactly what split the diagram into white dwarfs, the main sequence, giants, and supergiants.</p>
+</div>
+
+<script>
+const SIGMA = 5.670374419e-8;
+const TSUN = 5772;            // K
+const RSUN_KM = 695700;       // km
+
+const TMIN = 2500, TMAX = 40000;     // K
+const LMIN = 1e-4, LMAX = 1e6;       // solar luminosities
+const lgTmin = Math.log10(TMIN), lgTmax = Math.log10(TMAX);
+const lgLmin = Math.log10(LMIN), lgLmax = Math.log10(LMAX);
+
+// Reference stars: name, T (K), L (L_sun)
+const stars = [
+  { name: "Sun",        T: 5772,  L: 1 },
+  { name: "Sirius B",   T: 25000, L: 0.026 },
+  { name: "Proxima",    T: 3040,  L: 0.0017 },
+  { name: "Vega",       T: 9600,  L: 40 },
+  { name: "Rigel",      T: 12100, L: 1.2e5 },
+  { name: "Betelgeuse", T: 3500,  L: 1.0e5 }
+];
+
+const canvas = document.getElementById("plot");
+const tSlider = document.getElementById("tSlider");
+const lSlider = document.getElementById("lSlider");
+const tVal = document.getElementById("tVal");
+const lVal = document.getElementById("lVal");
+const readoutEl = document.getElementById("readout");
+
+// radius in solar units from L (solar) and T (K)
+function radiusSun(L, T) {
+  return Math.sqrt(L / Math.pow(T / TSUN, 4));
+}
+function classify(rSun) {
+  if (rSun < 0.1) return "white dwarf";
+  if (rSun < 1.5) return "main sequence";
+  if (rSun < 25) return "main seq / subgiant";
+  if (rSun < 100) return "giant";
+  return "supergiant";
+}
+function fmtL(L) {
+  if (L >= 100 || L < 0.01) return L.toExponential(1);
+  return L.toPrecision(2);
+}
+
+function makeField(parent, label, pinned) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  const lbl = document.createElement("span");
+  lbl.className = "lbl";
+  lbl.textContent = label;
+  const val = document.createElement("span");
+  if (pinned) val.className = "pin";
+  wrap.appendChild(lbl);
+  wrap.appendChild(val);
+  parent.appendChild(wrap);
+  return val;
+}
+const fT = makeField(readoutEl, "T");
+const fL = makeField(readoutEl, "L");
+const fR = makeField(readoutEl, "R = √(L/4πσT⁴)", true);
+const fRkm = makeField(readoutEl, "R", true);
+const fType = makeField(readoutEl, "where on the diagram");
+
+function draw() {
+  const T = Math.pow(10, parseFloat(tSlider.value));
+  const L = Math.pow(10, parseFloat(lSlider.value));
+  tVal.textContent = Math.round(T) + " K";
+  lVal.innerHTML = fmtL(L) + " L⊙";
+
+  const W = canvas.offsetWidth || 320;
+  canvas.width = W;
+  const H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const padL = 50, padR = 14, padT = 12, padB = 36;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  // x: temperature, log, REVERSED (hot left). y: luminosity, log, up.
+  function xFor(t) {
+    const f = (Math.log10(t) - lgTmin) / (lgTmax - lgTmin);
+    return padL + (1 - f) * plotW;            // reversed
+  }
+  function yFor(l) {
+    const f = (Math.log10(l) - lgLmin) / (lgLmax - lgLmin);
+    return padT + plotH - f * plotH;
+  }
+
+  // L gridlines (decades)
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  for (let e = -4; e <= 6; e += 2) {
+    const y = yFor(Math.pow(10, e));
+    ctx.strokeStyle = "rgba(26,26,24,0.08)";
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + plotW, y); ctx.stroke();
+    ctx.fillStyle = "rgba(26,26,24,0.55)";
+    ctx.textAlign = "right"; ctx.textBaseline = "middle";
+    ctx.fillText("10" + supScript(e), padL - 6, y);
+  }
+
+  // Constant-radius diagonals: L = Rc^2 * (T/Tsun)^4  -> log L = 2 logRc + 4 log(T/Tsun)
+  const radii = [
+    { r: 0.01, lab: "0.01 R⊙" },
+    { r: 0.1,  lab: "0.1 R⊙" },
+    { r: 1,    lab: "1 R⊙" },
+    { r: 10,   lab: "10 R⊙" },
+    { r: 100,  lab: "100 R⊙" },
+    { r: 1000, lab: "1000 R⊙" }
+  ];
+  ctx.save();
+  for (const rc of radii) {
+    let started = false, lastX = 0, lastY = 0;
+    ctx.strokeStyle = "rgba(156,58,34,0.28)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let i = 0; i <= 120; i++) {
+      const t = Math.pow(10, lgTmin + (i / 120) * (lgTmax - lgTmin));
+      const l = rc.r * rc.r * Math.pow(t / TSUN, 4);
+      if (l < LMIN || l > LMAX) { started = false; continue; }
+      const x = xFor(t), y = yFor(l);
+      if (!started) { ctx.moveTo(x, y); started = true; } else ctx.lineTo(x, y);
+      lastX = x; lastY = y;
+    }
+    ctx.stroke();
+    // label near the line's endpoint inside the frame
+    if (lastX > padL + 6 && lastX < padL + plotW - 2 && lastY > padT + 8) {
+      ctx.fillStyle = "rgba(156,58,34,0.6)";
+      ctx.font = "9px 'IBM Plex Mono',monospace";
+      ctx.textAlign = "left"; ctx.textBaseline = "bottom";
+      ctx.fillText(rc.lab, Math.min(lastX + 3, padL + plotW - 44), lastY - 1);
+    }
+  }
+  ctx.restore();
+
+  // Axes frame
+  ctx.strokeStyle = "rgba(26,26,24,0.45)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + plotH);
+  ctx.lineTo(padL + plotW, padT + plotH);
+  ctx.stroke();
+
+  // X ticks (temperature, reversed)
+  ctx.textAlign = "center"; ctx.textBaseline = "top";
+  const tTicks = [40000, 20000, 10000, 5000, 3000];
+  for (const t of tTicks) {
+    if (t < TMIN || t > TMAX) continue;
+    const x = xFor(t);
+    ctx.strokeStyle = "rgba(26,26,24,0.45)";
+    ctx.beginPath(); ctx.moveTo(x, padT + plotH); ctx.lineTo(x, padT + plotH + 3); ctx.stroke();
+    ctx.fillStyle = "rgba(26,26,24,0.6)";
+    ctx.font = "9px 'IBM Plex Mono',monospace";
+    ctx.fillText((t / 1000) + "k", x, padT + plotH + 5);
+  }
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("surface temperature  (hot ← → cool)", padL + plotW / 2, padT + plotH + 19);
+
+  // Y axis label
+  ctx.save();
+  ctx.translate(13, padT + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("luminosity  (L / L⊙)", 0, 0);
+  ctx.restore();
+
+  // Reference stars
+  ctx.textAlign = "center"; ctx.textBaseline = "bottom";
+  for (const s of stars) {
+    const x = xFor(s.T), y = yFor(s.L);
+    ctx.fillStyle = "rgba(168,158,144,0.95)";
+    ctx.beginPath(); ctx.arc(x, y, 2.6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "rgba(107,99,89,0.9)";
+    ctx.font = "9px 'IBM Plex Mono',monospace";
+    ctx.fillText(s.name, x, y - 4);
+  }
+
+  // Current star marker
+  const mx = xFor(T), my = yFor(L);
+  ctx.strokeStyle = "rgba(156,58,34,0.4)";
+  ctx.setLineDash([3, 3]); ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(mx, my); ctx.lineTo(mx, padT + plotH);
+  ctx.moveTo(mx, my); ctx.lineTo(padL, my);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = "#9c3a22";
+  ctx.beginPath(); ctx.arc(mx, my, 5, 0, Math.PI * 2); ctx.fill();
+
+  // Readout
+  const rSun = radiusSun(L, T);
+  fT.textContent = Math.round(T) + " K";
+  fL.innerHTML = fmtL(L) + " L⊙";
+  fR.textContent = (rSun >= 100 ? rSun.toExponential(2) : rSun.toPrecision(3)) + " R⊙";
+  const km = rSun * RSUN_KM;
+  fRkm.textContent = km.toExponential(2) + " km";
+  fType.textContent = classify(rSun);
+}
+
+function supScript(e) {
+  const map = { "-": "⁻", "0": "⁰", "1": "¹", "2": "²", "3": "³",
+    "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹" };
+  return String(e).split("").map(c => map[c] || c).join("");
+}
+
+tSlider.addEventListener("input", draw);
+lSlider.addEventListener("input", draw);
+window.addEventListener("load", draw);
+setTimeout(draw, 80);
+</script>
+</body>
+</html>

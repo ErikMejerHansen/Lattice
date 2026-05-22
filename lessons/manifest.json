@@ -166,5 +166,12 @@
     "subtitle": "(S/4σ)^¼",
     "date": "2026-05-21",
     "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-05-22-stellar-luminosity",
+    "title": "Stellar luminosity: the size and the lifespan read off a point of light",
+    "subtitle": "L = 4πR²σT⁴",
+    "date": "2026-05-22",
+    "estimatedReadingMinutes": 23
   }
 ]
