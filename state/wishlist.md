@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-06 from stefan-boltzmann-law
-Stellar luminosity — L = 4πR²σT⁴, how stars are weighed and timed by their surface alone
 Greenhouse effect — atmospheric IR absorption and the 34 K gap between Earth's blackbody and observed temperature
 
 # auto-suggested 2026-05-07 from cosmic-microwave-background
@@ -73,3 +72,7 @@ Correspondence principle — Bohr's bridge that quantum predictions must reprodu
 # auto-suggested 2026-05-21 from planetary-equilibrium-temperature
 Bond albedo — the fraction of all incident sunlight a body reflects across every wavelength and direction, the number that sets how much energy a planet has to work with
 Runaway greenhouse — Venus, the positive feedback where an IR-opaque atmosphere lifts the radiating level so high the surface beneath bakes to 737 K
+
+# auto-suggested 2026-05-22 from stellar-luminosity
+Mass-luminosity relation — L ∝ M^3.5, Eddington's discovery that brightness climbs far steeper than mass, the reason heavy stars are profligate and short-lived
+Main sequence — the hydrogen-burning diagonal where stars spend ninety percent of their lives, and why a star's position on it is fixed almost entirely by its mass
