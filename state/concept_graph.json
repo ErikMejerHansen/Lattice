@@ -249,6 +249,16 @@
       "createdAt": "2026-05-22T08:00:00Z",
       "col": 0,
       "row": 12
+    },
+    {
+      "id": "greenhouse_effect",
+      "label": "Greenhouse",
+      "subtitle": "IR back-emission",
+      "state": "available",
+      "lesson": "2026-05-23-greenhouse-effect",
+      "createdAt": "2026-05-23T08:00:00Z",
+      "col": 1,
+      "row": 12
     }
   ],
   "edges": [
@@ -311,6 +321,9 @@
     { "from": "planetary_equilibrium", "to": "wien_displacement", "kind": "related" },
     { "from": "stellar_luminosity", "to": "stefan_boltzmann", "kind": "extends" },
     { "from": "stellar_luminosity", "to": "blackbody", "kind": "applied" },
-    { "from": "stellar_luminosity", "to": "stellar_classification", "kind": "related" }
+    { "from": "stellar_luminosity", "to": "stellar_classification", "kind": "related" },
+    { "from": "greenhouse_effect", "to": "planetary_equilibrium", "kind": "extends" },
+    { "from": "greenhouse_effect", "to": "stefan_boltzmann", "kind": "applied" },
+    { "from": "greenhouse_effect", "to": "wien_displacement", "kind": "related" }
   ]
 }
