@@ -1,0 +1,135 @@
+{
+  "slug": "2026-05-23-greenhouse-effect",
+  "title": "The greenhouse effect: the slab of air that keeps the ground 33 K warmer than space",
+  "node": {
+    "id": "greenhouse_effect",
+    "label": "Greenhouse",
+    "subtitle": "IR back-emission"
+  },
+  "intro": "The previous lesson left a number on the table. A bare, airless Earth, balancing absorbed sunlight against emitted infrared, settles at 255 K, about −18 °C. The real Earth averages 288 K. That 33 K gap is the greenhouse effect, the difference between a frozen planet and the one we live on. Joseph Fourier named it in 1824 with the wrong picture, John Tyndall found the real mechanism in a London basement in 1859, and the whole of it can be captured by a single slab of air doing one simple thing to outgoing heat.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The gap Fourier could not close",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Fourier, in his 1824 memoir, could frame the planet as a ledger of incoming sunlight and outgoing dark heat, but he could not compute the outgoing column, because Stefan's fourth-power emission law was still fifty-five years away. What he could do was reach for an analogy: the heliothermometer built by the Genevan naturalist Horace-Benedict de Saussure, a glass-lidded wooden box that ran far hotter inside than the open air. The glass, Fourier suggested, let sunlight in and slowed the escape of heat, and perhaps the atmosphere did the same for the planet. The name greenhouse effect descends from that guess." },
+        { "type": "p", "text": "The irony, demonstrated by R. W. Wood in 1909, is that a real greenhouse stays warm mostly by stopping convection (the warm air inside cannot rise and carry heat away), not by trapping radiation. Wood built two boxes, one with a glass lid and one with a lid of rock salt, which unlike glass is transparent to infrared, and the two reached nearly the same temperature. The atmosphere's actual mechanism is the radiative one Fourier's box does not really demonstrate, but the misnomer stuck for two centuries." },
+        { "type": "p", "text": "The man who found the real mechanism was John Tyndall, working in the basement laboratory of the Royal Institution in 1859. Tyndall built a brass tube fitted with rock-salt windows and a thermopile (a stack of thermocouples that turns a temperature difference into a measurable electric current), and pushed different gases through it to see which blocked radiant heat. The result was sharp. The bulk of the atmosphere, nitrogen and oxygen, was almost perfectly transparent to heat radiation. But water vapor, carbon dioxide (which he called carbonic acid), and the hydrocarbons absorbed it strongly. Tyndall grasped the consequence at once: water vapor is the great regulator of Earth's surface temperature, and a change in any of these trace gases would change the climate." },
+        { "type": "p", "text": "Svante Arrhenius took the next step in 1896, performing by hand the first quantitative climate calculation, thousands of arithmetic operations, motivated by the riddle of what could have caused the ice ages. He estimated that cutting carbonic acid would chill Europe toward glaciation and that doubling it would warm the globe by some 5 to 6 K, a figure that sits, remarkably, inside the range our models give today. None of these workers had a clean model of why a gas transparent to sunlight but opaque to infrared should warm the ground at all. That asymmetry is what we need to look at first." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Sunlight comes in hot, heat leaves cold",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Everything turns on a mismatch of wavelengths, and the tool for seeing it is Wien's displacement law, which says the wavelength at which a body radiates most strongly is inversely proportional to its absolute temperature. Here T is the temperature of the radiating body, λ_max is the wavelength of its peak emission, and b is Wien's constant, about 2.9 × 10⁻³ metre-kelvin." },
+        { "type": "math", "tex": "\\lambda_{\\max} = \\frac{b}{T}", "display": true, "caption": "λ_max is the wavelength at which the body radiates most strongly. b is Wien's constant, 2.9 × 10⁻³ metre-kelvin. T is the absolute temperature of the body, so a hotter body has its peak at a shorter wavelength." },
+        { "type": "p", "text": "Put the two relevant temperatures in. The sun, with a surface near 5800 K, peaks at about half a micron, in the visible. The Earth, near 255 K, peaks at about eleven microns, in the thermal infrared, a factor of twenty longer in wavelength. The light that arrives and the heat that leaves live in completely different parts of the spectrum, and that separation is the entire opening for a greenhouse gas." },
+        { "type": "p", "text": "Now picture a gas with the property Tyndall measured: nearly transparent at half a micron, strongly absorbing at eleven microns. Incoming sunlight, riding the short wavelengths, passes through almost untouched and warms the ground. The outgoing infrared, riding the long wavelengths, runs straight into the gas and is absorbed, then re-emitted in all directions, including back down. The atmosphere becomes a one-way turnstile for radiant energy, open to the sun, half-closed to the planet's own glow. It adds no energy of its own, the sun stays the only furnace, but it impedes the exit of heat." },
+        { "type": "p", "text": "An impediment to the exit of heat does not change how much energy must ultimately leave. In steady state the planet still has to radiate to space exactly the sunlight it absorbs, no more and no less, or it would heat up or cool down without limit. What the absorbing gas changes is the temperature the surface must hold to force that fixed amount of energy out through the obstruction. Block part of the path and the surface warms until the leak past the block again balances the sun. The greenhouse effect is not extra heating: it is the surface running hotter to push a fixed wattage through a partly closed door." }
+      ],
+      "quiz": {
+        "question": "A hypothetical gas is opaque in the visible but perfectly transparent in the thermal infrared. Added to a planet's atmosphere, what would it do to the surface temperature?",
+        "options": [
+          "Cool it, by blocking incoming sunlight while letting the planet's heat escape freely",
+          "Warm it, exactly like a normal greenhouse gas",
+          "Nothing, since gases cannot change a planet's energy balance",
+          "Warm it by day and cool it by night, with no change in the average"
+        ],
+        "correctIndex": 0,
+        "explanation": "The greenhouse effect depends entirely on the wavelength asymmetry: real greenhouse gases are transparent to incoming short-wave sunlight and opaque to outgoing long-wave infrared, so they obstruct heat only on the way out. A gas with the reverse property, opaque in the visible and clear in the infrared, is an anti-greenhouse gas: it shades the surface from sunlight while doing nothing to slow the planet's cooling, so the surface runs colder. Such gases are real, the high haze over Saturn's moon Titan does roughly this. The lesson is that it is the selectivity, not the mere presence of a gas, that fixes the sign of the effect."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. A single slab of air",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Strip the real atmosphere down to its simplest honest caricature: a single isothermal layer, a slab, floating above the surface. Give the slab two properties. It is perfectly transparent to sunlight, which passes through it and is absorbed by the ground below. And it absorbs a fraction ε of the infrared radiation rising from the surface, where ε (the emissivity) runs from 0 for a slab that does nothing to 1 for one that swallows every infrared photon. By Kirchhoff's law a body absorbs and emits with the same efficiency, so the slab also radiates as a graybody of emissivity ε at its own temperature T_a, from both of its faces, upward to space and downward to the ground." },
+        { "type": "p", "text": "Let F be the absorbed solar flux per square metre, the same S(1 − A)/4 from the previous lesson, and recall that a bare planet balanced this against σT⁴ to give the equilibrium temperature, 255 K for Earth, where σ is the Stefan-Boltzmann constant. Now write the energy balance for the slab itself. It absorbs a fraction ε of the surface's upward emission σT_s⁴, where T_s is the surface temperature. It emits from two faces, a total of 2εσT_a⁴. In steady state these are equal:" },
+        { "type": "math", "tex": "\\varepsilon\\,\\sigma T_s^{4} = 2\\,\\varepsilon\\,\\sigma T_a^{4}", "display": true, "caption": "ε is the slab's infrared emissivity. σ is the Stefan-Boltzmann constant. T_s is the surface temperature, so σT_s⁴ is the flux the surface radiates upward and εσT_s⁴ is the part the slab absorbs. T_a is the slab's temperature, and 2εσT_a⁴ is what the slab emits from its two faces together." },
+        { "type": "p", "text": "The emissivity ε cancels from both sides, leaving a clean fact: the slab is always colder than the ground beneath it, locked at half its flux, no matter how strongly it absorbs." },
+        { "type": "math", "tex": "\\sigma T_a^{4} = \\tfrac{1}{2}\\,\\sigma T_s^{4}", "display": true, "caption": "T_a is the slab temperature and T_s the surface temperature. σ is the Stefan-Boltzmann constant, which cancels when you solve for the ratio. The factor one half says the slab is heated from one side but radiates from two, so each face carries half the surface's flux." },
+        { "type": "p", "text": "Now the surface. It receives the sunlight F from above and, in addition, the downward infrared from the slab, εσT_a⁴. It loses σT_s⁴ upward. Setting gain equal to loss, and substituting σT_a⁴ = ½σT_s⁴ from the slab balance, the back-radiation term becomes ½εσT_s⁴ and collects with the emission:" },
+        { "type": "math", "tex": "F + \\varepsilon\\,\\sigma T_a^{4} = \\sigma T_s^{4} \\;\\Longrightarrow\\; F = \\sigma T_s^{4}\\left(1 - \\tfrac{\\varepsilon}{2}\\right)", "display": true, "caption": "F is the absorbed solar flux per square metre. εσT_a⁴ is the back-radiation the slab sends down, which after substituting σT_a⁴ = ½σT_s⁴ becomes ½εσT_s⁴. σT_s⁴ is the surface's own emission. Moving that back-radiation to the right side leaves the absorbed sunlight equal to the surface emission reduced by the factor (1 − ε/2)." },
+        { "type": "p", "text": "But F = σT_eq⁴ for the bare planet, since that was the very balance that defined the equilibrium temperature. Divide both sides by σ(1 − ε/2) and take the fourth root. The surface temperature is the bare equilibrium temperature lifted by a factor that depends only on ε:" },
+        { "type": "math", "tex": "T_s = T_{\\text{eq}}\\left(1 - \\tfrac{\\varepsilon}{2}\\right)^{-1/4}", "display": true, "caption": "T_s is the surface temperature. T_eq is the bare-planet equilibrium temperature, 255 K for Earth. ε is the slab's infrared emissivity. The exponent −1/4 undoes the fourth power in Stefan's law, and the factor (1 − ε/2) shrinks toward one half as ε approaches one, which is what lifts the surface above T_eq." },
+        { "type": "viz", "src": "2026-05-23-greenhouse-effect.html", "height": 430, "caption": "Surface temperature against the slab's infrared emissivity ε, from the one-layer model T_s = T_eq(1 − ε/2)^(−1/4). The flat dashed line is the bare-planet 255 K. Drag the ε slider: at ε = 0 the air is transparent and the surface sits on that line; at ε = 1 the slab is opaque to infrared and the surface reaches 303 K. The marked dot is Earth's effective ε ≈ 0.77, the grayness that lands the surface on the observed 288 K." },
+        { "type": "p", "text": "Slide ε from 0 to 1 and watch the surface climb. At ε = 0 the slab is a pane of perfectly clear glass and the surface sits at the bare 255 K. At ε = 1, a slab opaque to all infrared, the factor (1 − ε/2) hits one half, and the surface jumps to 255 × 2^(1/4) ≈ 303 K. One perfectly absorbing layer, and nothing more, is enough to warm the ground by 48 K." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Why the slab overshoots, and the window it leaves open",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Push the slider to ε = 1 and the model predicts 303 K, fifteen kelvin hotter than the real Earth's 288 K. The overshoot is informative. A perfectly absorbing slab would let no infrared escape directly from the ground at all, and the real atmosphere is not that opaque. To find the effective emissivity that matches reality, set T_s to 288 K and invert the formula. Raising the ratio 288/255 to the fourth power, because the surface flux goes as T⁴, and solving for ε:" },
+        { "type": "math", "tex": "\\left(\\frac{288}{255}\\right)^{4} = \\frac{1}{1 - \\varepsilon/2} \\;\\Longrightarrow\\; \\varepsilon \\approx 0.77", "display": true, "caption": "288 K is Earth's observed surface temperature and 255 K is its bare equilibrium temperature. The fourth power appears because surface emission goes as T⁴, so the temperature ratio must be raised to the fourth to compare the two fluxes. Solving the resulting equation for the emissivity gives ε ≈ 0.77, the effective grayness of Earth's whole atmosphere collapsed into one number." },
+        { "type": "p", "text": "That single number, ε ≈ 0.77, stands in for an enormous amount of real physics: water vapor, which does most of the work, the carbon dioxide bands, methane, the clouds, all lumped into one effective grayness. The reason it falls short of 1 is that the atmosphere is not uniformly opaque across the infrared. It has an atmospheric window, a band running roughly from 8 to 13 microns where none of the major gases absorb much, and through which the surface radiates more or less straight to space." },
+        { "type": "p", "text": "You can feel that window. On a clear, dry night the ground radiates through it into the cold of space and can chill below the air temperature, which is why frost forms on grass and car roofs on nights when the thermometer never fell to freezing. Draw a layer of cloud across the sky (liquid water, which unlike water vapor closes the window) and the chilling stops: the night stays mild. The same window is what weather satellites look through, their 10-to-12-micron infrared cameras seeing the ground and the cloud tops precisely because the clear air between is transparent there. The slab model, with everything lumped into one ε, cannot show the window directly, but the gap between ε = 0.77 and ε = 1 is exactly the room the window leaves open." }
+      ],
+      "quiz": {
+        "question": "The one-slab model with a perfectly absorbing layer (ε = 1) predicts a surface temperature of 303 K, but Earth's is 288 K. What does the shortfall tell you?",
+        "options": [
+          "Earth's atmosphere is not perfectly opaque to infrared; some escapes straight to space through the atmospheric window, so the effective ε is below 1",
+          "The Stefan-Boltzmann law breaks down at planetary temperatures",
+          "Earth must have a second, higher slab that cools the first",
+          "The bare equilibrium temperature of 255 K must be wrong"
+        ],
+        "correctIndex": 0,
+        "explanation": "The perfect-absorber slab assumes every infrared photon from the surface is caught by the atmosphere, but real air has the 8-to-13-micron window where the major greenhouse gases barely absorb, letting the surface radiate part of its heat directly to space. That leak means the effective emissivity is about 0.77 rather than 1, so the surface need not run as hot to balance the books, landing at 288 K instead of 303 K. The Stefan-Boltzmann law and the 255 K bare figure are both fine: the slab's single ε is simply a lumped stand-in for an atmosphere that is opaque in some bands and nearly clear in others."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The level that faces space climbs higher",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The slab model gets the surface warming roughly right, but it hides the mechanism that matters most when you change the gas. Go back to the idea from the previous lesson: the equilibrium temperature, 255 K, is the temperature of whatever layer actually faces space and does the radiating. On an airless world that layer is the ground itself. On Earth it is not. Because the atmosphere is opaque across much of the infrared, the radiation that escapes to space leaves not from the surface but from some altitude up in the air, the effective radiating level, and that level, wherever it sits, must hold 255 K to balance the sun." },
+        { "type": "p", "text": "Now bring in one more fact about the lower atmosphere: temperature falls with height. In the troposphere it drops at a fairly steady lapse rate (the rate of cooling with altitude) of about 6.5 K per kilometre, because rising air expands and cools. If the radiating level sits at 255 K and the air warms at 6.5 K per kilometre on the way down, then the surface temperature is just the radiating temperature plus the lapse rate times the height of that level. Here T_s is the surface temperature, T_eq the radiating-level temperature, Γ the lapse rate, and h the height of the radiating level:" },
+        { "type": "math", "tex": "T_s = T_{\\text{eq}} + \\Gamma\\, h", "display": true, "caption": "T_s is the surface temperature. T_eq is the radiating-level temperature, 255 K, fixed by the balance with sunlight. Γ is the lapse rate, about 6.5 K per kilometre. h is the height of the effective radiating level, so the product Γh is the warming gained by descending from that level down to the ground." },
+        { "type": "p", "text": "Earth's 33 K gap, divided by 6.5 K per kilometre, places the effective radiating level about five kilometres up, halfway through the weather. This is the picture that makes carbon dioxide's role exact. Add more CO₂ and the atmosphere turns opaque in its infrared band a little higher up, so the level from which that band finally escapes rises into thinner, colder air. For a moment the planet radiates from a colder level, emits slightly less than the sunlight it takes in, and gains energy. It must warm until the new, higher radiating level climbs back to 255 K, and the whole profile beneath it, surface included, is dragged up along the lapse rate." },
+        { "type": "p", "text": "Doubling CO₂ lifts the effective emission height enough to add, before any other change, roughly one kelvin at the surface. A warmer surface then evaporates more water, and water vapor closes more of the window, which lifts the level further and roughly triples the figure. This is the chain Arrhenius was groping toward with his hand arithmetic in 1896. The slab model and the rising-level picture are the same physics seen from two ends: the slab says the surface runs hot because back-radiation adds to its budget, the rising level says the surface runs hot because the ground lies far below the cold layer that balances the sun. Both come from the one fact Tyndall measured in a basement: the air is clear to the light that arrives and cloudy to the heat that tries to leave." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Adding carbon dioxide raises the altitude from which Earth radiates to space. In steady state that radiating level still settles back to 255 K, the same as before. Why, then, is the surface warmer?",
+    "options": [
+      "The radiating level sits higher, and the surface lies further below it along the lapse rate, so the same 255 K aloft corresponds to a hotter surface",
+      "The radiating level itself ends up warmer, and that extra heat conducts down to the surface",
+      "The extra carbon dioxide releases chemical energy as it absorbs infrared",
+      "The planet now absorbs more sunlight, because carbon dioxide darkens the atmosphere"
+    ],
+    "correctIndex": 0,
+    "explanation": "The top-of-atmosphere balance is non-negotiable: the planet must radiate to space exactly the sunlight it absorbs, so the effective radiating level always returns to 255 K. Adding CO₂ pushes that level higher into the atmosphere. Since temperature falls with altitude at the lapse rate, a radiating level that is higher up but still at 255 K means the surface, lying further below it, is warmer by the lapse rate times the extra height. No new energy is created, the gas releases no chemical energy, and CO₂ does not darken the planet to sunlight: the warming is purely the geometry of a fixed-temperature level rising over a surface tied to it by the lapse rate."
+  },
+  "suggestedNodes": [
+    {
+      "id": "lapse_rate",
+      "label": "Lapse rate",
+      "subtitle": "−6.5 K/km",
+      "edgeType": "extends"
+    },
+    {
+      "id": "atmospheric_window",
+      "label": "IR window",
+      "subtitle": "8-13 μm escape",
+      "edgeType": "applied"
+    },
+    {
+      "id": "radiative_forcing",
+      "label": "Forcing",
+      "subtitle": "ΔF, W/m²",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-23T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": ["planetary_equilibrium", "stefan_boltzmann", "wien_displacement"]
+  }
+}
