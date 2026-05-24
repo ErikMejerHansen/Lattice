@@ -259,6 +259,16 @@
       "createdAt": "2026-05-23T08:00:00Z",
       "col": 1,
       "row": 12
+    },
+    {
+      "id": "recombination",
+      "label": "Recombination",
+      "subtitle": "z ≈ 1100",
+      "state": "available",
+      "lesson": "2026-05-24-recombination",
+      "createdAt": "2026-05-24T08:00:00Z",
+      "col": 0,
+      "row": 13
     }
   ],
   "edges": [
@@ -324,6 +334,9 @@
     { "from": "stellar_luminosity", "to": "stellar_classification", "kind": "related" },
     { "from": "greenhouse_effect", "to": "planetary_equilibrium", "kind": "extends" },
     { "from": "greenhouse_effect", "to": "stefan_boltzmann", "kind": "applied" },
-    { "from": "greenhouse_effect", "to": "wien_displacement", "kind": "related" }
+    { "from": "greenhouse_effect", "to": "wien_displacement", "kind": "related" },
+    { "from": "recombination", "to": "cmb", "kind": "extends" },
+    { "from": "recombination", "to": "bohr_atom", "kind": "applied" },
+    { "from": "recombination", "to": "blackbody", "kind": "related" }
   ]
 }

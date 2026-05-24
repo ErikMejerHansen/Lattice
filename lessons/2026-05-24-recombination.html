@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recombination: the Saha ionization cliff</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+.readout .pin { color: var(--accent); }
+.phase {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+}
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+  <canvas id="plot" height="300" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);background:var(--bg-raised);"></canvas>
+  <div class="viz-slider-row">
+    <label>T</label>
+    <input type="range" id="tSlider" min="2500" max="4500" step="5" value="3000" style="min-height:36px;">
+    <span class="value" id="tVal">3000 K</span>
+  </div>
+  <div class="viz-slider-row">
+    <label>n&#947;/n&#8347;</label>
+    <input type="range" id="etaSlider" min="6.0" max="10.5" step="0.05" value="9.215" style="min-height:36px;">
+    <span class="value" id="etaVal">1.6e9</span>
+  </div>
+  <div class="readout" id="readout"></div>
+  <p class="viz-caption" style="margin-top:10px;">The Saha ionization fraction x<sub>e</sub> against temperature, computed from x<sub>e</sub><sup>2</sup>/(1 &#8722; x<sub>e</sub>) = n<sub>b</sub><sup>&#8722;1</sup>(m<sub>e</sub>kT/2&#960;&#8463;<sup>2</sup>)<sup>3/2</sup>e<sup>&#8722;B/kT</sup> with the early-universe baryon density. Hot gas on the left is fully ionized and opaque; cool gas on the right is neutral and transparent. Drag T to walk down the cliff; drag the photons-per-baryon ratio to watch the photon flood shove the transition toward colder temperatures, far below the 13.6 eV/k of the naive guess.</p>
+</div>
+
+<script>
+// physical constants (SI)
+const ME = 9.109e-31;        // electron mass, kg
+const KB = 1.381e-23;        // Boltzmann constant, J/K
+const HBAR = 1.055e-34;      // reduced Planck constant, J s
+const C = 2.998e8;           // speed of light, m/s
+const B_J = 13.6 * 1.602e-19;// hydrogen binding energy, J
+const KB_EV = 8.617e-5;      // Boltzmann constant, eV/K
+const ZETA_FACTOR = 0.2436;  // 2 zeta(3) / pi^2, for photon number density
+
+const T_LO = 2500, T_HI = 4500; // axis range, K (hot left, cool right)
+
+const canvas = document.getElementById("plot");
+const tSlider = document.getElementById("tSlider");
+const tVal = document.getElementById("tVal");
+const etaSlider = document.getElementById("etaSlider");
+const etaVal = document.getElementById("etaVal");
+const readoutEl = document.getElementById("readout");
+
+// photon number density of a blackbody at temperature T (m^-3)
+function nGamma(T) {
+  const x = (KB * T) / (HBAR * C);
+  return ZETA_FACTOR * x * x * x;
+}
+
+// ionization fraction from Saha, given T and photons-per-baryon ratio R = n_gamma/n_b
+function ionizationFraction(T, R) {
+  const nb = nGamma(T) / R;
+  const phase = Math.pow((ME * KB * T) / (2 * Math.PI * HBAR * HBAR), 1.5);
+  const boltz = Math.exp(-B_J / (KB * T));
+  const S = (phase * boltz) / nb;          // x^2/(1-x) = S
+  if (!isFinite(S) || S <= 0) return 0;
+  // solve x^2 + S x - S = 0, positive root
+  const x = (-S + Math.sqrt(S * S + 4 * S)) / 2;
+  return Math.min(Math.max(x, 0), 1);
+}
+
+function makeField(parent, label, pinned) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  const lbl = document.createElement("span");
+  lbl.className = "lbl";
+  lbl.textContent = label;
+  const val = document.createElement("span");
+  if (pinned) val.className = "pin";
+  wrap.appendChild(lbl);
+  wrap.appendChild(val);
+  parent.appendChild(wrap);
+  return val;
+}
+
+const fT = makeField(readoutEl, "T");
+const fKt = makeField(readoutEl, "kT");
+const fXe = makeField(readoutEl, "x_e", true);
+const fPhase = makeField(readoutEl, "state", true);
+
+function draw() {
+  const T = parseFloat(tSlider.value);
+  const logR = parseFloat(etaSlider.value);
+  const R = Math.pow(10, logR);          // photons per baryon
+  tVal.textContent = T.toFixed(0) + " K";
+  etaVal.textContent = R.toExponential(1).replace("e+", "e");
+
+  const W = canvas.offsetWidth || 320;
+  canvas.width = W;
+  const H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const padL = 50, padR = 16, padT = 16, padB = 42;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  // x axis: temperature, hot (T_HI) on left, cool (T_LO) on right
+  function xFor(t) { return padL + ((T_HI - t) / (T_HI - T_LO)) * plotW; }
+  function yFor(xe) { return padT + plotH - xe * plotH; }
+
+  // axes
+  ctx.strokeStyle = "rgba(26,26,24,0.45)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, padT);
+  ctx.lineTo(padL, padT + plotH);
+  ctx.lineTo(padL + plotW, padT + plotH);
+  ctx.stroke();
+
+  // y gridlines + labels (ionization fraction)
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
+  for (let f = 0; f <= 1.0001; f += 0.25) {
+    const y = yFor(f);
+    ctx.strokeStyle = "rgba(26,26,24,0.10)";
+    ctx.beginPath();
+    ctx.moveTo(padL, y);
+    ctx.lineTo(padL + plotW, y);
+    ctx.stroke();
+    ctx.fillStyle = "rgba(26,26,24,0.6)";
+    ctx.fillText(f.toFixed(2), padL - 6, y);
+  }
+
+  // x ticks
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  for (let t = T_LO; t <= T_HI + 1; t += 500) {
+    const x = xFor(t);
+    ctx.strokeStyle = "rgba(26,26,24,0.45)";
+    ctx.beginPath();
+    ctx.moveTo(x, padT + plotH);
+    ctx.lineTo(x, padT + plotH + 3);
+    ctx.stroke();
+    ctx.fillStyle = "rgba(26,26,24,0.6)";
+    ctx.fillText((t / 1000).toFixed(1) + "k", x, padT + plotH + 6);
+  }
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("temperature (K), cooling →", padL + plotW / 2, padT + plotH + 23);
+
+  // y axis label
+  ctx.save();
+  ctx.translate(14, padT + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("ionization fraction x_e", 0, 0);
+  ctx.restore();
+
+  // Saha curve
+  ctx.strokeStyle = "#9c3a22";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  const N = 280;
+  for (let i = 0; i <= N; i++) {
+    const t = T_HI - (i / N) * (T_HI - T_LO);
+    const xe = ionizationFraction(t, R);
+    const x = xFor(t);
+    const y = yFor(xe);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // phase labels on the plot
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.fillStyle = "rgba(107,99,89,0.85)";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "top";
+  ctx.fillText("ionized plasma", padL + 6, padT + 4);
+  ctx.fillText("(opaque)", padL + 6, padT + 16);
+  ctx.textAlign = "right";
+  ctx.textBaseline = "bottom";
+  ctx.fillText("neutral gas", padL + plotW - 6, padT + plotH - 16);
+  ctx.fillText("(transparent)", padL + plotW - 6, padT + plotH - 4);
+
+  // current marker
+  const xe = ionizationFraction(T, R);
+  const mx = xFor(T), my = yFor(xe);
+  ctx.strokeStyle = "rgba(156,58,34,0.35)";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 3]);
+  ctx.beginPath();
+  ctx.moveTo(mx, my); ctx.lineTo(mx, padT + plotH);
+  ctx.moveTo(mx, my); ctx.lineTo(padL, my);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = "#9c3a22";
+  ctx.beginPath();
+  ctx.arc(mx, my, 5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // readout
+  const kt_eV = KB_EV * T;
+  fT.textContent = T.toFixed(0) + " K";
+  fKt.textContent = kt_eV.toFixed(3) + " eV";
+  fXe.textContent = xe < 1e-3 ? xe.toExponential(1) : xe.toFixed(3);
+  let state = "half ionized";
+  if (xe > 0.9) state = "ionized";
+  else if (xe < 0.1) state = "neutral";
+  fPhase.textContent = state;
+}
+
+tSlider.addEventListener("input", draw);
+etaSlider.addEventListener("input", draw);
+window.addEventListener("load", draw);
+setTimeout(draw, 80);
+</script>
+</body>
+</html>
