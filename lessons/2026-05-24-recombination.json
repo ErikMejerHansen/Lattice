@@ -1,0 +1,134 @@
+{
+  "slug": "2026-05-24-recombination",
+  "title": "Recombination: the moment the universe turned transparent",
+  "node": {
+    "id": "recombination",
+    "label": "Recombination",
+    "subtitle": "z ≈ 1100"
+  },
+  "intro": "For its first few hundred thousand years the universe was an opaque plasma, free electrons batting photons around so thoroughly that light could travel no distance at all, much as it cannot escape the interior of the sun. Then, about 380,000 years in, it cooled enough for electrons and protons to settle into neutral hydrogen, the scattering stopped, and the universe became transparent in what cosmologists call recombination. The light set free at that instant is the cosmic microwave background, and the shell from which it last scattered is the oldest thing a telescope can ever see. The surprise is that the universe had to cool to fifty times below hydrogen's binding energy before this could happen, and the reason is hidden in a single enormous number.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The fog that filled the early universe",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The cosmic microwave background lesson established that the universe is bathed in a relic glow left from a hot, dense beginning. It did not ask the obvious follow-up: why did that glow get out at all? In the first epochs the matter was a fully ionized plasma, a soup of bare protons and free electrons mixed with the photons. A photon could not fly straight in such a medium because of Thomson scattering (the elastic bouncing of light off a free electron), which gave it a mean free path far shorter than any cosmic distance. The early universe was its own fog: luminous, and completely opaque, like the inside of a star." },
+        { "type": "p", "text": "As the universe expanded it cooled, every wavelength in the photon bath stretching with it and the bath temperature falling in proportion. Eventually it grew cool enough for a proton to capture and keep an electron, forming neutral hydrogen. With the free electrons swept up into atoms, there was nothing left for the photons to scatter from, and the fog lifted in a cosmic instant. The light streaming free from that moment is exactly what we now catch as the microwave background." },
+        { "type": "p", "text": "The name is a small historical accident. Physicists call this recombination, a word carried over from laboratory plasma work, where an ionized gas re-forms neutral atoms after the discharge stops. In the cosmic case it is a misnomer: the electrons and protons had never been combined before, so this was the first combination, not a re-combination. The name stuck anyway, the way names do." },
+        { "type": "p", "text": "George Gamow's group predicted the relic radiation in the late 1940s but treated its release only crudely. The careful theory arrived in 1968, worked out independently by Jim Peebles at Princeton and by Yakov Zel'dovich's group in Moscow, on opposite sides of the Cold War and out of contact, both reaching the same surprising non-equilibrium picture we will come to in section 4. Before that subtlety, though, there is a blunt question worth getting wrong first: at what temperature should the fog have lifted?" }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The temperature that is fifty times too low",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The naive estimate leans on the Bohr atom. Hydrogen's electron sits 13.6 eV below the escape threshold, and that ionization energy B (the work needed to tear the ground-state electron loose) is the same 13.6 eV that set the bottom of the Bohr ladder. The obvious guess is that neutral hydrogen can survive once the typical thermal energy kT, where k is Boltzmann's constant and T the temperature, falls below B. Set the two equal and solve for T." },
+        { "type": "math", "tex": "kT = B \\;\\Longrightarrow\\; T = \\frac{B}{k} \\approx 1.58\\times10^{5}\\ \\text{K}", "display": true, "caption": "B is hydrogen's ionization energy, 13.6 eV, the work needed to free the ground-state electron. k is Boltzmann's constant, which converts a temperature into an energy. T is the temperature at which the typical thermal energy kT equals B, and it comes out near 1.58 × 10⁵ K." },
+        { "type": "p", "text": "That answer is wrong by a factor of about fifty. Recombination actually waits until a few thousand kelvin, and the early universe did not cool that far until far later than 160,000 K would suggest. Something keeps hydrogen ionized long after the average particle has too little energy to ionize anything. That something is the sheer number of photons." },
+        { "type": "p", "text": "There are roughly 1.6 billion photons for every baryon (every proton) in the universe. Write the baryon-to-photon ratio as the small number n_b/n_γ, where n_b is the baryon number density and n_γ the photon number density. Even when the average photon carries far less than 13.6 eV, the blackbody spectrum has an exponential high-energy tail, and a tiny fraction of photons, e^(−B/kT), still exceed the binding energy. With over a billion photons per atom, that tiny fraction still vastly outnumbers the atoms, and it re-ionizes neutral hydrogen as fast as it forms. Neutrality wins only when the count of ionizing photons per atom drops to about one." },
+        { "type": "math", "tex": "\\frac{n_\\gamma}{n_b}\\,e^{-B/kT} \\sim 1", "display": true, "caption": "n_γ is the number density of photons. n_b is the number density of baryons. The ratio n_γ/n_b is about 1.6 billion. e^(−B/kT) is the fraction of the blackbody photons still energetic enough to ionize hydrogen, so the product is the number of ionizing photons per atom, which must fall to about one before neutral hydrogen can persist." },
+        { "type": "p", "text": "Rearranging, the ionizing fraction has to fall to the baryon-to-photon level, about 10⁻⁹, before the atoms can hold together. Taking the logarithm turns the billion-to-one excess into a factor of about 21 dividing the binding energy." },
+        { "type": "math", "tex": "e^{-B/kT} \\approx \\frac{n_b}{n_\\gamma} \\;\\Longrightarrow\\; kT \\approx \\frac{B}{\\ln(n_\\gamma/n_b)} \\approx \\frac{13.6\\ \\text{eV}}{21} \\approx 0.6\\ \\text{eV}", "display": true, "caption": "e^(−B/kT) is the ionizing fraction of the photon bath. n_b/n_γ ≈ 10⁻⁹ is the baryon-to-photon ratio it must drop to. B is the 13.6 eV binding energy. ln(n_γ/n_b) ≈ 21 is the natural logarithm of the photon excess, and dividing B by it gives kT ≈ 0.6 eV, a temperature of order 7000 K rather than 160,000 K." },
+        { "type": "p", "text": "The photon flood alone drags the estimate down from 160,000 K to of order 7000 K. The exact figure needs the full equilibrium bookkeeping, which is the next section, and it falls lower still." }
+      ],
+      "quiz": {
+        "question": "Why does the universe stay ionized until it has cooled far below the 160,000 K that kT = 13.6 eV suggests?",
+        "options": [
+          "There are over a billion photons per baryon, so even the thin high-energy tail of the blackbody spectrum holds enough ionizing photons to re-ionize hydrogen as fast as it forms",
+          "Protons and electrons attract too weakly to bind until the gas is much colder",
+          "The expansion heats the electrons faster than the photons cool, delaying recombination",
+          "Hydrogen's binding energy increases as the universe expands"
+        ],
+        "correctIndex": 0,
+        "explanation": "The binding energy is fixed at 13.6 eV; what shifts the recombination temperature is the photon-to-baryon ratio, about 1.6 billion to one. Even when the average photon energy kT is far below 13.6 eV, the exponential Wien tail of the blackbody spectrum still contains a fraction e^(−B/kT) of photons above the binding energy. Multiplied by the billion-fold photon excess, that fraction keeps the number of ionizing photons per atom above one until the gas has cooled to a few thousand kelvin, dragging recombination down to roughly a fiftieth of the naive temperature."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Saha's equation, borrowed from the stars",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The exact bookkeeping was written down in 1920 by Meghnad Saha, working in Calcutta and then Allahabad. The Saha equation (which fixes the ionization fraction of a gas from its temperature and density) was not built for cosmology, a quantitative science that did not yet exist. Saha built it to read stellar spectra, to explain why the hydrogen lines that label class A stars fade toward the hotter and cooler types. The same equation that sorts the OBAFGKM sequence of stars also governs the recombination of the entire universe." },
+        { "type": "p", "text": "Write x_e for the ionization fraction, the share of baryons that are ionized rather than bound into neutral hydrogen. The other characters are the baryon density n_b, the electron mass m_e, the temperature T with Boltzmann's constant k, the reduced Planck constant ℏ, and the familiar binding energy B. Saha's equilibrium condition ties them together." },
+        { "type": "math", "tex": "\\frac{x_e^{2}}{1-x_e} = \\frac{1}{n_b}\\left(\\frac{m_e k T}{2\\pi\\hbar^{2}}\\right)^{3/2} e^{-B/kT}", "display": true, "caption": "x_e is the ionization fraction, the share of baryons that are ionized rather than neutral. n_b is the baryon number density. m_e is the electron mass. k is Boltzmann's constant. T is the temperature. ℏ is the reduced Planck constant, and the group (m_e kT / 2πℏ²)^(3/2) counts the momentum states a freed electron can occupy. B is the 13.6 eV binding energy, so e^(−B/kT) is the Boltzmann suppression of ionization." },
+        { "type": "p", "text": "Read the right side as three competing effects. The factor e^(−B/kT) is the same Wien-tail suppression from the last section, punishing ionization as the gas cools. The phase-space factor (m_e kT/2πℏ²)^(3/2) counts how many momentum states a liberated electron can occupy, and it is the piece the crude estimate left out: a freed electron has so much room to roam that ionization is favored more than counting energies alone suggests. The 1/n_b dilutes everything by the thinness of the baryon gas. Together they say ionization is easy when the gas is hot and sparse, and collapses when it is cool." },
+        { "type": "p", "text": "Feed in the early-universe density and the left side plunges from near one (fully ionized) to near zero (fully neutral) across a startlingly narrow band centered around 3700 K. Not 160,000, and not even the crude 7000: the phase-space factor pulls the cliff lower still. Drag the temperature below to walk down that cliff, and drag the photon-to-baryon ratio to watch the flood of photons push it toward colder temperatures." },
+        { "type": "viz", "src": "2026-05-24-recombination.html", "height": 460, "caption": "The Saha ionization fraction x_e plotted against temperature, computed from the early-universe equation above with the cosmic photon-to-baryon ratio. Hot gas on the left is fully ionized (an opaque plasma); cool gas on the right is neutral (transparent). Drag the temperature handle to read x_e at any point on the cliff, and drag the photon-per-baryon ratio to see the billion-fold photon excess shove the transition down from 13.6 eV/k toward a few thousand kelvin." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Why equilibrium was a useful lie",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Saha's equation assumes thermal equilibrium, every reaction exactly balanced by its reverse. Recombination quietly breaks that assumption, and this is the subtlety Peebles and Zel'dovich both uncovered in 1968. The trouble lies in the photon that a recombining atom throws off." },
+        { "type": "p", "text": "Picture a free electron dropping straight onto a proton and into the ground state (the lowest level, n = 1). To make that jump it must shed at least 13.6 eV, and it does so as a single photon, a photon that is by definition energetic enough to ionize hydrogen. That photon streams off and promptly knocks the electron out of a neighboring neutral atom. Direct recombination to the ground state therefore makes no net progress at all: one atom is built, one atom is destroyed, and the ledger does not move." },
+        { "type": "p", "text": "The only way to lock in a neutral atom is to avoid emitting that fatal photon. Two slow escapes do the job. An electron can recombine into a high level and cascade down to the 2s state, which is forbidden from reaching the ground state by any single-photon jump and must instead decay by emitting two photons at once (the two-photon decay, with a sluggish lifetime near 0.1 second against a nanosecond for an ordinary transition). Or a Lyman-alpha photon (from the n = 2 to n = 1 line) can be redshifted by the expansion just enough to slip out of resonance before it ionizes anything. Both are bottlenecks, and they throttle the whole process." },
+        { "type": "p", "text": "The throttle has three measurable consequences. Recombination lags the Saha curve, so the universe actually goes neutral nearer 3000 K than 3700 K, at redshift z ≈ 1100, when it was about 380,000 years old. It never quite finishes: a residual ionization of roughly one electron in ten thousand freezes out, stranded when the gas grew too thin to find a partner. And it is not instantaneous, smearing the moment of transparency over a shell of finite thickness rather than a sharp instant." }
+      ],
+      "quiz": {
+        "question": "Why does recombination stall instead of snapping to completion the moment the gas can hold neutral hydrogen together?",
+        "options": [
+          "A direct recombination to the ground state emits a 13.6 eV photon that immediately ionizes another atom, so net neutrality must wait for the slow two-photon and redshifted Lyman-alpha escapes",
+          "The protons and electrons run out before they can pair up",
+          "The Saha equation forbids ionization fractions below one half",
+          "Gravity pulls the electrons back off the atoms as fast as they bind"
+        ],
+        "correctIndex": 0,
+        "explanation": "Every direct recombination into the ground state releases a photon of at least 13.6 eV, exactly an ionizing photon, which is reabsorbed by a nearby neutral atom and undoes the progress. Permanent neutral hydrogen can only form through routes that dispose of the energy without making an ionizing photon: the forbidden two-photon decay of the 2s state, or Lyman-alpha photons that the cosmic expansion redshifts out of resonance before they are reabsorbed. Both are slow, so recombination is delayed below the Saha temperature, leaves a residual ionization of about 10⁻⁴, and spreads over a shell of finite thickness."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The surface of last scattering",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "As the free electrons vanished into atoms, the photon mean free path leapt from far shorter than any cosmic distance to far longer than the entire observable universe, almost all at once. The last time a typical microwave-background photon scattered off an electron was at this shell, and that shell is what cosmologists call the surface of last scattering. Since that final scattering, around z ≈ 1100, the photon has free-streamed in a straight line for 13.8 billion years, ending in a detector." },
+        { "type": "p", "text": "Consider what that gas looked like. At about 3000 K it radiated as a 3000 K blackbody, with its Wien peak in the near infrared and the deep red of the visible band. The whole sky, in every direction, glowed a dull orange-red, like the inside of a kiln or a fading ember. The reason we see microwaves today instead of that ember light is the same expansion that cooled the gas in the first place. The temperature of the radiation when it was emitted, T_emit, and its temperature now, T_0, are tied to the redshift z." },
+        { "type": "math", "tex": "T_{\\text{emit}} = T_0\\,(1+z)", "display": true, "caption": "T_emit is the temperature of the radiation at the moment it was emitted. T_0 is the temperature of that same radiation today, the 2.725 K of the cosmic microwave background. z is the redshift, so 1 + z is the factor by which the universe has expanded, and cooled, since emission." },
+        { "type": "p", "text": "This gives a clean cross-check. The microwave background today measures 2.725 K. The expansion has stretched every wavelength by 1 + z and lowered the bath temperature in exactly the same proportion, so the ratio of the two temperatures is itself 1 + z. Put in the 3000 K of the recombining gas and the 2.725 K we measure now." },
+        { "type": "math", "tex": "1+z = \\frac{T_{\\text{emit}}}{T_0} = \\frac{3000\\ \\text{K}}{2.725\\ \\text{K}} \\approx 1100", "display": true, "caption": "T_emit is the roughly 3000 K of the gas at last scattering. T_0 is today's 2.725 K background temperature. Their ratio is 1 + z, giving a redshift z of about 1100, the same value the recombination physics of the previous sections predicted on entirely different grounds." },
+        { "type": "p", "text": "The redshift read off a ratio of two temperatures lands on the same z ≈ 1100 that the ionization physics gave: two independent roads to one number. And the place those roads meet is a horizon in time rather than in space. The surface of last scattering is the earliest instant the universe will ever let us photograph, because before it light simply could not travel. The first three minutes, the formation of the first nuclei, the beginning itself, all lie hidden behind the fog, reachable only by messengers that ignore electrons: neutrinos, or gravitational waves. The microwave background is not a picture of the Big Bang. It is a picture of the moment the lights came on." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "The microwave background today is a near-perfect 2.725 K blackbody. What does its spectrum being a blackbody at all tell you about recombination?",
+    "options": [
+      "The radiation was in thermal equilibrium with the hot ionized plasma before it decoupled, and free expansion preserves a blackbody shape while cooling it, so today's blackbody is the cooled imprint of the gas at last scattering",
+      "Recombination must have happened at exactly 2.725 K for the spectrum to be thermal",
+      "The blackbody shape proves recombination was instantaneous and left no residual ionization",
+      "The photons have been re-thermalized many times since recombination, erasing all trace of their origin"
+    ],
+    "correctIndex": 0,
+    "explanation": "Before recombination the photons scattered constantly off free electrons and shared a common temperature with the plasma, so the bath was a true blackbody. When the electrons were captured into atoms the photons stopped interacting, but free expansion stretches every wavelength by the same factor 1 + z, which cools a blackbody into a colder blackbody without distorting its shape. The 2.725 K spectrum we measure is therefore the 3000 K spectrum of the recombining gas, redshifted by a factor of about 1100. It cannot mean recombination occurred at 2.725 K (the gas was near 3000 K), and the photons have precisely not been re-thermalized since: that untouched, free-streaming character is what makes the surface of last scattering observable."
+  },
+  "suggestedNodes": [
+    {
+      "id": "cmb_anisotropies",
+      "label": "Anisotropies",
+      "subtitle": "ΔT/T ≈ 10⁻⁵",
+      "edgeType": "extends"
+    },
+    {
+      "id": "cosmic_redshift",
+      "label": "Redshift",
+      "subtitle": "λ'=(1+z)λ",
+      "edgeType": "applied"
+    },
+    {
+      "id": "big_bang_nucleosynthesis",
+      "label": "BBN",
+      "subtitle": "first 3 minutes",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-24T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 24,
+    "previouslyMastered": ["cmb", "bohr_atom", "blackbody"]
+  }
+}

@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-07 from cosmic-microwave-background
-Recombination — when the universe became transparent at z ≈ 1100, the surface of last scattering
 Cosmic redshift — λ' = (1+z)λ, how the wavelengths and the temperature of a photon bath stretch with the universe
 CMB anisotropies — ΔT/T ≈ 10⁻⁵, the seeds of every galaxy ever formed, mapped by COBE/WMAP/Planck
 
@@ -78,3 +77,6 @@ Main sequence — the hydrogen-burning diagonal where stars spend ninety percent
 Lapse rate — why air cools about 6.5 K per kilometre going up, the adiabatic expansion of rising parcels and the profile the radiating level sits on
 Atmospheric window — the 8 to 13 micron band where the surface radiates almost straight to space, why frost forms on clear nights and what weather satellites see through
 Radiative forcing — ΔF in W/m² at the top of atmosphere, the common currency that lets CO2, methane, and solar changes be added on one ledger
+
+# auto-suggested 2026-05-24 from recombination
+Big Bang nucleosynthesis — the first three minutes, when free protons and neutrons fused into helium-4, deuterium, and lithium, and why the relic abundances pin down the baryon density that recombination assumes
