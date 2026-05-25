@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-07 from cosmic-microwave-background
-Cosmic redshift — λ' = (1+z)λ, how the wavelengths and the temperature of a photon bath stretch with the universe
 CMB anisotropies — ΔT/T ≈ 10⁻⁵, the seeds of every galaxy ever formed, mapped by COBE/WMAP/Planck
 
 # auto-suggested 2026-05-07 from stellar-classification
@@ -80,3 +79,8 @@ Radiative forcing — ΔF in W/m² at the top of atmosphere, the common currency
 
 # auto-suggested 2026-05-24 from recombination
 Big Bang nucleosynthesis — the first three minutes, when free protons and neutrons fused into helium-4, deuterium, and lithium, and why the relic abundances pin down the baryon density that recombination assumes
+
+# auto-suggested 2026-05-25 from cosmic-redshift
+Hubble's law — v = H₀d, the velocity-distance proportionality and the long fight over the value of H₀
+Friedmann equations — how the scale factor a(t) evolves from the matter, radiation, and curvature of the universe
+Dark energy — the accelerating expansion, Λ, and the 1998 supernova surveys that found the cosmos speeding up
