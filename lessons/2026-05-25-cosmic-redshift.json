@@ -1,0 +1,129 @@
+{
+  "slug": "2026-05-25-cosmic-redshift",
+  "title": "Cosmic redshift: the stretch of space written into starlight",
+  "node": {
+    "id": "cosmic_redshift",
+    "label": "Redshift",
+    "subtitle": "λ'=(1+z)λ"
+  },
+  "intro": "In 1912 Vesto Slipher pointed a spectrograph at the faint spiral nebulae and found their light shifted toward the red, as if the whole sky were drifting away. Edwin Hubble later turned that drift into a law: the farther a galaxy, the faster it recedes, in strict proportion. The obvious reading was Doppler, galaxies flying outward through space, but the truth is stranger and simpler, that space itself is stretching and dragging the light's wavelength along with it. This lesson follows the redshift from a puzzling spectral curiosity to the one relation that ties the size of the universe to the temperature of the light filling it.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The nebulae that would not hold still",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The story starts at the Lowell Observatory in Arizona, where Vesto Slipher spent the winter of 1912 coaxing a spectrum out of the Andromeda nebula, a smudge so faint that a single photographic plate took whole nights to expose. When he measured the positions of its spectral lines against a laboratory comparison, they were shifted, the way a train whistle shifts pitch as it passes. Andromeda's lines were shifted toward the blue, meaning it was rushing toward us at some 300 km/s, the largest velocity anyone had then measured for a celestial object. Slipher kept going, and by 1917 he had spectra for about 25 nebulae. All but a handful were shifted the other way, toward the red, receding, some at over 1000 km/s." },
+        { "type": "p", "text": "Slipher had the velocities but not the distances, and without distances the velocities were just a curiosity. The ruler came from Henrietta Leavitt, who in 1912 had found that a class of pulsating stars called Cepheid variables blink with a period that betrays their true brightness (the period-luminosity relation), so comparing true brightness to apparent brightness gives the distance. Edwin Hubble, working the 100-inch telescope on Mount Wilson with the tireless observer Milton Humason, used Cepheids to pin down how far the nebulae actually were. In 1929 he plotted Slipher's velocities against his own distances and found a straight line." },
+        { "type": "math", "tex": "v = H_0\\, d", "display": true, "caption": "v is the recession velocity of a galaxy, read from the shift of its spectral lines. d is its distance, fixed by standard candles such as Cepheid variables. H₀ is Hubble's constant, the present-day rate of expansion, so the law says recession velocity climbs in strict proportion to distance." },
+        { "type": "p", "text": "The proportionality was the surprise. A galaxy twice as far away runs away twice as fast, exactly the pattern you get if the whole of space is uniformly swelling, with no special center. The theory had in fact arrived first. Alexander Friedmann had found expanding solutions to Einstein's equations in 1922, which Einstein dismissed as a mathematical curiosity, and Georges Lemaitre, a Belgian priest and physicist, had derived the velocity-distance law in 1927 from general relativity and even estimated its slope, two years ahead of Hubble. Lemaitre published in an obscure Belgian journal and was ignored until the data forced everyone's hand." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. What the shift actually measures",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "To make the shift quantitative we need a number that does not care which line we picked. Every atom emits at sharp, known wavelengths, so for any line we can compare the wavelength we observe, written λ_obs, against the wavelength the atom emits at rest in the laboratory, written λ_emit. The redshift z is defined as the fractional increase between the two." },
+        { "type": "math", "tex": "z = \\frac{\\lambda_{\\text{obs}} - \\lambda_{\\text{emit}}}{\\lambda_{\\text{emit}}}", "display": true, "caption": "λ_obs is the wavelength measured at the telescope. λ_emit is the wavelength the atom emitted, known from laboratory spectra. z is the redshift, the fractional stretch of the wavelength, so z = 0 is no shift and a negative z is a blueshift." },
+        { "type": "p", "text": "A single algebraic rearrangement turns this definition into the form that does the work. Multiply through by λ_emit and collect terms, and the observed wavelength becomes the emitted wavelength scaled up by a single factor." },
+        { "type": "math", "tex": "\\lambda_{\\text{obs}} = (1+z)\\,\\lambda_{\\text{emit}}", "display": true, "caption": "λ_obs is the observed wavelength. λ_emit is the emitted wavelength. z is the redshift, so the factor 1 + z is the single number by which every wavelength in the light has been multiplied between emission and arrival." },
+        { "type": "p", "text": "The power of writing it this way is that 1 + z multiplies every wavelength equally. The hydrogen lines, the calcium lines, the whole spectral fingerprint slides bodily toward the red, preserving its pattern. That rigidity is what let Slipher and Hubble recognize a galaxy's lines at all despite the shift: the fingerprint was intact, just relocated. A quasar whose ultraviolet Lyman-alpha line at 121.6 nm arrives in the visible band has not changed its chemistry, only its scale, and reading off the factor tells you how far the light has come." }
+      ],
+      "quiz": {
+        "question": "A hydrogen line emitted in the laboratory at 121.6 nm is seen in a distant quasar at 243.2 nm. What is its redshift z?",
+        "options": [
+          "z = 1, because the wavelength has exactly doubled, so 1 + z = 2",
+          "z = 2, because the observed wavelength is twice the emitted one",
+          "z = 0.5, because the wavelength changed by half its original value",
+          "z = 121.6, the difference between the two wavelengths in nanometres"
+        ],
+        "correctIndex": 0,
+        "explanation": "Use λ_obs = (1 + z) λ_emit. Here 243.2 = (1 + z) × 121.6, so 1 + z = 2 and z = 1. The common trap is to read the doubling as z = 2; but z is the fractional increase in wavelength, not the ratio itself. A doubled wavelength is a 100 percent increase, z = 1, and the factor that multiplies every wavelength is 1 + z = 2."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Not a Doppler shift but a stretch of space",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "It is tempting to read the recession as ordinary Doppler motion, galaxies hurtling outward through a fixed space like fragments of a grenade. For nearby galaxies that picture even gives the right answer, with the velocity related to the shift by v ≈ cz. But push it to large distances and it breaks: the most distant galaxies have recession velocities exceeding the speed of light, which no object moving through space is allowed. The resolution is that nothing is moving through space at all. Space itself is expanding, and the galaxies sit nearly still within it while the distances between them grow." },
+        { "type": "p", "text": "General relativity bookkeeps this expansion with a single quantity, the scale factor a(t), a pure number that records the relative size of the universe at time t. Double a and every distance between galaxies doubles. The decisive fact is that a light wave in flight is stretched in exactly the same proportion as the space it travels through: its wavelength grows in lockstep with a. So a photon emitted long ago, when the universe was smaller, arrives carrying the imprint of how much space has stretched in the meantime." },
+        { "type": "math", "tex": "1 + z = \\frac{a_0}{a_{\\text{emit}}}", "display": true, "caption": "a_emit is the scale factor at the moment the light was emitted, a measure of how large the universe was then. a₀ is the scale factor today, conventionally set to 1. z is the redshift, so 1 + z is simply the factor by which the universe has expanded since the light set out." },
+        { "type": "p", "text": "This is a deeper statement than the Doppler formula, and it absorbs it as a special case. The redshift is not a velocity at all but a ratio of two sizes of the universe: the size now divided by the size when the light left. A galaxy at z = 1 emitted its light when the cosmos was half its present width; a photon at z = 9 set out when everything was crammed into a tenth of today's scale. The shift in the starlight is a direct readout of how much the universe has grown, no motion required." },
+        { "type": "viz", "src": "2026-05-25-cosmic-redshift.html", "height": 470, "caption": "A single light wave caught in flight as space expands. Drag the redshift z to stretch the universe by a factor 1 + z: the wavelength grows by the same factor, sliding from its emitted color toward the red and infrared, and the temperature of the photon bath that carries it drops in exact proportion. Watch the visible green line at z = 0 walk out past the red edge and into the infrared as you wind the universe back to a smaller, hotter past." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The light bath cools as it stretches",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The same stretch that reddens a single line does something remarkable to a whole bath of light. A box of radiation in thermal equilibrium is a blackbody, with its energy spread across wavelengths in the Planck curve. Expand the box and every wavelength stretches by 1 + z together, which slides the entire Planck curve toward the red without distorting its shape. The astonishing consequence is that a blackbody redshifts into a colder blackbody: the bath stays thermal, just cooler. Its temperature, written T_emit at emission and T₀ today, falls by the same factor that the wavelengths grow." },
+        { "type": "math", "tex": "T_{\\text{emit}} = T_0\\,(1+z)", "display": true, "caption": "T_emit is the temperature of the photon bath when the light was emitted. T₀ is its temperature today. z is the redshift, so 1 + z is the very same expansion factor that stretches the wavelengths, and the bath cools in exact proportion as it stretches." },
+        { "type": "p", "text": "This is precisely the relation the cosmic microwave background lesson leaned on. The microwave sky is a 2.725 K blackbody now; wind z back to 1100 and the same radiation was a 3000 K glow, the dull orange of a kiln, at the surface of last scattering. The redshift does not merely move spectral lines, it sets the thermal history of the universe, which was hotter the further back you look in exact proportion to 1 + z." },
+        { "type": "p", "text": "There is a sharper way to see how violently the early universe was packed with radiation. The energy density of the bath, written u, climbs even faster than the temperature, and it is worth showing why. Three factors of 1 + z come from the volume: the universe was smaller by a factor 1 + z in each of three dimensions, crowding the photons together. A fourth factor comes from each photon individually, since its energy is inversely proportional to its wavelength and so scales as 1 + z on its own." },
+        { "type": "math", "tex": "u \\propto (1+z)^4", "display": true, "caption": "u is the energy density of the radiation bath. z is the redshift. Three of the four powers of 1 + z come from the volume shrinking in three dimensions as the universe was smaller, and the fourth from each photon carrying more energy by a factor 1 + z, so the radiation energy density grows as the fourth power of 1 + z." }
+      ],
+      "quiz": {
+        "question": "The cosmic microwave background is 2.725 K today. At redshift z = 1, when the universe was half its present size, what was the temperature of that same radiation?",
+        "options": [
+          "5.45 K, because T_emit = T₀(1 + z) = 2.725 × 2",
+          "1.36 K, because the bath cools by half as the universe doubles",
+          "2.725 K, because the temperature of a blackbody is fixed",
+          "10.9 K, because energy density rises as (1 + z)⁴"
+        ],
+        "correctIndex": 0,
+        "explanation": "Temperature scales as T_emit = T₀(1 + z). At z = 1 the factor is 2, so the bath was 2 × 2.725 = 5.45 K, hotter in the past, not colder. The (1 + z)⁴ scaling applies to the energy density u, not the temperature, so 10.9 K confuses the two. And the temperature is emphatically not fixed: that the bath cools while staying a blackbody is the whole point."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The supernovae that aged in slow motion",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "A stubborn rival idea haunted the redshift for decades. In 1929 Fritz Zwicky proposed tired light: maybe photons simply lose energy as they trudge across billions of light-years, reddening with distance through some unknown friction, with no expansion at all. Tired light reproduces Hubble's law by construction, so the velocity-distance plot alone cannot tell the two apart. To break the tie you need a phenomenon that expansion touches and tired light does not." },
+        { "type": "p", "text": "The clean test is a clock. If space is genuinely stretching, then it stretches not only wavelengths but the apparent duration of events, because the successive wavefronts that mark out time arrive more and more spread out, exactly as the wavelengths do. A process that takes a time Δt at the source should be observed to take (1 + z) Δt for us. Tired light makes no such prediction: a photon losing energy en route says nothing about the spacing of the photons behind it, so distant clocks should tick at their normal rate." },
+        { "type": "p", "text": "Type Ia supernovae supplied the clock. These exploding white dwarfs brighten and fade over a few weeks in a light curve so standardized it serves as a cosmic candle. In the 1990s Gerson Goldhaber and collaborators on the Supernova Cosmology Project timed the light curves of distant ones and found them stretched: a supernova at z = 0.5 took about 50 percent longer to rise and fall than a nearby twin, and the stretch tracked 1 + z line for line. The explosions had not changed; the observed clock had been slowed by the expansion of space in flight." },
+        { "type": "p", "text": "That single measurement settles what the redshift is. It is not photons growing tired, and not galaxies flying through a static space, but the stretching of spacetime itself, dragging wavelength and duration along together. The ruler and the clock dilate by the same 1 + z because they are the same stretch seen in two guises, one in the spacing of wave crests across a wavelength, the other in the spacing of crests across a week. The reddened light of a distant supernova and its slow-motion fade are one fact, written once in the geometry of an expanding universe." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Type Ia supernovae at redshift z are observed to brighten and fade over a span (1 + z) times longer than nearby ones. Why is this the decisive evidence against 'tired light,' the idea that photons merely lose energy crossing space?",
+    "options": [
+      "Tired light reddens the spectrum but does nothing to the timing of events; only a genuine stretching of spacetime slows the observed clock, lengthening the light curve by the same 1 + z that reddens the light",
+      "Tired light would brighten the supernovae rather than redden them, contradicting the observations",
+      "Tired light predicts the light curves should appear (1 + z) times shorter, not longer",
+      "Supernovae at high redshift are intrinsically slower-burning, with no connection to expansion"
+    ],
+    "correctIndex": 0,
+    "explanation": "In an expanding universe the stretch that lengthens wavelengths also lengthens the apparent spacing of events, because the wavefronts marking out time arrive progressively more spread out. So a process of duration Δt at the source is seen to take (1 + z) Δt, and the supernova light curve dilates by exactly the factor that reddens its light. Tired light, a photon losing energy en route, says nothing about the spacing of the photons behind it, so it predicts reddening with no time dilation at all. The observed (1 + z) stretch of the light curves is therefore a direct fingerprint of expanding spacetime, not of any friction in flight."
+  },
+  "suggestedNodes": [
+    {
+      "id": "hubbles_law",
+      "label": "Hubble's law",
+      "subtitle": "v = H₀d",
+      "edgeType": "extends"
+    },
+    {
+      "id": "friedmann_equations",
+      "label": "Friedmann eqs",
+      "subtitle": "expansion a(t)",
+      "edgeType": "extends"
+    },
+    {
+      "id": "dark_energy",
+      "label": "Dark energy",
+      "subtitle": "accelerating Λ",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-25T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": ["wavelength", "cmb", "recombination"]
+  }
+}

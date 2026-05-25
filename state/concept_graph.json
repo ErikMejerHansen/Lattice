@@ -269,6 +269,16 @@
       "createdAt": "2026-05-24T08:00:00Z",
       "col": 0,
       "row": 13
+    },
+    {
+      "id": "cosmic_redshift",
+      "label": "Redshift",
+      "subtitle": "λ'=(1+z)λ",
+      "state": "available",
+      "lesson": "2026-05-25-cosmic-redshift",
+      "createdAt": "2026-05-25T08:00:00Z",
+      "col": 1,
+      "row": 13
     }
   ],
   "edges": [
@@ -337,6 +347,9 @@
     { "from": "greenhouse_effect", "to": "wien_displacement", "kind": "related" },
     { "from": "recombination", "to": "cmb", "kind": "extends" },
     { "from": "recombination", "to": "bohr_atom", "kind": "applied" },
-    { "from": "recombination", "to": "blackbody", "kind": "related" }
+    { "from": "recombination", "to": "blackbody", "kind": "related" },
+    { "from": "cosmic_redshift", "to": "wavelength", "kind": "extends" },
+    { "from": "cosmic_redshift", "to": "cmb", "kind": "applied" },
+    { "from": "cosmic_redshift", "to": "recombination", "kind": "related" }
   ]
 }
