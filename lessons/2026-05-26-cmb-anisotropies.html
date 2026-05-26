@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <div id="stage" style="padding:14px 16px;">
+    <div style="display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+      <div id="stageLabel" style="font-family:'IBM Plex Mono',Menlo,monospace; font-size:12px; letter-spacing:0.04em; color:var(--accent); text-transform:uppercase;">monopole</div>
+      <div id="stageDesc" style="font-size:12px; color:var(--text-muted);">a uniform 2.725 K glow, identical in every direction</div>
+    </div>
+    <canvas id="sky" style="width:100%; height:auto; display:block; margin-top:10px; border:1px solid var(--border-strong); border-radius:2px;"></canvas>
+    <div style="display:flex; align-items:center; gap:8px; margin-top:8px; font-family:'IBM Plex Mono',Menlo,monospace; font-size:10px; color:var(--text-muted);">
+      <span>colder</span>
+      <span id="bar" style="flex:1; height:10px; border:1px solid var(--border); border-radius:2px;"></span>
+      <span>hotter</span>
+    </div>
+    <div class="viz-slider-row">
+      <label for="win">zoom</label>
+      <input id="win" type="range" min="0" max="1000" value="0" step="1" aria-label="temperature contrast window">
+      <span class="value" id="winVal">±50 mK</span>
+    </div>
+    <div class="viz-caption" style="margin-top:8px;">
+      Narrow the temperature window and watch the sky give up its structure one scale at a time:
+      the 2.725 K monopole, then the one-part-in-a-thousand dipole from our own motion, then the
+      primordial speckle at a few parts in a hundred thousand, the seeds of every galaxy.
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var GW = 180, GH = 108;
+  var T0 = 2.725;
+  var A_DIP = 3.3e-3;     // dipole amplitude in K
+  var A_SPK = 5.0e-5;     // primordial speckle amplitude (rms-ish) in K
+
+  // --- precompute the speckle field as a sum of random plane waves ---
+  var waves = [];
+  for (var i = 0; i < 60; i++) {
+    var k = 5 + Math.random() * 17;          // cycles across the map -> few-degree blobs
+    var ang = Math.random() * Math.PI * 2;
+    waves.push({
+      kx: k * Math.cos(ang),
+      ky: k * Math.sin(ang) * 0.6,
+      ph: Math.random() * Math.PI * 2,
+      amp: Math.random()
+    });
+  }
+  var speckle = new Float32Array(GW * GH);
+  var dipole = new Float32Array(GW * GH);
+  var dirx = Math.cos(0.26), diry = Math.sin(0.26); // dipole axis, slightly tilted
+  var sMin = 1e9, sMax = -1e9;
+  for (var y = 0; y < GH; y++) {
+    for (var x = 0; x < GW; x++) {
+      var nx = x / GW, ny = y / GH;
+      var s = 0;
+      for (var w = 0; w < waves.length; w++) {
+        var ww = waves[w];
+        s += ww.amp * Math.sin(ww.kx * nx + ww.ky * ny + ww.ph);
+      }
+      var idx = y * GW + x;
+      speckle[idx] = s;
+      if (s < sMin) sMin = s;
+      if (s > sMax) sMax = s;
+      // dipole: smooth gradient along a tilted axis, range about -1..1
+      var u = (nx - 0.5) * 2 * dirx + (ny - 0.5) * 2 * diry;
+      dipole[idx] = u;
+    }
+  }
+  // normalize speckle to rms ~ A_SPK
+  var mean = 0;
+  for (var p = 0; p < speckle.length; p++) mean += speckle[p];
+  mean /= speckle.length;
+  var varSum = 0;
+  for (var p2 = 0; p2 < speckle.length; p2++) { var d = speckle[p2] - mean; varSum += d * d; }
+  var rms = Math.sqrt(varSum / speckle.length);
+  var sScale = A_SPK / rms;
+  for (var p3 = 0; p3 < speckle.length; p3++) speckle[p3] = (speckle[p3] - mean) * sScale;
+
+  // --- diverging colormap: cold (blue) -> neutral (cream) -> hot (rust) ---
+  var COLD = [47, 91, 124], NEU = [244, 238, 226], HOT = [156, 58, 34];
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function colorFor(n) { // n in [-1, 1]
+    var c;
+    if (n < 0) {
+      var t = Math.min(1, -n);
+      c = [lerp(NEU[0], COLD[0], t), lerp(NEU[1], COLD[1], t), lerp(NEU[2], COLD[2], t)];
+    } else {
+      var t2 = Math.min(1, n);
+      c = [lerp(NEU[0], HOT[0], t2), lerp(NEU[1], HOT[1], t2), lerp(NEU[2], HOT[2], t2)];
+    }
+    return c;
+  }
+
+  // --- paint the legend bar ---
+  var bar = document.getElementById('bar');
+  function rgb(c) { return 'rgb(' + (c[0] | 0) + ',' + (c[1] | 0) + ',' + (c[2] | 0) + ')'; }
+  bar.style.background = 'linear-gradient(to right,' + rgb(COLD) + ',' + rgb(NEU) + ',' + rgb(HOT) + ')';
+
+  // --- canvas setup ---
+  var canvas = document.getElementById('sky');
+  var off = document.createElement('canvas');
+  off.width = GW; off.height = GH;
+  var octx = off.getContext('2d');
+  var img = octx.createImageData(GW, GH);
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  function sizeCanvas() {
+    var w = canvas.clientWidth || 320;
+    var h = Math.round(w * GH / GW);
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    canvas.style.height = h + 'px';
+  }
+
+  function smoothstep(e0, e1, v) {
+    var t = Math.max(0, Math.min(1, (v - e0) / (e1 - e0)));
+    return t * t * (3 - 2 * t);
+  }
+
+  var winVal = document.getElementById('winVal');
+  var stageLabel = document.getElementById('stageLabel');
+  var stageDesc = document.getElementById('stageDesc');
+
+  function fmtWin(W) {
+    if (W >= 1e-3) return '±' + (W * 1e3).toFixed(W * 1e3 < 10 ? 1 : 0) + ' mK';
+    return '±' + (W * 1e6).toFixed(0) + ' µK';
+  }
+
+  function render(level) {
+    // window W on a log scale: level 0 -> 5e-2 K, level 1 -> 2e-5 K
+    var logW = lerp(Math.log(5e-2), Math.log(2e-5), level);
+    var W = Math.exp(logW);
+
+    // fade the dipole out as we zoom past its scale (it gets "removed", as in real pipelines)
+    var dipKeep = 1 - smoothstep(Math.log(6e-3), Math.log(1.2e-3), Math.log(W));
+
+    var data = img.data;
+    for (var i = 0; i < GW * GH; i++) {
+      var dev = dipole[i] * A_DIP * dipKeep + speckle[i];
+      var n = dev / W;
+      if (n > 1) n = 1; else if (n < -1) n = -1;
+      var c = colorFor(n);
+      var o = i * 4;
+      data[o] = c[0]; data[o + 1] = c[1]; data[o + 2] = c[2]; data[o + 3] = 255;
+    }
+    octx.putImageData(img, 0, 0);
+
+    sizeCanvas();
+    var ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(off, 0, 0, canvas.width, canvas.height);
+
+    winVal.textContent = fmtWin(W);
+
+    // stage labels
+    if (W > 1.2e-2) {
+      stageLabel.textContent = 'monopole';
+      stageDesc.textContent = 'a uniform 2.725 K glow, identical in every direction';
+    } else if (W > 2.0e-4) {
+      stageLabel.textContent = 'dipole';
+      stageDesc.textContent = 'our 370 km/s motion: hotter ahead, colder behind (ΔT/T ≈ 10⁻³)';
+    } else {
+      stageLabel.textContent = 'anisotropies';
+      stageDesc.textContent = 'the primordial speckle, ΔT/T ≈ 10⁻⁵, seeds of every galaxy';
+    }
+  }
+
+  var slider = document.getElementById('win');
+  slider.addEventListener('input', function () { render(slider.value / 1000); });
+  render(0);
+})();
+</script>
+</body>
+</html>

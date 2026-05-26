@@ -279,6 +279,16 @@
       "createdAt": "2026-05-25T08:00:00Z",
       "col": 1,
       "row": 13
+    },
+    {
+      "id": "cmb_anisotropies",
+      "label": "CMB anisotropy",
+      "subtitle": "ΔT/T ≈ 10⁻⁵",
+      "state": "available",
+      "lesson": "2026-05-26-cmb-anisotropies",
+      "createdAt": "2026-05-26T08:00:00Z",
+      "col": 0,
+      "row": 14
     }
   ],
   "edges": [
@@ -350,6 +360,9 @@
     { "from": "recombination", "to": "blackbody", "kind": "related" },
     { "from": "cosmic_redshift", "to": "wavelength", "kind": "extends" },
     { "from": "cosmic_redshift", "to": "cmb", "kind": "applied" },
-    { "from": "cosmic_redshift", "to": "recombination", "kind": "related" }
+    { "from": "cosmic_redshift", "to": "recombination", "kind": "related" },
+    { "from": "cmb_anisotropies", "to": "cmb", "kind": "extends" },
+    { "from": "cmb_anisotropies", "to": "recombination", "kind": "applied" },
+    { "from": "cmb_anisotropies", "to": "cosmic_redshift", "kind": "related" }
   ]
 }

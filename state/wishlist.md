@@ -1,6 +1,3 @@
-# auto-suggested 2026-05-07 from cosmic-microwave-background
-CMB anisotropies — ΔT/T ≈ 10⁻⁵, the seeds of every galaxy ever formed, mapped by COBE/WMAP/Planck
-
 # auto-suggested 2026-05-07 from stellar-classification
 Saha ionization equation — n+/n0 ∝ T^(3/2) exp(-χ/kT), the bridge from temperature to spectrum
 Hertzsprung-Russell diagram — luminosity vs temperature, the family portrait of stars
@@ -84,3 +81,8 @@ Big Bang nucleosynthesis — the first three minutes, when free protons and neut
 Hubble's law — v = H₀d, the velocity-distance proportionality and the long fight over the value of H₀
 Friedmann equations — how the scale factor a(t) evolves from the matter, radiation, and curvature of the universe
 Dark energy — the accelerating expansion, Λ, and the 1998 supernova surveys that found the cosmos speeding up
+
+# auto-suggested 2026-05-26 from cmb-anisotropies
+Acoustic peaks — the comb of peaks in the CMB angular power spectrum, the first at ℓ ≈ 220, whose heights weigh the baryon and dark-matter densities of the universe
+Sachs-Wolfe effect — ΔT/T = ⅓ Δφ/c², why a large-scale cold spot is a deep gravitational well, the gravitational redshift imprinted at the surface of last scattering
+Baryon acoustic oscillations — the 150 Mpc sound-horizon ruler frozen into the galaxy distribution, a standard ruler that pins down dark energy across cosmic time

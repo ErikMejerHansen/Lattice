@@ -1,0 +1,131 @@
+{
+  "slug": "2026-05-26-cmb-anisotropies",
+  "title": "CMB anisotropies: the parts-per-100,000 ripples that seeded every galaxy",
+  "node": {
+    "id": "cmb_anisotropies",
+    "label": "CMB anisotropy",
+    "subtitle": "ΔT/T ≈ 10⁻⁵"
+  },
+  "intro": "The cosmic microwave background lesson left us with a perfectly smooth 2.725 K glow, the same in every direction we look. But a perfectly smooth early universe could never have made a single galaxy, because gravity needs lumps to grow from. For almost three decades after Penzias and Wilson, cosmologists hunted for the faint temperature ripples that simply had to be there, and kept not finding them, until COBE in 1992 finally resolved fluctuations of a few parts in a hundred thousand. This lesson is about those ripples: what they are, why they sit at exactly ΔT/T ≈ 10⁻⁵, and how a snapshot of the infant sky became the blueprint for everything the universe later built.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The lumps that had to be there",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The smoothness of the microwave sky, the headline result of the CMB lesson, was also a crisis. The radiation is the same temperature in every direction to better than a part in a thousand, and on its face that is a triumph of the hot Big Bang. But the universe we live in is emphatically not smooth: it is clotted into galaxies, clusters, and vast empty voids. The mechanism that builds that structure is gravitational instability, the idea going back to James Jeans in 1902 that a region slightly denser than its surroundings pulls in more matter, grows denser still, and runs away. Gravity is an amplifier, but an amplifier needs an input. A perfectly uniform plasma at recombination would have nothing for gravity to work on, and the universe would still be a featureless gas. The ripples had to exist." },
+        { "type": "p", "text": "The trouble was that every prediction of their size kept shrinking, and every experiment kept failing to find them. Through the 1970s, assuming the cosmos was made only of ordinary matter (baryons, the protons and neutrons of everyday stuff), the seeds needed to grow today's galaxies implied temperature ripples of ΔT/T around 10⁻³ to 10⁻⁴. Searches pushed the upper limit down year after year and saw nothing, and the non-detections were a real threat to the whole picture. The escape was dark matter: if most of the matter is dark, feeling gravity but not light, it can begin clumping well before recombination while the baryons are still locked to the photons. That lets the visible temperature ripples be far fainter, around 10⁻⁵, and still leave wells deep enough to seed galaxies. The target shrank to a precision almost no one thought reachable." },
+        { "type": "p", "text": "COBE reached it. The satellite, launched in 1989, carried a Differential Microwave Radiometer led by George Smoot that did nothing but compare the temperature in pairs of directions across the sky. In April 1992, after subtracting everything known, the team announced genuine fluctuations at the level of thirty millionths of a kelvin, ΔT/T ≈ 10⁻⁵, exactly the faint level dark matter had predicted. Smoot's remark that seeing it was 'like looking at God, if you're religious' ran in every newspaper, and Stephen Hawking called it the discovery of the century. The 2006 Nobel Prize went to Smoot and John Mather, one for the ripples and one for the spectrum. The lumps were finally on the table." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Three temperatures stacked on one sky",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The microwave sky arrives as a strict hierarchy of scales, each about a thousand times smaller than the one above it, and you have to peel them off in order to reach the signal you want. The top layer is the monopole, the average over the whole sky: a 2.725 K blackbody, identical in every direction, the subject of the CMB lesson. It carries no directional information at all, and to study anisotropy you subtract it off and look at what varies." },
+        { "type": "p", "text": "What varies most, by far, is not primordial: it is us. The solar system is moving through the radiation bath at about 370 km/s, and that motion Doppler-shifts the CMB hotter in the direction we travel and colder behind, in the pattern called the dipole. Its size is the ratio of our speed v to the speed of light c, about one part in a thousand, a hundred times larger than anything genuinely cosmological. It tells us about our own velocity, nothing about the early universe, so it too gets stripped away." },
+        { "type": "math", "tex": "\\frac{\\Delta T}{T} \\approx \\frac{v}{c} \\approx 1.23 \\times 10^{-3}", "display": true, "caption": "ΔT/T is the fractional temperature variation across the sky. v is the speed of the solar system through the radiation bath, about 370 km/s. c is the speed of light. The ratio v/c sets the size of the dipole, and at roughly 1.23 × 10⁻³ it is the single largest variation in the microwave sky." },
+        { "type": "p", "text": "Subtract the monopole and the dipole and what is left, a thousand times fainter again, is the prize: the primordial anisotropies. For each direction on the sky, written as the unit vector n̂, we form the fractional difference between the temperature seen there, T(n̂), and the all-sky average T₀. That fraction is a few parts in a hundred thousand, about 30 microkelvin against the 2.725 K background." },
+        { "type": "math", "tex": "\\frac{\\Delta T}{T}(\\hat{n}) = \\frac{T(\\hat{n}) - T_0}{T_0} \\approx 10^{-5}", "display": true, "caption": "n̂ is a unit vector pointing in one direction on the sky. T(n̂) is the CMB temperature measured in that direction. T₀ is the average temperature over the whole sky, 2.725 K. ΔT/T is their fractional difference, and at about 10⁻⁵ it is the genuine primordial signal left once the monopole and dipole are removed." },
+        { "type": "p", "text": "These ripples carry no preferred spot or direction: statistically the sky looks the same wherever you point, a random speckle of slightly hotter and slightly colder patches. They are a frozen snapshot of the density variations in the plasma at the surface of last scattering, the moment of recombination at z ≈ 1100 when the universe turned transparent and the photons set off untouched. A hotter or colder patch on the map is a record of a denser or rarer patch of matter at that instant, thirteen and a half billion years ago." }
+      ],
+      "quiz": {
+        "question": "The CMB dipole, ΔT/T ≈ 10⁻³, is about a hundred times larger than the primordial anisotropies at 10⁻⁵. Why is it not treated as part of the cosmological signal?",
+        "options": [
+          "It is a Doppler shift caused by the solar system's own motion through the radiation bath, so it measures our velocity, not the early universe",
+          "It is an instrumental artifact that vanishes once the detector is cooled below 3 K",
+          "It is the gravitational redshift of light climbing out of the Milky Way's potential well",
+          "It is the residual glow of the monopole leaking through an imperfect subtraction"
+        ],
+        "correctIndex": 0,
+        "explanation": "The dipole follows the pattern ΔT/T ≈ v/c: the sky is hotter ahead of our motion and colder behind, exactly the Doppler shift of a moving observer in an isotropic bath. At v ≈ 370 km/s it comes out near 1.2 × 10⁻³. Because it is set entirely by the solar system's velocity, it tells us about our own motion and nothing about conditions at recombination, so it is removed before the primordial 10⁻⁵ anisotropies can be studied. It is neither an artifact nor a leak of the monopole; it is a real, and useful, measurement of our speed."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Why a cold spot is a deep well",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The obvious reading of the map is that a denser, hotter patch of plasma at recombination should show up as a hot spot. On the largest scales the truth is exactly the reverse, and the reason is gravity. A photon climbing out of a gravitational potential well loses energy on the way up and arrives redshifted, the effect called gravitational redshift, a direct consequence of general relativity that light fighting gravity comes out colder. A patch that was denser at last scattering sits at the bottom of a deeper well, written as a more negative gravitational potential φ, and its photons have a longer climb." },
+        { "type": "p", "text": "Rainer Sachs and Arthur Wolfe worked the full relativistic bookkeeping out in 1967. Two effects compete: the photon is intrinsically a touch hotter in a denser region, but it is redshifted climbing out of the deeper well, and on large scales the redshift wins. Sachs and Wolfe showed the net temperature shift is one third of the potential difference, in units of c². The factor of one third is the relativistic combination of the gravitational redshift with the time dilation of the expanding background, and it is the signature result of their calculation." },
+        { "type": "math", "tex": "\\frac{\\Delta T}{T} = \\frac{1}{3}\\frac{\\Delta\\phi}{c^2}", "display": true, "caption": "ΔT/T is the fractional temperature shift seen in a given direction. Δφ is the difference in gravitational potential at the surface of last scattering relative to the average. c is the speed of light, so Δφ/c² is the potential in dimensionless form. The factor 1/3 is the relativistic combination of gravitational redshift and time dilation that Sachs and Wolfe derived for large angular scales." },
+        { "type": "p", "text": "The consequence is a clean inversion of intuition: on large scales a cold spot in the CMB marks a deeper potential well, which is to say a denser region of matter, the future home of a galaxy cluster. The map of temperature is, in disguise, a map of the gravitational potential frozen in at recombination, and through it a map of where matter was piled up and where it was scarce. The faintest cold patch on the COBE map is not empty space but the deepest gravitational valley in that direction, the very seed gravity would spend the next thirteen billion years filling." },
+        { "type": "viz", "src": "2026-05-26-cmb-anisotropies.html", "height": 500, "caption": "The same patch of microwave sky, viewed at three scales of temperature contrast. Drag the slider to narrow the color window from millikelvin down to microkelvin: at the widest setting the sky is a uniform 2.725 K monopole, narrowing reveals the smooth dipole gradient from our own motion, and narrowing further by another factor of a hundred uncovers the primordial speckle at the 10⁻⁵ level. Read off the temperature window beside the slider to see just how far down you have to zoom before the seeds of every galaxy emerge from the glow." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The angle that measures the universe",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The speckle is not featureless noise; it has a preferred size, and that size is a ruler. Before recombination the photons and baryons were a single hot fluid: gravity pulled it down into the potential wells, and the photons' own pressure pushed back out, setting up oscillations that are literally sound waves, pressure ripples travelling through the plasma at more than half the speed of light. These acoustic oscillations all began at the Big Bang and all stopped at recombination, when the photons broke free, so there is a largest distance any wave could have travelled in between." },
+        { "type": "p", "text": "That distance is the sound horizon, written s, a fixed physical length of about 150 megaparsecs in today's units. The wave that had just enough time to compress the plasma once is the loudest, and it stamps a preferred separation between hot and cold spots onto the last-scattering surface. Seen from here, across the whole observable universe, that fixed length s subtends a particular angle θ on the sky, set by dividing it by the distance d_A to the surface of last scattering." },
+        { "type": "math", "tex": "\\theta \\approx \\frac{s}{d_A} \\approx 1^\\circ", "display": true, "caption": "θ is the angle on the sky subtended by the preferred spot size. s is the sound horizon, the largest distance an acoustic wave travelled before recombination, about 150 megaparsecs. d_A is the distance from us to the surface of last scattering. The ratio s/d_A comes out near one degree, the characteristic angular size of the hot and cold patches." },
+        { "type": "p", "text": "Here is the payoff that turned the CMB into precision cosmology. A fixed length seen at a fixed distance subtends an angle that depends on the geometry of the space the light crossed. In a flat universe the spot appears at about one degree; positive curvature would act like a lens and make it look larger, negative curvature would shrink it. Measuring the spot size is therefore measuring the curvature of space directly. Astronomers usually quote it not as a degree but as a multipole ℓ, an inverse angular scale where small angles mean large ℓ." },
+        { "type": "math", "tex": "\\ell \\approx \\frac{180^\\circ}{\\theta} \\approx 200", "display": true, "caption": "ℓ is the multipole, a dimensionless index that labels angular scale, with large ℓ meaning small angles. θ is the angular size of the preferred spot, about one degree. The relation ℓ ≈ 180°/θ converts an angle into a multipole, and a one-degree spot lands near ℓ ≈ 200, the location of the first acoustic peak." },
+        { "type": "p", "text": "The balloon experiment BOOMERANG in 2000, then WMAP and Planck from orbit, found the first acoustic peak sitting almost exactly at one degree, ℓ ≈ 220. The reading is unambiguous: the universe is spatially flat to better than a percent. A sound wave in a plasma thirteen billion years dead, measured as an angle on the sky, weighed the geometry of the entire cosmos." }
+      ],
+      "quiz": {
+        "question": "The first acoustic peak in the CMB sits at an angular scale of about one degree (ℓ ≈ 220). What does the position of that peak measure?",
+        "options": [
+          "The spatial geometry of the universe: a fixed sound-horizon length seen at one degree means space is flat, while curvature would shift the angle larger or smaller",
+          "The temperature of the CMB today, since hotter radiation produces peaks at larger angles",
+          "The total number of galaxies, because each galaxy contributes one hot spot to the pattern",
+          "The speed of the solar system, the same quantity that sets the dipole"
+        ],
+        "correctIndex": 0,
+        "explanation": "The sound horizon is a known physical length, the farthest an acoustic wave travelled before recombination. Seen across the observable universe it subtends an angle θ ≈ s/d_A, and that angle depends on the curvature of the space the light crossed: flat geometry puts it at about one degree (ℓ ≈ 220), positive curvature magnifies it, negative shrinks it. Finding the peak at one degree therefore measures the geometry directly, and the answer is that space is flat to better than a percent. The peak position has nothing to do with galaxy counts or the dipole, and the CMB temperature is read from the monopole, not the peak."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The seeds of every galaxy",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Follow a single overdense patch forward from the moment it was photographed. At recombination it is a region whose density exceeds the average by a fraction of order 10⁻⁵, the same tiny number the temperature ripple records. Being slightly denser, it expands a little slower than its surroundings, falls a little further behind the general thinning of the universe, and so grows relatively denser still. This is gravitational instability running in slow motion, and in a matter-dominated universe its arithmetic is strikingly simple: the density contrast δ, the fractional excess over average, grows in direct proportion to the scale factor a, the same number that measures the expansion in the cosmic-redshift lesson." },
+        { "type": "math", "tex": "\\delta \\propto a", "display": true, "caption": "δ is the density contrast, the fractional amount by which a region's density exceeds the cosmic average. a is the scale factor, the relative size of the universe, equal to 1 today and 1/1100 at recombination. The proportionality says that during matter domination the contrast grows in lockstep with the expansion, deepening by the same factor the universe stretches." },
+        { "type": "p", "text": "That linear growth is the engine, but it needs a head start, and here the dark matter of section 1 pays off. Ordinary matter could not begin collapsing until recombination released it from the photons, but dark matter feels no light and had been quietly deepening its wells since matter-radiation equality, well before the photons broke free. So when the baryons were finally set loose, they did not have to start from 10⁻⁵; they fell into potential wells dark matter had already dug. The temperature ripple marks the depth of the well, and the dark matter inside it had a running start on the climb to collapse." },
+        { "type": "p", "text": "Once a contrast reaches order unity the linear law breaks down, gravity takes over completely, and the region detaches from the expansion and collapses into a bound halo where gas can cool, fragment, and light up as stars. Every galaxy traces its lineage to one of these patches. The cold spots on the Planck map are not metaphors for the seeds of structure; they are the seeds, photographed at the instant they were sown." },
+        { "type": "p", "text": "Planck's map, released through the 2010s, measured the heights and spacings of the acoustic peaks so precisely that the whole inventory of the universe falls out of a single baby photo: about 5 percent ordinary matter, 27 percent dark matter, 68 percent dark energy. The deepest lesson of the anisotropies is the span between their two extremes. The same ripple is at once the faintest signal cosmology has ever pulled from the sky, thirty parts in a million, and the most consequential, because there is nothing structured in the universe, no galaxy, no star, no reader of this sentence, that did not grow from a fluctuation exactly that small." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "On the largest angular scales, a cold spot in the CMB corresponds to a denser region of matter at recombination, not a rarer one. Why does extra density show up as lower temperature?",
+    "options": [
+      "A denser region is a deeper gravitational well, and photons climbing out are gravitationally redshifted; by the Sachs-Wolfe result this redshift outweighs the patch being intrinsically hotter, so the net effect is a cold spot",
+      "A denser region contains more dust, which absorbs the microwave photons and cools the spot",
+      "A denser region expands faster, stretching its photons to longer wavelengths by ordinary Doppler shift",
+      "A denser region has more electrons, which scatter the photons away and leave a temperature deficit"
+    ],
+    "correctIndex": 0,
+    "explanation": "Two competing effects set the temperature of a spot. A denser patch of plasma is intrinsically slightly hotter, but it also sits in a deeper gravitational potential well, and a photon climbing out of a well loses energy to gravitational redshift. Sachs and Wolfe showed that on large scales the redshift dominates, with the net shift ΔT/T = (1/3)(Δφ/c²), so a deeper well (more negative φ) reads as a colder spot. The large-scale CMB map is therefore a map of the gravitational potential, and its cold spots mark the densest regions, the future homes of galaxy clusters. Dust absorption, expansion Doppler shifts, and electron scattering are not what produces the large-scale pattern."
+  },
+  "suggestedNodes": [
+    {
+      "id": "acoustic_peaks",
+      "label": "Acoustic peaks",
+      "subtitle": "Cℓ comb, ℓ≈220",
+      "edgeType": "extends"
+    },
+    {
+      "id": "sachs_wolfe_effect",
+      "label": "Sachs-Wolfe",
+      "subtitle": "ΔT/T=⅓Δφ/c²",
+      "edgeType": "applied"
+    },
+    {
+      "id": "baryon_acoustic_osc",
+      "label": "BAO",
+      "subtitle": "150 Mpc ruler",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-26T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 24,
+    "previouslyMastered": ["cmb", "recombination", "cosmic_redshift"]
+  }
+}
