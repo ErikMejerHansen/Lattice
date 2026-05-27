@@ -1,0 +1,129 @@
+{
+  "slug": "2026-05-27-saha-ionization-equation",
+  "title": "The Saha equation: how a star's temperature writes its spectrum",
+  "node": {
+    "id": "saha_ionization",
+    "label": "Saha eq.",
+    "subtitle": "n₊/n₀ ∝ T^3/2"
+  },
+  "intro": "Annie Jump Cannon sorted a quarter of a million stellar spectra into the order OBAFGKM, and the hydrogen lines in them did something strange: they strengthened from the hot O stars to class A, peaked there, then faded again toward the cool M stars. For twenty years nobody could say why a hot star and a cool star should both show weak hydrogen while a middling one blazed with it. The answer came from a young physicist in Calcutta, Meghnad Saha, who in 1920 borrowed the thermal-ionization bookkeeping of laboratory gases and aimed it at the stars. His equation turned a single number, the temperature, into a prediction of the spectrum, and in the hands of Cecilia Payne it revealed that the universe is built almost entirely of hydrogen.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The hydrogen lines that peak in the middle",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The stellar classification lesson left a loose thread. Cannon's OBAFGKM sequence is really a temperature scale, hottest stars first, and most spectral features change smoothly along it. The hydrogen lines do not. The Balmer lines (the visible absorption lines of hydrogen, produced when an electron jumps up out of the second energy level) are faint in the hot blue O stars, strengthen through B and A, reach their maximum at class A0 near 9500 K, then weaken again through F, G, K, and into the cool red M stars. A graph of their strength against temperature is a single hump, not a slope." },
+        { "type": "p", "text": "This was a genuine scandal. Hydrogen is the same atom in every star. If the lines measured how much hydrogen a star contained, they should rise or fall steadily with composition, not climb to a peak and come back down. Something other than abundance had to be setting the line strength, something that depended on temperature and switched the hydrogen on and off as you moved along Cannon's sequence." },
+        { "type": "p", "text": "The resolution came from Meghnad Saha, working in Calcutta and then Allahabad around 1920. Saha was not an astronomer. He had been studying the thermal ionization of gases, the way heat strips electrons from atoms in a hot laboratory plasma, and he saw that a star's atmosphere is simply such a gas held at a known temperature. The statistical mechanics that governed a discharge tube should govern the surface of a star. He wrote down an equation for how the ionization of an element depends on temperature and density, and turned it on the spectral sequence." },
+        { "type": "p", "text": "Two separate temperature effects turn out to be at work, pulling in opposite directions, and the hump is their product. One sets whether a hydrogen atom is excited enough to absorb a Balmer photon at all. The other sets whether the atom has been ionized out of existence as a neutral atom. The next two sections take them one at a time, excitation first, then ionization." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Why a cold star shows no hydrogen",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "To absorb a Balmer line, a hydrogen atom needs its electron already sitting in the second energy level, n = 2. The Balmer lines are upward jumps that start from there, to n = 3, 4, 5 and beyond. An atom with its electron in the ground state, n = 1, is invisible to Balmer light: it can only absorb the far-ultraviolet Lyman lines that start from n = 1. So the question of Balmer strength is first a question of how many atoms have an electron parked in n = 2." },
+        { "type": "p", "text": "Thermal collisions are what kick electrons up to n = 2, and the population of an excited level is set by the Boltzmann factor. Write n₂ for the number of atoms in the second level and n₁ for the number in the ground state. The gap between the levels is ΔE = 10.2 eV. The ratio of the two populations falls off exponentially with that gap measured in units of the thermal energy kT." },
+        { "type": "math", "tex": "\\frac{n_2}{n_1} = \\frac{g_2}{g_1}\\,e^{-\\Delta E / kT}", "display": true, "caption": "n₂ is the number of atoms with their electron in the second level. n₁ is the number in the ground state. g₂ and g₁ are the statistical weights of the two levels, counting how many quantum states share each energy (8 for n = 2, 2 for n = 1 in hydrogen). ΔE is the 10.2 eV gap between the levels. k is Boltzmann's constant and T the temperature, so kT is the typical thermal energy. The equation reads: the upper level is exponentially less populated the larger ΔE is compared to kT." },
+        { "type": "p", "text": "Put numbers in. A cool M star near 3500 K has a thermal energy kT of only about 0.3 eV, while the gap it must bridge is 10.2 eV. The exponent is then roughly thirty-four downward, so the fraction of atoms in n = 2 is about e^(−34), of order 10⁻¹⁵. Essentially no atom in a cool star has its electron in the right place to absorb a Balmer photon. The hydrogen is all there, waiting in the ground state, but invisible at these wavelengths. That is why the Balmer lines are weak in K and M stars even though the atmosphere is full of hydrogen." },
+        { "type": "p", "text": "Raise the temperature and the Boltzmann factor climbs steeply. By class A, near 9500 K, a workable fraction of atoms are excited to n = 2 and the Balmer lines grow strong. If excitation were the whole story the lines would keep strengthening toward the hottest stars. They do not, and the reason is the second effect." }
+      ],
+      "quiz": {
+        "question": "The Balmer absorption lines are almost absent in cool M stars. What does that tell us about the hydrogen in those stars?",
+        "options": [
+          "The hydrogen is present but almost all of it sits in the ground state, and only atoms already excited to n = 2 can absorb Balmer light",
+          "Cool stars contain very little hydrogen compared to hot stars",
+          "The hydrogen has been ionized, leaving no electron to absorb the light",
+          "Balmer photons are too low in energy to be absorbed at low temperature"
+        ],
+        "correctIndex": 0,
+        "explanation": "The tempting wrong answer is ionization, but that is the opposite regime: ionization strips hydrogen in the hottest stars, not the coolest. In a cool star the thermal energy kT (about 0.3 eV at 3500 K) is tiny next to the 10.2 eV needed to lift an electron to n = 2, so the Boltzmann factor e^(−ΔE/kT) leaves only about one atom in 10¹⁵ excited. The hydrogen is abundant but parked in the ground state, where it absorbs only ultraviolet Lyman lines, not visible Balmer lines."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Saha's equation and the ionization balance",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The second effect is ionization. A hot enough atmosphere does not merely excite hydrogen, it tears the electron off entirely, leaving a bare proton with no electron left to do any absorbing. Once hydrogen is ionized it produces no Balmer lines at all, no matter how hot the gas. Saha's equation is the bookkeeping for how far this has gone." },
+        { "type": "p", "text": "It balances two populations: the neutral atoms, of number density n₀, against the ionized atoms, of number density n₊, in a gas that also holds free electrons of number density nₑ. The contest is between ionization energy and thermal energy, as before, but with one new ingredient. A freed electron is not confined to a few atomic levels; it can occupy any of an enormous number of momentum states in the surrounding volume, and that vast available phase space makes ionization far more favorable than the energy cost alone would suggest." },
+        { "type": "math", "tex": "\\frac{n_+ \\, n_e}{n_0} = \\frac{2 g_+}{g_0}\\left(\\frac{2\\pi m_e k T}{h^2}\\right)^{3/2} e^{-\\chi / kT}", "display": true, "caption": "n₊ is the number density of ionized atoms. nₑ is the number density of free electrons. n₀ is the number density of neutral atoms. g₊ and g₀ are the statistical weights of the ion and the neutral atom, and the extra factor of 2 counts the two spin states of the freed electron. mₑ is the electron mass. k is Boltzmann's constant and T the temperature. h is Planck's constant, and the group (2πmₑkT/h²)^(3/2) counts the momentum states a liberated electron can occupy. χ is the ionization energy, 13.6 eV for hydrogen, so e^(−χ/kT) is the thermal suppression of ionization." },
+        { "type": "p", "text": "Read the right-hand side as the same exponential battle from the Boltzmann factor, e^(−χ/kT), multiplied by a phase-space term that grows as T^(3/2). The exponential resists ionization as the gas cools. The phase-space factor rewards it, because hotter, roomier gas offers a freed electron far more places to be. The competition is sharp: as the temperature rises through a narrow band, the neutral fraction collapses from nearly all to nearly none." },
+        { "type": "p", "text": "For hydrogen in a stellar atmosphere that collapse happens around 10000 K. Below it, hydrogen is mostly neutral and available to make Balmer lines if it can be excited. Above it, hydrogen is increasingly ionized and simply gone from the neutral population. The hot O and B stars, blazing at 20000 K and beyond, have stripped most of their hydrogen bare, so even though their remaining atoms are easily excited, there are few neutral atoms left to absorb, and the Balmer lines fade." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The hump as a product of two curves",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Now set the two effects side by side. The fraction of hydrogen still neutral falls with temperature, steeply, once Saha ionization sets in above 10000 K. The fraction of that neutral hydrogen with its electron excited to n = 2 rises with temperature, following the Boltzmann factor. The strength of the Balmer lines is proportional to the product of the two: neutral, and excited." },
+        { "type": "p", "text": "One curve climbs, the other falls, and a product of a rising and a falling curve has a maximum somewhere in between. That maximum lands near 9500 K, exactly class A0, exactly where Cannon's catalog showed the hydrogen lines at their strongest. The mystery of the hump dissolves: it was never about how much hydrogen the stars held, but about the fraction caught in the one state, neutral and excited to n = 2, that can absorb a Balmer photon." },
+        { "type": "viz", "src": "2026-05-27-saha-ionization-equation.html", "height": 440, "caption": "Balmer line strength as a product of two temperature curves. The rising curve is the Boltzmann fraction of neutral hydrogen excited to n = 2; the falling curve is the Saha fraction of hydrogen still neutral. Their product, the heavy line, peaks near class A0. Drag the temperature handle to read all three values and watch the peak sit where Cannon's hydrogen lines were strongest." },
+        { "type": "p", "text": "This is the bridge Saha built: from a single number, the temperature, to the look of the spectrum. Feed in a temperature and the equation tells you which lines you should see and how strong they should be. Run it across the whole sequence and the empirical OBAFGKM order, assembled by eye from photographic plates, falls out as a consequence of two competing exponentials. The letters were a temperature scale all along, and Saha's equation is the calibration." },
+        { "type": "p", "text": "The same machinery works for every element, not only hydrogen, and that is what makes stellar spectra readable. Calcium, iron, helium: each has its own ionization energy and its own ladder of levels, so each peaks in line strength at its own temperature. The pattern of which lines are strong in a given star is a fingerprint of its temperature, decoded element by element through the Saha and Boltzmann factors." }
+      ],
+      "quiz": {
+        "question": "The hydrogen Balmer lines reach maximum strength at class A0 (about 9500 K) and weaken toward both hotter and cooler stars. Why a peak rather than a steady rise or fall?",
+        "options": [
+          "Line strength is the product of a rising curve (excitation to n = 2, by the Boltzmann factor) and a falling curve (the neutral fraction, by Saha ionization), and a rising-times-falling product peaks in between",
+          "Class A stars simply contain the most hydrogen",
+          "The Balmer lines saturate and stop responding above 9500 K",
+          "Interstellar dust absorbs the lines in hotter and cooler stars"
+        ],
+        "correctIndex": 0,
+        "explanation": "It is not composition: every star is mostly hydrogen, so abundance cannot explain a peak. Two temperature effects oppose each other. Excitation to n = 2 (the lower level of the Balmer transitions) rises with temperature through the Boltzmann factor, while the fraction of hydrogen still neutral falls with temperature as Saha ionization strips the electrons. Balmer strength is proportional to their product, and the product of a rising and a falling function has a maximum in between, near 9500 K for hydrogen."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Cecilia Payne and the composition of the stars",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Saha gave the equation; turning it into the composition of the stars fell to Cecilia Payne, a young Englishwoman who had come to Harvard in 1923. For her 1925 doctoral thesis, Stellar Atmospheres, she applied Saha's ionization theory and the Boltzmann factor to the Harvard plate library, the same plates Cannon had classified. Where Cannon had sorted the spectra, Payne set out to read absolute abundances out of them." },
+        { "type": "p", "text": "The temperatures came out cleanly, a tidy ladder in step with the OBAFGKM order. The abundances startled her. Once she corrected the observed line strengths for excitation and ionization, hydrogen and helium were not trace constituents like the iron and silicon of the Earth's crust. They were overwhelmingly the main event: hydrogen made up the vast majority of every star she analyzed, outnumbering the heavier elements by something like a million to one." },
+        { "type": "p", "text": "This was heresy in 1925. The prevailing view, championed by Henry Norris Russell, held that the Sun and the Earth had much the same makeup. Russell reviewed her thesis and pressed her to soften the claim, and she added a sentence calling the enormous hydrogen abundance 'almost certainly not real.' It was real. Four years later Russell reached the same conclusion by his own route and published it, and for decades the discovery was credited largely to him." },
+        { "type": "p", "text": "The episode is a clean illustration of what the Saha equation actually does. A line strength is not a measure of abundance until you have divided out the temperature, because temperature decides what fraction of an element sits in the one state that absorbs. Payne divided it out correctly and found a universe made of hydrogen. The strength of a line tells you how the atoms are arranged; only the equation tells you how many there are." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Cecilia Payne found the stars to be overwhelmingly hydrogen, a result she was pressured to downplay. What did the Saha and Boltzmann factors let her do that earlier spectroscopists could not?",
+    "options": [
+      "Correct each observed line strength for the temperature-dependent fraction of atoms in the absorbing state, separating how the atoms are arranged from how many there are",
+      "Measure a star's temperature directly from the color of its continuum",
+      "Prove that hydrogen lines are strongest in class A stars",
+      "Show that the Sun and the Earth have the same composition"
+    ],
+    "correctIndex": 0,
+    "explanation": "The earlier reading took line strength as a proxy for abundance, which is exactly the trap: the hydrogen lines peak at class A not because A stars hold more hydrogen but because temperature put the right fraction of atoms into the absorbing state. The Saha equation (ionization balance) and the Boltzmann factor (excitation) together give that fraction as a function of temperature, so dividing it out turns a line strength into a true abundance. Option 4 is the view Payne overturned, not what the equations enabled; option 3 is a fact she used along the way, not the breakthrough."
+  },
+  "suggestedNodes": [
+    {
+      "id": "boltzmann_distribution",
+      "label": "Boltzmann",
+      "subtitle": "n ∝ e^(−E/kT)",
+      "edgeType": "related"
+    },
+    {
+      "id": "partition_function",
+      "label": "Partition fn",
+      "subtitle": "Z=Σ g e^(−E/kT)",
+      "edgeType": "related"
+    },
+    {
+      "id": "curve_of_growth",
+      "label": "Curve growth",
+      "subtitle": "W vs abundance",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-27T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["stellar_classification", "bohr_atom", "spectroscopy_basics"]
+  }
+}
