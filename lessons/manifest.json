@@ -201,5 +201,12 @@
     "subtitle": "ΔT/T ≈ 10⁻⁵",
     "date": "2026-05-26",
     "estimatedReadingMinutes": 24
+  },
+  {
+    "slug": "2026-05-27-saha-ionization-equation",
+    "title": "The Saha equation: how a star's temperature writes its spectrum",
+    "subtitle": "n₊/n₀ ∝ T^3/2",
+    "date": "2026-05-27",
+    "estimatedReadingMinutes": 22
   }
 ]

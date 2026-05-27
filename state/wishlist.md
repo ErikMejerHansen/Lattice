@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-07 from stellar-classification
-Saha ionization equation — n+/n0 ∝ T^(3/2) exp(-χ/kT), the bridge from temperature to spectrum
 Hertzsprung-Russell diagram — luminosity vs temperature, the family portrait of stars
 Balmer series — n → 2 transitions in hydrogen, the lines that started OBAFGKM
 
@@ -86,3 +85,8 @@ Dark energy — the accelerating expansion, Λ, and the 1998 supernova surveys t
 Acoustic peaks — the comb of peaks in the CMB angular power spectrum, the first at ℓ ≈ 220, whose heights weigh the baryon and dark-matter densities of the universe
 Sachs-Wolfe effect — ΔT/T = ⅓ Δφ/c², why a large-scale cold spot is a deep gravitational well, the gravitational redshift imprinted at the surface of last scattering
 Baryon acoustic oscillations — the 150 Mpc sound-horizon ruler frozen into the galaxy distribution, a standard ruler that pins down dark energy across cosmic time
+
+# auto-suggested 2026-05-27 from saha-ionization-equation
+Boltzmann distribution — n ∝ e^(−E/kT), the population of energy levels in thermal equilibrium and the excitation half of every spectral line
+Partition function — Z = Σ g e^(−E/kT), the sum over states that normalizes the Boltzmann factor and underlies Saha
+Curve of growth — how a line's equivalent width W grows with abundance, the bridge from a measured line strength to how many atoms are really there

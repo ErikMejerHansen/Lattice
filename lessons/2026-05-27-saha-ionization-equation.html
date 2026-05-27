@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz { padding: 14px 16px 18px; box-sizing: border-box; }
+.readout {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; margin-top: 6px;
+}
+.readout span b { font-weight: 600; }
+.k-neutral { color: #2a6f8e; }
+.k-exc { color: var(--accent-soft); }
+.k-prod { color: var(--accent); }
+.axis path, .axis line { stroke: var(--border-strong); }
+.axis text { fill: var(--text-muted); font-family: "IBM Plex Mono", Menlo, monospace; font-size: 9px; }
+.axis-label { fill: var(--text-muted); font-style: italic; font-size: 11px; }
+.class-label { fill: var(--text-ghost); font-family: "IBM Plex Mono", Menlo, monospace; font-size: 9px; text-anchor: middle; }
+</style>
+</head>
+<body>
+<div id="viz">
+  <svg id="chart" viewBox="0 0 340 270" width="100%" preserveAspectRatio="xMidYMid meet"></svg>
+  <div class="viz-slider-row">
+    <label for="temp">T</label>
+    <input type="range" id="temp" min="3000" max="30000" step="100" value="9500">
+    <span class="value" id="tval">9500 K</span>
+  </div>
+  <div class="readout">
+    <span class="k-exc"><b>excited (n=2):</b> <span id="rExc"></span></span>
+    <span class="k-neutral"><b>neutral H:</b> <span id="rNeu"></span></span>
+    <span class="k-prod"><b>Balmer strength:</b> <span id="rPro"></span></span>
+  </div>
+  <p class="viz-caption">Two temperature effects fight: excitation to n = 2 (rises) and the neutral fraction (falls). Their product is the Balmer line strength, peaking near class A0 (~9500 K). Curves are scaled to their own maxima; drag the handle to read each value at any temperature.</p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+(function () {
+  // Physical constants (SI unless noted)
+  var me = 9.109e-31, kB = 1.381e-23, h = 6.626e-34, eV = 1.602e-19;
+  var chi = 13.6 * eV;        // hydrogen ionization energy
+  var kBeV = 8.617e-5;        // Boltzmann constant in eV/K
+  var dE = 10.2;              // n=1 to n=2 gap, eV
+  var ne = 1e20;              // assumed electron density (m^-3), puts the Balmer peak at class A0 (~9500 K)
+
+  function exc(T) { return 4 * Math.exp(-dE / (kBeV * T)); }      // n2/n1, unnormalized
+  function neutral(T) {
+    var A = (1 / ne) * Math.pow(2 * Math.PI * me * kB * T / (h * h), 1.5) * 2 * Math.exp(-chi / (kB * T));
+    var x = (-A + Math.sqrt(A * A + 4 * A)) / 2;                  // ionized fraction
+    return 1 - x;                                                 // neutral fraction
+  }
+
+  var Tmin = 3000, Tmax = 30000, N = 240;
+  var Ts = d3.range(N + 1).map(function (i) { return Tmin + (Tmax - Tmin) * i / N; });
+  var excMax = d3.max(Ts, exc);
+  var prodMax = d3.max(Ts, function (T) { return exc(T) * neutral(T); });
+
+  function excN(T) { return exc(T) / excMax; }
+  function neuN(T) { return neutral(T); }
+  function proN(T) { return exc(T) * neutral(T) / prodMax; }
+
+  var W = 340, H = 270;
+  var m = { top: 14, right: 14, bottom: 42, left: 34 };
+  var iw = W - m.left - m.right, ih = H - m.top - m.bottom;
+
+  var svg = d3.select("#chart");
+  var g = svg.append("g").attr("transform", "translate(" + m.left + "," + m.top + ")");
+
+  var x = d3.scaleLinear().domain([Tmin, Tmax]).range([0, iw]);
+  var y = d3.scaleLinear().domain([0, 1]).range([ih, 0]);
+
+  // axes
+  var xAxis = d3.axisBottom(x).tickValues([3000, 9500, 15000, 22000, 30000])
+    .tickFormat(function (d) { return (d / 1000); });
+  var yAxis = d3.axisLeft(y).ticks(5);
+  g.append("g").attr("class", "axis").attr("transform", "translate(0," + ih + ")").call(xAxis);
+  g.append("g").attr("class", "axis").call(yAxis);
+
+  // axis labels (variable name + units), positioned to match data orientation
+  g.append("text").attr("class", "axis-label").attr("text-anchor", "middle")
+    .attr("x", iw / 2).attr("y", ih + 36).text("T  (10³ K)");
+  g.append("text").attr("class", "axis-label").attr("text-anchor", "middle")
+    .attr("transform", "rotate(-90)").attr("x", -ih / 2).attr("y", -26)
+    .text("relative strength");
+
+  // spectral-class markers along x
+  var classes = [
+    { t: 3500, l: "M" }, { t: 4700, l: "K" }, { t: 5700, l: "G" },
+    { t: 6800, l: "F" }, { t: 9500, l: "A" }, { t: 15000, l: "B" }, { t: 25000, l: "O" }
+  ];
+  g.selectAll(".class-label").data(classes).enter().append("text")
+    .attr("class", "class-label").attr("x", function (d) { return x(d.t); })
+    .attr("y", ih + 24).text(function (d) { return d.l; });
+
+  var line = d3.line().x(function (d) { return x(d); });
+
+  function draw(fn, color, width, dash) {
+    g.append("path").datum(Ts)
+      .attr("fill", "none").attr("stroke", color).attr("stroke-width", width)
+      .attr("stroke-dasharray", dash || null)
+      .attr("d", line.y(function (d) { return y(fn(d)); }));
+  }
+  draw(neuN, "#2a6f8e", 1.6, "4 3");   // neutral fraction (falls)
+  draw(excN, "#c47558", 1.6, "4 3");   // excitation (rises)
+  draw(proN, "#9c3a22", 2.6);          // product = Balmer strength
+
+  // moving marker
+  var marker = g.append("line").attr("y1", 0).attr("y2", ih)
+    .attr("stroke", "var(--border-strong)").attr("stroke-width", 1);
+  var dotPro = g.append("circle").attr("r", 3.5).attr("fill", "#9c3a22");
+
+  var slider = document.getElementById("temp");
+  function update() {
+    var T = +slider.value;
+    var px = x(T);
+    marker.attr("x1", px).attr("x2", px);
+    dotPro.attr("cx", px).attr("cy", y(proN(T)));
+    document.getElementById("tval").textContent = T + " K";
+    document.getElementById("rExc").textContent = (excN(T) * 100).toFixed(1) + "%";
+    document.getElementById("rNeu").textContent = (neuN(T) * 100).toFixed(1) + "%";
+    document.getElementById("rPro").textContent = (proN(T) * 100).toFixed(1) + "%";
+  }
+  slider.addEventListener("input", update);
+  update();
+})();
+</script>
+</body>
+</html>

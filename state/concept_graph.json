@@ -289,6 +289,16 @@
       "createdAt": "2026-05-26T08:00:00Z",
       "col": 0,
       "row": 14
+    },
+    {
+      "id": "saha_ionization",
+      "label": "Saha eq.",
+      "subtitle": "n₊/n₀ ∝ T^3/2",
+      "state": "available",
+      "lesson": "2026-05-27-saha-ionization-equation",
+      "createdAt": "2026-05-27T08:00:00Z",
+      "col": 1,
+      "row": 14
     }
   ],
   "edges": [
@@ -363,6 +373,9 @@
     { "from": "cosmic_redshift", "to": "recombination", "kind": "related" },
     { "from": "cmb_anisotropies", "to": "cmb", "kind": "extends" },
     { "from": "cmb_anisotropies", "to": "recombination", "kind": "applied" },
-    { "from": "cmb_anisotropies", "to": "cosmic_redshift", "kind": "related" }
+    { "from": "cmb_anisotropies", "to": "cosmic_redshift", "kind": "related" },
+    { "from": "saha_ionization", "to": "stellar_classification", "kind": "extends" },
+    { "from": "saha_ionization", "to": "bohr_atom", "kind": "applied" },
+    { "from": "saha_ionization", "to": "spectroscopy_basics", "kind": "related" }
   ]
 }
