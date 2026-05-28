@@ -1,0 +1,129 @@
+{
+  "slug": "2026-05-28-hertzsprung-russell-diagram",
+  "title": "The Hertzsprung-Russell diagram: the scatter plot that organized the stars",
+  "node": {
+    "id": "hertzsprung_russell",
+    "label": "H-R diagram",
+    "subtitle": "L vs T scatter"
+  },
+  "intro": "Sort a hundred thousand stars by temperature and luminosity and plot them, and the dots do not fill the plane evenly. They crowd along a narrow diagonal, swarm into a small cloud at one corner, scatter into a thin band at another, and leave most of the page bare. Two astronomers, Ejnar Hertzsprung in Copenhagen and Henry Norris Russell at Princeton, drew this plot independently between 1905 and 1913, and both saw that the shape itself was the discovery. The diagram became the working map of stellar physics: one point on it per star, every band and patch a different stage in a stellar life.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Two astronomers, one scatter plot",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Ejnar Hertzsprung was a chemical engineer in Copenhagen with a sideline in astronomical photography. Around 1905, working with the proper-motion catalogs (lists of stars whose distances Bessel-style parallax had pinned down) and the new Harvard spectral classifications, he noticed something odd in the red stars. There were two utterly different kinds. Some were intrinsically brilliant, some were intrinsically faint, and there were almost none in between. The bright ones he called giants, the faint ones dwarfs. The terms have stuck for a century. He published the finding in 1905 and 1907, in the obscurest possible places: Zeitschrift für wissenschaftliche Photographie, a journal for camera engineers. Nobody read it." },
+        { "type": "p", "text": "Henry Norris Russell, at Princeton, came at the same plot from the parallax side. He spent the years 1903 to 1910 measuring stellar distances at the Cambridge Observatory in England and then back at Princeton. With distance came absolute brightness (luminosity), and Russell began plotting luminosity against spectral type. By 1913 he had a few hundred stars on the chart and saw, with a jolt, the same structure Hertzsprung had inferred from photographic indices: a dense diagonal of dwarfs, a separate clump of giants up and to the right, and a thinly populated middle. He presented the plot at the Royal Astronomical Society in June 1913, and the diagram entered Anglophone astronomy under his name alone." },
+        { "type": "p", "text": "The two men did not meet until 1920. When Russell read Hertzsprung's earlier papers and realized the priority, he began calling it the Russell diagram with a Hertzsprung asterisk; European texts called it the Hertzsprung diagram; only by the 1930s did the joint name settle, the H-R diagram (the Hertzsprung-Russell diagram, a scatter plot of stellar luminosity against surface temperature with every star a single point on the page). Hertzsprung lived to see it become the central tool of stellar physics, and Russell wrote the first textbook chapter on it. The diagram outgrew them both." },
+        { "type": "p", "text": "The axes are unusual and worth pausing on. Temperature runs along the x-axis but reversed, hot on the left and cool on the right, because the spectral sequence (O B A F G K M, lesson 2026-05-07) was lettered hot-first and astronomers refused to renumber it. Luminosity runs up the y-axis, brightest on top, and both axes are logarithmic, because stars differ by factors of a million in luminosity and ten in temperature and there is no other way to show them on one sheet of paper. Hertzsprung's original plots had axes the other way around; the modern convention is Russell's." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The diagonal where most stars live",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The first thing you see on the diagram is a long diagonal running from the hot-bright corner (upper left) down to the cool-faint corner (lower right). It is the densest feature on the page. Hertzsprung gave it the name that stuck: the main sequence. Russell estimated that nine out of ten stars sit on it; modern surveys put the figure closer to ninety-three percent." },
+        { "type": "p", "text": "The main sequence is not an accident of plotting. It is what stars look like when they are doing the same thing: fusing hydrogen into helium in their cores. Once a star ignites hydrogen burning and settles into hydrostatic equilibrium (the inward pull of gravity exactly balanced by the outward push of thermal pressure), the structure of the star is fully determined by a single number, its mass. Composition matters a little, but for the bulk of Milky Way stars, all hydrogen-rich, mass alone fixes the answer. Luminosity, temperature, radius, lifetime: all of them follow." },
+        { "type": "p", "text": "This is the reason the main sequence is a line and not a cloud. If two parameters set a star's position, you would expect a two-dimensional region. Only one parameter sets it, so the points fall on a one-dimensional curve. The diagonal you see is the projection, into (L, T) coordinates, of a one-parameter family. Slide along it by varying mass; you sweep the whole sequence from the M dwarfs at the bottom to the O stars at the top." },
+        { "type": "p", "text": "The seven percent of stars not on the main sequence are exactly those for which the one-parameter story has broken down. Either they have not yet arrived (still contracting toward hydrogen ignition) or they have already left (having exhausted core hydrogen and begun to evolve). The branches that house them are the topic of the next section." }
+      ],
+      "quiz": {
+        "question": "Why do roughly 93% of stars sit on a single one-dimensional curve (the main sequence) rather than scattering across a two-dimensional patch of the H-R diagram?",
+        "options": [
+          "Stars on the main sequence are all doing the same thing (fusing core hydrogen in hydrostatic equilibrium), so their structure is fixed by a single parameter, mass, and a one-parameter family of states projects onto a one-dimensional curve in (L, T)",
+          "Most stars happen to have nearly identical mass, so they pile up at one luminosity",
+          "The main sequence is an observational artifact of how brightness limits were applied to the survey",
+          "All stars are born on the main sequence and never leave it"
+        ],
+        "correctIndex": 0,
+        "explanation": "Composition matters at the percent level, but the dominant fact is that core-hydrogen-burning stars are a one-parameter family in mass. Change the mass and luminosity, temperature, and radius all change together along a fixed track, which is exactly why they fall on a line rather than fill a region. Option 2 is the opposite of the truth (stars span a factor of ~300 in mass). Option 3 confuses the main sequence with a selection effect. Option 4 ignores giants and white dwarfs, the seven percent that have left."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The branches: giants, supergiants, white dwarfs",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Off the main sequence the diagram has three other populated regions, and each has a clean physical reading via L = 4πR²σT⁴ (the Stefan-Boltzmann law applied to a star, lesson 2026-05-22). The same luminosity can be produced by a small hot surface or by a large cool one; the law tells you the trade." },
+        { "type": "p", "text": "Upper right, cool but bright: the giants and supergiants. A cool surface can be bright only by being large. Aldebaran (the red giant that marks the eye of Taurus) is about 45 times the Sun's radius. Betelgeuse (the red supergiant in Orion's shoulder) is around 700 times the Sun's radius; substituted for the Sun, its surface would reach past Mars. Their surface temperatures of 3000 to 4000 K would put them at the bottom of the main sequence if they were Sun-sized, but they are not Sun-sized, and Stefan-Boltzmann lifts them four to six decades in L." },
+        { "type": "p", "text": "Lower left, hot but faint: the white dwarfs. A hot surface can be faint only by being small. Sirius B (the companion of Sirius, the brightest star in the night sky) sits at 25000 K but radiates only 3% of the Sun's power. Solve Stefan-Boltzmann for R and the answer is about 6000 km, roughly the size of Earth, with a Sun's worth of mass packed inside. These were the first hint that matter could exist in states stranger than the chemist's table allowed." },
+        { "type": "viz", "src": "2026-05-28-hertzsprung-russell-diagram.html", "height": 460, "caption": "An H-R diagram populated with real stars. The dense diagonal is the main sequence. The cloud upper right are red giants and supergiants. The thin band lower left are white dwarfs. Drag the mass slider to place a zero-age main-sequence star and read its luminosity, temperature, radius, and remaining lifetime. The dashed line traces the path that star will walk after it leaves the main sequence: up and right onto the giant branch, then down and left to its endpoint as a white dwarf or, for masses above about 8 suns, as a supernova." },
+        { "type": "p", "text": "Between these populated regions are two notable gaps. The Hertzsprung gap, between the main sequence and the giant branch around F-G temperatures, is sparsely tenanted because stars cross it quickly: a few hundred thousand years versus the billions they spend on either side. The instability strip, a near-vertical band crossing the giant branch, holds the Cepheid and RR Lyrae variables; stars passing through this strip pulsate because of a specific ionization layer in their envelopes. The diagram is read as much by its gaps as by its bands." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Mass writes the address",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "On the main sequence, a star's mass alone fixes its luminosity, to a very good approximation. Arthur Eddington worked out the relation in 1924 from the energy balance of a self-gravitating ball of ionized gas. Heavier stars need more central pressure to hold themselves up, more central pressure means hotter cores, and hotter cores burn hydrogen at runaway rates. The end result is the mass-luminosity relation. Write L for the star's luminosity and M for its mass, both in solar units; the data, across two decades of mass, are fit by an empirical power law with exponent close to 3.5." },
+        { "type": "math", "tex": "L / L_\\odot \\approx (M / M_\\odot)^{3.5}", "display": true, "caption": "L is the star's luminosity. L_⊙ is the Sun's luminosity (3.83 × 10²⁶ W). M is the star's mass. M_⊙ is the Sun's mass. The exponent 3.5 is empirical, varying between about 2.5 for very low-mass stars and 4 for medium ones; 3.5 is a working average across the main sequence." },
+        { "type": "p", "text": "Take a star ten times the Sun's mass: its luminosity is 10^3.5 ≈ 3200 times the Sun's. This is the reason the upper main sequence is dominated by hot, bright O and B stars (10 to 50 solar masses) and the lower main sequence by cool, faint red dwarfs (0.1 to 0.5 solar masses). The position on the diagonal is, very nearly, a mass scale in disguise." },
+        { "type": "p", "text": "Lifetime follows from the same algebra. A star burns through a fuel supply proportional to its mass at a rate equal to its luminosity, so its main-sequence lifetime t scales as fuel divided by rate, M divided by L. Plug in the mass-luminosity relation and the M cancels down to one power: lifetime falls as 1/M^2.5. With the Sun's 10 billion years as the anchor, you get the lifetime formula." },
+        { "type": "math", "tex": "t_{\\text{MS}} \\approx 10\\,\\text{Gyr} \\times (M / M_\\odot)^{-2.5}", "display": true, "caption": "t_MS is the star's main-sequence lifetime, the time it spends fusing hydrogen in its core. M is the star's mass and M_⊙ is the Sun's. 10 Gyr (10 billion years) is the Sun's main-sequence lifetime, calibrated from solar models. The −2.5 exponent comes from M divided by L ∝ M^3.5, leaving M^(1 − 3.5) = M^(−2.5)." },
+        { "type": "p", "text": "A 10-solar-mass O star lives 30 million years. A 0.3-solar-mass red dwarf will outlive the present universe by a factor of 6000. The upper main sequence is sparsely populated today not because the galaxy is reluctant to make heavy stars (it does), but because the heavy ones it has made have nearly all died. The lower main sequence stays crowded because nothing has died down there yet." }
+      ],
+      "quiz": {
+        "question": "A cluster of stars all the same age shows a main sequence with the upper-left end missing: there are no O or B stars left on it. What does the position where the main sequence ends (the turnoff point) tell you?",
+        "options": [
+          "The age of the cluster — stars with main-sequence lifetimes shorter than the cluster's age have already evolved off, and the turnoff marks the mass whose lifetime equals the cluster's age",
+          "The total mass of the cluster",
+          "The distance to the cluster",
+          "The chemical composition of the cluster"
+        ],
+        "correctIndex": 0,
+        "explanation": "Above the turnoff, all stars have died; below it, all stars are still fusing hydrogen. So the mass at the turnoff is exactly the mass M for which t_MS(M) equals the cluster's age. Read off the turnoff mass from the main-sequence position, plug into t = 10 Gyr × M^(−2.5), and the age falls out. This is how globular clusters are dated, and it was the method that first established a lower bound of about 12 billion years on the age of the universe. Composition and distance shift other features of the diagram but not the turnoff mass."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The Sun's walk across the diagram",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Take one star and trace its path on the H-R diagram from birth to grave, and the abstract diagram becomes a biography. The Sun is the case we know best. Today it sits at 5772 K and 1 solar luminosity, a G2 dwarf right in the middle of the main sequence, about 4.6 billion years old, with 5 billion years of hydrogen fusion ahead of it. During that 5 billion years it will not stand still on the diagram; it will brighten by about 10% per gigayear as helium ash accumulates in the core and the burning region must work harder. The Sun is creeping slowly up and slightly to the left." },
+        { "type": "p", "text": "At about 9.5 billion years total age, core hydrogen runs out. What follows is the classic post-main-sequence walk. The exhausted core is now pure helium, too cool to fuse but too dense to support itself, and it begins to contract. A shell of hydrogen just outside the core ignites and burns at a furious rate, dumping energy into the envelope. The envelope, having nowhere to put that energy, expands enormously. The Sun's radius grows to perhaps 100 times its current value; its surface, spread thin over the increased area, cools to about 3000 K. On the H-R diagram the Sun climbs almost straight up and a little to the right, onto the red giant branch, reaching a luminosity around 2000 solar." },
+        { "type": "p", "text": "At the tip of the red giant branch, with the helium core compressed to electron-degenerate matter and heated to 100 million K, helium fusion ignites in a runaway event called the helium flash. The Sun briefly moves back down and to the left to a new equilibrium called the horizontal branch, where it fuses helium into carbon and oxygen for about 100 million years. When the helium runs out the cycle repeats with a carbon-oxygen core, hydrogen and helium shells burning above it, the star climbing the asymptotic giant branch even higher than before. Pulsations on this branch shed the entire envelope as a planetary nebula (an expanding shell of glowing gas around the dying core, named for nothing more than its round telescopic appearance to William Herschel, who thought one looked like a planet)." },
+        { "type": "p", "text": "What remains is the bare carbon-oxygen core, no longer fusing, half a solar mass in an Earth-sized ball: a white dwarf. It glows at 100000 K initially and starts cooling along the white-dwarf cooling sequence, a track running across the lower-left of the diagram and bending downward over billions of years. The Sun's entire H-R-diagram biography, traced as a single curve, is a loop that begins low on the main sequence, ascends the giant branch, retreats to the horizontal branch, climbs again as an asymptotic giant, and ends in the lower left as a fading point of light. The diagram has been telling that story for every star on it the whole time." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Why is the Hertzsprung-Russell diagram more useful than a simple list of stellar properties, even though it shows only two quantities (luminosity and temperature) per star?",
+    "options": [
+      "The structure of the populated regions encodes the physics: a one-parameter family of hydrogen-burning stars produces a line; populations that have left that state produce branches; and a star's path across the diagram over its lifetime traces its biography in (L, T) coordinates",
+      "It is easier for humans to read a chart than a table",
+      "Luminosity and temperature are the only two quantities astronomers can measure",
+      "All other stellar properties can be derived from L and T alone, without needing further measurements"
+    ],
+    "correctIndex": 0,
+    "explanation": "The diagram works because (L, T) is not just two numbers, it is the coordinate system in which the physics is sharpest. Hydrostatic equilibrium plus hydrogen burning produces a one-parameter family of stars, which projects onto a curve (the main sequence). Departures from that state (giants, supergiants, white dwarfs) occupy specific regions set by Stefan-Boltzmann. And evolution traces a path across the same diagram, with each lifetime stage parked in a different region for a different duration. The list-of-properties view misses all of that structure. Option 3 is false (mass, radius, and abundance are also measurable). Option 4 is false (the same L and T can be produced by stars of very different masses and ages, as the giants-vs-dwarfs split shows)."
+  },
+  "suggestedNodes": [
+    {
+      "id": "stellar_evolution_tracks",
+      "label": "Evol. tracks",
+      "subtitle": "paths on H-R",
+      "edgeType": "extends"
+    },
+    {
+      "id": "cluster_hr_turnoff",
+      "label": "Cluster age",
+      "subtitle": "turnoff dating",
+      "edgeType": "applied"
+    },
+    {
+      "id": "white_dwarf_cooling",
+      "label": "WD cooling",
+      "subtitle": "track in lower L",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-28T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 24,
+    "previouslyMastered": ["stellar_classification", "stellar_luminosity", "stefan_boltzmann"]
+  }
+}

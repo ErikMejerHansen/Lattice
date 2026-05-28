@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-07 from stellar-classification
-Hertzsprung-Russell diagram — luminosity vs temperature, the family portrait of stars
 Balmer series — n → 2 transitions in hydrogen, the lines that started OBAFGKM
 
 # auto-suggested 2026-05-07 from color-temperature
@@ -90,3 +89,8 @@ Baryon acoustic oscillations — the 150 Mpc sound-horizon ruler frozen into the
 Boltzmann distribution — n ∝ e^(−E/kT), the population of energy levels in thermal equilibrium and the excitation half of every spectral line
 Partition function — Z = Σ g e^(−E/kT), the sum over states that normalizes the Boltzmann factor and underlies Saha
 Curve of growth — how a line's equivalent width W grows with abundance, the bridge from a measured line strength to how many atoms are really there
+
+# auto-suggested 2026-05-28 from hertzsprung-russell-diagram
+Stellar evolution tracks — pre-main-sequence contraction, post-MS climb, the actual paths a star walks across the H-R diagram and how long it spends in each stage
+Cluster H-R turnoff — t_MS ∝ M^(-2.5), so the turnoff mass of a coeval cluster reads its age, the technique that dated globular clusters to 12 Gyr and pinned a lower bound on the age of the universe before precision cosmology
+White dwarf cooling sequence — Mestel's law, the slow fade of degenerate carbon-oxygen remnants along the lower-left of the H-R diagram, the temperature-luminosity track of every Sun-like star's terminus
