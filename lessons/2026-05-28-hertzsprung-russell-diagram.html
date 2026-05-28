@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H-R diagram</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+.readout .pin { color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+  <canvas id="plot" height="360" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);background:var(--bg-raised);"></canvas>
+  <div class="viz-slider-row">
+    <label>M</label>
+    <input type="range" id="mSlider" min="-1" max="1.477" step="0.001" value="0" style="min-height:36px;">
+    <span class="value" id="mVal">1.0 M&#9737;</span>
+  </div>
+  <div class="readout" id="readout"></div>
+  <p class="viz-caption" style="margin-top:10px;">A populated H-R diagram. Hot temperatures left, luminosities up, both logarithmic. The dense diagonal is the main sequence; the cloud upper right is the red-giant and supergiant region; the thin band lower left is the white-dwarf cooling sequence. Named stars are marked. Drag the mass slider to place a zero-age main-sequence star (filled red dot) and read its luminosity, surface temperature, radius, and remaining hydrogen-burning lifetime. The faded red dots and dashed line trace the path the same star will walk after the main sequence: up onto the giant branch, then down to its endpoint as a white dwarf or, above about 8 solar masses, as a supernova.</p>
+</div>
+
+<script>
+const TSUN = 5772;
+const TMIN = 2200, TMAX = 50000;
+const LMIN = 1e-5, LMAX = 1e6;
+const lgTmin = Math.log10(TMIN), lgTmax = Math.log10(TMAX);
+const lgLmin = Math.log10(LMIN), lgLmax = Math.log10(LMAX);
+
+// Reference stars: name, T (K), L (Lsun), kind
+const refStars = [
+  { name: "Sun",        T: 5772,  L: 1,        kind: "ms" },
+  { name: "Sirius A",   T: 9940,  L: 25.4,     kind: "ms" },
+  { name: "Vega",       T: 9602,  L: 40,       kind: "ms" },
+  { name: "Procyon A",  T: 6530,  L: 6.9,      kind: "ms" },
+  { name: "Alpha Cen B",T: 5260,  L: 0.50,     kind: "ms" },
+  { name: "Proxima",    T: 3042,  L: 0.0017,   kind: "ms" },
+  { name: "Barnard's",  T: 3134,  L: 0.0035,   kind: "ms" },
+  { name: "Spica",      T: 22400, L: 12100,    kind: "ms" },
+  { name: "Rigel",      T: 12100, L: 1.2e5,    kind: "sg" },
+  { name: "Betelgeuse", T: 3600,  L: 1.0e5,    kind: "sg" },
+  { name: "Antares",    T: 3660,  L: 7.6e4,    kind: "sg" },
+  { name: "Aldebaran",  T: 3910,  L: 439,      kind: "rg" },
+  { name: "Arcturus",   T: 4286,  L: 170,      kind: "rg" },
+  { name: "Pollux",     T: 4666,  L: 43,       kind: "rg" },
+  { name: "Sirius B",   T: 25000, L: 0.026,    kind: "wd" },
+  { name: "Procyon B",  T: 7740,  L: 5.5e-4,   kind: "wd" },
+  { name: "40 Eri B",   T: 16500, L: 0.014,    kind: "wd" }
+];
+
+// Background field stars: realistic-ish sample, by region
+function rand(seed) {
+  let x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+function fieldStars() {
+  const stars = [];
+  // Main sequence: heavy density on lower right, light on upper left
+  for (let i = 0; i < 140; i++) {
+    const r = rand(i * 13.7 + 1);
+    // mass distribution skewed low (Salpeter-ish via inverse CDF on power -2.35)
+    const lgM = -0.7 + (Math.pow(rand(i * 7.31 + 3), 1.8) * 2.0);
+    const M = Math.pow(10, lgM);
+    const L = Math.pow(M, 3.5);
+    const T = TSUN * Math.pow(M, 0.54);
+    const dT = (rand(i * 5.19 + 9) - 0.5) * 0.04;
+    const dL = (rand(i * 11.7 + 5) - 0.5) * 0.12;
+    stars.push({ T: T * Math.pow(10, dT), L: L * Math.pow(10, dL), c: "ms" });
+  }
+  // Red giant branch cluster
+  for (let i = 0; i < 28; i++) {
+    const T = 3700 + (rand(i * 3.13 + 11) - 0.5) * 900;
+    const L = Math.pow(10, 1.5 + rand(i * 6.27 + 17) * 1.5);
+    stars.push({ T, L, c: "rg" });
+  }
+  // Supergiants
+  for (let i = 0; i < 9; i++) {
+    const T = 3500 + rand(i * 9.71 + 23) * 7000;
+    const L = Math.pow(10, 4.4 + rand(i * 4.99 + 29) * 1.3);
+    stars.push({ T, L, c: "sg" });
+  }
+  // White dwarfs
+  for (let i = 0; i < 22; i++) {
+    const T = Math.pow(10, 3.8 + rand(i * 2.17 + 31) * 0.85);
+    const L = Math.pow(10, -3.5 + rand(i * 8.43 + 37) * 2.2);
+    stars.push({ T, L, c: "wd" });
+  }
+  return stars;
+}
+const FIELD = fieldStars();
+
+const canvas = document.getElementById("plot");
+const mSlider = document.getElementById("mSlider");
+const mVal = document.getElementById("mVal");
+const readoutEl = document.getElementById("readout");
+
+function lifetimeGyr(M) {
+  // t = 10 Gyr * M^-2.5
+  return 10 * Math.pow(M, -2.5);
+}
+function fmtT(t) {
+  if (t < 0.001) return (t * 1e6).toFixed(1) + " Myr";
+  if (t < 1) return (t * 1000).toFixed(0) + " Myr";
+  if (t < 100) return t.toPrecision(2) + " Gyr";
+  return t.toExponential(1) + " Gyr";
+}
+function fmtL(L) {
+  if (L >= 100 || L < 0.01) return L.toExponential(1);
+  return L.toPrecision(2);
+}
+function fmtR(R) {
+  if (R >= 100) return R.toExponential(2);
+  if (R >= 0.01) return R.toPrecision(2);
+  return R.toExponential(2);
+}
+
+function makeField(parent, label, pinned) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  const lbl = document.createElement("span");
+  lbl.className = "lbl";
+  lbl.textContent = label;
+  const val = document.createElement("span");
+  if (pinned) val.className = "pin";
+  wrap.appendChild(lbl);
+  wrap.appendChild(val);
+  parent.appendChild(wrap);
+  return val;
+}
+const fM = makeField(readoutEl, "M (mass)", true);
+const fL = makeField(readoutEl, "L", true);
+const fT = makeField(readoutEl, "T_eff", true);
+const fR = makeField(readoutEl, "R");
+const fLife = makeField(readoutEl, "t_MS = 10 Gyr · M⁻²·⁵", true);
+const fEnd = makeField(readoutEl, "endpoint");
+
+function xFor(t, padL, plotW) {
+  const f = (Math.log10(t) - lgTmin) / (lgTmax - lgTmin);
+  return padL + (1 - f) * plotW;
+}
+function yFor(l, padT, plotH) {
+  const f = (Math.log10(l) - lgLmin) / (lgLmax - lgLmin);
+  return padT + plotH - f * plotH;
+}
+
+function draw() {
+  const lgM = parseFloat(mSlider.value);
+  const M = Math.pow(10, lgM);
+  mVal.textContent = (M < 1 ? M.toPrecision(2) : M.toPrecision(3)) + " M⊙";
+
+  const L_zams = Math.pow(M, 3.5);
+  const T_zams = TSUN * Math.pow(M, 0.54);
+  const R_zams = Math.sqrt(L_zams) * Math.pow(TSUN / T_zams, 2);
+  const tMS = lifetimeGyr(M);
+
+  // Giant phase (rough): T_g around 3500 K, L_g scales with mass to ~the 0.9 power above MS
+  const T_g = 3400;
+  const L_g = Math.max(50, 100 * Math.pow(M, 1.1));
+  // Endpoint
+  let endpoint, T_end, L_end;
+  if (M < 8) { endpoint = "white dwarf"; T_end = 25000; L_end = 0.02 * Math.pow(M, 0.4); }
+  else { endpoint = "supernova → NS / BH"; T_end = 40000; L_end = 1e5; }
+
+  const W = canvas.offsetWidth || 320;
+  canvas.width = W;
+  const H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const padL = 52, padR = 14, padT = 14, padB = 38;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+  const xF = t => xFor(t, padL, plotW);
+  const yF = l => yFor(l, padT, plotH);
+
+  // L gridlines (decades)
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  for (let e = -5; e <= 6; e += 1) {
+    const y = yF(Math.pow(10, e));
+    ctx.strokeStyle = "rgba(26,26,24,0.05)";
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + plotW, y); ctx.stroke();
+    if (e % 2 === 0) {
+      ctx.fillStyle = "rgba(26,26,24,0.55)";
+      ctx.textAlign = "right"; ctx.textBaseline = "middle";
+      ctx.fillText("10" + supScript(e), padL - 6, y);
+    }
+  }
+
+  // Region labels (drawn behind stars)
+  ctx.fillStyle = "rgba(107,99,89,0.42)";
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+  ctx.fillText("supergiants", xF(7000), yF(2.5e5));
+  ctx.fillText("giants", xF(4400), yF(80));
+  ctx.fillText("main sequence", xF(13000), yF(60));
+  ctx.fillText("white dwarfs", xF(13000), yF(2e-3));
+
+  // Field stars
+  for (const s of FIELD) {
+    if (s.T < TMIN || s.T > TMAX || s.L < LMIN || s.L > LMAX) continue;
+    const x = xF(s.T), y = yF(s.L);
+    let col;
+    if (s.c === "ms")      col = "rgba(80,72,60,0.55)";
+    else if (s.c === "rg") col = "rgba(184,108,68,0.65)";
+    else if (s.c === "sg") col = "rgba(184,108,68,0.7)";
+    else                   col = "rgba(108,138,168,0.7)";
+    ctx.fillStyle = col;
+    ctx.beginPath();
+    const r = (s.c === "sg" ? 2.4 : (s.c === "rg" ? 2.1 : 1.6));
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Reference stars (filled cream + accent ring + label)
+  ctx.font = "9px 'IBM Plex Mono',monospace";
+  ctx.textAlign = "left"; ctx.textBaseline = "middle";
+  for (const s of refStars) {
+    if (s.T < TMIN || s.T > TMAX || s.L < LMIN || s.L > LMAX) continue;
+    const x = xF(s.T), y = yF(s.L);
+    ctx.fillStyle = "rgba(244,238,226,1)";
+    ctx.strokeStyle = "rgba(26,26,24,0.55)";
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "rgba(26,26,24,0.7)";
+    ctx.fillText(s.name, x + 5, y);
+  }
+
+  // Axes frame
+  ctx.strokeStyle = "rgba(26,26,24,0.5)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + plotH);
+  ctx.lineTo(padL + plotW, padT + plotH);
+  ctx.stroke();
+
+  // X ticks
+  ctx.textAlign = "center"; ctx.textBaseline = "top";
+  const tTicks = [40000, 20000, 10000, 5000, 3000];
+  for (const t of tTicks) {
+    if (t < TMIN || t > TMAX) continue;
+    const x = xF(t);
+    ctx.strokeStyle = "rgba(26,26,24,0.5)";
+    ctx.beginPath(); ctx.moveTo(x, padT + plotH); ctx.lineTo(x, padT + plotH + 3); ctx.stroke();
+    ctx.fillStyle = "rgba(26,26,24,0.65)";
+    ctx.font = "9px 'IBM Plex Mono',monospace";
+    ctx.fillText(t >= 10000 ? (t / 1000) + "k" : String(t), x, padT + plotH + 5);
+  }
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("surface temperature  (hot ← → cool)", padL + plotW / 2, padT + plotH + 19);
+
+  // Y axis label
+  ctx.save();
+  ctx.translate(13, padT + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.font = "italic 11px 'Source Serif 4',serif";
+  ctx.fillStyle = "rgba(26,26,24,0.7)";
+  ctx.fillText("luminosity  (L / L⊙)", 0, 0);
+  ctx.restore();
+
+  // Evolutionary path: ZAMS -> giant -> endpoint
+  const x0 = xF(T_zams), y0 = yF(L_zams);
+  const x1 = xF(T_g),    y1 = yF(L_g);
+  const x2 = xF(T_end),  y2 = yF(L_end);
+
+  ctx.strokeStyle = "rgba(156,58,34,0.55)";
+  ctx.setLineDash([4, 3]); ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(x0, y0);
+  // curve up to the giant
+  const cx = xF(Math.sqrt(T_zams * T_g) * 0.8);
+  const cy = yF(Math.sqrt(L_zams * L_g) * 2);
+  ctx.quadraticCurveTo(cx, cy, x1, y1);
+  // then down to endpoint
+  ctx.quadraticCurveTo(xF(T_g * 3), yF(L_g * 0.3), x2, y2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Faded markers at giant and endpoint
+  ctx.fillStyle = "rgba(156,58,34,0.42)";
+  ctx.beginPath(); ctx.arc(x1, y1, 5, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "rgba(156,58,34,0.42)";
+  ctx.beginPath();
+  if (M < 8) {
+    ctx.arc(x2, y2, 4, 0, Math.PI * 2); ctx.fill();
+  } else {
+    // star marker for supernova endpoint
+    starMarker(ctx, x2, y2, 6);
+  }
+
+  // Crosshairs at ZAMS dot
+  ctx.strokeStyle = "rgba(156,58,34,0.35)";
+  ctx.setLineDash([3, 3]); ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(x0, y0); ctx.lineTo(x0, padT + plotH);
+  ctx.moveTo(x0, y0); ctx.lineTo(padL, y0);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Solid ZAMS dot
+  ctx.fillStyle = "#9c3a22";
+  ctx.beginPath(); ctx.arc(x0, y0, 6, 0, Math.PI * 2); ctx.fill();
+
+  // Stage labels near each marker
+  ctx.fillStyle = "rgba(156,58,34,0.85)";
+  ctx.font = "italic 10px 'Source Serif 4',serif";
+  ctx.textAlign = "left"; ctx.textBaseline = "bottom";
+  ctx.fillText("ZAMS", x0 + 7, y0 - 5);
+  ctx.fillText("giant", x1 + 6, y1 - 4);
+  ctx.fillText(M < 8 ? "white dwarf" : "supernova", x2 + 7, y2 - 4);
+
+  // Readout
+  fM.textContent  = (M < 1 ? M.toPrecision(2) : M.toPrecision(3)) + " M⊙";
+  fL.innerHTML    = fmtL(L_zams) + " L⊙";
+  fT.textContent  = Math.round(T_zams) + " K";
+  fR.innerHTML    = fmtR(R_zams) + " R⊙";
+  fLife.textContent = fmtT(tMS);
+  fEnd.textContent  = endpoint;
+}
+
+function starMarker(ctx, x, y, r) {
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const a = -Math.PI / 2 + i * Math.PI / 5;
+    const rr = (i % 2 === 0) ? r : r * 0.45;
+    const px = x + Math.cos(a) * rr;
+    const py = y + Math.sin(a) * rr;
+    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.fill();
+}
+
+function supScript(e) {
+  const map = { "-": "⁻", "0": "⁰", "1": "¹", "2": "²", "3": "³",
+    "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹" };
+  return String(e).split("").map(c => map[c] || c).join("");
+}
+
+mSlider.addEventListener("input", draw);
+window.addEventListener("load", draw);
+setTimeout(draw, 80);
+</script>
+</body>
+</html>
