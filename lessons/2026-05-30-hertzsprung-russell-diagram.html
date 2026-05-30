@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz { padding: 14px 16px 18px; box-sizing: border-box; }
+.readout {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; margin-top: 8px; color: var(--text);
+}
+.readout span b { font-weight: 600; color: var(--text-muted); }
+.axis path, .axis line { stroke: var(--border-strong); }
+.axis text { fill: var(--text-muted); font-family: "IBM Plex Mono", Menlo, monospace; font-size: 9px; }
+.axis-label { fill: var(--text-muted); font-style: italic; font-size: 11px; }
+.r-line { stroke: var(--border-strong); stroke-dasharray: 3 3; stroke-width: 0.8; fill: none; }
+.r-label { fill: var(--text-ghost); font-family: "IBM Plex Mono", Menlo, monospace; font-size: 9px; }
+.pop-label { fill: var(--text-muted); font-style: italic; font-size: 10px; }
+.star-ms { fill: #2a6f8e; fill-opacity: 0.4; }
+.star-giant { fill: var(--accent-soft); fill-opacity: 0.55; }
+.star-wd { fill: #5b4a35; fill-opacity: 0.5; }
+</style>
+</head>
+<body>
+<div id="viz">
+  <svg id="chart" viewBox="0 0 360 320" width="100%" preserveAspectRatio="xMidYMid meet"></svg>
+  <div class="viz-slider-row">
+    <label for="mass">M</label>
+    <input type="range" id="mass" min="-1" max="1.4" step="0.01" value="0">
+    <span class="value" id="mval">1.00 M☉</span>
+  </div>
+  <div class="readout">
+    <span><b>T:</b> <span id="rT"></span></span>
+    <span><b>L:</b> <span id="rL"></span></span>
+    <span><b>R:</b> <span id="rR"></span></span>
+    <span><b>τ:</b> <span id="rTau"></span></span>
+  </div>
+  <p class="viz-caption">Hertzsprung-Russell diagram in (log T, log L), drawn with hot stars on the left as is the astronomical convention. Faint points are stars: a blue main-sequence diagonal, an orange giant clump in the upper right, brown white dwarfs in the lower left. Dashed grey diagonals are lines of constant radius at 0.01, 1, and 100 R☉. Drag the mass slider to place a main-sequence star (red dot) and read its surface temperature, luminosity, radius, and hydrogen-burning lifetime τ.</p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+(function () {
+  // Main-sequence scaling (rough but pedagogically accurate)
+  // L/Lsun = M^3.5, T/Tsun = M^0.55, R follows from L = R^2 (T/Tsun)^4 (in solar units)
+  // tau = 10 Gyr * M / L = 10 * M^(-2.5)
+  var Tsun = 5778;
+  function msL(M) { return Math.pow(M, 3.5); }
+  function msT(M) { return Tsun * Math.pow(M, 0.55); }
+  function msR(M) { return Math.pow(M, 0.65); }
+  function msTau(M) { return 10 * Math.pow(M, -2.5); }
+
+  var W = 360, H = 320;
+  var m = { top: 14, right: 18, bottom: 46, left: 44 };
+  var iw = W - m.left - m.right, ih = H - m.top - m.bottom;
+  var svg = d3.select("#chart");
+  var g = svg.append("g").attr("transform", "translate(" + m.left + "," + m.top + ")");
+
+  // x = log10 T, REVERSED so hot is on the left (astronomical convention)
+  var xDom = [Math.log10(2500), Math.log10(45000)];
+  var x = d3.scaleLinear().domain(xDom).range([iw, 0]);
+  // y = log10 L (in solar units)
+  var yDom = [-4.2, 6];
+  var y = d3.scaleLinear().domain(yDom).range([ih, 0]);
+
+  var supMap = { "-":"⁻","0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹" };
+  function sup(s) { return String(s).split("").map(function(c){return supMap[c]||c;}).join(""); }
+
+  var xTicks = [Math.log10(2500), Math.log10(5000), Math.log10(10000), Math.log10(20000), Math.log10(40000)];
+  var xAxis = d3.axisBottom(x).tickValues(xTicks)
+    .tickFormat(function (d) { var t = Math.pow(10, d); return t < 1000 ? Math.round(t) : (t/1000).toFixed(t < 10000 ? 1 : 0) + "k"; });
+  var yAxis = d3.axisLeft(y).tickValues([-4, -2, 0, 2, 4, 6])
+    .tickFormat(function (d) { return "10" + sup(d); });
+
+  g.append("g").attr("class", "axis").attr("transform", "translate(0," + ih + ")").call(xAxis);
+  g.append("g").attr("class", "axis").call(yAxis);
+
+  g.append("text").attr("class", "axis-label").attr("text-anchor", "middle")
+    .attr("x", iw / 2).attr("y", ih + 36).text("T  (K, hot on left)");
+  g.append("text").attr("class", "axis-label").attr("text-anchor", "middle")
+    .attr("transform", "rotate(-90)").attr("x", -ih / 2).attr("y", -30)
+    .text("L  (L☉)");
+
+  // Constant-R diagonals from log L = 2 log R + 4 log(T/Tsun), in solar units
+  function logL_at(logR, logT) { return 2 * logR + 4 * (logT - Math.log10(Tsun)); }
+  var rLines = [
+    { logR: -2, label: "0.01 R☉" },
+    { logR:  0, label: "1 R☉" },
+    { logR:  2, label: "100 R☉" }
+  ];
+  rLines.forEach(function (r) {
+    var pts = [];
+    for (var lt = xDom[0]; lt <= xDom[1] + 0.001; lt += 0.05) {
+      var ll = logL_at(r.logR, lt);
+      if (ll >= yDom[0] - 0.1 && ll <= yDom[1] + 0.1) pts.push({ lt: lt, ll: ll });
+    }
+    if (pts.length > 1) {
+      g.append("path").attr("class", "r-line")
+        .attr("d", d3.line().x(function(d){return x(d.lt);}).y(function(d){return y(d.ll);})(pts));
+      // label near hot end of the line, inside the plot
+      var anchor = pts.reduce(function(best, p){
+        return (p.lt > best.lt && p.ll <= yDom[1] - 0.4) ? p : best;
+      }, pts[0]);
+      g.append("text").attr("class", "r-label")
+        .attr("x", x(anchor.lt) + 2).attr("y", y(anchor.ll) - 3).text(r.label);
+    }
+  });
+
+  // Star populations (deterministic pseudorandom for reproducibility)
+  var seed = 7;
+  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+
+  // Main sequence: sample masses log-uniformly, place on (T, L) with small jitter
+  var ms = [];
+  for (var i = 0; i < 70; i++) {
+    var logM = -1 + rnd() * 2.3;
+    var M = Math.pow(10, logM);
+    var jt = (rnd() - 0.5) * 0.04;
+    var jl = (rnd() - 0.5) * 0.35;
+    ms.push({ lt: Math.log10(msT(M)) + jt, ll: Math.log10(msL(M)) + jl });
+  }
+  g.selectAll(".star-ms").data(ms).enter().append("circle")
+    .attr("class", "star-ms").attr("r", 1.6)
+    .attr("cx", function(d){return x(d.lt);}).attr("cy", function(d){return y(d.ll);});
+
+  // Giants: cluster in upper right (cool, bright), centered on ~ log T 3.55, log L 2.5
+  var giants = [];
+  for (var i = 0; i < 22; i++) {
+    var jt = 3.45 + rnd() * 0.28;
+    var jl = 1.6 + rnd() * 1.9;
+    giants.push({ lt: jt, ll: jl });
+  }
+  g.selectAll(".star-giant").data(giants).enter().append("circle")
+    .attr("class", "star-giant").attr("r", 2.2)
+    .attr("cx", function(d){return x(d.lt);}).attr("cy", function(d){return y(d.ll);});
+
+  // White dwarfs: lower left (hot, faint)
+  var wds = [];
+  for (var i = 0; i < 16; i++) {
+    var jt = 3.85 + rnd() * 0.7;
+    var jl = -3.6 + rnd() * 1.3;
+    wds.push({ lt: jt, ll: jl });
+  }
+  g.selectAll(".star-wd").data(wds).enter().append("circle")
+    .attr("class", "star-wd").attr("r", 1.7)
+    .attr("cx", function(d){return x(d.lt);}).attr("cy", function(d){return y(d.ll);});
+
+  // Population labels
+  g.append("text").attr("class", "pop-label")
+    .attr("x", x(3.58)).attr("y", y(3.0)).text("giants");
+  g.append("text").attr("class", "pop-label")
+    .attr("x", x(4.1)).attr("y", y(-2.4)).text("white dwarfs");
+  g.append("text").attr("class", "pop-label")
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(" + x(3.95) + "," + y(0.6) + ") rotate(-32)")
+    .text("main sequence");
+
+  // Active star
+  var glow = g.append("circle").attr("r", 9).attr("fill", "var(--accent)").attr("fill-opacity", 0.18);
+  var active = g.append("circle").attr("r", 4.6).attr("fill", "var(--accent)");
+
+  var slider = document.getElementById("mass");
+  function fmtT(T) { return T < 10000 ? Math.round(T) + " K" : (T / 1000).toFixed(1) + " kK"; }
+  function fmtL(L) {
+    if (L < 0.01) return L.toExponential(1) + " L☉";
+    if (L < 1) return L.toFixed(2) + " L☉";
+    if (L < 100) return L.toFixed(1) + " L☉";
+    return Math.round(L).toLocaleString() + " L☉";
+  }
+  function fmtR(R) {
+    if (R < 1) return R.toFixed(2) + " R☉";
+    return R.toFixed(2) + " R☉";
+  }
+  function fmtTau(tau) {
+    if (tau < 0.001) return (tau * 1000).toFixed(2) + " Myr";
+    if (tau < 1) return (tau * 1000).toFixed(0) + " Myr";
+    if (tau < 100) return tau.toFixed(1) + " Gyr";
+    return Math.round(tau) + " Gyr";
+  }
+
+  function update() {
+    var logM = +slider.value;
+    var M = Math.pow(10, logM);
+    var T = msT(M), L = msL(M), R = msR(M), tau = msTau(M);
+    var lt = Math.log10(T), ll = Math.log10(L);
+    active.attr("cx", x(lt)).attr("cy", y(ll));
+    glow.attr("cx", x(lt)).attr("cy", y(ll));
+    document.getElementById("mval").textContent = M.toFixed(2) + " M☉";
+    document.getElementById("rT").textContent = fmtT(T);
+    document.getElementById("rL").textContent = fmtL(L);
+    document.getElementById("rR").textContent = fmtR(R);
+    document.getElementById("rTau").textContent = fmtTau(tau);
+  }
+  slider.addEventListener("input", update);
+  update();
+})();
+</script>
+</body>
+</html>
