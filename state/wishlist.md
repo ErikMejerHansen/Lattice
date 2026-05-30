@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-07 from stellar-classification
-Hertzsprung-Russell diagram — luminosity vs temperature, the family portrait of stars
 Balmer series — n → 2 transitions in hydrogen, the lines that started OBAFGKM
 
 # auto-suggested 2026-05-07 from color-temperature
@@ -90,3 +89,8 @@ Baryon acoustic oscillations — the 150 Mpc sound-horizon ruler frozen into the
 Boltzmann distribution — n ∝ e^(−E/kT), the population of energy levels in thermal equilibrium and the excitation half of every spectral line
 Partition function — Z = Σ g e^(−E/kT), the sum over states that normalizes the Boltzmann factor and underlies Saha
 Curve of growth — how a line's equivalent width W grows with abundance, the bridge from a measured line strength to how many atoms are really there
+
+# auto-suggested 2026-05-30 from hertzsprung-russell-diagram
+Red giants — post-main-sequence expansion, where the Sun is headed in five billion years, the upper-right inhabitants of the HR diagram
+White dwarfs — Earth-sized stellar corpses, no fusion, slowly cooling along their own constant-radius diagonal of the HR diagram
+Parallax — d = 1/p, the trigonometric distance measurement Bessel pulled off in 1838 that turned apparent brightness into luminosity

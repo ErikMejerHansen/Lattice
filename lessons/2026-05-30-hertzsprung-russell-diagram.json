@@ -1,0 +1,129 @@
+{
+  "slug": "2026-05-30-hertzsprung-russell-diagram",
+  "title": "The Hertzsprung-Russell diagram: the family portrait of the stars",
+  "node": {
+    "id": "hr_diagram",
+    "label": "HR diagram",
+    "subtitle": "L vs T, R hidden"
+  },
+  "intro": "By 1910 Annie Jump Cannon at Harvard had sorted a quarter of a million stellar spectra into the order OBAFGKM, a single temperature ladder for all the stars in the sky. The ladder was missing a dimension: two stars at the same place in Cannon's sequence could differ in brightness by a factor of ten thousand, and nothing in their spectra said why. The fix, which arrived independently from a Danish photographer-turned-astronomer and a Princeton mathematician within seven years of each other, was to add a second axis. The resulting scatter plot of luminosity against temperature, published in obscurity by Hertzsprung in 1911 and in full glare by Russell in 1913, revealed that the stars are not random points but lie along sharply defined tracks: a family portrait of the cosmos.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The missing dimension",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Cannon's OBAFGKM classification, the Harvard temperature sequence from hot blue O stars through cool red M stars, packed an enormous amount of physics into a single letter. But a letter has only one degree of freedom, and the universe of stars has two. Two stars at the same surface temperature need not have the same brightness. A star at 3500 K can be the dim red dwarf next door or a supergiant a thousand light-years away, and the spectrum is nearly identical in both cases." },
+        { "type": "p", "text": "The reason is geometry. The total power a blackbody radiates depends on both its temperature and its surface area, the result fixed by the Stefan-Boltzmann law: luminosity scales as the square of the radius and the fourth power of the temperature. Two stars at the same T can therefore differ enormously in L if they differ in R. Hold T fixed and the brightness reveals the size, but only if you actually know the brightness, which is to say only if you know the distance." },
+        { "type": "p", "text": "Distance was the bottleneck. Apparent brightness in a telescope falls off with distance squared, so converting what you see into an actual luminosity requires knowing how far away the star is. Stellar distances are measured by parallax (the small angular shift of a nearby star against background stars as Earth orbits the Sun, six months apart). Friedrich Bessel pulled off the first reliable parallax in 1838, on the star 61 Cygni; by 1910 several hundred parallaxes were in hand, enough to start plotting." },
+        { "type": "p", "text": "So for the first time you could draw a plot nobody had been able to draw before: a star's actual luminosity against its actual temperature. There was no theoretical reason to expect the result to look like anything in particular. It could have been a featureless cloud, every (T, L) pair represented in rough proportion. It was not." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Hertzsprung's quiet discovery",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Ejnar Hertzsprung came to astronomy sideways. Trained as a chemical engineer in Copenhagen, he had taken up photography as a serious amateur, and astronomical photography drew him into measuring stars in his spare time. Between 1905 and 1911 he published a sequence of short papers in the Zeitschrift für wissenschaftliche Photographie, a German scientific-photography journal that no astronomer subscribed to. Hidden in those pages was a striking claim: among the cool K-class stars there were two completely separate populations." },
+        { "type": "p", "text": "His trick was to use proper motions (the slow drift of a star across the sky from year to year as it moves through space) as a substitute for the distance he could not always measure directly. Nearby stars tend to drift fast; distant stars drift slowly. So among the K-class stars, the fast-movers must be small and faint (otherwise they would be conspicuously bright nearby), while the slow-movers must be huge and intrinsically luminous (otherwise they would be invisible at their distance). Same spectral class, two utterly different sizes. Hertzsprung named them dwarfs and giants." },
+        { "type": "p", "text": "The arithmetic that turns a luminosity-temperature pair into a radius is the Stefan-Boltzmann relation, the central equation of the stellar luminosity lesson. Write the total power radiated by a sphere of radius R at surface temperature T:" },
+        { "type": "math", "tex": "L = 4\\pi R^2 \\sigma T^4", "display": true, "caption": "L is the luminosity, the total power the star radiates. R is the star's radius. σ is the Stefan-Boltzmann constant, a fixed number. T is the surface temperature. The equation reads: luminosity is the surface area, 4πR², times the power emitted per unit area, σT⁴. For two stars at the same T, the ratio of luminosities equals the square of the ratio of radii." },
+        { "type": "p", "text": "A K-giant turned out to be roughly a hundred times the radius of a K-dwarf. Same surface temperature, same spectrum, but one is the size of the Sun and the other could swallow Mercury's orbit. Hertzsprung had found two species of K star where everyone else had seen one. The papers sank without ripple; almost nobody in astronomy read photographic journals." }
+      ],
+      "quiz": {
+        "question": "Two K-class stars (same surface temperature, same spectrum) differ in luminosity by a factor of 10,000. The temperatures match, so what does the luminosity ratio tell you?",
+        "options": [
+          "Their radii differ by a factor of 100, since L scales as R² at fixed T",
+          "Their temperatures must actually differ by a factor of 10, since L scales as T⁴",
+          "Their distances differ by a factor of 100",
+          "One contains 10,000 times more hydrogen than the other"
+        ],
+        "correctIndex": 0,
+        "explanation": "The trap is to reach for the T⁴ part of Stefan-Boltzmann after we have just been told temperatures are equal. With T identical the T⁴ factors cancel in the ratio, leaving L₂/L₁ = (R₂/R₁)². A luminosity ratio of 10⁴ means a radius ratio of √10⁴ = 100. Distance is irrelevant: luminosity is the intrinsic power, already corrected for distance. This is what Hertzsprung was reading off his K-class data when he split it into giants and dwarfs."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Russell's diagram and the main sequence",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Henry Norris Russell came at the same problem with a Princeton mathematician's instincts and a much larger pile of parallax data. By 1913 he was ready to make the plot Hertzsprung had implied but never drawn: every star whose distance was known, with its absolute magnitude (the brightness it would have at a standard distance of 10 parsecs, removing distance from the equation) on the vertical axis and its spectral class on the horizontal. About three hundred stars went onto the page." },
+        { "type": "p", "text": "The result was not a cloud. The stars piled into a narrow diagonal band running from the upper left (hot, bright, blue) to the lower right (cool, faint, red). Above and to the right of the band, separated by an obvious gap, sat a clump of cool but bright stars: Hertzsprung's giants, vindicated in print at last. The universe of stars, plotted in luminosity-temperature coordinates, had organized itself into a few sharply bounded tracks. Russell named the diagonal the main sequence." },
+        { "type": "p", "text": "Most stars in the sky, when measured, fell on the main sequence. The giants gathered in a smaller cluster off to the side. A third population, the white dwarfs (tiny, very hot, very faint stellar corpses, the size of the Earth) would be identified in the 1920s by Walter Adams at Mount Wilson and theoretically explained by Eddington and Fowler, and would settle into the lower-left empty quarter of the diagram. Three families, three regions of the L-T plane." },
+        { "type": "viz", "src": "2026-05-30-hertzsprung-russell-diagram.html", "height": 460, "caption": "The HR diagram in (log T, log L), drawn with hot on the left as is conventional. Faint points are stars: a main-sequence diagonal across the middle, a giant clump in the upper right, a white-dwarf cluster in the lower left. Dashed diagonals are lines of constant radius (0.01, 1, 100 R☉). Drag the mass slider to place a main-sequence star and read off its temperature, luminosity, radius, and hydrogen-burning lifetime." },
+        { "type": "p", "text": "What the diagonal meant physically took longer. Russell guessed at first that it represented a single line of stellar evolution, stars cooling along it from hot blue youth to cool red age. He was wrong, and he later said so himself. The main sequence is a mass sequence, not an age sequence: a star sits at a fixed point on it for as long as it burns hydrogen in its core, and where on it depends almost entirely on how much mass it started with." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Lines of constant radius",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "There is a beautiful geometric reading of the HR diagram that emerges if you take logarithms. Start from the Stefan-Boltzmann relation L = 4πR²σT⁴ and take the logarithm of both sides. The product on the right turns into a sum, and the diagram becomes a chart of three quantities in two dimensions:" },
+        { "type": "math", "tex": "\\log L = \\log(4\\pi\\sigma) + 2 \\log R + 4 \\log T", "display": true, "caption": "L is luminosity. R is the star's radius. T is its surface temperature. σ is the Stefan-Boltzmann constant, so log(4πσ) is just a fixed offset. The equation reads: log-luminosity is the sum of a constant, twice the log-radius, and four times the log-temperature. Holding R fixed, log L is a linear function of log T with slope 4." },
+        { "type": "p", "text": "Holding the radius constant, log L is a linear function of log T with slope 4. A star of any one radius traces a straight diagonal line across the (log T, log L) plane. Different radii correspond to parallel diagonals, shifted up or down by 2 log R. Bigger T at the same R means a brighter star: doubling T at fixed R multiplies the luminosity by 2⁴ = 16." },
+        { "type": "p", "text": "That single fact opens the diagram up. Position on the chart fixes log T from the horizontal axis and log L from the vertical, and log R follows by subtraction. The HR diagram is, in disguise, a (T, L, R) chart, with the third quantity coded as the family of dashed diagonals overlaid in the visualization above." },
+        { "type": "p", "text": "Run the lines through. The main sequence cuts across the constant-R diagonals at a shallower slope, because more massive main-sequence stars are not only hotter but also a little larger; radii on the main sequence run from about 0.5 to 10 solar radii. The giant branch parallels the constant-R line at roughly 100 solar radii. White dwarfs occupy a diagonal of their own at about 0.01 solar radii, the size of the Earth. Three populations, three radius scales, all read straight off the plot." }
+      ],
+      "quiz": {
+        "question": "You spot a star at the same luminosity as the Sun but at a surface temperature of only 3500 K, roughly half the Sun's 5800 K. What does this tell you about its radius?",
+        "options": [
+          "It must be roughly 3 solar radii in size; at fixed luminosity, the cooler star compensates for its smaller T⁴ by having a larger surface area",
+          "It must be exactly one solar radius, since the luminosity is the same",
+          "It must be 2 to 3 times smaller than the Sun, since cooler stars are usually smaller",
+          "Nothing can be said without knowing the star's mass"
+        ],
+        "correctIndex": 0,
+        "explanation": "The tempting wrong answer is option 2: same luminosity must mean same star. But Stefan-Boltzmann ties luminosity to both radius and temperature through L = 4πR²σT⁴. Holding L fixed, R must scale as 1/T². With T cut nearly in half, T⁴ falls by about a factor of 7, so R² grows by 7 and R lands near 3 solar radii. A star at 3500 K with the Sun's luminosity sits on the subgiant or lower-giant branch, off the main sequence."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The Sun's track across the diagram",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The HR diagram looks like a family portrait, but the stars in the photo are not relatives. They are snapshots of different individuals caught at different ages, and every star in the sky is somewhere along its own track across the plane. To make this concrete, take a single star, the Sun, and trace its life from beginning to end on the (T, L) chart." },
+        { "type": "p", "text": "The Sun sits today at T = 5778 K, L = 1 in solar units, where it has been for 4.6 billion years and where it will remain for about another five. The main sequence is not a fixed point but a slow-burn life stage, ten billion years long for a Sun-mass star, with only slight drift in temperature and luminosity while hydrogen burns steadily in the core. The Sun's point on the diagram has hardly moved since the trilobites." },
+        { "type": "p", "text": "When the core hydrogen runs out, the equilibrium collapses. The core contracts and heats; the envelope expands and cools. Over a few hundred million years the Sun will swell to roughly a hundred times its current radius, its surface will cool to about 3500 K, and its luminosity will climb by a factor of a thousand. The Sun's point slides up and to the right, off the main sequence and onto the giant branch, joining the K and M giants Hertzsprung had isolated in his proper-motion data a century earlier." },
+        { "type": "p", "text": "After a final round of envelope-shedding, the outer layers drift away as a planetary nebula and leave the bare core behind: a white dwarf, no larger than the Earth, with no fusion to sustain it. The point drops from the giant branch to the lower-left corner of the diagram and begins a multi-billion-year cooling track. The shape of the HR diagram then becomes intelligible. The main sequence is densely populated because stars spend most of their lives there. The giant branch is sparse because stars cross it quickly. The white dwarf region fills up again because once a star arrives, it lingers for the age of the universe. The family portrait is a long-exposure photograph of a crowd in motion, with each region's density set by how long stars stand still inside it." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "The main sequence on the HR diagram is the most heavily populated region, the giant branch is sparse, and the white dwarf region is dense again. What does this distribution of star counts across the diagram actually measure?",
+    "options": [
+      "The fraction of its life a star spends in each phase. A region is crowded when stars linger there and sparse when they hurry through, so the population is proportional to lifetime in that state.",
+      "The relative number of stars that are born as main-sequence stars, giants, or white dwarfs in roughly fixed proportions.",
+      "The temperatures and luminosities most common in the present-epoch universe, independent of any stellar evolution.",
+      "An observational selection effect: brighter stars are easier to detect, so they show up more often."
+    ],
+    "correctIndex": 0,
+    "explanation": "The tempting wrong answer is option 2, that stars are 'born' main-sequence-type or giant-type and stay that way. They do not. Every low-to-intermediate-mass star passes through all three regions in turn: a long main-sequence youth, a brief giant phase, then a very long white-dwarf retirement. Region density on the HR diagram measures how long stars stand still in each part of the plane, which is why the main sequence and white-dwarf region are both densely populated (long-lived stages) while the giant branch is sparse (a fast crossing). Option 4 is real but secondary; the lifetime effect dominates."
+  },
+  "suggestedNodes": [
+    {
+      "id": "red_giants",
+      "label": "Red giants",
+      "subtitle": "post-MS phase",
+      "edgeType": "extends"
+    },
+    {
+      "id": "white_dwarfs",
+      "label": "White dwarfs",
+      "subtitle": "R ≈ R_Earth",
+      "edgeType": "related"
+    },
+    {
+      "id": "parallax",
+      "label": "Parallax",
+      "subtitle": "d = 1/p in pc",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-30T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": ["stellar_classification", "stellar_luminosity", "stefan_boltzmann"]
+  }
+}

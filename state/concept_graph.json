@@ -299,6 +299,16 @@
       "createdAt": "2026-05-27T08:00:00Z",
       "col": 1,
       "row": 14
+    },
+    {
+      "id": "hr_diagram",
+      "label": "HR diagram",
+      "subtitle": "L vs T, R hidden",
+      "state": "available",
+      "lesson": "2026-05-30-hertzsprung-russell-diagram",
+      "createdAt": "2026-05-30T08:00:00Z",
+      "col": 0,
+      "row": 15
     }
   ],
   "edges": [
@@ -376,6 +386,9 @@
     { "from": "cmb_anisotropies", "to": "cosmic_redshift", "kind": "related" },
     { "from": "saha_ionization", "to": "stellar_classification", "kind": "extends" },
     { "from": "saha_ionization", "to": "bohr_atom", "kind": "applied" },
-    { "from": "saha_ionization", "to": "spectroscopy_basics", "kind": "related" }
+    { "from": "saha_ionization", "to": "spectroscopy_basics", "kind": "related" },
+    { "from": "hr_diagram", "to": "stellar_classification", "kind": "extends" },
+    { "from": "hr_diagram", "to": "stellar_luminosity", "kind": "applied" },
+    { "from": "hr_diagram", "to": "wien_displacement", "kind": "related" }
   ]
 }
