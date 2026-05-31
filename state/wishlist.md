@@ -1,6 +1,3 @@
-# auto-suggested 2026-05-07 from stellar-classification
-Balmer series — n → 2 transitions in hydrogen, the lines that started OBAFGKM
-
 # auto-suggested 2026-05-07 from color-temperature
 Color rendering index — the eight-patch test, why two 3000K LEDs disagree on a tomato
 Chromaticity diagram — CIE 1931 xy, the (x,y) sheet that the Planckian locus lives on
@@ -94,3 +91,8 @@ Curve of growth — how a line's equivalent width W grows with abundance, the br
 Red giants — post-main-sequence expansion, where the Sun is headed in five billion years, the upper-right inhabitants of the HR diagram
 White dwarfs — Earth-sized stellar corpses, no fusion, slowly cooling along their own constant-radius diagonal of the HR diagram
 Parallax — d = 1/p, the trigonometric distance measurement Bessel pulled off in 1838 that turned apparent brightness into luminosity
+
+# auto-suggested 2026-05-31 from balmer-series
+Rydberg formula — 1/λ = R(1/n₁² − 1/n₂²), the additive two-term reformulation of Balmer that generalizes to every hydrogen series (Lyman, Paschen, Brackett, Pfund) and to every hydrogenic ion through a Z² factor
+Hydrogenic ions — one-electron atoms of arbitrary nuclear charge Z (He⁺, Li²⁺, ...) whose spectra are hydrogen's with every wavelength scaled by 1/Z², the system Bohr's atom solves exactly and the workhorse benchmark for every more elaborate atomic theory
+Hα imaging — narrowband photography at 656.3 nm, the workhorse that maps H II regions, planetary nebulae, and the warm ionized gas of every galactic spiral arm, and that confirms high-redshift starbursts in survey spectra
