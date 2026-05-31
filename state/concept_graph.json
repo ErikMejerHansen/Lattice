@@ -309,6 +309,16 @@
       "createdAt": "2026-05-30T08:00:00Z",
       "col": 0,
       "row": 15
+    },
+    {
+      "id": "balmer_series",
+      "label": "Balmer series",
+      "subtitle": "1/λ ∝ 1/4 − 1/n²",
+      "state": "available",
+      "lesson": "2026-05-31-balmer-series",
+      "createdAt": "2026-05-31T08:00:00Z",
+      "col": 1,
+      "row": 15
     }
   ],
   "edges": [
@@ -389,6 +399,9 @@
     { "from": "saha_ionization", "to": "spectroscopy_basics", "kind": "related" },
     { "from": "hr_diagram", "to": "stellar_classification", "kind": "extends" },
     { "from": "hr_diagram", "to": "stellar_luminosity", "kind": "applied" },
-    { "from": "hr_diagram", "to": "wien_displacement", "kind": "related" }
+    { "from": "hr_diagram", "to": "wien_displacement", "kind": "related" },
+    { "from": "balmer_series", "to": "bohr_atom", "kind": "extends" },
+    { "from": "balmer_series", "to": "spectroscopy_basics", "kind": "extends" },
+    { "from": "balmer_series", "to": "stellar_classification", "kind": "applied" }
   ]
 }

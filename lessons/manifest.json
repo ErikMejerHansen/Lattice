@@ -215,5 +215,12 @@
     "subtitle": "L vs T, R hidden",
     "date": "2026-05-30",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-05-31-balmer-series",
+    "title": "The Balmer series: a schoolteacher's curve-fit and the spectroscopy it built",
+    "subtitle": "1/λ ∝ 1/4 − 1/n²",
+    "date": "2026-05-31",
+    "estimatedReadingMinutes": 23
   }
 ]

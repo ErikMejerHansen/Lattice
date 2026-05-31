@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz { padding: 14px 16px 18px; box-sizing: border-box; }
+.series-row {
+  display: flex; gap: 6px; margin-top: 4px; margin-bottom: 6px; flex-wrap: wrap;
+}
+.series-btn {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 12px; padding: 8px 12px; min-height: 36px;
+  background: var(--bg-raised); color: var(--text-muted);
+  border: 1px solid var(--border); cursor: pointer; border-radius: 0;
+}
+.series-btn.active {
+  background: var(--accent); color: var(--bg-raised); border-color: var(--accent);
+}
+.readout {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; margin-top: 8px; color: var(--text);
+}
+.readout span b { font-weight: 600; color: var(--text-muted); }
+.axis path, .axis line { stroke: var(--border-strong); }
+.axis text { fill: var(--text-muted); font-family: "IBM Plex Mono", Menlo, monospace; font-size: 9px; }
+.axis-label { fill: var(--text-muted); font-style: italic; font-size: 11px; }
+.level-line { stroke: var(--border-strong); stroke-width: 0.8; }
+.level-line.target { stroke: var(--accent); stroke-width: 1.6; }
+.level-line.source { stroke: var(--text); stroke-width: 1.4; }
+.level-label { fill: var(--text-muted); font-family: "IBM Plex Mono", Menlo, monospace; font-size: 9px; }
+.level-label.active { fill: var(--text); }
+.ionz-label { fill: var(--text-ghost); font-style: italic; font-size: 10px; }
+.transition-arrow { stroke: var(--accent); stroke-width: 1.8; fill: none; marker-end: url(#arrowhead); }
+.spectrum-rect { stroke: var(--border-strong); stroke-width: 0.5; }
+.spectrum-marker { stroke: var(--accent); stroke-width: 2; }
+.spectrum-marker-glow { stroke: var(--accent); stroke-width: 5; stroke-opacity: 0.3; }
+.region-label { fill: var(--text-muted); font-style: italic; font-size: 9px; }
+.limit-tick { stroke: var(--accent-soft); stroke-width: 1; stroke-dasharray: 2 2; }
+.limit-label { fill: var(--accent-soft); font-family: "IBM Plex Mono", Menlo, monospace; font-size: 9px; }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div class="series-row" id="series">
+    <button class="series-btn" data-n1="1">Lyman (n₁=1)</button>
+    <button class="series-btn active" data-n1="2">Balmer (n₁=2)</button>
+    <button class="series-btn" data-n1="3">Paschen (n₁=3)</button>
+  </div>
+  <svg id="chart" viewBox="0 0 360 380" width="100%" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)"/>
+      </marker>
+      <linearGradient id="spectrum-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#9b59b6"/>
+        <stop offset="20%" stop-color="#3498db"/>
+        <stop offset="45%" stop-color="#2ecc71"/>
+        <stop offset="65%" stop-color="#f1c40f"/>
+        <stop offset="85%" stop-color="#e67e22"/>
+        <stop offset="100%" stop-color="#c0392b"/>
+      </linearGradient>
+    </defs>
+  </svg>
+  <div class="viz-slider-row">
+    <label for="n2">n₂</label>
+    <input type="range" id="n2" min="3" max="12" step="1" value="3">
+    <span class="value" id="n2val">3</span>
+  </div>
+  <div class="readout">
+    <span><b>transition:</b> <span id="rTrans"></span></span>
+    <span><b>λ:</b> <span id="rLam"></span></span>
+    <span><b>ΔE:</b> <span id="rE"></span></span>
+    <span><b>region:</b> <span id="rReg"></span></span>
+  </div>
+  <p class="viz-caption">Hydrogen energy levels E_n = −13.6 eV / n² as horizontal rules, with the ionization limit at 0 eV. Pick a series with the buttons (which level the electron lands on), then drag the slider to scan the upper level n₂ the electron is falling from. The red arrow shows the chosen transition. The spectrum bar at the bottom marks the emitted wavelength on a logarithmic axis from 80 nm to 4000 nm, with the visible window (380 to 750 nm) shaded with a rainbow gradient. Only the Balmer series (n₁ = 2) puts most of its lines inside the visible band; Lyman lives in the UV, Paschen in the IR.</p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+(function () {
+  var R_INV_NM = 1.0e7 / 1.0974e7 * 1e9 / 1e9; // sentinel, recomputed below
+  // Rydberg constant in nm^-1: R = 1.0974e7 m^-1 = 0.010974 nm^-1
+  var R_NM = 0.010974;
+  var E_RY = 13.6056; // eV
+
+  function lambdaNm(n1, n2) {
+    return 1 / (R_NM * (1 / (n1 * n1) - 1 / (n2 * n2)));
+  }
+  function dEeV(n1, n2) {
+    return E_RY * (1 / (n1 * n1) - 1 / (n2 * n2));
+  }
+
+  var W = 360, H = 380;
+  var svg = d3.select("#chart");
+
+  // Layout: energy diagram on top, spectrum bar on bottom
+  var diag = { top: 14, right: 86, bottom: 0, left: 50, height: 260 };
+  var spec = { top: 304, right: 28, bottom: 36, left: 28 };
+
+  // Energy axis: 0 to -14 eV, drawn so 0 is near top
+  var eDom = [-14, 0.2];
+  var y = d3.scaleLinear().domain(eDom).range([diag.top + diag.height - 8, diag.top + 8]);
+  var dIw = W - diag.left - diag.right;
+  var x0 = diag.left, x1 = diag.left + dIw;
+
+  // Energy axis
+  var eAxis = d3.axisLeft(y)
+    .tickValues([0, -1, -2, -3.4, -6, -10, -13.6])
+    .tickFormat(function (d) {
+      if (Math.abs(d) < 0.01) return "0";
+      if (Math.abs(d - (-3.4)) < 0.05) return "−3.4";
+      if (Math.abs(d - (-13.6)) < 0.05) return "−13.6";
+      return d.toFixed(0);
+    });
+  svg.append("g").attr("class", "axis").attr("transform", "translate(" + diag.left + ",0)").call(eAxis);
+
+  svg.append("text").attr("class", "axis-label")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -(diag.top + diag.height / 2))
+    .attr("y", 16)
+    .attr("text-anchor", "middle")
+    .text("E_n  (eV)");
+
+  // Ionization limit line and label
+  svg.append("line").attr("class", "limit-tick")
+    .attr("x1", x0).attr("x2", x1).attr("y1", y(0)).attr("y2", y(0));
+  svg.append("text").attr("class", "ionz-label")
+    .attr("x", x1 + 4).attr("y", y(0) + 3).text("ionized (E = 0)");
+
+  // Draw energy levels n = 1..7
+  var levelGroups = [];
+  var nMax = 7;
+  for (var n = 1; n <= nMax; n++) {
+    var E = -E_RY / (n * n);
+    if (E < eDom[0] - 0.1) continue;
+    var g = svg.append("g").attr("data-n", n);
+    g.append("line").attr("class", "level-line")
+      .attr("x1", x0).attr("x2", x1).attr("y1", y(E)).attr("y2", y(E));
+    g.append("text").attr("class", "level-label")
+      .attr("x", x1 + 4).attr("y", y(E) + 3)
+      .text("n = " + n);
+    levelGroups.push({ n: n, E: E, group: g });
+  }
+
+  // Transition arrow (added last so it sits on top)
+  var arrow = svg.append("line").attr("class", "transition-arrow");
+
+  // Spectrum bar
+  var sIw = W - spec.left - spec.right;
+  // log10(nm): 80 nm to 4000 nm
+  var specDom = [Math.log10(80), Math.log10(4000)];
+  var xs = d3.scaleLinear().domain(specDom).range([spec.left, spec.left + sIw]);
+
+  // Visible window: 380 to 750 nm, painted with rainbow gradient
+  svg.append("rect")
+    .attr("x", xs(Math.log10(380)))
+    .attr("y", spec.top)
+    .attr("width", xs(Math.log10(750)) - xs(Math.log10(380)))
+    .attr("height", 18)
+    .attr("fill", "url(#spectrum-grad)")
+    .attr("stroke", "var(--border-strong)").attr("stroke-width", 0.5);
+
+  // Non-visible bands (UV and IR) as flat fills
+  svg.append("rect").attr("class", "spectrum-rect")
+    .attr("x", spec.left)
+    .attr("y", spec.top)
+    .attr("width", xs(Math.log10(380)) - spec.left)
+    .attr("height", 18)
+    .attr("fill", "#3a3654");
+  svg.append("rect").attr("class", "spectrum-rect")
+    .attr("x", xs(Math.log10(750)))
+    .attr("y", spec.top)
+    .attr("width", spec.left + sIw - xs(Math.log10(750)))
+    .attr("height", 18)
+    .attr("fill", "#5b2a18");
+
+  // Spectrum tick marks and labels
+  var specTicks = [100, 200, 400, 800, 1600, 3200];
+  var specG = svg.append("g").attr("class", "axis").attr("transform", "translate(0," + (spec.top + 18) + ")");
+  specTicks.forEach(function (lam) {
+    var px = xs(Math.log10(lam));
+    specG.append("line").attr("x1", px).attr("x2", px).attr("y1", 0).attr("y2", 4)
+      .attr("stroke", "var(--border-strong)").attr("stroke-width", 0.5);
+    specG.append("text").attr("x", px).attr("y", 14).attr("text-anchor", "middle")
+      .text(lam < 1000 ? lam : (lam / 1000) + "k");
+  });
+  svg.append("text").attr("class", "axis-label")
+    .attr("x", spec.left + sIw / 2).attr("y", spec.top + 18 + 30)
+    .attr("text-anchor", "middle")
+    .text("λ  (nm, log scale)");
+
+  // Region labels
+  svg.append("text").attr("class", "region-label")
+    .attr("x", spec.left + 4).attr("y", spec.top - 4).text("UV");
+  svg.append("text").attr("class", "region-label")
+    .attr("x", (xs(Math.log10(380)) + xs(Math.log10(750))) / 2)
+    .attr("y", spec.top - 4)
+    .attr("text-anchor", "middle").text("visible");
+  svg.append("text").attr("class", "region-label")
+    .attr("x", spec.left + sIw - 4).attr("y", spec.top - 4)
+    .attr("text-anchor", "end").text("IR");
+
+  // Spectrum line marker (drawn last to sit on top)
+  var markerGlow = svg.append("line").attr("class", "spectrum-marker-glow");
+  var marker = svg.append("line").attr("class", "spectrum-marker");
+
+  // Series limit marker
+  var limitTick = svg.append("line").attr("class", "limit-tick")
+    .attr("y1", spec.top - 2).attr("y2", spec.top + 20);
+  var limitLabel = svg.append("text").attr("class", "limit-label")
+    .attr("y", spec.top + 32).attr("text-anchor", "middle");
+
+  // State
+  var state = { n1: 2, n2: 3 };
+
+  function region(lam) {
+    if (lam < 380) return "UV";
+    if (lam <= 750) return "visible";
+    return "IR";
+  }
+  function fmtLam(lam) {
+    if (lam < 100) return lam.toFixed(1) + " nm";
+    if (lam < 1000) return lam.toFixed(1) + " nm";
+    return (lam / 1000).toFixed(2) + " μm";
+  }
+
+  function highlightLevels() {
+    levelGroups.forEach(function (lg) {
+      lg.group.select("line").attr("class", "level-line");
+      lg.group.select("text").attr("class", "level-label");
+      if (lg.n === state.n1) {
+        lg.group.select("line").attr("class", "level-line target");
+        lg.group.select("text").attr("class", "level-label active");
+      } else if (lg.n === state.n2) {
+        lg.group.select("line").attr("class", "level-line source");
+        lg.group.select("text").attr("class", "level-label active");
+      }
+    });
+  }
+
+  function update() {
+    highlightLevels();
+    var E1 = -E_RY / (state.n1 * state.n1);
+    var E2 = -E_RY / (state.n2 * state.n2);
+
+    // Arrow at right side of energy diagram
+    var ax = x1 - 20;
+    arrow.attr("x1", ax).attr("y1", y(E2))
+         .attr("x2", ax).attr("y2", y(E1));
+
+    var lam = lambdaNm(state.n1, state.n2);
+    var dE = dEeV(state.n1, state.n2);
+    var lamPx = xs(Math.log10(Math.max(80, Math.min(4000, lam))));
+
+    marker.attr("x1", lamPx).attr("y1", spec.top - 4).attr("x2", lamPx).attr("y2", spec.top + 22);
+    markerGlow.attr("x1", lamPx).attr("y1", spec.top - 4).attr("x2", lamPx).attr("y2", spec.top + 22);
+
+    // Series limit (n2 -> infinity)
+    var limLam = 1 / (R_NM / (state.n1 * state.n1));
+    var clamped = Math.max(80, Math.min(4000, limLam));
+    var limPx = xs(Math.log10(clamped));
+    limitTick.attr("x1", limPx).attr("x2", limPx);
+    limitLabel.attr("x", limPx).text("series limit " + Math.round(limLam) + " nm");
+
+    document.getElementById("rTrans").textContent = "n=" + state.n2 + " → n=" + state.n1;
+    document.getElementById("rLam").textContent = fmtLam(lam);
+    document.getElementById("rE").textContent = dE.toFixed(2) + " eV";
+    document.getElementById("rReg").textContent = region(lam);
+    document.getElementById("n2val").textContent = String(state.n2);
+  }
+
+  // Wire up the n1 buttons and the n2 slider
+  var btns = document.querySelectorAll(".series-btn");
+  btns.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var newN1 = +b.getAttribute("data-n1");
+      state.n1 = newN1;
+      btns.forEach(function (bb) { bb.classList.remove("active"); });
+      b.classList.add("active");
+      // Make sure n2 > n1; bump slider if needed
+      var slider = document.getElementById("n2");
+      var minN2 = newN1 + 1;
+      slider.min = minN2;
+      if (state.n2 <= newN1) {
+        state.n2 = minN2;
+        slider.value = String(minN2);
+      }
+      update();
+    });
+  });
+
+  document.getElementById("n2").addEventListener("input", function (e) {
+    state.n2 = +e.target.value;
+    update();
+  });
+
+  // Initial state: Balmer, n2 = 3
+  document.getElementById("n2").min = 3;
+  update();
+})();
+</script>
+</body>
+</html>

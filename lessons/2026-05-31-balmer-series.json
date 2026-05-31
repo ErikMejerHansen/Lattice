@@ -1,0 +1,128 @@
+{
+  "slug": "2026-05-31-balmer-series",
+  "title": "The Balmer series: a schoolteacher's curve-fit and the spectroscopy it built",
+  "node": {
+    "id": "balmer_series",
+    "label": "Balmer series",
+    "subtitle": "1/λ ∝ 1/4 − 1/n²"
+  },
+  "intro": "In 1885 a sixty-year-old mathematics teacher in Basel, working in his spare time on what he called the geometry of sacred buildings, fit four wavelengths of light to a formula with one constant and one integer. The four lines were the only hydrogen features anyone had cleanly measured in visible light, and Johann Balmer's curve-fit reproduced them to four decimal places. He had no theory of atoms, no model of electrons, no idea why the formula worked. Within thirty years it had been generalized by Rydberg to a single equation governing every hydrogen line in the universe, derived from first principles by Bohr, and used to settle the strangest stellar puzzle of the 1890s.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. A schoolteacher's number game",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "In 1853 the Swedish physicist Anders Ångström used a diffraction grating sharper than any made before to measure the dark lines in the solar spectrum. Four of them, brought out by hydrogen discharge tubes back in his Uppsala laboratory, stood out: a red line at 6562.8 Å, a cyan line at 4861.3 Å, a violet line at 4340.5 Å, and a deeper violet at 4101.7 Å. (One Ångström is 0.1 nm, the unit he had introduced for exactly this kind of spectroscopy and which still carries his name.) He labeled the four lines Hα, Hβ, Hγ, Hδ and tabulated their wavelengths to a precision nobody could yet make use of. The numbers sat in print for thirty years." },
+        { "type": "p", "text": "The man who finally saw a pattern in them was Johann Balmer, a sixty-year-old mathematics teacher at a girls' school in Basel. He was a numerologist by temperament, convinced that physical quantities ought to be expressible as clean fractions, and a friend at the university suggested he try Ångström's four numbers as a puzzle. In 1885, after months of fiddling, Balmer noticed that all four wavelengths could be written as the same constant scaled by a single ratio:" },
+        { "type": "math", "tex": "\\lambda = B \\, \\frac{n^2}{n^2 - 4}", "display": true, "caption": "λ is the wavelength of one of the four hydrogen lines. B is a constant Balmer fit empirically from the data, equal to 3645.6 Å. n is an integer index, taking the values 3, 4, 5, and 6 for Hα, Hβ, Hγ, and Hδ respectively. The equation reads: the wavelength is Balmer's constant scaled by a ratio that depends only on n." },
+        { "type": "p", "text": "Plug in n = 3 and the formula gives 6562.1 Å, matching Hα to four digits. n = 4 lands on Hβ, n = 5 on Hγ, n = 6 on Hδ. As an extrapolation, n → ∞ pushes λ down toward exactly B = 3645.6 Å, predicting an accumulation of lines crowding the violet end of the spectrum at that limit, a feature already half-suspected in the data and confirmed within the decade. The schoolteacher had pulled a single formula out of four numbers and won the structure of an entire spectral series for free, with no notion of why integers and a single empirical constant should describe the colors of glowing hydrogen at all." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Rydberg's generalization",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Five years later Johannes Rydberg, a Swedish physicist working in Lund on the spectra of the alkali metals (sodium, potassium, lithium), noticed that many of them showed Balmer-like series of lines crowding toward a short-wavelength limit. The pattern was too widespread to be a hydrogen accident. Rydberg suspected the deeper structure was additive, not multiplicative: instead of products and ratios, the lines ought to be differences of two simpler terms. In 1890 he rewrote Balmer's formula in the form he had been pursuing for years:" },
+        { "type": "math", "tex": "\\frac{1}{\\lambda} = R \\left( \\frac{1}{n_1^2} - \\frac{1}{n_2^2} \\right)", "display": true, "caption": "λ is the wavelength of a spectral line. R is the Rydberg constant, a single empirical number equal to 1.0974 × 10⁷ m⁻¹ in modern units. n₁ and n₂ are integers with n₂ > n₁, and the pair (n₁, n₂) labels the line. The equation reads: the reciprocal wavelength of a hydrogen line is R times the difference of two inverse squares." },
+        { "type": "p", "text": "For the Balmer series, n₁ is fixed at 2 and n₂ runs through 3, 4, 5, 6; the four visible lines fall out. But the formula also predicted an n₁ = 1 series in the deep ultraviolet and an n₁ = 3 series in the infrared. Nobody had seen either. And the constant R now stood as a single fundamental number shared by every hydrogen line in existence, with B = 4/R for Balmer the simplest of an infinite family of series limits at n²/R for the series ending at level n." },
+        { "type": "p", "text": "Both predictions came in within thirty years. Theodore Lyman at Harvard, after building a vacuum spectrograph because ordinary air absorbs the wavelengths he needed (anything below 200 nm is blocked by atmospheric oxygen), found the n₁ = 1 series between 1906 and 1914; the lines now carry his name. Friedrich Paschen in Tübingen, working with photographic emulsions sensitized into the red and near-infrared, found the n₁ = 3 series in 1908. The Brackett (n₁ = 4) and Pfund (n₁ = 5) series followed in the 1920s. Rydberg's reformulation had quietly turned a Swiss schoolteacher's curve-fit into a generator of new physics." }
+      ],
+      "quiz": {
+        "question": "The Lyman series (n₁ = 1) lies in the ultraviolet; the Balmer series (n₁ = 2) lies mostly in the visible; the Paschen series (n₁ = 3) lies in the infrared. Why do the series march from UV through visible to IR as n₁ increases?",
+        "options": [
+          "The largest possible 1/λ in each series is R/n₁², so smaller n₁ pushes the series limit to shorter wavelengths and the lines come out bluer.",
+          "Higher-n orbits are physically larger, so atoms in those states emit longer-wavelength photons.",
+          "The Lyman series radiates from hotter atoms, so its photons are bluer.",
+          "Only the Balmer series sits in the visible by symmetry of the Rydberg formula around n = 2."
+        ],
+        "correctIndex": 0,
+        "explanation": "The tempting wrong answer is option 2, that larger orbits emit longer wavelengths. That confuses the size of the orbit with the energy gap of the transition. The Rydberg formula gives the line wavelength from a difference of inverse squares 1/n₁² − 1/n₂², not from the absolute orbit size. The maximum possible 1/λ in a series (taking n₂ → ∞) is just R/n₁². For Lyman, that puts the series limit at 1/R ≈ 91 nm (UV); for Balmer at 4/R ≈ 364 nm (violet); for Paschen at 9/R ≈ 821 nm (IR). The lower the fixed n₁, the bigger the available energy gap, the bluer the entire series."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Bohr supplies the meaning",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "In 1913 Niels Bohr, twenty-eight years old and just back in Copenhagen after a year in Rutherford's Manchester laboratory, published a three-paper trilogy that explained the Rydberg formula from a postulate. As covered in the lesson on the Bohr atom, the hydrogen electron was restricted to discrete orbits whose binding energies depended only on a single integer n:" },
+        { "type": "math", "tex": "E_n = -\\frac{m_e e^4}{8 \\varepsilon_0^2 h^2} \\cdot \\frac{1}{n^2} = -\\frac{13.6 \\,\\text{eV}}{n^2}", "display": true, "caption": "E_n is the binding energy of the electron sitting in the nth orbit. m_e is the electron mass. e is the elementary charge. ε₀ is the vacuum permittivity (a constant from electromagnetism). h is Planck's constant. n is the orbit's quantum number, taking values 1, 2, 3, and so on. The expression collects to −13.6 eV when n = 1, the ionization energy of hydrogen." },
+        { "type": "p", "text": "When the electron drops from orbit n₂ down to orbit n₁ < n₂, it emits a photon whose energy equals the gap between the two levels. Setting that gap equal to hν, and using ν = c/λ to convert frequency to wavelength, rearranges directly into inverse-wavelength form:" },
+        { "type": "math", "tex": "\\frac{1}{\\lambda} = \\frac{m_e e^4}{8 \\varepsilon_0^2 h^3 c} \\left( \\frac{1}{n_1^2} - \\frac{1}{n_2^2} \\right)", "display": true, "caption": "1/λ is the photon's inverse wavelength. The constants m_e, e, ε₀, h, and c are the same fundamental quantities introduced above (with the speed of light c brought in by the ν = c/λ step). n₁ and n₂ are the lower and upper orbit indices. The coefficient sitting in front of the bracket is exactly the Rydberg constant R, calculated from fundamental physics rather than fit to a curve." },
+        { "type": "viz", "src": "2026-05-31-balmer-series.html", "height": 460, "caption": "An energy-level diagram of hydrogen, with horizontal lines at the Bohr energies E_n = −13.6 eV / n² for n = 1 through 7 and the ionization limit at 0 eV. The buttons pick which series you are looking at (Lyman lands in n = 1, Balmer in n = 2, Paschen in n = 3), and the slider scans the upper level n₂. The red arrow shows the chosen transition, the spectrum bar below marks the resulting wavelength on a log axis from 80 nm to 4000 nm, and the visible window between 380 and 750 nm is shaded with a rainbow gradient. The Balmer series is the only one whose lines mostly fall inside that visible window, which is why Balmer found his lines in sunlight and Lyman had to build a vacuum spectrograph." },
+        { "type": "p", "text": "Bohr plugged in the measured values of m_e, e, ε₀, h, and c (Robert Millikan had just pinned down e in 1909 with the oil-drop experiment, balancing tiny charged oil droplets in an electric field; without that measurement Bohr's calculation would not have been possible) and got R = 1.0973 × 10⁷ m⁻¹. The discrepancy with Rydberg's empirical value was a fraction of a percent. Twenty-eight years after Balmer pulled a formula out of four numbers, Bohr had grown the same formula out of the fundamental constants of physics. The Balmer series in particular came from transitions in which the electron lands in n = 2 from any orbit above, and the integer n in Balmer's original formula was now visibly an orbital quantum number." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Why hydrogen lines peak at A0",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The strength of the Balmer lines in a stellar spectrum is not a measure of how much hydrogen the star contains. Every star is overwhelmingly hydrogen (about 75 percent by mass for the Sun and its neighbors), and that fraction varies by only a few percent across spectral classes. What varies dramatically is how many of those hydrogen atoms have an electron sitting in the n = 2 orbit, which is the starting level for every Balmer absorption. Take an electron out of n = 2 (either by exciting it higher or by ionizing the atom entirely) and that atom can no longer absorb a Balmer photon." },
+        { "type": "p", "text": "Two opposing temperature effects govern the population of n = 2. At low temperatures almost every hydrogen atom sits in the ground state n = 1: the gap of 10.2 eV from n = 1 to n = 2 is far larger than the thermal energy kT (about 0.3 eV at 3500 K), and the Boltzmann factor exp(−ΔE/kT) drives the n = 2 occupancy toward zero. At high temperatures the radiation field carries plenty of 13.6 eV photons and the hydrogen atom simply ionizes: the Saha equation (the equilibrium balance between bound atoms and free electrons and protons that was the subject of the recombination lesson) sweeps the neutral fraction toward zero." },
+        { "type": "p", "text": "The product of these two factors, Boltzmann excitation up to n = 2 multiplied by the Saha fraction still neutral, has a single peak. For the photon density of a typical stellar photosphere the peak sits near T = 9500 K. In Annie Jump Cannon's Harvard spectral classification (the OBAFGKM letter sequence ordered by temperature) that temperature is class A0, and Vega is the type star. Indeed, the Balmer lines in an A0 spectrum are darker and broader than in any other class. Cool K and M stars have hydrogen everywhere but almost none of it in n = 2; hot O and B stars have hardly any neutral hydrogen left at all. Hydrogen line strength climbs from O to A and falls again from A to M, and the non-monotonic pattern that broke Cannon's first attempt at a one-parameter classification is just the Saha-Boltzmann curve viewed sideways." }
+      ],
+      "quiz": {
+        "question": "A G2 star like the Sun is much cooler than the A0 stars where Balmer lines peak (5800 K vs 9500 K). Why are the Balmer lines in the solar spectrum noticeably weaker than in Vega's spectrum despite the Sun and Vega having essentially the same hydrogen abundance?",
+        "options": [
+          "At 5800 K the thermal energy kT is far smaller than the 10.2 eV gap up to n = 2, so the Boltzmann factor leaves almost no hydrogen in n = 2 and there is little for a Balmer photon to be absorbed by.",
+          "The Sun has too little neutral hydrogen left because Saha-equation ionization has stripped most of it.",
+          "Solar atmospheric absorption obscures the Balmer lines from below.",
+          "At 5800 K the Balmer lines shift outside the visible window and can no longer be detected."
+        ],
+        "correctIndex": 0,
+        "explanation": "The tempting wrong answer is option 2, that ionization is doing the work. At only 5800 K, with kT ≈ 0.5 eV, the Boltzmann factor exp(−10.2/0.5) = exp(−20) is microscopic; almost no hydrogen sits in n = 2 to begin with. Ionization is barely relevant at the solar photospheric temperature (only a small fraction of solar hydrogen is ionized there). The Sun lives on the cool side of the Saha-Boltzmann peak, where the excitation bottleneck dominates. Push the temperature up to 9500 K, the A0 peak, and enough atoms get to n = 2 while most are still neutral; that combination is what makes Vega's Balmer lines the darkest in the sky."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The Pickering puzzle and Z²",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "In 1896 Edward Pickering at Harvard was photographing the spectrum of ζ Puppis, a hot O-type star whose lines were unlike anything in the laboratory catalog. Among them sat a series of dark absorption lines that obeyed Rydberg's formula but only if you allowed half-integer indices: between every pair of Balmer integers (n = 3, 4, 5, 6) there sat an extra line at the apparent positions n = 2.5, 3.5, 4.5, and so on. Pickering interpreted the lines as a previously unknown form of hydrogen, perhaps a high-temperature variant available only in the atmospheres of the hottest stars." },
+        { "type": "p", "text": "The interpretation was wrong, and it almost broke Bohr's theory before it could be published. Alfred Fowler in London, reproducing the Pickering lines in mixed hydrogen-helium discharge tubes in 1912, insisted they were still hydrogen. Bohr disagreed in print. He pointed out that his own equation for E_n carried a hidden Z² dependence on nuclear charge: for any hydrogenic ion (one electron orbiting a nucleus of charge Ze), the energy formula is" },
+        { "type": "math", "tex": "E_n = -\\frac{Z^2 \\cdot 13.6 \\,\\text{eV}}{n^2}", "display": true, "caption": "E_n is the binding energy of the single bound electron. Z is the nuclear charge in units of the elementary charge e. n is the orbit's quantum number. The factor Z² says that doubling the nuclear charge deepens every orbital well by a factor of four; for singly-ionized helium (Z = 2, written He⁺), every transition wavelength shrinks by a factor of four compared to neutral hydrogen." },
+        { "type": "p", "text": "For He⁺ the transitions ending at n = 4 (with n₂ = 5, 6, 7, 8, ...) reproduce, by accident of arithmetic, the wavelengths of the hydrogen Balmer series at n₂ = 5, 6, 7, 8 (the even n₂ values for He⁺), interleaved with extra lines (the odd n₂ values) that look like Balmer at half-integer indices. The Pickering half-integers were never magic. They were the He⁺ Balmer-analogue series, with the Z² scaling Bohr's equation predicted on the nose." },
+        { "type": "p", "text": "Bohr's calculation matched Fowler's measurements to three parts in ten thousand, fine enough that Fowler conceded the next year. The Pickering puzzle became the first decisive astrophysical confirmation of quantum theory: a stellar atmosphere had produced lines no laboratory had ever cleanly seen, and a brand-new model of the atom had explained them quantitatively from a Z² that nobody else had noticed in the formula. The Balmer series, four hydrogen lines a Swiss schoolteacher had fit by playing with fractions, had turned out to be a template for every hydrogenic ion in the universe, with a Z² knob that lets a single observed wavelength fingerprint the charge of the nucleus that emitted it." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "What does it mean to say the Balmer series is defined by 'transitions ending at n = 2,' and why does that organizing choice matter rather than, say, fixing the upper level n₂?",
+    "options": [
+      "An emission photon is released when an electron drops to a lower level, so a spectral series is naturally identified by the destination orbit; fixing the lower level groups together every transition that lands there, and all of them share a common series limit (the wavelength at n₂ → ∞).",
+      "Only transitions ending at n = 2 are physically allowed in hydrogen; transitions ending at other levels violate selection rules.",
+      "The Rydberg formula only works when n₁ = 2; for other values of n₁ the constant R has to be replaced by a different empirical fit.",
+      "The Balmer series is the only hydrogen series in which n₁ < n₂; the other series have inverted indices."
+    ],
+    "correctIndex": 0,
+    "explanation": "The tempting wrong answer is option 3, that the Rydberg formula somehow privileges n₁ = 2. It does not: the same R works for Lyman (n₁ = 1), Paschen (n₁ = 3), Brackett (n₁ = 4), Pfund (n₁ = 5), and every higher analogue. The reason we group Balmer's four original lines together is that they all happen to land on the same final orbit, n = 2, which gives them a single accumulation point (the series limit at 4/R = 364.6 nm where transitions from very large n₂ pile up). Every other series follows the same logic with a different destination; Balmer's distinction is just that the n = 2 destination puts its lines in the visible window where Ångström could measure them with a diffraction grating."
+  },
+  "suggestedNodes": [
+    {
+      "id": "rydberg_formula",
+      "label": "Rydberg formula",
+      "subtitle": "1/λ = R(...)",
+      "edgeType": "extends"
+    },
+    {
+      "id": "hydrogenic_ions",
+      "label": "Hydrogenic ions",
+      "subtitle": "Z² scaling",
+      "edgeType": "extends"
+    },
+    {
+      "id": "h_alpha_imaging",
+      "label": "Hα imaging",
+      "subtitle": "656.3 nm tracer",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-05-31T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": ["bohr_atom", "spectroscopy_basics", "stellar_classification", "saha_ionization"]
+  }
+}
