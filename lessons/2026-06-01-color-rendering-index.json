@@ -1,0 +1,127 @@
+{
+  "slug": "2026-06-01-color-rendering-index",
+  "title": "Color rendering index: the eight-patch test that catches a tomato lying",
+  "node": {
+    "id": "color_rendering_index",
+    "label": "CRI",
+    "subtitle": "Ra = ΣRi / 8"
+  },
+  "intro": "In 1965 the International Commission on Illumination shipped a recipe for a number that does what a Kelvin temperature cannot. Pick eight pastel paint chips, light them with the lamp you want to grade and again with a blackbody of the same color temperature, measure how far each chip's color shifted, average the shifts, subtract from 100. The number, Ra, says nothing about what the lamp looks like on a freshly painted wall. It says only whether the tomato in the kitchen, the mahogany on the floor, and the human skin standing next to them can still be themselves under that light.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The kitchen problem tungsten left behind",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Tungsten incandescent lamps, the wire-coil bulb refined by William Coolidge at General Electric in 1908, were the gold standard of indoor lighting for sixty years. The wire glowed at 2700 to 2900 K, a continuous Planck spectrum that, by accident of physics, reproduced almost every color a paint chip or a human cheek could reflect. The catch was efficiency. About ninety percent of the input energy left the bulb as invisible infrared, and the remaining ten percent of visible light cost the consumer a small fortune in electricity." },
+        { "type": "p", "text": "When the 1973 oil shock made replacement urgent, fluorescent tubes were waiting. A fluorescent tube is a low-pressure mercury vapor lamp, a sealed glass cylinder filled with argon and a trace of mercury whose internal walls are coated with phosphors that downconvert the mercury's ultraviolet lines into visible light. The spectrum is a handful of narrow phosphor peaks rather than a smooth Planck curve. Phosphor recipes that put the chromaticity near 2700 K (a warm-white tube) arrived in the early 1980s, and the chromaticity match was indeed convincing on a bare wall." },
+        { "type": "p", "text": "It did not save the food. Restaurants installed warm-white fluorescents and watched diners send back the salmon. Butchers found their red meat looking gray on the case. The correlated color temperature (your last lesson) declared both lamps occupied the same point on the Planckian locus, the curved line in the chromaticity plane where ideal blackbodies sit. The eye glancing at the salmon disagreed. Some other property of the spectrum, invisible to CCT, was responsible for how a tomato or a steak looked when you put your face within arm's reach of it." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The CIE recipe, eight pastel chips and an averaging step",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The International Commission on Illumination (CIE), the body that had drawn the 1931 chromaticity diagram, addressed the food problem in 1965 with publication CIE 13. The procedure is mechanical. You measure the test lamp's correlated color temperature. You pick a reference illuminant of the same CCT: a Planck blackbody below 5000 K, a daylight phase model (the CIE D series, sunlight averaged through different atmospheres of varying turbidity) above. The reference, by construction, renders itself perfectly and scores 100." },
+        { "type": "p", "text": "Then take eight specific paint chips. Deane Judd, the National Bureau of Standards colorist who had built the 1931 chromaticity diagram thirty years earlier, picked them in the 1950s from a Munsell color sample book. They are deliberately pastel rather than saturated: a grayish pink, an ochre, a yellow-green, a sage, an aqua, a powder blue, a lavender, a mauve. Their reflectance curves are smooth and mid-saturation, the sort of surface that fills a real room." },
+        { "type": "p", "text": "For each chip simulate two renderings, one under the test lamp and one under the reference. Each rendering yields a color point in CIE 1960 uv coordinates, a near-linear remapping of the 1931 xy plane chosen so that small distances correspond to small perceptual differences. The shift ΔE_i between the two renderings is the Euclidean distance in that plane, with components Δu_i along the u axis and Δv_i along the v axis." },
+        { "type": "math", "tex": "\\Delta E_i = \\sqrt{(\\Delta u_i)^2 + (\\Delta v_i)^2}", "display": true, "caption": "ΔE_i is the perceptual color shift of chip number i, measured in CIE 1960 uv units. Δu_i is the difference between the chip's u coordinate under the test lamp and under the reference. Δv_i is the same difference along the v axis. The subscript i runs from 1 to 8 across the eight Judd test color samples." },
+        { "type": "p", "text": "Convert each shift to a 100-point per-chip index using a scaling constant chosen in 1965 so that a contemporary cool-white fluorescent tube would score around 50, a number the committee found uncomfortable enough to motivate better phosphors. The average of the eight per-chip indices is Ra, the headline number on a premium lamp box." },
+        { "type": "math", "tex": "R_i = 100 - 4.6 \\, \\Delta E_i", "display": true, "caption": "R_i is the special color rendering index for chip i. The constant 4.6 is the empirical scaling chosen by the CIE in 1965 so that a 1965-era cool-white fluorescent tube would yield Ra near 50. ΔE_i is the perceptual shift from the previous formula, a non-negative number." },
+        { "type": "math", "tex": "R_a = \\frac{1}{8} \\sum_{i=1}^{8} R_i", "display": true, "caption": "R_a is the general color rendering index, the single number printed on lamp boxes. The sum is taken over i from 1 to 8, one term per Judd test color sample. The averaging is unweighted, the chips treated as equally important. A perfect score is R_a equal to 100; a score of zero corresponds to chips so badly shifted that the lamp may as well be lighting them at random." }
+      ],
+      "quiz": {
+        "question": "The CIE recipe simulates each chip's rendering under the test lamp, then chromatically adapts that rendering (the von Kries transform, a 1902 model in which the eye's three cone responses scale independently) so that the test lamp's white maps onto the reference white before computing ΔE_i. Why is the adaptation step in the recipe?",
+        "options": [
+          "To compensate for measurement error in the test lamp's CCT",
+          "To match the human eye's actual behavior: after about a minute under a new light, the brain rebalances the cones so the lamp's white still reads as white, and Ra should grade what the adapted eye sees",
+          "To shrink every ΔE_i and ensure most commercial lamps score above 50",
+          "To make lamps at different CCTs comparable against each other on the same Ra scale"
+        ],
+        "correctIndex": 1,
+        "explanation": "The von Kries adaptation step models the cone rebalancing that happens during the first minute under any light. Without it, every test lamp would score badly against the reference's color cast even when it rendered the eight chips perfectly relative to its own white. The recipe asks the question the adapted eye asks: granted that I have stopped seeing the warm cast of the lamp itself, do the objects in the room still look like themselves? Option 1 is wrong; the recipe needs an accurate CCT to pick the reference, but it does not correct measurement error. Option 3 misreads the calibration; the constant 4.6 is what sets the scale, not the adaptation. Option 4 is wrong because Ra is always computed against a reference of the same CCT, so lamps at different CCTs are not on the same scale; a 2700 K halogen with Ra 100 and a 6500 K daylight LED with Ra 100 are not making the same claim."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Eight chips against a row of lamps",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The recipe makes the most sense when you watch it run. Pick a lamp from the row below. Its spectral power distribution (SPD), a curve giving the lamp's emitted power as a function of wavelength, overlays the reference blackbody at 2700 K. Watch the eight Judd chips shift between the two rows: the reference rendering on top, the test rendering below, the per-chip ΔE printed underneath. The Ra readout is the eight-chip average, scaled by 4.6 and subtracted from 100, exactly as the formulas of section 2 prescribe." },
+        { "type": "p", "text": "An incandescent bulb scores 100; it is the reference. A typical cool-white fluorescent scores around 62, and the chips that move the most are the pastel red and the mauve, both of which want long-wavelength light the lamp barely emits. A blue-pump phosphor LED with only a yellow yttrium aluminum garnet phosphor scores around 75 for the same reason. Add a second phosphor that emits near 630 nm and the score climbs above 90, because the missing red wavelengths come back." },
+        { "type": "p", "text": "The most instructive lamp in the row is the RGB LED, three narrow spikes engineered so their weighted sum lands at a 2700 K chromaticity. The eye glancing at a wall sees a convincing warm white. On the chips it lies wholesale: pastel surfaces depend on a continuous spectrum to read as themselves, and three spikes cannot synthesize one. Ra falls below 40 even though the chromaticity is exactly where you wanted it." },
+        { "type": "viz", "src": "2026-06-01-color-rendering-index.html", "height": 580, "caption": "Pick a lamp. The dashed curve is the reference blackbody SPD at 2700 K, the rust curve is the SPD of the lamp you selected, the rust-shaded band is the visible window. The eight chips render under each light below, with ΔE_i printed beneath. Ra is the eight-chip average scaled by 4.6 and subtracted from 100. Notice that the LEDs with little energy above 620 nm wreck the pastel red and the mauve, and that an RGB LED hits the right white but lies about every chip at once." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The deep-red deficit",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Unpack the cheapest 2700 K LED on a hardware-store shelf and you find one of the great industrial compromises of the early twenty-first century. The light comes from a gallium nitride diode emitting a narrow blue line around 450 nm. Roughly sixty percent of those blue photons are absorbed by a yttrium aluminum garnet (YAG) phosphor doped with cerium, a yellow-emitting ceramic developed at Nichia in 1996, which re-emits them as a broad bump centered near 555 nm. The eye adds the unabsorbed blue and the new yellow back into white, and the wall lights up." },
+        { "type": "p", "text": "What the SPD has almost none of is light between 480 and 510 nm (the cyan deficit) and almost nothing above 620 nm (the deep-red deficit). The eight Judd chips include a pastel red (TCS1) and a mauve (TCS8) whose reflectance curves peak in the long-wavelength region the LED barely lights. Light those chips with an SPD that has no red in it, and the reflected light has nothing red to reflect. The chips read as desaturated grays, and ΔE_1 and ΔE_8 blow up." },
+        { "type": "p", "text": "The fix is straightforward and expensive. Replace some of the YAG with a nitride red phosphor (the original Mitsubishi 2002 recipe used europium-doped strontium nitride; later potassium fluorosilicate doped with manganese, marketed as KSF) that emits in a sharp band near 630 nm. Ra climbs from 75 toward 92. The price is that nitride red phosphors are less efficient than YAG, by roughly fifteen to twenty-five percent in lumens per watt: the lamp draws more current for the same brightness, and the lumen rating on the box drops. Premium LEDs trade efficiency for fidelity, lumen for lumen." }
+      ],
+      "quiz": {
+        "question": "Two LEDs are both labeled 2700 K, both built around a 450 nm blue gallium-nitride diode, but one scores Ra 78 and the other Ra 92. The chromaticity points on the Planckian locus are nearly identical. Which physical difference is most likely responsible for the gap?",
+        "options": [
+          "The Ra 92 lamp drives its blue diode at higher current, pushing more photons through the same phosphor mix",
+          "The Ra 92 lamp includes an additional red phosphor (a nitride or potassium fluorosilicate compound) emitting near 630 nm; the Ra 78 lamp uses yellow YAG alone",
+          "The Ra 92 lamp runs at a lower junction temperature, which narrows the blue spike and improves color fidelity",
+          "The Ra 92 lamp uses a thicker phosphor layer, which downconverts more of the blue photons"
+        ],
+        "correctIndex": 1,
+        "explanation": "The matched CCT guarantees the two lamps occupy the same chromaticity point on the Planckian locus, but tells you nothing about the underlying spectrum. A YAG-only phosphor LED is essentially a blue spike plus a broad yellow bump, with little energy above 620 nm. The pastel red (TCS1) and mauve (TCS8) chips depend on that long-wavelength light to render correctly; without it, ΔE_1 and ΔE_8 climb sharply and the Ra average drops. Adding a red phosphor at the cost of some lumens per watt fills the gap and lifts Ra. Option 1 affects brightness, not the SPD shape. Option 3 has the wrong sign: a sharper blue spike slightly hurts CRI, not helps it. Option 4 shifts the blue-to-yellow ratio (and drifts the CCT), but does not address the deep-red deficit."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. What the eight chips cannot see",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The eight-chip recipe was a compromise from the start. Judd's patches are pastel, their reflectance curves smooth, their colors interior to the saturated boundary of the chromaticity diagram. A clever lamp designer who knows the recipe can game it: pick three narrowband emitters (a deep red, a green, a blue) whose chromaticity sum lands at 2700 K and whose intensities are tuned so the eight pastel chips happen to render close to the reference. Ra above 90 is reachable. The same lamp, lighting a tomato or a saturated violet curtain, can still produce a color so far from its name that you would not recognize it." },
+        { "type": "p", "text": "The CIE foresaw this and defined six additional samples, R9 through R14: saturated red, saturated yellow, saturated green, saturated blue, a Caucasian skin tone, and a leaf green. These are reported as optional per-chip indices, but they are not included in the Ra average. A premium 2700 K LED sold for general use commonly scores Ra equal to 90 with R9 equal to 30, because the deep red around 660 nm is still missing even when the recipe's pastel chips have been satisfied." },
+        { "type": "p", "text": "The Illuminating Engineering Society, the American lighting industry's standards body, published TM-30 in 2015 as a successor. It samples 99 real-surface reflectances (paint chips, textiles, plant leaves, skin tones from a 2010s NIST atlas) rather than eight pastel Munsell chips, and reports two numbers: R_f (fidelity, the CRI analog measuring how close the test rendering is to the reference) and R_g (gamut, measuring whether the test renders the samples at the same saturation as the reference, or shrinks them, or stretches them). A lamp that desaturates everything uniformly could score Ra 90 and R_f 90 but R_g 85; the wall looks white, the salad looks dull, and TM-30 finally has a number for the second half of that sentence." },
+        { "type": "p", "text": "The lamps the National Gallery in London uses over its painting halls are now warm-white LEDs specified to Ra at least 95 with R9 at least 80. They draw roughly seven watts where the incandescents they replaced in the late 2010s drew a hundred. The Vermeer pearl in Girl with a Pearl Earring holds its luster on the wall the same way it did under the old halogens, which is the only test that mattered in the room. The eight pastel chips of 1965 were never enough to settle that, and yet sixty years of building around them taught the industry exactly which extra numbers (R9, R_f, R_g) had to be reported so that the chips finally could." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A friend brings home a 'soft white 2700 K' LED bulb (label says Ra 80, no R9 quoted) and a 'warm white 2700 K halogen' bulb (no CRI on the package) to put in identical desk lamps next to a bowl of tomatoes. On the wall behind each lamp, both bulbs produce the same warm yellow cast. On the tomatoes, the halogen makes them look ripe and the LED makes them look dull and slightly brown. Which physical fact best explains the mismatch?",
+    "options": [
+      "The halogen filament runs hotter than the LED junction, so its peak emission sits at a longer wavelength and excites the red receptors more strongly",
+      "The two bulbs occupy the same point on the Planckian locus, so their chromaticities match, but the halogen emits a smooth Planck spectrum with substantial power above 620 nm while the blue-pump phosphor LED emits almost none, so the tomato has almost no red wavelengths to reflect",
+      "The halogen's unlisted Ra is necessarily above 80, which means it scores higher on the eight pastel chips than the LED",
+      "The LED has not yet undergone the von Kries chromatic adaptation step that the halogen has, so its rendering of the tomato will improve after a minute"
+    ],
+    "correctIndex": 1,
+    "explanation": "The walls match because CCT is a chromaticity number, the average color of the light reflected off a neutral surface; both lamps land on the same Planckian-locus point so the wall reads the same. A tomato is not a neutral surface: its reflectance curve peaks above 620 nm. A halogen is a small tungsten coil at about 2900 K and emits a smooth Planck curve with plenty of power above 620 nm; the tomato reflects that and looks ripe. A blue-pump phosphor LED with no red phosphor emits almost nothing above 620 nm, so the tomato has nothing red to reflect, and it reads as a desaturated brown. Option 1 has the wrong sign for Wien's law: a hotter Planck curve peaks at shorter wavelengths, not longer. Option 3 has the conclusion roughly right but for the wrong reason; the actual physical cause is the SPD gap in the long-wavelength region, which the Judd pastel red (TCS1) is also sensitive to. Option 4 misapplies adaptation, which is a property of the eye, not of the lamp; the eye adapts under both bulbs equally."
+  },
+  "suggestedNodes": [
+    {
+      "id": "chromaticity_diagram",
+      "label": "Chromaticity",
+      "subtitle": "CIE 1931 xy",
+      "edgeType": "extends"
+    },
+    {
+      "id": "metamerism",
+      "label": "Metamerism",
+      "subtitle": "same xy, ≠ SPD",
+      "edgeType": "extends"
+    },
+    {
+      "id": "tm30",
+      "label": "TM-30",
+      "subtitle": "Rf, Rg, 99 samples",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-06-01T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["wavelength", "blackbody", "wien_displacement", "color_temperature"]
+  }
+}

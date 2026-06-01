@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-07 from color-temperature
-Color rendering index — the eight-patch test, why two 3000K LEDs disagree on a tomato
 Chromaticity diagram — CIE 1931 xy, the (x,y) sheet that the Planckian locus lives on
 Metamerism — same color seen, different spectra emitted, the catch behind every camera
 
@@ -96,3 +95,6 @@ Parallax — d = 1/p, the trigonometric distance measurement Bessel pulled off i
 Rydberg formula — 1/λ = R(1/n₁² − 1/n₂²), the additive two-term reformulation of Balmer that generalizes to every hydrogen series (Lyman, Paschen, Brackett, Pfund) and to every hydrogenic ion through a Z² factor
 Hydrogenic ions — one-electron atoms of arbitrary nuclear charge Z (He⁺, Li²⁺, ...) whose spectra are hydrogen's with every wavelength scaled by 1/Z², the system Bohr's atom solves exactly and the workhorse benchmark for every more elaborate atomic theory
 Hα imaging — narrowband photography at 656.3 nm, the workhorse that maps H II regions, planetary nebulae, and the warm ionized gas of every galactic spiral arm, and that confirms high-redshift starbursts in survey spectra
+
+# auto-suggested 2026-06-01 from color-rendering-index
+TM-30 — Rf and Rg from 99 real-surface samples, the IES 2015 successor to CRI and the two-number test that catches a lamp that desaturates everything uniformly

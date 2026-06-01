@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color rendering index</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+</style>
+<style>
+#viz { padding: 12px 12px 18px; box-sizing: border-box; }
+.lamp-buttons { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.lamp-buttons button {
+  flex: 1 1 auto;
+  min-height: 40px;
+  padding: 6px 10px;
+  font-family: inherit;
+  font-size: 13px;
+  background: var(--bg-raised);
+  color: var(--text);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+.lamp-buttons button.active {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+.lamp-name {
+  font-style: italic;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 4px 2px 8px;
+}
+.section-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  letter-spacing: 0.05em;
+  margin: 4px 0 4px;
+  text-transform: uppercase;
+}
+.spd-chart { width: 100%; height: 132px; display: block; }
+.spd-chart .visible-band { fill: var(--accent); opacity: 0.06; }
+.spd-chart .axis { stroke: var(--border-strong); stroke-width: 1; fill: none; }
+.spd-chart .ref-curve { fill: none; stroke: var(--text-ghost); stroke-width: 1.4; stroke-dasharray: 3 3; }
+.spd-chart .test-curve { fill: none; stroke: var(--accent); stroke-width: 1.6; }
+.spd-chart .axis-label {
+  font-size: 9px; fill: var(--text-muted);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+}
+.legend {
+  display: flex; gap: 14px; font-size: 11px; color: var(--text-muted);
+  margin: 4px 0 10px; font-style: italic;
+}
+.legend .swatch { display: inline-block; width: 18px; height: 2px; vertical-align: middle; margin-right: 4px; }
+.legend .ref-swatch { border-top: 1.4px dashed var(--text-ghost); height: 0; }
+.legend .test-swatch { background: var(--accent); height: 2px; }
+.patch-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+.patch-cell { display: flex; flex-direction: column; align-items: stretch; }
+.patch-swatch { width: 100%; aspect-ratio: 1; border: 1px solid var(--border); }
+.patch-label {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 2px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+}
+.delta {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 9px; color: var(--accent); text-align: center; margin-top: 2px;
+}
+.ra-readout {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.ra-readout .label { font-style: italic; font-size: 13px; color: var(--text-muted); }
+.ra-readout .value-big {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 22px; color: var(--text); font-weight: 600;
+}
+.ra-readout .value-detail {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-left: 4px;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <div class="lamp-buttons" id="lampButtons"></div>
+  <div class="lamp-name" id="lampName"></div>
+  <div class="section-label">SPD overlay, both normalized to peak = 1</div>
+  <svg class="spd-chart" id="spdChart" viewBox="0 0 480 132" preserveAspectRatio="none"></svg>
+  <div class="legend">
+    <span><span class="swatch ref-swatch"></span> reference (2700 K blackbody)</span>
+    <span><span class="swatch test-swatch"></span> test lamp</span>
+  </div>
+  <div class="section-label">Reference rendering (top) vs test rendering (bottom)</div>
+  <div class="patch-grid" id="refPatches"></div>
+  <div class="patch-grid" id="testPatches" style="margin-top: 5px;"></div>
+  <div class="patch-grid" id="deltaLabels" style="margin-top: 2px;"></div>
+  <div class="ra-readout">
+    <span class="label">General color rendering index R<sub>a</sub></span>
+    <span><span class="value-big" id="raValue">100</span><span class="value-detail" id="raDetail"> / 100</span></span>
+  </div>
+  <div class="viz-caption" style="margin-top: 10px;">
+    Pick a lamp. The dashed curve is the reference blackbody spectrum at 2700 K, the rust curve is the lamp you selected, the rust-shaded band is the visible window (380 to 740 nm). The eight Judd chips render under each light below, with ΔE<sub>i</sub> printed beneath. The LEDs with little energy above 620 nm wreck the pastel red (TCS1) and the mauve (TCS8); the RGB LED hits the right white but lies on every chip.
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+const wavelengths = d3.range(380, 781, 10);
+
+function gauss(lam, mu, sigma, h) {
+  return h * Math.exp(-Math.pow((lam - mu) / sigma, 2) / 2);
+}
+
+function planck(lam, T) {
+  const h = 6.626e-34, c = 3.0e8, k = 1.381e-23;
+  const lamM = lam * 1e-9;
+  const a = 2 * h * c * c / Math.pow(lamM, 5);
+  const ex = Math.exp(h * c / (lamM * k * T)) - 1;
+  return a / ex;
+}
+
+const refPlanck = wavelengths.map(l => planck(l, 2700));
+const refMax = d3.max(refPlanck);
+const refNorm = refPlanck.map(v => v / refMax);
+
+const lamps = [
+  {
+    short: "Incandescent",
+    name: "Incandescent tungsten 2700 K",
+    note: "the reference, by definition",
+    spd: refNorm,
+    rendered: [
+      ["#cc9a8e", 0.0], ["#b59f74", 0.0], ["#c5c879", 0.0], ["#99b685", 0.0],
+      ["#98c8c4", 0.0], ["#9aaecc", 0.0], ["#b7a3c8", 0.0], ["#cc9ab8", 0.0]
+    ],
+    ra: 100
+  },
+  {
+    short: "Cool-white fluor.",
+    name: "Cool-white fluorescent, 2700 K phosphor blend",
+    note: "three phosphor peaks plus mercury lines; deep red is thin",
+    spd: wavelengths.map(l =>
+      0.08 + gauss(l, 440, 18, 0.65) + gauss(l, 543, 24, 0.90) + gauss(l, 611, 20, 0.55) + gauss(l, 580, 4, 0.35)
+    ),
+    rendered: [
+      ["#b08278", 14], ["#ab9968", 4],  ["#bdc26d", 4],  ["#8ba778", 5],
+      ["#88baaf", 7],  ["#95a4b8", 6],  ["#9b8caf", 12], ["#b5849c", 14]
+    ],
+    ra: 62
+  },
+  {
+    short: "YAG-only LED",
+    name: "Phosphor LED, YAG only, no red",
+    note: "blue spike at 450 nm + broad yellow YAG bump; almost nothing above 620 nm",
+    spd: wavelengths.map(l =>
+      gauss(l, 450, 12, 1.00) + gauss(l, 565, 70, 0.80) * (l < 690 ? 1 : Math.max(0, 1 - (l - 690) / 30))
+    ),
+    rendered: [
+      ["#b88c80", 9], ["#b39d72", 2], ["#c4c573", 4], ["#94b483", 4],
+      ["#92c2c0", 4], ["#94aac6", 4], ["#a999b5", 9], ["#ba8ea2", 10]
+    ],
+    ra: 75
+  },
+  {
+    short: "Red-phos. LED",
+    name: "Premium LED, blue + yellow + nitride red phosphor",
+    note: "added red phosphor near 628 nm fills the long-wavelength gap",
+    spd: wavelengths.map(l =>
+      gauss(l, 450, 12, 1.00) + gauss(l, 555, 65, 0.65) + gauss(l, 628, 22, 0.55)
+    ),
+    rendered: [
+      ["#cb9a8d", 1.0], ["#b59f73", 0.4], ["#c4c879", 1.0], ["#98b485", 1.2],
+      ["#95c4c0", 2.6], ["#98abc8", 2.1], ["#b29fc4", 2.7], ["#c597b3", 2.8]
+    ],
+    ra: 92
+  },
+  {
+    short: "RGB LED",
+    name: "RGB LED, three narrow peaks summed to 2700 K chromaticity",
+    note: "three narrow spikes hit the right white; the chips have nothing continuous to reflect",
+    spd: wavelengths.map(l =>
+      gauss(l, 460, 10, 0.85) + gauss(l, 540, 12, 0.90) + gauss(l, 625, 12, 0.95)
+    ),
+    rendered: [
+      ["#b9745f", 18], ["#c7a263", 10], ["#b8c95e", 12], ["#87bd6f", 14],
+      ["#67c0c2", 20], ["#6e9ad1", 18], ["#b58bb8", 11], ["#ce7ba9", 16]
+    ],
+    ra: 32
+  }
+];
+
+const refColors = lamps[0].rendered.map(([c]) => c);
+const patchLabels = ["TCS1", "TCS2", "TCS3", "TCS4", "TCS5", "TCS6", "TCS7", "TCS8"];
+
+let activeLamp = 0;
+
+const btnContainer = d3.select("#lampButtons");
+lamps.forEach((lamp, i) => {
+  btnContainer.append("button")
+    .attr("type", "button")
+    .classed("active", i === 0)
+    .text(lamp.short)
+    .on("click", () => { activeLamp = i; render(); });
+});
+
+const svg = d3.select("#spdChart");
+const W = 480, H = 132;
+const m = { top: 8, right: 8, bottom: 20, left: 28 };
+const xScale = d3.scaleLinear().domain([380, 780]).range([m.left, W - m.right]);
+const yScale = d3.scaleLinear().domain([0, 1.08]).range([H - m.bottom, m.top]);
+
+svg.append("rect")
+  .attr("class", "visible-band")
+  .attr("x", xScale(380))
+  .attr("y", m.top)
+  .attr("width", xScale(740) - xScale(380))
+  .attr("height", H - m.bottom - m.top);
+
+svg.append("line")
+  .attr("class", "axis")
+  .attr("x1", m.left).attr("x2", W - m.right)
+  .attr("y1", H - m.bottom).attr("y2", H - m.bottom);
+
+[400, 500, 600, 700].forEach(t => {
+  svg.append("text")
+    .attr("class", "axis-label")
+    .attr("x", xScale(t))
+    .attr("y", H - 6)
+    .attr("text-anchor", "middle")
+    .text(t + " nm");
+});
+
+svg.append("text")
+  .attr("class", "axis-label")
+  .attr("x", 4).attr("y", m.top + 6)
+  .text("power");
+
+const refPath = svg.append("path").attr("class", "ref-curve");
+const testPath = svg.append("path").attr("class", "test-curve");
+
+const line = d3.line()
+  .x((_, i) => xScale(wavelengths[i]))
+  .y(v => yScale(v));
+
+function fillPatchRow(selector, colors, withLabels) {
+  const sel = d3.select(selector);
+  sel.selectAll("*").remove();
+  colors.forEach((c, i) => {
+    const cell = sel.append("div").attr("class", "patch-cell");
+    cell.append("div").attr("class", "patch-swatch").style("background", c);
+    if (withLabels) cell.append("div").attr("class", "patch-label").text(patchLabels[i]);
+  });
+}
+
+function fillDeltaRow(rendered) {
+  const sel = d3.select("#deltaLabels");
+  sel.selectAll("*").remove();
+  rendered.forEach(([, dE]) => {
+    const cell = sel.append("div").attr("class", "patch-cell");
+    cell.append("div").attr("class", "delta").text("ΔE " + dE.toFixed(1));
+  });
+}
+
+function render() {
+  d3.selectAll("#lampButtons button").classed("active", (_, i) => i === activeLamp);
+
+  const test = lamps[activeLamp].spd;
+  const testMax = d3.max(test) || 1;
+  const testNorm = test.map(v => v / testMax);
+
+  refPath.attr("d", line(refNorm));
+  testPath.attr("d", line(testNorm));
+
+  d3.select("#lampName").text(lamps[activeLamp].name + " — " + lamps[activeLamp].note);
+
+  fillPatchRow("#refPatches", refColors, true);
+  fillPatchRow("#testPatches", lamps[activeLamp].rendered.map(([c]) => c), false);
+  fillDeltaRow(lamps[activeLamp].rendered);
+
+  d3.select("#raValue").text(lamps[activeLamp].ra.toFixed(0));
+}
+
+render();
+</script>
+</body>
+</html>
