@@ -222,5 +222,12 @@
     "subtitle": "1/λ ∝ 1/4 − 1/n²",
     "date": "2026-05-31",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-06-01-color-rendering-index",
+    "title": "Color rendering index: the eight-patch test that catches a tomato lying",
+    "subtitle": "Ra = ΣRi / 8",
+    "date": "2026-06-01",
+    "estimatedReadingMinutes": 22
   }
 ]
