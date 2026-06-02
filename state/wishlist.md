@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-07 from color-temperature
-Color rendering index — the eight-patch test, why two 3000K LEDs disagree on a tomato
 Chromaticity diagram — CIE 1931 xy, the (x,y) sheet that the Planckian locus lives on
 Metamerism — same color seen, different spectra emitted, the catch behind every camera
 
@@ -96,3 +95,8 @@ Parallax — d = 1/p, the trigonometric distance measurement Bessel pulled off i
 Rydberg formula — 1/λ = R(1/n₁² − 1/n₂²), the additive two-term reformulation of Balmer that generalizes to every hydrogen series (Lyman, Paschen, Brackett, Pfund) and to every hydrogenic ion through a Z² factor
 Hydrogenic ions — one-electron atoms of arbitrary nuclear charge Z (He⁺, Li²⁺, ...) whose spectra are hydrogen's with every wavelength scaled by 1/Z², the system Bohr's atom solves exactly and the workhorse benchmark for every more elaborate atomic theory
 Hα imaging — narrowband photography at 656.3 nm, the workhorse that maps H II regions, planetary nebulae, and the warm ionized gas of every galactic spiral arm, and that confirms high-redshift starbursts in survey spectra
+
+# auto-suggested 2026-06-02 from color-rendering-index
+TM-30-20 — IES successor to CRI: 99 real-world reflectance samples, Rf for fidelity and Rg for gamut area, plus a color vector graphic showing which hue regions a lamp shifts in which direction; the working metric every professional procurement spec now uses
+Phosphor-converted white LED — blue InGaN diode pump plus YAG:Ce yellow phosphor (and optionally K2SiF6:Mn4+ red phosphor), the chemistry that took over residential and commercial lighting in the 2010s and whose spectral hole at 600 to 660 nm is the entire reason R9 became a separately specified number
+CIE 1976 ΔE — the color-difference distance in CIELAB whose value of 1 is roughly a just-noticeable difference for the standard observer, the metric every CRI patch score (and every TM-30 fidelity calculation) ultimately rests on

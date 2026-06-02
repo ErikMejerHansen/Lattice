@@ -1,0 +1,129 @@
+{
+  "slug": "2026-06-02-color-rendering-index",
+  "title": "The color rendering index: a number on a bulb box and the spectrum it hides",
+  "node": {
+    "id": "color_rendering_index",
+    "label": "CRI / Ra",
+    "subtitle": "Ra = ⟨R₁…R₈⟩"
+  },
+  "intro": "In 1965 the International Commission on Illumination realized that two lamps could carry the same color temperature on the box, sit at the same point on the Planckian locus, light a white wall to identical shades, and still murder a tomato in the kitchen. The chromaticity number from the prior lesson was averaging the lamp's spectrum across the eye's three cone responses, and any two spectra that produced the same averages got the same Kelvin number, no matter how violently they disagreed about what to do with a red object. The committee invented a mechanical patch test to plug the gap, called it the color rendering index Ra, and printed it on every museum-grade bulb for the next sixty years. The recipe is first-year linear algebra, the eight patches it averages are pastels, and its blind spots are exactly what you need to understand to choose a bulb that does not gray out the wood and the fruit.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The tomato that refused to be red",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "After 1931 the chromaticity number invented at the CIE meeting in Cambridge had quietly taken over the lighting industry. Film stocks, camera filters, and reference illuminants were anchored to imaginary Planck curves at specific temperatures, and a tungsten lamp at 2856 K was, by international agreement, the standard against which every shade of indoor light was judged. The achievement was real and the gap in it was hidden for thirty years." },
+        { "type": "p", "text": "The trouble surfaced in the new fluorescent fixtures that had taken over offices and supermarkets after the war. A mercury-vapor tube coated with halophosphate phosphor (a calcium fluorophosphate mixed with antimony and manganese, the white powder that lined the inside of every classroom fixture from 1950 onward) could be tuned to a 4000 K chromaticity neatly enough, but its emission was concentrated in the narrow atomic-line peaks of mercury (404 nm, 436 nm, 546 nm, 578 nm) smeared by the phosphor blanket. The visible spectrum was full of holes. A butcher displaying meat under one watched the cuts turn slate gray; the same meat under a tungsten bulb at the same chromaticity stayed red. The two lamps were metamers, distinct spectra that produced the same color at the eye when reflected off a white wall and different colors when reflected off anything else." },
+        { "type": "p", "text": "What the industry needed was a number the chromaticity coordinate refused to give: a rating of how faithfully a lamp rendered the colors of objects, not the color of the lamp itself. The CIE colorimetry subgroup, working through the early 1960s, turned the problem over to a Munsell-color-system veteran named Günter Wyszecki and the U.S. National Bureau of Standards colorimetrist Deane Judd. The recipe they returned in 1965 was mechanical, the math was first-year linear algebra, and the scoring system has not been changed in any binding way since." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Eight patches and a reference lamp",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The 1965 recipe begins with a list of paint chips. Judd had spent years measuring the reflectance spectra of hundreds of common textiles, plant materials, and pigment samples; the subgroup picked eight of them as the standard test color samples, labeled TCS01 through TCS08. The choices are pastels rather than saturated hues: a light grayish red, a dark grayish yellow, a strong yellow-green, a moderate yellowish-green, a light bluish-green, a light blue, a light violet, and a light reddish-purple. Six more saturated samples (TCS09 through TCS14, including a saturated red, an oak leaf, and two human skin tones) were defined as supplementary but not averaged into the headline score." },
+        { "type": "p", "text": "The test is a side-by-side comparison. Pick a reference illuminant of the same correlated color temperature as the test lamp (a Planck-curve blackbody if the CCT is below 5000 K, a CIE daylight phase D-series spectrum if it is above, this distinction tracks what an outdoor or indoor observer would actually compare the lamp against). Mathematically reflect both spectra off each of the eight patches by multiplying patch reflectance against lamp spectrum at every wavelength. Convert each reflected spectrum to coordinates in a perceptually uniform color space, originally the CIE 1964 U*V*W* space, a coordinate system in which Euclidean distance between two points roughly equals the just-noticeable color difference a human eye reports. Measure the displacement ΔE between the two coordinate points for each patch:" },
+        { "type": "math", "tex": "\\Delta E_i = \\sqrt{\\,(U^{*}_{t,i} - U^{*}_{r,i})^{2} + (V^{*}_{t,i} - V^{*}_{r,i})^{2} + (W^{*}_{t,i} - W^{*}_{r,i})^{2}\\,}", "display": true, "caption": "ΔE_i is the color difference for the ith patch in the U*V*W* space. U*_{t,i} is the U* coordinate of patch i seen under the test lamp. U*_{r,i} is the U* coordinate of the same patch seen under the reference lamp. V* and W* are the other two coordinates of the same perceptually uniform space, with t and r marking the test and reference renderings the same way. The expression is the ordinary three-dimensional distance between those two points, and a ΔE of 1 is calibrated to be roughly the smallest color difference a careful observer reports." },
+        { "type": "p", "text": "Eight ΔE values, one per averaged patch. The smaller each one is, the closer the lamp comes to making the patch look the way the reference would have. A perfect match across all eight is ΔE = 0 everywhere. A pathologically bad lamp can push individual ΔE values into the high teens, far past any threshold an observer would call subtle." }
+      ],
+      "quiz": {
+        "question": "The CIE picked eight pastel test color samples for averaging into Ra; saturated reds, deep blues, and clean yellow-greens were deliberately left out of the average. Why pastels rather than the saturated hues an observer is most likely to notice on a fruit bowl?",
+        "options": [
+          "Pastels have broader reflectance spectra that overlap the emission of nearly any indoor lamp, so the committee got smaller ΔE values across the board and could publish scores in a range (60 to 100) that looked encouraging to lamp manufacturers; the saturated samples were defined as a supplementary diagnostic but never averaged in.",
+          "Pastels reflect more total light than saturated samples and so dominate the color-matching arithmetic of any real-world scene.",
+          "Saturated colors are governed by different physical principles (vibrational rather than electronic transitions in the dye molecules) and cannot be compared to pastels on the same colorimetric scale.",
+          "Human cones saturate at high color purity, so the eye does not report perceptual differences between saturated samples reliably enough to use them as test targets."
+        ],
+        "correctIndex": 0,
+        "explanation": "The tempting wrong answer is option 4, that the eye fails on saturated samples. It does not; deep-red discrimination is in fact one of the cleanest signals a human observer produces. The honest answer is that the committee, working with the fluorescent industry that had paid for the research, picked patches whose broad reflectance overlapped a fluorescent's narrow emission peaks generously enough to keep ΔE values polite. A lamp with a hole in the red between 600 and 660 nm produces small ΔE on a light grayish red whose reflectance is broad and gentle; that same hole produces a catastrophic ΔE on a saturated cadmium red whose reflectance peaks exactly in the missing band. The supplementary samples TCS09 to TCS14 are present in the standard precisely because the eight averaged samples cannot catch this failure, and the next sixty years of CRI controversy turn on this exact choice."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. From ΔE to Ra",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The conversion from ΔE_i to a per-patch score is a straight line. The committee wanted a number that ran from 0 (random colors) up to 100 (perfect rendering), so they fixed a constant that mapped a typical worst-case ΔE near 20 to a per-patch score near zero:" },
+        { "type": "math", "tex": "R_i = 100 - 4.6 \\, \\Delta E_i", "display": true, "caption": "R_i is the rendering score for the ith patch. ΔE_i is the patch's color difference between test and reference, as defined in the previous formula. The constant 4.6 is a calibration the committee chose in 1965 so that a just-noticeable color difference (ΔE around 1) costs about 4.6 points off 100 and a full-tilt mismatch (ΔE around 20) drives R_i to zero or below. The expression says the per-patch score falls linearly with the color-difference distance the lamp produces." },
+        { "type": "p", "text": "The general color rendering index Ra is the arithmetic mean of the eight per-patch scores, ignoring the supplementary samples:" },
+        { "type": "math", "tex": "R_a = \\frac{1}{8} \\sum_{i=1}^{8} R_i", "display": true, "caption": "Ra is the general color rendering index. R_i is the rendering score for the ith patch from the prior formula. The summation runs over i from 1 to 8, the eight averaged test color samples TCS01 through TCS08. The factor of one-eighth turns the sum into an arithmetic mean. The expression is the single Kelvin-style number that has appeared on every bulb box since the standard was published." },
+        { "type": "p", "text": "A lamp scoring 100 puts every patch on top of where the reference would have put it. A lamp scoring 80 has spent most of its color budget faithfully but missed one or two patches noticeably. A lamp scoring 50 is making half the averaged patches look wrong, and at that point a human walking into the room can tell, even without a reference next to it, that the colors are off." },
+        { "type": "p", "text": "The viz below lets you slide a red-phosphor knob between 0 (a bare blue-pump-plus-yellow-phosphor LED, the recipe for the first generation of consumer LED bulbs sold in the late 2000s) and 1 (a premium red-phosphor-augmented LED, the recipe for any 2020-era museum lamp). The lamp's chromaticity stays pinned at 3000 K throughout, so the wall would look the same shade of warm white at both extremes. Ra and the saturated-red R9 swing across forty points as the red phosphor turns on." },
+        { "type": "viz", "src": "2026-06-02-color-rendering-index.html", "height": 520, "caption": "The lamp's spectral power distribution is drawn in rust over a faint rainbow strip of the visible band; the dashed gray curve is the 3000 K Planck reference at the same chromaticity. Below it are the nine test patches drawn twice: the top row is how they look under the reference, the bottom row is how they look under your lamp. Slide the red phosphor from 0 to 100 percent and watch patch 9 (the saturated red on the right) collapse to a muddy gray, while the eight averaged pastels barely move. Ra reads in the seventies at the cool end and the upper nineties at the warm end; R9 swings from around minus 20 to around plus 90."
+        },
+        { "type": "p", "text": "Pull the slider all the way down and the eight patches that Ra averages stay roughly where they are. Pull it up and the saturated red on the right snaps back to looking like a tomato. The two readouts move in lockstep at the bottom end of the slider, but R9 is far steeper across the whole range, and that asymmetry is the entire story of why Ra alone is not enough." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The phosphor LED's red hole",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "A blue-pump-plus-yellow-phosphor white LED has a characteristic spectrum that the viz above approximates. There is a sharp blue spike around 450 nm where the indium-gallium-nitride diode itself emits, a deep trough through the 480 to 510 nm cyan that no part of the device fills in, a broad yellow hump centered at 555 nm where the YAG:Ce phosphor (a layer of yttrium aluminum garnet doped with cerium, the cream-colored powder that turns a blue diode into a white-light fixture) reradiates after absorbing blue photons, and an exponential tail trailing off through orange that has died out by 650 nm. There is essentially no emission in the long-wavelength red beyond 620 nm, which is precisely where the reflectance peaks of saturated red objects live." },
+        { "type": "p", "text": "A tomato reflects best at 620 to 680 nm. Under sunlight, where every wavelength is present in roughly Planck proportions, that long-red reflectance reaches the eye and the brain sees red. Under a phosphor LED whose spectrum is dark in that band, the tomato has nothing to reflect except the yellow-orange tail of the lamp; its strong long-red reflectance bounces back none of the light that is not there. The visible result is a muddy brownish-orange, sometimes mistaken at first glance for a tomato that has gone overripe. The same physics flattens a piece of mahogany, a brick wall, a red apple, and a human cheek." },
+        { "type": "p", "text": "The Ra of this lamp scores in the seventies or low eighties. The eight averaged patches are pastels with broad reflectances that overlap the lamp's emission almost everywhere; their ΔE values stay small because there is light arriving across most of their reflectance band. The lamp passes the test the CIE designed in 1965, because nothing in the eight-patch average asks what happens to a saturated red. The deficiency that earns the lamp its industry reputation as a tomato killer hides in exactly the patches the headline number never sees." }
+      ],
+      "quiz": {
+        "question": "A phosphor-converted white LED with a deep spectral hole between 600 and 660 nm scores Ra = 82, well inside the range usually called 'acceptable for indoor use.' A butcher who switches to the lamp watches every cut of red meat turn brown. How can a lamp pass the Ra test and still fail conspicuously on red meat?",
+        "options": [
+          "Ra averages over eight pastel patches with broad reflectances that overlap the lamp emission almost everywhere; saturated-red reflectances peak exactly in the band where the lamp has its hole, but the eight averaged patches do not include any saturated red, so the deficiency cannot show up in the headline score.",
+          "Ra is computed in linear RGB rather than a perceptually uniform space, and the conversion error happens to mask red deficiencies.",
+          "Red meat is reflective enough that even a small fraction of the lamp's red emission keeps the color rendering intact; the perceived browning is a psychological effect of the cooler ambient.",
+          "The CIE reference illuminant at 3000 K itself has little red emission, so the test lamp and the reference are equally deficient and the ΔE values stay close to zero."
+        ],
+        "correctIndex": 0,
+        "explanation": "The tempting wrong answer is option 4, that the 3000 K reference is itself red-poor. The reference is a Planck curve at 3000 K, whose emission rises monotonically through the red and peaks deep in the infrared at 966 nm; the reference has plenty of light at 620 to 660 nm. The honest answer is option 1: the averaged patches are pastels with broad reflectance shoulders, so the lamp's missing red band shows up in their ΔE only as a small trim of the overall reflected flux. A saturated red, whose reflectance is a tall narrow peak centered exactly in the missing band, would see a catastrophic ΔE; the saturated red is precisely the patch TCS09, which Ra does not average. The lamp passes a test that was never written to catch its weakness."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. R9 and the patch the committee forgot",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Three supplementary samples, R9 through R14, were defined in the same 1965 report and printed in the same column of the table as Ra. They were not averaged in. R9 was a saturated red textile patch, R13 was a sample of light caucasian skin, R14 was a green leaf. A lamp's score on each of them was published alongside Ra by anyone who cared to measure it, and for the first twenty years of the standard almost nobody did." },
+        { "type": "p", "text": "The neglect mattered the moment phosphor-converted white LEDs reached consumer prices in the late 2000s. A typical consumer LED of that era scored Ra around 80 and R9 around negative 30. The negative number was not a typo. The R_i = 100 − 4.6 ΔE_i formula has no floor at zero, and once ΔE_i passed roughly 22 the score went negative, meaning the patch under the lamp had shifted in U*V*W* space by a distance larger than the gap between most distinct hues. A saturated red object under such a lamp was no longer a desaturated red; it had crossed into a different color region entirely. Lighting magazines and architects began quoting R9 alongside Ra as a way of separating LEDs that could be used in a kitchen from LEDs that could only be used in a parking garage." },
+        { "type": "p", "text": "Specifications for museum lighting at the Louvre, the National Gallery in London, and the Metropolitan in New York now read 'Ra > 90, R9 > 50' as a hard floor. The cheapest LEDs that clear that double specification cost roughly five times what a same-CCT Ra-only LED costs, because the second specification requires a third phosphor (typically a manganese-doped potassium fluorosilicate, K2SiF6:Mn4+, which emits in narrow red lines around 631 nm) on top of the YAG:Ce yellow. A bulb that meets the museum specification will read warm-and-bright on the wall and will let a Vermeer pearl hold its luster; a bulb at the same chromaticity that meets only the Ra specification will read identical on the wall and will make the pearl go muddy." },
+        { "type": "p", "text": "In 2015 the Illuminating Engineering Society of North America (IES is the body that publishes the working standards used by the U.S. lighting industry) issued technical memorandum TM-30-15 (revised to TM-30-20 in 2020), which replaced R9 with a denser approach: ninety-nine real-world reflectance samples (skin tones, fabrics, foliage, paint chips, food), two summary numbers (Rf for fidelity to the reference and Rg for gamut area, a measure of how much the test lamp expands or contracts the chromatic spread compared to the reference), and a color vector graphic that shows which hue regions a lamp shifts in which direction. The CIE published its own version, CIE 224:2017, the same year. CRI is still on every consumer bulb box, and TM-30 is still mostly invisible to consumers, but the working specifications behind professional procurement have moved on. The patch the committee left out of the average in 1965 turned out to be the one that mattered most, and the lighting industry spent half a century discovering that." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Both Ra ≥ 90 and R9 ≥ 50 are now required by major museum lighting specifications, and the working professional standard has since moved to IES TM-30-20 with its Rf and Rg pair. What does the R9 floor (and the TM-30 fidelity metric Rf that followed it) add that Ra alone misses, and why does it matter that the chromaticity number on the bulb box does not catch the same thing?",
+    "options": [
+      "Ra averages over eight pastel patches whose reflectance is broad and gentle; R9 (a saturated red textile) and Rf (a 99-sample average including saturated reds, foliage, and skin) directly probe the long-wavelength red between 600 and 660 nm where phosphor-converted white LEDs are prone to a spectral hole. The chromaticity coordinate (the Kelvin number on the box) collapses a full spectrum into two numbers and is blind to spectral holes by construction, so a lamp can sit on the Planckian locus and still fail every saturated red in the room.",
+          "R9 measures luminous flux directly, while Ra measures only chromatic shifts; the museum specification combines a chromatic constraint with a flux constraint so that paintings are also bright enough to see clearly.",
+      "Ra is computed in the CIE 1931 xy chromaticity diagram and R9 is computed in CIELAB, which fixes a coordinate-system error the original Ra inherited from its 1964 U*V*W* space.",
+      "R9 and Rf measure color rendering for the deuteranopic (red-green colorblind) observer, and museums adopted the specification to make their galleries more accessible; the chromaticity coordinate is calibrated for the standard trichromatic observer and was never meant to handle this case."
+    ],
+    "correctIndex": 0,
+    "explanation": "The tempting wrong answer is option 3, that R9 fixes a coordinate-system error. Both Ra and R9 are defined in the same U*V*W* space (and the modern TM-30 metrics use CIELAB instead, but the upgrade is in the sample set, not the geometry). Option 2 confuses lumens with chromaticity (R9 is a chromatic score, not a flux number). Option 4 is an invented story. The honest answer is option 1: the averaged eight-patch test for Ra deliberately picked pastels whose broad reflectance spectra mask the very deficiency a phosphor LED has, while the chromaticity coordinate that sets a lamp's color temperature is, by construction, the integral of the lamp's spectrum against three broad cone-response functions and cannot distinguish a smooth Planck curve from one with a hole in the red. R9 and TM-30 both move the testing into the band where phosphor LEDs fail, and that is why they survived as the standards lighting professionals actually use."
+  },
+  "suggestedNodes": [
+    {
+      "id": "tm_30",
+      "label": "TM-30-20",
+      "subtitle": "Rf + Rg, 99 SPDs",
+      "edgeType": "extends"
+    },
+    {
+      "id": "phosphor_white_led",
+      "label": "Phosphor LED",
+      "subtitle": "InGaN + YAG:Ce",
+      "edgeType": "applied"
+    },
+    {
+      "id": "cielab_delta_e",
+      "label": "CIELAB ΔE",
+      "subtitle": "ΔE ≈ 1 ≈ JND",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-06-02T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["color_temperature", "blackbody", "wavelength", "wien_displacement"]
+  }
+}

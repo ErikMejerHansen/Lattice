@@ -319,6 +319,16 @@
       "createdAt": "2026-05-31T08:00:00Z",
       "col": 1,
       "row": 15
+    },
+    {
+      "id": "color_rendering_index",
+      "label": "CRI / Ra",
+      "subtitle": "Ra = ⟨R₁…R₈⟩",
+      "state": "available",
+      "lesson": "2026-06-02-color-rendering-index",
+      "createdAt": "2026-06-02T08:00:00Z",
+      "col": 0,
+      "row": 16
     }
   ],
   "edges": [
@@ -402,6 +412,9 @@
     { "from": "hr_diagram", "to": "wien_displacement", "kind": "related" },
     { "from": "balmer_series", "to": "bohr_atom", "kind": "extends" },
     { "from": "balmer_series", "to": "spectroscopy_basics", "kind": "extends" },
-    { "from": "balmer_series", "to": "stellar_classification", "kind": "applied" }
+    { "from": "balmer_series", "to": "stellar_classification", "kind": "applied" },
+    { "from": "color_rendering_index", "to": "color_temperature", "kind": "extends" },
+    { "from": "color_rendering_index", "to": "blackbody", "kind": "related" },
+    { "from": "color_rendering_index", "to": "wavelength", "kind": "related" }
   ]
 }

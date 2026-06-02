@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.card { padding: 14px; max-width: 720px; margin: 0 auto; }
+.spectrum-wrap {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  padding: 10px 10px 6px 10px;
+}
+.spectrum-wrap svg { display: block; width: 100%; height: 160px; }
+.axis-row {
+  display: flex; justify-content: space-between;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10px; color: var(--text-muted); margin-top: 3px;
+}
+.patch-section { margin-top: 14px; }
+.patch-title {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
+}
+.patch-row {
+  display: grid; grid-template-columns: repeat(9, 1fr); gap: 4px;
+}
+.patch {
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  position: relative;
+  min-height: 44px;
+}
+.patch.r9 { border-color: var(--border-strong); }
+.patch-label {
+  position: absolute; bottom: 2px; left: 4px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 9px;
+  color: rgba(0,0,0,0.55);
+  pointer-events: none;
+}
+.row-label {
+  display: inline-block;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 9px;
+  color: var(--text-ghost);
+  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.readouts { display: flex; gap: 10px; margin-top: 14px; }
+.readout {
+  flex: 1;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  text-align: center;
+}
+.readout-label {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.6px;
+}
+.readout-value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 24px;
+  color: var(--text);
+  margin-top: 2px;
+  font-feature-settings: "tnum" 1;
+}
+.readout-value.bad { color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div class="card">
+    <div class="spectrum-wrap">
+      <svg id="spectrum" viewBox="0 0 680 160" preserveAspectRatio="none"></svg>
+      <div class="axis-row">
+        <span>380 nm</span><span>500 nm</span><span>600 nm</span><span>700 nm</span><span>780 nm</span>
+      </div>
+    </div>
+    <div class="patch-section">
+      <span class="row-label">Patches under 3000 K Planck reference</span>
+      <div class="patch-row" id="refRow"></div>
+      <span class="row-label" style="margin-top:6px;">Patches under your lamp</span>
+      <div class="patch-row" id="testRow"></div>
+    </div>
+    <div class="viz-slider-row">
+      <label>red φ</label>
+      <input type="range" id="redSlider" min="0" max="100" value="0" aria-label="red phosphor strength">
+      <span class="value" id="redVal">0%</span>
+    </div>
+    <div class="readouts">
+      <div class="readout">
+        <div class="readout-label">Ra (avg of R1…R8)</div>
+        <div class="readout-value" id="raVal">--</div>
+      </div>
+      <div class="readout">
+        <div class="readout-label">R9 (saturated red)</div>
+        <div class="readout-value" id="r9Val">--</div>
+      </div>
+    </div>
+    <div class="viz-caption">The lamp spectral power distribution is drawn in rust over a faint rainbow strip of the visible band; the dashed gray curve is the 3000 K Planck reference at the same chromaticity. The top patch row is the nine test color samples seen under the reference, the bottom row is the same samples seen under your lamp. Slide the red phosphor between 0 (a bare blue-pump-plus-yellow-phosphor LED) and 100 percent (a premium red-phosphor LED). Both lamps have the same 3000 K chromaticity. The eight averaged pastels (1 through 8) barely move; the saturated red R9 collapses from a true red into a muddy gray when the red phosphor is absent. Ra reads in the seventies at the cool end and the upper nineties at the warm end; R9 swings from around minus twenty to around plus ninety across the same range.</div>
+  </div>
+</div>
+<script>
+(function(){
+  var svgNS = "http://www.w3.org/2000/svg";
+  var W = 680, H = 160;
+  var spectrum = document.getElementById("spectrum");
+  var redSlider = document.getElementById("redSlider");
+  var redVal = document.getElementById("redVal");
+  var raEl = document.getElementById("raVal");
+  var r9El = document.getElementById("r9Val");
+  var refRow = document.getElementById("refRow");
+  var testRow = document.getElementById("testRow");
+
+  var WL_MIN = 380, WL_MAX = 780;
+  function xOfWl(wl) { return ((wl - WL_MIN) / (WL_MAX - WL_MIN)) * W; }
+
+  // Approximate the nine CIE TCS samples by an HSL triple. The first eight are
+  // pastels; the ninth is a saturated red.
+  var PATCHES = [
+    { name: "1", h: 8,   s: 0.45, l: 0.55 },
+    { name: "2", h: 42,  s: 0.38, l: 0.58 },
+    { name: "3", h: 75,  s: 0.55, l: 0.50 },
+    { name: "4", h: 120, s: 0.42, l: 0.52 },
+    { name: "5", h: 170, s: 0.40, l: 0.58 },
+    { name: "6", h: 210, s: 0.42, l: 0.60 },
+    { name: "7", h: 265, s: 0.42, l: 0.62 },
+    { name: "8", h: 320, s: 0.42, l: 0.58 },
+    { name: "9", h: 4,   s: 0.85, l: 0.46 }
+  ];
+  // How much each patch's appearance depends on long-wavelength red light.
+  // The first eight pastels overlap broadly with the lamp emission; the
+  // saturated red of R9 needs the band the phosphor LED is missing.
+  var RED_SENS = [0.55, 0.18, 0.08, 0.04, 0.04, 0.06, 0.12, 0.50, 1.0];
+  var BASELINE_DE = 0.6;   // an inherent lamp-vs-blackbody mismatch
+  var SENS_SCALE = 25;     // calibrates the worst-case ΔE for R9
+
+  function gauss(wl, peak, sigma) {
+    var z = (wl - peak) / sigma;
+    return Math.exp(-z*z);
+  }
+  // Blue InGaN diode at 450, YAG:Ce yellow phosphor at 555,
+  // optional K2SiF6:Mn4+ red phosphor at 625.
+  function lampSPD(wl, redPhi) {
+    return 1.00 * gauss(wl, 450, 14)
+         + 0.95 * gauss(wl, 555, 65)
+         + redPhi * 0.75 * gauss(wl, 625, 28);
+  }
+  // 3000 K Planck reference, normalized so its in-window peak is 1.
+  function planckSPDRaw(wl) {
+    var h = 6.626e-34, c = 3.0e8, k = 1.38e-23, T = 3000;
+    var lam = wl * 1e-9;
+    return (2 * h * c * c / Math.pow(lam, 5))
+         / (Math.exp(h * c / (lam * k * T)) - 1);
+  }
+  var PLANCK_PEAK = (function(){
+    var m = 0;
+    for (var wl = WL_MIN; wl <= WL_MAX; wl += 4) {
+      var v = planckSPDRaw(wl);
+      if (v > m) m = v;
+    }
+    return m;
+  })();
+  function planckSPD(wl) { return planckSPDRaw(wl) / PLANCK_PEAK; }
+
+  function deltaE(i, redPhi) {
+    return BASELINE_DE + RED_SENS[i] * SENS_SCALE * (1 - redPhi);
+  }
+  function hsl(h, s, l) {
+    if (s < 0) s = 0;
+    if (s > 1) s = 1;
+    if (l < 0) l = 0;
+    if (l > 1) l = 1;
+    return "hsl(" + h.toFixed(0) + ", "
+         + (s*100).toFixed(0) + "%, "
+         + (l*100).toFixed(0) + "%)";
+  }
+  function refColor(i) {
+    var p = PATCHES[i];
+    return hsl(p.h, p.s, p.l);
+  }
+  function testColor(i, redPhi) {
+    var p = PATCHES[i];
+    var adj = 1 - RED_SENS[i] * (1 - redPhi);
+    return hsl(p.h, p.s * adj, p.l + (1 - adj) * 0.05);
+  }
+
+  function buildPatchRow(rowEl) {
+    rowEl.textContent = "";
+    var cells = [];
+    PATCHES.forEach(function(p, i) {
+      var d = document.createElement("div");
+      d.className = "patch" + (p.name === "9" ? " r9" : "");
+      var lbl = document.createElement("span");
+      lbl.className = "patch-label";
+      lbl.textContent = p.name;
+      d.appendChild(lbl);
+      rowEl.appendChild(d);
+      cells.push(d);
+    });
+    return cells;
+  }
+  var refCells = buildPatchRow(refRow);
+  var testCells = buildPatchRow(testRow);
+  PATCHES.forEach(function(p, i) {
+    refCells[i].style.background = refColor(i);
+  });
+
+  function makeEl(name, attrs) {
+    var e = document.createElementNS(svgNS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function makePath(d, stroke, width, dash) {
+    var attrs = { d: d, fill: "none", stroke: stroke, "stroke-width": width,
+                  "stroke-linejoin": "round", "stroke-linecap": "round" };
+    if (dash) attrs["stroke-dasharray"] = dash;
+    return makeEl("path", attrs);
+  }
+  function drawSpectrum(redPhi) {
+    spectrum.textContent = "";
+    var defs = makeEl("defs", {});
+    var grad = makeEl("linearGradient", { id: "rainbow", x1: "0%", x2: "100%" });
+    [
+      [0,  "#2a0a5a"], [22, "#1e3fc8"], [38, "#1aa3a3"],
+      [52, "#3fb13a"], [67, "#d8c633"], [82, "#d97426"], [100, "#9c1f10"]
+    ].forEach(function(pair) {
+      grad.appendChild(makeEl("stop", { offset: pair[0]+"%", "stop-color": pair[1] }));
+    });
+    defs.appendChild(grad);
+    spectrum.appendChild(defs);
+    spectrum.appendChild(makeEl("rect", {
+      x: 0, y: 132, width: W, height: 16,
+      fill: "url(#rainbow)", opacity: 0.5
+    }));
+    // Reference curve (dashed, gray)
+    var dRef = "";
+    for (var wl = WL_MIN; wl <= WL_MAX; wl += 4) {
+      var x = xOfWl(wl);
+      var y = 130 - planckSPD(wl) * 105;
+      dRef += (wl === WL_MIN ? "M" : "L") + x.toFixed(1) + "," + y.toFixed(1) + " ";
+    }
+    spectrum.appendChild(makePath(dRef, "#b8ac8e", 1.4, "4 3"));
+    // Lamp curve (solid, accent)
+    var lampMax = 0;
+    for (var wl2 = WL_MIN; wl2 <= WL_MAX; wl2 += 4) {
+      var v = lampSPD(wl2, redPhi);
+      if (v > lampMax) lampMax = v;
+    }
+    var dLamp = "";
+    for (var wl3 = WL_MIN; wl3 <= WL_MAX; wl3 += 4) {
+      var x3 = xOfWl(wl3);
+      var y3 = 130 - (lampSPD(wl3, redPhi) / lampMax) * 105;
+      dLamp += (wl3 === WL_MIN ? "M" : "L") + x3.toFixed(1) + "," + y3.toFixed(1) + " ";
+    }
+    spectrum.appendChild(makePath(dLamp, "#9c3a22", 1.9));
+    // Legend
+    var legend = makeEl("g", { transform: "translate(10, 14)" });
+    function legendItem(x, label, stroke, width, dash, color) {
+      var ln = makeEl("line", {
+        x1: x, y1: 0, x2: x + 14, y2: 0,
+        stroke: stroke, "stroke-width": width
+      });
+      if (dash) ln.setAttribute("stroke-dasharray", dash);
+      legend.appendChild(ln);
+      var t = makeEl("text", {
+        x: x + 18, y: 4,
+        "font-family": "IBM Plex Mono, monospace",
+        "font-size": 10, fill: color
+      });
+      t.textContent = label;
+      legend.appendChild(t);
+    }
+    legendItem(0,  "lamp SPD",       "#9c3a22", 1.9, null,  "#1a1a18");
+    legendItem(98, "3000 K Planck",  "#b8ac8e", 1.4, "4 3", "#6b6359");
+    spectrum.appendChild(legend);
+  }
+
+  function update() {
+    var rp = +redSlider.value / 100;
+    redVal.textContent = (rp * 100).toFixed(0) + "%";
+    drawSpectrum(rp);
+    var raSum = 0;
+    for (var i = 0; i < 8; i++) {
+      var Ri = 100 - 4.6 * deltaE(i, rp);
+      raSum += Ri;
+      testCells[i].style.background = testColor(i, rp);
+    }
+    testCells[8].style.background = testColor(8, rp);
+    var ra = raSum / 8;
+    var r9 = 100 - 4.6 * deltaE(8, rp);
+    raEl.textContent = ra.toFixed(0);
+    r9El.textContent = r9.toFixed(0);
+    raEl.className = "readout-value" + (ra < 80 ? " bad" : "");
+    r9El.className = "readout-value" + (r9 < 50 ? " bad" : "");
+  }
+  redSlider.addEventListener("input", update);
+  update();
+})();
+</script>
+</body>
+</html>
