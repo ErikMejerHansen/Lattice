@@ -222,5 +222,12 @@
     "subtitle": "1/λ ∝ 1/4 − 1/n²",
     "date": "2026-05-31",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-06-02-color-rendering-index",
+    "title": "The color rendering index: a number on a bulb box and the spectrum it hides",
+    "subtitle": "Ra = ⟨R₁…R₈⟩",
+    "date": "2026-06-02",
+    "estimatedReadingMinutes": 22
   }
 ]
