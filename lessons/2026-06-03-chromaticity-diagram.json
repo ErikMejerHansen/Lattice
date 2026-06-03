@@ -1,0 +1,126 @@
+{
+  "slug": "2026-06-03-chromaticity-diagram",
+  "title": "The CIE 1931 chromaticity diagram: every color the eye can see, on one sheet of paper",
+  "node": {
+    "id": "chromaticity_diagram",
+    "label": "Chromaticity",
+    "subtitle": "CIE 1931 (x,y)"
+  },
+  "intro": "The horseshoe shape on every color-management slide deck and every monitor specification was nailed down at a CIE committee meeting in Cambridge in September 1931, and it has not budged since. Inside its outline lives every color a standard human observer can see; outside it lives nothing the eye can ever resolve. The previous lesson on color temperature plotted the blackbody curve as a path through it without quite saying what the underlying sheet meant. This lesson builds the sheet from the experiment that produced it, the algebraic trick that made the numbers polite, and the way it lies about distance even while it tells the truth about identity.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Three lights and the dimension count",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Newton split sunlight with a prism in 1672 and named seven colors, partly because seven was a musical number. The split was real and the count was rhetoric. The first person to take seriously how many independent numbers a color carries was James Clerk Maxwell, who in 1860 built a spinning disk of colored paper sectors and asked observers to set a fourth sector that looked indistinguishable from the spinning mixture of three. He found that any color the human eye can distinguish can be matched by some combination of three primaries chosen in advance, as long as no primary is a mixture of the other two. Color was three-dimensional, and no fewer dimensions would do." },
+        { "type": "p", "text": "Two observers, picking different primaries, would write down different triples for the same physical light, and that disagreement was tolerable in a laboratory and intolerable on a factory floor. The early film industry coloring frames, the dyestuffs makers grading batches, and the new electric-lighting industry tagging bulbs by their tint all needed a shared coordinate system. The Commission Internationale de l'Eclairage (CIE, the international lighting commission founded in 1913 in Berlin to coordinate exactly this kind of standardization) took the problem on through the 1920s. Their answer in 1931 was a piece of paper with a horseshoe on it. It has been the lingua franca of color science since." },
+        { "type": "p", "text": "The trick the CIE pulled is unusual in physics. The (x, y) diagram is not a measurement of any single physical quantity; it is a measurement of the human eye plus a deliberate algebraic transformation chosen to make the numbers convenient. It is a piece of human anatomy plotted as if it were a piece of geometry. The diagram does that job perfectly, and where it fails (it lies about how perceptually different two nearby points are) it fails in a way that took the colorimetry community half a century to fully diagnose. The next five sections walk that arc." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The matching experiment and its negative answer",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The 1931 standard rests on two experiments. William David Wright at Imperial College London ran one starting in 1928, and John Guild at the National Physical Laboratory in Teddington ran the other in parallel. The apparatus was the same: a circular field split down the middle, monochromatic test light on one half, a controllable mixture of three primaries on the other (red R at 700.0 nm, green G at 546.1 nm, blue B at 435.8 nm, all isolable from a mercury-arc lamp). The observer turned three knobs that set the intensities of R, G, and B until the two halves of the field blended into a single uniform disc. For most of the visible band, the matching ran cleanly: a monochromatic test color C(λ) could be written as the weighted sum" },
+        { "type": "math", "tex": "C(\\lambda) \\;=\\; \\bar{r}(\\lambda)\\,R \\;+\\; \\bar{g}(\\lambda)\\,G \\;+\\; \\bar{b}(\\lambda)\\,B", "display": true, "caption": "C(λ) is the appearance of a pure monochromatic test at wavelength λ. R, G, and B are the three fixed primary lights at 700.0 nm, 546.1 nm, and 435.8 nm. The bar over each coefficient marks it as a function of the test wavelength, not a single number. r̄(λ) is the intensity of red the observer dialed in to match wavelength λ. ḡ(λ) is the green intensity. b̄(λ) is the blue intensity. Together, the three functions r̄, ḡ, b̄ are called the color matching functions of the standard observer." },
+        { "type": "p", "text": "For cyans around 500 nm, the procedure would not converge. No positive combination of R, G, B was as saturated as a pure 500 nm light; the primaries were too desaturated. Wright and Guild's workaround was to move the red primary across to the test side, mix it with the monochromatic light there, and match the now-diluted test with G and B alone. The bookkeeping wrote that displaced R as a negative coefficient on the original side of the equation. The tabulated r̄(λ) dipped below zero through the cyan band. The negativity was not a failure of the eye; it was a property of the chosen primaries. Pure spectral colors are more saturated than any positive mixture of any three real lights. The CIE averaged Wright's and Guild's tables, called the result the 1931 standard observer (named for the 2° central visual field the experiments used), and every later colorimeter has been calibrated against it." }
+      ],
+      "quiz": {
+        "question": "Wright and Guild's matching function r̄(λ) dipped to negative values in the cyan band around 500 nm. The negative sign was a real coefficient in their experimental records, not a typo. What was it telling them?",
+        "options": [
+          "The 1931 observer's blue-sensitive cones contributed a literal subtractive response in the cyan band, and the matching function recorded that physiological inversion.",
+          "Any three real lights together span a triangle in chromaticity space, and the convex spectral locus bulges outside that triangle. Spectral cyans sit on the outside-bulge part and cannot be reached by adding R, G, and B together; matching them requires moving one primary to the test side, which the bookkeeping records as a negative coefficient on the original side.",
+          "The mercury-arc lamp the experiment used was unstable in the cyan, and the negative coefficients were calibration corrections subtracted out afterward.",
+          "Subjects could not focus on the test patch in the cyan band, so the negative coefficients were a perceptual-accommodation term added by the experimenter."
+        ],
+        "correctIndex": 1,
+        "explanation": "The tempting wrong answer is option 1, that the cones do something subtractive. They do not; the photoreceptors integrate non-negatively across their absorption bands. Options 3 and 4 invent equipment and observer effects that did not happen. The honest answer is option 2, and it is geometric, not physiological. The set of colors reachable by additive combination of any three positive lights forms a triangle in chromaticity space with the three primaries at its vertices. The pure spectral locus is a convex curve, and the curve bulges outside any triangle inscribed within it. The spectral cyans (around 500 nm) sit on the bulge, outside the R-G-B triangle the experiment used, and cannot be reproduced as r·R + g·G + b·B with positive weights. Wright and Guild's workaround (move R to the test side) makes the equation balance at the cost of a negative r̄(λ) on paper, and exactly this geometric fact is what will force the CIE in section 3 to invent three imaginary primaries placed outside the spectral locus so that every matching coefficient can be positive."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The trick: imaginary primaries so the bookkeeping comes out positive",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The CIE committee, meeting in Cambridge in September 1931, did not want negative coefficients on colorimeter dials. They solved the problem by changing primaries. They picked three new primaries X, Y, Z designed to make two properties true. First, the new matching functions x̄(λ), ȳ(λ), z̄(λ) had to be non-negative across the entire visible band, so that a colorimeter reading any spectrum would print only positive numbers. Second, ȳ(λ) was set equal to V(λ), the photopic luminous efficiency function (the standardized 1924 curve giving how brightly a daylight-adapted eye perceives unit power at each wavelength). With that second choice baked in, the Y component carries all of a stimulus's perceived brightness on its own, and X and Z together carry the rest of its color information. The X, Y, Z primaries are not physical lights. They sit deliberately outside the horseshoe of realizable colors, so that the horseshoe can be inscribed inside their triangle and every matching coefficient can stay non-negative." },
+        { "type": "p", "text": "Given any light source whose spectral power distribution is S(λ), the (X, Y, Z) tristimulus values are the three integrals" },
+        { "type": "math", "tex": "X = \\int S(\\lambda)\\,\\bar{x}(\\lambda)\\,d\\lambda, \\quad Y = \\int S(\\lambda)\\,\\bar{y}(\\lambda)\\,d\\lambda, \\quad Z = \\int S(\\lambda)\\,\\bar{z}(\\lambda)\\,d\\lambda", "display": true, "caption": "X, Y, and Z are the three tristimulus values that describe how the standard observer responds to the spectrum S(λ). S(λ) is the spectral power distribution of the source, the power per unit wavelength at each wavelength λ. x̄(λ), ȳ(λ), and z̄(λ) are the CIE 1931 color matching functions plotted from the redesigned matching equation; they are tabulated at 5 nm intervals and are all non-negative across the visible band. ȳ(λ) is set equal to V(λ), the photopic luminous efficiency function, which is why Y alone carries the perceived brightness. The integrals run over the visible band, conventionally 380 nm to 780 nm." },
+        { "type": "p", "text": "Three numbers (X, Y, Z) per spectrum is one number too many for a flat printed diagram. To get a two-dimensional figure, the CIE normalized by the total:" },
+        { "type": "math", "tex": "x = \\frac{X}{X+Y+Z}, \\qquad y = \\frac{Y}{X+Y+Z}", "display": true, "caption": "x is the chromaticity coordinate along the horizontal axis of the diagram. y is the chromaticity coordinate along the vertical axis. X, Y, and Z are the tristimulus values from the previous integrals. The denominator X + Y + Z is the same for x and y, so the projection preserves the ratios among X, Y, Z while collapsing their overall magnitude. The third normalized coordinate z = Z / (X+Y+Z) = 1 − x − y is redundant and is never plotted." },
+        { "type": "p", "text": "The (x, y) sheet is the chromaticity diagram. Two spectra with identical (x, y) look identical to the standard observer, regardless of how their wavelengths happen to be distributed. Every monochromatic wavelength from 380 to 700 nm maps to a point on the outer curve (the spectral locus). The bottom of the figure, where the violet end meets the red end, closes with a straight line (the line of purples), drawn dashed in the viz because no single wavelength produces those colors. Mixtures of any two points fall on the chord between them, by the additive structure of color matching Hermann Grassmann formalized in 1853, and so all reachable mixtures live inside the horseshoe." },
+        { "type": "viz", "src": "2026-06-03-chromaticity-diagram.html", "height": 580, "caption": "Drag the temperature slider. The marker walks along the rust Planckian locus from a red-hot 1500 K, through the tungsten illuminant A at 2856 K, through noon daylight at illuminant D65 (6504 K), and up into the sky-blue corner at 20000 K. The gray dot at E is the equal-energy white where x = y = 1/3, and the small colored circles label the spectral locus by wavelength in nanometers." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Where Wien's blackbody lands on the sheet",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Plug Planck's blackbody spectrum at temperature T into the tristimulus integrals and project to (x, y). The result is one point on the chromaticity diagram per temperature. Sweep T from a few hundred kelvin up to twenty thousand kelvin and the point traces a smooth curve through the figure. This is the Planckian locus, the same curve the previous color-temperature lesson plotted. Its mathematical content is the Planck spectral radiance integrated against the CIE matching functions:" },
+        { "type": "math", "tex": "B(\\lambda, T) = \\frac{2hc^{2}}{\\lambda^{5}}\\,\\frac{1}{\\exp\\!\\left(\\dfrac{hc}{\\lambda k T}\\right) - 1}", "display": true, "caption": "B(λ, T) is the spectral radiance of a blackbody at temperature T at wavelength λ, in units of power per area per solid angle per wavelength. h is Planck's constant. c is the speed of light. k is the Boltzmann constant. λ is wavelength. T is the absolute temperature in kelvin. The expression is Planck's 1900 radiation law, and substituting it for S(λ) in the X, Y, Z integrals of section 3 generates the (x, y) of the blackbody at temperature T." },
+        { "type": "p", "text": "At low T (say 1500 K, deep red-orange) the curve sits in the lower right of the diagram. As T climbs through a tungsten filament's 2856 K (the historical illuminant A) it walks up and to the left. Around 5500 K the curve passes near the equal-energy point E. At 6504 K the curve sits at the CIE 1964 daylight illuminant D65, the standard adopted to represent average noon daylight in northern Europe. The D-series daylight illuminants are not exactly on the Planckian curve but slightly above it, accounting for atmospheric water and ozone absorption that a true blackbody does not include. Climb further toward 12000 K and the marker enters the blue corner near overcast and clear-sky chromaticities." },
+        { "type": "p", "text": "The Planckian locus matters because most real white-light sources cluster near it but rarely sit on it. A phosphor-converted white LED at advertised 3000 K may land at a chromaticity off the Planckian curve by a small but measurable distance. The lighting industry quotes a 'correlated color temperature' (CCT) for such off-locus sources: the temperature of the Planckian point closest to the source's chromaticity. 'Closest' demands a metric, and the (x, y) sheet does not give the right one. The industry metric is Euclidean distance in CIE 1960 (u, v), a perceptually flatter linear-fractional transform of (x, y) published in 1960; a perpendicular projection from the off-locus source onto the Planckian curve in (u, v) coordinates picks out its CCT. The (x, y) diagram answers what the lamp's color is; the (u, v) extension answers what temperature it is closest to." }
+      ],
+      "quiz": {
+        "question": "A phosphor-converted white LED has chromaticity (x = 0.435, y = 0.404), slightly off the Planckian locus. Its box advertises a correlated color temperature of 3000 K, which is the temperature of the Planckian point at (x = 0.437, y = 0.404). The CCT is defined as the perpendicular projection onto the Planckian locus in CIE 1960 (u, v), not in (x, y). Why bother with the coordinate change just to do a projection?",
+        "options": [
+          "The (u, v) projection is computed in real photometric units, while (x, y) is dimensionless; comparing apples to apples requires the photometric form.",
+          "The (x, y) sheet is mathematically faithful to color matching (which mixtures equal which) but lies about color distance (how perceptually different two mixtures look). MacAdam's 1942 measurements found just-noticeable-difference contours of wildly varying size and orientation across the (x, y) sheet. The 1960 (u, v) transform reshaped (x, y) so those contours were roughly circular and roughly the same size, so a perpendicular projection onto the Planckian curve in (u, v) picks out the temperature an observer would actually call closest.",
+          "The CIE 1931 (x, y) coordinates are defined only for monochromatic light, and a phosphor LED's spectrum is broadband; (u, v) extends the diagram to broadband sources.",
+          "The Planckian locus is straight in (u, v) but curved in (x, y); a straight curve admits a unique perpendicular projection while a curved one does not."
+        ],
+        "correctIndex": 1,
+        "explanation": "Option 1 is invented dimensionality nonsense; both (x, y) and (u, v) are dimensionless. Option 3 is false: (x, y) and (X, Y, Z) are defined for any spectrum, and the only thing that changes for a broadband source is the integrand of the tristimulus integrals. Option 4 is a half-truth: the Planckian locus is curved in both (u, v) and (x, y), and perpendicular projection is well-defined on any smooth curve. The honest answer is option 2, the perceptual non-uniformity of (x, y). David MacAdam at Kodak measured just-noticeable-difference contours at 25 points scattered across the diagram in 1942 and found ellipses (not circles) whose areas varied by more than an order of magnitude across the sheet (largest in the green, smallest in the blue), with their long axes pointing in different directions. A perpendicular projection in (x, y) would weight color differences by something the observer does not actually report. The 1960 (u, v) coordinates are the simplest linear-fractional transform that makes the JND contours roughly circular and roughly the same size, and that is the geometry the CCT projection requires. Subsequent transforms (CIE 1976 u'v', CIELAB) flatten the metric further; section 5 walks the rest of that history."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. MacAdam's ellipses and the lie the horseshoe tells about distance",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The chromaticity diagram is honest about identity (two spectra mapping to the same (x, y) point look identical to the standard observer, no matter how different their underlying wavelength distributions) and dishonest about difference (two spectra mapping to nearby (x, y) points may look identical or wildly different depending on where on the sheet they happen to land). The honesty is the property the CIE built the figure to have, and it sells monitors and prints color separations and matches paint chips. The dishonesty took eleven years to surface in the literature and another twenty to fix in standards." },
+        { "type": "p", "text": "The dishonesty was measured carefully in 1942 by David L. MacAdam at the Eastman Kodak Research Laboratories. MacAdam sat an observer in front of a split field, fixed the reference color at some (x_0, y_0), and asked the observer to adjust a knob until the test color was barely distinguishable from the reference. He repeated the experiment in many directions in the (x, y) plane around (x_0, y_0), each time recording the displacement at which the difference became just noticeable. The set of just-noticeable points around any single reference fell on an ellipse, not a circle. MacAdam tabulated 25 such ellipses at 25 references scattered across the diagram. The ellipses in the green region were a factor of ten larger than those in the blue, and their long axes pointed in various directions across the sheet. There was no uniform color metric on (x, y), and no rescaling of x and y alone could make one." },
+        { "type": "p", "text": "A camera engineer asking whether two image pixels matched got a 'yes' or 'no' depending on which corner of the diagram the pixels happened to land in. The CIE responded with successive coordinate fixes. The 1960 (u, v) transform flattened the ellipses partially and is the geometry still used to define CCT. The 1976 (u', v') diagram refined the rescaling further. The CIELAB color space, also adopted in 1976 and still the working tool of digital color management, transforms (X, Y, Z) into three perceptual coordinates (L*, a*, b*) in which Euclidean distance ΔE_ab is calibrated so a ΔE_ab near 1 is the smallest difference a careful observer reports. The horseshoe survives, on the slide deck and in the spec sheet, as the map of which color is which. Half a century of coordinate engineering has been spent building better rulers to lay across it, and none of those rulers is the diagram itself." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A display-panel review writes that the panel 'covers 99% of sRGB and 95% of DCI-P3, measured against the CIE 1931 (x, y) chromaticity diagram.' What does the area inside the panel's gamut triangle on that diagram actually represent, and what is the diagram refusing to tell the reviewer about how the colors inside that triangle compare to each other?",
+    "options": [
+      "The triangle's interior is the locus of perceptually uniform colors reachable by the panel's three primaries; the diagram describes the panel's color accuracy at each chromaticity, and the only thing the diagram does not carry is the panel's brightness.",
+      "The triangle's interior is the set of (x, y) chromaticities reachable as positive additive combinations of the panel's three primary lights, ignoring luminance, by the additive structure Grassmann formalized in 1853. The diagram is honest about which chromaticities the panel can reproduce but dishonest about how perceptually different any two of those chromaticities are, because MacAdam's just-noticeable-difference ellipses vary in area by an order of magnitude across the sheet.",
+      "The triangle's interior is the projection of the sRGB color space onto the CIE 1976 (u', v') uniform diagram; the (x, y) figure is a historical schematic with no quantitative meaning.",
+      "The triangle's interior measures the panel's gamma response and ΔE rendering simultaneously; the only information the (x, y) diagram omits is whether the panel's white point sits exactly on the Planckian locus."
+    ],
+    "correctIndex": 1,
+    "explanation": "Option 1 confuses additive reachability with perceptual uniformity, the two properties the diagram is exactly honest and exactly dishonest about, in reversed order. Option 3 invents a separation between (x, y) and (u', v') that does not exist; both are quantitative and convertible. Option 4 folds gamma and ΔE into the diagram, neither of which it carries. The honest answer is option 2. The triangle of additive reach is a faithful predictor of which chromaticities the panel can produce: any positive combination of three real primaries lives inside their triangle in (x, y), and the same triangle drawn in (X, Y, Z) projects to it. But the triangle says nothing about how perceptually different two of its interior points are, because the (x, y) sheet stretches the green region and compresses the blue region against a uniform perceptual metric. Two panels with identical 99%-sRGB gamut coverage in (x, y) may have very different perceptual color accuracies in the green band where MacAdam's ellipses are largest. The successor diagrams (u'v', CIELAB) exist for exactly this reason, and a serious display review reports gamut in u'v' coverage or in CIELAB volume, not in (x, y) area."
+  },
+  "suggestedNodes": [
+    {
+      "id": "macadam_ellipses",
+      "label": "MacAdam ellip.",
+      "subtitle": "JND on (x,y)",
+      "edgeType": "related"
+    },
+    {
+      "id": "cielab_color_space",
+      "label": "CIELAB",
+      "subtitle": "ΔE_ab ≈ 1 ≈ JND",
+      "edgeType": "related"
+    },
+    {
+      "id": "standard_illuminants",
+      "label": "CIE illum.",
+      "subtitle": "A, D50, D65",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-06-03T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["color_temperature", "color_rendering_index", "blackbody", "wavelength", "wien_displacement"]
+  }
+}

@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CIE 1931 chromaticity diagram</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 80px; text-align: right;
+}
+#viz { max-width: 640px; margin: 12px auto; padding: 8px 16px 16px; }
+svg { width: 100%; height: auto; display: block; }
+.bg-plot { fill: var(--bg-raised); stroke: var(--border); stroke-width: 1; }
+.locus-fill { fill: #ece3cd; stroke: none; opacity: 0.55; }
+.locus-stroke { fill: none; stroke: var(--border-strong); stroke-width: 1.4; stroke-linejoin: round; }
+.purples { stroke: var(--border-strong); stroke-width: 1.4; stroke-dasharray: 4 3; fill: none; }
+.planck { fill: none; stroke: var(--accent); stroke-width: 1.8; opacity: 0.92; }
+.lambda-label { font-size: 10px; fill: var(--text-muted); font-family: "IBM Plex Mono", "SF Mono", monospace; }
+.marker { fill: var(--accent); stroke: var(--bg); stroke-width: 2.5; }
+.e-point { fill: var(--text-muted); }
+.e-label { font-size: 11px; fill: var(--text-muted); font-style: italic; }
+.axis-tick { stroke: var(--border-strong); stroke-width: 0.7; }
+.axis-label { font-size: 10px; fill: var(--text-muted); font-family: "IBM Plex Mono", "SF Mono", monospace; }
+.axis-title { font-size: 11px; fill: var(--text-muted); font-style: italic; }
+.readout { display: flex; gap: 18px; flex-wrap: wrap; font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; font-size: 12px; color: var(--text); margin-top: 8px; }
+.readout .lbl { color: var(--text-muted); font-style: italic; font-family: "Source Serif 4", "Iowan Old Style", serif; margin-right: 5px; }
+</style>
+</head>
+<body>
+<div id="viz">
+<svg viewBox="0 0 600 500" preserveAspectRatio="xMidYMid meet" role="img" aria-label="CIE 1931 chromaticity diagram with Planckian locus and temperature slider">
+  <g id="plot"></g>
+</svg>
+<div class="viz-slider-row">
+  <label for="T">T</label>
+  <input id="T" type="range" min="1500" max="20000" value="6504" step="25" aria-label="Blackbody temperature in kelvin">
+  <span class="value" id="Tval">6504 K</span>
+</div>
+<div class="readout">
+  <span><span class="lbl">x</span><span id="xval">0.313</span></span>
+  <span><span class="lbl">y</span><span id="yval">0.329</span></span>
+  <span><span class="lbl">near</span><span id="namedval">illuminant D65 (daylight)</span></span>
+</div>
+<div class="viz-caption">The horseshoe is the CIE 1931 (x, y) chromaticity diagram. Pure spectral wavelengths sit on the outside curve, labeled in nanometers. The dashed bottom edge is the line of purples, mixtures of violet and red that no single wavelength can produce. The rust curve is the Planckian locus, the chromaticity trace of a blackbody at every temperature. Slide T to walk the marker from a red-hot 1500 K, through tungsten illuminant A near 2856 K, through noon daylight at D65 (6504 K), up into the sky-blue corner near 20000 K. The gray dot at E is the equal-energy white where x = y = 1/3.</div>
+</div>
+
+<script>
+(() => {
+  // CIE 1931 spectral locus (2 degree observer), selected wavelengths
+  const sl = [
+    [380, 0.1741, 0.0050],
+    [410, 0.1736, 0.0048],
+    [440, 0.1644, 0.0109],
+    [460, 0.1440, 0.0297],
+    [470, 0.1241, 0.0578],
+    [480, 0.0913, 0.1327],
+    [490, 0.0454, 0.2950],
+    [500, 0.0082, 0.5384],
+    [510, 0.0139, 0.7502],
+    [520, 0.0743, 0.8338],
+    [530, 0.1547, 0.8059],
+    [540, 0.2296, 0.7543],
+    [550, 0.3016, 0.6923],
+    [560, 0.3731, 0.6245],
+    [570, 0.4441, 0.5547],
+    [580, 0.5125, 0.4866],
+    [590, 0.5752, 0.4242],
+    [600, 0.6270, 0.3725],
+    [610, 0.6658, 0.3340],
+    [620, 0.6915, 0.3083],
+    [640, 0.7190, 0.2809],
+    [660, 0.7290, 0.2710],
+    [700, 0.7347, 0.2653]
+  ];
+
+  // SVG plot rectangle: chromaticity x in [0, 0.8], y in [0, 0.9]
+  const X0 = 60, X1 = 560, Y0 = 460, Y1 = 30;
+  const xmax = 0.8, ymax = 0.9;
+  const px = x => X0 + (x / xmax) * (X1 - X0);
+  const py = y => Y0 - (y / ymax) * (Y0 - Y1);
+
+  const ns = 'http://www.w3.org/2000/svg';
+  function el(name, attrs) {
+    const e = document.createElementNS(ns, name);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  const plot = document.getElementById('plot');
+
+  // Background plot rectangle
+  plot.appendChild(el('rect', { class: 'bg-plot', x: X0, y: Y1, width: X1 - X0, height: Y0 - Y1 }));
+
+  // Axis ticks every 0.1
+  for (let i = 0; i <= 8; i++) {
+    const x = i * 0.1;
+    plot.appendChild(el('line', { class: 'axis-tick', x1: px(x), y1: Y0, x2: px(x), y2: Y0 + 4 }));
+    const t = el('text', { class: 'axis-label', x: px(x), y: Y0 + 15, 'text-anchor': 'middle' });
+    t.textContent = x.toFixed(1);
+    plot.appendChild(t);
+  }
+  for (let i = 0; i <= 9; i++) {
+    const y = i * 0.1;
+    plot.appendChild(el('line', { class: 'axis-tick', x1: X0 - 4, y1: py(y), x2: X0, y2: py(y) }));
+    const t = el('text', { class: 'axis-label', x: X0 - 7, y: py(y) + 3, 'text-anchor': 'end' });
+    t.textContent = y.toFixed(1);
+    plot.appendChild(t);
+  }
+  const xt = el('text', { class: 'axis-title', x: (X0 + X1) / 2, y: Y0 + 30, 'text-anchor': 'middle' });
+  xt.textContent = 'x';
+  plot.appendChild(xt);
+  const yt = el('text', { class: 'axis-title', x: X0 - 32, y: (Y0 + Y1) / 2, 'text-anchor': 'middle', transform: `rotate(-90, ${X0 - 32}, ${(Y0 + Y1) / 2})` });
+  yt.textContent = 'y';
+  plot.appendChild(yt);
+
+  // Locus fill (closed polygon for area)
+  const locusPts = sl.map(p => `${px(p[1]).toFixed(1)},${py(p[2]).toFixed(1)}`).join(' ');
+  plot.appendChild(el('polygon', { class: 'locus-fill', points: locusPts }));
+  // Spectral locus stroke (open path along the spectral curve only)
+  const slStroke = 'M ' + sl.map(p => `${px(p[1]).toFixed(2)},${py(p[2]).toFixed(2)}`).join(' L ');
+  plot.appendChild(el('path', { class: 'locus-stroke', d: slStroke }));
+  // Line of purples (dashed) from 380 nm endpoint to 700 nm endpoint
+  const first = sl[0], last = sl[sl.length - 1];
+  plot.appendChild(el('line', { class: 'purples',
+    x1: px(first[1]), y1: py(first[2]),
+    x2: px(last[1]), y2: py(last[2]) }));
+
+  // Wavelength labels with small colored circles
+  const labelWL = [400, 460, 480, 490, 500, 520, 540, 560, 580, 600, 620, 700];
+  const wlColor = {
+    400: '#5a009a', 460: '#0033ff', 480: '#00b8ff', 490: '#00d9c8',
+    500: '#00e090', 520: '#3edd00', 540: '#9bd200', 560: '#ddc800',
+    580: '#e89800', 600: '#dc4d00', 620: '#cc1d00', 700: '#7a0000'
+  };
+  const Ex = px(0.31), Ey = py(0.33);
+  for (const wl of labelWL) {
+    const p = sl.find(s => s[0] === wl);
+    if (!p) continue;
+    const cx = px(p[1]), cy = py(p[2]);
+    plot.appendChild(el('circle', { cx, cy, r: 3.2, fill: wlColor[wl] || '#444', stroke: '#faf5e9', 'stroke-width': 1 }));
+    const dx = cx - Ex, dy = cy - Ey;
+    const norm = Math.max(1, Math.sqrt(dx * dx + dy * dy));
+    const lx = cx + (dx / norm) * 16;
+    const ly = cy + (dy / norm) * 16 + 3;
+    const lab = el('text', { class: 'lambda-label', x: lx.toFixed(1), y: ly.toFixed(1), 'text-anchor': 'middle' });
+    lab.textContent = wl;
+    plot.appendChild(lab);
+  }
+
+  // Planckian locus via Kim/Krystek polynomial approximation
+  function planck(T) {
+    let x, y;
+    if (T < 4000) {
+      x = -0.2661239e9 / (T * T * T) - 0.2343580e6 / (T * T) + 0.8776956e3 / T + 0.179910;
+    } else {
+      x = -3.0258469e9 / (T * T * T) + 2.1070379e6 / (T * T) + 0.2226347e3 / T + 0.240390;
+    }
+    if (T < 2222) {
+      y = -1.1063814 * x * x * x - 1.34811020 * x * x + 2.18555832 * x - 0.20219683;
+    } else if (T < 4000) {
+      y = -0.9549476 * x * x * x - 1.37418593 * x * x + 2.09137015 * x - 0.16748867;
+    } else {
+      y = 3.0817580 * x * x * x - 5.87338670 * x * x + 3.75112997 * x - 0.37001483;
+    }
+    return [x, y];
+  }
+  const planckPts = [];
+  for (let T = 1500; T <= 20000; T += T < 4000 ? 50 : 150) planckPts.push(planck(T));
+  const plD = 'M ' + planckPts.map(p => `${px(p[0]).toFixed(2)},${py(p[1]).toFixed(2)}`).join(' L ');
+  plot.appendChild(el('path', { class: 'planck', d: plD }));
+
+  // Equal-energy point E
+  plot.appendChild(el('circle', { class: 'e-point', cx: px(1 / 3), cy: py(1 / 3), r: 3.6 }));
+  const eLab = el('text', { class: 'e-label', x: px(1 / 3) + 7, y: py(1 / 3) - 6 });
+  eLab.textContent = 'E';
+  plot.appendChild(eLab);
+
+  // Marker for the current temperature
+  const marker = el('circle', { class: 'marker', r: 7.5, cx: 0, cy: 0 });
+  plot.appendChild(marker);
+
+  // Nearest-named illuminant tags
+  const named = [
+    [1900, 'candle flame (≈1900 K)'],
+    [2400, 'sodium lamp (≈2400 K)'],
+    [2856, 'illuminant A (tungsten)'],
+    [3200, 'studio tungsten (≈3200 K)'],
+    [4000, 'cool fluorescent (≈4000 K)'],
+    [5003, 'illuminant D50'],
+    [5500, 'noon sunlight (≈5500 K)'],
+    [6504, 'illuminant D65 (daylight)'],
+    [7500, 'overcast daylight (≈7500 K)'],
+    [10000, 'shade in open sky (≈10000 K)'],
+    [16000, 'clear blue sky (≈16000 K)']
+  ];
+  function nearestName(T) {
+    let best = named[0], bd = Math.abs(T - named[0][0]);
+    for (const n of named) {
+      const d = Math.abs(T - n[0]);
+      if (d < bd) { best = n; bd = d; }
+    }
+    return best[1];
+  }
+
+  // Slider wiring
+  const sliderEl = document.getElementById('T');
+  const Tval = document.getElementById('Tval');
+  const xval = document.getElementById('xval');
+  const yval = document.getElementById('yval');
+  const namedval = document.getElementById('namedval');
+  function update() {
+    const T = +sliderEl.value;
+    const [x, y] = planck(T);
+    marker.setAttribute('cx', px(x).toFixed(2));
+    marker.setAttribute('cy', py(y).toFixed(2));
+    Tval.textContent = T.toLocaleString() + ' K';
+    xval.textContent = x.toFixed(3);
+    yval.textContent = y.toFixed(3);
+    namedval.textContent = nearestName(T);
+  }
+  sliderEl.addEventListener('input', update);
+  update();
+})();
+</script>
+</body>
+</html>

@@ -229,5 +229,12 @@
     "subtitle": "Ra = ⟨R₁…R₈⟩",
     "date": "2026-06-02",
     "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-06-03-chromaticity-diagram",
+    "title": "The CIE 1931 chromaticity diagram: every color the eye can see, on one sheet of paper",
+    "subtitle": "CIE 1931 (x,y)",
+    "date": "2026-06-03",
+    "estimatedReadingMinutes": 22
   }
 ]

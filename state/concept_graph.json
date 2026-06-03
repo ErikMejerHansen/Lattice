@@ -329,6 +329,16 @@
       "createdAt": "2026-06-02T08:00:00Z",
       "col": 0,
       "row": 16
+    },
+    {
+      "id": "chromaticity_diagram",
+      "label": "Chromaticity",
+      "subtitle": "CIE 1931 (x,y)",
+      "state": "available",
+      "lesson": "2026-06-03-chromaticity-diagram",
+      "createdAt": "2026-06-03T08:00:00Z",
+      "col": 1,
+      "row": 16
     }
   ],
   "edges": [
@@ -415,6 +425,9 @@
     { "from": "balmer_series", "to": "stellar_classification", "kind": "applied" },
     { "from": "color_rendering_index", "to": "color_temperature", "kind": "extends" },
     { "from": "color_rendering_index", "to": "blackbody", "kind": "related" },
-    { "from": "color_rendering_index", "to": "wavelength", "kind": "related" }
+    { "from": "color_rendering_index", "to": "wavelength", "kind": "related" },
+    { "from": "chromaticity_diagram", "to": "color_temperature", "kind": "extends" },
+    { "from": "chromaticity_diagram", "to": "color_rendering_index", "kind": "related" },
+    { "from": "chromaticity_diagram", "to": "wavelength", "kind": "related" }
   ]
 }

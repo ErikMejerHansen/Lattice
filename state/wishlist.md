@@ -1,5 +1,4 @@
 # auto-suggested 2026-05-07 from color-temperature
-Chromaticity diagram — CIE 1931 xy, the (x,y) sheet that the Planckian locus lives on
 Metamerism — same color seen, different spectra emitted, the catch behind every camera
 
 # auto-suggested 2026-05-07 from spectroscopy-basics
@@ -100,3 +99,8 @@ Hα imaging — narrowband photography at 656.3 nm, the workhorse that maps H II
 TM-30-20 — IES successor to CRI: 99 real-world reflectance samples, Rf for fidelity and Rg for gamut area, plus a color vector graphic showing which hue regions a lamp shifts in which direction; the working metric every professional procurement spec now uses
 Phosphor-converted white LED — blue InGaN diode pump plus YAG:Ce yellow phosphor (and optionally K2SiF6:Mn4+ red phosphor), the chemistry that took over residential and commercial lighting in the 2010s and whose spectral hole at 600 to 660 nm is the entire reason R9 became a separately specified number
 CIE 1976 ΔE — the color-difference distance in CIELAB whose value of 1 is roughly a just-noticeable difference for the standard observer, the metric every CRI patch score (and every TM-30 fidelity calculation) ultimately rests on
+
+# auto-suggested 2026-06-03 from chromaticity-diagram
+MacAdam ellipses — 1942 Kodak measurement of just-noticeable-difference contours scattered across CIE 1931 (x,y), the data that proved the diagram lies about distance even while it tells the truth about identity
+CIELAB color space — the 1976 transform of (X,Y,Z) into perceptual (L*, a*, b*), ΔE_ab calibrated so 1 is the smallest difference an observer reports, and still the working ruler of digital color management
+Standard illuminants — A (tungsten 2856 K), D50, D65, the canonical reference spectra anchored to specific points on the diagram that every colorimetric measurement is implicitly compared against
