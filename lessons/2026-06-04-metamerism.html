@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metamerism: spectrum twists, color holds</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 80px; text-align: right;
+}
+#viz { max-width: 640px; margin: 12px auto; padding: 8px 16px 16px; }
+svg { width: 100%; height: auto; display: block; }
+.bg-plot { fill: var(--bg-raised); stroke: var(--border); stroke-width: 1; }
+.ref-curve { fill: none; stroke: var(--text-ghost); stroke-width: 1.4; stroke-dasharray: 5 3; }
+.alt-bar { fill: var(--accent-soft); opacity: 0.55; stroke: var(--accent); stroke-width: 0.8; }
+.blend-curve { fill: none; stroke: var(--accent); stroke-width: 2.2; stroke-linejoin: round; }
+.blend-fill { fill: var(--accent); opacity: 0.10; }
+.axis-tick { stroke: var(--border-strong); stroke-width: 0.7; }
+.axis-label { font-size: 10px; fill: var(--text-muted); font-family: "IBM Plex Mono", "SF Mono", monospace; }
+.axis-title { font-size: 11px; fill: var(--text-muted); font-style: italic; }
+.peak-label { font-size: 9px; fill: var(--accent); font-family: "IBM Plex Mono", "SF Mono", monospace; }
+.legend-text { font-size: 11px; fill: var(--text-muted); font-style: italic; }
+.legend-mark { stroke-width: 1.6; fill: none; }
+.swatch-row { display: flex; align-items: center; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
+.swatch-box {
+  width: 88px; height: 44px;
+  border: 1px solid var(--border-strong);
+  background: #cfa97a;
+}
+.readouts {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 12px; color: var(--text);
+}
+.readouts .lbl {
+  color: var(--text-muted); font-style: italic;
+  font-family: "Source Serif 4", "Iowan Old Style", serif;
+  margin-right: 4px;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+<svg viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Two spectra producing the same color, with a blend slider">
+  <g id="plot"></g>
+</svg>
+<div class="swatch-row">
+  <div class="swatch-box" id="swatch" aria-label="rendered color of the current blend"></div>
+  <div class="readouts">
+    <span><span class="lbl">X</span><span id="Xval">0.836</span></span>
+    <span><span class="lbl">Y</span><span id="Yval">1.000</span></span>
+    <span><span class="lbl">Z</span><span id="Zval">0.301</span></span>
+    <span><span class="lbl">x</span><span id="xval">0.391</span></span>
+    <span><span class="lbl">y</span><span id="yval">0.468</span></span>
+  </div>
+</div>
+<div class="viz-slider-row">
+  <label for="t">t</label>
+  <input id="t" type="range" min="0" max="100" value="0" step="1" aria-label="Blend between smooth Planckian and three-peak metamer">
+  <span class="value" id="tval">smooth (t=0)</span>
+</div>
+<div class="viz-caption">The dashed gray curve is the reference, a Planckian blackbody at 3500 K. The three rust bars at 460, 540, and 600 nm are its three-peak metamer, with heights solved live from the 3x3 system in section 3. The heavy rust curve is the current blend at slider value t. Drag t from 0 to 1: the spectrum twists from smooth-continuum to three-narrow-spike. The color swatch and the (X, Y, Z) and (x, y) readouts hold steady, because every linear blend of two metamers is itself a metamer, by linearity of the integral.</div>
+</div>
+
+<script>
+(() => {
+  // CIE 1931 2-degree standard observer at 20 nm intervals from 380 to 780 nm
+  const dlam = 20;
+  const wls = [380,400,420,440,460,480,500,520,540,560,580,600,620,640,660,680,700,720,740,760,780];
+  const xbar = [0.0014,0.0143,0.1344,0.3483,0.2908,0.0956,0.0049,0.0633,0.2904,0.5945,0.9163,1.0622,0.8544,0.4479,0.1649,0.0468,0.0114,0.0029,0.0007,0.0002,0.0000];
+  const ybar = [0.0000,0.0004,0.0040,0.0230,0.0600,0.1390,0.3230,0.7100,0.9540,0.9950,0.8700,0.6310,0.3810,0.1750,0.0610,0.0170,0.0041,0.0010,0.0002,0.0001,0.0000];
+  const zbar = [0.0065,0.0679,0.6456,1.7471,1.6692,0.8130,0.2720,0.0782,0.0203,0.0039,0.0017,0.0008,0.0002,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000];
+  const N = wls.length;
+
+  // Reference: Planckian at 3500 K, normalized to peak 1
+  const T = 3500;
+  function planck(lam, T) {
+    const c2 = 1.4388e7; // hc/k in nm*K
+    const x = c2 / (lam * T);
+    return 1 / (Math.pow(lam, 5) * (Math.exp(x) - 1));
+  }
+  let Sref = wls.map(l => planck(l, T));
+  const refmax = Math.max.apply(null, Sref);
+  Sref = Sref.map(v => v / refmax);
+
+  // Tristimulus of the reference
+  let Xref = 0, Yref = 0, Zref = 0;
+  for (let i = 0; i < N; i++) {
+    Xref += Sref[i] * xbar[i] * dlam;
+    Yref += Sref[i] * ybar[i] * dlam;
+    Zref += Sref[i] * zbar[i] * dlam;
+  }
+
+  // Three-peak metamer: spikes at 460, 540, 600 nm
+  const ib = wls.indexOf(460);
+  const ig = wls.indexOf(540);
+  const ir = wls.indexOf(600);
+  // System M * w = v, where M is 3x3 from matching functions at the three peaks
+  function solve3(M, v) {
+    // Augment
+    const A = [
+      [M[0][0], M[0][1], M[0][2], v[0]],
+      [M[1][0], M[1][1], M[1][2], v[1]],
+      [M[2][0], M[2][1], M[2][2], v[2]],
+    ];
+    for (let i = 0; i < 3; i++) {
+      let p = i;
+      for (let j = i + 1; j < 3; j++) {
+        if (Math.abs(A[j][i]) > Math.abs(A[p][i])) p = j;
+      }
+      const tmp = A[i]; A[i] = A[p]; A[p] = tmp;
+      for (let j = i + 1; j < 3; j++) {
+        const f = A[j][i] / A[i][i];
+        for (let k = i; k <= 3; k++) A[j][k] -= f * A[i][k];
+      }
+    }
+    const w = [0, 0, 0];
+    for (let i = 2; i >= 0; i--) {
+      let s = A[i][3];
+      for (let k = i + 1; k < 3; k++) s -= A[i][k] * w[k];
+      w[i] = s / A[i][i];
+    }
+    return w;
+  }
+  const M = [
+    [xbar[ib], xbar[ig], xbar[ir]],
+    [ybar[ib], ybar[ig], ybar[ir]],
+    [zbar[ib], zbar[ig], zbar[ir]],
+  ];
+  const w = solve3(M, [Xref, Yref, Zref]);
+  // S_alt(lambda): zero except three spike bins; height = w_i / dlam so that
+  // integral over the 20 nm bin = w_i, and tristimulus matches the reference.
+  const Salt = new Array(N).fill(0);
+  Salt[ib] = w[0] / dlam;
+  Salt[ig] = w[1] / dlam;
+  Salt[ir] = w[2] / dlam;
+
+  // Plot geometry
+  const X0 = 60, X1 = 580, Y0 = 250, Y1 = 30;
+  const lamMin = 380, lamMax = 780;
+  // Find y-scale: maximum of all curves we'll draw
+  const ymax = Math.max.apply(null, Salt.concat(Sref).concat([0.001]));
+  const yScale = ymax * 1.1;
+  const px = lam => X0 + (lam - lamMin) / (lamMax - lamMin) * (X1 - X0);
+  const py = s => Y0 - s / yScale * (Y0 - Y1);
+
+  const ns = 'http://www.w3.org/2000/svg';
+  function el(name, attrs) {
+    const e = document.createElementNS(ns, name);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  const plot = document.getElementById('plot');
+
+  // Background plot rectangle
+  plot.appendChild(el('rect', { class: 'bg-plot', x: X0, y: Y1, width: X1 - X0, height: Y0 - Y1 }));
+
+  // X-axis ticks at every 50 nm
+  for (let lam = 400; lam <= 780; lam += 50) {
+    plot.appendChild(el('line', { class: 'axis-tick', x1: px(lam), y1: Y0, x2: px(lam), y2: Y0 + 4 }));
+    const t = el('text', { class: 'axis-label', x: px(lam), y: Y0 + 15, 'text-anchor': 'middle' });
+    t.textContent = lam;
+    plot.appendChild(t);
+  }
+  const xt = el('text', { class: 'axis-title', x: (X0 + X1) / 2, y: Y0 + 30, 'text-anchor': 'middle' });
+  xt.textContent = 'wavelength (nm)';
+  plot.appendChild(xt);
+  const yt = el('text', { class: 'axis-title', x: X0 - 32, y: (Y0 + Y1) / 2, 'text-anchor': 'middle', transform: `rotate(-90, ${X0 - 32}, ${(Y0 + Y1) / 2})` });
+  yt.textContent = 'spectral power (a.u.)';
+  plot.appendChild(yt);
+
+  // Reference curve (dashed): smooth Planckian
+  const refD = 'M ' + Sref.map((s, i) => `${px(wls[i]).toFixed(1)},${py(s).toFixed(1)}`).join(' L ');
+  plot.appendChild(el('path', { class: 'ref-curve', d: refD }));
+
+  // Three-peak alt: render as three thin bars centered on the peak wavelengths
+  const barW = 7;
+  [ib, ig, ir].forEach((idx, k) => {
+    const cx = px(wls[idx]);
+    const top = py(Salt[idx]);
+    const wlbl = [460, 540, 600][k];
+    plot.appendChild(el('rect', { class: 'alt-bar', x: cx - barW / 2, y: top, width: barW, height: Y0 - top }));
+    // label above the bar
+    const lbl = el('text', { class: 'peak-label', x: cx, y: top - 4, 'text-anchor': 'middle' });
+    lbl.textContent = wlbl;
+    plot.appendChild(lbl);
+  });
+
+  // Legend
+  const lgY = Y1 + 6;
+  plot.appendChild(el('line', { class: 'legend-mark', x1: X1 - 200, y1: lgY, x2: X1 - 180, y2: lgY, stroke: 'var(--text-ghost)', 'stroke-dasharray': '5 3' }));
+  const lref = el('text', { class: 'legend-text', x: X1 - 176, y: lgY + 3 });
+  lref.textContent = 'Planckian 3500 K (reference)';
+  plot.appendChild(lref);
+  plot.appendChild(el('rect', { x: X1 - 200, y: lgY + 14 - 5, width: 20, height: 10, fill: 'var(--accent-soft)', opacity: 0.55, stroke: 'var(--accent)', 'stroke-width': 0.8 }));
+  const lalt = el('text', { class: 'legend-text', x: X1 - 176, y: lgY + 17 });
+  lalt.textContent = 'three-peak metamer';
+  plot.appendChild(lalt);
+  plot.appendChild(el('line', { class: 'legend-mark', x1: X1 - 200, y1: lgY + 28, x2: X1 - 180, y2: lgY + 28, stroke: 'var(--accent)', 'stroke-width': 2.2 }));
+  const lblend = el('text', { class: 'legend-text', x: X1 - 176, y: lgY + 31 });
+  lblend.textContent = 'current blend';
+  plot.appendChild(lblend);
+
+  // Blend curve (rust, heavier)
+  const blendPath = el('path', { class: 'blend-curve' });
+  plot.appendChild(blendPath);
+
+  // sRGB conversion
+  function xyzToSrgb(X, Y, Z) {
+    // Linear sRGB from XYZ (D65 matrix)
+    let r =  3.2406 * X - 1.5372 * Y - 0.4986 * Z;
+    let g = -0.9689 * X + 1.8758 * Y + 0.0415 * Z;
+    let b =  0.0557 * X - 0.2040 * Y + 1.0570 * Z;
+    // Clip negatives
+    r = Math.max(0, r); g = Math.max(0, g); b = Math.max(0, b);
+    // Scale so max is <= 1 if any > 1
+    const mx = Math.max(r, g, b);
+    if (mx > 1) { r /= mx; g /= mx; b /= mx; }
+    // Gamma encode to sRGB
+    function gam(v) {
+      return v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055;
+    }
+    r = gam(r); g = gam(g); b = gam(b);
+    return [
+      Math.round(255 * Math.min(1, Math.max(0, r))),
+      Math.round(255 * Math.min(1, Math.max(0, g))),
+      Math.round(255 * Math.min(1, Math.max(0, b)))
+    ];
+  }
+
+  const slider = document.getElementById('t');
+  const tval = document.getElementById('tval');
+  const swatch = document.getElementById('swatch');
+  const Xv = document.getElementById('Xval');
+  const Yv = document.getElementById('Yval');
+  const Zv = document.getElementById('Zval');
+  const xv = document.getElementById('xval');
+  const yv = document.getElementById('yval');
+
+  function update() {
+    const t = +slider.value / 100;
+    // Blend spectrum
+    const Sb = new Array(N);
+    for (let i = 0; i < N; i++) Sb[i] = (1 - t) * Sref[i] + t * Salt[i];
+    // Path for the blend curve. We draw it as a piecewise linear with explicit
+    // line-down-to-baseline near the three peak indices so the spike shape is
+    // visible at t close to 1. Outside the spike bins we connect smoothly.
+    let d = '';
+    for (let i = 0; i < N; i++) {
+      const cx = px(wls[i]);
+      const cy = py(Sb[i]);
+      if (i === 0) d += `M ${cx.toFixed(1)} ${cy.toFixed(1)}`;
+      else d += ` L ${cx.toFixed(1)} ${cy.toFixed(1)}`;
+    }
+    blendPath.setAttribute('d', d);
+    // Tristimulus of the blend
+    let X = 0, Y = 0, Z = 0;
+    for (let i = 0; i < N; i++) {
+      X += Sb[i] * xbar[i] * dlam;
+      Y += Sb[i] * ybar[i] * dlam;
+      Z += Sb[i] * zbar[i] * dlam;
+    }
+    // Normalize so Y of reference = 1
+    const Xn = X / Yref, Yn = Y / Yref, Zn = Z / Yref;
+    const xc = Xn / (Xn + Yn + Zn);
+    const yc = Yn / (Xn + Yn + Zn);
+    Xv.textContent = Xn.toFixed(3);
+    Yv.textContent = Yn.toFixed(3);
+    Zv.textContent = Zn.toFixed(3);
+    xv.textContent = xc.toFixed(4);
+    yv.textContent = yc.toFixed(4);
+    const rgb = xyzToSrgb(Xn, Yn, Zn);
+    swatch.style.backgroundColor = `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+    let lbl;
+    if (t < 0.02) lbl = 'smooth (t=0.00)';
+    else if (t > 0.98) lbl = 'three-peak (t=1.00)';
+    else lbl = `blend t=${t.toFixed(2)}`;
+    tval.textContent = lbl;
+  }
+  slider.addEventListener('input', update);
+  update();
+})();
+</script>
+</body>
+</html>
