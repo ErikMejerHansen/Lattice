@@ -243,5 +243,12 @@
     "subtitle": "same (X,Y,Z)",
     "date": "2026-06-04",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-06-05-doppler-spectroscopy",
+    "title": "Doppler spectroscopy: from Buys-Ballot's brass band to the wobble of 51 Pegasi",
+    "subtitle": "Δλ/λ = v/c",
+    "date": "2026-06-05",
+    "estimatedReadingMinutes": 23
   }
 ]
