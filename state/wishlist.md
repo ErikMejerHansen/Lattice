@@ -1,7 +1,6 @@
 # auto-suggested 2026-05-07 from color-temperature
 
 # auto-suggested 2026-05-07 from spectroscopy-basics
-Doppler spectroscopy — Δλ/λ = v/c, the radial-velocity trick that found the first exoplanets and that runs every redshift survey
 
 # auto-suggested 2026-05-08 from coherence
 Stimulated emission — Einstein 1917, the inverted population, the engine that runs every laser from Maiman onward
@@ -108,3 +107,8 @@ Standard illuminants — A (tungsten 2856 K), D50, D65, the canonical reference 
 Luther-Ives condition — Robert Luther 1927 and Herbert Ives 1929, the linear-algebra requirement that a camera's R̄(λ), Ḡ(λ), B̄(λ) be a linear combination of the eye's x̄, ȳ, z̄ for a fixed 3×3 color matrix to bring camera readings into agreement with the standard observer's, and the manufacturing reasons no commercial sensor satisfies it
 Cone fundamentals — Stiles-Burch 1959 10° matching plus 1980s microspectrophotometry on dissected cone outer segments, the three pigment absorption curves L̄(λ), M̄(λ), S̄(λ) peaking near 564, 533, and 437 nm that sit under every (x̄, ȳ, z̄) and define the eye's metamer set
 Spectral reflectance — R(λ) as the intrinsic light-bouncing fingerprint of a surface independent of any illuminant, the function the dyestuff and pigment industries actually want to specify, and the modern Munsell-derived reflectance atlases that tabulate it for 1600+ reference colors
+
+# auto-suggested 2026-06-05 from doppler-spectroscopy
+Relativistic Doppler effect — f_obs = f_src √((1−β)/(1+β)), the γ-factor correction that survives at quasar redshifts, plus the transverse Doppler shift Ives and Stilwell measured in 1938 with hydrogen canal rays
+Transit method — the periodic 1% dip in stellar brightness as a planet crosses the disk, ΔL/L ≈ (R_p/R_*)², the geometry-only complement to RV that broke the inclination degeneracy and made Kepler the dominant survey for a decade
+Spectroscopic binary stars — two RV curves of the two stellar components reading off the mass ratio M_1/M_2 from the amplitude ratio K_2/K_1, the original 19th-century use of Doppler before any planet had been found

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The wobble of a star pulled by a planet</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 90px; text-align: right;
+}
+.preset-row {
+  display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;
+}
+.preset {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  min-height: 36px;
+  border-radius: 2px;
+}
+.preset:hover { border-color: var(--accent-soft); }
+.preset.active { background: var(--accent); color: var(--bg-raised); border-color: var(--accent); }
+.readout {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+.readout .pin { color: var(--accent); }
+.readout .detect-yes { color: var(--accent); }
+.readout .detect-no { color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+  <canvas id="rv" height="280" style="width:100%;display:block;border-radius:3px;border:1px solid var(--border);background:var(--bg-raised);"></canvas>
+  <div class="viz-slider-row">
+    <label>M<sub>p</sub></label>
+    <input type="range" id="mSlider" min="-3" max="1" step="0.02" value="-0.328" style="min-height:36px;">
+    <span class="value" id="mVal"></span>
+  </div>
+  <div class="viz-slider-row">
+    <label>P</label>
+    <input type="range" id="pSlider" min="0" max="3.7" step="0.02" value="0.626" style="min-height:36px;">
+    <span class="value" id="pVal"></span>
+  </div>
+  <div class="preset-row">
+    <button class="preset" data-m="-0.328" data-p="0.626">51 Peg b</button>
+    <button class="preset" data-m="0" data-p="3.637">Jupiter / Sun</button>
+    <button class="preset" data-m="-2.502" data-p="2.562">Earth / Sun</button>
+  </div>
+  <div class="readout" id="readout"></div>
+  <p class="viz-caption" style="margin-top:10px;">The reflex radial velocity of a Sun-mass star pulled by a planet of mass M_p on a circular, edge-on orbit of period P, plotted over one orbital cycle. The vertical scale auto-fits to the current K amplitude. The three dashed horizontal lines mark the precision floors of three eras of spectrograph: ELODIE 1995 (~13 m/s), HARPS 2003 (~1 m/s), ESPRESSO 2018 (~10 cm/s). When a threshold lies outside the visible y range, an arrow at the canvas edge marks its direction. The detect tag in the readout reports the first instrument era whose floor sits below K.</p>
+</div>
+
+<script>
+const rvCanvas = document.getElementById("rv");
+const mSlider = document.getElementById("mSlider");
+const pSlider = document.getElementById("pSlider");
+const mVal = document.getElementById("mVal");
+const pVal = document.getElementById("pVal");
+const readoutEl = document.getElementById("readout");
+
+const M_EARTH_PER_JUP = 317.828;
+const THRESHOLDS = [
+  { v: 13, label: "ELODIE 1995" },
+  { v: 1,  label: "HARPS 2003" },
+  { v: 0.1, label: "ESPRESSO 2018" }
+];
+
+function Kamp(M_J, P_days) {
+  const P_yr = P_days / 365.25;
+  return 28.4329 * M_J * Math.pow(P_yr, -1/3);
+}
+function semiMajor(P_days) {
+  const P_yr = P_days / 365.25;
+  return Math.pow(P_yr, 2/3);
+}
+
+function fmtPeriod(P_days) {
+  if (P_days < 1) return (P_days * 24).toFixed(2) + " hr";
+  if (P_days < 60) return P_days.toFixed(2) + " days";
+  if (P_days < 365) return P_days.toFixed(1) + " days";
+  return (P_days / 365.25).toFixed(2) + " yr";
+}
+function fmtMass(M_J) {
+  const M_earth = M_J * M_EARTH_PER_JUP;
+  if (M_J >= 0.5) return M_J.toFixed(2) + " M_J";
+  if (M_J >= 0.05) return M_J.toFixed(3) + " M_J (" + M_earth.toFixed(1) + " M_⊕)";
+  if (M_J >= 0.005) return M_earth.toFixed(2) + " M_⊕";
+  return M_earth.toFixed(3) + " M_⊕";
+}
+function fmtK(K_mps) {
+  if (K_mps >= 1000) return (K_mps / 1000).toFixed(2) + " km/s";
+  if (K_mps >= 1)    return K_mps.toFixed(2) + " m/s";
+  return (K_mps * 100).toFixed(2) + " cm/s";
+}
+function fmtAU(a) {
+  if (a < 0.01) return (a * 1000).toFixed(2) + " mAU";
+  if (a < 1) return a.toFixed(3) + " AU";
+  return a.toFixed(2) + " AU";
+}
+
+function makeField(parent, label, pinned) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  const lbl = document.createElement("span");
+  lbl.className = "lbl";
+  lbl.textContent = label;
+  const val = document.createElement("span");
+  if (pinned) val.className = "pin";
+  wrap.appendChild(lbl);
+  wrap.appendChild(val);
+  parent.appendChild(wrap);
+  return val;
+}
+const fK = makeField(readoutEl, "K (half-amplitude)", true);
+const fMp = makeField(readoutEl, "M_p");
+const fP = makeField(readoutEl, "period P");
+const fA = makeField(readoutEl, "a (semi-major)");
+const fDet = makeField(readoutEl, "detect");
+
+const PAD_L = 56, PAD_R = 14, PAD_T = 14, PAD_B = 28;
+
+function drawAxes(ctx, W, H, yMax) {
+  // axes
+  ctx.strokeStyle = "rgba(184,172,142,0.7)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PAD_L, PAD_T);
+  ctx.lineTo(PAD_L, H - PAD_B);
+  ctx.lineTo(W - PAD_R, H - PAD_B);
+  ctx.stroke();
+
+  // zero line
+  const yZero = PAD_T + (H - PAD_T - PAD_B) / 2;
+  ctx.strokeStyle = "rgba(168,158,144,0.6)";
+  ctx.setLineDash([2, 3]);
+  ctx.beginPath();
+  ctx.moveTo(PAD_L, yZero);
+  ctx.lineTo(W - PAD_R, yZero);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // y axis label values
+  ctx.fillStyle = "rgba(107,99,89,0.95)";
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "right";
+  ctx.fillText("0", PAD_L - 6, yZero);
+  ctx.fillText("+" + fmtK(yMax).replace(" ", ""), PAD_L - 6, PAD_T + 6);
+  ctx.fillText("-" + fmtK(yMax).replace(" ", ""), PAD_L - 6, H - PAD_B - 6);
+
+  ctx.fillStyle = "rgba(107,99,89,0.95)";
+  ctx.textBaseline = "alphabetic";
+  ctx.textAlign = "left";
+  ctx.fillText("v_radial", 6, PAD_T + 12);
+
+  // x axis: orbital phase
+  ctx.fillStyle = "rgba(107,99,89,0.95)";
+  ctx.textBaseline = "top";
+  ctx.textAlign = "center";
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+  const yAxis = H - PAD_B;
+  const xL = PAD_L, xR = W - PAD_R, xMid = (xL + xR) / 2;
+  ctx.fillText("phase 0", xL, yAxis + 4);
+  ctx.fillText("0.5", xMid, yAxis + 4);
+  ctx.fillText("1.0 (one period)", xR, yAxis + 4);
+}
+
+function drawThresholds(ctx, W, H, yMax) {
+  const plotH = H - PAD_T - PAD_B;
+  const yZero = PAD_T + plotH / 2;
+  const half = plotH / 2;
+  const xL = PAD_L, xR = W - PAD_R;
+
+  ctx.font = "10px 'IBM Plex Mono',monospace";
+
+  THRESHOLDS.forEach((t, idx) => {
+    const inRange = t.v <= yMax;
+    if (inRange) {
+      const yPos = yZero - half * (t.v / yMax);
+      const yNeg = yZero + half * (t.v / yMax);
+
+      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = "rgba(196,117,88,0.75)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(xL, yPos); ctx.lineTo(xR, yPos);
+      ctx.moveTo(xL, yNeg); ctx.lineTo(xR, yNeg);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = "rgba(156,58,34,0.85)";
+      ctx.textBaseline = "bottom";
+      ctx.textAlign = "right";
+      ctx.fillText(t.label + "  ±" + fmtK(t.v), xR - 3, yPos - 2);
+    } else {
+      // threshold is above the visible y range; draw an arrow at top edge
+      const yArrow = PAD_T + 4 + idx * 12;
+      ctx.fillStyle = "rgba(196,117,88,0.8)";
+      ctx.textBaseline = "top";
+      ctx.textAlign = "right";
+      ctx.fillText("↑ " + t.label + " ±" + fmtK(t.v) + " (above scale)", xR - 3, yArrow);
+    }
+  });
+}
+
+function drawWave(ctx, W, H, K, yMax) {
+  const plotH = H - PAD_T - PAD_B;
+  const yZero = PAD_T + plotH / 2;
+  const half = plotH / 2;
+  const xL = PAD_L, xR = W - PAD_R;
+
+  ctx.strokeStyle = "var(--accent)";
+  ctx.strokeStyle = "#9c3a22";
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  const N = 240;
+  for (let i = 0; i <= N; i++) {
+    const phase = i / N;
+    const v = K * Math.sin(2 * Math.PI * phase);
+    const x = xL + (xR - xL) * phase;
+    let y = yZero - half * (v / yMax);
+    if (y < PAD_T) y = PAD_T;
+    if (y > H - PAD_B) y = H - PAD_B;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // mark the +K and -K extrema with thin guide marks at quarter and three-quarter phase
+  if (K <= yMax) {
+    ctx.fillStyle = "#9c3a22";
+    const xPeak = xL + (xR - xL) * 0.25;
+    const xTrough = xL + (xR - xL) * 0.75;
+    const yPeak = yZero - half * (K / yMax);
+    const yTrough = yZero + half * (K / yMax);
+    ctx.beginPath(); ctx.arc(xPeak, yPeak, 3, 0, 2 * Math.PI); ctx.fill();
+    ctx.beginPath(); ctx.arc(xTrough, yTrough, 3, 0, 2 * Math.PI); ctx.fill();
+
+    ctx.font = "10px 'IBM Plex Mono',monospace";
+    ctx.fillStyle = "#9c3a22";
+    ctx.textBaseline = "bottom";
+    ctx.textAlign = "left";
+    ctx.fillText("K = +" + fmtK(K), xPeak + 5, yPeak - 2);
+    ctx.textBaseline = "top";
+    ctx.fillText("-" + fmtK(K), xTrough + 5, yTrough + 2);
+  } else {
+    // K runs off the top; the curve clips; label at the top edge
+    ctx.fillStyle = "#9c3a22";
+    ctx.font = "10px 'IBM Plex Mono',monospace";
+    ctx.textBaseline = "top";
+    ctx.textAlign = "left";
+    ctx.fillText("K = ±" + fmtK(K) + " (curve clipped)", PAD_L + 6, PAD_T + 2);
+  }
+}
+
+function draw() {
+  const M_J = Math.pow(10, parseFloat(mSlider.value));
+  const P_days = Math.pow(10, parseFloat(pSlider.value));
+  const K = Kamp(M_J, P_days);
+  const a = semiMajor(P_days);
+
+  // auto-scale y axis. Floor at 0.15 m/s so the smallest wobbles still show.
+  const yMax = Math.max(K * 1.25, 0.15);
+
+  const W = rvCanvas.offsetWidth || 320;
+  rvCanvas.width = W;
+  const H = rvCanvas.height;
+  const ctx = rvCanvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  drawAxes(ctx, W, H, yMax);
+  drawThresholds(ctx, W, H, yMax);
+  drawWave(ctx, W, H, K, yMax);
+
+  // readout
+  mVal.textContent = fmtMass(M_J);
+  pVal.textContent = fmtPeriod(P_days);
+  fK.textContent = fmtK(K);
+  fMp.textContent = fmtMass(M_J);
+  fP.textContent = fmtPeriod(P_days);
+  fA.textContent = fmtAU(a);
+
+  // detection era
+  let era = null;
+  for (let i = THRESHOLDS.length - 1; i >= 0; i--) {
+    if (K >= THRESHOLDS[i].v) { era = THRESHOLDS[i]; break; }
+  }
+  if (era) {
+    fDet.textContent = era.label;
+    fDet.className = "pin";
+  } else {
+    fDet.textContent = "below all eras";
+    fDet.className = "";
+  }
+
+  // preset highlighting
+  document.querySelectorAll(".preset").forEach(btn => {
+    const mp = parseFloat(btn.dataset.m), pp = parseFloat(btn.dataset.p);
+    const matches = Math.abs(parseFloat(mSlider.value) - mp) < 0.03 &&
+                    Math.abs(parseFloat(pSlider.value) - pp) < 0.03;
+    btn.classList.toggle("active", matches);
+  });
+}
+
+mSlider.addEventListener("input", draw);
+pSlider.addEventListener("input", draw);
+document.querySelectorAll(".preset").forEach(btn => {
+  btn.addEventListener("click", () => {
+    mSlider.value = btn.dataset.m;
+    pSlider.value = btn.dataset.p;
+    draw();
+  });
+});
+window.addEventListener("load", draw);
+setTimeout(draw, 50);
+</script>
+</body>
+</html>
