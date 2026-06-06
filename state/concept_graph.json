@@ -359,6 +359,16 @@
       "createdAt": "2026-06-05T08:00:00Z",
       "col": 1,
       "row": 17
+    },
+    {
+      "id": "stimulated_emission",
+      "label": "Stim. emission",
+      "subtitle": "B₂₁ = B₁₂",
+      "state": "available",
+      "lesson": "2026-06-06-stimulated-emission",
+      "createdAt": "2026-06-06T08:00:00Z",
+      "col": 0,
+      "row": 18
     }
   ],
   "edges": [
@@ -454,6 +464,9 @@
     { "from": "metamerism", "to": "spectroscopy_basics", "kind": "related" },
     { "from": "doppler_spectroscopy", "to": "spectroscopy_basics", "kind": "extends" },
     { "from": "doppler_spectroscopy", "to": "wavelength", "kind": "related" },
-    { "from": "doppler_spectroscopy", "to": "cosmic_redshift", "kind": "related" }
+    { "from": "doppler_spectroscopy", "to": "cosmic_redshift", "kind": "related" },
+    { "from": "stimulated_emission", "to": "blackbody", "kind": "extends" },
+    { "from": "stimulated_emission", "to": "coherence", "kind": "extends" },
+    { "from": "stimulated_emission", "to": "photon_energy", "kind": "related" }
   ]
 }

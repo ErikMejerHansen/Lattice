@@ -3,7 +3,6 @@
 # auto-suggested 2026-05-07 from spectroscopy-basics
 
 # auto-suggested 2026-05-08 from coherence
-Stimulated emission — Einstein 1917, the inverted population, the engine that runs every laser from Maiman onward
 Michelson interferometer — the splitter, two arms, and recombiner that measured the ether's nonexistence and now hears black holes collide
 Photon bunching — g²(0) = 2 for a thermal source, g²(0) = 1 for a laser, the statistic that distinguishes them when their first-order coherence cannot
 
@@ -112,3 +111,8 @@ Spectral reflectance — R(λ) as the intrinsic light-bouncing fingerprint of a 
 Relativistic Doppler effect — f_obs = f_src √((1−β)/(1+β)), the γ-factor correction that survives at quasar redshifts, plus the transverse Doppler shift Ives and Stilwell measured in 1938 with hydrogen canal rays
 Transit method — the periodic 1% dip in stellar brightness as a planet crosses the disk, ΔL/L ≈ (R_p/R_*)², the geometry-only complement to RV that broke the inclination degeneracy and made Kepler the dominant survey for a decade
 Spectroscopic binary stars — two RV curves of the two stellar components reading off the mass ratio M_1/M_2 from the amplitude ratio K_2/K_1, the original 19th-century use of Doppler before any planet had been found
+
+# auto-suggested 2026-06-06 from stimulated-emission
+Fabry-Perot cavity — two parallel partially-reflecting mirrors with resonance condition 2L = mλ, the resonator that converts single-pass gain into coherent oscillation in every laser since Schawlow-Townes 1958, and the spectroscopic tool that measures linewidths to parts in 10⁹
+Three-level vs four-level lasers — the threshold pump R = γ that traps ruby in pulsed operation versus the R > 0 of Nd:YAG that runs continuous-wave at a few watts, the level-structure decision that fixed the engineering of every solid-state laser after Geusic 1964
+Cosmic masers — the 22 GHz H₂O, 1.6 GHz OH, and 43 GHz SiO lines that mase naturally in shocked molecular gas around protostars and late-type stars, single-pass amplifiers with brightness temperatures above 10¹³ K and the geometric distance scale to NGC 4258
