@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Three-level vs four-level laser pumping</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 110px; text-align: right;
+}
+.schemes {
+  display: flex; gap: 14px; margin-top: 10px; flex-wrap: wrap;
+}
+.scheme {
+  flex: 1 1 280px;
+  padding: 10px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+.scheme h4 {
+  margin: 0 0 8px 0;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  font-weight: normal;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.diagram { width: 100%; height: 200px; display: block; }
+.popbar {
+  margin-top: 4px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10px;
+}
+.popbar .row {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 3px;
+}
+.popbar .lab { width: 26px; color: var(--text-muted); text-align: right; }
+.popbar .bar {
+  flex: 1; height: 14px; background: var(--bg);
+  border: 1px solid var(--border); position: relative; overflow: hidden;
+}
+.popbar .fill { position: absolute; top: 0; left: 0; bottom: 0; }
+.popbar .pct { width: 56px; color: var(--text); text-align: right; }
+.scheme .status {
+  margin-top: 8px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10.5px;
+  padding: 6px 9px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 2px;
+}
+.status.inv { color: var(--accent); border-color: var(--accent); }
+.status.abs { color: var(--text-muted); }
+.scheme .threshold {
+  margin-top: 6px;
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 11px;
+  color: var(--text-muted);
+}
+.preset-row {
+  display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;
+}
+.preset {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  min-height: 36px;
+  border-radius: 2px;
+}
+.preset:hover { border-color: var(--accent-soft); }
+.preset.active { background: var(--accent); color: var(--bg-raised); border-color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+  <div class="viz-slider-row">
+    <label>R</label>
+    <input type="range" id="pumpSlider" min="-2" max="2.5" step="0.02" value="-0.5" style="min-height:36px;">
+    <span class="value" id="pumpVal"></span>
+  </div>
+  <div class="preset-row">
+    <button class="preset" data-r="-1.6">below threshold</button>
+    <button class="preset" data-r="0">R = γ (3-level threshold)</button>
+    <button class="preset" data-r="1.4">strong pump</button>
+  </div>
+  <div class="schemes">
+    <div class="scheme">
+      <h4>Three-level (ruby, Maiman 1960)</h4>
+      <svg class="diagram" id="d3lvl" viewBox="0 0 320 200"></svg>
+      <div class="popbar" id="pop3"></div>
+      <div class="status" id="stat3"></div>
+      <div class="threshold">Threshold: R = γ (more than half the active ions must be lifted out of the ground state).</div>
+    </div>
+    <div class="scheme">
+      <h4>Four-level (Nd:YAG, Geusic 1964)</h4>
+      <svg class="diagram" id="d4lvl" viewBox="0 0 320 200"></svg>
+      <div class="popbar" id="pop4"></div>
+      <div class="status" id="stat4"></div>
+      <div class="threshold">Threshold: any R &gt; 0 (the lower laser level decays to ground at rate Γ much larger than γ and stays empty).</div>
+    </div>
+  </div>
+  <p class="viz-caption" style="margin-top:12px;">Steady-state populations of two model laser media under pump rate R, given here in units of the spontaneous decay rate γ of the lasing transition. The fast non-radiative decay rate Γ (dashed gray arrow on each diagram) is held at 100γ throughout. Δ is the inversion density N_upper − N_lower; positive Δ means the medium amplifies a beam at the lasing frequency, negative Δ means it absorbs. Drag the slider through five decades of pump rate and watch the three-level scheme fight for inversion while the four-level scheme has it at any positive pump.</p>
+</div>
+<script>
+const pumpSlider = document.getElementById("pumpSlider");
+const pumpVal = document.getElementById("pumpVal");
+const d3svg = document.getElementById("d3lvl");
+const d4svg = document.getElementById("d4lvl");
+const pop3 = document.getElementById("pop3");
+const pop4 = document.getElementById("pop4");
+const stat3 = document.getElementById("stat3");
+const stat4 = document.getElementById("stat4");
+
+const GAMMA21_4LVL = 100;
+
+function defs() {
+  return `
+    <defs>
+      <marker id="arr-up" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#9c3a22"/>
+      </marker>
+      <marker id="arr-dn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#9c3a22"/>
+      </marker>
+      <marker id="arr-dn-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#a89e90"/>
+      </marker>
+    </defs>
+  `;
+}
+
+function levelLine(y, lbl) {
+  return `<line x1="50" y1="${y}" x2="200" y2="${y}" stroke="#1a1a18" stroke-width="2"/>
+          <text x="210" y="${y + 3}" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6b6359">${lbl}</text>`;
+}
+
+function drawDiagram3lvl() {
+  d3svg.innerHTML = `
+    ${defs()}
+    ${levelLine(170, "|1⟩  ground (lower)")}
+    ${levelLine(90,  "|2⟩  metastable (upper)")}
+    ${levelLine(30,  "|3⟩  pump band")}
+    <line x1="72" y1="170" x2="72" y2="34" stroke="#9c3a22" stroke-width="1.8" marker-end="url(#arr-up)"/>
+    <text x="45" y="105" font-family="IBM Plex Mono, monospace" font-size="10" fill="#9c3a22" text-anchor="end">R</text>
+    <line x1="110" y1="34" x2="110" y2="86" stroke="#a89e90" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arr-dn-gray)"/>
+    <text x="125" y="63" font-family="IBM Plex Mono, monospace" font-size="10" fill="#a89e90">Γ</text>
+    <line x1="160" y1="94" x2="160" y2="166" stroke="#9c3a22" stroke-width="2" marker-end="url(#arr-dn)"/>
+    <text x="170" y="135" font-family="IBM Plex Mono, monospace" font-size="10" fill="#9c3a22">γ (laser)</text>
+  `;
+}
+
+function drawDiagram4lvl() {
+  d4svg.innerHTML = `
+    ${defs()}
+    ${levelLine(180, "|1⟩  ground")}
+    ${levelLine(140, "|2⟩  lower laser")}
+    ${levelLine(80,  "|3⟩  upper laser")}
+    ${levelLine(30,  "|4⟩  pump band")}
+    <line x1="72" y1="180" x2="72" y2="34" stroke="#9c3a22" stroke-width="1.8" marker-end="url(#arr-up)"/>
+    <text x="45" y="110" font-family="IBM Plex Mono, monospace" font-size="10" fill="#9c3a22" text-anchor="end">R</text>
+    <line x1="110" y1="34" x2="110" y2="76" stroke="#a89e90" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arr-dn-gray)"/>
+    <text x="125" y="58" font-family="IBM Plex Mono, monospace" font-size="10" fill="#a89e90">Γ</text>
+    <line x1="150" y1="84" x2="150" y2="136" stroke="#9c3a22" stroke-width="2" marker-end="url(#arr-dn)"/>
+    <text x="160" y="115" font-family="IBM Plex Mono, monospace" font-size="10" fill="#9c3a22">γ (laser)</text>
+    <line x1="90" y1="144" x2="90" y2="176" stroke="#a89e90" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arr-dn-gray)"/>
+    <text x="80" y="164" font-family="IBM Plex Mono, monospace" font-size="10" fill="#a89e90" text-anchor="end">Γ</text>
+  `;
+}
+
+function populate3lvl(R) {
+  const N1 = 1 / (R + 1);
+  const N2 = R / (R + 1);
+  return { N1, N2, Delta: N2 - N1 };
+}
+
+function populate4lvl(R) {
+  const r2 = R / GAMMA21_4LVL;
+  const denom = R + 1 + r2;
+  const N3 = R / denom;
+  const N2 = r2 / denom;
+  const N1 = 1 / denom;
+  return { N1, N2, N3, Delta: N3 - N2 };
+}
+
+function fmtPct(x) {
+  if (Math.abs(x) < 0.0001) return "0.00%";
+  if (Math.abs(x) < 0.01) return (100 * x).toFixed(3) + "%";
+  return (100 * x).toFixed(1) + "%";
+}
+function fmtSigned(x) {
+  return (x >= 0 ? "+" : "−") + fmtPct(Math.abs(x));
+}
+
+function drawBar(container, rows) {
+  container.innerHTML = "";
+  rows.forEach(row => {
+    const div = document.createElement("div");
+    div.className = "row";
+    const fillW = Math.max(0, Math.min(100, row.val * 100));
+    div.innerHTML =
+      '<div class="lab">' + row.label + '</div>' +
+      '<div class="bar"><div class="fill" style="width:' + fillW + '%;background:' + row.color + ';"></div></div>' +
+      '<div class="pct">' + row.txt + '</div>';
+    container.appendChild(div);
+  });
+}
+
+function update() {
+  const R = Math.pow(10, parseFloat(pumpSlider.value));
+  pumpVal.textContent = "R = " + R.toFixed(R < 0.1 ? 4 : R < 1 ? 3 : 2) + " γ";
+
+  const p3 = populate3lvl(R);
+  const p4 = populate4lvl(R);
+
+  drawBar(pop3, [
+    { label: "N₂", val: p3.N2, txt: fmtPct(p3.N2), color: "#9c3a22" },
+    { label: "N₁", val: p3.N1, txt: fmtPct(p3.N1), color: "#c47558" },
+    { label: "Δ",  val: Math.abs(p3.Delta), txt: fmtSigned(p3.Delta), color: p3.Delta > 0 ? "#9c3a22" : "#a89e90" }
+  ]);
+  drawBar(pop4, [
+    { label: "N₃", val: p4.N3, txt: fmtPct(p4.N3), color: "#9c3a22" },
+    { label: "N₂", val: p4.N2, txt: fmtPct(p4.N2), color: "#c47558" },
+    { label: "Δ",  val: Math.abs(p4.Delta), txt: fmtSigned(p4.Delta), color: p4.Delta > 0 ? "#9c3a22" : "#a89e90" }
+  ]);
+
+  stat3.className = "status " + (p3.Delta > 0 ? "inv" : "abs");
+  stat3.textContent = p3.Delta > 0
+    ? "inversion: medium amplifies (N₂ > N₁)"
+    : "no inversion: medium absorbs (N₂ ≤ N₁)";
+  stat4.className = "status " + (p4.Delta > 0 ? "inv" : "abs");
+  stat4.textContent = p4.Delta > 0
+    ? "inversion: medium amplifies (N₃ > N₂)"
+    : "no inversion: medium absorbs (N₃ ≤ N₂)";
+
+  document.querySelectorAll(".preset").forEach(btn => {
+    const rv = parseFloat(btn.dataset.r);
+    btn.classList.toggle("active", Math.abs(parseFloat(pumpSlider.value) - rv) < 0.03);
+  });
+}
+
+drawDiagram3lvl();
+drawDiagram4lvl();
+pumpSlider.addEventListener("input", update);
+document.querySelectorAll(".preset").forEach(btn => {
+  btn.addEventListener("click", () => {
+    pumpSlider.value = btn.dataset.r;
+    update();
+  });
+});
+update();
+</script>
+</body>
+</html>
