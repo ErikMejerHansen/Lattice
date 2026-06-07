@@ -369,6 +369,16 @@
       "createdAt": "2026-06-06T08:00:00Z",
       "col": 0,
       "row": 18
+    },
+    {
+      "id": "michelson_interferometer",
+      "label": "Michelson",
+      "subtitle": "split, recombine",
+      "state": "available",
+      "lesson": "2026-06-07-michelson-interferometer",
+      "createdAt": "2026-06-07T08:00:00Z",
+      "col": 1,
+      "row": 18
     }
   ],
   "edges": [
@@ -467,6 +477,9 @@
     { "from": "doppler_spectroscopy", "to": "cosmic_redshift", "kind": "related" },
     { "from": "stimulated_emission", "to": "blackbody", "kind": "extends" },
     { "from": "stimulated_emission", "to": "coherence", "kind": "extends" },
-    { "from": "stimulated_emission", "to": "photon_energy", "kind": "related" }
+    { "from": "stimulated_emission", "to": "photon_energy", "kind": "related" },
+    { "from": "michelson_interferometer", "to": "interference_diffraction", "kind": "extends" },
+    { "from": "michelson_interferometer", "to": "coherence", "kind": "extends" },
+    { "from": "michelson_interferometer", "to": "wavelength", "kind": "applied" }
   ]
 }
