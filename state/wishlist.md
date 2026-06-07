@@ -3,7 +3,6 @@
 # auto-suggested 2026-05-07 from spectroscopy-basics
 
 # auto-suggested 2026-05-08 from coherence
-Michelson interferometer — the splitter, two arms, and recombiner that measured the ether's nonexistence and now hears black holes collide
 Photon bunching — g²(0) = 2 for a thermal source, g²(0) = 1 for a laser, the statistic that distinguishes them when their first-order coherence cannot
 
 # auto-suggested 2026-05-09 from diffraction-gratings
@@ -116,3 +115,8 @@ Spectroscopic binary stars — two RV curves of the two stellar components readi
 Fabry-Perot cavity — two parallel partially-reflecting mirrors with resonance condition 2L = mλ, the resonator that converts single-pass gain into coherent oscillation in every laser since Schawlow-Townes 1958, and the spectroscopic tool that measures linewidths to parts in 10⁹
 Three-level vs four-level lasers — the threshold pump R = γ that traps ruby in pulsed operation versus the R > 0 of Nd:YAG that runs continuous-wave at a few watts, the level-structure decision that fixed the engineering of every solid-state laser after Geusic 1964
 Cosmic masers — the 22 GHz H₂O, 1.6 GHz OH, and 43 GHz SiO lines that mase naturally in shocked molecular gas around protostars and late-type stars, single-pass amplifiers with brightness temperatures above 10¹³ K and the geometric distance scale to NGC 4258
+
+# auto-suggested 2026-06-07 from michelson-interferometer
+Gravitational waves — propagating ripples in the metric of spacetime, h ≈ 10⁻²¹ at Earth from a binary black hole merger 1.3 billion light-years away, predicted from the linearized Einstein field equations in 1916 and detected by LIGO in 2015
+Lorentz transformation — the coordinate change that leaves Maxwell's equations invariant between two frames in relative motion, γ = 1/√(1−v²/c²), the kinematic backbone of special relativity and the resolution of the Michelson-Morley null result
+Sagnac interferometer — closed-loop interferometer with a fringe shift ΔΦ = 8πAΩ/(λc) under rotation rate Ω of the enclosed area A, the rotational dual of the Michelson and the readout principle of every ring-laser and fiber-optic gyroscope from inertial navigation to the Sagnac measurements of Earth's rotation rate
