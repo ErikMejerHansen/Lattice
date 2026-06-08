@@ -379,6 +379,16 @@
       "createdAt": "2026-06-07T08:00:00Z",
       "col": 1,
       "row": 18
+    },
+    {
+      "id": "photon_bunching",
+      "label": "Bunching",
+      "subtitle": "g²(0) = 2 vs 1",
+      "state": "available",
+      "lesson": "2026-06-08-photon-bunching",
+      "createdAt": "2026-06-08T08:00:00Z",
+      "col": 0,
+      "row": 19
     }
   ],
   "edges": [
@@ -480,6 +490,9 @@
     { "from": "stimulated_emission", "to": "photon_energy", "kind": "related" },
     { "from": "michelson_interferometer", "to": "interference_diffraction", "kind": "extends" },
     { "from": "michelson_interferometer", "to": "coherence", "kind": "extends" },
-    { "from": "michelson_interferometer", "to": "wavelength", "kind": "applied" }
+    { "from": "michelson_interferometer", "to": "wavelength", "kind": "applied" },
+    { "from": "photon_bunching", "to": "coherence", "kind": "extends" },
+    { "from": "photon_bunching", "to": "stimulated_emission", "kind": "related" },
+    { "from": "photon_bunching", "to": "photoelectric_effect", "kind": "related" }
   ]
 }

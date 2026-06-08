@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photon bunching: thermal vs coherent vs antibunched</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 80px; text-align: right;
+}
+.src-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.src {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  min-height: 36px;
+  border-radius: 2px;
+}
+.src:hover { border-color: var(--accent-soft); }
+.src.active { background: var(--accent); color: var(--bg-raised); border-color: var(--accent); }
+.panel {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 8px 10px;
+  margin-top: 10px;
+}
+.panel-title {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+.stat {
+  display: inline-block;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  margin-right: 16px;
+}
+.stat .lab { color: var(--text-muted); }
+svg { display: block; width: 100%; }
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+  <div class="src-row">
+    <button class="src active" data-src="thermal">thermal (chaotic)</button>
+    <button class="src" data-src="coherent">coherent (laser)</button>
+    <button class="src" data-src="antibunched">antibunched (1-atom)</button>
+  </div>
+  <div class="viz-slider-row">
+    <label>τ_c</label>
+    <input type="range" id="tauSlider" min="0.4" max="3.0" step="0.05" value="1.2" style="min-height:36px;">
+    <span class="value" id="tauVal"></span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">photon click stream at detector (most recent 8 ns)</div>
+    <svg id="timeline" viewBox="0 0 400 64" preserveAspectRatio="none" style="height:64px;"></svg>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">empirical g²(τ) — pair coincidences vs delay</div>
+    <svg id="g2plot" viewBox="0 0 400 180" preserveAspectRatio="none" style="height:180px;"></svg>
+    <div style="margin-top:6px;">
+      <span class="stat"><span class="lab">g²(0) ≈ </span><span id="g2zero">—</span></span>
+      <span class="stat"><span class="lab">pairs counted: </span><span id="pairCount">0</span></span>
+    </div>
+  </div>
+
+  <p class="viz-caption" style="margin-top:12px;">
+    A photon-counting simulator. Pick a source: thermal light from a vast number of independent emitters, coherent light from a laser well above threshold, or antibunched light from a single quantum emitter that can hold only one excitation. The upper panel shows the most recent clicks on the detector. The lower panel histograms pair coincidences as a function of delay τ between successive clicks, normalized so the value at long delays equals 1 (the dotted gray line). Thermal grows a bump at τ ≈ 0 climbing toward 2 (the Hanbury Brown-Twiss bunching). Coherent stays flat at 1 (Poisson, no bunching). Antibunched cuts a hole toward 0 (a single emitter cannot release two photons in one excited-state lifetime). The τ_c slider sets the coherence time of the thermal source and the recovery time of the antibunched source.
+  </p>
+</div>
+<script>
+const tauSlider = document.getElementById("tauSlider");
+const tauVal = document.getElementById("tauVal");
+const timelineSvg = document.getElementById("timeline");
+const g2svg = document.getElementById("g2plot");
+const g2zeroEl = document.getElementById("g2zero");
+const pairCountEl = document.getElementById("pairCount");
+
+let sourceType = "thermal";
+let tauC = 1.2;
+const MEAN_RATE = 2.5;
+const NS_PER_BIN = 0.15;
+const NUM_BINS = 60;
+const TAU_MAX = NUM_BINS * NS_PER_BIN;
+let pairHist = new Float64Array(NUM_BINS);
+let singleTimeSum = 0;
+let singleClicks = 0;
+let totalPairs = 0;
+
+let recentClicks = [];
+const TIMELINE_WINDOW = 8;
+let simTime = 0;
+
+function rngGauss() {
+  let u = 0, v = 0;
+  while (u === 0) u = Math.random();
+  while (v === 0) v = Math.random();
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+
+let thermalRe = 0, thermalIm = 0;
+function thermalIntensity(dt) {
+  const a = Math.exp(-dt / tauC);
+  const sigma = Math.sqrt(1 - a * a);
+  thermalRe = a * thermalRe + sigma * rngGauss();
+  thermalIm = a * thermalIm + sigma * rngGauss();
+  return 0.5 * (thermalRe * thermalRe + thermalIm * thermalIm);
+}
+
+let lastEmission = -1e9;
+function generateClicks(dtChunk) {
+  const subSteps = Math.max(1, Math.round(dtChunk / 0.02));
+  const stepDt = dtChunk / subSteps;
+  const out = [];
+  for (let i = 0; i < subSteps; i++) {
+    const t = simTime + (i + 1) * stepDt;
+    let rate;
+    if (sourceType === "thermal") {
+      const I = thermalIntensity(stepDt);
+      rate = MEAN_RATE * I;
+    } else if (sourceType === "coherent") {
+      rate = MEAN_RATE;
+    } else {
+      const gap = t - lastEmission;
+      const recovery = 1 - Math.exp(-gap / tauC);
+      rate = MEAN_RATE * recovery * recovery;
+    }
+    const p = rate * stepDt;
+    if (Math.random() < p) {
+      out.push(t);
+      if (sourceType === "antibunched") lastEmission = t;
+    }
+  }
+  simTime += dtChunk;
+  return out;
+}
+
+function recordClick(t) {
+  if (recentClicks.length > 0) {
+    for (let i = recentClicks.length - 1; i >= 0; i--) {
+      const dt = t - recentClicks[i];
+      if (dt <= 0) continue;
+      if (dt >= TAU_MAX) break;
+      const bin = Math.floor(dt / NS_PER_BIN);
+      if (bin >= 0 && bin < NUM_BINS) {
+        pairHist[bin] += 1;
+        totalPairs += 1;
+      }
+    }
+  }
+  singleTimeSum += 1;
+  singleClicks += 1;
+  recentClicks.push(t);
+  while (recentClicks.length > 0 && t - recentClicks[0] > TIMELINE_WINDOW + TAU_MAX) {
+    recentClicks.shift();
+  }
+}
+
+function drawTimeline() {
+  const tNow = simTime;
+  const tLeft = tNow - TIMELINE_WINDOW;
+  let s = '<rect x="0" y="0" width="400" height="64" fill="#f4eee2"/>';
+  s += '<line x1="0" y1="42" x2="400" y2="42" stroke="#d8cfb8" stroke-width="1"/>';
+  for (let i = 0; i <= TIMELINE_WINDOW; i++) {
+    const x = (i / TIMELINE_WINDOW) * 400;
+    s += '<line x1="' + x + '" y1="42" x2="' + x + '" y2="46" stroke="#a89e90" stroke-width="0.6"/>';
+    s += '<text x="' + x + '" y="58" font-family="IBM Plex Mono, monospace" font-size="9" fill="#a89e90" text-anchor="middle">' + (i - TIMELINE_WINDOW) + '</text>';
+  }
+  s += '<text x="396" y="12" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6b6359" text-anchor="end">ns (now at right)</text>';
+  for (const t of recentClicks) {
+    if (t < tLeft) continue;
+    const x = ((t - tLeft) / TIMELINE_WINDOW) * 400;
+    s += '<line x1="' + x.toFixed(2) + '" y1="14" x2="' + x.toFixed(2) + '" y2="42" stroke="#9c3a22" stroke-width="1.5"/>';
+  }
+  timelineSvg.innerHTML = s;
+}
+
+function drawG2() {
+  const W = 400, H = 180;
+  const marginL = 36, marginR = 8, marginT = 12, marginB = 24;
+  const plotW = W - marginL - marginR;
+  const plotH = H - marginT - marginB;
+
+  const meanRate = singleClicks > 0 ? singleClicks / simTime : 0;
+  const norm = meanRate * meanRate * NS_PER_BIN * simTime;
+  let g2 = new Float64Array(NUM_BINS);
+  for (let i = 0; i < NUM_BINS; i++) {
+    g2[i] = norm > 0 ? pairHist[i] / norm : 0;
+  }
+
+  const yMax = 2.6;
+  const yMin = 0;
+  function xAt(bin) { return marginL + (bin / NUM_BINS) * plotW; }
+  function yAt(v) {
+    const c = Math.max(yMin, Math.min(yMax, v));
+    return marginT + plotH - ((c - yMin) / (yMax - yMin)) * plotH;
+  }
+
+  let s = '<rect x="0" y="0" width="' + W + '" height="' + H + '" fill="#faf5e9"/>';
+
+  for (let v = 0; v <= 2.5; v += 0.5) {
+    const y = yAt(v);
+    s += '<line x1="' + marginL + '" y1="' + y + '" x2="' + (W - marginR) + '" y2="' + y + '" stroke="#d8cfb8" stroke-width="0.6"/>';
+    s += '<text x="' + (marginL - 4) + '" y="' + (y + 3) + '" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6b6359" text-anchor="end">' + v.toFixed(1) + '</text>';
+  }
+  const yOne = yAt(1);
+  s += '<line x1="' + marginL + '" y1="' + yOne + '" x2="' + (W - marginR) + '" y2="' + yOne + '" stroke="#a89e90" stroke-width="0.8" stroke-dasharray="3,3"/>';
+
+  for (let t = 0; t <= TAU_MAX; t += 2) {
+    const x = marginL + (t / TAU_MAX) * plotW;
+    s += '<line x1="' + x + '" y1="' + (marginT + plotH) + '" x2="' + x + '" y2="' + (marginT + plotH + 3) + '" stroke="#a89e90" stroke-width="0.6"/>';
+    s += '<text x="' + x + '" y="' + (marginT + plotH + 14) + '" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6b6359" text-anchor="middle">' + t + '</text>';
+  }
+  s += '<text x="' + (W - marginR) + '" y="' + (H - 4) + '" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6b6359" text-anchor="end">τ (ns)</text>';
+  s += '<text x="' + (marginL - 28) + '" y="' + (marginT + 8) + '" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6b6359">g²(τ)</text>';
+
+  if (totalPairs > 6) {
+    let path = '';
+    for (let i = 0; i < NUM_BINS; i++) {
+      const x = xAt(i + 0.5);
+      const y = yAt(g2[i]);
+      path += (i === 0 ? 'M' : 'L') + x.toFixed(2) + ',' + y.toFixed(2) + ' ';
+    }
+    s += '<path d="' + path + '" stroke="#9c3a22" stroke-width="1.8" fill="none"/>';
+    for (let i = 0; i < NUM_BINS; i++) {
+      const x = xAt(i + 0.5);
+      const y = yAt(g2[i]);
+      s += '<circle cx="' + x.toFixed(2) + '" cy="' + y.toFixed(2) + '" r="1.4" fill="#9c3a22"/>';
+    }
+  } else {
+    s += '<text x="' + (W / 2) + '" y="' + (marginT + plotH / 2) + '" font-family="Source Serif 4, serif" font-style="italic" font-size="12" fill="#a89e90" text-anchor="middle">collecting pairs...</text>';
+  }
+
+  g2svg.innerHTML = s;
+
+  if (totalPairs > 6) {
+    const g2_0 = g2[0];
+    g2zeroEl.textContent = g2_0.toFixed(2);
+  } else {
+    g2zeroEl.textContent = '—';
+  }
+  pairCountEl.textContent = totalPairs.toString();
+}
+
+function resetStats() {
+  pairHist = new Float64Array(NUM_BINS);
+  singleTimeSum = 0;
+  singleClicks = 0;
+  totalPairs = 0;
+  recentClicks = [];
+  simTime = 0;
+  thermalRe = 0;
+  thermalIm = 0;
+  lastEmission = -1e9;
+}
+
+let lastFrame = performance.now();
+function tick() {
+  const now = performance.now();
+  const realDt = Math.min(0.1, (now - lastFrame) / 1000);
+  lastFrame = now;
+  const simDt = realDt * 50;
+  const clicks = generateClicks(simDt);
+  for (const t of clicks) recordClick(t);
+  drawTimeline();
+  drawG2();
+  requestAnimationFrame(tick);
+}
+
+document.querySelectorAll('.src').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.src').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    sourceType = btn.dataset.src;
+    resetStats();
+  });
+});
+
+tauSlider.addEventListener('input', () => {
+  tauC = parseFloat(tauSlider.value);
+  tauVal.textContent = 'τ_c = ' + tauC.toFixed(2) + ' ns';
+  resetStats();
+});
+
+tauVal.textContent = 'τ_c = ' + tauC.toFixed(2) + ' ns';
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
