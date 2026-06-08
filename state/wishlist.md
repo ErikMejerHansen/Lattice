@@ -3,7 +3,6 @@
 # auto-suggested 2026-05-07 from spectroscopy-basics
 
 # auto-suggested 2026-05-08 from coherence
-Photon bunching — g²(0) = 2 for a thermal source, g²(0) = 1 for a laser, the statistic that distinguishes them when their first-order coherence cannot
 
 # auto-suggested 2026-05-09 from diffraction-gratings
 Rowland grating — concave grating, no collimating lens, the Johns Hopkins ruling engine that pushed R past 80,000
@@ -120,3 +119,8 @@ Cosmic masers — the 22 GHz H₂O, 1.6 GHz OH, and 43 GHz SiO lines that mase n
 Gravitational waves — propagating ripples in the metric of spacetime, h ≈ 10⁻²¹ at Earth from a binary black hole merger 1.3 billion light-years away, predicted from the linearized Einstein field equations in 1916 and detected by LIGO in 2015
 Lorentz transformation — the coordinate change that leaves Maxwell's equations invariant between two frames in relative motion, γ = 1/√(1−v²/c²), the kinematic backbone of special relativity and the resolution of the Michelson-Morley null result
 Sagnac interferometer — closed-loop interferometer with a fringe shift ΔΦ = 8πAΩ/(λc) under rotation rate Ω of the enclosed area A, the rotational dual of the Michelson and the readout principle of every ring-laser and fiber-optic gyroscope from inertial navigation to the Sagnac measurements of Earth's rotation rate
+
+# auto-suggested 2026-06-08 from photon-bunching
+Coherent states — Glauber's |α⟩, the eigenstates of the photon annihilation operator â|α⟩ = α|α⟩ with Poissonian photon-number distribution, the formal definition of "laser-like" light and the foundation of the 1963 quantum theory of optical coherence (Nobel 2005)
+Single-photon source — a device with g²(0) ≪ 1: nitrogen-vacancy centers in diamond, InGaAs quantum dots in micropillar cavities, and heralded photons from spontaneous parametric down-conversion, the components on which quantum key distribution, linear-optical quantum computing, and quantum repeaters are built
+Hong-Ou-Mandel effect — two indistinguishable photons entering a 50/50 beam splitter from opposite ports always leave together through the same output port, the 1987 Hong-Ou-Mandel dip in coincidence counts that measures photon indistinguishability and underlies every linear-optical entanglement scheme
