@@ -5,7 +5,6 @@
 # auto-suggested 2026-05-08 from coherence
 
 # auto-suggested 2026-05-09 from diffraction-gratings
-Rowland grating — concave grating, no collimating lens, the Johns Hopkins ruling engine that pushed R past 80,000
 Echelle spectrograph — high-order, high-dispersion, the workhorse of stellar and exoplanet spectroscopy
 Helium discovery 1868 — Janssen and Lockyer, an element found in the corona twenty-seven years before being isolated on Earth
 
@@ -124,3 +123,8 @@ Sagnac interferometer — closed-loop interferometer with a fringe shift ΔΦ = 
 Coherent states — Glauber's |α⟩, the eigenstates of the photon annihilation operator â|α⟩ = α|α⟩ with Poissonian photon-number distribution, the formal definition of "laser-like" light and the foundation of the 1963 quantum theory of optical coherence (Nobel 2005)
 Single-photon source — a device with g²(0) ≪ 1: nitrogen-vacancy centers in diamond, InGaAs quantum dots in micropillar cavities, and heralded photons from spontaneous parametric down-conversion, the components on which quantum key distribution, linear-optical quantum computing, and quantum repeaters are built
 Hong-Ou-Mandel effect — two indistinguishable photons entering a 50/50 beam splitter from opposite ports always leave together through the same output port, the 1987 Hong-Ou-Mandel dip in coincidence counts that measures photon indistinguishability and underlies every linear-optical entanglement scheme
+
+# auto-suggested 2026-06-09 from rowland-grating
+Free spectral range — FSR = λ/m, the wavelength interval a grating can cover in a single order without the next order folding back into the field of view, and the practical constraint that drives every echelle-grating cross-disperser design
+Blazed grating — a sawtooth ruling profile that tips the grating facets to angle θ_B and concentrates diffracted energy into a chosen order rather than spreading it across all m, the efficiency trick that turned Rowland's beautiful but dim higher-order spectra into modern bright workhorse instruments
+Czerny-Turner spectrograph — two off-axis paraboloid mirrors plus a flat grating, the post-WWII alternative to the Rowland mount that gave up the self-focusing geometry in exchange for compact, modular benchtop dispersion at modest R
