@@ -5,7 +5,6 @@
 # auto-suggested 2026-05-08 from coherence
 
 # auto-suggested 2026-05-09 from diffraction-gratings
-Echelle spectrograph — high-order, high-dispersion, the workhorse of stellar and exoplanet spectroscopy
 Helium discovery 1868 — Janssen and Lockyer, an element found in the corona twenty-seven years before being isolated on Earth
 
 # auto-suggested 2026-05-10 from principle-of-least-action
@@ -128,3 +127,8 @@ Hong-Ou-Mandel effect — two indistinguishable photons entering a 50/50 beam sp
 Free spectral range — FSR = λ/m, the wavelength interval a grating can cover in a single order without the next order folding back into the field of view, and the practical constraint that drives every echelle-grating cross-disperser design
 Blazed grating — a sawtooth ruling profile that tips the grating facets to angle θ_B and concentrates diffracted energy into a chosen order rather than spreading it across all m, the efficiency trick that turned Rowland's beautiful but dim higher-order spectra into modern bright workhorse instruments
 Czerny-Turner spectrograph — two off-axis paraboloid mirrors plus a flat grating, the post-WWII alternative to the Rowland mount that gave up the self-focusing geometry in exchange for compact, modular benchtop dispersion at modest R
+
+# auto-suggested 2026-06-10 from echelle-spectrograph
+Laser frequency comb — f_n = nf_rep + f_0, Hänsch and Hall's 2005-Nobel-winning rake of evenly spaced laser lines stabilized to an atomic clock, the wavelength reference that took echelle radial-velocity precision from 1 m/s to 10 cm/s and pinned ESPRESSO at the VLT
+Iodine cell calibration — the I₂ molecular-absorption-cell wavelength reference Marcy and Butler pioneered in 1992, stamped onto the stellar spectrum on its way to the detector to deconvolve instrumental drift, the alternative to Mayor's simultaneous-reference-fiber approach that ran most American RV planet searches through the 2000s
+Radial-velocity photon-noise floor — v_min ≈ c / (R × √N_lines × SNR_per_line), the fundamental floor that even a perfect spectrograph cannot beat with finite light, the equation that fixes how big a telescope you need for a given precision and that drives the case for both ESPRESSO and the next-generation 30 m extremely large telescopes
