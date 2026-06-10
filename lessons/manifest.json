@@ -278,5 +278,12 @@
     "subtitle": "R = mN > 80,000",
     "date": "2026-06-09",
     "estimatedReadingMinutes": 24
+  },
+  {
+    "slug": "2026-06-10-echelle-spectrograph",
+    "title": "The echelle spectrograph: trading line count for diffraction order",
+    "subtitle": "2d sin θ_B = mλ",
+    "date": "2026-06-10",
+    "estimatedReadingMinutes": 25
   }
 ]

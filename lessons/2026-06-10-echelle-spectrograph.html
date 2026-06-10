@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Echellogram</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 32px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 96px; text-align: right;
+}
+#viz {
+  padding: 16px;
+  max-width: 620px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+svg { display: block; width: 100%; height: auto; }
+.detector-frame {
+  fill: #0f0e0c;
+  stroke: var(--border-strong);
+  stroke-width: 1.2;
+}
+.order-label {
+  font-size: 9px;
+  fill: var(--text-ghost);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+}
+.axis-label {
+  font-size: 11px;
+  fill: var(--text-muted);
+  font-family: "Source Serif 4", serif;
+  font-style: italic;
+}
+.D-line {
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+  fill: none;
+  opacity: 0.85;
+}
+.D-line-marker {
+  fill: var(--accent);
+}
+.D-label {
+  font-size: 10px;
+  fill: var(--accent);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+}
+.readout {
+  margin-top: 12px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+.readout span.k { color: var(--text); }
+.line-toggle {
+  display: inline-flex;
+  gap: 6px;
+  margin-top: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.line-toggle button {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  padding: 0 12px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  cursor: pointer;
+  min-height: 36px;
+}
+.line-toggle button.active {
+  background: var(--accent);
+  color: var(--bg-raised);
+  border-color: var(--accent);
+}
+.line-toggle .label-inline {
+  font-style: italic;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <svg id="echellogram-svg" viewBox="0 0 600 420" preserveAspectRatio="xMidYMid meet"></svg>
+  <div class="viz-slider-row">
+    <label>θ_B</label>
+    <input type="range" id="blaze-slider" min="50" max="76" step="1" value="63">
+    <span class="value" id="blaze-value">θ_B = 63°</span>
+  </div>
+  <div class="viz-slider-row">
+    <label>d</label>
+    <input type="range" id="d-slider" min="8" max="32" step="1" value="12">
+    <span class="value" id="d-value">d = 12 μm</span>
+  </div>
+  <div class="line-toggle">
+    <span class="label-inline">Mark:</span>
+    <button id="line-Na" class="active">Na D₂ 589 nm</button>
+    <button id="line-Ha">Hα 656 nm</button>
+    <button id="line-Hb">Hβ 486 nm</button>
+  </div>
+  <div class="readout" id="readout"></div>
+  <div class="viz-caption" style="margin-top: 14px;">
+    An echellogram on a 4k by 4k CCD. Each horizontal stripe is one diffraction order m of the echelle; the cross-disperser separates orders along the vertical axis. Along each stripe the high echelle dispersion paints the free spectral range FSR = λ/m of that order as a thin rainbow. The blaze condition 2d sin θ_B = mλ_B sets which orders are bright; the slider for θ_B sweeps the blaze across the visible band, and the slider for line spacing d trades line count for order. The dashed red mark is the chosen spectral line (sodium D₂ by default), visible jumping from order to order as the blaze geometry shifts. The R = mN readout updates live with N held at 16,000 lines.
+  </div>
+</div>
+<script>
+(() => {
+  const svg = document.getElementById('echellogram-svg');
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+
+  const DET_X = 60, DET_Y = 30, DET_W = 500, DET_H = 340;
+  const LAMBDA_MIN = 380, LAMBDA_MAX = 760;
+  const N_LINES = 16000;
+
+  const SPECTRAL_LINES = {
+    Na: { lambda: 589.0, name: 'Na D₂ 589 nm' },
+    Ha: { lambda: 656.3, name: 'Hα 656 nm' },
+    Hb: { lambda: 486.1, name: 'Hβ 486 nm' }
+  };
+
+  let blazeDeg = 63;
+  let dMicron = 12;
+  let activeLine = 'Na';
+
+  function wavelengthToRGB(wavelength) {
+    let r, g, b;
+    if (wavelength < 440) { r = -(wavelength - 440) / 60; g = 0; b = 1; }
+    else if (wavelength < 490) { r = 0; g = (wavelength - 440) / 50; b = 1; }
+    else if (wavelength < 510) { r = 0; g = 1; b = -(wavelength - 510) / 20; }
+    else if (wavelength < 580) { r = (wavelength - 510) / 70; g = 1; b = 0; }
+    else if (wavelength < 645) { r = 1; g = -(wavelength - 645) / 65; b = 0; }
+    else { r = 1; g = 0; b = 0; }
+    let f;
+    if (wavelength < 420) f = 0.3 + 0.7 * (wavelength - 380) / 40;
+    else if (wavelength > 700) f = 0.3 + 0.7 * (780 - wavelength) / 80;
+    else f = 1.0;
+    f = Math.max(0.15, Math.min(1, f));
+    return `rgb(${Math.round(r * f * 255)},${Math.round(g * f * 255)},${Math.round(b * f * 255)})`;
+  }
+
+  function el(name, attrs, text) {
+    const e = document.createElementNS(SVG_NS, name);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  function blazeWavelength(m) {
+    const blazeRad = blazeDeg * Math.PI / 180;
+    const d_nm = dMicron * 1000;
+    return 2 * d_nm * Math.sin(blazeRad) / m;
+  }
+
+  function ordersInBand() {
+    const orders = [];
+    for (let m = 1; m <= 250; m++) {
+      const lambdaB = blazeWavelength(m);
+      if (lambdaB >= LAMBDA_MIN - 60 && lambdaB <= LAMBDA_MAX + 60) {
+        orders.push(m);
+      }
+    }
+    return orders;
+  }
+
+  function render() {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    svg.appendChild(el('rect', {
+      x: DET_X, y: DET_Y, width: DET_W, height: DET_H, class: 'detector-frame'
+    }));
+
+    svg.appendChild(el('text', {
+      x: DET_X, y: DET_Y - 12, class: 'axis-label'
+    }, 'echelle dispersion within order  (λ across the FSR)'));
+
+    svg.appendChild(el('text', {
+      x: DET_X - 12, y: DET_Y + DET_H / 2,
+      class: 'axis-label',
+      transform: `rotate(-90 ${DET_X - 12} ${DET_Y + DET_H / 2})`,
+      'text-anchor': 'middle'
+    }, 'cross-dispersion (order m)'));
+
+    const orders = ordersInBand();
+    if (orders.length === 0) {
+      svg.appendChild(el('text', {
+        x: DET_X + DET_W / 2, y: DET_Y + DET_H / 2,
+        class: 'axis-label', 'text-anchor': 'middle',
+        fill: '#a89e90'
+      }, 'no orders blaze in the visible at this θ_B and d'));
+      updateReadout([], null, null);
+      return;
+    }
+
+    const N = orders.length;
+    const stripeH = Math.min(18, (DET_H - 8) / N);
+    const stripePad = Math.max(1, (DET_H - 8 - stripeH * N) / Math.max(1, N - 1));
+    const lineLambda = SPECTRAL_LINES[activeLine].lambda;
+    let markedOrder = null;
+    let markedX = null;
+
+    orders.forEach((m, i) => {
+      const stripeY = DET_Y + 4 + i * (stripeH + stripePad);
+      const lambdaB = blazeWavelength(m);
+      const fsr = lambdaB / m;
+      const lambdaLo = lambdaB - fsr / 2;
+      const lambdaHi = lambdaB + fsr / 2;
+
+      const nSamples = 32;
+      for (let s = 0; s < nSamples; s++) {
+        const tNorm = s / (nSamples - 1);
+        const lambda = lambdaLo + tNorm * (lambdaHi - lambdaLo);
+        const xLeft = DET_X + 6 + tNorm * (DET_W - 12);
+        const segW = (DET_W - 12) / nSamples + 1.5;
+        const color = wavelengthToRGB(lambda);
+        svg.appendChild(el('rect', {
+          x: xLeft, y: stripeY,
+          width: segW, height: stripeH,
+          fill: color, stroke: 'none', opacity: 0.95
+        }));
+      }
+
+      if (i % Math.max(1, Math.ceil(N / 14)) === 0 || i === N - 1) {
+        svg.appendChild(el('text', {
+          x: DET_X + DET_W + 6,
+          y: stripeY + stripeH * 0.75,
+          class: 'order-label'
+        }, `m=${m}`));
+      }
+
+      if (lineLambda >= lambdaLo && lineLambda <= lambdaHi) {
+        const t = (lineLambda - lambdaLo) / (lambdaHi - lambdaLo);
+        const xMark = DET_X + 6 + t * (DET_W - 12);
+        svg.appendChild(el('line', {
+          x1: xMark, y1: stripeY - 2,
+          x2: xMark, y2: stripeY + stripeH + 2,
+          class: 'D-line'
+        }));
+        svg.appendChild(el('circle', {
+          cx: xMark, cy: stripeY + stripeH / 2,
+          r: 2.4, class: 'D-line-marker'
+        }));
+        if (markedOrder === null) {
+          markedOrder = m;
+          markedX = xMark;
+        }
+      }
+    });
+
+    if (markedOrder !== null) {
+      svg.appendChild(el('text', {
+        x: Math.min(markedX + 6, DET_X + DET_W - 80),
+        y: DET_Y - 2, class: 'D-label'
+      }, `${SPECTRAL_LINES[activeLine].name} → m=${markedOrder}`));
+    } else {
+      svg.appendChild(el('text', {
+        x: DET_X + 6, y: DET_Y - 2, class: 'D-label'
+      }, `${SPECTRAL_LINES[activeLine].name}: outside blazed orders`));
+    }
+
+    [400, 500, 600, 700].forEach(lambda => {
+      const middleOrderIdx = Math.floor(N / 2);
+      const m = orders[middleOrderIdx];
+      const lambdaB = blazeWavelength(m);
+      const fsr = lambdaB / m;
+      if (lambda < lambdaB - fsr / 2 || lambda > lambdaB + fsr / 2) return;
+      const t = (lambda - (lambdaB - fsr / 2)) / fsr;
+      const xMark = DET_X + 6 + t * (DET_W - 12);
+      svg.appendChild(el('text', {
+        x: xMark - 16,
+        y: DET_Y + DET_H + 14,
+        class: 'order-label',
+        fill: '#6b6359'
+      }, `${lambda}nm`));
+    });
+
+    updateReadout(orders, markedOrder, blazeWavelength(orders[Math.floor(N / 2)]));
+  }
+
+  function updateReadout(orders, markedOrder, centralBlaze) {
+    const ro = document.getElementById('readout');
+    if (orders.length === 0) {
+      ro.innerHTML = '<span class="k">no orders blaze in the visible</span>';
+      return;
+    }
+    const mMid = orders[Math.floor(orders.length / 2)];
+    const R = mMid * N_LINES;
+    const fsr = centralBlaze / mMid;
+    let lineInfo = '';
+    if (markedOrder !== null) {
+      const lineLambda = SPECTRAL_LINES[activeLine].lambda;
+      lineInfo = `&nbsp;&nbsp;<span class="k">${SPECTRAL_LINES[activeLine].name.split(' ')[0]} in </span>m=${markedOrder}`;
+    }
+    ro.innerHTML =
+      `<span class="k">orders visible: </span>${orders[0]}-${orders[orders.length - 1]} (${orders.length})` +
+      `&nbsp;&nbsp;<span class="k">R = mN = </span>${R.toLocaleString()}` +
+      `&nbsp;&nbsp;<span class="k">FSR at m=${mMid}: </span>${fsr.toFixed(1)} nm` +
+      lineInfo;
+  }
+
+  document.getElementById('blaze-slider').addEventListener('input', (e) => {
+    blazeDeg = parseInt(e.target.value, 10);
+    document.getElementById('blaze-value').textContent = `θ_B = ${blazeDeg}°`;
+    render();
+  });
+  document.getElementById('d-slider').addEventListener('input', (e) => {
+    dMicron = parseInt(e.target.value, 10);
+    document.getElementById('d-value').textContent = `d = ${dMicron} μm`;
+    render();
+  });
+
+  function setLine(key) {
+    activeLine = key;
+    ['Na', 'Ha', 'Hb'].forEach(k => {
+      const b = document.getElementById('line-' + k);
+      if (k === key) b.classList.add('active');
+      else b.classList.remove('active');
+    });
+    render();
+  }
+  document.getElementById('line-Na').addEventListener('click', () => setLine('Na'));
+  document.getElementById('line-Ha').addEventListener('click', () => setLine('Ha'));
+  document.getElementById('line-Hb').addEventListener('click', () => setLine('Hb'));
+
+  render();
+})();
+</script>
+</body>
+</html>

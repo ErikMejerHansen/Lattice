@@ -399,6 +399,16 @@
       "createdAt": "2026-06-09T08:00:00Z",
       "col": 1,
       "row": 19
+    },
+    {
+      "id": "echelle_spectrograph",
+      "label": "Echelle",
+      "subtitle": "2d sin θ_B = mλ",
+      "state": "available",
+      "lesson": "2026-06-10-echelle-spectrograph",
+      "createdAt": "2026-06-10T08:00:00Z",
+      "col": 0,
+      "row": 20
     }
   ],
   "edges": [
@@ -506,6 +516,9 @@
     { "from": "photon_bunching", "to": "photoelectric_effect", "kind": "related" },
     { "from": "rowland_grating", "to": "diffraction_gratings", "kind": "extends" },
     { "from": "rowland_grating", "to": "spectroscopy_basics", "kind": "applied" },
-    { "from": "rowland_grating", "to": "balmer_series", "kind": "related" }
+    { "from": "rowland_grating", "to": "balmer_series", "kind": "related" },
+    { "from": "echelle_spectrograph", "to": "rowland_grating", "kind": "extends" },
+    { "from": "echelle_spectrograph", "to": "diffraction_gratings", "kind": "extends" },
+    { "from": "echelle_spectrograph", "to": "doppler_spectroscopy", "kind": "applied" }
   ]
 }
