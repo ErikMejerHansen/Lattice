@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz { padding: 14px 16px 18px; }
+.title {
+  font-size: 14px; color: var(--text-muted); font-style: italic; margin-bottom: 4px;
+}
+.legend {
+  display: flex; gap: 14px; margin-top: 6px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); flex-wrap: wrap;
+}
+.legend .swatch { display: inline-block; width: 10px; height: 10px; vertical-align: middle; margin-right: 4px; border: 1px solid var(--border-strong); }
+.markers {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 6px;
+}
+.markers b { color: var(--text); font-weight: 600; }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div class="title">The yellow D-region of the solar emission spectrum</div>
+  <svg id="plot" viewBox="0 0 640 360" width="100%" preserveAspectRatio="xMidYMid meet" aria-label="D-line spectrum"></svg>
+  <div class="viz-slider-row">
+    <label for="r">R</label>
+    <input id="r" type="range" min="200" max="12000" step="50" value="500" />
+    <span class="value" id="rval">500</span>
+  </div>
+  <div class="legend">
+    <span><span class="swatch" style="background:#9c3a22"></span>D₃ (He) 587.49 nm</span>
+    <span><span class="swatch" style="background:#b8870b"></span>D₂ (Na) 589.00 nm</span>
+    <span><span class="swatch" style="background:#d4a410"></span>D₁ (Na) 589.59 nm</span>
+  </div>
+  <div class="markers" id="hint"></div>
+  <div class="viz-caption" style="margin-top:10px">
+    Drag the slider to change the spectroscope's resolving power R = λ/Δλ. At R ≈ 200 (Janssen's 1868 traveling spectroscope) the three lines blur into one yellow bump; at R ≈ 4000 (Lockyer's October 1868 instrument) D₃ peels away from the sodium doublet and the case for a new element becomes visible.
+  </div>
+</div>
+<script>
+(function () {
+  const svg = document.getElementById('plot');
+  const slider = document.getElementById('r');
+  const rval = document.getElementById('rval');
+  const hint = document.getElementById('hint');
+
+  const W = 640, H = 360;
+  const M = { l: 44, r: 16, t: 20, b: 44 };
+  const innerW = W - M.l - M.r;
+  const innerH = H - M.t - M.b;
+
+  const lambdaMin = 585.0, lambdaMax = 591.5;
+  const xOf = (lam) => M.l + (lam - lambdaMin) / (lambdaMax - lambdaMin) * innerW;
+  const yOf = (v) => M.t + innerH - v * innerH;
+
+  const lines = [
+    { lam: 587.49, color: '#9c3a22', amp: 1.00, label: 'D₃' },
+    { lam: 588.995, color: '#b8870b', amp: 0.85, label: 'D₂' },
+    { lam: 589.592, color: '#d4a410', amp: 0.55, label: 'D₁' }
+  ];
+
+  function ns(tag, attrs) {
+    const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    if (attrs) for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  function axes() {
+    const ax = ns('g');
+    ax.appendChild(ns('line', { x1: M.l, y1: M.t + innerH, x2: M.l + innerW, y2: M.t + innerH, stroke: '#b8ac8e', 'stroke-width': 1 }));
+    for (let lam = 585; lam <= 591; lam += 1) {
+      const x = xOf(lam);
+      ax.appendChild(ns('line', { x1: x, y1: M.t + innerH, x2: x, y2: M.t + innerH + 5, stroke: '#b8ac8e', 'stroke-width': 1 }));
+      const t = ns('text', { x: x, y: M.t + innerH + 18, 'text-anchor': 'middle', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 10, fill: '#6b6359' });
+      t.textContent = lam.toFixed(0);
+      ax.appendChild(t);
+    }
+    const xLabel = ns('text', { x: M.l + innerW / 2, y: H - 6, 'text-anchor': 'middle', 'font-style': 'italic', 'font-size': 12, fill: '#6b6359' });
+    xLabel.textContent = 'wavelength λ (nm)';
+    ax.appendChild(xLabel);
+    const yLabel = ns('text', { x: 14, y: M.t + innerH / 2, 'text-anchor': 'middle', 'font-style': 'italic', 'font-size': 12, fill: '#6b6359', transform: 'rotate(-90 14 ' + (M.t + innerH / 2) + ')' });
+    yLabel.textContent = 'intensity';
+    ax.appendChild(yLabel);
+    return ax;
+  }
+
+  function draw(R) {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    const bg = ns('rect', { x: M.l, y: M.t, width: innerW, height: innerH, fill: '#faf5e9', stroke: '#d8cfb8' });
+    svg.appendChild(bg);
+    svg.appendChild(axes());
+
+    const lambda0 = 588.5;
+    const dlam = lambda0 / R;
+    const sigma = dlam / 2.3548;
+
+    const NPTS = 481;
+    let sumPath = '';
+    let maxSum = 0;
+    const ys = [];
+    for (let i = 0; i < NPTS; i++) {
+      const lam = lambdaMin + i / (NPTS - 1) * (lambdaMax - lambdaMin);
+      let s = 0;
+      for (const ln of lines) {
+        const d = (lam - ln.lam) / sigma;
+        s += ln.amp * Math.exp(-0.5 * d * d);
+      }
+      ys.push(s);
+      if (s > maxSum) maxSum = s;
+    }
+    const norm = maxSum > 0 ? 0.92 / maxSum : 0;
+
+    for (const ln of lines) {
+      let p = '';
+      let maxLn = 0;
+      const ly = [];
+      for (let i = 0; i < NPTS; i++) {
+        const lam = lambdaMin + i / (NPTS - 1) * (lambdaMax - lambdaMin);
+        const d = (lam - ln.lam) / sigma;
+        const v = ln.amp * Math.exp(-0.5 * d * d) * norm;
+        ly.push(v);
+        if (v > maxLn) maxLn = v;
+      }
+      for (let i = 0; i < NPTS; i++) {
+        const lam = lambdaMin + i / (NPTS - 1) * (lambdaMax - lambdaMin);
+        const x = xOf(lam), y = yOf(ly[i]);
+        p += (i === 0 ? 'M' : 'L') + x.toFixed(2) + ' ' + y.toFixed(2);
+      }
+      svg.appendChild(ns('path', { d: p, stroke: ln.color, 'stroke-width': 1.2, fill: 'none', opacity: 0.55 }));
+
+      const lx = xOf(ln.lam);
+      svg.appendChild(ns('line', { x1: lx, y1: yOf(0), x2: lx, y2: yOf(Math.min(0.95, maxLn + 0.04)), stroke: ln.color, 'stroke-width': 0.8, 'stroke-dasharray': '2 3', opacity: 0.5 }));
+      const t = ns('text', { x: lx, y: yOf(Math.min(0.97, maxLn + 0.06)), 'text-anchor': 'middle', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 10, fill: ln.color });
+      t.textContent = ln.label;
+      svg.appendChild(t);
+    }
+
+    let sp = '';
+    for (let i = 0; i < NPTS; i++) {
+      const lam = lambdaMin + i / (NPTS - 1) * (lambdaMax - lambdaMin);
+      const x = xOf(lam), y = yOf(ys[i] * norm);
+      sp += (i === 0 ? 'M' : 'L') + x.toFixed(2) + ' ' + y.toFixed(2);
+    }
+    svg.appendChild(ns('path', { d: sp, stroke: '#1a1a18', 'stroke-width': 1.8, fill: 'none' }));
+
+    const hL = R < 800 ? 'Below R ≈ 800: D₃ blurs into the sodium doublet; one yellow bump.'
+              : R < 1500 ? 'Around R ≈ 800–1500: D₃ has peeled off, but D₁ and D₂ are still one peak.'
+              : R < 4000 ? 'Above R ≈ 1500: the sodium doublet splits. D₃ stands alone.'
+              : 'Above R ≈ 4000: every line clean. Roughly where Lockyer was in October 1868.';
+    hint.innerHTML = 'Resolving power <b>R = λ/Δλ ≈ ' + R.toFixed(0) + '</b>, instrument linewidth <b>Δλ ≈ ' + (588.5 / R).toFixed(3) + ' nm</b>. ' + hL;
+  }
+
+  function update() {
+    const R = parseInt(slider.value, 10);
+    rval.textContent = R.toString();
+    draw(R);
+  }
+  slider.addEventListener('input', update);
+  update();
+})();
+</script>
+</body>
+</html>

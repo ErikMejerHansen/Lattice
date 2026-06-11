@@ -5,7 +5,6 @@
 # auto-suggested 2026-05-08 from coherence
 
 # auto-suggested 2026-05-09 from diffraction-gratings
-Helium discovery 1868 — Janssen and Lockyer, an element found in the corona twenty-seven years before being isolated on Earth
 
 # auto-suggested 2026-05-10 from principle-of-least-action
 Lagrangian mechanics — L = T − V, generalized coordinates, the framework that ate classical mechanics
@@ -132,3 +131,8 @@ Czerny-Turner spectrograph — two off-axis paraboloid mirrors plus a flat grati
 Laser frequency comb — f_n = nf_rep + f_0, Hänsch and Hall's 2005-Nobel-winning rake of evenly spaced laser lines stabilized to an atomic clock, the wavelength reference that took echelle radial-velocity precision from 1 m/s to 10 cm/s and pinned ESPRESSO at the VLT
 Iodine cell calibration — the I₂ molecular-absorption-cell wavelength reference Marcy and Butler pioneered in 1992, stamped onto the stellar spectrum on its way to the detector to deconvolve instrumental drift, the alternative to Mayor's simultaneous-reference-fiber approach that ran most American RV planet searches through the 2000s
 Radial-velocity photon-noise floor — v_min ≈ c / (R × √N_lines × SNR_per_line), the fundamental floor that even a perfect spectrograph cannot beat with finite light, the equation that fixes how big a telescope you need for a given precision and that drives the case for both ESPRESSO and the next-generation 30 m extremely large telescopes
+
+# auto-suggested 2026-06-11 from helium-discovery
+Alpha decay — ⁴He²⁺ ejected at MeV energies, Geiger and Nuttall's logarithmic correlation of decay rate with α energy, and Gamow's 1928 tunnelling derivation that turned twenty orders of magnitude of half-lives into one curve
+Solar chromosphere — the 2000-km thin red shell between photosphere and corona, T rising from 6000 K to 20,000 K, the layer Janssen and Lockyer learned to read with a slit at the limb and the source of every emission-line spectrum from Hα to D₃
+Noble gases — Ramsay's 1894-1898 systematic isolation program: argon from air with Rayleigh, helium from cleveite, then neon, krypton, xenon from fractional distillation of liquid air; the column of the periodic table that nobody had predicted because nobody had a sample

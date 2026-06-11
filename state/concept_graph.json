@@ -409,6 +409,16 @@
       "createdAt": "2026-06-10T08:00:00Z",
       "col": 0,
       "row": 20
+    },
+    {
+      "id": "helium_discovery",
+      "label": "Helium",
+      "subtitle": "D₃ at 587.49 nm",
+      "state": "available",
+      "lesson": "2026-06-11-helium-discovery",
+      "createdAt": "2026-06-11T08:00:00Z",
+      "col": 1,
+      "row": 20
     }
   ],
   "edges": [
@@ -519,6 +529,9 @@
     { "from": "rowland_grating", "to": "balmer_series", "kind": "related" },
     { "from": "echelle_spectrograph", "to": "rowland_grating", "kind": "extends" },
     { "from": "echelle_spectrograph", "to": "diffraction_gratings", "kind": "extends" },
-    { "from": "echelle_spectrograph", "to": "doppler_spectroscopy", "kind": "applied" }
+    { "from": "echelle_spectrograph", "to": "doppler_spectroscopy", "kind": "applied" },
+    { "from": "helium_discovery", "to": "spectroscopy_basics", "kind": "extends" },
+    { "from": "helium_discovery", "to": "balmer_series", "kind": "related" },
+    { "from": "helium_discovery", "to": "rowland_grating", "kind": "applied" }
   ]
 }
