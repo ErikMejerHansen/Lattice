@@ -7,7 +7,6 @@
 # auto-suggested 2026-05-09 from diffraction-gratings
 
 # auto-suggested 2026-05-10 from principle-of-least-action
-Lagrangian mechanics — L = T − V, generalized coordinates, the framework that ate classical mechanics
 Noether's theorem — every continuous symmetry of the action gives a conservation law (time → energy, space → momentum)
 Brachistochrone — the cycloid that gets a bead from A to B in the least time, the variational problem that started it all
 
@@ -136,3 +135,6 @@ Radial-velocity photon-noise floor — v_min ≈ c / (R × √N_lines × SNR_per
 Alpha decay — ⁴He²⁺ ejected at MeV energies, Geiger and Nuttall's logarithmic correlation of decay rate with α energy, and Gamow's 1928 tunnelling derivation that turned twenty orders of magnitude of half-lives into one curve
 Solar chromosphere — the 2000-km thin red shell between photosphere and corona, T rising from 6000 K to 20,000 K, the layer Janssen and Lockyer learned to read with a slit at the limb and the source of every emission-line spectrum from Hα to D₃
 Noble gases — Ramsay's 1894-1898 systematic isolation program: argon from air with Rayleigh, helium from cleveite, then neon, krypton, xenon from fractional distillation of liquid air; the column of the periodic table that nobody had predicted because nobody had a sample
+
+# auto-suggested 2026-06-12 from lagrangian-mechanics
+Hamiltonian mechanics — H = T + V, the (q, p) phase-space reformulation Hamilton wrote in 1834, canonical transformations and Poisson brackets, the formalism Heisenberg reached for in 1925

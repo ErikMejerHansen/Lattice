@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lagrangian mechanics — double pendulum</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 80px; text-align: right;
+}
+#viz { padding: 14px 16px 18px; max-width: 480px; box-sizing: border-box; }
+svg { display: block; width: 100%; height: auto; touch-action: none; }
+.pivot { fill: var(--text); }
+.rod { stroke: var(--text-muted); stroke-width: 2; stroke-linecap: round; fill: none; }
+.bob1 { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.2; }
+.bob2 { fill: var(--accent); stroke: var(--text); stroke-width: 0.8; }
+.trail { stroke: var(--accent); stroke-width: 1.1; fill: none; opacity: 0.55; }
+.frame { stroke: var(--border); stroke-width: 1; fill: none; }
+.axis-label {
+  font-style: italic; font-size: 11px; fill: var(--text-muted);
+}
+.readouts {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 12px; color: var(--text);
+  display: flex; gap: 16px; margin-top: 6px; flex-wrap: wrap;
+}
+.readouts span { color: var(--text-muted); }
+.readouts b { font-weight: 600; color: var(--text); }
+.btn {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  background: var(--bg-raised);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  padding: 6px 12px;
+  cursor: pointer;
+  min-height: 36px;
+  border-radius: 0;
+}
+.btn:hover { background: var(--bg); }
+.btn:active { background: var(--accent-soft); color: var(--bg); }
+.controls-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 10px;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <svg viewBox="0 0 360 360" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Interactive double pendulum">
+    <rect x="0.5" y="0.5" width="359" height="359" class="frame"></rect>
+    <!-- pivot at (180, 80) -->
+    <circle class="pivot" cx="180" cy="80" r="3"></circle>
+    <text x="190" y="78" class="axis-label">pivot</text>
+    <!-- bob 2 trail -->
+    <path id="trail" class="trail"></path>
+    <!-- rod 1 and rod 2 -->
+    <line id="rod1" class="rod" x1="180" y1="80" x2="180" y2="80"></line>
+    <line id="rod2" class="rod" x1="180" y1="80" x2="180" y2="80"></line>
+    <!-- bob 1 (lighter) and bob 2 (accent) -->
+    <circle id="bob1" class="bob1" cx="180" cy="80" r="7"></circle>
+    <circle id="bob2" class="bob2" cx="180" cy="80" r="9"></circle>
+  </svg>
+
+  <div class="viz-slider-row">
+    <label for="theta2">θ₂(0)</label>
+    <input id="theta2" type="range" min="-180" max="180" step="1" value="90">
+    <span class="value" id="theta2-value">θ₂(0) = +90°</span>
+  </div>
+
+  <div class="controls-row">
+    <button id="reset" class="btn">restart</button>
+    <span class="readouts" style="margin-top: 0;">
+      <span>E <b id="energy-value">−</b></span>
+      <span>t <b id="time-value">0.0 s</b></span>
+    </span>
+  </div>
+
+  <div class="viz-caption" style="margin-top: 10px;">
+    Equal masses m = 1 and equal rods L = 1, with g = 1. The upper rod is released from θ₁(0) = 90° with both bobs at rest; drag the slider to set the lower rod's starting angle θ₂(0) from −180° to +180°. Restart to launch with the current angle. The faint trail tracks bob 2. The dynamics come from Lagrange's equations in (θ₁, θ₂), integrated with a symplectic RK4 step; rod tensions never enter the calculation.
+  </div>
+</div>
+
+<script>
+const PIVOT_X = 180;
+const PIVOT_Y = 80;
+const ROD_PX = 90;
+const TRAIL_MAX = 240;
+
+let t1, t2, w1, w2;
+let trail = [];
+let lastTimestamp = null;
+let simTime = 0;
+let initialEnergy = 0;
+
+const slider = document.getElementById('theta2');
+const sliderValue = document.getElementById('theta2-value');
+const resetBtn = document.getElementById('reset');
+const rod1El = document.getElementById('rod1');
+const rod2El = document.getElementById('rod2');
+const bob1El = document.getElementById('bob1');
+const bob2El = document.getElementById('bob2');
+const trailEl = document.getElementById('trail');
+const energyEl = document.getElementById('energy-value');
+const timeEl = document.getElementById('time-value');
+
+function energy(t1, t2, w1, w2) {
+  const T_kin = w1*w1 + 0.5*w2*w2 + w1*w2*Math.cos(t1 - t2);
+  const V_pot = -2*Math.cos(t1) - Math.cos(t2);
+  return T_kin + V_pot;
+}
+
+function deriv(s) {
+  const t1 = s[0], t2 = s[1], w1 = s[2], w2 = s[3];
+  const a = t1 - t2;
+  const sa = Math.sin(a), ca = Math.cos(a);
+  const det = 1 + sa*sa;
+  const b1 = -w2*w2*sa - 2*Math.sin(t1);
+  const b2 =  w1*w1*sa - Math.sin(t2);
+  const a1 = (b1 - ca*b2) / det;
+  const a2 = (2*b2 - ca*b1) / det;
+  return [w1, w2, a1, a2];
+}
+
+function rk4Step(s, dt) {
+  const k1 = deriv(s);
+  const s2 = s.map((v, i) => v + 0.5*dt*k1[i]);
+  const k2 = deriv(s2);
+  const s3 = s.map((v, i) => v + 0.5*dt*k2[i]);
+  const k3 = deriv(s3);
+  const s4 = s.map((v, i) => v + dt*k3[i]);
+  const k4 = deriv(s4);
+  return s.map((v, i) => v + (dt/6)*(k1[i] + 2*k2[i] + 2*k3[i] + k4[i]));
+}
+
+function reset() {
+  t1 = Math.PI / 2;
+  t2 = parseFloat(slider.value) * Math.PI / 180;
+  w1 = 0;
+  w2 = 0;
+  trail = [];
+  simTime = 0;
+  lastTimestamp = null;
+  initialEnergy = energy(t1, t2, w1, w2);
+}
+
+function formatSigned(deg) {
+  const sign = deg >= 0 ? '+' : '−';
+  return sign + Math.abs(deg).toFixed(0) + '°';
+}
+
+function updateSliderLabel() {
+  const v = parseFloat(slider.value);
+  sliderValue.textContent = 'θ₂(0) = ' + formatSigned(v);
+}
+
+slider.addEventListener('input', updateSliderLabel);
+resetBtn.addEventListener('click', reset);
+slider.addEventListener('change', reset);
+
+function draw() {
+  const x1 = PIVOT_X + ROD_PX * Math.sin(t1);
+  const y1 = PIVOT_Y + ROD_PX * Math.cos(t1);
+  const x2 = x1 + ROD_PX * Math.sin(t2);
+  const y2 = y1 + ROD_PX * Math.cos(t2);
+
+  rod1El.setAttribute('x2', x1.toFixed(2));
+  rod1El.setAttribute('y2', y1.toFixed(2));
+  rod2El.setAttribute('x1', x1.toFixed(2));
+  rod2El.setAttribute('y1', y1.toFixed(2));
+  rod2El.setAttribute('x2', x2.toFixed(2));
+  rod2El.setAttribute('y2', y2.toFixed(2));
+  bob1El.setAttribute('cx', x1.toFixed(2));
+  bob1El.setAttribute('cy', y1.toFixed(2));
+  bob2El.setAttribute('cx', x2.toFixed(2));
+  bob2El.setAttribute('cy', y2.toFixed(2));
+
+  trail.push([x2, y2]);
+  if (trail.length > TRAIL_MAX) trail.shift();
+  if (trail.length > 1) {
+    let d = 'M' + trail[0][0].toFixed(1) + ',' + trail[0][1].toFixed(1);
+    for (let i = 1; i < trail.length; i++) {
+      d += ' L' + trail[i][0].toFixed(1) + ',' + trail[i][1].toFixed(1);
+    }
+    trailEl.setAttribute('d', d);
+  } else {
+    trailEl.setAttribute('d', '');
+  }
+}
+
+function tick(timestamp) {
+  if (lastTimestamp === null) {
+    lastTimestamp = timestamp;
+    requestAnimationFrame(tick);
+    return;
+  }
+  const realDt = Math.min(0.05, (timestamp - lastTimestamp) / 1000);
+  lastTimestamp = timestamp;
+
+  const subSteps = 6;
+  const h = realDt / subSteps;
+  let s = [t1, t2, w1, w2];
+  for (let i = 0; i < subSteps; i++) {
+    s = rk4Step(s, h);
+  }
+  t1 = s[0]; t2 = s[1]; w1 = s[2]; w2 = s[3];
+  simTime += realDt;
+
+  draw();
+
+  const E = energy(t1, t2, w1, w2);
+  const dE = E - initialEnergy;
+  const sign = dE >= 0 ? '+' : '−';
+  energyEl.textContent = sign + Math.abs(dE).toFixed(4);
+  timeEl.textContent = simTime.toFixed(1) + ' s';
+
+  requestAnimationFrame(tick);
+}
+
+updateSliderLabel();
+reset();
+draw();
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
