@@ -1,0 +1,109 @@
+{
+  "slug": "2026-06-12-lagrangian-mechanics",
+  "title": "Lagrangian mechanics: the book without a single diagram",
+  "node": {
+    "id": "lagrangian_mechanics",
+    "label": "Lagrangian",
+    "subtitle": "L = T − V"
+  },
+  "intro": "When Joseph-Louis Lagrange's 'Mécanique analytique' came off the Paris presses in 1788, the author opened with a boast that has irritated mechanics students ever since: 'On ne trouvera point de figures dans cet ouvrage.' No figures will be found in this work. The book reformulated all of classical mechanics, the wires and hinges and pulleys that Newton's free-body diagrams had handled by drawing the constraint forces and then eliminating them, into a single scalar function L = T − V whose Euler-Lagrange equation in any chosen coordinate gave the equation of motion directly. The constraint forces never appeared. The framework that did this was so flexible that, by the time the Standard Model was written down, it was the only formalism left.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The constraint force you have to draw, then erase",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "A bead slides on a frictionless wire bent into a vertical circle. To solve this in Newton's framework you draw a free-body diagram: gravity m g pointing straight down, and the wire's normal force N pointing along the radius, in toward the center, with magnitude unknown. You write F = m a along two Cartesian axes, project gravity onto the tangent and the radius, set the radial acceleration equal to v²/R, and at the end you eliminate N because it does no work and is not what you wanted to know. The unknown N has to be carried through every step and discarded at the end. That is a chore, not physics." },
+        { "type": "p", "text": "Now bend the wire into a parabola, or a cycloid, or a helix. Or string two pendulums together, with the second hanging from the first; the rods exert tensions on each other that change in magnitude every instant, both unknown. Or put a bead on a hoop that someone is spinning at angular velocity Ω. Each of these is the same kind of problem: a configuration with one or two degrees of freedom, but the Newtonian recipe insists on writing equations in Cartesian space where the constraint must appear as a force. The algebra explodes faster than the physics deepens." },
+        { "type": "p", "text": "Lagrange (Turin 1736, Berlin 1766, Paris 1787) spent most of his Berlin years building an alternative. By the time he handed Mécanique analytique to a Paris publisher in 1788 the book ran to two volumes, contained no diagram, and proposed that classical mechanics could be rewritten in terms of energies and a clever choice of coordinate rather than forces and Cartesian axes. Where Newton's recipe was 'draw every force, project onto axes, eliminate the ones you do not want,' Lagrange's was 'choose a coordinate that lives on the constraint, write down L = T − V in that coordinate, turn the crank.' Constraint forces stopped existing in the equations. They were not eliminated; they were never written." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Generalized coordinates",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "A generalized coordinate is any independent parameter that helps fix the configuration of a system. For the bead on the vertical circle, the angle θ measured from the bottom does it: one number specifies where the bead is, and the constraint to the wire is built into the choice. For the spherical pendulum (a bob swinging on a string in three dimensions), two angles suffice: one for the tilt from vertical, one for the azimuth. For the double pendulum, two angles, one per rod. The number of generalized coordinates needed is the number of degrees of freedom of the system, and writing the equations in those coordinates means the constraints never have to be enforced by hand." },
+        { "type": "p", "text": "Lagrange's claim was that for any choice of generalized coordinates {q_1, …, q_n}, the equation of motion is the Euler-Lagrange equation applied in each coordinate:" },
+        { "type": "math", "tex": "\\frac{d}{dt}\\!\\left(\\frac{\\partial L}{\\partial \\dot{q}_i}\\right) = \\frac{\\partial L}{\\partial q_i} \\quad (i = 1, \\ldots, n)", "display": true, "caption": "L is the Lagrangian T − V. q_i is the i-th generalized coordinate. q̇_i is its time derivative, the i-th generalized velocity. ∂L/∂q̇_i is the conjugate momentum in the i-th coordinate (ordinary momentum for a Cartesian coordinate, angular momentum for an angular coordinate). ∂L/∂q_i is the generalized force in that coordinate. The whole equation reads: rate of change of conjugate momentum equals generalized force, written one line per degree of freedom." },
+        { "type": "p", "text": "Two things are remarkable about this form. First, the form of the equation does not change when you switch coordinates. If x is an awkward variable for your problem and θ is natural, you do not have to rewrite Newton's law in polar coordinates and re-derive the centripetal terms; you write L(θ, θ̇) and apply the same equation. Second, the equation contains no constraint force. The reason is that constraint forces do no work on motions that stay on the constraint (they point perpendicular to the allowed motion), and the calculus of variations that produces the Euler-Lagrange equation only sees the work done along candidate paths. The wire's normal force, the rod's tension, the hoop's reaction, all drop out before the equation is even written." }
+      ],
+      "quiz": {
+        "question": "A pendulum's bob hangs from a string of length L attached to a cart that is free to slide horizontally on a frictionless table. The cart has mass M and position x, the bob has mass m and swings at angle θ from vertical. How many generalized coordinates does the system need?",
+        "options": [
+          "Two: x for the cart and θ for the bob. Two degrees of freedom, two coordinates.",
+          "Four: x and y for the cart, x and y for the bob.",
+          "Three: x for the cart and the bob's (x, y) position.",
+          "One: only θ matters, because the cart's motion is fixed by momentum conservation."
+        ],
+        "correctIndex": 0,
+        "explanation": "The system has two degrees of freedom: the cart slides along one axis (1 DOF), and the bob's string length is fixed so its position relative to the cart is parametrized by a single angle (1 DOF). Generalized coordinates {x, θ} are the minimal independent set that fixes the configuration; the string constraint is baked into the choice of θ rather than imposed by a force. Option 2 over-counts by ignoring the constraints (the cart is on a table, the bob is on a string). Option 3 mixes Cartesian and constrained coordinates, dragging the string constraint back in as something to enforce. Option 4 is wrong because momentum conservation is a derived consequence, not a structural reduction: x is a real coordinate that the Lagrangian still depends on through ẋ, and the dynamics needs both equations of motion to play out."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The double pendulum, written down in four lines",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The double pendulum is the canonical example of a system where the Newtonian recipe is grim and the Lagrangian recipe is short. Two rigid rods of length L are hinged together; the upper rod hangs from a fixed pivot, the lower rod from the end of the upper. Bobs of mass m sit at each rod's end. The state is fully specified by two angles θ_1 and θ_2, both measured from the downward vertical. Position of bob 1: (L sin θ_1, −L cos θ_1). Position of bob 2: (L sin θ_1 + L sin θ_2, −L cos θ_1 − L cos θ_2). Differentiating gives the velocities, and writing the kinetic energy 1/2 m (ẋ² + ẏ²) for each bob produces the total kinetic energy in two lines." },
+        { "type": "math", "tex": "T = m L^2 \\dot\\theta_1^2 + \\tfrac{1}{2} m L^2 \\dot\\theta_2^2 + m L^2 \\dot\\theta_1 \\dot\\theta_2 \\cos(\\theta_1 - \\theta_2)", "display": true, "caption": "T is the total kinetic energy of both bobs. m is each bob's mass. L is each rod's length. θ_1 is the upper rod's angle from vertical, θ̇_1 its time derivative. θ_2 and θ̇_2 are the same for the lower rod. The cross term θ̇_1 θ̇_2 cos(θ_1 − θ_2) is the geometric coupling: bob 2's velocity inherits the swing of rod 1 and adds the swing of rod 2, so its kinetic energy mixes both angular velocities." },
+        { "type": "math", "tex": "V = -2 m g L \\cos\\theta_1 - m g L \\cos\\theta_2", "display": true, "caption": "V is the gravitational potential energy of both bobs, measured from the pivot. m, g, L are as above. The factor of 2 on the first term is bob 1's mass plus bob 2's mass, both of which sit at the height −L cos θ_1 relative to the pivot from rod 1 alone. The second term is bob 2's additional drop −L cos θ_2 below bob 1, contributing only its own weight." },
+        { "type": "p", "text": "The Lagrangian L = T − V is the difference. Apply the Euler-Lagrange equation in θ_1 (taking ∂L/∂θ̇_1, then d/dt of that, then ∂L/∂θ_1, and setting them equal) and again in θ_2, and you have two coupled second-order equations in θ_1, θ_2, θ̇_1, θ̇_2 that are the full equations of motion. The rods' tensions never appear. The pivot's reaction never appears. The viz below holds m = L = g = 1 and integrates exactly these equations; drag the slider to set the lower bob's starting angle, watch the system swing and trace its trail." },
+        { "type": "viz", "src": "2026-06-12-lagrangian-mechanics.html", "height": 460, "caption": "Live double pendulum with equal masses and lengths, integrated from Lagrange's equations in (θ_1, θ_2). The upper bob is released from θ_1 = 90°; drag the slider to set θ_2(0) anywhere from −180° to +180°. The trace shows the path of the lower bob, sensitive enough to initial conditions that two close starting angles diverge within a few seconds. The whole picture comes from a Lagrangian that fits in two lines, with no rod tensions written down at any step." },
+        { "type": "p", "text": "The same recipe handles the spherical pendulum, the bead on a parabolic wire, the rotating hoop with a bead, the symmetric top, and dozens of textbook problems that resist the Newtonian recipe. In each case the choice of generalized coordinate bakes in the constraint, the Lagrangian falls into two lines of energy bookkeeping, and the Euler-Lagrange equation cranks out the dynamics. The two-volume Mécanique analytique was mostly a catalogue of cases like this, worked out for the first time without diagrams." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Cyclic coordinates: when a symmetry hands you a conservation law",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Now look at what happens when the Lagrangian fails to depend on one of its coordinates. Suppose L is a function of q̇_i but not of q_i itself; the coordinate q_i is called cyclic, or ignorable. The Euler-Lagrange equation in i becomes d/dt(∂L/∂q̇_i) = 0, which says the conjugate momentum p_i = ∂L/∂q̇_i is conserved. A symmetry of the Lagrangian (here, invariance under shifts in q_i) gives you a conserved quantity for free, with no separate argument required." },
+        { "type": "math", "tex": "\\frac{\\partial L}{\\partial q_i} = 0 \\;\\Longrightarrow\\; p_i \\equiv \\frac{\\partial L}{\\partial \\dot{q}_i} = \\text{const}", "display": true, "caption": "L is the Lagrangian. q_i is a generalized coordinate. ∂L/∂q_i = 0 is the statement that L does not depend on q_i, only on its derivative q̇_i. p_i is the conjugate momentum to q_i, defined as ∂L/∂q̇_i. The implication reads: if L is invariant under shifts of q_i, the conjugate momentum p_i is constant along the trajectory." },
+        { "type": "p", "text": "A free particle in three dimensions has L = 1/2 m (ẋ² + ẏ² + ż²). All three Cartesian coordinates are cyclic, so all three linear momenta p_x, p_y, p_z are conserved. A particle in a central potential V(r) has L = 1/2 m (ṙ² + r² θ̇² + r² sin² θ φ̇²) − V(r); the azimuthal coordinate φ is cyclic, so the conjugate momentum p_φ = m r² sin² θ φ̇ is the conserved z-component of angular momentum. A Lagrangian with no explicit time dependence has its energy conserved as well, by a slightly different argument (the Beltrami identity in disguise). The pattern: every continuous symmetry of L gives a conserved quantity." },
+        { "type": "p", "text": "Emmy Noether (Erlangen and Göttingen, 1882-1935) generalized this pattern in 1918 into the single deepest theorem in mathematical physics: for every continuous symmetry of the action, there is a conserved current. Translations in space give momentum. Translations in time give energy. Rotations give angular momentum. Gauge symmetry of electrodynamics gives electric charge. The cyclic-coordinate observation in Lagrange's 1788 book was the seed; Noether's theorem (which will get its own lesson) is the tree. The whole conservation-law architecture of modern physics rests on it." }
+      ],
+      "quiz": {
+        "question": "A bead slides on a horizontal wire bent into a circle of radius R, rotating freely about a vertical axis through the circle's center. The wire is in the horizontal plane (so gravity does no work on the bead's motion). Using the azimuthal angle φ around the wire as the coordinate, the Lagrangian is L = (1/2) m R² φ̇². What conservation law does the Euler-Lagrange equation give you?",
+        "options": [
+          "Angular momentum about the vertical axis is conserved: p_φ = m R² φ̇ = const. The Lagrangian does not depend on φ, so φ is cyclic and its conjugate momentum is constant.",
+          "Kinetic energy is conserved, because the Lagrangian equals the kinetic energy.",
+          "The bead's angular velocity φ̇ is conserved, because there is no force on the bead.",
+          "Linear momentum in the horizontal plane is conserved, because gravity is the only external force."
+        ],
+        "correctIndex": 0,
+        "explanation": "L depends on φ̇ but not on φ itself, so φ is a cyclic coordinate and the cyclic-coordinate rule applies directly: p_φ = ∂L/∂φ̇ = m R² φ̇ is constant along the trajectory, which is the angular momentum about the vertical axis. Option 3 happens to be correct numerically (with no friction, constant p_φ does imply constant φ̇), but it misnames the conservation law: φ̇ is not in general the conserved quantity, p_φ = m R² φ̇ is, and the distinction matters once R or m varies. Option 2 conflates two facts: in this special case L = T because V = 0, but conservation of energy is a separate consequence of ∂L/∂t = 0, not of cyclic φ. Option 4 is wrong because the wire's normal force changes linear momentum continually; only angular momentum about the symmetry axis is conserved."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The framework that ate classical mechanics",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "In 1834 William Rowan Hamilton, working in Dublin, rewrote Lagrange's formulation in a way that turned out to be deeper still. Hamilton replaced the velocities q̇_i with the conjugate momenta p_i = ∂L/∂q̇_i as the independent variables, defined the Hamiltonian H = Σ p_i q̇_i − L (which, for a system whose Lagrangian has no explicit time dependence and whose kinetic energy is a quadratic form in velocities, comes out to T + V, the total energy), and showed that the Euler-Lagrange equations split into a clean symmetric pair: q̇_i = ∂H/∂p_i and ṗ_i = −∂H/∂q_i. The phase space (q, p) replaced configuration space (q), and a vast geometric structure (canonical transformations, Poisson brackets, symplectic two-forms) opened up that was not visible from Lagrange's side. Hamilton's formalism, in 1925, was what Heisenberg and Dirac reached for when they needed a starting point for quantum mechanics." },
+        { "type": "p", "text": "Lagrange's formalism, meanwhile, climbed the other staircase. James Clerk Maxwell's 1865 derivation of his equations of electromagnetism used a Lagrangian for the electromagnetic field, A^μ(x), with L_EM = −1/(4 μ_0) F_μν F^μν, and extremizing the action gave the field equations. Einstein and Hilbert in November 1915, racing each other to general relativity, wrote down the Einstein-Hilbert Lagrangian L_GR ∝ R, the scalar curvature of spacetime, and extremized to get the field equations of gravity. Every quantum field theory of the twentieth century was specified the same way: write down a Lagrangian density, extremize the action. The Standard Model of particle physics has its own Lagrangian, fits on a coffee mug, and is the entire content of the theory." },
+        { "type": "p", "text": "What started in 1788 as a way to skip drawing free-body diagrams ended up as the only formalism in modern physics. The reason is structural. Newton's F = ma is a vector equation in a flat Cartesian space; it does not survive a coordinate change to curvilinear coordinates without explicit Christoffel-symbol bookkeeping, it does not survive a Lorentz boost without becoming p^μ = m u^μ first, and it does not survive quantization because the position operator and the momentum operator do not commute. Lagrange's δS = 0 is a scalar equation about a number, the action, with no preferred coordinates and no preferred axes. It survives every generalization that mattered: special relativity (Lorentz-invariant action), general relativity (diffeomorphism-invariant action), quantum mechanics (the Feynman path integral evaluates e^(i S/ℏ) along every path), gauge theory (the action is invariant under gauge transformations, by construction). The book that opened with 'no figures will be found in this work' ended up being a book that the rest of physics could be written inside." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A learner asks: if Newton's F = ma and Lagrange's δS = 0 give the same equations of motion for a classical particle, why does graduate mechanics spend most of its time on Lagrangians and almost none on free-body diagrams? Which answer captures the deepest reason rather than a convenience reason?",
+    "options": [
+      "Lagrange's δS = 0 is a scalar statement about a coordinate-free quantity (the action), and it survives every generalization that mattered in the twentieth century: special relativity, general relativity, quantum mechanics through the Feynman path integral, gauge theory. Newton's F = ma is a vector statement in flat Cartesian space and survives none of them in its original form. Modern physics is built on the formalism that lifts.",
+      "Lagrangians automatically conserve energy, while Newton's equations do not.",
+      "Newton's F = ma is mathematically incorrect; Lagrangian mechanics corrected it.",
+      "Lagrangian mechanics gives a closed-form solution for every problem; Newton's only for some."
+    ],
+    "correctIndex": 0,
+    "explanation": "The two formulations are equivalent on classical configuration space, so neither is more accurate at that level; what makes Lagrangians the modern formalism is that the scalar variational form generalizes upward where the vector force law does not. Maxwell's equations, the Einstein field equations, the Standard Model, and Feynman's path integral are all specified by writing down a Lagrangian density and extremizing an action. The tempting wrong answer is option 2, which confuses a special case (a Lagrangian with no explicit time dependence does have conserved energy, by Noether's theorem) with a general claim; nothing about writing L = T − V automatically conserves energy if the potential depends on t. Option 3 is simply wrong (Newton's law is the classical limit of quantum mechanics, not a falsified theory), and option 4 misstates a basic fact: closed-form solutions are rare in either formalism."
+  },
+  "suggestedNodes": [
+    { "id": "noethers_theorem", "edgeType": "extends" },
+    { "id": "hamiltonian_mechanics", "edgeType": "extends" },
+    { "id": "brachistochrone", "edgeType": "applied" }
+  ],
+  "metadata": {
+    "estimatedReadingMinutes": 25,
+    "generatedAt": "2026-06-12T08:00:00Z"
+  }
+}
