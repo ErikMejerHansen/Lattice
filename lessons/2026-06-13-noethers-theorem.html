@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noether's theorem — which charges stay flat</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz { padding: 14px 16px 18px; max-width: 480px; box-sizing: border-box; }
+svg { display: block; width: 100%; height: auto; touch-action: none; }
+.frame { stroke: var(--border); stroke-width: 1; fill: none; }
+.axis { stroke: var(--border-strong); stroke-width: 0.7; fill: none; }
+.particle { fill: var(--accent); stroke: var(--text); stroke-width: 0.6; }
+.well { fill: var(--accent-soft); opacity: 0.18; }
+.well-line { stroke: var(--accent-soft); stroke-width: 0.8; fill: none; opacity: 0.5; }
+.trail { stroke: var(--accent); stroke-width: 1; fill: none; opacity: 0.45; }
+.sparkline { stroke: var(--text); stroke-width: 1; fill: none; }
+.spark-zero { stroke: var(--border-strong); stroke-width: 0.5; stroke-dasharray: 2 2; }
+.spark-flat { stroke: var(--accent); stroke-width: 1.2; }
+.spark-label {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; fill: var(--text);
+}
+.spark-status {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10px; fill: var(--text-muted);
+}
+.spark-value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; fill: var(--text);
+}
+.controls-row {
+  display: flex; align-items: center; gap: 6px; margin-top: 12px; flex-wrap: wrap;
+}
+.btn {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  background: var(--bg-raised);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  padding: 6px 10px;
+  cursor: pointer;
+  min-height: 36px;
+  border-radius: 0;
+  flex: 1 1 auto;
+}
+.btn:hover { background: var(--bg); }
+.btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.controls-actions {
+  display: flex; align-items: center; gap: 10px; margin-top: 8px;
+}
+.reset-btn {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  background: var(--bg-raised);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  padding: 6px 12px;
+  cursor: pointer;
+  min-height: 36px;
+  border-radius: 0;
+}
+.reset-btn:hover { background: var(--bg); }
+.pot-label {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted);
+}
+.t-label {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-left: auto;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <svg viewBox="0 0 360 280" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Particle in potential, with Noether charge readouts">
+    <rect x="0.5" y="0.5" width="359" height="279" class="frame"></rect>
+    <line class="axis" x1="180" y1="20" x2="180" y2="260"></line>
+    <line class="axis" x1="20" y1="140" x2="340" y2="140"></line>
+    <g id="well-layer"></g>
+    <path id="trail" class="trail"></path>
+    <circle id="particle" class="particle" cx="180" cy="140" r="5"></circle>
+  </svg>
+
+  <div class="controls-row">
+    <button class="btn" data-pot="free">V = 0</button>
+    <button class="btn active" data-pot="central">V = ½(x²+y²)</button>
+    <button class="btn" data-pot="anisotropic">V = ½x²</button>
+    <button class="btn" data-pot="driven">V = ½(1+0.3 sin t)(x²+y²)</button>
+  </div>
+
+  <div class="controls-actions">
+    <button class="reset-btn" id="reset">restart</button>
+    <span class="pot-label" id="pot-label">central well</span>
+    <span class="t-label" id="t-label">t = 0.0</span>
+  </div>
+
+  <svg viewBox="0 0 360 240" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Four Noether charges over time">
+    <rect x="0.5" y="0.5" width="359" height="239" class="frame"></rect>
+    <g id="sparks"></g>
+  </svg>
+
+  <div class="viz-caption" style="margin-top: 10px;">
+    Top: a unit-mass particle in V(x, y, t), launched from (1, 0) with velocity (0, 1). Bottom: the four candidate Noether charges (E, p_x, p_y, L_z), one per spacetime symmetry (time translation, x-translation, y-translation, z-rotation). Toggle the potential and watch which charges stay flat (the symmetry survives) and which drift (the symmetry was broken). Free space keeps all four. A 1D harmonic keeps E and p_y. A 2D central well keeps E and L_z. Drive the spring in time and only L_z survives.
+  </div>
+</div>
+
+<script>
+const SCENE_W = 360, SCENE_H = 280;
+const CX = 180, CY = 140;
+const SCALE = 60; // pixels per unit
+const TRAIL_MAX = 220;
+const SPARK_MAX = 220;
+const SPARK_PANEL_W = 360, SPARK_PANEL_H = 240;
+const SPARK_LABEL_W = 50, SPARK_VALUE_W = 60;
+const SPARK_PAD = 8;
+const SPARK_PLOT_X = SPARK_LABEL_W + SPARK_PAD;
+const SPARK_PLOT_W = SPARK_PANEL_W - SPARK_PLOT_X - SPARK_VALUE_W - SPARK_PAD;
+
+let x = 1.0, y = 0.0, vx = 0.0, vy = 1.0;
+let t_sim = 0;
+let potType = 'central';
+let trail = [];
+let lastTs = null;
+let initial = {};
+
+const history = { E: [], px: [], py: [], Lz: [] };
+const CHARGES = ['E', 'px', 'py', 'Lz'];
+const CHARGE_LABEL = { E: 'E', px: 'p_x', py: 'p_y', Lz: 'L_z' };
+const CHARGE_SYM = { E: 'time', px: 'x-shift', py: 'y-shift', Lz: 'rotation' };
+
+const POT_LABELS = {
+  free: 'free particle',
+  central: 'central well',
+  anisotropic: '1D harmonic',
+  driven: 'time-driven spring'
+};
+
+const trailEl = document.getElementById('trail');
+const particleEl = document.getElementById('particle');
+const wellLayer = document.getElementById('well-layer');
+const tLabel = document.getElementById('t-label');
+const potLabel = document.getElementById('pot-label');
+const sparksLayer = document.getElementById('sparks');
+
+function force(x, y, t) {
+  if (potType === 'free') return [0, 0];
+  if (potType === 'anisotropic') return [-x, 0];
+  if (potType === 'central') return [-x, -y];
+  const k = 1 + 0.3 * Math.sin(t);
+  return [-k * x, -k * y];
+}
+
+function PE(x, y, t) {
+  if (potType === 'free') return 0;
+  if (potType === 'anisotropic') return 0.5 * x * x;
+  if (potType === 'central') return 0.5 * (x * x + y * y);
+  const k = 1 + 0.3 * Math.sin(t);
+  return 0.5 * k * (x * x + y * y);
+}
+
+function charges() {
+  return {
+    E: 0.5 * (vx * vx + vy * vy) + PE(x, y, t_sim),
+    px: vx,
+    py: vy,
+    Lz: x * vy - y * vx
+  };
+}
+
+function step(dt) {
+  const f0 = force(x, y, t_sim);
+  x += vx * dt + 0.5 * f0[0] * dt * dt;
+  y += vy * dt + 0.5 * f0[1] * dt * dt;
+  const f1 = force(x, y, t_sim + dt);
+  vx += 0.5 * (f0[0] + f1[0]) * dt;
+  vy += 0.5 * (f0[1] + f1[1]) * dt;
+  t_sim += dt;
+}
+
+function reset() {
+  x = 1.0; y = 0.0; vx = 0.0; vy = 1.0;
+  t_sim = 0;
+  trail = [];
+  lastTs = null;
+  for (const k of CHARGES) history[k] = [];
+  initial = charges();
+  drawWell();
+  drawScene();
+  drawSparks();
+}
+
+function px2screen(xx, yy) {
+  return [CX + SCALE * xx, CY - SCALE * yy];
+}
+
+function drawWell() {
+  let html = '';
+  if (potType === 'central' || potType === 'driven') {
+    for (let r = 0.5; r <= 2.0; r += 0.5) {
+      const rp = r * SCALE;
+      html += '<circle class="well-line" cx="' + CX + '" cy="' + CY + '" r="' + rp.toFixed(1) + '"></circle>';
+    }
+  } else if (potType === 'anisotropic') {
+    for (let xv = 0.5; xv <= 2.0; xv += 0.5) {
+      const xp = xv * SCALE;
+      html += '<line class="well-line" x1="' + (CX - xp).toFixed(1) + '" y1="20" x2="' + (CX - xp).toFixed(1) + '" y2="260"></line>';
+      html += '<line class="well-line" x1="' + (CX + xp).toFixed(1) + '" y1="20" x2="' + (CX + xp).toFixed(1) + '" y2="260"></line>';
+    }
+  }
+  wellLayer.innerHTML = html;
+}
+
+function drawScene() {
+  const [sx, sy] = px2screen(x, y);
+  particleEl.setAttribute('cx', sx.toFixed(2));
+  particleEl.setAttribute('cy', sy.toFixed(2));
+  if (trail.length > 1) {
+    let d = 'M' + trail[0][0].toFixed(1) + ',' + trail[0][1].toFixed(1);
+    for (let i = 1; i < trail.length; i++) {
+      d += ' L' + trail[i][0].toFixed(1) + ',' + trail[i][1].toFixed(1);
+    }
+    trailEl.setAttribute('d', d);
+  } else {
+    trailEl.setAttribute('d', '');
+  }
+}
+
+function drawSparks() {
+  const rowH = SPARK_PANEL_H / 4;
+  let html = '';
+  for (let i = 0; i < CHARGES.length; i++) {
+    const k = CHARGES[i];
+    const y0 = i * rowH;
+    const yMid = y0 + rowH / 2;
+    const series = history[k];
+    const init = initial[k] === undefined ? 0 : initial[k];
+
+    let min = init, max = init;
+    for (const v of series) { if (v < min) min = v; if (v > max) max = v; }
+    const spread = Math.max(0.05, max - min);
+    const drift = series.length > 0 ? Math.abs(series[series.length - 1] - init) : 0;
+    const isFlat = drift < 0.02;
+
+    const plotH = rowH * 0.55;
+    const plotTop = yMid - plotH / 2;
+    const plotBot = yMid + plotH / 2;
+
+    const center = (max + min) / 2;
+    function vy(v) {
+      const norm = (v - center) / spread;
+      return yMid - norm * plotH * 0.8;
+    }
+    const zeroY = vy(init);
+
+    html += '<text class="spark-label" x="' + (SPARK_LABEL_W - 6) + '" y="' + (yMid + 4) + '" text-anchor="end">' + CHARGE_LABEL[k] + '</text>';
+    html += '<text class="spark-status" x="' + (SPARK_LABEL_W - 6) + '" y="' + (yMid + 18) + '" text-anchor="end">' + CHARGE_SYM[k] + '</text>';
+
+    html += '<line class="spark-zero" x1="' + SPARK_PLOT_X + '" y1="' + zeroY.toFixed(1) + '" x2="' + (SPARK_PLOT_X + SPARK_PLOT_W) + '" y2="' + zeroY.toFixed(1) + '"></line>';
+
+    if (series.length > 1) {
+      const cls = isFlat ? 'spark-flat' : 'sparkline';
+      const n = series.length;
+      let d = '';
+      for (let j = 0; j < n; j++) {
+        const xs = SPARK_PLOT_X + (j / (SPARK_MAX - 1)) * SPARK_PLOT_W;
+        const ys = vy(series[j]);
+        d += (j === 0 ? 'M' : ' L') + xs.toFixed(1) + ',' + ys.toFixed(1);
+      }
+      html += '<path class="' + cls + '" d="' + d + '"></path>';
+    }
+
+    const cur = series.length > 0 ? series[series.length - 1] : init;
+    const dispVal = (cur >= 0 ? '+' : '−') + Math.abs(cur).toFixed(3);
+    html += '<text class="spark-value" x="' + (SPARK_PLOT_X + SPARK_PLOT_W + 6) + '" y="' + (yMid + 4) + '">' + dispVal + '</text>';
+
+    if (i < CHARGES.length - 1) {
+      html += '<line x1="0" y1="' + (y0 + rowH) + '" x2="' + SPARK_PANEL_W + '" y2="' + (y0 + rowH) + '" stroke="var(--border)" stroke-width="0.5"></line>';
+    }
+  }
+  sparksLayer.innerHTML = html;
+}
+
+function setPotential(p) {
+  potType = p;
+  potLabel.textContent = POT_LABELS[p];
+  document.querySelectorAll('.btn[data-pot]').forEach(b => {
+    b.classList.toggle('active', b.dataset.pot === p);
+  });
+  reset();
+}
+
+document.querySelectorAll('.btn[data-pot]').forEach(b => {
+  b.addEventListener('click', () => setPotential(b.dataset.pot));
+});
+document.getElementById('reset').addEventListener('click', reset);
+
+function tick(ts) {
+  if (lastTs === null) {
+    lastTs = ts;
+    requestAnimationFrame(tick);
+    return;
+  }
+  const dt = Math.min(0.05, (ts - lastTs) / 1000);
+  lastTs = ts;
+
+  const sub = 6;
+  const h = dt / sub;
+  for (let i = 0; i < sub; i++) step(h);
+
+  const [sx, sy] = px2screen(x, y);
+  if (sx > 12 && sx < SCENE_W - 12 && sy > 12 && sy < SCENE_H - 12) {
+    trail.push([sx, sy]);
+  }
+  if (trail.length > TRAIL_MAX) trail.shift();
+
+  const c = charges();
+  for (const k of CHARGES) {
+    history[k].push(c[k]);
+    if (history[k].length > SPARK_MAX) history[k].shift();
+  }
+
+  drawScene();
+  drawSparks();
+  tLabel.textContent = 't = ' + t_sim.toFixed(1);
+
+  requestAnimationFrame(tick);
+}
+
+reset();
+drawWell();
+drawScene();
+drawSparks();
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>

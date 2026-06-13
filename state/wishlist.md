@@ -7,7 +7,6 @@
 # auto-suggested 2026-05-09 from diffraction-gratings
 
 # auto-suggested 2026-05-10 from principle-of-least-action
-Noether's theorem — every continuous symmetry of the action gives a conservation law (time → energy, space → momentum)
 Brachistochrone — the cycloid that gets a bead from A to B in the least time, the variational problem that started it all
 
 # auto-suggested 2026-05-11 from total-internal-reflection
@@ -138,3 +137,8 @@ Noble gases — Ramsay's 1894-1898 systematic isolation program: argon from air 
 
 # auto-suggested 2026-06-12 from lagrangian-mechanics
 Hamiltonian mechanics — H = T + V, the (q, p) phase-space reformulation Hamilton wrote in 1834, canonical transformations and Poisson brackets, the formalism Heisenberg reached for in 1925
+
+# auto-suggested 2026-06-13 from noethers-theorem
+Stress-energy tensor — T^μν, the four-by-four matrix packaging energy density, momentum density, and stress flux into a single covariant object, the right-hand side of Einstein's field equation and the Noether current of spacetime translation in any relativistic field theory
+Gauge invariance — local U(1) phase rotation of the electron field ψ → e^(iα(x)) ψ with a compensating shift of the vector potential A_μ → A_μ + ∂_μ α, the symmetry Weyl identified in 1929 that forces electromagnetism into existence and is the canonical example of Noether's second theorem
+Continuity equation — ∂ρ/∂t + ∇·j = 0, the local statement that whatever-it-is can only flow in and out of a region through its boundary, the integral form of every Noether-first-theorem conservation law and the workhorse identity behind charge conservation, mass conservation, and probability conservation in QM
