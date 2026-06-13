@@ -429,6 +429,16 @@
       "createdAt": "2026-06-12T08:00:00Z",
       "col": 0,
       "row": 21
+    },
+    {
+      "id": "noethers_theorem",
+      "label": "Noether",
+      "subtitle": "every symmetry",
+      "state": "available",
+      "lesson": "2026-06-13-noethers-theorem",
+      "createdAt": "2026-06-13T08:00:00Z",
+      "col": 1,
+      "row": 21
     }
   ],
   "edges": [
@@ -544,6 +554,8 @@
     { "from": "helium_discovery", "to": "balmer_series", "kind": "related" },
     { "from": "helium_discovery", "to": "rowland_grating", "kind": "applied" },
     { "from": "lagrangian_mechanics", "to": "least_action", "kind": "extends" },
-    { "from": "lagrangian_mechanics", "to": "refraction", "kind": "related" }
+    { "from": "lagrangian_mechanics", "to": "refraction", "kind": "related" },
+    { "from": "noethers_theorem", "to": "lagrangian_mechanics", "kind": "extends" },
+    { "from": "noethers_theorem", "to": "least_action", "kind": "extends" }
   ]
 }

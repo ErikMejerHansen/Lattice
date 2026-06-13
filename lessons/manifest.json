@@ -299,5 +299,12 @@
     "subtitle": "L = T − V",
     "date": "2026-06-12",
     "estimatedReadingMinutes": 25
+  },
+  {
+    "slug": "2026-06-13-noethers-theorem",
+    "title": "Noether's theorem: every continuous symmetry is a conservation law",
+    "subtitle": "every symmetry",
+    "date": "2026-06-13",
+    "estimatedReadingMinutes": 22
   }
 ]
