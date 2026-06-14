@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The brachistochrone race</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz { padding: 14px 16px 18px; max-width: 480px; box-sizing: border-box; }
+svg { display: block; width: 100%; height: auto; touch-action: none; }
+.frame { stroke: var(--border); stroke-width: 1; fill: none; }
+.axis-line { stroke: var(--border-strong); stroke-width: 0.7; fill: none; }
+.axis-label {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10px; fill: var(--text-muted);
+}
+.endpoint { fill: var(--text); stroke: var(--text); stroke-width: 0.6; }
+.start { fill: var(--text); stroke: var(--text); stroke-width: 0.6; }
+.curve-line { fill: none; stroke-width: 1.4; opacity: 0.85; }
+.curve-straight { stroke: #6b6359; stroke-dasharray: 4 3; }
+.curve-arc      { stroke: #c47558; }
+.curve-cycloid  { stroke: var(--accent); }
+.bead { stroke: var(--text); stroke-width: 0.6; }
+.bead-straight { fill: #6b6359; }
+.bead-arc      { fill: #c47558; }
+.bead-cycloid  { fill: var(--accent); }
+.legend-row {
+  display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; font-size: 11px;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-swatch {
+  width: 18px; height: 3px; border-radius: 0;
+}
+.times-grid {
+  display: grid; grid-template-columns: 110px 1fr 60px;
+  gap: 4px 10px; margin-top: 12px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; font-size: 11px;
+}
+.times-grid .label { color: var(--text-muted); }
+.times-grid .bar-cell {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  position: relative; height: 14px;
+}
+.times-grid .bar {
+  position: absolute; left: 0; top: 0; bottom: 0; opacity: 0.7;
+}
+.bar.straight { background: #6b6359; }
+.bar.arc      { background: #c47558; }
+.bar.cycloid  { background: var(--accent); }
+.times-grid .num { color: var(--text); text-align: right; }
+.times-grid .winner { color: var(--accent); font-weight: 700; }
+.controls-actions {
+  display: flex; align-items: center; gap: 10px; margin-top: 8px;
+}
+.reset-btn {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  background: var(--bg-raised);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  padding: 6px 12px;
+  cursor: pointer;
+  min-height: 36px;
+  border-radius: 0;
+}
+.reset-btn:hover { background: var(--bg); }
+.elapsed-label {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-left: auto;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <svg id="scene" viewBox="0 0 360 280" preserveAspectRatio="xMidYMid meet"
+       role="img" aria-label="Three beads race down three curves from a fixed start to a movable endpoint">
+    <rect x="0.5" y="0.5" width="359" height="279" class="frame"></rect>
+
+    <line class="axis-line" x1="30"  y1="30" x2="30"  y2="250"></line>
+    <line class="axis-line" x1="30"  y1="30" x2="340" y2="30"></line>
+
+    <text class="axis-label" x="170" y="22" text-anchor="middle">x  (horizontal distance, m)</text>
+    <text class="axis-label" x="20"  y="140" text-anchor="middle"
+          transform="rotate(-90, 20, 140)">y  (depth, m)</text>
+
+    <text class="axis-label" x="30"  y="266" text-anchor="middle">0</text>
+    <text class="axis-label" x="340" y="266" text-anchor="middle" id="x-axis-end">2.0</text>
+    <text class="axis-label" x="24"  y="32"  text-anchor="end">0</text>
+    <text class="axis-label" x="24"  y="253" text-anchor="end" id="y-axis-end">1.0</text>
+
+    <path id="curve-straight" class="curve-line curve-straight" d=""></path>
+    <path id="curve-arc"      class="curve-line curve-arc"      d=""></path>
+    <path id="curve-cycloid"  class="curve-line curve-cycloid"  d=""></path>
+
+    <circle id="start"    class="start"    cx="30" cy="30" r="4"></circle>
+    <circle id="endpoint" class="endpoint" cx="340" cy="250" r="4"></circle>
+
+    <circle id="bead-straight" class="bead bead-straight" cx="30" cy="30" r="5"></circle>
+    <circle id="bead-arc"      class="bead bead-arc"      cx="30" cy="30" r="5"></circle>
+    <circle id="bead-cycloid"  class="bead bead-cycloid"  cx="30" cy="30" r="5"></circle>
+  </svg>
+
+  <div class="viz-slider-row">
+    <label for="D">x_end</label>
+    <input type="range" id="D" min="0.3" max="2.5" step="0.05" value="1.4">
+    <span class="value" id="D-value">1.40 m</span>
+  </div>
+
+  <div class="controls-actions">
+    <button class="reset-btn" id="reset">restart race</button>
+    <span class="elapsed-label" id="elapsed">t = 0.00 s</span>
+  </div>
+
+  <div class="legend-row">
+    <div class="legend-item"><span class="legend-swatch" style="background:#6b6359;"></span>straight line</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#c47558;"></span>circular arc</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:var(--accent);"></span>cycloid</div>
+  </div>
+
+  <div class="times-grid" id="times-grid">
+    <span class="label">straight line</span>
+    <div class="bar-cell"><div class="bar straight" id="bar-straight" style="width: 0%;"></div></div>
+    <span class="num" id="t-straight">— s</span>
+
+    <span class="label">circular arc</span>
+    <div class="bar-cell"><div class="bar arc" id="bar-arc" style="width: 0%;"></div></div>
+    <span class="num" id="t-arc">— s</span>
+
+    <span class="label">cycloid</span>
+    <div class="bar-cell"><div class="bar cycloid" id="bar-cycloid" style="width: 0%;"></div></div>
+    <span class="num" id="t-cycloid">— s</span>
+  </div>
+
+  <div class="viz-caption" style="margin-top: 12px;">
+    A bead is released from rest at the upper left and slides without friction along each of three candidate curves to a movable lower-right endpoint, in a gravitational field g = 9.8 m/s² with the vertical drop fixed at H = 1.0 m. Drag the slider to move the endpoint horizontally. The cycloid wins for every horizontal distance, because it dives steeply at the start to build speed before flattening out, while the straight line minimizes arclength but not transit time. The animation slows real time by a factor of 1.5 for legibility; the finishing times shown are the true physical descent times.
+  </div>
+</div>
+
+<script>
+"use strict";
+
+const SVG_W = 360, SVG_H = 280;
+const PLOT_LEFT = 30, PLOT_TOP = 30;
+const PLOT_RIGHT = 340, PLOT_BOTTOM = 250;
+const PLOT_W = PLOT_RIGHT - PLOT_LEFT;
+const PLOT_H = PLOT_BOTTOM - PLOT_TOP;
+
+const H_WORLD = 1.0;
+const G = 9.8;
+const D_MIN_VIEW = 2.0;
+const TIME_SCALE = 1.5;
+
+let D = parseFloat(document.getElementById('D').value);
+
+let geom = null;
+let times = { straight: 0, arc: 0, cycloid: 0 };
+let animT = 0;
+let lastTs = null;
+let running = true;
+let bestT = Infinity;
+
+const elBeadS = document.getElementById('bead-straight');
+const elBeadA = document.getElementById('bead-arc');
+const elBeadC = document.getElementById('bead-cycloid');
+const elCurveS = document.getElementById('curve-straight');
+const elCurveA = document.getElementById('curve-arc');
+const elCurveC = document.getElementById('curve-cycloid');
+const elEndpoint = document.getElementById('endpoint');
+const elDVal = document.getElementById('D-value');
+const elElapsed = document.getElementById('elapsed');
+const elXAxisEnd = document.getElementById('x-axis-end');
+const elYAxisEnd = document.getElementById('y-axis-end');
+const elTimeStraight = document.getElementById('t-straight');
+const elTimeArc = document.getElementById('t-arc');
+const elTimeCycloid = document.getElementById('t-cycloid');
+const elBarStraight = document.getElementById('bar-straight');
+const elBarArc = document.getElementById('bar-arc');
+const elBarCycloid = document.getElementById('bar-cycloid');
+
+function worldToPx(x, y, xMaxView, yMaxView) {
+  const sx = PLOT_LEFT + (x / xMaxView) * PLOT_W;
+  const sy = PLOT_TOP + (y / yMaxView) * PLOT_H;
+  return [sx, sy];
+}
+
+function solveCycloid(D, H) {
+  const f = (phi) => (phi - Math.sin(phi)) / (1 - Math.cos(phi)) - (D / H);
+  let lo = 1e-3, hi = Math.PI - 1e-4;
+  if (D / H >= Math.PI / 2) {
+    hi = 2 * Math.PI - 1e-4;
+    lo = Math.PI + 1e-3;
+  }
+  for (let i = 0; i < 60; i++) {
+    const mid = 0.5 * (lo + hi);
+    if (f(mid) < 0) lo = mid; else hi = mid;
+  }
+  const phiEnd = 0.5 * (lo + hi);
+  const R = H / (1 - Math.cos(phiEnd));
+  return { R, phiEnd };
+}
+
+function arcDescentTime(c, alphaEnd) {
+  const N = 1200;
+  const uEnd = Math.sqrt(alphaEnd);
+  const du = uEnd / N;
+  let T = 0;
+  for (let i = 0; i < N; i++) {
+    const u = (i + 0.5) * du;
+    const a = u * u;
+    T += 2 * u * Math.sqrt(c / (2 * G * Math.sin(a))) * du;
+  }
+  return T;
+}
+
+function buildGeometry(D) {
+  const cyc = solveCycloid(D, H_WORLD);
+  const cArc = (D * D + H_WORLD * H_WORLD) / (2 * D);
+  const alphaEnd = Math.atan2(2 * D * H_WORLD, H_WORLD * H_WORLD - D * D);
+
+  const L_line = Math.sqrt(D * D + H_WORLD * H_WORLD);
+  const sinBeta = H_WORLD / L_line;
+  const T_line = Math.sqrt(2 * L_line / (G * sinBeta));
+
+  const T_cyc = cyc.phiEnd * Math.sqrt(cyc.R / G);
+  const T_arc = arcDescentTime(cArc, alphaEnd);
+
+  const yDipArc = (alphaEnd > Math.PI / 2) ? cArc : H_WORLD;
+  const yDipCyc = (cyc.phiEnd > Math.PI) ? 2 * cyc.R : H_WORLD;
+  const yPlotMax = Math.max(H_WORLD, yDipArc, yDipCyc);
+
+  return { D, R: cyc.R, phiEnd: cyc.phiEnd, cArc, alphaEnd,
+           T_line, T_arc, T_cyc, L_line, sinBeta, yPlotMax };
+}
+
+function posStraight(t, geom) {
+  const T = geom.T_line;
+  const tt = Math.min(t, T);
+  const s = 0.5 * G * geom.sinBeta * tt * tt;
+  const frac = Math.min(1, s / geom.L_line);
+  return [geom.D * frac, H_WORLD * frac];
+}
+
+function posCycloid(t, geom) {
+  const T = geom.T_cyc;
+  const tt = Math.min(t, T);
+  const phi = tt * Math.sqrt(G / geom.R);
+  const phiCl = Math.min(phi, geom.phiEnd);
+  const x = geom.R * (phiCl - Math.sin(phiCl));
+  const y = geom.R * (1 - Math.cos(phiCl));
+  return [x, y];
+}
+
+function arcAlphaAt(t, geom) {
+  const tt = Math.min(t, geom.T_arc);
+  const N = 1200;
+  const uEnd = Math.sqrt(geom.alphaEnd);
+  const du = uEnd / N;
+  let acc = 0;
+  for (let i = 0; i < N; i++) {
+    const u = (i + 0.5) * du;
+    const a = u * u;
+    const step = 2 * u * Math.sqrt(geom.cArc / (2 * G * Math.sin(a))) * du;
+    if (acc + step >= tt) {
+      const frac = (tt - acc) / step;
+      const uCur = i * du + frac * du;
+      return uCur * uCur;
+    }
+    acc += step;
+  }
+  return geom.alphaEnd;
+}
+
+function posArc(t, geom) {
+  const alpha = arcAlphaAt(t, geom);
+  const x = geom.cArc * (1 - Math.cos(alpha));
+  const y = geom.cArc * Math.sin(alpha);
+  return [x, y];
+}
+
+function buildPaths() {
+  const xMax = Math.max(D, D_MIN_VIEW);
+  const yMax = geom.yPlotMax;
+
+  const [s0x, s0y] = worldToPx(0, 0, xMax, yMax);
+  const [s1x, s1y] = worldToPx(D, H_WORLD, xMax, yMax);
+  elCurveS.setAttribute('d', 'M' + s0x.toFixed(1) + ',' + s0y.toFixed(1)
+                           + ' L' + s1x.toFixed(1) + ',' + s1y.toFixed(1));
+
+  const NSEG = 120;
+  let d2 = '';
+  for (let i = 0; i <= NSEG; i++) {
+    const alpha = (i / NSEG) * geom.alphaEnd;
+    const wx = geom.cArc * (1 - Math.cos(alpha));
+    const wy = geom.cArc * Math.sin(alpha);
+    const [px, py] = worldToPx(wx, wy, xMax, yMax);
+    d2 += (i === 0 ? 'M' : ' L') + px.toFixed(1) + ',' + py.toFixed(1);
+  }
+  elCurveA.setAttribute('d', d2);
+
+  let d3 = '';
+  for (let i = 0; i <= NSEG; i++) {
+    const phi = (i / NSEG) * geom.phiEnd;
+    const wx = geom.R * (phi - Math.sin(phi));
+    const wy = geom.R * (1 - Math.cos(phi));
+    const [px, py] = worldToPx(wx, wy, xMax, yMax);
+    d3 += (i === 0 ? 'M' : ' L') + px.toFixed(1) + ',' + py.toFixed(1);
+  }
+  elCurveC.setAttribute('d', d3);
+
+  const [epx, epy] = worldToPx(D, H_WORLD, xMax, yMax);
+  elEndpoint.setAttribute('cx', epx.toFixed(1));
+  elEndpoint.setAttribute('cy', epy.toFixed(1));
+
+  elXAxisEnd.textContent = xMax.toFixed(1);
+  elYAxisEnd.textContent = yMax.toFixed(2);
+}
+
+function rebuild() {
+  geom = buildGeometry(D);
+  buildPaths();
+  bestT = Math.min(geom.T_line, geom.T_arc, geom.T_cyc);
+
+  elTimeStraight.textContent = geom.T_line.toFixed(2) + ' s';
+  elTimeArc.textContent      = geom.T_arc.toFixed(2)  + ' s';
+  elTimeCycloid.textContent  = geom.T_cyc.toFixed(2)  + ' s';
+
+  elTimeStraight.classList.toggle('winner', geom.T_line === bestT);
+  elTimeArc.classList.toggle('winner',      geom.T_arc  === bestT);
+  elTimeCycloid.classList.toggle('winner',  geom.T_cyc  === bestT);
+
+  const maxT = Math.max(geom.T_line, geom.T_arc, geom.T_cyc);
+  elBarStraight.style.width = (100 * geom.T_line / maxT).toFixed(1) + '%';
+  elBarArc.style.width      = (100 * geom.T_arc  / maxT).toFixed(1) + '%';
+  elBarCycloid.style.width  = (100 * geom.T_cyc  / maxT).toFixed(1) + '%';
+}
+
+function placeBead(el, wx, wy) {
+  const xMax = Math.max(D, D_MIN_VIEW);
+  const yMax = geom.yPlotMax;
+  const [px, py] = worldToPx(wx, wy, xMax, yMax);
+  el.setAttribute('cx', px.toFixed(2));
+  el.setAttribute('cy', py.toFixed(2));
+}
+
+function frame(ts) {
+  if (lastTs === null) { lastTs = ts; requestAnimationFrame(frame); return; }
+  const dtReal = Math.min(0.06, (ts - lastTs) / 1000);
+  lastTs = ts;
+  if (running) animT += dtReal / TIME_SCALE;
+
+  const tMax = Math.max(geom.T_line, geom.T_arc, geom.T_cyc);
+  if (animT > tMax + 0.6) {
+    animT = 0;
+  }
+
+  const [sx, sy] = posStraight(animT, geom);
+  const [ax, ay] = posArc(animT, geom);
+  const [cx, cy] = posCycloid(animT, geom);
+  placeBead(elBeadS, sx, sy);
+  placeBead(elBeadA, ax, ay);
+  placeBead(elBeadC, cx, cy);
+
+  elElapsed.textContent = 't = ' + Math.min(animT, tMax).toFixed(2) + ' s';
+
+  requestAnimationFrame(frame);
+}
+
+document.getElementById('D').addEventListener('input', (e) => {
+  D = parseFloat(e.target.value);
+  elDVal.textContent = D.toFixed(2) + ' m';
+  animT = 0;
+  rebuild();
+});
+
+document.getElementById('reset').addEventListener('click', () => {
+  animT = 0;
+});
+
+elDVal.textContent = D.toFixed(2) + ' m';
+rebuild();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

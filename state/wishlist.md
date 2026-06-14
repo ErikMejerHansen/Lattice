@@ -7,7 +7,6 @@
 # auto-suggested 2026-05-09 from diffraction-gratings
 
 # auto-suggested 2026-05-10 from principle-of-least-action
-Brachistochrone — the cycloid that gets a bead from A to B in the least time, the variational problem that started it all
 
 # auto-suggested 2026-05-11 from total-internal-reflection
 Evanescent wave — the exp(-z/d) field that lives in the medium where no ray penetrates, and why a wavelength-thin gap can leak energy across it
@@ -142,3 +141,8 @@ Hamiltonian mechanics — H = T + V, the (q, p) phase-space reformulation Hamilt
 Stress-energy tensor — T^μν, the four-by-four matrix packaging energy density, momentum density, and stress flux into a single covariant object, the right-hand side of Einstein's field equation and the Noether current of spacetime translation in any relativistic field theory
 Gauge invariance — local U(1) phase rotation of the electron field ψ → e^(iα(x)) ψ with a compensating shift of the vector potential A_μ → A_μ + ∂_μ α, the symmetry Weyl identified in 1929 that forces electromagnetism into existence and is the canonical example of Noether's second theorem
 Continuity equation — ∂ρ/∂t + ∇·j = 0, the local statement that whatever-it-is can only flow in and out of a region through its boundary, the integral form of every Noether-first-theorem conservation law and the workhorse identity behind charge conservation, mass conservation, and probability conservation in QM
+
+# auto-suggested 2026-06-14 from brachistochrone
+Calculus of variations — δJ = 0, the formalism Euler 1744 and Lagrange 1755 built out of the Bernoulli brothers' brachistochrone trick: vary a curve, demand the first-order change of an integral functional vanish, and read off the Euler-Lagrange equation that classical mechanics, optics, GR, and quantum field theory all run on
+Cycloidal pendulum — Huygens's 1673 tautochronous clock, where the bob hangs from a string that wraps against two cycloidal cheek-pieces so the bob traces a cycloid, the unique tautochrone curve; the involute construction that anticipated the involute-of-a-curve definition by a century
+Isoperimetric problem — among all closed plane curves of fixed perimeter P, the circle encloses the maximum area A = P²/(4π), the variational question Jakob Bernoulli set as a counter-challenge to Johann after the brachistochrone and that became the second canonical case study in the calculus of variations
