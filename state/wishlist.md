@@ -9,7 +9,6 @@
 # auto-suggested 2026-05-10 from principle-of-least-action
 
 # auto-suggested 2026-06-15 from brachistochrone
-Tautochrone — Huygens 1659, the cycloid as the curve of equal-time descent regardless of starting point, and the cycloidal-cheek pendulum clock that exploited it
 Catenary — y = a cosh(x/a), the shape of a hanging chain solved by James Bernoulli in 1691, the twin variational triumph of the 1690s Bernoulli rivalry
 Calculus of variations — Euler's 1744 Methodus inveniendi as the general theory, the Euler equation as the necessary condition for any J[y] = ∫F(x,y,y')dx to be stationary
 
@@ -146,3 +145,7 @@ Hamiltonian mechanics — H = T + V, the (q, p) phase-space reformulation Hamilt
 Stress-energy tensor — T^μν, the four-by-four matrix packaging energy density, momentum density, and stress flux into a single covariant object, the right-hand side of Einstein's field equation and the Noether current of spacetime translation in any relativistic field theory
 Gauge invariance — local U(1) phase rotation of the electron field ψ → e^(iα(x)) ψ with a compensating shift of the vector potential A_μ → A_μ + ∂_μ α, the symmetry Weyl identified in 1929 that forces electromagnetism into existence and is the canonical example of Noether's second theorem
 Continuity equation — ∂ρ/∂t + ∇·j = 0, the local statement that whatever-it-is can only flow in and out of a region through its boundary, the integral form of every Noether-first-theorem conservation law and the workhorse identity behind charge conservation, mass conservation, and probability conservation in QM
+
+# auto-suggested 2026-06-16 from tautochrone
+Abel's integral equation — T(y₀) = ∫₀^{y₀} f(y) dy / √(y₀ − y), Niels Henrik Abel's 1826 Crelle paper that solved the generalized tautochrone problem and founded the theory of integral equations
+Evolute and involute — the differential-geometry pair that Huygens needed for his cycloidal-cheek clock, where the evolute of a cycloid is another cycloid and the involute construction recovers the original curve by unwrapping a string
