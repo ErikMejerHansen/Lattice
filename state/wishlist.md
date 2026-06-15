@@ -7,7 +7,11 @@
 # auto-suggested 2026-05-09 from diffraction-gratings
 
 # auto-suggested 2026-05-10 from principle-of-least-action
-Brachistochrone — the cycloid that gets a bead from A to B in the least time, the variational problem that started it all
+
+# auto-suggested 2026-06-15 from brachistochrone
+Tautochrone — Huygens 1659, the cycloid as the curve of equal-time descent regardless of starting point, and the cycloidal-cheek pendulum clock that exploited it
+Catenary — y = a cosh(x/a), the shape of a hanging chain solved by James Bernoulli in 1691, the twin variational triumph of the 1690s Bernoulli rivalry
+Calculus of variations — Euler's 1744 Methodus inveniendi as the general theory, the Euler equation as the necessary condition for any J[y] = ∫F(x,y,y')dx to be stationary
 
 # auto-suggested 2026-05-11 from total-internal-reflection
 Evanescent wave — the exp(-z/d) field that lives in the medium where no ray penetrates, and why a wavelength-thin gap can leak energy across it

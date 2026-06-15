@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brachistochrone race</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz { padding: 14px 16px 18px; max-width: 480px; box-sizing: border-box; }
+svg { display: block; width: 100%; height: auto; touch-action: none; }
+.frame { stroke: var(--border); stroke-width: 1; fill: none; }
+.path-straight { stroke: var(--text-ghost); stroke-width: 1.4; fill: none; stroke-dasharray: 2.5,3; }
+.path-cycloid { stroke: var(--accent); stroke-width: 1.9; fill: none; }
+.path-user { stroke: var(--text-muted); stroke-width: 1.4; fill: none; }
+.endpoint { fill: var(--text); }
+.endpoint-label {
+  font-style: italic; font-size: 11px; fill: var(--text-muted);
+}
+.bead-straight { fill: var(--text-ghost); stroke: var(--text-muted); stroke-width: 0.8; }
+.bead-cycloid { fill: var(--accent); stroke: var(--text); stroke-width: 0.8; }
+.bead-user { fill: var(--bg-raised); stroke: var(--text-muted); stroke-width: 1.2; }
+.legend {
+  display: flex; gap: 14px; margin-top: 10px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text);
+  flex-wrap: wrap;
+}
+.legend .row { display: flex; align-items: center; gap: 6px; }
+.legend .swatch {
+  display: inline-block; width: 16px; height: 3px;
+}
+.legend .swatch.dashed {
+  border-top: 2.5px dashed var(--text-ghost); height: 0;
+}
+.legend .name { color: var(--text-muted); }
+.legend b { font-weight: 600; color: var(--text); }
+.controls-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 10px;
+}
+.btn {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  background: var(--bg-raised);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  padding: 6px 14px;
+  cursor: pointer;
+  min-height: 36px;
+  border-radius: 0;
+}
+.btn:hover { background: var(--bg); }
+.btn:active { background: var(--accent-soft); color: var(--bg); }
+.status {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <svg viewBox="0 0 360 200" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Brachistochrone race">
+    <rect x="0.5" y="0.5" width="359" height="199" class="frame"></rect>
+
+    <path id="path-straight" class="path-straight"></path>
+    <path id="path-user" class="path-user"></path>
+    <path id="path-cycloid" class="path-cycloid"></path>
+
+    <circle class="endpoint" cx="40" cy="20" r="3"></circle>
+    <text x="46" y="17" class="endpoint-label">A</text>
+    <circle class="endpoint" cx="320" cy="160" r="3"></circle>
+    <text x="326" y="162" class="endpoint-label">B</text>
+
+    <circle id="bead-straight" class="bead-straight" cx="40" cy="20" r="5"></circle>
+    <circle id="bead-user" class="bead-user" cx="40" cy="20" r="5.5"></circle>
+    <circle id="bead-cycloid" class="bead-cycloid" cx="40" cy="20" r="6"></circle>
+  </svg>
+
+  <div class="viz-slider-row">
+    <label for="p">p</label>
+    <input id="p" type="range" min="0.4" max="1.8" step="0.05" value="0.7">
+    <span class="value" id="p-value">p = 0.70</span>
+  </div>
+
+  <div class="legend">
+    <span class="row"><span class="swatch" style="background: var(--accent);"></span><span class="name">cycloid</span><b id="t-cycloid">&minus;</b></span>
+    <span class="row"><span class="swatch dashed"></span><span class="name">straight</span><b id="t-straight">&minus;</b></span>
+    <span class="row"><span class="swatch" style="background: var(--text-muted);"></span><span class="name">y = H(x/L)^p</span><b id="t-user">&minus;</b></span>
+  </div>
+
+  <div class="controls-row">
+    <button id="release" class="btn">release</button>
+    <button id="reset" class="btn">reset</button>
+    <span class="status" id="status">ready</span>
+  </div>
+
+  <div class="viz-caption" style="margin-top: 10px;">
+    Three beads slide from A to B under gravity, frictionless, from rest. The accent (rust) curve is the cycloid. The dotted line is the straight path. The third curve is the test family y = H(x/L)^p with exponent p set by the slider. Press release and watch the times. The cycloid wins for every p you can dial in; the slider lets you see what kind of wrong each alternative is.
+  </div>
+</div>
+
+<script>
+const XA = 40, YA = 20;
+const XB = 320, YB = 160;
+const L = XB - XA;
+const H = YB - YA;
+const g = 1;
+
+function toSvgX(x) { return XA + x; }
+function toSvgY(y) { return YA + y; }
+
+function solveCycloid() {
+  const ratio = L / H;
+  let t = 3.0;
+  for (let i = 0; i < 80; i++) {
+    const f = (t - Math.sin(t)) - ratio * (1 - Math.cos(t));
+    const df = (1 - Math.cos(t)) - ratio * Math.sin(t);
+    if (Math.abs(df) < 1e-14) break;
+    t -= f / df;
+    if (Math.abs(f) < 1e-10) break;
+  }
+  const R = H / (1 - Math.cos(t));
+  return { thetaMax: t, R };
+}
+const { thetaMax: TH, R: RC } = solveCycloid();
+const T_cycloid = TH * Math.sqrt(RC / g);
+const T_straight = Math.sqrt(2 * (L*L + H*H) / (g * H));
+
+function buildCycloidPath() {
+  const N = 80;
+  let d = '';
+  for (let i = 0; i <= N; i++) {
+    const t = TH * i / N;
+    const x = RC * (t - Math.sin(t));
+    const y = RC * (1 - Math.cos(t));
+    d += (i === 0 ? 'M' : ' L') + toSvgX(x).toFixed(2) + ',' + toSvgY(y).toFixed(2);
+  }
+  return d;
+}
+function buildStraightPath() {
+  return 'M' + toSvgX(0).toFixed(2) + ',' + toSvgY(0).toFixed(2)
+       + ' L' + toSvgX(L).toFixed(2) + ',' + toSvgY(H).toFixed(2);
+}
+function buildUserPath(p) {
+  const N = 80;
+  let d = '';
+  for (let i = 0; i <= N; i++) {
+    const xn = L * i / N;
+    const yn = H * Math.pow(xn / L, p);
+    d += (i === 0 ? 'M' : ' L') + toSvgX(xn).toFixed(2) + ',' + toSvgY(yn).toFixed(2);
+  }
+  return d;
+}
+
+function computeUserTable(p) {
+  const N = 400;
+  const dx = L / N;
+  const ts = new Float64Array(N + 1);
+  ts[0] = 0;
+  for (let i = 0; i < N; i++) {
+    const x = (i + 0.5) * dx;
+    const u = x / L;
+    const y = H * Math.pow(u, p);
+    const dydx = (H * p / L) * Math.pow(u, p - 1);
+    const ds_dx = Math.sqrt(1 + dydx * dydx);
+    const v = Math.sqrt(2 * g * y);
+    ts[i+1] = ts[i] + (ds_dx / v) * dx;
+  }
+  return ts;
+}
+
+function userPos(ts, t, p) {
+  const N = ts.length - 1;
+  if (t >= ts[N]) return { x: L, y: H, done: true };
+  let lo = 0, hi = N;
+  while (lo + 1 < hi) {
+    const mid = (lo + hi) >> 1;
+    if (ts[mid] <= t) lo = mid; else hi = mid;
+  }
+  const t0 = ts[lo], t1 = ts[lo+1];
+  const frac = (t1 > t0) ? (t - t0) / (t1 - t0) : 0;
+  const xn = L * (lo + frac) / N;
+  const yn = H * Math.pow(xn / L, p);
+  return { x: xn, y: yn, done: false };
+}
+
+function straightPos(t) {
+  if (t >= T_straight) return { x: L, y: H, done: true };
+  const diag = Math.sqrt(L*L + H*H);
+  const a = g * H / diag;
+  const s = 0.5 * a * t * t;
+  return { x: s * L / diag, y: s * H / diag, done: false };
+}
+
+function cycloidPos(t) {
+  if (t >= T_cycloid) return { x: L, y: H, done: true };
+  const theta = t * Math.sqrt(g / RC);
+  return { x: RC * (theta - Math.sin(theta)), y: RC * (1 - Math.cos(theta)), done: false };
+}
+
+const slider = document.getElementById('p');
+const pValue = document.getElementById('p-value');
+const tCycloidEl = document.getElementById('t-cycloid');
+const tStraightEl = document.getElementById('t-straight');
+const tUserEl = document.getElementById('t-user');
+const statusEl = document.getElementById('status');
+const pathStraightEl = document.getElementById('path-straight');
+const pathCycloidEl = document.getElementById('path-cycloid');
+const pathUserEl = document.getElementById('path-user');
+const beadStraightEl = document.getElementById('bead-straight');
+const beadCycloidEl = document.getElementById('bead-cycloid');
+const beadUserEl = document.getElementById('bead-user');
+const releaseBtn = document.getElementById('release');
+const resetBtn = document.getElementById('reset');
+
+let p = parseFloat(slider.value);
+let userTimes = computeUserTable(p);
+let T_user = userTimes[userTimes.length - 1];
+let racing = false;
+let raceStart = null;
+const SIM_PER_REAL = 12;
+
+function fmt(t) { return t.toFixed(2); }
+
+function refreshTimes() {
+  tCycloidEl.textContent = fmt(T_cycloid);
+  tStraightEl.textContent = fmt(T_straight);
+  tUserEl.textContent = fmt(T_user);
+}
+
+function placeBead(el, x, y) {
+  el.setAttribute('cx', toSvgX(x).toFixed(2));
+  el.setAttribute('cy', toSvgY(y).toFixed(2));
+}
+
+function resetBeads() {
+  placeBead(beadStraightEl, 0, 0);
+  placeBead(beadCycloidEl, 0, 0);
+  placeBead(beadUserEl, 0, 0);
+}
+
+function rebuildUser() {
+  p = parseFloat(slider.value);
+  pValue.textContent = 'p = ' + p.toFixed(2);
+  pathUserEl.setAttribute('d', buildUserPath(p));
+  userTimes = computeUserTable(p);
+  T_user = userTimes[userTimes.length - 1];
+  refreshTimes();
+  if (!racing) {
+    resetBeads();
+    statusEl.textContent = 'ready';
+  }
+}
+
+function tick(timestamp) {
+  if (!racing) return;
+  if (raceStart === null) raceStart = timestamp;
+  const elapsedReal = (timestamp - raceStart) / 1000;
+  const tSim = elapsedReal * SIM_PER_REAL;
+
+  const ps = straightPos(tSim);
+  const pc = cycloidPos(tSim);
+  const pu = userPos(userTimes, tSim, p);
+
+  placeBead(beadStraightEl, ps.x, ps.y);
+  placeBead(beadCycloidEl, pc.x, pc.y);
+  placeBead(beadUserEl, pu.x, pu.y);
+
+  if (ps.done && pc.done && pu.done) {
+    racing = false;
+    statusEl.textContent = 'cycloid wins (Δt = ' + fmt(T_straight - T_cycloid) + ' vs straight)';
+    return;
+  }
+  requestAnimationFrame(tick);
+}
+
+slider.addEventListener('input', rebuildUser);
+releaseBtn.addEventListener('click', () => {
+  resetBeads();
+  racing = true;
+  raceStart = null;
+  statusEl.textContent = 'racing';
+  requestAnimationFrame(tick);
+});
+resetBtn.addEventListener('click', () => {
+  racing = false;
+  resetBeads();
+  statusEl.textContent = 'ready';
+});
+
+pathStraightEl.setAttribute('d', buildStraightPath());
+pathCycloidEl.setAttribute('d', buildCycloidPath());
+rebuildUser();
+resetBeads();
+</script>
+</body>
+</html>
