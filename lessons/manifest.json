@@ -320,5 +320,12 @@
     "subtitle": "T = π√(R/g)",
     "date": "2026-06-16",
     "estimatedReadingMinutes": 25
+  },
+  {
+    "slug": "2026-06-17-catenary",
+    "title": "The catenary: why a hanging chain is not a parabola, and how the Bernoullis prised the answer loose",
+    "subtitle": "y = a cosh(x/a)",
+    "date": "2026-06-17",
+    "estimatedReadingMinutes": 25
   }
 ]

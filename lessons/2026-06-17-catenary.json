@@ -1,0 +1,203 @@
+{
+  "slug": "2026-06-17-catenary",
+  "title": "The catenary: why a hanging chain is not a parabola, and how the Bernoullis prised the answer loose",
+  "node": {
+    "id": "catenary",
+    "label": "Catenary",
+    "subtitle": "y = a cosh(x/a)"
+  },
+  "intro": "Galileo, in 1638, looked at a chain hanging between two posts and said the shape was a parabola. He was wrong, and Europe believed him for fifty years. The right curve, the hyperbolic cosine y = a cosh(x/a), came out of a public challenge Jakob Bernoulli posted in 1690 to recover from losing the brachistochrone race to his younger brother. Three different mathematicians answered him in a year by three different routes, and Robert Hooke had quietly noticed, fifteen years earlier, that the same shape inverted is the optimal arch.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Galileo's parabola and the fifty-year mistake",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Galileo, in his last book Two New Sciences (1638), considered the shape a chain takes when it is suspended from two posts and asserted that the curve was a parabola. He had earned the right to be wrong in style; he was right about so many other things. His argument was loose, by analogy with the parabolic trajectory of a projectile, and the conclusion stuck. For the next half century European mathematicians copied the parabola guess into their books and looked no further."
+        },
+        {
+          "type": "p",
+          "text": "The first chink came in 1669, when Joachim Jungius, a German mathematician working in Hamburg, published a careful calculation showing that Galileo's parabola did not fit. He had no replacement curve to offer, only the negative result. The work was unread and unloved; few cared about a discrepancy that the eye could not see between two curves drawn close to one another. Mathematics, sometimes, has to wait for someone to be motivated to look."
+        },
+        {
+          "type": "p",
+          "text": "Motivation arrived in May 1690. Jakob Bernoulli (also called James, the elder of the Basel brothers) had just been beaten by his younger brother Johann in the brachistochrone race, a contest to find the curve of fastest descent. To salvage some pride he posted a new public challenge in the Leipzig journal Acta Eruditorum, a monthly almanac of European mathematics where Leibniz had announced the calculus six years earlier: what is the shape of a perfectly flexible chain of uniform weight hung between two posts? Jakob could not solve it himself. Within a year three independent answers came back, from Christiaan Huygens (then sixty-two, the elder statesman of European mechanics), Gottfried Leibniz, and the same Johann who had embarrassed Jakob a year earlier. The chain had given up its secret."
+        },
+        {
+          "type": "p",
+          "text": "The lesson is one Hamming would have liked. A great authority writing carelessly can lock in a wrong answer for two generations. A patient calculation by someone nobody reads can sit on a shelf for decades waiting for a follow-up. And a public challenge, with a small reward and a deadline, can prise loose three different correct solutions in twelve months. Mathematics is done by people, and people respond to social structure."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The local balance: three forces at every link",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Pick any point on the hanging chain and look at the link there. It has three forces on it. Its own weight pulls down, but as the link size shrinks to zero that weight becomes negligible against the tensions on either side. The tension from the left pulls along the chain back toward the left support. The tension from the right pulls along the chain toward the right support. For the chain to hang motionless, these forces must add to zero."
+        },
+        {
+          "type": "p",
+          "text": "It is cleaner to look at the chain in larger pieces. Slice it at horizontal position x and consider the piece from the lowest point of the chain out to x. Call the mass per unit length λ, so the weight of that piece is λg times its arc length, which we will call s(x). The piece is pulled at one end by the horizontal tension T_H at the bottom (the tangent is horizontal there, so the tension at the bottom has no vertical part). It is pulled at the other end along the local tangent at position x by the local tension T(x). For equilibrium, the horizontal component of T(x) must equal T_H, and the vertical component must equal λg s(x), the weight of the chain hanging in that piece."
+        },
+        {
+          "type": "p",
+          "text": "Dividing those two components gives the slope of the chain at point x. The slope is the vertical part of T(x) divided by the horizontal part, which is the weight of the chain below divided by T_H. Define the characteristic length a = T_H / (λg), which is the only length scale built into the problem. Then the slope at x equals the arc length below divided by a."
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{dy}{dx} = \\frac{s}{a}, \\qquad a = \\frac{T_H}{\\lambda g}",
+          "display": true,
+          "caption": "dy/dx is the local slope of the chain. s is the arc length from the lowest point, measured along the chain. a is the characteristic length T_H divided by λg. T_H is the horizontal tension at the bottom, constant along the whole chain. λ is the mass per unit length. g is the gravitational acceleration. The single sentence: the steeper the chain, the more weight hangs below."
+        }
+      ],
+      "quiz": {
+        "question": "At the lowest point of a freely hanging catenary, what is the magnitude of the tension in the chain?",
+        "options": [
+          "Zero, because the chain is horizontal there",
+          "Exactly T_H, the horizontal tension",
+          "Equal to the full weight of the chain",
+          "The weight of half the chain"
+        ],
+        "correctIndex": 1,
+        "explanation": "The tangent is horizontal at the bottom, so the tension there has no vertical component; its full magnitude is T_H. The most tempting wrong answer is (a): a horizontal tangent does not mean no tension, only that the tension is pulled in a horizontal direction. The chain is still being pulled toward both supports along itself, and that pull is what holds it up against the weight hanging on either side."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Solving the equation: enter the hyperbolic cosine",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The slope equation dy/dx = s/a contains the arc length s, which is itself an integral of √(1 + (dy/dx)²) over x. We can eliminate s by differentiating the slope equation with respect to x. The left side becomes d²y/dx², the curvature. The right side becomes (1/a) ds/dx, which is (1/a)√(1 + (dy/dx)²) by the standard arc-length identity. The result is a second-order ODE in y(x) alone."
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{d^2 y}{dx^2} = \\frac{1}{a}\\sqrt{1 + \\left(\\frac{dy}{dx}\\right)^2}",
+          "display": true,
+          "caption": "d²y/dx² is the second derivative of height with respect to horizontal position, the local curvature. dy/dx is the slope. The factor (1/a) is the inverse characteristic length from the previous section. The √(1+y'²) factor is ds/dx, the rate at which arc length grows with horizontal distance. The sentence: curvature equals one over a, times how fast arc length is accumulating."
+        },
+        {
+          "type": "p",
+          "text": "Write p = dy/dx and the ODE becomes dp/dx = (1/a)√(1+p²). The two sides separate: dp/√(1+p²) on the left, dx/a on the right. The integral on the left is sinh⁻¹(p), the inverse hyperbolic sine, the function that asks 'what argument has this value of sinh?' Setting the constant of integration to zero by placing the origin at the lowest point (where p = 0 and x = 0), we get sinh⁻¹(p) = x/a, or equivalently p = sinh(x/a). Integrating p once more in x gives y, with a cosh appearing as the antiderivative of sinh."
+        },
+        {
+          "type": "p",
+          "text": "The hyperbolic cosine, cosh(x) = (eˣ + e⁻ˣ)/2, is the even twin of the hyperbolic sine sinh(x) = (eˣ − e⁻ˣ)/2; together they satisfy cosh² − sinh² = 1, the hyperbolic analogue of the trig identity. The catenary is just cosh rescaled by the length a. The constant of the second integration sets the height of the lowest point, conventionally taken to be y = a so the formula has no offset."
+        },
+        {
+          "type": "math",
+          "tex": "y = a \\cosh\\!\\left(\\frac{x}{a}\\right)",
+          "display": true,
+          "caption": "y is the height of the chain measured from the ground (with the lowest point at y = a). x is the horizontal distance from the lowest point. cosh is the hyperbolic cosine, defined above as (eˣ + e⁻ˣ)/2. a is the characteristic length T_H/(λg) from section 2."
+        },
+        {
+          "type": "p",
+          "text": "Now look at the two limits. For x much smaller than a, cosh(x/a) expands as 1 + (1/2)(x/a)² + O((x/a)⁴), and the catenary becomes y ≈ a + x²/(2a), a parabola. This is the curve Galileo's eye saw. For x large compared to a, cosh grows like (1/2) e^(x/a), exponentially, and no parabola can keep up. The two shapes agree near the bottom and diverge as the chain rises toward its supports. To see the discrepancy you need a chain with enough sag that the higher-order terms matter, and most hand-drawings in 1638 did not give Galileo that."
+        },
+        {
+          "type": "viz",
+          "src": "2026-06-17-catenary.html",
+          "height": 360,
+          "caption": "Drag the sag slider. The chain in accent color is the true catenary y = a cosh(x/a); the dashed grey curve is the parabola y = α + βx² fitted to the same two supports and the same lowest point. At small sag the two curves are visually identical (Galileo's case). At large sag the parabola sags too little in the middle and not enough at the edges, and the gap grows with cosh's fourth-order term."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The variational angle: a constrained minimum",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The catenary has a second life as a variational problem, in the style of the brachistochrone but with a twist. A chain in equilibrium minimizes its gravitational potential energy. Write y(x) for the shape, λ for the mass per unit length, g for gravity, and √(1 + y'²) dx for the arc-length element. The potential energy is the integral, over the chain, of weight per length times height."
+        },
+        {
+          "type": "math",
+          "tex": "U[y] = \\lambda g \\int y \\sqrt{1 + y'^2}\\, dx",
+          "display": true,
+          "caption": "U[y] is the gravitational potential energy of the chain, a functional, a number depending on the entire curve y(x). λ is the mass per unit length. g is the gravitational acceleration. y is the local height of the chain. y' = dy/dx is the local slope. The integrand y√(1+y'²) is height times the local arc-length element, integrated over the chain."
+        },
+        {
+          "type": "p",
+          "text": "If we tried to minimize U on its own, the chain would just shrink to zero length and sit at the ground. What stops it is the inextensibility constraint: the chain has a fixed total length L, fixed by the rope you bought. So we want to minimize U subject to the side condition that the length integral ∫√(1+y'²) dx equals L. The standard tool for a fixed-integral side condition in a variational problem is the Lagrange multiplier (an isoperimetric constraint, in the older language). Lagrange did not write down the systematic recipe until 1788; in 1691 Johann Bernoulli was doing it ad hoc, and Euler systematized the catenary case in his 1744 Methodus inveniendi, the founding treatise of the calculus of variations."
+        },
+        {
+          "type": "math",
+          "tex": "\\delta \\int \\left[y - \\mu\\right] \\sqrt{1 + y'^2}\\, dx = 0",
+          "display": true,
+          "caption": "δ denotes the first variation, the change in the functional when y(x) is perturbed by an infinitesimal amount. μ is the Lagrange multiplier, a constant with units of length whose value is fixed retroactively by the length constraint. The combined integrand (y − μ)√(1+y'²) is what the Euler equation acts on; setting its variation to zero is the requirement that y minimize potential energy at fixed length."
+        },
+        {
+          "type": "p",
+          "text": "The integrand (y − μ)√(1+y'²) does not depend on x explicitly, which lets a standard reduction (Beltrami's identity) lower the Euler equation by one order to (y − μ)/√(1+y'²) = C, a first-order ODE. Separating and integrating gives y − μ = C cosh(x/C). Identifying C with a and absorbing μ into the choice of vertical origin recovers y = a cosh(x/a). Two completely different starting points, the local force balance of section 2 and the global energy minimization here, give the same curve. This was the first hint of a deeper truth that took two centuries to mature: every well-posed problem in mechanics can be written in either differential form (force at each point) or variational form (a functional minimized over the whole path), and the two forms describe the same physics."
+        }
+      ],
+      "quiz": {
+        "question": "Why does the variational derivation of the catenary require a Lagrange multiplier?",
+        "options": [
+          "Because gravity makes the energy depend on y",
+          "Because the chain has uniform mass per unit length",
+          "Because the chain's total length is held fixed",
+          "Because the chain's endpoints are pinned to the supports"
+        ],
+        "correctIndex": 2,
+        "explanation": "The Lagrange multiplier enforces the constraint that ∫√(1+y'²) dx (the total length) equals a prescribed value L. Without this constraint, minimizing potential energy alone would just collapse the chain to zero length and zero height. The most tempting wrong answer is (d): fixed endpoints are already enforced as boundary conditions on the variational problem, not via a multiplier. Length, an integral constraint, is the kind that needs a multiplier; endpoint positions, a pointwise constraint, do not."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Hooke's inverted arch and the Gateway in St. Louis",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In 1675 Robert Hooke, the English natural philosopher (curator of experiments at the Royal Society, collaborator with Christopher Wren on the rebuilding of London after the Great Fire), published at the back of a treatise on helioscopes a Latin anagram. Decoded after his death, it read ut pendet continuum flexile, sic stabit contiguum rigidum inversum: as hangs the flexible line, so but inverted will stand the rigid arch. He was claiming, fifteen years before Jakob Bernoulli even posed the catenary question, that the optimal arch shape is the catenary upside down. He never published the proof. The anagram was Hooke's habit when he wanted to claim priority without revealing the method."
+        },
+        {
+          "type": "p",
+          "text": "His reasoning, recovered from his notebooks, is geometrical. In a hanging chain, every link is in pure tension: gravity pulls down along the chain at each point, the supports pull up along the chain at the ends, and the equilibrium happens with no shear and no bending stress anywhere. Invert the chain and replace it with a stack of stones laid along the same curve. Gravity now pushes along the curve toward the ground, where each stone presses on the one below. The shape that was purely tensile when hanging is purely compressive when standing. The stones never need to resist a bending moment, which is the failure mode of masonry: stone is strong in compression and weak in tension, and a non-catenary arch develops tension on the inside of every curve where the line of thrust does not pass through the stone."
+        },
+        {
+          "type": "p",
+          "text": "Wren took this directly into St. Paul's Cathedral. The inner dome, completed in 1710, has a profile close to a catenoid (the surface of revolution of a catenary), not the hemisphere that contemporary practice would have called for. The masonry sits cleanly in compression, and the dome demands no iron tension ring at its base, unlike Brunelleschi's hemispherical dome on Florence Cathedral two and a half centuries earlier. Gaudi later took the principle further, designing the Sagrada Familia in Barcelona by literally inverting hanging-chain models photographed from below."
+        },
+        {
+          "type": "p",
+          "text": "The cleanest twentieth-century catenary stands in Saint Louis, Missouri. Eero Saarinen and the engineer Hannskarl Bandel designed the Gateway Arch (completed 1965), 192 meters tall and 192 meters wide, as a weighted catenary: not the bare cosh, but a version in which the cross-sectional area thickens toward the base so that the structure is exactly self-stable in compression under its own non-uniform weight. The arch is signed with its own equation on a plaque inside, of the form y = A(cosh(Cx) − 1) with A and C chosen to fit the geometry. Three hundred years after Bernoulli's challenge, Hooke's inverted chain holds up nine hundred tons of stainless steel against the Missouri sky, and a tourist can ride a tram to the top of it."
+        },
+        {
+          "type": "p",
+          "text": "The catenary's two answers (force balance at every link, energy minimum over the whole chain) and Hooke's third answer (the same shape inverted is the funicular curve of an arch) are not three theorems but three readings of one fact. The same equation y = a cosh(x/a) describes a piece of matter, configured to hang under gravity, in the state where the constraints of its physical existence are minimally fought. Whether you call that state mechanical equilibrium, potential-energy minimum, or pure compression depends on which way the gravity points and which way you read the equation."
+        }
+      ]
+    }
+  ],
+  "checkInAfter": [1, 3],
+  "finalQuiz": {
+    "question": "Why did Galileo's parabola guess for a hanging chain pass undetected for half a century?",
+    "options": [
+      "Calculation was not yet powerful enough to distinguish the two curves",
+      "Near the bottom, the catenary is well approximated by a parabola to second order in x/a",
+      "Hanging chains were rarely available for study before the 1690s",
+      "Newton confirmed the parabola hypothesis in the Principia (1687)"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Taylor expansion cosh(x/a) = 1 + (1/2)(x/a)² + (1/24)(x/a)⁴ + ... agrees with a parabola y ≈ a + x²/(2a) to second order in x/a. At small sag the higher-order terms (the x⁴ correction and beyond) are tiny, and the two curves are visually indistinguishable. Only when the chain hangs with a sag comparable to half its length does the discrepancy reveal itself. Option (a) is wrong because Jungius did the calculation in 1669 with the mathematics available; the discrepancy was within reach. The truth is that no one had reason to doubt Galileo, and the problem only got solved when a feud between the Bernoulli brothers made it socially worth answering. Option (d) is wrong because Newton's Principia (1687) said nothing about the catenary."
+  },
+  "suggestedNodes": [
+    { "id": "isoperimetric_problem", "label": "Isoperimetric", "subtitle": "Dido's problem", "edgeType": "extends" },
+    { "id": "catenoid", "label": "Catenoid", "subtitle": "min surface", "edgeType": "applied" },
+    { "id": "funicular_polygon", "label": "Funicular", "subtitle": "line of thrust", "edgeType": "related" }
+  ],
+  "metadata": {
+    "estimatedReadingMinutes": 25,
+    "generatedAt": "2026-06-17T08:00:00Z",
+    "generatedBy": "routine-claude-code"
+  }
+}

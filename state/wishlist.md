@@ -9,7 +9,6 @@
 # auto-suggested 2026-05-10 from principle-of-least-action
 
 # auto-suggested 2026-06-15 from brachistochrone
-Catenary — y = a cosh(x/a), the shape of a hanging chain solved by James Bernoulli in 1691, the twin variational triumph of the 1690s Bernoulli rivalry
 Calculus of variations — Euler's 1744 Methodus inveniendi as the general theory, the Euler equation as the necessary condition for any J[y] = ∫F(x,y,y')dx to be stationary
 
 # auto-suggested 2026-05-11 from total-internal-reflection
@@ -149,3 +148,8 @@ Continuity equation — ∂ρ/∂t + ∇·j = 0, the local statement that whatev
 # auto-suggested 2026-06-16 from tautochrone
 Abel's integral equation — T(y₀) = ∫₀^{y₀} f(y) dy / √(y₀ − y), Niels Henrik Abel's 1826 Crelle paper that solved the generalized tautochrone problem and founded the theory of integral equations
 Evolute and involute — the differential-geometry pair that Huygens needed for his cycloidal-cheek clock, where the evolute of a cycloid is another cycloid and the involute construction recovers the original curve by unwrapping a string
+
+# auto-suggested 2026-06-17 from catenary
+Isoperimetric problem — the broader class of variational problems with a fixed-integral side constraint, traceable back to Dido carving the largest possible enclosure from a single ox-hide thong, the framework into which the catenary's fixed-length constraint slots cleanly
+Catenoid — the surface of revolution swept by rotating a catenary about its directrix, the only non-planar minimal surface of revolution (Meusnier, 1776), the shape a soap film takes between two coaxial rings before it pinches off
+Funicular polygon — the cord-and-weights diagram Stevin used in 1586 to compose forces before calculus existed, the graphical-statics ancestor of Hooke's inverted-arch idea and the tool Gaudi used to design the Sagrada Familia by photographing chain models from below
