@@ -459,6 +459,16 @@
       "createdAt": "2026-06-16T08:00:00Z",
       "col": 1,
       "row": 22
+    },
+    {
+      "id": "catenary",
+      "label": "Catenary",
+      "subtitle": "y = a cosh(x/a)",
+      "state": "available",
+      "lesson": "2026-06-17-catenary",
+      "createdAt": "2026-06-17T08:00:00Z",
+      "col": 0,
+      "row": 23
     }
   ],
   "edges": [
@@ -581,6 +591,9 @@
     { "from": "brachistochrone", "to": "lagrangian_mechanics", "kind": "applied" },
     { "from": "brachistochrone", "to": "refraction", "kind": "related" },
     { "from": "tautochrone", "to": "brachistochrone", "kind": "extends" },
-    { "from": "tautochrone", "to": "least_action", "kind": "related" }
+    { "from": "tautochrone", "to": "least_action", "kind": "related" },
+    { "from": "catenary", "to": "least_action", "kind": "extends" },
+    { "from": "catenary", "to": "lagrangian_mechanics", "kind": "applied" },
+    { "from": "catenary", "to": "brachistochrone", "kind": "related" }
   ]
 }

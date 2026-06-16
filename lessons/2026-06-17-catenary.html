@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Catenary vs parabola</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); min-height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz { padding: 14px 16px 8px; box-sizing: border-box; }
+.legend {
+  display: flex; gap: 18px; margin-top: 8px; flex-wrap: wrap;
+  font-size: 12px; color: var(--text-muted);
+}
+.legend .swatch {
+  display: inline-block; width: 22px; height: 0;
+  border-top-width: 2px; vertical-align: middle; margin-right: 6px;
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 8px;
+}
+.readout b { color: var(--text); font-weight: 600; }
+text.axislabel {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10px; fill: var(--text-muted);
+}
+text.tick {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 9px; fill: var(--text-ghost);
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <svg id="plot" viewBox="0 0 500 250" preserveAspectRatio="xMidYMid meet" style="width:100%; max-width:540px; display:block;"></svg>
+  <div class="viz-slider-row">
+    <label for="sag">sag</label>
+    <input id="sag" type="range" min="0.04" max="0.95" step="0.005" value="0.20" aria-label="sag depth as a fraction of half-span L">
+    <span id="sagval" class="value">0.20 · L</span>
+  </div>
+  <div class="readout">
+    a / L = <b id="ahat">…</b>
+    &nbsp; &middot; &nbsp; max gap (parabola − catenary) = <b id="gap">…</b> · L
+  </div>
+  <div class="legend">
+    <span><span class="swatch" style="border-top: 2px solid var(--accent);"></span>catenary &nbsp;y = a cosh(x/a)</span>
+    <span><span class="swatch" style="border-top: 2px dashed var(--text-ghost);"></span>parabola through same endpoints + bottom</span>
+  </div>
+  <div class="viz-caption">Drag the sag slider. The accent curve is the true catenary; the dashed grey curve is the parabola y = (sag) · (x/L)² fitted to the same two supports and the same lowest point. At small sag the two are visually identical (the regime in which Galileo's eye accepted the parabola in 1638). As sag grows the parabola lifts off the catenary in the middle: the cosh's fourth-order term has begun to matter.</div>
+</div>
+<script>
+(function(){
+  var svg = document.getElementById('plot');
+  var sagInput = document.getElementById('sag');
+  var sagVal = document.getElementById('sagval');
+  var ahat = document.getElementById('ahat');
+  var gapEl = document.getElementById('gap');
+
+  var W = 500, H = 250;
+  var margin = { top: 18, right: 22, bottom: 38, left: 48 };
+  var plotW = W - margin.left - margin.right;
+  var plotH = H - margin.top - margin.bottom;
+
+  // Math frame: x in [-1, 1] in units of half-span L. y plotted up to 1.05 in same units.
+  var Y_MAX = 1.05;
+  function sx(x){ return margin.left + (x + 1) / 2 * plotW; }
+  function sy(y){ return margin.top + (1 - y / Y_MAX) * plotH; }
+
+  // Solve d = a (cosh(1/a) - 1) for a, given d. Monotonic decreasing in a.
+  function aFromSag(d){
+    var lo = 0.001, hi = 1000;
+    for (var i = 0; i < 80; i++){
+      var mid = (lo + hi) / 2;
+      var rhs = mid * (Math.cosh(1/mid) - 1);
+      if (rhs > d) lo = mid; else hi = mid;
+    }
+    return (lo + hi) / 2;
+  }
+
+  function axes(){
+    var s = '';
+    s += '<line x1="'+sx(-1)+'" y1="'+sy(0)+'" x2="'+sx(-1)+'" y2="'+sy(1.0)+'" stroke="var(--border-strong)" stroke-width="1"/>';
+    s += '<line x1="'+sx(-1)+'" y1="'+sy(0)+'" x2="'+sx(1)+'" y2="'+sy(0)+'" stroke="var(--border-strong)" stroke-width="1"/>';
+    [-1, -0.5, 0, 0.5, 1].forEach(function(t){
+      s += '<line x1="'+sx(t)+'" y1="'+sy(0)+'" x2="'+sx(t)+'" y2="'+(sy(0)+4)+'" stroke="var(--border-strong)"/>';
+      s += '<text class="tick" x="'+sx(t)+'" y="'+(sy(0)+15)+'" text-anchor="middle">'+t+'</text>';
+    });
+    [0, 0.25, 0.5, 0.75, 1.0].forEach(function(t){
+      s += '<line x1="'+(sx(-1)-4)+'" y1="'+sy(t)+'" x2="'+sx(-1)+'" y2="'+sy(t)+'" stroke="var(--border-strong)"/>';
+      s += '<text class="tick" x="'+(sx(-1)-7)+'" y="'+(sy(t)+3)+'" text-anchor="end">'+t.toFixed(2)+'</text>';
+    });
+    s += '<text class="axislabel" x="'+sx(0)+'" y="'+(sy(0)+30)+'" text-anchor="middle">x / L  (horizontal position, units of half-span L)</text>';
+    var ylx = sx(-1) - 30, yly = sy(0.5);
+    s += '<text class="axislabel" x="'+ylx+'" y="'+yly+'" text-anchor="middle" transform="rotate(-90, '+ylx+', '+yly+')">height above lowest point  (y − y₀) / L</text>';
+    return s;
+  }
+
+  function render(){
+    var d = parseFloat(sagInput.value);
+    sagVal.textContent = d.toFixed(2) + ' · L';
+    var a = aFromSag(d);
+    ahat.textContent = a.toFixed(3);
+
+    var N = 240, catPath = '', parPath = '', maxGap = 0, maxGapX = 0;
+    for (var i = 0; i <= N; i++){
+      var x = -1 + (2 * i) / N;
+      var yc = a * (Math.cosh(x / a) - 1);
+      var yp = d * x * x;
+      var gap = yp - yc;
+      if (gap > maxGap){ maxGap = gap; maxGapX = x; }
+      var cmd = (i === 0 ? 'M' : 'L');
+      catPath += cmd + sx(x).toFixed(2) + ',' + sy(yc).toFixed(2) + ' ';
+      parPath += cmd + sx(x).toFixed(2) + ',' + sy(yp).toFixed(2) + ' ';
+    }
+    gapEl.textContent = maxGap.toFixed(4);
+
+    function support(xv){
+      var px = sx(xv), py = sy(d);
+      return '<polygon points="'+(px-6)+','+py+' '+(px+6)+','+py+' '+px+','+(py-10)+'" fill="var(--border-strong)" stroke="var(--text-muted)" stroke-width="0.5"/>';
+    }
+
+    // Optional vertical marker at the max-gap location, only when sag is large enough to be visible.
+    var marker = '';
+    if (d > 0.10){
+      var mx = sx(maxGapX);
+      var myc = sy(a * (Math.cosh(maxGapX / a) - 1));
+      var myp = sy(d * maxGapX * maxGapX);
+      marker = '<line x1="'+mx+'" y1="'+myp+'" x2="'+mx+'" y2="'+myc+'" stroke="var(--accent-soft)" stroke-width="1.5" stroke-dasharray="2 2"/>';
+    }
+
+    svg.innerHTML =
+      axes()
+      + '<path d="' + parPath + '" stroke="var(--text-ghost)" stroke-width="1.5" stroke-dasharray="4 3" fill="none"/>'
+      + '<path d="' + catPath + '" stroke="var(--accent)" stroke-width="2.2" fill="none"/>'
+      + marker
+      + support(-1) + support(1);
+  }
+
+  sagInput.addEventListener('input', render);
+  render();
+})();
+</script>
+</body>
+</html>
