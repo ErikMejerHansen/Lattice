@@ -327,5 +327,12 @@
     "subtitle": "y = a cosh(x/a)",
     "date": "2026-06-17",
     "estimatedReadingMinutes": 25
+  },
+  {
+    "slug": "2026-06-18-calculus-of-variations",
+    "title": "The calculus of variations: how Euler turned a generation of tricks into one equation",
+    "subtitle": "δJ[y] = 0",
+    "date": "2026-06-18",
+    "estimatedReadingMinutes": 25
   }
 ]

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The first variation</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); min-height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz { padding: 14px 16px 10px; box-sizing: border-box; }
+.panels { display: flex; gap: 16px; flex-wrap: wrap; }
+.panel { flex: 1 1 280px; min-width: 0; }
+.panel svg {
+  width: 100%; height: auto; display: block;
+  background: var(--bg-raised); border: 1px solid var(--border);
+}
+.panel-title { font-style: italic; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+.legend {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  font-size: 11px; color: var(--text-muted); margin-top: 4px;
+}
+.legend .swatch {
+  display: inline-block; width: 18px; height: 0;
+  border-top-width: 2px; vertical-align: middle; margin-right: 5px;
+}
+.controls { margin-top: 12px; }
+.button-row { display: flex; gap: 8px; margin-bottom: 4px; }
+.button-row button {
+  flex: 1; padding: 10px 8px; min-height: 36px;
+  background: var(--bg-raised); color: var(--text);
+  border: 1px solid var(--border-strong);
+  font-family: inherit; font-size: 13px; cursor: pointer;
+  border-radius: 0;
+}
+.button-row button.active {
+  background: var(--accent); color: var(--bg-raised); border-color: var(--accent);
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); margin-top: 6px;
+}
+.readout span { color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div class="panels">
+    <div class="panel">
+      <div class="panel-title">The candidate curve y(x) with perturbation εsin(πx)</div>
+      <svg id="curveSvg" viewBox="0 0 320 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+      <div class="legend">
+        <span><span class="swatch" style="border-top: 2px dashed var(--text-muted);"></span>base curve</span>
+        <span><span class="swatch" style="border-top: 2px solid var(--accent);"></span>perturbed</span>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">J(ε), the arc length as a function of the perturbation</div>
+      <svg id="jSvg" viewBox="0 0 320 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+      <div class="legend">
+        <span><span class="swatch" style="border-top: 2px solid var(--accent-soft);"></span>J(ε)</span>
+        <span><span class="swatch" style="border-top: 2px dashed var(--text);"></span>tangent at ε = 0</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="button-row">
+      <button id="btnLine" class="active">Base: line y = x</button>
+      <button id="btnPar">Base: parabola y = x²</button>
+    </div>
+    <div class="viz-slider-row">
+      <label for="epsSlider">ε</label>
+      <input id="epsSlider" type="range" min="-0.4" max="0.4" step="0.005" value="0">
+      <span class="value" id="epsVal">+0.000</span>
+    </div>
+    <div class="readout">
+      J(ε) = <span id="jVal">0.000</span> &nbsp; <span>·</span> &nbsp; dJ/dε at ε = 0 ≈ <span id="dJ0">0.000</span>
+    </div>
+  </div>
+
+  <div class="viz-caption" style="margin-top: 12px;">
+    For the straight-line base, ε = 0 sits at the minimum of J(ε) and the tangent there is flat: dJ/dε vanishes, the line is the optimum of the arc-length functional. Switch to the parabola and the dot is no longer at the bottom of the curve: the tangent tilts, dJ/dε ≠ 0, and the parabola is not the curve nature would pick.
+  </div>
+</div>
+
+<script>
+(function () {
+  var NX = 200;
+  var NE = 81;
+  var EMIN = -0.4, EMAX = 0.4;
+
+  function baseLine(x)  { return x; }
+  function baseLineP(x) { return 1; }
+  function basePar(x)   { return x * x; }
+  function baseParP(x)  { return 2 * x; }
+
+  function perturb(x, eps)  { return Math.sin(Math.PI * x) * eps; }
+  function perturbP(x, eps) { return Math.PI * Math.cos(Math.PI * x) * eps; }
+
+  function arcLength(baseP, eps) {
+    var h = 1 / NX;
+    var sum = 0;
+    for (var i = 0; i <= NX; i++) {
+      var x = i * h;
+      var yp = baseP(x) + perturbP(x, eps);
+      var f = Math.sqrt(1 + yp * yp);
+      var w;
+      if (i === 0 || i === NX) w = 1;
+      else if (i % 2 === 1) w = 4;
+      else w = 2;
+      sum += w * f;
+    }
+    return (h / 3) * sum;
+  }
+
+  function dJdEps0(baseP) {
+    var dx = 1e-3;
+    return (arcLength(baseP, dx) - arcLength(baseP, -dx)) / (2 * dx);
+  }
+
+  var mode = 'line';
+  var eps = 0;
+  function baseY()  { return mode === 'line' ? baseLine  : basePar; }
+  function baseYP() { return mode === 'line' ? baseLineP : baseParP; }
+
+  var curveSvg = document.getElementById('curveSvg');
+  var jSvg = document.getElementById('jSvg');
+  var epsSlider = document.getElementById('epsSlider');
+  var epsVal = document.getElementById('epsVal');
+  var jVal = document.getElementById('jVal');
+  var dJ0 = document.getElementById('dJ0');
+  var btnLine = document.getElementById('btnLine');
+  var btnPar = document.getElementById('btnPar');
+
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  function svgEl(name, attrs) {
+    var el = document.createElementNS(SVG_NS, name);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  var CX0 = 40, CX1 = 300, CY0 = 220, CY1 = 20;
+  var cyMin = -0.4, cyMax = 1.45;
+  function cxMap(x) { return CX0 + x * (CX1 - CX0); }
+  function cyMap(y) { return CY0 + ((y - cyMin) / (cyMax - cyMin)) * (CY1 - CY0); }
+
+  function drawCurvePanel() {
+    while (curveSvg.firstChild) curveSvg.removeChild(curveSvg.firstChild);
+    curveSvg.appendChild(svgEl('line', {
+      x1: CX0, y1: cyMap(0), x2: CX1, y2: cyMap(0),
+      stroke: 'var(--border-strong)', 'stroke-width': '1'
+    }));
+    curveSvg.appendChild(svgEl('line', {
+      x1: CX0, y1: CY1, x2: CX0, y2: CY0,
+      stroke: 'var(--border-strong)', 'stroke-width': '1'
+    }));
+    curveSvg.appendChild(svgEl('circle', {
+      cx: cxMap(0), cy: cyMap(0), r: 3, fill: 'var(--text)'
+    }));
+    curveSvg.appendChild(svgEl('circle', {
+      cx: cxMap(1), cy: cyMap(1), r: 3, fill: 'var(--text)'
+    }));
+    var lab1 = svgEl('text', {
+      x: cxMap(0) - 4, y: cyMap(0) + 14, 'font-size': '10',
+      fill: 'var(--text-muted)', 'text-anchor': 'end'
+    });
+    lab1.textContent = '(0,0)';
+    curveSvg.appendChild(lab1);
+    var lab2 = svgEl('text', {
+      x: cxMap(1) + 6, y: cyMap(1) + 4, 'font-size': '10',
+      fill: 'var(--text-muted)'
+    });
+    lab2.textContent = '(1,1)';
+    curveSvg.appendChild(lab2);
+
+    var by = baseY();
+    var d1 = '';
+    for (var i = 0; i <= 100; i++) {
+      var x = i / 100;
+      var y = by(x);
+      d1 += (i === 0 ? 'M' : 'L') + cxMap(x).toFixed(2) + ',' + cyMap(y).toFixed(2);
+    }
+    curveSvg.appendChild(svgEl('path', {
+      d: d1, fill: 'none',
+      stroke: 'var(--text-muted)', 'stroke-width': '1.2',
+      'stroke-dasharray': '4 4'
+    }));
+
+    var d2 = '';
+    for (var j = 0; j <= 100; j++) {
+      var xj = j / 100;
+      var yj = by(xj) + perturb(xj, eps);
+      d2 += (j === 0 ? 'M' : 'L') + cxMap(xj).toFixed(2) + ',' + cyMap(yj).toFixed(2);
+    }
+    curveSvg.appendChild(svgEl('path', {
+      d: d2, fill: 'none',
+      stroke: 'var(--accent)', 'stroke-width': '2'
+    }));
+  }
+
+  var JX0 = 40, JX1 = 300, JY0 = 220, JY1 = 20;
+  var jPanelData = null;
+
+  function recomputeJPanelData() {
+    var baseP = baseYP();
+    var samples = [];
+    var jmin = Infinity, jmax = -Infinity;
+    for (var i = 0; i < NE; i++) {
+      var e = EMIN + (i / (NE - 1)) * (EMAX - EMIN);
+      var j = arcLength(baseP, e);
+      samples.push({ e: e, j: j });
+      if (j < jmin) jmin = j;
+      if (j > jmax) jmax = j;
+    }
+    jPanelData = {
+      samples: samples, jmin: jmin, jmax: jmax,
+      dJ_0: dJdEps0(baseP),
+      j0: arcLength(baseP, 0)
+    };
+  }
+
+  function jxMap(e) { return JX0 + ((e - EMIN) / (EMAX - EMIN)) * (JX1 - JX0); }
+  function jyMap(j) {
+    var jmin = jPanelData.jmin, jmax = jPanelData.jmax;
+    var pad = (jmax - jmin) * 0.1 || 0.01;
+    return JY0 + ((j - (jmin - pad)) / ((jmax + pad) - (jmin - pad))) * (JY1 - JY0);
+  }
+
+  function drawJPanel() {
+    while (jSvg.firstChild) jSvg.removeChild(jSvg.firstChild);
+    var data = jPanelData;
+
+    jSvg.appendChild(svgEl('line', {
+      x1: JX0, y1: JY0, x2: JX1, y2: JY0,
+      stroke: 'var(--border-strong)', 'stroke-width': '1'
+    }));
+    jSvg.appendChild(svgEl('line', {
+      x1: JX0, y1: JY1, x2: JX0, y2: JY0,
+      stroke: 'var(--border-strong)', 'stroke-width': '1'
+    }));
+    jSvg.appendChild(svgEl('line', {
+      x1: jxMap(0), y1: JY1, x2: jxMap(0), y2: JY0,
+      stroke: 'var(--text-ghost)', 'stroke-width': '1',
+      'stroke-dasharray': '2 3'
+    }));
+
+    var eL = svgEl('text', {
+      x: JX0 + 2, y: JY0 + 14, 'font-size': '10', fill: 'var(--text-muted)'
+    });
+    eL.textContent = 'ε = ' + EMIN.toFixed(1);
+    jSvg.appendChild(eL);
+    var eR = svgEl('text', {
+      x: JX1 - 2, y: JY0 + 14, 'font-size': '10',
+      fill: 'var(--text-muted)', 'text-anchor': 'end'
+    });
+    eR.textContent = 'ε = ' + EMAX.toFixed(1);
+    jSvg.appendChild(eR);
+    var e0 = svgEl('text', {
+      x: jxMap(0), y: JY0 + 14, 'font-size': '10',
+      fill: 'var(--text-muted)', 'text-anchor': 'middle'
+    });
+    e0.textContent = 'ε = 0';
+    jSvg.appendChild(e0);
+    var jminLab = svgEl('text', {
+      x: JX0 - 4, y: jyMap(data.jmin) + 3, 'font-size': '10',
+      fill: 'var(--text-muted)', 'text-anchor': 'end'
+    });
+    jminLab.textContent = 'J = ' + data.jmin.toFixed(3);
+    jSvg.appendChild(jminLab);
+    var jmaxLab = svgEl('text', {
+      x: JX0 - 4, y: jyMap(data.jmax) + 3, 'font-size': '10',
+      fill: 'var(--text-muted)', 'text-anchor': 'end'
+    });
+    jmaxLab.textContent = data.jmax.toFixed(3);
+    jSvg.appendChild(jmaxLab);
+
+    var d = '';
+    for (var i = 0; i < data.samples.length; i++) {
+      var s = data.samples[i];
+      d += (i === 0 ? 'M' : 'L') + jxMap(s.e).toFixed(2) + ',' + jyMap(s.j).toFixed(2);
+    }
+    jSvg.appendChild(svgEl('path', {
+      d: d, fill: 'none',
+      stroke: 'var(--accent-soft)', 'stroke-width': '2'
+    }));
+
+    var dx = 0.18;
+    var x1 = -dx, x2 = dx;
+    var y1 = data.j0 + data.dJ_0 * x1;
+    var y2 = data.j0 + data.dJ_0 * x2;
+    jSvg.appendChild(svgEl('line', {
+      x1: jxMap(x1), y1: jyMap(y1), x2: jxMap(x2), y2: jyMap(y2),
+      stroke: 'var(--text)', 'stroke-width': '1.5',
+      'stroke-dasharray': '3 3'
+    }));
+
+    var currJ = arcLength(baseYP(), eps);
+    jSvg.appendChild(svgEl('circle', {
+      cx: jxMap(eps), cy: jyMap(currJ), r: 4.5,
+      fill: 'var(--accent)', stroke: 'var(--bg-raised)', 'stroke-width': '1.5'
+    }));
+  }
+
+  function update() {
+    epsVal.textContent = (eps >= 0 ? '+' : '') + eps.toFixed(3);
+    var currJ = arcLength(baseYP(), eps);
+    jVal.textContent = currJ.toFixed(4);
+    var d = jPanelData.dJ_0;
+    dJ0.textContent = (d >= 0 ? '+' : '') + d.toFixed(4);
+    drawCurvePanel();
+    drawJPanel();
+  }
+
+  epsSlider.addEventListener('input', function () {
+    eps = parseFloat(epsSlider.value);
+    update();
+  });
+  btnLine.addEventListener('click', function () {
+    if (mode === 'line') return;
+    mode = 'line';
+    btnLine.classList.add('active');
+    btnPar.classList.remove('active');
+    recomputeJPanelData();
+    update();
+  });
+  btnPar.addEventListener('click', function () {
+    if (mode === 'par') return;
+    mode = 'par';
+    btnPar.classList.add('active');
+    btnLine.classList.remove('active');
+    recomputeJPanelData();
+    update();
+  });
+
+  recomputeJPanelData();
+  update();
+})();
+</script>
+</body>
+</html>

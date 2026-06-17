@@ -1,0 +1,235 @@
+{
+  "slug": "2026-06-18-calculus-of-variations",
+  "title": "The calculus of variations: how Euler turned a generation of tricks into one equation",
+  "node": {
+    "id": "calculus_of_variations",
+    "label": "Calc. of var.",
+    "subtitle": "δJ[y] = 0"
+  },
+  "intro": "Through the 1690s a series of puzzles, each more startling than the last, yielded to ad hoc tricks: Fermat's lazy ray of 1662, the brachistochrone of 1696, the catenary of 1691, the isoperimetric problem of 1697. Each was solved by a different method that nobody could quite generalize, and the field had no name. In 1744 Leonhard Euler, then thirty-seven and a salaried mathematician at Frederick the Great's Berlin Academy, published a book that reduced every such problem to a single ordinary differential equation. The trick was to learn how to take the derivative of a functional, a quantity that depends on an entire curve and not just on a number.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Five different tricks for five different curves",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In June 1696 Johann Bernoulli, then a professor in Groningen and the younger of the two Basel brothers, posed a public challenge in Acta Eruditorum, the Leipzig journal that served as European mathematics' bulletin board: of all the curves connecting a high point to a lower one off to the side, which curve gets a frictionless bead from the first to the second in the shortest time? He had a solution in his pocket. By his self-imposed deadline (May 1697) five independent correct answers had come back: from his older brother Jakob (a discrete-link argument that broke the curve into infinitesimal steps), from Leibniz (the inventor of the calculus six years earlier), from Guillaume de l'Hôpital (the marquis whose name now sits on a calculus rule he had bought from Johann a few years before), from Isaac Newton (anonymous, allegedly cracked in a single night, the famous lion-from-the-paw submission), and from Johann himself (the elegant trick of treating the brachistochrone as a layered-medium Snell's-law problem)."
+        },
+        {
+          "type": "p",
+          "text": "Five techniques, one answer. And this was the state of variational problem-solving for the next half century. Each problem was its own art. Fermat's principle of 1662 (light takes the path of least time through a refractive medium) had given a beautiful one-line statement but no general recipe. The catenary, in 1691, had Christiaan Huygens, Leibniz, and Johann answering Jakob's challenge with three completely different arguments (geometric, infinitesimal-link, and energetic). The isoperimetric problem (Jakob's 1697 challenge: among all closed curves of fixed perimeter, which one encloses the most area?) brought him to a circle but only by yet another bespoke calculation. Pierre-Louis Maupertuis would announce the principle of least action in 1744 (the bold claim that all of mechanics minimizes some integral) but with no machinery for finding the curve that did the minimizing."
+        },
+        {
+          "type": "p",
+          "text": "Euler had been Johann Bernoulli's student in Basel from 1720 to 1726, and the brachistochrone and catenary were, literally, the family business. He spent the 1730s at the St. Petersburg Academy and the 1740s at Frederick the Great's Berlin Academy as director of mathematics. By 1740 he had decided to do for variational problems what Newton had done for differential equations: write down one machine that handled all of them. The result, published in Lausanne and Geneva in 1744, was a book whose title gave the field its name: Methodus inveniendi lineas curvas maximi minimive proprietate gaudentes, which translates as 'method for finding curves enjoying maximal or minimal properties.'"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The first variation: how to take the derivative of a curve",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Start with the object you want to optimize. It is a functional, a rule that takes in an entire curve y(x) defined on some interval [x_0, x_1] and returns a single number. In every classical example the functional has the same shape: an integral over x of a known function F that depends on the position x, the curve's height y, and the curve's slope y' = dy/dx."
+        },
+        {
+          "type": "math",
+          "tex": "J[y] = \\int_{x_0}^{x_1} F\\!\\left(x, y(x), y'(x)\\right)\\, dx",
+          "display": true,
+          "caption": "J is the functional, a single number that depends on the entire curve y(x). x is the independent variable, running from a fixed left endpoint x_0 to a fixed right endpoint x_1. F is the integrand, a known function of three arguments (position, height, slope). y(x) is the candidate curve being chosen. y'(x) is its slope, dy/dx."
+        },
+        {
+          "type": "p",
+          "text": "Suppose y(x) is the curve you suspect is the optimum. Perturb it. Pick any smooth function η(x) (eta, pronounced 'ay-ta', a Greek letter that mathematicians reach for when they need a generic perturbation) that vanishes at the two endpoints, so η(x_0) = η(x_1) = 0 and the perturbed curve still meets the fixed boundary conditions. Now consider the one-parameter family y(x) + ε η(x), where ε is a small real number you can dial. When ε = 0 you have your candidate curve. When ε is nonzero, you have a nearby competitor. The functional J becomes an ordinary function of ε, and you can Taylor-expand it about ε = 0."
+        },
+        {
+          "type": "math",
+          "tex": "J[y + \\varepsilon \\eta] = J[y] + \\varepsilon\\, \\delta J[y; \\eta] + O(\\varepsilon^2)",
+          "display": true,
+          "caption": "ε is a small real-valued parameter measuring the size of the perturbation. η(x) is the perturbation function, smooth and vanishing at both endpoints. δJ[y; η] is the first variation of J at y in the direction η, the coefficient of the ε^1 term in the expansion. O(ε²) collects all terms of second order and higher in ε."
+        },
+        {
+          "type": "p",
+          "text": "The coefficient of ε in this expansion is called the first variation, and it is the analogue of the ordinary derivative dJ/dε at ε = 0. Computing it is a chain-rule exercise. Each appearance of y inside F gets perturbed by εη; each appearance of y' gets perturbed by εη'. Differentiating with respect to ε and setting ε = 0 picks off the linear terms."
+        },
+        {
+          "type": "math",
+          "tex": "\\delta J[y; \\eta] = \\int_{x_0}^{x_1} \\left[ \\frac{\\partial F}{\\partial y}\\, \\eta + \\frac{\\partial F}{\\partial y'}\\, \\eta' \\right] dx",
+          "display": true,
+          "caption": "∂F/∂y is the partial derivative of F with respect to its second argument, holding x and y' fixed. ∂F/∂y' is the partial derivative of F with respect to its third argument, holding x and y fixed. η is the perturbation and η' = dη/dx is its derivative. The integrand is the linearised change in the integrand of J when y is shifted to y + εη."
+        },
+        {
+          "type": "p",
+          "text": "The expression contains η' (the perturbation's derivative), which is awkward, because we want to factor η out of the integral and conclude something about the bracket multiplying it. The standard move is integration by parts on the second term: turn ∫(∂F/∂y') η' dx into [(∂F/∂y') η] evaluated at the endpoints, minus ∫(d/dx)(∂F/∂y') η dx. Because we chose η to vanish at x_0 and x_1, the boundary term is zero, and we are left with a single integral with η factored out."
+        },
+        {
+          "type": "math",
+          "tex": "\\delta J[y; \\eta] = \\int_{x_0}^{x_1} \\left[ \\frac{\\partial F}{\\partial y} - \\frac{d}{dx} \\frac{\\partial F}{\\partial y'} \\right] \\eta(x)\\, dx",
+          "display": true,
+          "caption": "The bracket is the integrand after integration by parts, with all derivatives now acting on F rather than on η. d/dx is the total derivative with respect to x, which acts on the partial derivative ∂F/∂y' (a function of x through x, y(x), and y'(x)). η(x) is again the arbitrary endpoint-vanishing perturbation."
+        },
+        {
+          "type": "p",
+          "text": "Now demand δJ = 0 for every admissible η. The fundamental lemma of the calculus of variations (made rigorous by Paul du Bois-Reymond in 1879, but already used in substance by Euler) says: if a continuous function h(x) satisfies ∫h(x) η(x) dx = 0 for every smooth η that vanishes at the endpoints, then h(x) must itself be zero everywhere on [x_0, x_1]. The bracket in the integrand must therefore vanish identically, and we have an ordinary differential equation for y."
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{\\partial F}{\\partial y} - \\frac{d}{dx} \\frac{\\partial F}{\\partial y'} = 0",
+          "display": true,
+          "caption": "This is the Euler-Lagrange equation. ∂F/∂y and ∂F/∂y' are the same partial derivatives defined above. d/dx is the total derivative along the curve. The equation is a second-order ODE for y(x), with boundary conditions y(x_0) and y(x_1) prescribed. Any curve that makes the first variation vanish must satisfy it."
+        },
+        {
+          "type": "viz",
+          "src": "2026-06-18-calculus-of-variations.html",
+          "height": 420,
+          "caption": "Drag the ε slider to perturb the base curve from (0,0) to (1,1) by ε sin(πx). The functional shown is the arc length J[y] = ∫√(1+y'²) dx. For the straight-line base, J(ε) sits exactly at its minimum at ε = 0 and the slope dJ/dε|₀ = 0: the first variation vanishes. Switch to the parabolic base and J(ε) is no longer minimized at ε = 0; the slope is nonzero, and the parabola is not the optimum."
+        }
+      ],
+      "quiz": {
+        "question": "The Euler-Lagrange equation is derived by demanding δJ = 0 for every admissible perturbation η. What does this condition actually require of the candidate curve y(x)?",
+        "options": [
+          "That J[y] is a minimum",
+          "That J[y] is stationary, meaning unchanged to first order under every small endpoint-vanishing perturbation",
+          "That y(x) is a straight line",
+          "That y(x) extremizes the perturbation η"
+        ],
+        "correctIndex": 1,
+        "explanation": "Stationarity, not minimization, is what δJ = 0 expresses. The first variation vanishes at minima, maxima, and saddle points alike; the Euler-Lagrange equation cannot tell those cases apart. Option (a) is too strong: the soap-film and brachistochrone problems both happen to give minima, but the variational machinery itself only certifies stationarity. (Whether the stationary point is a minimum is a second-variation question, settled by the sign of the analogue of the second derivative.) Option (c) is wrong because the optimal curve depends entirely on what F is; a straight line only emerges if F = √(1+y'²), the arc-length integrand. Option (d) confuses what is being optimized: η is the perturbation, not the curve."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The Euler equation in practice: the brachistochrone in four lines",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The brachistochrone, the problem that took five separate proofs in 1697, now takes one calculation. The time to slide a bead from (0, 0) down to a target point, under gravity, along the curve y(x), is the integral of ds / v, where ds = √(1+y'²) dx is the arc-length element and v = √(2gy) is the speed gained by falling through height y (from conservation of energy, starting at rest). The integrand F of the time functional is therefore a function of y and y' alone."
+        },
+        {
+          "type": "math",
+          "tex": "T[y] = \\int_0^{x_1} \\sqrt{\\frac{1 + y'^2}{2 g y}}\\, dx",
+          "display": true,
+          "caption": "T is the descent time as a functional of the curve y(x). x is the horizontal coordinate, running from 0 at the start to x_1 at the end. y(x) is the depth of the curve below the starting height, with y measured downward and y(0) = 0. y' = dy/dx is the slope. g is gravitational acceleration. The integrand combines the arc-length element √(1+y'²) with the local speed √(2gy)."
+        },
+        {
+          "type": "p",
+          "text": "Apply the Euler-Lagrange equation to F = √((1+y'²)/(2gy)) directly and you face an unpleasant second-order ODE. But notice: F has no explicit dependence on x; it depends on x only through y and y'. That triggers a standard shortcut, the Beltrami identity (a first integral of the Euler-Lagrange equation, valid whenever F is independent of x). The Beltrami identity says that when ∂F/∂x = 0, the quantity F − y' (∂F/∂y') is conserved along the curve, a constant we can call C."
+        },
+        {
+          "type": "math",
+          "tex": "F - y'\\, \\frac{\\partial F}{\\partial y'} = C",
+          "display": true,
+          "caption": "F is the integrand of the functional. y' is the slope of the curve. ∂F/∂y' is the partial derivative of F with respect to y'. C is an integration constant fixed by boundary conditions. The identity is what you get when you take d/dx of (F − y' ∂F/∂y') and use the Euler-Lagrange equation to show it equals zero, so the bracket is conserved."
+        },
+        {
+          "type": "p",
+          "text": "Plug F = √((1+y'²)/(2gy)) into the identity. The partial derivative is ∂F/∂y' = y' / [√(2gy) · √(1+y'²)]. Subtracting y'·(∂F/∂y') from F and simplifying the numerator gives (1 + y'² − y'²) / [√(2gy) · √(1+y'²)], which is just 1 / [√(2gy) · √(1+y'²)]. Setting this equal to C, squaring both sides, and absorbing 2g and 1/C² into a single constant K, the algebra collapses to y(1 + y'²) = K, the defining first-order ODE of a cycloid. Six pages of an 18th-century geometric proof, now four lines."
+        },
+        {
+          "type": "math",
+          "tex": "y\\,(1 + y'^2) = K",
+          "display": true,
+          "caption": "y is the depth coordinate of the curve. y' = dy/dx is its slope. K is a positive constant fixed by the endpoint (x_1, y_1) the bead must reach. The equation is the first-order ODE whose solutions are arcs of the cycloid, the curve traced by a point on the rim of a rolling wheel."
+        },
+        {
+          "type": "p",
+          "text": "The same machine then chews through every other 17th-century puzzle. The catenary's integrand is y √(1+y'²) (potential energy per unit length); apply the Euler equation, get the Beltrami identity again, and the cosh comes out. Fermat's least-time path through a medium with refractive index n(x, y) becomes n(x, y) √(1+y'²); the Euler equation reduces to Snell's law. The shortest path on a surface (a geodesic) is whatever F encodes 'distance along the surface'; the Euler equation gives the geodesic ODE that differential geometry would later turn into the Christoffel-symbol bookkeeping. Different F, same recipe."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Constraints: the multiplier that walks into the integrand",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Some variational problems carry an extra rule. The catenary's chain has a fixed total length L; minimizing its potential energy with no constraint would just collapse the chain to a point. Dido's problem, the legendary one in which the founder of Carthage was told she could have whatever land she could enclose with an ox hide cut into a long strip, fixes the perimeter and asks for the maximum area. These constraints take the form of a second integral that equals a prescribed constant: ∫G(x, y, y') dx = L. Such constraints are called isoperimetric, after the original perimeter-fixing problem."
+        },
+        {
+          "type": "p",
+          "text": "Euler's recipe, systematized in chapter five of Methodus inveniendi, is to absorb the constraint into the integrand using a Lagrange multiplier (a single unknown constant λ whose value will be fixed retroactively by the constraint itself). The idea is exactly the one Joseph-Louis Lagrange would later systematize for finite-dimensional constrained optimization in his 1788 Méchanique Analytique. Instead of minimizing ∫F dx subject to ∫G dx = L, you minimize ∫(F − λ G) dx as if it were a free variational problem, with no constraint, and then choose λ at the end to make ∫G dx come out to L."
+        },
+        {
+          "type": "math",
+          "tex": "\\delta \\int_{x_0}^{x_1} \\left[ F(x, y, y') - \\lambda\\, G(x, y, y') \\right] dx = 0",
+          "display": true,
+          "caption": "δ denotes the first variation, as before. F is the integrand being optimized. G is the integrand whose total ∫G dx is constrained to equal L. λ is the Lagrange multiplier, a single real constant (not a function of x). The equation says the modified functional, integrand F − λG, has vanishing first variation under the same admissible perturbations as before."
+        },
+        {
+          "type": "p",
+          "text": "The Euler-Lagrange equation now acts on the modified integrand F − λG as if it were a single function, giving a second-order ODE that depends on the unknown λ. You solve it, pick the constants of integration from boundary conditions, and then determine λ from the constraint ∫G dx = L. For Dido's problem F = y (so the area under the curve is being maximised) and G = √(1+y'²) (the arc length); the Euler equation for y − λ√(1+y'²) has the circle as its solution, and Dido's optimal strip walks in a perfect arc."
+        },
+        {
+          "type": "p",
+          "text": "The catenary lesson worked through exactly this maneuver. Minimize ∫λg y √(1+y'²) dx, subject to ∫√(1+y'²) dx = L, and out drops y = a cosh(x/a), with the multiplier μ in that derivation playing the role of λ here. The same recipe handles every isoperimetric problem the 17th century had wrestled with by hand, and it generalises trivially to multiple constraints by introducing one multiplier per constraint, the standard story of constrained optimization that every physicist now learns in their first mechanics course."
+        }
+      ],
+      "quiz": {
+        "question": "In the isoperimetric construction above, what determines the numerical value of the Lagrange multiplier λ?",
+        "options": [
+          "λ is a free parameter; any value gives a valid solution",
+          "λ is fixed by demanding that the resulting solution y(x) satisfy the constraint ∫G dx = L",
+          "λ is the slope of the curve at the midpoint",
+          "λ is fixed by demanding ∂F/∂λ = 0 at every x"
+        ],
+        "correctIndex": 1,
+        "explanation": "The Lagrange multiplier is determined by the constraint. You solve the Euler equation for the modified integrand F − λG, treating λ as an unknown constant; the solution comes out as a one-parameter family in λ; you then evaluate ∫G dx on that family and pick the λ that makes it equal L. Option (a) misses the point: different λ give different solutions, and exactly one λ matches the constraint. Option (d) is wrong because F does not depend on λ at all; the dependence is through the modified integrand F − λG, and what is varied is y, not λ. The multiplier is the price (in modern parlance, the shadow price) of relaxing the constraint by one unit; the constrained physics fixes that price."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Plateau's soap films and the Fields Medal that took 187 years",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "One specific case carries the story most cleanly into the twentieth century: the minimal surface problem, also called Plateau's problem. Joseph Plateau, a Belgian physicist working in Ghent in the 1840s (the same Plateau who had earlier built the phenakistoscope, an early animation device exploiting persistence of vision, and who lost most of his sight from staring at the sun in an 1829 experiment on retinal afterimages), dipped bent wire frames into a soap solution and recorded the shapes the resulting films took. Every frame, however contorted, produced a film, and every film had a property he could state geometrically: among all surfaces spanned by that wire, the one nature picked was the one with the smallest area."
+        },
+        {
+          "type": "p",
+          "text": "The mathematical formulation predated Plateau by nearly a century. Lagrange, in 1762, had taken Euler's variational machinery and asked: what is the Euler equation when the unknown is not a curve y(x) but a surface z(x, y), and the functional is the surface area ∫∫√(1 + z_x² + z_y²) dx dy? He wrote down the resulting partial differential equation, the minimal surface equation, which says that the mean curvature (the average of the two principal curvatures at every point of the surface) must vanish identically. Plateau then verified, experimentally, that soap films obey this equation, because surface tension at every point pulls the film with no preferred direction and so balances exactly when the mean curvature is zero."
+        },
+        {
+          "type": "p",
+          "text": "The mathematics of existence took longer. The 1880s and 1890s saw a parade of attempts (Karl Weierstrass, Bernhard Riemann, Hermann Schwarz, Henri Poincaré) that produced specific minimal surfaces (Schwarz's H-surface, Riemann's periodic minimal surfaces, the helicoid, the catenoid) but no general existence theorem for arbitrary boundaries. In 1900 David Hilbert listed it as part of his 23rd problem on the rigorous foundations of the calculus of variations. The breakthrough came in 1931 from Jesse Douglas, working at MIT, who proved that every Jordan curve in three-space bounds at least one minimal surface, using Leonida Tonelli's direct method (a 1910s reformulation of variational existence proofs in terms of weak limits of minimising sequences). For this Douglas was awarded the first Fields Medal in 1936, jointly with Lars Ahlfors. From Euler's chapter on F(x, y, y') in 1744 to the first Fields Medal: 187 years."
+        },
+        {
+          "type": "p",
+          "text": "Plateau's problem is one case. But the story it tells is the whole story of what the calculus of variations became. Euler had set out to systematize a few seventeenth-century puzzles about curves of fastest descent and chains hung between posts. By 1788 Lagrange had used the same machinery to rewrite all of classical mechanics, with the action integral ∫(T − V) dt taking the role of J[y] and Newton's equations falling out as the Euler-Lagrange equations of L = T − V. By 1834 William Rowan Hamilton had turned the Euler-Lagrange picture into Hamilton's equations and the phase-space flow. By 1918 Emmy Noether had shown that every continuous symmetry of a variational principle produces a conservation law. By 1948 Richard Feynman had reformulated quantum mechanics as a path integral, a sum over curves weighted by e^(iS/ℏ) with S the action, recovering classical mechanics in the limit ℏ → 0 because away from the stationary path the phase oscillates and the contributions cancel. Every framework that calls itself modern physics (Lagrangian mechanics, Hamiltonian mechanics, general relativity through the Einstein-Hilbert action, the Standard Model through its gauge-field Lagrangians, the path integral) descends through Euler's 1744 ODE."
+        },
+        {
+          "type": "p",
+          "text": "The thing Euler did was not merely systematize a handful of curve-finding puzzles. He discovered, without quite knowing it, the second native language of physics. Newton's differential equations are the first: they describe what happens locally, at each point in space and at each instant in time. Euler's variational principles are the second: they describe what happens globally, across the entire history of a system, by selecting the path on which an integral is stationary. The two pictures are mathematically equivalent for any well-posed mechanical problem (Lagrange proved this in 1788 for classical mechanics; Feynman extended the equivalence to the quantum world). But they read like different worlds, and Methodus inveniendi was the book in which the second world first acquired the means to speak."
+        }
+      ]
+    }
+  ],
+  "checkInAfter": [1, 3],
+  "finalQuiz": {
+    "question": "Three problems (the brachistochrone, the catenary, and Dido's isoperimetric problem) were each solved by completely different ad hoc methods in the 1690s. What was the single mathematical maneuver in Methodus inveniendi (1744) that reduced all three to one ordinary differential equation?",
+    "options": [
+      "Differentiating under the integral sign with respect to a parameter inside F",
+      "Computing the first variation by perturbing y → y + εη with η vanishing at the endpoints, integrating by parts to move the derivative off η, and then demanding the bracketed result vanish for every admissible η",
+      "Solving the corresponding partial differential equation by separation of variables",
+      "Expanding y(x) in a Fourier series and minimizing each coefficient independently"
+    ],
+    "correctIndex": 1,
+    "explanation": "The first-variation calculation is the heart of the calculus of variations. The Taylor expansion of J[y + εη] in ε picks off a linear term δJ = ∫(F_y η + F_y' η') dx; integration by parts moves the derivative off η; the boundary term vanishes because η was chosen to vanish at the endpoints; and the fundamental lemma then forces the bracket F_y − (d/dx) F_y' to be zero pointwise. That is the Euler-Lagrange equation. Option (a) is a different, useful trick (Feynman's favourite) but it differentiates with respect to a numerical parameter, not a perturbation of y. Option (c) is wrong because the resulting equation is an ODE, not a PDE (the unknown is a curve, not a surface). Option (d) is anachronistic: spectral methods for variational problems came much later, and they reduce the calculation to the same Euler equation in a Fourier basis."
+  },
+  "suggestedNodes": [
+    { "id": "geodesics", "label": "Geodesics", "subtitle": "straight on curved", "edgeType": "applied" },
+    { "id": "minimal_surfaces", "label": "Min. surfaces", "subtitle": "soap films, H = 0", "edgeType": "applied" },
+    { "id": "direct_method", "label": "Direct method", "subtitle": "Tonelli, weak lim", "edgeType": "extends" }
+  ],
+  "metadata": {
+    "estimatedReadingMinutes": 25,
+    "generatedAt": "2026-06-18T08:00:00Z",
+    "generatedBy": "routine-claude-code"
+  }
+}

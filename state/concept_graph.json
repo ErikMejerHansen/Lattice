@@ -469,6 +469,16 @@
       "createdAt": "2026-06-17T08:00:00Z",
       "col": 0,
       "row": 23
+    },
+    {
+      "id": "calculus_of_variations",
+      "label": "Calc. of var.",
+      "subtitle": "δJ[y] = 0",
+      "state": "available",
+      "lesson": "2026-06-18-calculus-of-variations",
+      "createdAt": "2026-06-18T08:00:00Z",
+      "col": 1,
+      "row": 23
     }
   ],
   "edges": [
@@ -594,6 +604,9 @@
     { "from": "tautochrone", "to": "least_action", "kind": "related" },
     { "from": "catenary", "to": "least_action", "kind": "extends" },
     { "from": "catenary", "to": "lagrangian_mechanics", "kind": "applied" },
-    { "from": "catenary", "to": "brachistochrone", "kind": "related" }
+    { "from": "catenary", "to": "brachistochrone", "kind": "related" },
+    { "from": "calculus_of_variations", "to": "least_action", "kind": "extends" },
+    { "from": "calculus_of_variations", "to": "brachistochrone", "kind": "applied" },
+    { "from": "calculus_of_variations", "to": "catenary", "kind": "related" }
   ]
 }
