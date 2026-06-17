@@ -8,8 +8,10 @@
 
 # auto-suggested 2026-05-10 from principle-of-least-action
 
-# auto-suggested 2026-06-15 from brachistochrone
-Calculus of variations — Euler's 1744 Methodus inveniendi as the general theory, the Euler equation as the necessary condition for any J[y] = ∫F(x,y,y')dx to be stationary
+# auto-suggested 2026-06-18 from calculus-of-variations
+Geodesics — the variational definition of "straight line" on a curved surface: minimize ∫√(g_ij dx^i dx^j), the Euler equation becomes the geodesic ODE with Christoffel symbols, the same machine carrying optics into general relativity
+Minimal surfaces — Lagrange 1762 wrote down the H = 0 PDE by Euler's method, Plateau 1849 verified it experimentally with soap films, Douglas 1931 proved existence for arbitrary Jordan boundaries by Tonelli's direct method and was awarded the first Fields Medal in 1936
+Direct method of variations — Tonelli 1915, the lower-semicontinuity + weak-compactness machine that proves a variational minimum actually exists, the rigorous answer to Hilbert's 23rd problem and the standard tool of modern PDE
 
 # auto-suggested 2026-05-11 from total-internal-reflection
 Evanescent wave — the exp(-z/d) field that lives in the medium where no ray penetrates, and why a wavelength-thin gap can leak energy across it
