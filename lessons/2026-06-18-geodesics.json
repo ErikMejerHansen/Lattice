@@ -1,0 +1,217 @@
+{
+  "slug": "2026-06-18-geodesics",
+  "title": "Geodesics: what counts as a straight line when the world is curved",
+  "node": {
+    "id": "geodesics",
+    "label": "Geodesics",
+    "subtitle": "δ∫ds = 0"
+  },
+  "intro": "Eratosthenes had to confront the question in 240 BCE in order to measure the Earth, and every Atlantic-crossing ship's master since Mercator has wrestled with it: what counts as a straight line when the surface you live on is curved? The answer, made precise by Gauss in the 1820s and generalised by Riemann in 1854, is that 'straight' becomes a property of curves rather than a primitive: a geodesic is the curve that locally minimises arc length, the path you cannot shorten by perturbing it slightly. The same Euler-Lagrange machine the previous lesson built, applied to the right integral, produces an ordinary differential equation for that curve, and with the metric of spacetime substituted in it becomes Einstein's 1915 picture of free fall.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. From Eratosthenes to Riemann: the problem of straightness on a curved surface",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Around 240 BCE Eratosthenes, the librarian at Alexandria, noticed that a vertical stick cast no shadow at noon in Syene (modern Aswan, on the Nile) on the summer solstice, while at the same hour a stick in Alexandria cast a shadow making 7.2° with the vertical. Assuming the sun's rays were parallel, the two cities had to lie on the same meridian separated by 7.2° of latitude, which was one fiftieth of a full circle. Multiplying the surveyed distance between them (about 5,000 stadia) by fifty gave 250,000 stadia for the Earth's circumference, within a few percent of the modern value. The calculation depended on the fact that the Earth's surface bends, and on a definition of 'shortest distance' along that curved surface, the great-circle arc. The word geodesic itself comes from γεωδαισία (geodaisia, Greek for 'earth-measuring'), the trade Eratosthenes had just invented."
+        },
+        {
+          "type": "p",
+          "text": "Sixteen centuries later the problem returned in a far more practical form. Pedro Nunes, the royal cosmographer of Portugal, pointed out in 1537 that a ship holding a constant compass heading does not sail the shortest route between two ports: it sails a rhumb line (or loxodrome, a curve of constant bearing on the sphere), which on Gerardus Mercator's 1569 projection is a straight line and elsewhere is a spiral approaching the pole. The shortest path is the great circle, the arc of the unique circle through the two ports whose centre lies at the centre of the Earth. On the Mercator chart the great circle curves toward the poles, which is why a New-York-to-Tokyo route on the seat-back map of any modern flight bulges over Alaska. By the eighteenth century admiralty navigators carried both: the rhumb for steering, the great circle for planning."
+        },
+        {
+          "type": "p",
+          "text": "The mathematical understanding caught up between 1818 and 1854. Carl Friedrich Gauss spent six summers triangulating the Kingdom of Hannover, an irregular 27,000 km² region, with theodolites and heliotropes; in his 1827 paper Disquisitiones generales circa superficies curvas (general investigations of curved surfaces) he proved the Theorema Egregium (the 'remarkable theorem'), which says that the curvature of a surface is intrinsic, meaning a being living on the surface could measure it without ever stepping off it, simply by checking whether the angles of triangles add up to π. The generalisation was Bernhard Riemann's 1854 inaugural lecture in Göttingen, Über die Hypothesen, welche der Geometrie zu Grunde liegen (on the hypotheses that lie at the foundation of geometry), in which Riemann, then twenty-seven and lecturing at Gauss's request, extended the intrinsic-curvature idea to n-dimensional manifolds with arbitrary smooth ways of measuring distance. From that lecture forward, 'geodesic' meant a specific solution of a specific differential equation, in any dimension, on any manifold."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The arc-length functional and what Euler does to it",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Riemann's definition of a manifold packages a smooth space together with a recipe for measuring infinitesimal distances. Choose local coordinates x^1, x^2, ..., x^n on a neighbourhood. The recipe is a metric tensor, an n×n symmetric matrix g_ij(x) of smooth functions, such that the squared length of an infinitesimal displacement (dx^1, ..., dx^n) is the quadratic form below. We adopt the Einstein summation convention, the bookkeeping convention introduced by Einstein in 1916 that says any index appearing once as an upper and once as a lower index is summed over its range, suppressed Σ-signs and all."
+        },
+        {
+          "type": "math",
+          "tex": "ds^2 = g_{ij}(x)\\, dx^i\\, dx^j",
+          "display": true,
+          "caption": "ds is the infinitesimal arc-length element, the local distance. g_ij(x) is the metric tensor, an n×n symmetric matrix of smooth functions of the coordinates. x^i and x^j are the coordinate displacements, with i and j ranging from 1 to n (the dimension). The right-hand side is summed over i and j by the Einstein convention. On the plane in Cartesian coordinates g_ij is the identity matrix and the formula reduces to Pythagoras."
+        },
+        {
+          "type": "p",
+          "text": "A curve γ on the manifold is a smooth map t → x(t) from a real interval [t_0, t_1] into the coordinate space, with components x^i(t). Its arc length is the integral of ds along it. Substituting ds² from above and pulling out the dt² hidden in the differentials gives the functional L[γ], which depends on the entire curve x^i(t) and returns a single number."
+        },
+        {
+          "type": "math",
+          "tex": "L[\\gamma] = \\int_{t_0}^{t_1} \\sqrt{g_{ij}(x(t))\\, \\dot{x}^i\\, \\dot{x}^j}\\, dt",
+          "display": true,
+          "caption": "L[γ] is the arc-length functional, a number assigned to each candidate curve γ. t is the parameter along the curve, running from t_0 to t_1. x(t) is the position of the curve at parameter value t, with components x^i(t). ẋ^i = dx^i/dt is the i-th component of the velocity along the curve. g_ij(x(t)) is the metric tensor evaluated at the current position. The integrand is the local speed: ds/dt = √(g_ij ẋ^i ẋ^j)."
+        },
+        {
+          "type": "p",
+          "text": "This is exactly the functional shape Euler treated in Methodus inveniendi, only with an integrand F(x, ẋ) that happens to be √(g_ij ẋ^i ẋ^j) rather than the brachistochrone's √((1+y'²)/(2gy)). The previous lesson derived the Euler-Lagrange equation for a single-variable y(x); the multi-variable version is the obvious generalisation: one equation for each coordinate x^k, with k running from 1 to n."
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{\\partial F}{\\partial x^k} - \\frac{d}{dt}\\frac{\\partial F}{\\partial \\dot{x}^k} = 0, \\qquad k = 1, \\ldots, n",
+          "display": true,
+          "caption": "F is the integrand of the functional, here F = √(g_ij ẋ^i ẋ^j). x^k is the k-th coordinate. ẋ^k is its time derivative. ∂F/∂x^k is the partial derivative holding all the other coordinates and all the velocities fixed. ∂F/∂ẋ^k is the partial derivative with respect to the k-th velocity, holding the rest fixed. d/dt is the total derivative along the curve. The system is n coupled second-order ODEs for the n unknown functions x^k(t)."
+        },
+        {
+          "type": "p",
+          "text": "Two simplifications make the calculation manageable. First, the integrand is a square root, which is unpleasant to differentiate. But the curve that extremises L[γ] also extremises the energy functional E[γ] = ½ ∫ g_ij ẋ^i ẋ^j dt (a fact that comes from a quick reparametrisation argument worked out by Hilbert in his 1900 lectures), and E has a polynomial integrand. Second, when you write the answer in terms of arc-length parametrisation (where t = s, so that the speed √(g_ij ẋ^i ẋ^j) equals 1 everywhere along the curve), the equations contract into a particularly clean form, which we unpack in the next section."
+        }
+      ],
+      "quiz": {
+        "question": "The arc-length functional L[γ] and the energy functional E[γ] = ½ ∫ g_ij ẋ^i ẋ^j dt have different integrands. Why does extremising either one give the same curve?",
+        "options": [
+          "L and E are equal numerically for every curve",
+          "L is invariant under reparametrisation of the curve, while E is minimised exactly when the parametrisation has constant speed; combined, the two pick out the same curve as the unparametrised path of stationary arc length",
+          "L is always smaller than E by a fixed constant, so their derivatives match",
+          "E is the square of L and the chain rule makes their stationary points coincide"
+        ],
+        "correctIndex": 1,
+        "explanation": "Reparametrisation invariance is the trick. L[γ] only sees the geometric image of the curve (an arc length is a property of the trace, not the schedule), so any choice of parametrisation gives the same value of L. E[γ] is not reparametrisation-invariant; its value drops if you stretch out a slow segment, and the minimum over all reparametrisations of a given image is achieved when ẋ has constant length (when t is proportional to arc length). For curves with constant-speed parametrisation, E = ½ L² / (t_1 − t_0), so up to that monotone transformation E and L share their stationary points, and both pick out the geodesic. Option (a) is wrong: numerically L and E differ. Option (c) is wrong because no constant offset exists. Option (d) is the right idea (a power relation) but with the wrong exponent and missing the parametrisation step."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Christoffel symbols and the worked sphere",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Carry the Euler-Lagrange calculation through for F = √(g_ij ẋ^i ẋ^j) with arc-length parametrisation, taking partial derivatives of g_ij with respect to coordinates and bookkeeping the indices, and the result is the geodesic equation: a second-order ODE for each coordinate, with a coupling term that depends on how the metric changes from point to point. The coupling coefficients are the Christoffel symbols Γ^k_ij, named for Elwin Christoffel, a Riemann student who introduced them in 1869 to systematise the algebra. They encode how the local notion of 'parallel' twists as you move across the manifold."
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{d^2 x^k}{ds^2} + \\Gamma^k_{ij}\\, \\frac{dx^i}{ds}\\, \\frac{dx^j}{ds} = 0",
+          "display": true,
+          "caption": "x^k(s) is the k-th coordinate of the curve as a function of arc length s. d²x^k/ds² is its second derivative, the acceleration. Γ^k_ij is the Christoffel symbol of the second kind, a coefficient that depends on the metric and the position; the index k is contravariant (upper) and i, j are covariant (lower). dx^i/ds and dx^j/ds are the velocity components. The double sum over i and j is implied by the Einstein convention. The equation says the curve is straight in the sense that its acceleration along the manifold vanishes, after the curvature of the manifold itself is subtracted via the Γ-term."
+        },
+        {
+          "type": "math",
+          "tex": "\\Gamma^k_{ij} = \\tfrac{1}{2}\\, g^{kl} \\left( \\frac{\\partial g_{li}}{\\partial x^j} + \\frac{\\partial g_{lj}}{\\partial x^i} - \\frac{\\partial g_{ij}}{\\partial x^l} \\right)",
+          "display": true,
+          "caption": "Γ^k_ij is the same Christoffel symbol that appears in the geodesic equation. g_ij is the metric tensor. g^{kl} is the inverse metric, the matrix inverse of g_ij (so g^{kl} g_lm = δ^k_m, the Kronecker delta). ∂g_li/∂x^j and the two cousins are the ordinary partial derivatives of the metric components. The index l is summed by the Einstein convention. The formula is the definition; it falls out of the Euler-Lagrange algebra and contains nothing more than the metric and its first derivatives."
+        },
+        {
+          "type": "p",
+          "text": "Work out the simplest non-trivial case. Take the sphere of radius R parametrised by colatitude θ (the angle from the north pole, running 0 to π) and longitude φ (running 0 to 2π). The metric is ds² = R² dθ² + R² sin²θ dφ², so g_{θθ} = R², g_{φφ} = R² sin²θ, g_{θφ} = g_{φθ} = 0. The inverse is g^{θθ} = 1/R², g^{φφ} = 1/(R² sin²θ). Most derivatives ∂g_ij/∂x^k vanish; the only non-vanishing one is ∂g_{φφ}/∂θ = 2 R² sinθ cosθ. Plugging into the Christoffel formula gives Γ^θ_{φφ} = −sinθ cosθ and Γ^φ_{θφ} = Γ^φ_{φθ} = cotθ; every other Γ is zero."
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{d^2 \\theta}{ds^2} - \\sin\\theta \\cos\\theta \\left( \\frac{d\\varphi}{ds} \\right)^2 = 0, \\qquad \\frac{d^2 \\varphi}{ds^2} + 2 \\cot\\theta \\, \\frac{d\\theta}{ds}\\, \\frac{d\\varphi}{ds} = 0",
+          "display": true,
+          "caption": "θ(s) is the colatitude of the curve along arc length s, with values in (0, π). φ(s) is the longitude, with values in (0, 2π). dθ/ds and dφ/ds are their s-derivatives. The non-zero Christoffel symbols on the sphere were computed in the prose above: Γ^θ_φφ = −sinθ cosθ, and Γ^φ_θφ = Γ^φ_φθ = cotθ. These two coupled ODEs are the full geodesic equation on the sphere of radius R; the radius itself drops out because the equations are dimensionless in s/R."
+        },
+        {
+          "type": "p",
+          "text": "Check that this system reproduces what every sailor knew. The equator (θ = π/2 constant, dφ/ds = 1/R, s = R φ) is a solution: the first equation reads 0 − 0 = 0 (sin θ cos θ vanishes at θ = π/2), and the second reads 0 + 0 = 0 (cot θ vanishes at θ = π/2). So the equator is a geodesic. Any meridian (φ = constant, dθ/ds = 1/R, s = R θ) is a solution by inspection: dφ/ds vanishes, killing both coupling terms, and dθ²/ds² vanishes because dθ/ds is constant. The full set of solutions of the system is precisely the great circles (a fact one verifies by rotating any meridian or equator solution; rotations of the sphere preserve the metric and so map geodesics to geodesics). The geodesic-equation machinery agrees with Eratosthenes."
+        },
+        {
+          "type": "viz",
+          "src": "2026-06-18-geodesics.html",
+          "height": 460,
+          "caption": "Two cities at the same latitude (40°N), with one fixed at lon = −74° (New York) and the other movable by the slider. The straight horizontal route stays on the parallel (a rhumb line at heading 90°). The arched route is the great-circle geodesic the equations above pick out, bulging north on the equirectangular chart. The savings in kilometres grow rapidly as the destination moves east; at lon = +116° (Beijing), the geodesic is roughly 5,100 km shorter than the parallel, a 32% saving on a 16,200 km route."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Fermat's principle is a geodesic principle in disguise",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Once you have the geodesic equation in hand, an unexpected old result drops in your lap. Fermat's principle of 1662 says that a ray of light through a medium with position-dependent refractive index n(x, y) extremises the optical path length, the integral of n along its trajectory: ∫n ds_flat, where ds_flat = √(dx² + dy²) is the ordinary Euclidean arc length. The previous lesson on refraction derived Snell's law from this principle; the previous lesson on the calculus of variations rederived it in one line via the Euler-Lagrange equation. The geodesic reading of the same line is sharper. Pull the n inside the square root."
+        },
+        {
+          "type": "math",
+          "tex": "\\int n(x, y)\\, ds_{\\text{flat}} = \\int \\sqrt{n^2(x, y)\\, (dx^2 + dy^2)} = \\int \\sqrt{g^{\\text{opt}}_{ij}\\, dx^i\\, dx^j}",
+          "display": true,
+          "caption": "n(x, y) is the refractive index, a positive smooth function of position. ds_flat = √(dx² + dy²) is the Euclidean line element of the plane. g^opt_ij is the optical metric, defined so g^opt_{xx} = g^opt_{yy} = n²(x, y) and g^opt_{xy} = 0. The final integral is the arc-length functional of section 2 in this metric. Fermat's principle and the geodesic principle are the same statement, with two different metrics on the plane."
+        },
+        {
+          "type": "p",
+          "text": "Light rays are therefore geodesics of the optical metric ds² = n²(x,y) (dx² + dy²), a metric that says 'distances are stretched in regions of high refractive index'. A pencil of light entering a high-n region behaves the way a ship's track behaves entering a high-latitude region: it bends, because the metric has bent. Snell's law is the boundary case of the geodesic equation across an interface where n jumps discontinuously, and the road mirage that pools on hot summer asphalt is the geodesic for a continuously-varying n(z) that drops sharply near the heated surface, sending the light curving up to your eye. Hermann Helmholtz, lecturing in Heidelberg in the 1870s, made exactly this point: optics had been doing differential geometry for two hundred years without anyone calling it that."
+        },
+        {
+          "type": "p",
+          "text": "The analogy mattered historically because it made physicists at the turn of the twentieth century fluent in the Riemannian language ahead of any cosmic application. When Einstein started learning the apparatus from Marcel Grossmann in Zurich in 1912 and 1913 (Grossmann had been a classmate and was now professor of geometry at the ETH; he gave Einstein a six-week crash course on tensors), he could rely on intuition optical engineers had already built. The leap from 'light bends in glass because the optical metric bends' to 'planets fall along curves because the spacetime metric bends' was, conceptually, one substitution of letters."
+        }
+      ],
+      "quiz": {
+        "question": "The optical metric ds² = n²(dx² + dy²) makes Fermat's principle a special case of the geodesic principle on a curved manifold. What is being curved here, given that the underlying plane is still flat in the Cartesian sense?",
+        "options": [
+          "The plane itself, by warping (x, y) into new coordinates",
+          "The Riemannian metric tensor on the plane: the rule that converts coordinate differences into distances is no longer the Euclidean identity; high-n regions act as if locally elongated, and a light ray's geodesic is the shortest path measured by this stretched ruler",
+          "Spacetime, through Einstein's field equations applied to the refractive medium",
+          "The Cartesian coordinates, which become non-orthogonal in a high-index region"
+        ],
+        "correctIndex": 1,
+        "explanation": "The plane stays the plane. What changes is how we measure distance on it, encoded in the position-dependent metric g^opt_ij = n²(x, y) δ_ij. From the metric's point of view, a high-n region is 'far'; the geodesic equation picks the path that minimises the total distance under this new rule, and that path is exactly the one Fermat's principle picks. Option (a) confuses 'coordinates change' with 'metric changes': you keep Cartesian (x, y), but the matrix in the formula ds² = g_ij dx^i dx^j varies with position. Option (c) is wrong because we are doing pre-relativistic optics; no Einstein field equation is invoked. Option (d) is wrong because the metric remains diagonal (g_xy = 0), so the coordinate axes remain orthogonal at every point; only their scale shifts."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Mercury's perihelion: the geodesic equation on a curved spacetime",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Through the 1840s, Urbain Le Verrier at the Paris Observatory had been auditing the orbit of Mercury. Newton's gravity plus the perturbations from every other planet predicted the long-axis of Mercury's ellipse should advance by about 532 arcseconds per century relative to the fixed stars. Observation gave 575. The 43-arcsecond gap was too small to dismiss and stubborn enough that Le Verrier proposed an unseen planet inside Mercury's orbit (provisionally named Vulcan) to account for it; for a decade observers searched and never found it. By 1859 the gap was a known anomaly of the solar system, the only remaining one on Le Verrier's books, and there it sat for fifty-six years."
+        },
+        {
+          "type": "p",
+          "text": "Einstein arrived at the answer in November 1915. The field equations of general relativity, completed that month after eight years of struggle, say that the metric of spacetime is curved by the energy and momentum present in it (the matter, including the matter's own gravitational field as a sort of self-reference). Karl Schwarzschild, a forty-one-year-old artillery officer on the Russian front, read Einstein's papers in December and within six weeks had solved the equations exactly for the metric outside a static spherical mass; the solution carries his name. The Schwarzschild metric is, in the standard (t, r, θ, φ) coordinates Schwarzschild used, the line element below."
+        },
+        {
+          "type": "math",
+          "tex": "ds^2 = -\\left(1 - \\frac{2GM}{c^2 r}\\right) c^2 dt^2 + \\left(1 - \\frac{2GM}{c^2 r}\\right)^{-1} dr^2 + r^2 d\\theta^2 + r^2 \\sin^2\\theta\\, d\\varphi^2",
+          "display": true,
+          "caption": "ds² is the squared spacetime line element, now of mixed sign (the minus on the dt² term is the Lorentzian signature). t is the time coordinate measured at infinity. r is the areal radial coordinate, defined so a sphere at fixed r has area 4πr². θ is colatitude, φ is longitude, as on the sphere of section 3. G is Newton's gravitational constant. M is the central mass. c is the speed of light. The combination 2GM/c² is the Schwarzschild radius, the radius at which the metric coefficient changes sign; for the Sun it is about 3 km, deep inside the surface."
+        },
+        {
+          "type": "p",
+          "text": "Apply the same geodesic equation to this metric and a planet's orbit comes out as a curve x^μ(τ) (with τ the proper time, the relativistic analogue of arc length) that no longer closes after one revolution. Solving the geodesic equation in the Schwarzschild metric to first non-trivial order in (GM/c²r), a calculation Einstein did himself in late November 1915 using Le Verrier's tabulated orbital elements, gives a perihelion advance per orbit of Δφ = 6πGM/(c²a(1−e²)), with a the semi-major axis and e the eccentricity. Plug in Mercury's numbers (a = 5.79×10¹⁰ m, e = 0.2056) and convert to a century, and the answer is 42.98 arcseconds per century. Le Verrier's gap, to three significant figures, accounted for by a single substitution into the same Euler-Lagrange machinery."
+        },
+        {
+          "type": "p",
+          "text": "Light too travels on geodesics of the Schwarzschild metric, the null kind (ds² = 0). Eddington's 1919 expedition split into two teams (one to Príncipe in West Africa, one to Sobral in Brazil) to photograph the field of stars near the limb of the totally eclipsed Sun, and the measured deflection (1.61 arcseconds at Sobral, 1.98 at Príncipe) matched Einstein's prediction (1.75) at the level of measurement precision the cloudy day allowed. The Pound-Rebka experiment in the Harvard tower in 1959 confirmed gravitational time dilation directly, by sensing the Mössbauer shift of 14.4 keV γ-rays from ⁵⁷Fe over a 22.5 m vertical drop; the GPS constellation today applies the relativistic geodesic correction at the nanosecond level continuously, because without it your phone's location would drift by about ten kilometres a day."
+        },
+        {
+          "type": "p",
+          "text": "This is the one historical case to remember from this lesson: a 43-arcsecond gap in Mercury's orbit, untouched for fifty-six years, closed in a single afternoon by recognising the planet's path as a geodesic of a curved metric instead of a Newtonian ellipse in a flat space. Methodus inveniendi (1744) had supplied the variational machine. Disquisitiones generales (1827) had recognised that curvature is intrinsic. Über die Hypothesen (1854) had generalised to arbitrary metrics in arbitrary dimensions. By 1915 nothing remained except to pick which metric the universe was actually using, and Einstein found it. From Eratosthenes' shadow stick to GPS, the chain is one differential equation deep."
+        }
+      ]
+    }
+  ],
+  "checkInAfter": [1, 3],
+  "finalQuiz": {
+    "question": "The lesson presents three problems that each reduce to the geodesic equation d²x^k/ds² + Γ^k_ij (dx^i/ds)(dx^j/ds) = 0: great circles on a sphere, light rays in a refractive medium, and planetary orbits in Schwarzschild spacetime. What single feature of each problem makes the geodesic equation applicable, in each case?",
+    "options": [
+      "All three are problems on flat manifolds, where Γ^k_ij happens to vanish",
+      "All three are settings where a metric tensor g_ij defines arc length, and the curve being sought extremises that arc length; the geodesic equation is the Euler-Lagrange equation of the arc-length functional, regardless of what the metric specifically is",
+      "All three problems can be solved by separation of variables in spherical coordinates",
+      "All three are limits of the brachistochrone for different choices of the speed function v(y)"
+    ],
+    "correctIndex": 1,
+    "explanation": "The metric supplies arc length; the Euler-Lagrange equation supplies the ODE. On the sphere the metric is the round metric R²(dθ² + sin²θ dφ²); in optics it is the conformal metric n²(dx² + dy²); in Schwarzschild spacetime it is the Lorentzian metric with the (1 − 2GM/c²r) coefficients. In each case 'the curve that extremises ∫ds' is the geodesic, and computing what curve that is reduces to the same indexed second-order ODE with the same Γ-formula. Option (a) is the opposite of right: on the sphere and in Schwarzschild spacetime the Christoffel symbols are emphatically non-zero, and that is what bends the curve. Option (c) is a coincidence of coordinate choice in two of the three problems, not the underlying structure. Option (d) tries to fold everything into the brachistochrone, which is a single problem in flat plane with a particular speed function and does not generalise this way."
+  },
+  "suggestedNodes": [
+    { "id": "riemannian_metric", "label": "Riemann metric", "subtitle": "g_ij(x)", "edgeType": "extends" },
+    { "id": "schwarzschild_metric", "label": "Schwarzschild", "subtitle": "static BH metric", "edgeType": "applied" },
+    { "id": "parallel_transport", "label": "Parallel xport", "subtitle": "∇_X Y = 0", "edgeType": "related" }
+  ],
+  "metadata": {
+    "estimatedReadingMinutes": 25,
+    "generatedAt": "2026-06-18T09:00:00Z",
+    "generatedBy": "routine-claude-code"
+  }
+}

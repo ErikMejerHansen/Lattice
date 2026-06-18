@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Geodesic vs parallel between two cities at 40°N</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); min-height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 72px; text-align: right;
+}
+#viz { padding: 14px 16px 10px; box-sizing: border-box; }
+.map svg {
+  width: 100%; height: auto; display: block;
+  background: var(--bg-raised); border: 1px solid var(--border);
+}
+.legend {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  font-size: 11px; color: var(--text-muted); margin-top: 6px;
+}
+.legend .swatch {
+  display: inline-block; width: 18px; height: 0;
+  border-top-width: 2px; vertical-align: middle; margin-right: 5px;
+}
+.controls { margin-top: 10px; }
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); margin-top: 8px;
+  display: flex; flex-wrap: wrap; gap: 14px;
+}
+.readout span.lbl { color: var(--text-muted); }
+.readout .item { display: flex; gap: 5px; align-items: baseline; }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div class="map">
+    <svg id="map" viewBox="0 0 640 320" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+  </div>
+  <div class="legend">
+    <span><span class="swatch" style="border-top: 2px solid var(--text-ghost);"></span>parallel at 40°N (constant bearing east, the rhumb route)</span>
+    <span><span class="swatch" style="border-top: 2px solid var(--accent);"></span>great circle (the geodesic)</span>
+  </div>
+
+  <div class="controls">
+    <div class="viz-slider-row">
+      <label for="lonSlider">B lon</label>
+      <input id="lonSlider" type="range" min="-30" max="140" step="0.5" value="0">
+      <span class="value" id="lonVal">0.0°E</span>
+    </div>
+    <div class="readout">
+      <div class="item"><span class="lbl">parallel</span><span id="rhumbKm">0</span><span class="lbl">km</span></div>
+      <div class="item"><span class="lbl">geodesic</span><span id="geoKm">0</span><span class="lbl">km</span></div>
+      <div class="item"><span class="lbl">savings</span><span id="savKm">0</span><span class="lbl">km</span></div>
+      <div class="item"><span class="lbl">savings</span><span id="savPct">0</span><span class="lbl">%</span></div>
+    </div>
+  </div>
+
+  <div class="viz-caption" style="margin-top: 10px;">
+    City A fixed at 40°N, 74°W (New York). City B at 40°N, slider longitude (Madrid sits at lon ≈ −4°; Beijing at lon ≈ +116°). The two paths leave A in different compass directions: the parallel heads due east, the great circle heads roughly northeast and the geodesic arc bends back down to the same latitude at B. The further apart the cities, the further north the geodesic strays and the larger the savings.
+  </div>
+</div>
+
+<script>
+(function () {
+  var R = 6371;
+  var DEG = Math.PI / 180;
+  var W = 640, H = 320;
+
+  var latA = 40 * DEG;
+  var lonA = -74 * DEG;
+
+  function toVec(lat, lon) {
+    return [Math.cos(lat) * Math.cos(lon), Math.cos(lat) * Math.sin(lon), Math.sin(lat)];
+  }
+  function fromVec(v) {
+    return [Math.asin(Math.max(-1, Math.min(1, v[2]))), Math.atan2(v[1], v[0])];
+  }
+
+  function projX(lonRad) {
+    var d = lonRad / DEG;
+    return ((d + 180) / 360) * W;
+  }
+  function projY(latRad) {
+    var d = latRad / DEG;
+    return ((90 - d) / 180) * H;
+  }
+
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  function svgEl(name, attrs, text) {
+    var el = document.createElementNS(SVG_NS, name);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    if (text != null) el.textContent = text;
+    return el;
+  }
+
+  var mapSvg = document.getElementById('map');
+  var lonSlider = document.getElementById('lonSlider');
+  var lonVal = document.getElementById('lonVal');
+  var rhumbKmEl = document.getElementById('rhumbKm');
+  var geoKmEl = document.getElementById('geoKm');
+  var savKmEl = document.getElementById('savKm');
+  var savPctEl = document.getElementById('savPct');
+
+  function drawStatic(g) {
+    for (var lon = -180; lon <= 180; lon += 30) {
+      g.appendChild(svgEl('line', {
+        x1: projX(lon * DEG), y1: 0, x2: projX(lon * DEG), y2: H,
+        stroke: 'var(--border)', 'stroke-width': '0.8'
+      }));
+    }
+    for (var lat = -90; lat <= 90; lat += 30) {
+      g.appendChild(svgEl('line', {
+        x1: 0, y1: projY(lat * DEG), x2: W, y2: projY(lat * DEG),
+        stroke: 'var(--border)', 'stroke-width': '0.8'
+      }));
+    }
+    g.appendChild(svgEl('line', {
+      x1: 0, y1: projY(0), x2: W, y2: projY(0),
+      stroke: 'var(--border-strong)', 'stroke-width': '1.1'
+    }));
+    g.appendChild(svgEl('line', {
+      x1: 0, y1: projY(latA), x2: W, y2: projY(latA),
+      stroke: 'var(--text-ghost)', 'stroke-width': '0.8',
+      'stroke-dasharray': '2 4'
+    }));
+    var eqLab = svgEl('text', {
+      x: 4, y: projY(0) - 4, 'font-size': '9.5',
+      fill: 'var(--text-muted)', 'font-style': 'italic'
+    }, 'equator');
+    g.appendChild(eqLab);
+    var pLab = svgEl('text', {
+      x: 4, y: projY(latA) - 4, 'font-size': '9.5',
+      fill: 'var(--text-muted)', 'font-style': 'italic'
+    }, '40°N');
+    g.appendChild(pLab);
+    var lonNeg90 = svgEl('text', {
+      x: projX(-90 * DEG) + 3, y: H - 4, 'font-size': '9.5',
+      fill: 'var(--text-muted)'
+    }, '90°W');
+    g.appendChild(lonNeg90);
+    var lonZero = svgEl('text', {
+      x: projX(0) + 3, y: H - 4, 'font-size': '9.5',
+      fill: 'var(--text-muted)'
+    }, '0°');
+    g.appendChild(lonZero);
+    var lonPos90 = svgEl('text', {
+      x: projX(90 * DEG) + 3, y: H - 4, 'font-size': '9.5',
+      fill: 'var(--text-muted)'
+    }, '90°E');
+    g.appendChild(lonPos90);
+  }
+
+  function pathD(points) {
+    var d = '';
+    for (var i = 0; i < points.length; i++) {
+      d += (i === 0 ? 'M' : 'L') + projX(points[i][1]).toFixed(2)
+        + ',' + projY(points[i][0]).toFixed(2);
+    }
+    return d;
+  }
+
+  function geodesicPath(lonBRad, n) {
+    var A = toVec(latA, lonA);
+    var B = toVec(latA, lonBRad);
+    var dot = A[0] * B[0] + A[1] * B[1] + A[2] * B[2];
+    dot = Math.max(-1, Math.min(1, dot));
+    var arc = Math.acos(dot);
+    if (arc < 1e-9) return { points: [[latA, lonA]], lengthKm: 0 };
+    var tx = B[0] - dot * A[0];
+    var ty = B[1] - dot * A[1];
+    var tz = B[2] - dot * A[2];
+    var tn = Math.sqrt(tx * tx + ty * ty + tz * tz);
+    var t = [tx / tn, ty / tn, tz / tn];
+    var pts = [];
+    for (var i = 0; i <= n; i++) {
+      var alpha = (i / n) * arc;
+      var ca = Math.cos(alpha), sa = Math.sin(alpha);
+      var r0 = A[0] * ca + t[0] * sa;
+      var r1 = A[1] * ca + t[1] * sa;
+      var r2 = A[2] * ca + t[2] * sa;
+      pts.push(fromVec([r0, r1, r2]));
+    }
+    return { points: pts, lengthKm: R * arc };
+  }
+
+  function parallelPath(lonBRad, n) {
+    var pts = [];
+    for (var i = 0; i <= n; i++) {
+      var lon = lonA + (i / n) * (lonBRad - lonA);
+      pts.push([latA, lon]);
+    }
+    return { points: pts, lengthKm: R * Math.cos(latA) * Math.abs(lonBRad - lonA) };
+  }
+
+  function fmt(n) {
+    return Math.round(n).toLocaleString('en-US');
+  }
+  function fmtLon(deg) {
+    if (Math.abs(deg) < 0.05) return '0.0°';
+    return Math.abs(deg).toFixed(1) + '°' + (deg >= 0 ? 'E' : 'W');
+  }
+
+  drawStatic(mapSvg);
+
+  var rhumbPath = svgEl('path', {
+    d: '', fill: 'none',
+    stroke: 'var(--text-ghost)', 'stroke-width': '2.5'
+  });
+  mapSvg.appendChild(rhumbPath);
+
+  var geoPath = svgEl('path', {
+    d: '', fill: 'none',
+    stroke: 'var(--accent)', 'stroke-width': '2.5'
+  });
+  mapSvg.appendChild(geoPath);
+
+  var dotA = svgEl('circle', {
+    cx: projX(lonA), cy: projY(latA), r: 4,
+    fill: 'var(--accent)', stroke: 'var(--bg-raised)', 'stroke-width': '1.5'
+  });
+  mapSvg.appendChild(dotA);
+  var dotALab = svgEl('text', {
+    x: projX(lonA) - 6, y: projY(latA) + 14, 'font-size': '10.5',
+    fill: 'var(--text)', 'text-anchor': 'end'
+  }, 'A: NY (40°N, 74°W)');
+  mapSvg.appendChild(dotALab);
+
+  var dotB = svgEl('circle', {
+    cx: projX(0), cy: projY(latA), r: 4,
+    fill: 'var(--accent)', stroke: 'var(--bg-raised)', 'stroke-width': '1.5'
+  });
+  mapSvg.appendChild(dotB);
+  var dotBLab = svgEl('text', {
+    x: projX(0) + 7, y: projY(latA) + 14, 'font-size': '10.5',
+    fill: 'var(--text)'
+  }, 'B');
+  mapSvg.appendChild(dotBLab);
+
+  function update() {
+    var lonBDeg = parseFloat(lonSlider.value);
+    var lonBRad = lonBDeg * DEG;
+    lonVal.textContent = fmtLon(lonBDeg);
+
+    var g = geodesicPath(lonBRad, 120);
+    var p = parallelPath(lonBRad, 60);
+    geoPath.setAttribute('d', pathD(g.points));
+    rhumbPath.setAttribute('d', pathD(p.points));
+
+    dotB.setAttribute('cx', projX(lonBRad));
+    dotBLab.setAttribute('x', projX(lonBRad) + 7);
+
+    rhumbKmEl.textContent = fmt(p.lengthKm);
+    geoKmEl.textContent = fmt(g.lengthKm);
+    var sav = p.lengthKm - g.lengthKm;
+    savKmEl.textContent = fmt(sav);
+    var pct = p.lengthKm > 0 ? 100 * sav / p.lengthKm : 0;
+    savPctEl.textContent = pct.toFixed(1);
+  }
+
+  lonSlider.addEventListener('input', update);
+  update();
+})();
+</script>
+</body>
+</html>

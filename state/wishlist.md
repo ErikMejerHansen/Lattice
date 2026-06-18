@@ -9,9 +9,13 @@
 # auto-suggested 2026-05-10 from principle-of-least-action
 
 # auto-suggested 2026-06-18 from calculus-of-variations
-Geodesics — the variational definition of "straight line" on a curved surface: minimize ∫√(g_ij dx^i dx^j), the Euler equation becomes the geodesic ODE with Christoffel symbols, the same machine carrying optics into general relativity
 Minimal surfaces — Lagrange 1762 wrote down the H = 0 PDE by Euler's method, Plateau 1849 verified it experimentally with soap films, Douglas 1931 proved existence for arbitrary Jordan boundaries by Tonelli's direct method and was awarded the first Fields Medal in 1936
 Direct method of variations — Tonelli 1915, the lower-semicontinuity + weak-compactness machine that proves a variational minimum actually exists, the rigorous answer to Hilbert's 23rd problem and the standard tool of modern PDE
+
+# auto-suggested 2026-06-18 from geodesics
+Riemannian metric — g_ij(x) as the smooth assignment of inner products to tangent spaces, Riemann's 1854 generalisation of Gauss's intrinsic-curvature programme to arbitrary smooth manifolds in arbitrary dimensions, and the algebraic object every general-relativity calculation begins by writing down
+Schwarzschild metric — Karl Schwarzschild's January-1916 closed-form solution to Einstein's vacuum field equations outside a static spherical mass, the (1 − 2GM/c²r) line element that produced Mercury's perihelion to four-figure precision and predicts every black-hole geodesic outside the event horizon
+Parallel transport — the differential-geometric sibling that defines "straight" without a variational principle: keep a vector pointing the same way as you carry it along a curve by demanding ∇_X V = 0, and the curves whose tangent parallel-transports itself are exactly the geodesics, the equivalence that gives the geodesic equation its connection-form derivation
 
 # auto-suggested 2026-05-11 from total-internal-reflection
 Evanescent wave — the exp(-z/d) field that lives in the medium where no ray penetrates, and why a wavelength-thin gap can leak energy across it

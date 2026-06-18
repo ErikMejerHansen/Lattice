@@ -479,134 +479,663 @@
       "createdAt": "2026-06-18T08:00:00Z",
       "col": 1,
       "row": 23
+    },
+    {
+      "id": "geodesics",
+      "label": "Geodesics",
+      "subtitle": "δ∫ds = 0",
+      "state": "available",
+      "lesson": "2026-06-18-geodesics",
+      "createdAt": "2026-06-18T09:00:00Z",
+      "col": 0,
+      "row": 24
     }
   ],
   "edges": [
-    { "from": "photon_energy", "to": "wavelength", "kind": "extends" },
-    { "from": "blackbody", "to": "photon_energy", "kind": "extends" },
-    { "from": "blackbody", "to": "wavelength", "kind": "related" },
-    { "from": "wien_displacement", "to": "blackbody", "kind": "extends" },
-    { "from": "wien_displacement", "to": "wavelength", "kind": "applied" },
-    { "from": "interference_diffraction", "to": "wavelength", "kind": "extends" },
-    { "from": "interference_diffraction", "to": "photon_energy", "kind": "related" },
-    { "from": "refraction", "to": "wavelength", "kind": "related" },
-    { "from": "refraction", "to": "interference_diffraction", "kind": "related" },
-    { "from": "photoelectric_effect", "to": "photon_energy", "kind": "extends" },
-    { "from": "photoelectric_effect", "to": "blackbody", "kind": "related" },
-    { "from": "wave_particle_duality", "to": "photon_energy", "kind": "extends" },
-    { "from": "wave_particle_duality", "to": "photoelectric_effect", "kind": "extends" },
-    { "from": "wave_particle_duality", "to": "interference_diffraction", "kind": "applied" },
-    { "from": "stefan_boltzmann", "to": "blackbody", "kind": "extends" },
-    { "from": "stefan_boltzmann", "to": "wien_displacement", "kind": "related" },
-    { "from": "cmb", "to": "blackbody", "kind": "extends" },
-    { "from": "cmb", "to": "wien_displacement", "kind": "applied" },
-    { "from": "cmb", "to": "stefan_boltzmann", "kind": "related" },
-    { "from": "stellar_classification", "to": "wien_displacement", "kind": "extends" },
-    { "from": "stellar_classification", "to": "blackbody", "kind": "related" },
-    { "from": "stellar_classification", "to": "stefan_boltzmann", "kind": "applied" },
-    { "from": "color_temperature", "to": "wien_displacement", "kind": "extends" },
-    { "from": "color_temperature", "to": "blackbody", "kind": "related" },
-    { "from": "spectroscopy_basics", "to": "photon_energy", "kind": "extends" },
-    { "from": "spectroscopy_basics", "to": "wavelength", "kind": "extends" },
-    { "from": "spectroscopy_basics", "to": "stellar_classification", "kind": "related" },
-    { "from": "coherence", "to": "interference_diffraction", "kind": "extends" },
-    { "from": "coherence", "to": "wavelength", "kind": "related" },
-    { "from": "coherence", "to": "wave_particle_duality", "kind": "related" },
-    { "from": "diffraction_gratings", "to": "interference_diffraction", "kind": "extends" },
-    { "from": "diffraction_gratings", "to": "wavelength", "kind": "applied" },
-    { "from": "diffraction_gratings", "to": "spectroscopy_basics", "kind": "related" },
-    { "from": "least_action", "to": "refraction", "kind": "extends" },
-    { "from": "least_action", "to": "wave_particle_duality", "kind": "related" },
-    { "from": "least_action", "to": "photon_energy", "kind": "related" },
-    { "from": "total_internal_reflection", "to": "refraction", "kind": "extends" },
-    { "from": "total_internal_reflection", "to": "wavelength", "kind": "related" },
-    { "from": "dispersion", "to": "refraction", "kind": "extends" },
-    { "from": "dispersion", "to": "wavelength", "kind": "related" },
-    { "from": "dispersion", "to": "diffraction_gratings", "kind": "related" },
-    { "from": "compton_scattering", "to": "photon_energy", "kind": "extends" },
-    { "from": "compton_scattering", "to": "photoelectric_effect", "kind": "related" },
-    { "from": "compton_scattering", "to": "wave_particle_duality", "kind": "related" },
-    { "from": "work_function", "to": "photoelectric_effect", "kind": "extends" },
-    { "from": "work_function", "to": "photon_energy", "kind": "related" },
-    { "from": "schrodinger_equation", "to": "wave_particle_duality", "kind": "extends" },
-    { "from": "schrodinger_equation", "to": "photon_energy", "kind": "related" },
-    { "from": "uncertainty_principle", "to": "schrodinger_equation", "kind": "extends" },
-    { "from": "uncertainty_principle", "to": "wave_particle_duality", "kind": "extends" },
-    { "from": "uncertainty_principle", "to": "compton_scattering", "kind": "related" },
-    { "from": "bohr_atom", "to": "wave_particle_duality", "kind": "extends" },
-    { "from": "bohr_atom", "to": "photon_energy", "kind": "extends" },
-    { "from": "bohr_atom", "to": "spectroscopy_basics", "kind": "applied" },
-    { "from": "planetary_equilibrium", "to": "stefan_boltzmann", "kind": "applied" },
-    { "from": "planetary_equilibrium", "to": "blackbody", "kind": "related" },
-    { "from": "planetary_equilibrium", "to": "wien_displacement", "kind": "related" },
-    { "from": "stellar_luminosity", "to": "stefan_boltzmann", "kind": "extends" },
-    { "from": "stellar_luminosity", "to": "blackbody", "kind": "applied" },
-    { "from": "stellar_luminosity", "to": "stellar_classification", "kind": "related" },
-    { "from": "greenhouse_effect", "to": "planetary_equilibrium", "kind": "extends" },
-    { "from": "greenhouse_effect", "to": "stefan_boltzmann", "kind": "applied" },
-    { "from": "greenhouse_effect", "to": "wien_displacement", "kind": "related" },
-    { "from": "recombination", "to": "cmb", "kind": "extends" },
-    { "from": "recombination", "to": "bohr_atom", "kind": "applied" },
-    { "from": "recombination", "to": "blackbody", "kind": "related" },
-    { "from": "cosmic_redshift", "to": "wavelength", "kind": "extends" },
-    { "from": "cosmic_redshift", "to": "cmb", "kind": "applied" },
-    { "from": "cosmic_redshift", "to": "recombination", "kind": "related" },
-    { "from": "cmb_anisotropies", "to": "cmb", "kind": "extends" },
-    { "from": "cmb_anisotropies", "to": "recombination", "kind": "applied" },
-    { "from": "cmb_anisotropies", "to": "cosmic_redshift", "kind": "related" },
-    { "from": "saha_ionization", "to": "stellar_classification", "kind": "extends" },
-    { "from": "saha_ionization", "to": "bohr_atom", "kind": "applied" },
-    { "from": "saha_ionization", "to": "spectroscopy_basics", "kind": "related" },
-    { "from": "hr_diagram", "to": "stellar_classification", "kind": "extends" },
-    { "from": "hr_diagram", "to": "stellar_luminosity", "kind": "applied" },
-    { "from": "hr_diagram", "to": "wien_displacement", "kind": "related" },
-    { "from": "balmer_series", "to": "bohr_atom", "kind": "extends" },
-    { "from": "balmer_series", "to": "spectroscopy_basics", "kind": "extends" },
-    { "from": "balmer_series", "to": "stellar_classification", "kind": "applied" },
-    { "from": "color_rendering_index", "to": "color_temperature", "kind": "extends" },
-    { "from": "color_rendering_index", "to": "blackbody", "kind": "related" },
-    { "from": "color_rendering_index", "to": "wavelength", "kind": "related" },
-    { "from": "chromaticity_diagram", "to": "color_temperature", "kind": "extends" },
-    { "from": "chromaticity_diagram", "to": "color_rendering_index", "kind": "related" },
-    { "from": "chromaticity_diagram", "to": "wavelength", "kind": "related" },
-    { "from": "metamerism", "to": "chromaticity_diagram", "kind": "extends" },
-    { "from": "metamerism", "to": "color_rendering_index", "kind": "related" },
-    { "from": "metamerism", "to": "spectroscopy_basics", "kind": "related" },
-    { "from": "doppler_spectroscopy", "to": "spectroscopy_basics", "kind": "extends" },
-    { "from": "doppler_spectroscopy", "to": "wavelength", "kind": "related" },
-    { "from": "doppler_spectroscopy", "to": "cosmic_redshift", "kind": "related" },
-    { "from": "stimulated_emission", "to": "blackbody", "kind": "extends" },
-    { "from": "stimulated_emission", "to": "coherence", "kind": "extends" },
-    { "from": "stimulated_emission", "to": "photon_energy", "kind": "related" },
-    { "from": "michelson_interferometer", "to": "interference_diffraction", "kind": "extends" },
-    { "from": "michelson_interferometer", "to": "coherence", "kind": "extends" },
-    { "from": "michelson_interferometer", "to": "wavelength", "kind": "applied" },
-    { "from": "photon_bunching", "to": "coherence", "kind": "extends" },
-    { "from": "photon_bunching", "to": "stimulated_emission", "kind": "related" },
-    { "from": "photon_bunching", "to": "photoelectric_effect", "kind": "related" },
-    { "from": "rowland_grating", "to": "diffraction_gratings", "kind": "extends" },
-    { "from": "rowland_grating", "to": "spectroscopy_basics", "kind": "applied" },
-    { "from": "rowland_grating", "to": "balmer_series", "kind": "related" },
-    { "from": "echelle_spectrograph", "to": "rowland_grating", "kind": "extends" },
-    { "from": "echelle_spectrograph", "to": "diffraction_gratings", "kind": "extends" },
-    { "from": "echelle_spectrograph", "to": "doppler_spectroscopy", "kind": "applied" },
-    { "from": "helium_discovery", "to": "spectroscopy_basics", "kind": "extends" },
-    { "from": "helium_discovery", "to": "balmer_series", "kind": "related" },
-    { "from": "helium_discovery", "to": "rowland_grating", "kind": "applied" },
-    { "from": "lagrangian_mechanics", "to": "least_action", "kind": "extends" },
-    { "from": "lagrangian_mechanics", "to": "refraction", "kind": "related" },
-    { "from": "noethers_theorem", "to": "lagrangian_mechanics", "kind": "extends" },
-    { "from": "noethers_theorem", "to": "least_action", "kind": "extends" },
-    { "from": "brachistochrone", "to": "least_action", "kind": "extends" },
-    { "from": "brachistochrone", "to": "lagrangian_mechanics", "kind": "applied" },
-    { "from": "brachistochrone", "to": "refraction", "kind": "related" },
-    { "from": "tautochrone", "to": "brachistochrone", "kind": "extends" },
-    { "from": "tautochrone", "to": "least_action", "kind": "related" },
-    { "from": "catenary", "to": "least_action", "kind": "extends" },
-    { "from": "catenary", "to": "lagrangian_mechanics", "kind": "applied" },
-    { "from": "catenary", "to": "brachistochrone", "kind": "related" },
-    { "from": "calculus_of_variations", "to": "least_action", "kind": "extends" },
-    { "from": "calculus_of_variations", "to": "brachistochrone", "kind": "applied" },
-    { "from": "calculus_of_variations", "to": "catenary", "kind": "related" }
+    {
+      "from": "photon_energy",
+      "to": "wavelength",
+      "kind": "extends"
+    },
+    {
+      "from": "blackbody",
+      "to": "photon_energy",
+      "kind": "extends"
+    },
+    {
+      "from": "blackbody",
+      "to": "wavelength",
+      "kind": "related"
+    },
+    {
+      "from": "wien_displacement",
+      "to": "blackbody",
+      "kind": "extends"
+    },
+    {
+      "from": "wien_displacement",
+      "to": "wavelength",
+      "kind": "applied"
+    },
+    {
+      "from": "interference_diffraction",
+      "to": "wavelength",
+      "kind": "extends"
+    },
+    {
+      "from": "interference_diffraction",
+      "to": "photon_energy",
+      "kind": "related"
+    },
+    {
+      "from": "refraction",
+      "to": "wavelength",
+      "kind": "related"
+    },
+    {
+      "from": "refraction",
+      "to": "interference_diffraction",
+      "kind": "related"
+    },
+    {
+      "from": "photoelectric_effect",
+      "to": "photon_energy",
+      "kind": "extends"
+    },
+    {
+      "from": "photoelectric_effect",
+      "to": "blackbody",
+      "kind": "related"
+    },
+    {
+      "from": "wave_particle_duality",
+      "to": "photon_energy",
+      "kind": "extends"
+    },
+    {
+      "from": "wave_particle_duality",
+      "to": "photoelectric_effect",
+      "kind": "extends"
+    },
+    {
+      "from": "wave_particle_duality",
+      "to": "interference_diffraction",
+      "kind": "applied"
+    },
+    {
+      "from": "stefan_boltzmann",
+      "to": "blackbody",
+      "kind": "extends"
+    },
+    {
+      "from": "stefan_boltzmann",
+      "to": "wien_displacement",
+      "kind": "related"
+    },
+    {
+      "from": "cmb",
+      "to": "blackbody",
+      "kind": "extends"
+    },
+    {
+      "from": "cmb",
+      "to": "wien_displacement",
+      "kind": "applied"
+    },
+    {
+      "from": "cmb",
+      "to": "stefan_boltzmann",
+      "kind": "related"
+    },
+    {
+      "from": "stellar_classification",
+      "to": "wien_displacement",
+      "kind": "extends"
+    },
+    {
+      "from": "stellar_classification",
+      "to": "blackbody",
+      "kind": "related"
+    },
+    {
+      "from": "stellar_classification",
+      "to": "stefan_boltzmann",
+      "kind": "applied"
+    },
+    {
+      "from": "color_temperature",
+      "to": "wien_displacement",
+      "kind": "extends"
+    },
+    {
+      "from": "color_temperature",
+      "to": "blackbody",
+      "kind": "related"
+    },
+    {
+      "from": "spectroscopy_basics",
+      "to": "photon_energy",
+      "kind": "extends"
+    },
+    {
+      "from": "spectroscopy_basics",
+      "to": "wavelength",
+      "kind": "extends"
+    },
+    {
+      "from": "spectroscopy_basics",
+      "to": "stellar_classification",
+      "kind": "related"
+    },
+    {
+      "from": "coherence",
+      "to": "interference_diffraction",
+      "kind": "extends"
+    },
+    {
+      "from": "coherence",
+      "to": "wavelength",
+      "kind": "related"
+    },
+    {
+      "from": "coherence",
+      "to": "wave_particle_duality",
+      "kind": "related"
+    },
+    {
+      "from": "diffraction_gratings",
+      "to": "interference_diffraction",
+      "kind": "extends"
+    },
+    {
+      "from": "diffraction_gratings",
+      "to": "wavelength",
+      "kind": "applied"
+    },
+    {
+      "from": "diffraction_gratings",
+      "to": "spectroscopy_basics",
+      "kind": "related"
+    },
+    {
+      "from": "least_action",
+      "to": "refraction",
+      "kind": "extends"
+    },
+    {
+      "from": "least_action",
+      "to": "wave_particle_duality",
+      "kind": "related"
+    },
+    {
+      "from": "least_action",
+      "to": "photon_energy",
+      "kind": "related"
+    },
+    {
+      "from": "total_internal_reflection",
+      "to": "refraction",
+      "kind": "extends"
+    },
+    {
+      "from": "total_internal_reflection",
+      "to": "wavelength",
+      "kind": "related"
+    },
+    {
+      "from": "dispersion",
+      "to": "refraction",
+      "kind": "extends"
+    },
+    {
+      "from": "dispersion",
+      "to": "wavelength",
+      "kind": "related"
+    },
+    {
+      "from": "dispersion",
+      "to": "diffraction_gratings",
+      "kind": "related"
+    },
+    {
+      "from": "compton_scattering",
+      "to": "photon_energy",
+      "kind": "extends"
+    },
+    {
+      "from": "compton_scattering",
+      "to": "photoelectric_effect",
+      "kind": "related"
+    },
+    {
+      "from": "compton_scattering",
+      "to": "wave_particle_duality",
+      "kind": "related"
+    },
+    {
+      "from": "work_function",
+      "to": "photoelectric_effect",
+      "kind": "extends"
+    },
+    {
+      "from": "work_function",
+      "to": "photon_energy",
+      "kind": "related"
+    },
+    {
+      "from": "schrodinger_equation",
+      "to": "wave_particle_duality",
+      "kind": "extends"
+    },
+    {
+      "from": "schrodinger_equation",
+      "to": "photon_energy",
+      "kind": "related"
+    },
+    {
+      "from": "uncertainty_principle",
+      "to": "schrodinger_equation",
+      "kind": "extends"
+    },
+    {
+      "from": "uncertainty_principle",
+      "to": "wave_particle_duality",
+      "kind": "extends"
+    },
+    {
+      "from": "uncertainty_principle",
+      "to": "compton_scattering",
+      "kind": "related"
+    },
+    {
+      "from": "bohr_atom",
+      "to": "wave_particle_duality",
+      "kind": "extends"
+    },
+    {
+      "from": "bohr_atom",
+      "to": "photon_energy",
+      "kind": "extends"
+    },
+    {
+      "from": "bohr_atom",
+      "to": "spectroscopy_basics",
+      "kind": "applied"
+    },
+    {
+      "from": "planetary_equilibrium",
+      "to": "stefan_boltzmann",
+      "kind": "applied"
+    },
+    {
+      "from": "planetary_equilibrium",
+      "to": "blackbody",
+      "kind": "related"
+    },
+    {
+      "from": "planetary_equilibrium",
+      "to": "wien_displacement",
+      "kind": "related"
+    },
+    {
+      "from": "stellar_luminosity",
+      "to": "stefan_boltzmann",
+      "kind": "extends"
+    },
+    {
+      "from": "stellar_luminosity",
+      "to": "blackbody",
+      "kind": "applied"
+    },
+    {
+      "from": "stellar_luminosity",
+      "to": "stellar_classification",
+      "kind": "related"
+    },
+    {
+      "from": "greenhouse_effect",
+      "to": "planetary_equilibrium",
+      "kind": "extends"
+    },
+    {
+      "from": "greenhouse_effect",
+      "to": "stefan_boltzmann",
+      "kind": "applied"
+    },
+    {
+      "from": "greenhouse_effect",
+      "to": "wien_displacement",
+      "kind": "related"
+    },
+    {
+      "from": "recombination",
+      "to": "cmb",
+      "kind": "extends"
+    },
+    {
+      "from": "recombination",
+      "to": "bohr_atom",
+      "kind": "applied"
+    },
+    {
+      "from": "recombination",
+      "to": "blackbody",
+      "kind": "related"
+    },
+    {
+      "from": "cosmic_redshift",
+      "to": "wavelength",
+      "kind": "extends"
+    },
+    {
+      "from": "cosmic_redshift",
+      "to": "cmb",
+      "kind": "applied"
+    },
+    {
+      "from": "cosmic_redshift",
+      "to": "recombination",
+      "kind": "related"
+    },
+    {
+      "from": "cmb_anisotropies",
+      "to": "cmb",
+      "kind": "extends"
+    },
+    {
+      "from": "cmb_anisotropies",
+      "to": "recombination",
+      "kind": "applied"
+    },
+    {
+      "from": "cmb_anisotropies",
+      "to": "cosmic_redshift",
+      "kind": "related"
+    },
+    {
+      "from": "saha_ionization",
+      "to": "stellar_classification",
+      "kind": "extends"
+    },
+    {
+      "from": "saha_ionization",
+      "to": "bohr_atom",
+      "kind": "applied"
+    },
+    {
+      "from": "saha_ionization",
+      "to": "spectroscopy_basics",
+      "kind": "related"
+    },
+    {
+      "from": "hr_diagram",
+      "to": "stellar_classification",
+      "kind": "extends"
+    },
+    {
+      "from": "hr_diagram",
+      "to": "stellar_luminosity",
+      "kind": "applied"
+    },
+    {
+      "from": "hr_diagram",
+      "to": "wien_displacement",
+      "kind": "related"
+    },
+    {
+      "from": "balmer_series",
+      "to": "bohr_atom",
+      "kind": "extends"
+    },
+    {
+      "from": "balmer_series",
+      "to": "spectroscopy_basics",
+      "kind": "extends"
+    },
+    {
+      "from": "balmer_series",
+      "to": "stellar_classification",
+      "kind": "applied"
+    },
+    {
+      "from": "color_rendering_index",
+      "to": "color_temperature",
+      "kind": "extends"
+    },
+    {
+      "from": "color_rendering_index",
+      "to": "blackbody",
+      "kind": "related"
+    },
+    {
+      "from": "color_rendering_index",
+      "to": "wavelength",
+      "kind": "related"
+    },
+    {
+      "from": "chromaticity_diagram",
+      "to": "color_temperature",
+      "kind": "extends"
+    },
+    {
+      "from": "chromaticity_diagram",
+      "to": "color_rendering_index",
+      "kind": "related"
+    },
+    {
+      "from": "chromaticity_diagram",
+      "to": "wavelength",
+      "kind": "related"
+    },
+    {
+      "from": "metamerism",
+      "to": "chromaticity_diagram",
+      "kind": "extends"
+    },
+    {
+      "from": "metamerism",
+      "to": "color_rendering_index",
+      "kind": "related"
+    },
+    {
+      "from": "metamerism",
+      "to": "spectroscopy_basics",
+      "kind": "related"
+    },
+    {
+      "from": "doppler_spectroscopy",
+      "to": "spectroscopy_basics",
+      "kind": "extends"
+    },
+    {
+      "from": "doppler_spectroscopy",
+      "to": "wavelength",
+      "kind": "related"
+    },
+    {
+      "from": "doppler_spectroscopy",
+      "to": "cosmic_redshift",
+      "kind": "related"
+    },
+    {
+      "from": "stimulated_emission",
+      "to": "blackbody",
+      "kind": "extends"
+    },
+    {
+      "from": "stimulated_emission",
+      "to": "coherence",
+      "kind": "extends"
+    },
+    {
+      "from": "stimulated_emission",
+      "to": "photon_energy",
+      "kind": "related"
+    },
+    {
+      "from": "michelson_interferometer",
+      "to": "interference_diffraction",
+      "kind": "extends"
+    },
+    {
+      "from": "michelson_interferometer",
+      "to": "coherence",
+      "kind": "extends"
+    },
+    {
+      "from": "michelson_interferometer",
+      "to": "wavelength",
+      "kind": "applied"
+    },
+    {
+      "from": "photon_bunching",
+      "to": "coherence",
+      "kind": "extends"
+    },
+    {
+      "from": "photon_bunching",
+      "to": "stimulated_emission",
+      "kind": "related"
+    },
+    {
+      "from": "photon_bunching",
+      "to": "photoelectric_effect",
+      "kind": "related"
+    },
+    {
+      "from": "rowland_grating",
+      "to": "diffraction_gratings",
+      "kind": "extends"
+    },
+    {
+      "from": "rowland_grating",
+      "to": "spectroscopy_basics",
+      "kind": "applied"
+    },
+    {
+      "from": "rowland_grating",
+      "to": "balmer_series",
+      "kind": "related"
+    },
+    {
+      "from": "echelle_spectrograph",
+      "to": "rowland_grating",
+      "kind": "extends"
+    },
+    {
+      "from": "echelle_spectrograph",
+      "to": "diffraction_gratings",
+      "kind": "extends"
+    },
+    {
+      "from": "echelle_spectrograph",
+      "to": "doppler_spectroscopy",
+      "kind": "applied"
+    },
+    {
+      "from": "helium_discovery",
+      "to": "spectroscopy_basics",
+      "kind": "extends"
+    },
+    {
+      "from": "helium_discovery",
+      "to": "balmer_series",
+      "kind": "related"
+    },
+    {
+      "from": "helium_discovery",
+      "to": "rowland_grating",
+      "kind": "applied"
+    },
+    {
+      "from": "lagrangian_mechanics",
+      "to": "least_action",
+      "kind": "extends"
+    },
+    {
+      "from": "lagrangian_mechanics",
+      "to": "refraction",
+      "kind": "related"
+    },
+    {
+      "from": "noethers_theorem",
+      "to": "lagrangian_mechanics",
+      "kind": "extends"
+    },
+    {
+      "from": "noethers_theorem",
+      "to": "least_action",
+      "kind": "extends"
+    },
+    {
+      "from": "brachistochrone",
+      "to": "least_action",
+      "kind": "extends"
+    },
+    {
+      "from": "brachistochrone",
+      "to": "lagrangian_mechanics",
+      "kind": "applied"
+    },
+    {
+      "from": "brachistochrone",
+      "to": "refraction",
+      "kind": "related"
+    },
+    {
+      "from": "tautochrone",
+      "to": "brachistochrone",
+      "kind": "extends"
+    },
+    {
+      "from": "tautochrone",
+      "to": "least_action",
+      "kind": "related"
+    },
+    {
+      "from": "catenary",
+      "to": "least_action",
+      "kind": "extends"
+    },
+    {
+      "from": "catenary",
+      "to": "lagrangian_mechanics",
+      "kind": "applied"
+    },
+    {
+      "from": "catenary",
+      "to": "brachistochrone",
+      "kind": "related"
+    },
+    {
+      "from": "calculus_of_variations",
+      "to": "least_action",
+      "kind": "extends"
+    },
+    {
+      "from": "calculus_of_variations",
+      "to": "brachistochrone",
+      "kind": "applied"
+    },
+    {
+      "from": "calculus_of_variations",
+      "to": "catenary",
+      "kind": "related"
+    },
+    {
+      "from": "geodesics",
+      "to": "calculus_of_variations",
+      "kind": "extends"
+    },
+    {
+      "from": "geodesics",
+      "to": "least_action",
+      "kind": "applied"
+    },
+    {
+      "from": "geodesics",
+      "to": "refraction",
+      "kind": "related"
+    }
   ]
 }
