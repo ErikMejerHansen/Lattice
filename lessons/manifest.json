@@ -334,5 +334,12 @@
     "subtitle": "δJ[y] = 0",
     "date": "2026-06-18",
     "estimatedReadingMinutes": 25
+  },
+  {
+    "slug": "2026-06-18-geodesics",
+    "title": "Geodesics: what counts as a straight line when the world is curved",
+    "subtitle": "δ∫ds = 0",
+    "date": "2026-06-18",
+    "estimatedReadingMinutes": 25
   }
 ]
