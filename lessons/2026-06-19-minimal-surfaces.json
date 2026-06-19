@@ -1,0 +1,211 @@
+{
+  "slug": "2026-06-19-minimal-surfaces",
+  "title": "Minimal surfaces: Lagrange's PDE, Plateau's soap films, and the first Fields Medal",
+  "node": {
+    "id": "minimal_surfaces",
+    "label": "Min. surfaces",
+    "subtitle": "H = 0"
+  },
+  "intro": "In 1762 Joseph-Louis Lagrange, then twenty-five and on the verge of taking over Euler's old chair in Berlin, extended Euler's eighteen-year-old variational machine to functionals of surfaces and wrote down the partial differential equation for a surface of minimal area. He had no nontrivial example to plug into it. Eighty-seven years later Joseph Plateau, a blind Belgian physicist in Ghent, would dip wire loops into soap solution and watch every resulting film obey Lagrange's equation point for point. Whether every closed wire bounds such a film stayed open another sixty years, until Jesse Douglas settled it in 1931 and was awarded the first Fields Medal in 1936.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Lagrange takes Euler's machine into two variables",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In 1759 a seventeen-year-old in Turin wrote to Leonhard Euler in Berlin claiming he had recast the whole calculus of variations in a more economical way. The seventeen-year-old was Joseph-Louis Lagrange (then Giuseppe Luigi Lagrangia, son of a French-Italian artillery officer), and the letter was the first volley in what became a four-year correspondence. Euler, then fifty-two and the most prolific mathematician alive, recognized at once that the boy had something. The two letters Euler wrote back, in 1755 and 1756, withheld a paper of his own on the same subject so that the younger man could publish first. Lagrange's reformulation, the δ-calculus (a single symbol δ that operated on functionals the same way d operated on numbers), turned Euler's bookkeeping into a notational machine you could turn the crank on without thinking. Euler, in a touch of professional generosity rare in any century, urged the boy to publish."
+        },
+        {
+          "type": "p",
+          "text": "Lagrange's paper appeared in 1762 in Miscellanea Taurinensia, the Turin society's bulletin, under the title 'Essai d'une nouvelle méthode pour déterminer les maxima et les minima des formules intégrales indéfinies'. The first part redid the curve case in the new notation. The second part did what Euler had not: it extended the method to functionals whose argument was a surface z(x, y) rather than a curve y(x). Lagrange asked the natural follow-up question. Of all surfaces z(x, y) over a fixed planar domain D, with z prescribed along the boundary ∂D, which one minimizes the total surface area?"
+        },
+        {
+          "type": "p",
+          "text": "The functional is the surface area integral, written down by elementary geometry: an infinitesimal patch of the surface tilted at slope (z_x, z_y) has area dA = √(1 + z_x² + z_y²) dx dy, where z_x and z_y denote the partial derivatives of z with respect to x and y. Sum over the domain and you get the total area as a functional of z."
+        },
+        {
+          "type": "math",
+          "tex": "A[z] = \\iint_D \\sqrt{1 + z_x^2 + z_y^2}\\, dx\\, dy",
+          "display": true,
+          "caption": "A is the surface area, a functional that returns one number given the entire surface z(x,y). D is the fixed planar region the surface sits over. z(x, y) is the candidate height function, with values prescribed along the boundary ∂D. z_x = ∂z/∂x and z_y = ∂z/∂y are the two partial derivatives. The integrand √(1 + z_x² + z_y²) is the area scale factor at each point: it is 1 when the surface is horizontal there and larger when the surface tilts."
+        },
+        {
+          "type": "p",
+          "text": "Lagrange applied his δ-calculus to A[z]. The first variation came out as a double integral of the perturbation η(x, y), with two-dimensional integration by parts taking the role that one-dimensional integration by parts had taken in the curve case. Demanding δA = 0 for every η that vanished on the boundary forced the bracket in the integrand to vanish identically, exactly as in the Euler-Lagrange story for curves. The result was a second-order partial differential equation for z."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The minimal surface equation, and Meusnier's geometric reading of it",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Write the integrand of A[z] as F(p, q) = √(1 + p² + q²), where for brevity p = z_x and q = z_y. The Euler-Lagrange equation in two independent variables says that ∂F/∂z − ∂_x(∂F/∂p) − ∂_y(∂F/∂q) = 0, the obvious generalization of the curve case. The first term ∂F/∂z is zero (F does not depend on z directly). The other two need a computation: ∂F/∂p = p / √(1+p²+q²) and ∂F/∂q = q / √(1+p²+q²)."
+        },
+        {
+          "type": "p",
+          "text": "Differentiate ∂F/∂p with respect to x and ∂F/∂q with respect to y, add them, and multiply through by (1+p²+q²)^(3/2) to clear the denominators. The result, after the chain rule and a page of algebra Lagrange did not bother showing in the paper, is the minimal surface equation."
+        },
+        {
+          "type": "math",
+          "tex": "(1 + z_y^2)\\, z_{xx} - 2\\, z_x z_y\\, z_{xy} + (1 + z_x^2)\\, z_{yy} = 0",
+          "display": true,
+          "caption": "z(x, y) is the height function of the surface. z_x and z_y are its first partial derivatives (slopes). z_xx, z_xy, z_yy are its second partial derivatives (curvatures). The equation is a second-order quasilinear partial differential equation: linear in the second derivatives, nonlinear in the first derivatives. Boundary conditions are z prescribed along ∂D. This is the equation Lagrange wrote down in 1762."
+        },
+        {
+          "type": "p",
+          "text": "Lagrange had the equation but knew only one solution to it: z = ax + by + c, a flat plane. The trivial case. He left the rest as an open question. Fourteen years later, in 1776, the French military engineer Jean Baptiste Meusnier (then twenty-two and a year out of officer school) gave the equation its lasting geometric reading. He noticed that the left-hand side, divided by (1+z_x²+z_y²)^(3/2), is exactly twice the mean curvature H of the surface, where H is by definition the average of the two principal curvatures κ₁ and κ₂. The minimal surface PDE collapses to a one-line statement."
+        },
+        {
+          "type": "math",
+          "tex": "H = \\tfrac{1}{2}(\\kappa_1 + \\kappa_2) = 0",
+          "display": true,
+          "caption": "H is the mean curvature of the surface at a point, the average of the two principal curvatures. κ₁ and κ₂ are the principal curvatures: the maximum and minimum of the normal curvature taken over all directions through the point. The condition H = 0 says the two principal curvatures are equal in magnitude and opposite in sign at every point of the surface."
+        },
+        {
+          "type": "p",
+          "text": "The geometric content is that a minimal surface is locally a saddle everywhere. At each point it curves up in one direction by the same amount it curves down in the perpendicular direction. The Gaussian curvature, the product K = κ₁κ₂ = −κ₁², is therefore non-positive everywhere on a minimal surface, vanishing only at isolated flat points. Meusnier used the new reading to produce two nontrivial examples by hand: the catenoid (a surface of revolution we will look at next) and the helicoid (the screw-shaped surface swept by a horizontal line spiralling around a vertical axis). For sixty years after Meusnier's paper these three (plane, catenoid, helicoid) were the only minimal surfaces known."
+        }
+      ],
+      "quiz": {
+        "question": "Meusnier's 1776 reading of Lagrange's PDE says the mean curvature H vanishes everywhere on a minimal surface. What does H = 0 mean geometrically at a single point?",
+        "options": [
+          "The surface is flat at that point: both principal curvatures are zero",
+          "The two principal curvatures are equal in magnitude and opposite in sign, so the surface is locally a saddle",
+          "The Gaussian curvature K = κ₁κ₂ is strictly positive there",
+          "The surface is convex (bowl-shaped) at that point"
+        ],
+        "correctIndex": 1,
+        "explanation": "H = (κ₁ + κ₂)/2 = 0 says κ₁ = −κ₂. The surface curves up in one principal direction by the same amount it curves down in the perpendicular one: a saddle. Option (a) is too strong: it asks for both curvatures to be zero individually (an umbilic flat point), which happens only at isolated points of a minimal surface, not everywhere. Option (c) is the wrong sign: K = κ₁κ₂ = −κ₁² is non-positive on a minimal surface, with K < 0 except at flat points. Option (d) is what convex surfaces (spheres, paraboloids) look like, which have H > 0 and K > 0 everywhere; minimal surfaces are the opposite shape at every point."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The catenoid, and the soap film that snaps to two disks",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Meusnier's catenoid is the only minimal surface of revolution other than the flat plane. The derivation, like every problem of revolution, collapses the PDE in two variables to an ODE in one. Parameterize the surface by its profile r(z), the radius at height z. The surface area is a single integral over z, with r(z) the unknown function and r'(z) = dr/dz its slope."
+        },
+        {
+          "type": "math",
+          "tex": "A[r] = 2\\pi \\int_{-h}^{h} r(z)\\, \\sqrt{1 + r'(z)^2}\\; dz",
+          "display": true,
+          "caption": "A is the surface area of the surface of revolution. The factor 2π is from rotating about the z axis. r(z) is the profile, the radius at height z. r'(z) = dr/dz is its slope along the axis. The integrand r √(1+r'²) is the area swept per unit height: r times the arc length element of the profile curve. Boundary conditions r(±h) = R fix the surface to two parallel coaxial rings of radius R at heights ±h."
+        },
+        {
+          "type": "p",
+          "text": "The integrand has no explicit z dependence, which triggers the Beltrami identity (the same first integral we used for the brachistochrone). Set F = r √(1+r'²) and use F − r' (∂F/∂r') = C. The partial derivative is ∂F/∂r' = r r' / √(1+r'²), and after subtracting r' times this from F the numerator simplifies to r (1+r'²−r'²) = r, leaving r / √(1+r'²) = C."
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{r}{\\sqrt{1 + r'^2}} = C \\qquad \\Longrightarrow \\qquad r(z) = C\\, \\cosh\\!\\left(\\frac{z - z_0}{C}\\right)",
+          "display": true,
+          "caption": "C is the integration constant from the Beltrami identity, with units of length: it equals r at the narrowest point of the surface (where r' = 0). z_0 is a translation constant; by axial symmetry we may set z_0 = 0. cosh is the hyperbolic cosine, cosh(x) = (e^x + e^(-x))/2. The profile is a catenary (the same cosh curve we met as the hanging chain), and the surface swept by rotating it is called a catenoid."
+        },
+        {
+          "type": "p",
+          "text": "Catenary, then catenoid. The catenary lesson on 2026-06-17 derived y = a cosh(x/a) from force balance on a hanging chain. The same curve, rotated about its directrix, sweeps the unique non-planar minimal surface of revolution. Two lessons, two completely different physical problems (a chain hung in gravity, a soap film stretched between rings), one geometric answer. The variational principles are different (potential energy for the chain, surface area for the film); the Lagrangian integrands look different up close; the Beltrami identity reduces both to the same first-order ODE."
+        },
+        {
+          "type": "p",
+          "text": "Now fix two parallel coaxial rings of equal radius R at heights z = ±h, and look for a catenoid that joins them. The boundary condition r(±h) = R becomes R = C cosh(h/C), a transcendental equation for C. Let u = h/C; then h/R = u/cosh(u). The function on the right is bounded: it rises from 0 at u = 0, peaks at u* ≈ 1.1997 with value u*/cosh(u*) ≈ 0.6627, and decreases thereafter. If the rings are spaced so that h/R > 0.6627, no real C satisfies the boundary condition: there is no catenoid between them. Pull two coaxial rings of a soap film slowly apart and at exactly this ratio the soap film snaps; the equilibrium below the critical separation jumps discontinuously to the two-disk solution (Goldschmidt's 1831 discontinuous answer), each ring spanned by a flat disk and the column between them evacuated. The viz below dials h/R and shows the snap."
+        },
+        {
+          "type": "viz",
+          "src": "2026-06-19-minimal-surfaces.html",
+          "height": 460,
+          "caption": "Drag the separation slider to vary h/R, the ratio of the half-separation between the two coaxial rings to their common radius. The cross-section of the catenoid r(z) = C cosh(z/C) is drawn between the rings whenever a real C exists. Below h/R ≈ 0.528 (the Goldschmidt threshold) the catenoid has less total area than the two flat disks 2πR², and the soap film is the global minimum. Between 0.528 and 0.6627 the catenoid is only metastable: it exists, but the two-disk solution would have less area, and a sufficiently large perturbation pops the film. Above 0.6627 no real catenoid exists at all; the film must collapse to two disks."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Plateau's wire frames and the question of existence",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Joseph Antoine Ferdinand Plateau (1801-1883) was a Belgian physicist at the University of Ghent. He had spent the late 1820s investigating persistence of vision, the lag with which the retina holds an image after the light goes away; in 1832 he built the phenakistoscope, a slotted spinning disk that made painted figures appear to move, one of the founding devices of animation. In 1829 he stared directly at the sun for twenty-five seconds in an experiment on retinal afterimages, and his eyesight never recovered. By 1843 he was effectively blind. His later work was done by dictating instructions to his wife, his son-in-law, and a series of students, who carried out the experiments and reported what they saw."
+        },
+        {
+          "type": "p",
+          "text": "Plateau's experimental program, begun in earnest in the late 1830s and culminating in his 1873 magnum opus 'Statique expérimentale et théorique des liquides soumis aux seules forces moléculaires' (Experimental and theoretical statics of liquids subject only to molecular forces), bent wires into closed loops, dipped them into a solution of soapy water, glycerin, and water (a mixture Plateau invented to extend the lifetime of the films from seconds to minutes), and tabulated what came out. Every wire bounded a film. The films minimised area: this was the experimental observation, repeated for hundreds of frames including cubes, tetrahedra, double rings, helices, knotted loops. The physical reason was clear once one wrote down the force balance."
+        },
+        {
+          "type": "p",
+          "text": "At every interior point of a soap film, surface tension γ pulls equally in every tangential direction. There is no pressure jump across a film with air on both sides (the two air-water interfaces of the soap film are very close together and the pressure across them cancels in equilibrium). The Young-Laplace equation, ΔP = 2γH (the pressure jump across a fluid interface equals twice the surface tension times the mean curvature), then forces H = 0 at every interior point. Plateau's experiments verified the H = 0 condition without anyone using that language: by measuring the films and comparing to Lagrange's PDE, the agreement was perfect to the accuracy of nineteenth-century geometry."
+        },
+        {
+          "type": "p",
+          "text": "Plateau's program also raised the question that took the next sixty years to settle. Every wire he tried bounded at least one film. Did every closed wire? The mathematical version, given any Jordan curve in three-space (a simple closed curve without self-intersections), prove that there exists a minimal surface bounded by it, became known as Plateau's problem. Through the 1870s and 1880s it remained an empirical observation, not a theorem. Karl Weierstrass, Bernhard Riemann, and Hermann Schwarz constructed specific minimal surfaces (Schwarz's H-surface, Riemann's periodic minimal surfaces) by inverse methods that built the surface from a known parameterization, but none of them gave a general existence proof: pick any wire, get a surface."
+        }
+      ],
+      "quiz": {
+        "question": "Plateau observed experimentally that every soap film he made took up a surface of zero mean curvature. What physical fact about a soap film in equilibrium forces H = 0 at every interior point?",
+        "options": [
+          "The film is incompressible, which forces its Laplacian ∇²z to vanish",
+          "Surface tension pulls equally in every tangential direction, and with no pressure jump across the film the Young-Laplace equation ΔP = 2γH gives H = 0",
+          "The soap molecules align along the direction of steepest descent, locking the surface to a graph of a harmonic function",
+          "The viscosity of the soap solution drives the film toward the configuration of lowest dissipation, which is the plane"
+        ],
+        "correctIndex": 1,
+        "explanation": "The Young-Laplace equation ΔP = 2γH (Young 1805, Laplace 1806) relates the pressure jump across a fluid interface to its mean curvature times the surface tension. A soap film in equilibrium has equal pressure on both sides (the two air-water interfaces are too close to support a sustained pressure difference), so ΔP = 0, which forces H = 0. The film does not minimize area because the molecules have any clever microscopic alignment; it minimizes area because force balance is the macroscopic statement of mechanical equilibrium, and force balance on a tensioned membrane with no normal load reduces to H = 0. Option (a) confuses minimal surfaces with harmonic graphs: harmonic surfaces solve ∇²z = 0, but minimal surfaces solve a different, nonlinear PDE that only reduces to ∇²z = 0 in the small-slope linearization. Option (c) and option (d) are physically irrelevant: alignment of soap molecules and viscosity say nothing about the equilibrium shape, which is set by the elastic-membrane force balance."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Douglas, the direct method, and the first Fields Medal",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The case that pulls the whole story forward is the existence proof itself, settled in 1930-31 and rewarded with the first Fields Medal in 1936. The story is, in the end, the story of a single mathematical technique called the direct method, due to Leonida Tonelli, applied to a problem that had waited 169 years for it."
+        },
+        {
+          "type": "p",
+          "text": "The classical approach to a variational problem is Euler-Lagrange, the recipe Lagrange wrote in 1762 and Euler had already written for curves in 1744: take the first variation, get a differential equation, solve the equation, verify boundary conditions, and ask the existence question only afterward as 'does my PDE solution satisfy what I wanted?' This works when the PDE is tractable. The minimal surface equation is not tractable for arbitrary boundaries: the two-dimensional quasilinear elliptic PDE with prescribed Dirichlet data along an arbitrary Jordan curve is one of the harder boundary-value problems in the nineteenth-century catalogue, and no general existence theorem followed from PDE methods through the entire nineteenth century."
+        },
+        {
+          "type": "p",
+          "text": "Tonelli's direct method, written down in a sequence of papers around 1915 in Bologna, inverted the order. Rather than solving the PDE and then asking whether the solution exists, prove existence directly from the functional itself, without ever writing the PDE down. The recipe has three steps. Step one: take a minimizing sequence, a sequence of admissible functions z_n whose areas A[z_n] converge to the infimum. Step two: extract a subsequence that converges weakly in some appropriate function space, using a compactness theorem. Step three: prove that the area functional is lower semicontinuous under weak convergence, so that the limit has area at most the infimum, hence equal to it. The limit is then the desired minimizer. This was Tonelli's machinery, and it set the modern template for every existence proof in the calculus of variations after 1915."
+        },
+        {
+          "type": "p",
+          "text": "Tibor Radó (a Hungarian then at Ohio State) and Jesse Douglas (at MIT and later CCNY) gave independent proofs of Plateau's problem within a year of each other. Radó's 1930 proof used conformal mapping methods and required that the boundary Jordan curve admit a polyhedral approximation. Douglas's 1931 paper, 'Solution of the problem of Plateau' in the Transactions of the AMS, used a more powerful idea: instead of minimizing the area integral directly (which is awkwardly invariant under reparameterization, so a minimizing sequence can run off to infinity in parameter space), minimize a related functional that Douglas constructed on the boundary alone. The Douglas functional is convex enough to be amenable to the direct method even for arbitrary Jordan curves, and his proof handled all of them at once."
+        },
+        {
+          "type": "p",
+          "text": "The first International Congress of Mathematicians after Helsinki met in Oslo in July 1936, and the Canadian-American geometer John Charles Fields had left, in his 1932 will, the funds for two medals (and a cash prize, deliberately smaller than the Nobel, to avoid the temptation of personal politics) to be awarded at each Congress thereafter to mathematicians under forty for outstanding work. The committee, chaired by the Danish topologist Niels Erik Nørlund, picked Lars Ahlfors (a thirty-year-old Finnish complex analyst, for his work on covering surfaces and quasiconformal maps) and Jesse Douglas (forty in July 1936, just inside the rule, for the solution of Plateau's problem). Douglas was in poor health and could not travel; Ahlfors picked up Douglas's medal alongside his own, and the lineage of the most prestigious prize in mathematics began with Plateau's wires and the PDE Lagrange had written in Turin 174 years earlier."
+        }
+      ]
+    }
+  ],
+  "checkInAfter": [1, 3],
+  "finalQuiz": {
+    "question": "Lagrange in 1762, Plateau in the 1840s-1870s, and Douglas in 1931 are three pieces of the same story. Which single mathematical condition do all three of their contributions describe?",
+    "options": [
+      "The Laplace equation ∇²z = 0 on the planar domain D",
+      "The minimal surface equation, equivalently H = 0 (mean curvature zero) at every interior point of the surface",
+      "Conservation of momentum along the boundary of the wire",
+      "The conformal map from the planar domain D to the upper half-plane"
+    ],
+    "correctIndex": 1,
+    "explanation": "Lagrange wrote the minimal surface PDE in 1762 by applying his δ-calculus to the area functional A[z] = ∫∫√(1+z_x²+z_y²) dx dy and getting the second-order quasilinear equation (1+z_y²)z_xx − 2z_xz_yz_xy + (1+z_x²)z_yy = 0. Meusnier in 1776 read this as H = 0. Plateau in the 1840s-1870s verified experimentally that every soap film he produced obeyed this equation, because force balance on a soap film with no pressure jump (Young-Laplace ΔP = 2γH = 0) forces H = 0 everywhere. Douglas in 1931 proved that every Jordan boundary in three-space bounds at least one surface satisfying this same equation. Option (a) is wrong because the Laplace equation is the small-slope linearization of the minimal surface equation; the full equation is nonlinear and only reduces to ∇²z = 0 when |∇z| ≪ 1. Option (c) is irrelevant: there is no momentum, this is statics. Option (d) is a tool Douglas used, but it is a method, not the conclusion that the three results share."
+  },
+  "suggestedNodes": [
+    { "id": "plateaus_laws", "label": "Plateau's laws", "subtitle": "120°, 109.5°", "edgeType": "applied" },
+    { "id": "helicoid", "label": "Helicoid", "subtitle": "Meusnier 1776", "edgeType": "related" },
+    { "id": "bernsteins_theorem", "label": "Bernstein thm.", "subtitle": "entire = plane", "edgeType": "extends" }
+  ],
+  "metadata": {
+    "estimatedReadingMinutes": 25,
+    "generatedAt": "2026-06-19T08:00:00Z",
+    "generatedBy": "routine-claude-code"
+  }
+}

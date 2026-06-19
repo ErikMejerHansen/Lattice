@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Catenoid between two rings</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); min-height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz { padding: 14px 16px 12px; box-sizing: border-box; }
+#stage {
+  width: 100%; height: auto; display: block;
+  background: var(--bg-raised); border: 1px solid var(--border);
+}
+.state-line {
+  font-style: italic; font-size: 13px; margin-top: 8px;
+  color: var(--accent);
+}
+.state-line.metastable { color: var(--accent-soft); }
+.state-line.snapped { color: var(--text-muted); }
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); margin-top: 4px;
+}
+.readout span.lbl { color: var(--text-muted); }
+.readout .row { margin-top: 2px; }
+</style>
+</head>
+<body>
+<div id="viz">
+  <svg id="stage" viewBox="0 0 360 260" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+
+  <div class="viz-slider-row">
+    <label for="hSlider">h/R</label>
+    <input id="hSlider" type="range" min="0.05" max="0.90" step="0.005" value="0.35">
+    <span class="value" id="hVal">0.350</span>
+  </div>
+
+  <div class="state-line" id="stateLine">stable catenoid</div>
+  <div class="readout">
+    <div class="row"><span class="lbl">neck radius C/R =</span> <span id="cVal">—</span> &nbsp; <span class="lbl">·</span> &nbsp; <span class="lbl">A_catenoid / (2πR²) =</span> <span id="aCat">—</span></div>
+    <div class="row"><span class="lbl">A_two_disks / (2πR²) =</span> 1.000 &nbsp; <span class="lbl">·</span> &nbsp; <span class="lbl">winner =</span> <span id="winner">—</span></div>
+  </div>
+
+  <div class="viz-caption" style="margin-top: 10px;">
+    Two coaxial rings of radius R sit at heights z = ±h. Drag h/R to pull them apart. Below h/R ≈ 0.528 the catenoid is the global minimum (less area than the two disks). Between 0.528 and 0.6627 the catenoid still exists but is metastable, and a real soap film at this ratio will snap on perturbation. Above 0.6627 no catenoid exists; the film must collapse to two flat disks (Goldschmidt's 1831 discontinuous solution).
+  </div>
+</div>
+
+<script>
+(function () {
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  var stage = document.getElementById('stage');
+  var hSlider = document.getElementById('hSlider');
+  var hVal = document.getElementById('hVal');
+  var cVal = document.getElementById('cVal');
+  var aCat = document.getElementById('aCat');
+  var winner = document.getElementById('winner');
+  var stateLine = document.getElementById('stateLine');
+
+  function el(name, attrs) {
+    var e = document.createElementNS(SVG_NS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  // Solve R = C cosh(h/C) for C, with R = 1. Equivalently, let u = h/C, then h = u/cosh(u).
+  // For h < hMax ≈ 0.6627 there are two roots; we want the SMALLER u (the wide-neck, stable branch).
+  function solveSmallU(h) {
+    var hMax = 0.6627434193492;
+    if (h >= hMax) return null;
+    // bracket between 0 and uStar ≈ 1.1997
+    var lo = 1e-8, hi = 1.1996785;
+    for (var i = 0; i < 80; i++) {
+      var mid = 0.5 * (lo + hi);
+      var f = mid / Math.cosh(mid);
+      if (f < h) lo = mid; else hi = mid;
+    }
+    return 0.5 * (lo + hi);
+  }
+
+  // Area of catenoid (R = 1) given C and half-height h.
+  // A = ∫_{-h}^{h} 2π r √(1+r'²) dz with r = C cosh(z/C), r' = sinh(z/C).
+  // √(1+sinh²(z/C)) = cosh(z/C), so r √(1+r'²) = C cosh²(z/C).
+  // ∫_{-h}^{h} cosh²(z/C) dz = h + (C/2) sinh(2h/C).
+  // A = 2π C [h + (C/2) sinh(2h/C)] = π (C² sinh(2h/C) + 2 C h).
+  function catenoidArea(C, h) {
+    return Math.PI * (C * C * Math.sinh(2 * h / C) + 2 * C * h);
+  }
+
+  function update() {
+    var hr = parseFloat(hSlider.value);
+    hVal.textContent = hr.toFixed(3);
+
+    // Clear stage
+    while (stage.firstChild) stage.removeChild(stage.firstChild);
+
+    // Layout
+    var W = 360, H = 260;
+    var CX = 180, CY = 130;
+    var Rpix = 60;  // pixel radius for R = 1
+    var ringEllipseRy = 12; // perspective squash of rings
+
+    // Compute physics
+    var u = solveSmallU(hr);
+    var hasCat = (u !== null);
+    var C = hasCat ? hr / u : null;        // since R = 1, C = h/u
+    var Acat = hasCat ? catenoidArea(C, hr) : null;
+    var Adisks = 2 * Math.PI;              // 2 * π R²
+
+    var ratio = hasCat ? Acat / Adisks : null;
+    var snapped = !hasCat;
+    var metastable = hasCat && ratio > 1;
+    var stable = hasCat && ratio <= 1;
+
+    // Vertical span of rings (in pixels): half-height h*Rpix
+    var hPix = hr * Rpix;
+    // Cap visible range so rings stay on stage
+    var maxHPix = 90;
+    var scale = 1;
+    if (hPix > maxHPix) {
+      scale = maxHPix / hPix;
+      hPix = maxHPix;
+      Rpix = Rpix * scale;
+    }
+    var topY = CY - hPix;
+    var botY = CY + hPix;
+
+    // Background axis (vertical, dotted)
+    stage.appendChild(el('line', {
+      x1: CX, y1: 20, x2: CX, y2: H - 30,
+      stroke: 'var(--border-strong)', 'stroke-width': '1',
+      'stroke-dasharray': '2 4'
+    }));
+
+    // Render catenoid surface OR two disks
+    if (hasCat) {
+      // Build the profile r(z) and its mirror -r(z)
+      var N = 80;
+      var rightPath = '';
+      var leftPath = '';
+      var minR = Infinity;
+      for (var i = 0; i <= N; i++) {
+        var t = i / N;
+        var z = -hr + 2 * hr * t;             // physical z from -h to h
+        var rr = C * Math.cosh(z / C);        // physical r
+        if (rr < minR) minR = rr;
+        var px = CX + rr * Rpix;
+        var py = CY + z * Rpix;
+        rightPath += (i === 0 ? 'M' : 'L') + px.toFixed(2) + ',' + py.toFixed(2);
+        var pxL = CX - rr * Rpix;
+        leftPath += (i === 0 ? 'M' : 'L') + pxL.toFixed(2) + ',' + py.toFixed(2);
+      }
+
+      // Fill the catenoid silhouette as a soft band
+      var bandPath = rightPath + ' L' + (CX - C * Rpix * Math.cosh(hr / C)).toFixed(2) + ',' + botY.toFixed(2);
+      // build a closed shape: right profile + bottom + reversed left profile
+      var fillD = '';
+      for (var k = 0; k <= N; k++) {
+        var tk = k / N;
+        var zk = -hr + 2 * hr * tk;
+        var rk = C * Math.cosh(zk / C);
+        var pxk = CX + rk * Rpix;
+        var pyk = CY + zk * Rpix;
+        fillD += (k === 0 ? 'M' : 'L') + pxk.toFixed(2) + ',' + pyk.toFixed(2);
+      }
+      for (var m = N; m >= 0; m--) {
+        var tm = m / N;
+        var zm = -hr + 2 * hr * tm;
+        var rm = C * Math.cosh(zm / C);
+        var pxm = CX - rm * Rpix;
+        var pym = CY + zm * Rpix;
+        fillD += 'L' + pxm.toFixed(2) + ',' + pym.toFixed(2);
+      }
+      fillD += 'Z';
+      var fillColor = stable ? 'rgba(156, 58, 34, 0.18)' : 'rgba(196, 117, 88, 0.18)';
+      var strokeColor = stable ? 'var(--accent)' : 'var(--accent-soft)';
+      stage.appendChild(el('path', {
+        d: fillD, fill: fillColor, stroke: 'none'
+      }));
+
+      // Horizontal "latitude" lines to suggest a surface of revolution
+      var latLines = 5;
+      for (var L = 1; L < latLines; L++) {
+        var zL = -hr + (2 * hr) * (L / latLines);
+        var rL = C * Math.cosh(zL / C);
+        var cyL = CY + zL * Rpix;
+        var ryL = ringEllipseRy * (rL);
+        stage.appendChild(el('ellipse', {
+          cx: CX, cy: cyL, rx: (rL * Rpix).toFixed(2), ry: Math.max(1, ryL * 0.25).toFixed(2),
+          fill: 'none', stroke: strokeColor, 'stroke-width': '0.8', 'stroke-opacity': '0.45'
+        }));
+      }
+
+      // Profile curves (left and right edges)
+      stage.appendChild(el('path', {
+        d: rightPath, fill: 'none', stroke: strokeColor, 'stroke-width': '2'
+      }));
+      stage.appendChild(el('path', {
+        d: leftPath, fill: 'none', stroke: strokeColor, 'stroke-width': '2'
+      }));
+
+      // Mark the neck
+      var neckPx = C * Rpix;
+      stage.appendChild(el('line', {
+        x1: CX - neckPx, y1: CY, x2: CX + neckPx, y2: CY,
+        stroke: 'var(--text-muted)', 'stroke-width': '0.8',
+        'stroke-dasharray': '2 3'
+      }));
+      var neckLab = el('text', {
+        x: CX + neckPx + 4, y: CY + 4,
+        'font-size': '10', fill: 'var(--text-muted)',
+        'font-style': 'italic'
+      });
+      neckLab.textContent = 'neck';
+      stage.appendChild(neckLab);
+    } else {
+      // Snapped: draw the two disks as filled ellipses (the "two-disk" Goldschmidt solution)
+      stage.appendChild(el('ellipse', {
+        cx: CX, cy: topY, rx: Rpix, ry: ringEllipseRy,
+        fill: 'rgba(107, 99, 89, 0.18)', stroke: 'var(--text-muted)', 'stroke-width': '1'
+      }));
+      stage.appendChild(el('ellipse', {
+        cx: CX, cy: botY, rx: Rpix, ry: ringEllipseRy,
+        fill: 'rgba(107, 99, 89, 0.18)', stroke: 'var(--text-muted)', 'stroke-width': '1'
+      }));
+      // Dotted column between (where the film used to be)
+      stage.appendChild(el('line', {
+        x1: CX - Rpix, y1: topY, x2: CX - Rpix, y2: botY,
+        stroke: 'var(--text-ghost)', 'stroke-width': '1', 'stroke-dasharray': '2 4'
+      }));
+      stage.appendChild(el('line', {
+        x1: CX + Rpix, y1: topY, x2: CX + Rpix, y2: botY,
+        stroke: 'var(--text-ghost)', 'stroke-width': '1', 'stroke-dasharray': '2 4'
+      }));
+    }
+
+    // Two wire rings (always drawn, on top of surface)
+    stage.appendChild(el('ellipse', {
+      cx: CX, cy: topY, rx: Rpix, ry: ringEllipseRy,
+      fill: 'none', stroke: 'var(--text)', 'stroke-width': '2'
+    }));
+    stage.appendChild(el('ellipse', {
+      cx: CX, cy: botY, rx: Rpix, ry: ringEllipseRy,
+      fill: 'none', stroke: 'var(--text)', 'stroke-width': '2'
+    }));
+
+    // Labels for rings
+    var labTop = el('text', {
+      x: CX + Rpix + 6, y: topY + 4,
+      'font-size': '10', fill: 'var(--text-muted)', 'font-style': 'italic'
+    });
+    labTop.textContent = 'z = +h';
+    stage.appendChild(labTop);
+    var labBot = el('text', {
+      x: CX + Rpix + 6, y: botY + 4,
+      'font-size': '10', fill: 'var(--text-muted)', 'font-style': 'italic'
+    });
+    labBot.textContent = 'z = −h';
+    stage.appendChild(labBot);
+
+    // R scale bar at top-left
+    stage.appendChild(el('line', {
+      x1: 28, y1: 30, x2: 28 + Rpix, y2: 30,
+      stroke: 'var(--text-muted)', 'stroke-width': '1'
+    }));
+    stage.appendChild(el('line', {
+      x1: 28, y1: 26, x2: 28, y2: 34,
+      stroke: 'var(--text-muted)', 'stroke-width': '1'
+    }));
+    stage.appendChild(el('line', {
+      x1: 28 + Rpix, y1: 26, x2: 28 + Rpix, y2: 34,
+      stroke: 'var(--text-muted)', 'stroke-width': '1'
+    }));
+    var rLab = el('text', {
+      x: 28 + Rpix / 2, y: 22, 'text-anchor': 'middle',
+      'font-size': '10', fill: 'var(--text-muted)', 'font-style': 'italic'
+    });
+    rLab.textContent = 'R';
+    stage.appendChild(rLab);
+
+    // Update readouts
+    if (hasCat) {
+      cVal.textContent = C.toFixed(3);
+      aCat.textContent = ratio.toFixed(3);
+      if (stable) {
+        winner.textContent = 'catenoid';
+        stateLine.textContent = 'stable catenoid (global minimum)';
+        stateLine.className = 'state-line';
+      } else {
+        winner.textContent = 'two disks';
+        stateLine.textContent = 'metastable catenoid (two disks have less area)';
+        stateLine.className = 'state-line metastable';
+      }
+    } else {
+      cVal.textContent = '—';
+      aCat.textContent = '—';
+      winner.textContent = 'two disks';
+      stateLine.textContent = 'no catenoid exists: soap film snapped to two disks';
+      stateLine.className = 'state-line snapped';
+    }
+  }
+
+  hSlider.addEventListener('input', update);
+  update();
+})();
+</script>
+</body>
+</html>

@@ -9,7 +9,6 @@
 # auto-suggested 2026-05-10 from principle-of-least-action
 
 # auto-suggested 2026-06-18 from calculus-of-variations
-Minimal surfaces — Lagrange 1762 wrote down the H = 0 PDE by Euler's method, Plateau 1849 verified it experimentally with soap films, Douglas 1931 proved existence for arbitrary Jordan boundaries by Tonelli's direct method and was awarded the first Fields Medal in 1936
 Direct method of variations — Tonelli 1915, the lower-semicontinuity + weak-compactness machine that proves a variational minimum actually exists, the rigorous answer to Hilbert's 23rd problem and the standard tool of modern PDE
 
 # auto-suggested 2026-06-18 from geodesics
@@ -159,3 +158,8 @@ Evolute and involute — the differential-geometry pair that Huygens needed for 
 Isoperimetric problem — the broader class of variational problems with a fixed-integral side constraint, traceable back to Dido carving the largest possible enclosure from a single ox-hide thong, the framework into which the catenary's fixed-length constraint slots cleanly
 Catenoid — the surface of revolution swept by rotating a catenary about its directrix, the only non-planar minimal surface of revolution (Meusnier, 1776), the shape a soap film takes between two coaxial rings before it pinches off
 Funicular polygon — the cord-and-weights diagram Stevin used in 1586 to compose forces before calculus existed, the graphical-statics ancestor of Hooke's inverted-arch idea and the tool Gaudi used to design the Sagrada Familia by photographing chain models from below
+
+# auto-suggested 2026-06-19 from minimal-surfaces
+Plateau's laws — the empirical rules Joseph Plateau extracted from soap films in 1873: three films meet along a Plateau border at 120°, and four borders meet at a vertex at the tetrahedral angle arccos(−1/3) ≈ 109.47°, the local geometry every foam in equilibrium must satisfy and the constraint Jean Taylor proved rigorously in 1976 by geometric measure theory
+Helicoid — the screw-shaped minimal surface z = c arctan(y/x), Meusnier's second 1776 example, the only ruled minimal surface besides the plane and the local model for every screw dislocation in a smectic liquid crystal
+Bernstein's theorem — Sergei Bernstein's 1915 statement that the only entire minimal graph z = f(x, y) defined on all of R² is the plane, false in five dimensions and higher (Bombieri, De Giorgi, Giusti 1969) and the historical inlet to the regularity theory of minimal surfaces in arbitrary codimension
