@@ -499,6 +499,16 @@
       "createdAt": "2026-06-19T08:00:00Z",
       "col": 1,
       "row": 24
+    },
+    {
+      "id": "direct_method",
+      "label": "Direct method",
+      "subtitle": "weak lim + lsc",
+      "state": "available",
+      "lesson": "2026-06-20-direct-method-of-variations",
+      "createdAt": "2026-06-20T08:00:00Z",
+      "col": 0,
+      "row": 25
     }
   ],
   "edges": [
@@ -1160,6 +1170,21 @@
     {
       "from": "minimal_surfaces",
       "to": "lagrangian_mechanics",
+      "kind": "related"
+    },
+    {
+      "from": "direct_method",
+      "to": "calculus_of_variations",
+      "kind": "extends"
+    },
+    {
+      "from": "direct_method",
+      "to": "minimal_surfaces",
+      "kind": "applied"
+    },
+    {
+      "from": "direct_method",
+      "to": "least_action",
       "kind": "related"
     }
   ]

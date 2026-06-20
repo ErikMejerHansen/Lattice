@@ -348,5 +348,12 @@
     "subtitle": "H = 0",
     "date": "2026-06-19",
     "estimatedReadingMinutes": 25
+  },
+  {
+    "slug": "2026-06-20-direct-method-of-variations",
+    "title": "The direct method: how Tonelli proved that variational minima actually exist",
+    "subtitle": "weak lim + lsc",
+    "date": "2026-06-20",
+    "estimatedReadingMinutes": 25
   }
 ]

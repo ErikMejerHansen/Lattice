@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Strong and weak convergence</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); min-height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz { padding: 14px 16px 10px; box-sizing: border-box; }
+.panels { display: flex; gap: 16px; flex-wrap: wrap; }
+.panel { flex: 1 1 280px; min-width: 0; }
+.panel svg {
+  width: 100%; height: auto; display: block;
+  background: var(--bg-raised); border: 1px solid var(--border);
+}
+.panel-title { font-style: italic; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+.legend {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  font-size: 11px; color: var(--text-muted); margin-top: 4px;
+}
+.legend .swatch {
+  display: inline-block; width: 18px; height: 0;
+  border-top-width: 2px; vertical-align: middle; margin-right: 5px;
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); margin-top: 6px;
+}
+.readout span { color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div class="panels">
+    <div class="panel">
+      <div class="panel-title">f_n(x) = sin(nπx) on [0, 1], with test function φ(x) = 1 − x</div>
+      <svg id="fSvg" viewBox="0 0 320 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+      <div class="legend">
+        <span><span class="swatch" style="border-top: 2px solid var(--accent);"></span>f_n(x)</span>
+        <span><span class="swatch" style="border-top: 2px dashed var(--text-muted);"></span>φ(x) = 1 − x</span>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Strong size ‖f_n‖ versus weak pairing |∫ f_n φ|</div>
+      <svg id="barSvg" viewBox="0 0 320 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+      <div class="legend">
+        <span><span class="swatch" style="border-top: 6px solid var(--accent-soft); height: 0;"></span>‖f_n‖_{L²}</span>
+        <span><span class="swatch" style="border-top: 6px solid var(--accent); height: 0;"></span>|∫ f_n φ|</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="viz-slider-row">
+    <label for="nSlider">n</label>
+    <input id="nSlider" type="range" min="1" max="50" step="1" value="1">
+    <span class="value" id="nVal">1</span>
+  </div>
+  <div class="readout">
+    ‖f_n‖_{L²} = <span id="normVal">0.707</span> &nbsp; <span>·</span> &nbsp;
+    |∫₀¹ f_n(x)(1 − x) dx| = <span id="pairVal">0.318</span>
+  </div>
+
+  <div class="viz-caption" style="margin-top: 12px;">
+    As n grows, sin(nπx) oscillates ever faster. The strong-norm bar stays at √(1/2): in L² distance the sequence is permanently far from zero. The weak-pairing bar tracks 1/(nπ), the integral of f_n against the linear test function (1 − x), and shrinks to nothing. The same sequence is weakly null and strongly not. This is the asymmetry the direct method exploits.
+  </div>
+</div>
+
+<script>
+(function () {
+  var nSlider = document.getElementById('nSlider');
+  var nVal = document.getElementById('nVal');
+  var normVal = document.getElementById('normVal');
+  var pairVal = document.getElementById('pairVal');
+  var fSvg = document.getElementById('fSvg');
+  var barSvg = document.getElementById('barSvg');
+
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  function svgEl(name, attrs) {
+    var el = document.createElementNS(SVG_NS, name);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  var FX0 = 36, FX1 = 304, FY0 = 215, FY1 = 25;
+  var fyMin = -1.15, fyMax = 1.15;
+  function fxMap(x) { return FX0 + x * (FX1 - FX0); }
+  function fyMap(y) { return FY0 + ((y - fyMin) / (fyMax - fyMin)) * (FY1 - FY0); }
+
+  function drawFPanel(n) {
+    while (fSvg.firstChild) fSvg.removeChild(fSvg.firstChild);
+
+    fSvg.appendChild(svgEl('line', {
+      x1: FX0, y1: fyMap(0), x2: FX1, y2: fyMap(0),
+      stroke: 'var(--border-strong)', 'stroke-width': '1'
+    }));
+    fSvg.appendChild(svgEl('line', {
+      x1: FX0, y1: FY1, x2: FX0, y2: FY0,
+      stroke: 'var(--border-strong)', 'stroke-width': '1'
+    }));
+
+    var yp1 = svgEl('text', {
+      x: FX0 - 4, y: fyMap(1) + 3, 'font-size': '10',
+      fill: 'var(--text-muted)', 'text-anchor': 'end'
+    });
+    yp1.textContent = '+1';
+    fSvg.appendChild(yp1);
+    var ym1 = svgEl('text', {
+      x: FX0 - 4, y: fyMap(-1) + 3, 'font-size': '10',
+      fill: 'var(--text-muted)', 'text-anchor': 'end'
+    });
+    ym1.textContent = '−1';
+    fSvg.appendChild(ym1);
+    var x0L = svgEl('text', {
+      x: FX0, y: FY0 + 14, 'font-size': '10',
+      fill: 'var(--text-muted)', 'text-anchor': 'middle'
+    });
+    x0L.textContent = '0';
+    fSvg.appendChild(x0L);
+    var x1L = svgEl('text', {
+      x: FX1, y: FY0 + 14, 'font-size': '10',
+      fill: 'var(--text-muted)', 'text-anchor': 'middle'
+    });
+    x1L.textContent = '1';
+    fSvg.appendChild(x1L);
+
+    var dPhi = '';
+    for (var k = 0; k <= 100; k++) {
+      var xk = k / 100;
+      var yk = 1 - xk;
+      dPhi += (k === 0 ? 'M' : 'L') + fxMap(xk).toFixed(2) + ',' + fyMap(yk).toFixed(2);
+    }
+    fSvg.appendChild(svgEl('path', {
+      d: dPhi, fill: 'none',
+      stroke: 'var(--text-muted)', 'stroke-width': '1.2',
+      'stroke-dasharray': '4 4'
+    }));
+
+    var NS = Math.max(400, n * 40);
+    var d = '';
+    for (var i = 0; i <= NS; i++) {
+      var x = i / NS;
+      var y = Math.sin(n * Math.PI * x);
+      d += (i === 0 ? 'M' : 'L') + fxMap(x).toFixed(2) + ',' + fyMap(y).toFixed(2);
+    }
+    fSvg.appendChild(svgEl('path', {
+      d: d, fill: 'none',
+      stroke: 'var(--accent)', 'stroke-width': '1.6'
+    }));
+  }
+
+  var BX0 = 40, BX1 = 300, BY0 = 215, BY1 = 25;
+  var BWIDTH = 70;
+
+  function drawBarPanel(n) {
+    while (barSvg.firstChild) barSvg.removeChild(barSvg.firstChild);
+
+    var ymax = 1.0;
+    function byMap(v) {
+      return BY0 + (v / ymax) * (BY1 - BY0);
+    }
+
+    barSvg.appendChild(svgEl('line', {
+      x1: BX0, y1: BY0, x2: BX1, y2: BY0,
+      stroke: 'var(--border-strong)', 'stroke-width': '1'
+    }));
+    barSvg.appendChild(svgEl('line', {
+      x1: BX0, y1: BY1, x2: BX0, y2: BY0,
+      stroke: 'var(--border-strong)', 'stroke-width': '1'
+    }));
+
+    var ticks = [0, 0.25, 0.5, 0.75, 1.0];
+    for (var t = 0; t < ticks.length; t++) {
+      var v = ticks[t];
+      barSvg.appendChild(svgEl('line', {
+        x1: BX0, y1: byMap(v), x2: BX1, y2: byMap(v),
+        stroke: 'var(--border)', 'stroke-width': '0.8',
+        'stroke-dasharray': '2 4'
+      }));
+      var lab = svgEl('text', {
+        x: BX0 - 4, y: byMap(v) + 3, 'font-size': '10',
+        fill: 'var(--text-muted)', 'text-anchor': 'end'
+      });
+      lab.textContent = v.toFixed(2);
+      barSvg.appendChild(lab);
+    }
+
+    var normNum = Math.sqrt(0.5);
+    var pairNum = 1 / (n * Math.PI);
+    var refLine = svgEl('line', {
+      x1: BX0, y1: byMap(normNum), x2: BX1, y2: byMap(normNum),
+      stroke: 'var(--accent-soft)', 'stroke-width': '0.8',
+      'stroke-dasharray': '3 3', opacity: '0.6'
+    });
+    barSvg.appendChild(refLine);
+
+    var b1x = 110;
+    barSvg.appendChild(svgEl('rect', {
+      x: b1x, y: byMap(normNum),
+      width: BWIDTH, height: BY0 - byMap(normNum),
+      fill: 'var(--accent-soft)'
+    }));
+    var l1 = svgEl('text', {
+      x: b1x + BWIDTH / 2, y: BY0 + 14, 'font-size': '10',
+      fill: 'var(--text-muted)', 'text-anchor': 'middle'
+    });
+    l1.textContent = 'strong';
+    barSvg.appendChild(l1);
+    var v1 = svgEl('text', {
+      x: b1x + BWIDTH / 2, y: byMap(normNum) - 4, 'font-size': '10',
+      fill: 'var(--text)', 'text-anchor': 'middle',
+      'font-family': '"IBM Plex Mono", monospace'
+    });
+    v1.textContent = normNum.toFixed(3);
+    barSvg.appendChild(v1);
+
+    var b2x = 210;
+    barSvg.appendChild(svgEl('rect', {
+      x: b2x, y: byMap(pairNum),
+      width: BWIDTH, height: BY0 - byMap(pairNum),
+      fill: 'var(--accent)'
+    }));
+    var l2 = svgEl('text', {
+      x: b2x + BWIDTH / 2, y: BY0 + 14, 'font-size': '10',
+      fill: 'var(--text-muted)', 'text-anchor': 'middle'
+    });
+    l2.textContent = 'weak';
+    barSvg.appendChild(l2);
+    var v2 = svgEl('text', {
+      x: b2x + BWIDTH / 2, y: byMap(pairNum) - 4, 'font-size': '10',
+      fill: 'var(--text)', 'text-anchor': 'middle',
+      'font-family': '"IBM Plex Mono", monospace'
+    });
+    v2.textContent = pairNum.toFixed(3);
+    barSvg.appendChild(v2);
+  }
+
+  function update() {
+    var n = parseInt(nSlider.value, 10);
+    nVal.textContent = n;
+    var pair = 1 / (n * Math.PI);
+    normVal.textContent = Math.sqrt(0.5).toFixed(3);
+    pairVal.textContent = pair.toFixed(3);
+    drawFPanel(n);
+    drawBarPanel(n);
+  }
+
+  nSlider.addEventListener('input', update);
+  update();
+})();
+</script>
+</body>
+</html>

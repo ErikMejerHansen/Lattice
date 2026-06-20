@@ -9,7 +9,6 @@
 # auto-suggested 2026-05-10 from principle-of-least-action
 
 # auto-suggested 2026-06-18 from calculus-of-variations
-Direct method of variations — Tonelli 1915, the lower-semicontinuity + weak-compactness machine that proves a variational minimum actually exists, the rigorous answer to Hilbert's 23rd problem and the standard tool of modern PDE
 
 # auto-suggested 2026-06-18 from geodesics
 Riemannian metric — g_ij(x) as the smooth assignment of inner products to tangent spaces, Riemann's 1854 generalisation of Gauss's intrinsic-curvature programme to arbitrary smooth manifolds in arbitrary dimensions, and the algebraic object every general-relativity calculation begins by writing down
@@ -163,3 +162,8 @@ Funicular polygon — the cord-and-weights diagram Stevin used in 1586 to compos
 Plateau's laws — the empirical rules Joseph Plateau extracted from soap films in 1873: three films meet along a Plateau border at 120°, and four borders meet at a vertex at the tetrahedral angle arccos(−1/3) ≈ 109.47°, the local geometry every foam in equilibrium must satisfy and the constraint Jean Taylor proved rigorously in 1976 by geometric measure theory
 Helicoid — the screw-shaped minimal surface z = c arctan(y/x), Meusnier's second 1776 example, the only ruled minimal surface besides the plane and the local model for every screw dislocation in a smectic liquid crystal
 Bernstein's theorem — Sergei Bernstein's 1915 statement that the only entire minimal graph z = f(x, y) defined on all of R² is the plane, false in five dimensions and higher (Bombieri, De Giorgi, Giusti 1969) and the historical inlet to the regularity theory of minimal surfaces in arbitrary codimension
+
+# auto-suggested 2026-06-20 from direct-method-of-variations
+Sobolev spaces — W^{k,p}, Sergei Sobolev's 1936 function spaces whose elements have weak derivatives in L^p up to order k, the natural home of every modern variational problem and the framework in which Tonelli's three-condition machine actually runs
+Hilbert's 19th problem — Ennio De Giorgi 1957, the 18-page paper proving that minimizers of regular variational integrals are automatically smooth, the regularity sibling of existence Hilbert had asked for alongside problem 23 and the result that earned De Giorgi the 1990 Wolf Prize
+Lax-Milgram lemma — Peter Lax and Arthur Milgram 1954, the abstract Hilbert-space reformulation of the direct method for symmetric coercive bilinear forms, the version of the existence theorem every graduate elliptic-PDE course actually uses

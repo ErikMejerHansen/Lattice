@@ -1,0 +1,181 @@
+{
+  "slug": "2026-06-20-direct-method-of-variations",
+  "title": "The direct method: how Tonelli proved that variational minima actually exist",
+  "node": {
+    "id": "direct_method",
+    "label": "Direct method",
+    "subtitle": "weak lim + lsc"
+  },
+  "intro": "The Euler-Lagrange equation, the centerpiece of every variational problem since Euler's Methodus inveniendi (1744), gives you a candidate curve: any minimum of the functional must satisfy it. But it does not tell you whether a minimum exists. For 150 years mathematicians assumed any integral bounded below must reach its infimum at some admissible function. In 1870 Karl Weierstrass showed they were wrong. The repair, signposted by David Hilbert at the 1900 Paris Congress and built into a machine by Leonida Tonelli in the 1910s, is three conditions, checked in order, that prove the minimum exists before you try to find it.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The hundred-year hole in the variational tradition",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Euler in 1744 had shown that any minimizing curve of the functional J[y] = ∫F(x, y, y') dx must satisfy the Euler-Lagrange equation, a second-order ODE in y(x). For the next 150 years the recipe ran: write the functional, derive the ODE, solve it, declare victory. The recipe is one step short. Solving the Euler-Lagrange equation gives you the curve that, if any minimum exists, must be it. It does not tell you whether the minimum exists at all. Eighteenth- and nineteenth-century mathematicians simply assumed that any integral bounded below must be attained at some admissible function, the way a continuous function bounded below on a closed interval attains its infimum. They were wrong, and the wrongness mattered."
+        },
+        {
+          "type": "p",
+          "text": "The crisis arrived through Bernhard Riemann (1826-1866, Göttingen mathematician and Gauss's most influential successor). In his 1851 inaugural dissertation Riemann used the Dirichlet principle (the claim that the harmonic function with prescribed boundary values minimizes the energy integral ∫|∇u|² dx among all functions sharing those values) to prove what is now called the Riemann mapping theorem (every simply connected proper subdomain of the plane can be conformally mapped onto the unit disc). The Dirichlet principle was the existence engine of geometric complex analysis. In 1870 Karl Weierstrass (1815-1897, Berlin analyst and the great rigorist of nineteenth-century real analysis) constructed a specific variational integral, bounded below by zero, whose infimum was zero but whose infimum no admissible function achieved. The infimum was a limit of better and better candidates; no candidate reached the limit. The Dirichlet principle, as Riemann had used it, was unsafe."
+        },
+        {
+          "type": "p",
+          "text": "For thirty years complex analysts patched around the hole with explicit conformal-map constructions and integral-representation theorems that did not need an existence-by-minimization step. The variational programme itself was distrusted. When David Hilbert (1862-1943, Göttingen's central figure in mathematics for the next forty years) addressed the Paris International Congress of Mathematicians in 1900 with his famous list of twenty-three problems (the program-setting talk of twentieth-century mathematics), the twenty-third asked for a rigorous rebuild of the calculus of variations. Hilbert had already shown the way that same year: he proved that the Dirichlet integral, the specific case Weierstrass had attacked, does attain its minimum after all, by an argument about how minimizing sequences behave. The abstract machinery hiding inside Hilbert's argument was the work of the next twenty years."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Tonelli's three-condition machine",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Leonida Tonelli (1885-1946, Italian mathematician at Bologna and later director of the Scuola Normale Superiore in Pisa) gathered the pieces in the 1910s. His 1911 paper on semicontinuity of integrals and the two-volume Fondamenti di calcolo delle variazioni (1921-1923) set down a single argument that proves the minimum exists, without ever constructing it. The argument needs three ingredients: a lower bound on the functional, a way to extract a limit from any minimizing sequence, and a guarantee that the limit point is at least as good as the limit of the values."
+        },
+        {
+          "type": "p",
+          "text": "Write Y for the space of admissible functions (curves satisfying the boundary conditions, in a function space rich enough to contain the limits we will need). Suppose J: Y → ℝ is the functional we want to minimize, with infimum m = inf_{y ∈ Y} J[y]. By the definition of infimum, there exists a sequence {y_n} ⊂ Y with J[y_n] → m. Such a sequence is called a minimizing sequence. Tonelli's three conditions are: (i) m > −∞ (J is bounded below), (ii) every minimizing sequence has a subsequence converging weakly to some y* ∈ Y (weak compactness), and (iii) for any weakly convergent sequence y_n ⇀ y* in Y, J[y*] ≤ lim inf J[y_n] (weak lower semicontinuity). Granted all three, the chain of inequalities is immediate."
+        },
+        {
+          "type": "math",
+          "tex": "\\inf_{y \\in Y} J[y] \\;\\leq\\; J[y^*] \\;\\leq\\; \\liminf_{n \\to \\infty} J[y_n] \\;=\\; \\lim_{n \\to \\infty} J[y_n] \\;=\\; \\inf_{y \\in Y} J[y]",
+          "display": true,
+          "caption": "inf_{y ∈ Y} J[y] is the infimum of J over the admissible class, the target number. J[y*] is the value of J at the weak limit y* of a subsequence of the minimizing sequence. lim inf is the limit inferior, the smallest accumulation point of the sequence of values J[y_n]. lim is the ordinary limit, defined here because the sequence J[y_n] converges to the infimum by construction. The leftmost inequality holds because y* is admissible. The middle inequality is the weak-lower-semicontinuity hypothesis. The right two equalities are the definition of a minimizing sequence."
+        },
+        {
+          "type": "p",
+          "text": "Every term in the chain equals every other term, so J[y*] = inf J. The minimum is attained at y*. Notice what the argument does and does not deliver. It does not produce y* by any constructive formula; it only proves that some weak limit exists and has the right value. It does not say the minimizer is unique; if J is not strictly convex the limit may depend on which subsequence you took. And it does not give you the Euler-Lagrange equation; that follows separately, by perturbing y* and using its minimality. What the direct method delivers is the one thing the Euler-Lagrange equation cannot: existence."
+        }
+      ],
+      "quiz": {
+        "question": "An undergraduate exercise asks you to find the curve y(x) that minimizes ∫F(x, y, y') dx by solving the Euler-Lagrange equation. The candidate solution exists and is unique. Does this calculation, by itself, prove that the integral has a minimum?",
+        "options": [
+          "Yes: a unique solution to the Euler-Lagrange equation is always the minimum.",
+          "Yes, provided the integrand is non-negative.",
+          "No: the Euler-Lagrange equation is only the necessary first-order condition for a stationary point. Proving that a minimum exists requires the three conditions of the direct method (a lower bound, weak compactness of minimizing sequences, weak lower semicontinuity).",
+          "No: the Euler-Lagrange equation only ever locates saddle points, never minima."
+        ],
+        "correctIndex": 2,
+        "explanation": "The Euler-Lagrange equation is a necessary condition: if y* minimizes J, then y* satisfies it. The converse is what fails. A function can satisfy the Euler-Lagrange equation while being a maximum, a saddle, or (worst) the limit of a minimizing sequence in a problem whose infimum is achieved by no admissible function at all. Option (a) confuses the necessary condition with a sufficient one. Option (b) misses the point: Weierstrass's 1870 example had a non-negative integrand and was the specific case that exposed the problem. Option (d) is just wrong; the Euler-Lagrange equation locates stationary points of every kind, and most of them, in the well-posed examples we care about, are minima. The direct method is the separate machinery that proves the minimum actually exists before you go looking for it."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Why weak convergence: oscillation that hides in the limit",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The compactness step is the subtle one. In the natural setting for variational problems (the Sobolev spaces W^{1,2}, also called H¹, introduced by Sergei Sobolev in 1936, in which both the function and its first derivative are square-integrable), bounded sets are not compact for the strong topology generated by the norm. A bounded sequence in H¹ can oscillate forever without ever settling near a limit in norm. The compactness Tonelli needs is therefore strong compactness's gentler cousin: weak compactness."
+        },
+        {
+          "type": "p",
+          "text": "Bounded sets in a reflexive Banach space are weakly compact, by the Banach-Alaoglu theorem (Stefan Banach and Leonidas Alaoglu, 1932, the foundational compactness statement of functional analysis: the closed unit ball of the dual of a Banach space is compact in the weak-star topology). A sequence {f_n} converges weakly to f, written f_n ⇀ f, if the integral of f_n against every smooth test function converges to the integral of f against the same test function. Rapid oscillations of f_n do not interfere with weak convergence: when averaged against a smooth weight, they wash out."
+        },
+        {
+          "type": "math",
+          "tex": "f_n \\rightharpoonup f \\;\\;\\Longleftrightarrow\\;\\; \\int_\\Omega f_n(x)\\, \\varphi(x)\\, dx \\;\\to\\; \\int_\\Omega f(x)\\, \\varphi(x)\\, dx \\quad \\text{for every smooth } \\varphi",
+          "display": true,
+          "caption": "f_n is the sequence of candidate functions. f is the proposed weak limit. φ is an arbitrary smooth test function (in practice, any smooth function with compact support inside the domain Ω). The harpoon arrow ⇀ denotes weak convergence, the standard notation distinguishing it from the ordinary arrow → used for strong convergence. The integral of f_n times φ must converge to the integral of f times φ, for every choice of φ. Strong convergence (the L²-norm of f_n − f going to zero) is a strictly stronger condition that implies weak convergence but not the other way around."
+        },
+        {
+          "type": "p",
+          "text": "The cleanest illustration is f_n(x) = sin(nπx) on the unit interval. Each f_n has the same L² norm, ‖f_n‖_{L²} = √(1/2), no matter how large n grows: the function does not get smaller in size. But every weighted integral ∫₀¹ sin(nπx) φ(x) dx decays to zero as n grows, for any smooth φ. The Riemann-Lebesgue lemma (an 1854 result of Riemann's, generalized by Henri Lebesgue, that the Fourier coefficients of any integrable function decay to zero as the frequency increases) is the same statement in different language. The sequence converges weakly to zero, without converging at all in norm. The slider below makes the asymmetry visible: the L²-norm bar stays put, the weak-pairing bar shrinks to nothing."
+        },
+        {
+          "type": "viz",
+          "src": "2026-06-20-direct-method-of-variations.html",
+          "height": 420,
+          "caption": "Move the n slider from 1 to 50 and watch f_n(x) = sin(nπx) oscillate ever faster. The left bar tracks the L² norm ‖f_n‖, which equals √(1/2) ≈ 0.707 regardless of n: in the strong topology the sequence is permanently far from zero. The right bar tracks the weak pairing |∫₀¹ f_n(x)(1 − x) dx|, which falls as 1/(nπ) and goes to zero. The same sequence is weakly null and strongly not."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Lower semicontinuity is convexity of the integrand",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Weak compactness lets us extract a limit y* from any minimizing sequence. But the chain of inequalities in section 2 only closes if J behaves well under that limit: we need J[y*] ≤ lim inf J[y_n] whenever y_n ⇀ y*. Which integral functionals have this property? Tonelli answered it cleanly in his 1920 paper on the semicontinuity of integrals. For a functional of the standard form J[y] = ∫F(x, y, y') dx on a Sobolev space, weak lower semicontinuity is equivalent to convexity of the integrand F in its derivative slot."
+        },
+        {
+          "type": "math",
+          "tex": "F\\!\\left(x, y,\\, \\lambda p_1 + (1-\\lambda) p_2\\right) \\;\\leq\\; \\lambda\\, F(x, y, p_1) + (1-\\lambda)\\, F(x, y, p_2) \\quad \\text{for all } \\lambda \\in [0, 1]",
+          "display": true,
+          "caption": "F is the integrand of the functional J. x and y are held fixed throughout the inequality. p_1 and p_2 are two arbitrary values of the third argument of F (the derivative slot, into which y' is plugged when J is computed). λ is a real number in the closed unit interval. The inequality says the graph of F as a function of its third argument sits at or below the chord between any two of its points. This is the standard definition of convexity of F in p, often called the Tonelli condition. Tonelli's theorem: J is weakly lower semicontinuous if and only if F satisfies this inequality for every (x, y, p_1, p_2)."
+        },
+        {
+          "type": "p",
+          "text": "The reason is exactly the oscillation phenomenon from section 3. Suppose F is not convex in p: there exist slopes p_1 and p_2 such that F at the midpoint is strictly larger than the average of F(p_1) and F(p_2). Build a sequence of zigzag curves with slope alternating between p_1 and p_2, fast enough that the average slope is (p_1 + p_2)/2. The integrand evaluated along each zigzag is the small value, the chord average; the weak limit of the zigzags is the straight line with the average slope; and the functional fails the inequality lim inf J[y_n] ≥ J[y*] by exactly the gap between F at the average and the average of F. Non-convex integrands do not survive weak limits."
+        },
+        {
+          "type": "p",
+          "text": "The Bolza problem (Oskar Bolza, 1857-1942, a Göttingen-trained American at the University of Chicago who codified the classical calculus of variations into a textbook discipline) is the cleanest cautionary example. The functional J[y] = ∫₀¹ (y(x)² + (y'(x)² − 1)²) dx has infimum zero, by zigzagging with slopes ±1 of very small amplitude so the y² term stays tiny and the (y'² − 1)² term stays zero. But the only candidate for a weak limit, y ≡ 0, gives J[0] = ∫₀¹ 1 dx = 1. The integrand (y'² − 1)² has two wells at y' = ±1 and a bump in between: it is not convex in y'. Tonelli's theorem says exactly this functional cannot have a minimizer, and exactly this functional does not."
+        }
+      ],
+      "quiz": {
+        "question": "Tonelli's theorem says J[y] = ∫F(x, y, y') dx is weakly lower semicontinuous on a Sobolev space if and only if F is convex in y'. Which fact about weak limits is this theorem really capturing?",
+        "options": [
+          "Weak limits respect addition: the weak limit of a sum is the sum of the weak limits.",
+          "When y_n ⇀ y* weakly, the derivatives y_n' weakly converge to y*', and a weakly convergent sequence of slopes can have its convex hull collapse onto the limit slope. So the integrand can drop below its limiting value at the chord but never above it, and the inequality J[y*] ≤ lim inf J[y_n] holds exactly when F is convex in y'.",
+          "Convex functions of weakly convergent sequences strongly converge, by the Riemann-Lebesgue lemma.",
+          "Convexity makes the Euler-Lagrange equation unique, which forces lower semicontinuity automatically."
+        ],
+        "correctIndex": 1,
+        "explanation": "Option (b) is the precise statement of why convexity-in-the-derivative is the right condition. The Riemann-Lebesgue / weak-convergence machinery lets the slopes oscillate while preserving averages, and a convex F can only lose value under that averaging (Jensen's inequality, applied pointwise); a non-convex F can gain value, by the zigzag construction in the section, and the lower-semicontinuity inequality flips the wrong way. Option (a) is true but is the linearity of the limit, not the lsc question. Option (c) is wrong: weak convergence of a sequence applied to a convex function does not in general give strong convergence; what it gives is the one-sided Jensen inequality on the integrals, which is exactly lsc. Option (d) confuses uniqueness of the Euler-Lagrange solution (a strict-convexity statement) with existence."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The Dirichlet integral, repaired and reused",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The case worth following all the way through is the rescue of the Dirichlet integral, the wound the lesson opened with. The Dirichlet integral D[u] = ∫_Ω |∇u|² dx on a bounded domain Ω, with prescribed boundary values g on ∂Ω, has every property Tonelli's machine needs. The integrand |∇u|² is strictly convex in ∇u (a quadratic form on the gradient vector), so D is weakly lower semicontinuous on the Sobolev space H¹(Ω). The functional is bounded below by zero. Minimizing sequences with the prescribed boundary values are bounded in H¹ norm (because the integral controls the gradient, and Poincaré's inequality controls the function from its gradient and boundary values) and therefore have weakly convergent subsequences by Banach-Alaoglu. The infimum is attained by some u* ∈ H¹(Ω). The Euler-Lagrange equation of D is the Laplace equation Δu = 0. The harmonic function with the prescribed boundary values exists."
+        },
+        {
+          "type": "math",
+          "tex": "D[u] = \\int_\\Omega |\\nabla u|^2 \\, dx, \\qquad \\delta D = 0 \\;\\Longleftrightarrow\\; \\Delta u = 0",
+          "display": true,
+          "caption": "D is the Dirichlet integral, the squared-gradient energy. Ω is the bounded domain in which the function u is defined. ∇u is the gradient of u, the vector of partial derivatives (∂u/∂x_1, ∂u/∂x_2, ...). The minimization is taken over functions u ∈ H¹(Ω) sharing prescribed boundary values g on ∂Ω. Δu = ∂²u/∂x_1² + ∂²u/∂x_2² + ... is the Laplacian, the sum of pure second derivatives. δD = 0 is the vanishing of the first variation of D, the Euler-Lagrange condition. The equivalence says that critical points of D are exactly the harmonic functions, those with vanishing Laplacian."
+        },
+        {
+          "type": "p",
+          "text": "The Riemann mapping theorem regained its foundation. Every conformal-mapping existence argument that had leaned on Riemann's use of the Dirichlet principle now had a foundation Weierstrass's example could not break. By the time Tonelli's Fondamenti appeared in 1921-1923, the direct method was already being applied to problems Riemann had never seen. Any partial differential equation that could be written as the Euler-Lagrange equation of an integral with an integrand convex in the gradient and a coercive functional (J[u] → ∞ as ‖u‖_{H¹} → ∞) now had an existence theorem behind it: pick the Sobolev space matching the boundary conditions, check the three conditions, minimize. The Lax-Milgram lemma (Peter Lax and Arthur Milgram, 1954, the clean abstract reformulation of the direct method for symmetric bilinear forms) became the version every graduate analysis class teaches. Ennio De Giorgi (1957, an eighteen-page paper from a twenty-eight-year-old Italian who had never published outside Italy) used the direct method to close Hilbert's 19th problem, proving that minimizers of regular variational integrals are smooth, the regularity sibling of existence Hilbert had asked for alongside problem 23."
+        },
+        {
+          "type": "p",
+          "text": "The Dirichlet integral has one more historical role to play. Jesse Douglas (1897-1965, an MIT mathematician) was awarded the first Fields Medal in 1936 for his 1931 proof of Plateau's problem (the existence of a minimal surface, a surface of locally smallest area, spanning every Jordan curve in three-space). The surface-area integrand √(1 + z_x² + z_y²) is convex in the gradient slot. But Douglas was working with surfaces parametrized over a disc, and the area functional on parametrizations is not convex in the parametrization variables: a degenerate parametrization can sweep over the same surface area while running the parametrization in highly non-convex ways. Tonelli's machine, applied directly to area, broke. So Douglas replaced area with the Dirichlet integral of the parametrization (which did satisfy the convexity condition), proved that minimizing harmonic parametrizations correspond to minimal surfaces, and minimized that instead. The detour, swapping the natural functional for an equivalent one that meets Tonelli's condition, won the first Fields Medal. The Dirichlet integral that Riemann had assumed reached its minimum in 1851, that Weierstrass had exposed as having no general right to a minimizer in 1870, and that Hilbert had proved did attain its minimum for its own boundary-value problem in 1900, was the substitute energy that pinned down minimal surfaces three decades later."
+        }
+      ]
+    }
+  ],
+  "checkInAfter": [1, 3],
+  "finalQuiz": {
+    "question": "The direct method proves that a functional J attains its minimum, but it does so without writing down the minimizer. In one sentence, what does the recipe trade for that existence guarantee?",
+    "options": [
+      "It trades constructiveness for existence: the argument identifies a weak limit y* of a minimizing sequence, proves J[y*] = inf J by combining weak compactness with lower semicontinuity, and gives no formula for y* itself.",
+      "It trades uniqueness for existence: a weak limit always exists but is never unique.",
+      "It trades the Euler-Lagrange equation for the Sobolev embedding theorem.",
+      "It trades convexity of F for coercivity of J: a coercive functional always has a minimizer, regardless of the integrand."
+    ],
+    "correctIndex": 0,
+    "explanation": "Option (a) is the substance of Tonelli's method: you get existence (the proof that some y* achieves the infimum) at the cost of constructiveness (no formula for y*; you know only that some weak limit of some minimizing sequence does the job). Option (b) is wrong because uniqueness is a strict-convexity question (when F is strictly convex in y', the minimizer is unique), separate from existence. Option (c) garbles the technical landscape; the Sobolev embedding theorem is used to upgrade weak convergence to strong convergence in lower-order terms, a refinement of the method rather than a trade-off it makes. Option (d) is the most pedagogically misleading: a coercive but non-convex functional (the Bolza example in section 4) need not have a minimizer at all, and Tonelli's theorem is exactly the rigorous statement of why coercivity alone is not enough."
+  },
+  "suggestedNodes": [
+    { "id": "sobolev_spaces", "label": "Sobolev spaces", "subtitle": "W^{k,p}", "edgeType": "extends" },
+    { "id": "hilbert_19th_problem", "label": "Hilbert's 19th", "subtitle": "De Giorgi 1957", "edgeType": "applied" },
+    { "id": "lax_milgram", "label": "Lax-Milgram", "subtitle": "1954", "edgeType": "related" }
+  ],
+  "metadata": {
+    "estimatedReadingMinutes": 25,
+    "generatedAt": "2026-06-20T08:00:00Z",
+    "generatedBy": "routine-claude-code"
+  }
+}
