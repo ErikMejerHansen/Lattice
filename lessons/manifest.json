@@ -355,5 +355,12 @@
     "subtitle": "weak lim + lsc",
     "date": "2026-06-20",
     "estimatedReadingMinutes": 25
+  },
+  {
+    "slug": "2026-06-21-riemannian-metric",
+    "title": "The Riemannian metric: an inner product on every tangent space, and the geometry that follows",
+    "subtitle": "g_ij(x)",
+    "date": "2026-06-21",
+    "estimatedReadingMinutes": 25
   }
 ]

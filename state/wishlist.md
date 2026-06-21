@@ -11,7 +11,6 @@
 # auto-suggested 2026-06-18 from calculus-of-variations
 
 # auto-suggested 2026-06-18 from geodesics
-Riemannian metric — g_ij(x) as the smooth assignment of inner products to tangent spaces, Riemann's 1854 generalisation of Gauss's intrinsic-curvature programme to arbitrary smooth manifolds in arbitrary dimensions, and the algebraic object every general-relativity calculation begins by writing down
 Schwarzschild metric — Karl Schwarzschild's January-1916 closed-form solution to Einstein's vacuum field equations outside a static spherical mass, the (1 − 2GM/c²r) line element that produced Mercury's perihelion to four-figure precision and predicts every black-hole geodesic outside the event horizon
 Parallel transport — the differential-geometric sibling that defines "straight" without a variational principle: keep a vector pointing the same way as you carry it along a curve by demanding ∇_X V = 0, and the curves whose tangent parallel-transports itself are exactly the geodesics, the equivalence that gives the geodesic equation its connection-form derivation
 
@@ -167,3 +166,7 @@ Bernstein's theorem — Sergei Bernstein's 1915 statement that the only entire m
 Sobolev spaces — W^{k,p}, Sergei Sobolev's 1936 function spaces whose elements have weak derivatives in L^p up to order k, the natural home of every modern variational problem and the framework in which Tonelli's three-condition machine actually runs
 Hilbert's 19th problem — Ennio De Giorgi 1957, the 18-page paper proving that minimizers of regular variational integrals are automatically smooth, the regularity sibling of existence Hilbert had asked for alongside problem 23 and the result that earned De Giorgi the 1990 Wolf Prize
 Lax-Milgram lemma — Peter Lax and Arthur Milgram 1954, the abstract Hilbert-space reformulation of the direct method for symmetric coercive bilinear forms, the version of the existence theorem every graduate elliptic-PDE course actually uses
+
+# auto-suggested 2026-06-21 from riemannian-metric
+Riemann curvature tensor — R^ρ_σμν built from g_ij and its first and second derivatives via the Christoffel symbols, the n-dimensional generalisation of Gauss's scalar K and the local object Einstein's field equations equate to the stress-energy tensor
+Minkowski spacetime — the flat pseudo-Riemannian (−,+,+,+) metric Hermann Minkowski wrote down in his September 1908 Cologne lecture, the geometric reading of special relativity and the local tangent-space model that every general-relativistic spacetime reduces to in a free-fall frame

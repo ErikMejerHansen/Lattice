@@ -1,0 +1,237 @@
+{
+  "slug": "2026-06-21-riemannian-metric",
+  "title": "The Riemannian metric: an inner product on every tangent space, and the geometry that follows",
+  "node": {
+    "id": "riemannian_metric",
+    "label": "Riemann metric",
+    "subtitle": "g_ij(x)"
+  },
+  "intro": "The previous lesson treated the metric tensor g_ij as a recipe: substitute it into the arc-length integral and the Euler-Lagrange equation grinds out the geodesic. This lesson opens the recipe and asks what kind of object g_ij actually is, where it came from, and what else it does. The answer Gauss arrived at in 1827 and Riemann generalised in 1854 is that g_ij is a smooth assignment of an inner product to every tangent space of the manifold; from that single matrix-valued field, length, angle, area, and curvature all follow. Every general-relativity calculation begins by writing one down.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Hannover, theodolites, and the surprise of intrinsic curvature",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "King George IV of Hannover, who happened also to be King George IV of the United Kingdom, commissioned a precise geodetic survey of his German kingdom in 1818, and Carl Friedrich Gauss, age 41 and already director of the Göttingen observatory, was put in charge. The job consumed his summers through 1832: triangulating an irregular 27,000 km² region with theodolites (precision angle-measuring instruments mounted on tripods) and heliotropes (mirrors that reflected sunlight as a daytime aiming beacon, Gauss's own 1821 invention). The output was a network of 2,578 measured triangles and a stack of computed coordinates good to fractions of an arc-second. The byproduct, which Gauss had not been asked for, was a complete theory of curved surfaces."
+        },
+        {
+          "type": "p",
+          "text": "The byproduct appeared in 1827 as Disquisitiones generales circa superficies curvas (general investigations of curved surfaces). The central discovery is now called the Theorema Egregium (remarkable theorem, a Latin name Gauss gave it himself out of unusual delight): the Gaussian curvature K of a surface is determined entirely by measurements made inside the surface, with no reference to the way the surface sits in the three-dimensional space around it. A creature confined to a sphere can measure K without ever stepping off it, by tallying distances along the surface and angles between intersecting curves. The same creature on a flat plane finds K = 0; on a saddle, K < 0; on a sphere of radius R, K = 1/R²."
+        },
+        {
+          "type": "p",
+          "text": "The example to keep in mind is the cylinder. A cylinder is curved in the everyday sense of having a non-flat shape in three-dimensional space, but its intrinsic curvature is exactly zero. Roll a sheet of paper into a cylinder and every distance and angle on the paper survives the rolling, because the operation does not stretch, tear, or wrinkle the sheet. Cartographers had known this for centuries: any region that maps onto a flat sheet without distortion (a developable surface, in the technical name Gaspard Monge fixed in 1795) has K = 0. The sphere is the opposite. Every flat map of the Earth distorts something: Mercator (1569) preserves angles and inflates polar areas, Mollweide (1805) preserves areas and warps shapes, and no projection preserves both. The non-existence of a faithful flat map of the sphere is the same fact as the sphere's positive intrinsic curvature."
+        },
+        {
+          "type": "p",
+          "text": "The pivot inside the Disquisitiones was a single definition. Gauss specified the intrinsic geometry of a surface by giving, in any coordinate patch (u, v), three coefficients of what he called the first fundamental form: ds² = E du² + 2F du dv + G dv². The symbols are bookkeeping for inner products: E is ⟨∂_u, ∂_u⟩, F is ⟨∂_u, ∂_v⟩, G is ⟨∂_v, ∂_v⟩, the inner products of the two coordinate tangent vectors that span the tangent plane at each point. The Theorema Egregium says K is a function of E, F, G and their first and second partial derivatives, nothing more. The embedding of the surface in three-space had vanished from the formula, and intrinsic geometry was born."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The 1854 lecture: every tangent space gets an inner product",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bernhard Riemann arrived at Göttingen in 1846 as Gauss's student and graduated to the Habilitation (the German qualification required to lecture as a Privatdozent, an unsalaried university teacher paid directly by student fees) in 1854. The custom called for the candidate to propose three lecture topics and the faculty to choose one. Riemann offered two on subjects he had prepared thoroughly and a third, Über die Hypothesen, welche der Geometrie zu Grunde liegen (on the hypotheses that lie at the foundation of geometry), that he had barely thought through, expecting it to be passed over. Gauss, who would die in eight months, picked the third. Riemann delivered the lecture on June 10, 1854, with Gauss in the front row; the audience reportedly understood very little, and Gauss is said to have walked home afterwards visibly moved."
+        },
+        {
+          "type": "p",
+          "text": "The lecture made two leaps. First, Riemann replaced the 2D embedded surfaces of the Disquisitiones with the manifold (German Mannigfaltigkeit), an abstract n-dimensional space defined intrinsically by local coordinate patches and rules for how they overlap. The surface no longer had to live inside any ambient ℝ^k; a manifold is the surface, full stop. Second, at each point p of a manifold he attached the tangent space T_p M, an n-dimensional real vector space whose elements are the velocity vectors of curves passing through p. Tangent spaces at different points are different vector spaces; on a sphere, the tangent plane at the north pole and the tangent plane at Quito are unrelated by any natural identification."
+        },
+        {
+          "type": "p",
+          "text": "A Riemannian metric is the additional structure that turns each tangent space into a geometric object: an inner product g_p that takes two tangent vectors and returns a real number, and that varies smoothly with the point p. In a local coordinate basis (∂_1, ..., ∂_n), the inner product is encoded by an n×n matrix g_ij(p) whose entries are the inner products of the basis vectors. All metric notions of the surface (length of a vector, angle between two vectors, length of a curve) are then computed from this single matrix-valued field."
+        },
+        {
+          "type": "math",
+          "tex": "g_p(u, v) = g_{ij}(p)\\, u^i\\, v^j, \\qquad ds^2 = g_{ij}(x)\\, dx^i\\, dx^j",
+          "display": true,
+          "caption": "g_p is the inner product at the point p, a function that takes two tangent vectors and returns a real number. u and v are tangent vectors at p, with components u^i and v^j in the chosen coordinate basis. g_ij(p) is the matrix of g_p in that basis: g_ij(p) = g_p(∂_i, ∂_j). ds is the infinitesimal arc-length element. dx^i and dx^j are the coordinate displacements, with i and j running from 1 to n (the dimension). Einstein summation is used: any index repeated once as a superscript and once as a subscript is summed. The two formulas are the same statement, written first for finite tangent vectors and then for infinitesimal displacements."
+        },
+        {
+          "type": "p",
+          "text": "Three properties make the matrix a Riemannian metric rather than an arbitrary bilinear form. It is symmetric, g_ij = g_ji, so inner products do not depend on the order of arguments. It is positive-definite, g_ij u^i u^j > 0 for any nonzero tangent vector u, so every nonzero vector has positive squared length. And it is smooth in p, so the entries g_ij are smooth functions of the coordinates and geometric quantities vary continuously across the manifold. Drop positive-definiteness and you get the pseudo-Riemannian metric, the case relativity will need (section 5 returns to this). Keep all three and you have the object Riemann put on the table in 1854: a smooth, symmetric, positive-definite tensor field on a manifold, ready to do every geometric job at once."
+        }
+      ],
+      "quiz": {
+        "question": "A flat square sheet of paper and a hemisphere of the same surface area are placed in front of you. Both are 2D Riemannian surfaces with smooth metrics. Is there an isometry (a smooth, distance-preserving map) between the interior of the square and the interior of the hemisphere?",
+        "options": [
+          "Yes; equal-area 2D Riemannian surfaces are always isometric.",
+          "Yes; both are simply connected, and any two simply connected 2D manifolds with the same area admit an isometry between them.",
+          "No; the square has K = 0 everywhere and the hemisphere has K = 1/R² > 0. The Theorema Egregium says any isometry preserves K at every corresponding pair of points, and 0 ≠ 1/R², so no such map exists.",
+          "No; the square has corners and the hemisphere does not, so they cannot have the same topology."
+        ],
+        "correctIndex": 2,
+        "explanation": "Isometries preserve every intrinsic quantity, K included. The flat square has K = 0 at every point; the hemisphere has K = 1/R² > 0 at every point. Any candidate isometry would have to map a K = 0 point to a K > 0 point, contradicting preservation. This is the cartographer's obstruction made precise: no flat map of any region of the sphere can preserve distances. Option (a) is wrong because equal area is necessary but nowhere near sufficient. Option (b) makes the same area-only mistake and dresses it up with topology. Option (d) confuses chart artifacts (the square's corners are the boundary of a chosen coordinate patch, not intrinsic features) with intrinsic geometric differences."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Length, angle, area: everything geometric the metric measures",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "With one symmetric matrix per point, the metric tensor makes good on the inner-product promise. Three constructions cover most of what classical geometry needs from it."
+        },
+        {
+          "type": "p",
+          "text": "Length of a curve, recovered the way the geodesics lesson used it. A smooth curve γ on the parameter interval [t_0, t_1] has, at each parameter value t, a tangent vector γ̇(t) lying in the tangent space at γ(t). The local speed is the metric length of that tangent vector, √(g_ij ẋ^i ẋ^j), and the arc length is the integral of the speed along the curve."
+        },
+        {
+          "type": "math",
+          "tex": "L[\\gamma] = \\int_{t_0}^{t_1} \\sqrt{g_{ij}(\\gamma(t))\\, \\dot{\\gamma}^i\\, \\dot{\\gamma}^j}\\, dt",
+          "display": true,
+          "caption": "L[γ] is the arc length of the curve γ, a single real number. t is the parameter, running from t_0 to t_1. γ(t) is the curve's position at parameter t. γ̇^i = dγ^i/dt is the i-th component of the curve's velocity in the chosen coordinates. g_ij(γ(t)) is the metric tensor evaluated at the current position. Einstein summation over the repeated indices i and j is implied. The integrand is the local speed ds/dt; integrating it along the parameter recovers the arc length."
+        },
+        {
+          "type": "p",
+          "text": "Angle between two tangent vectors at the same point. If u and v are nonzero tangent vectors at p, the inner product g_ij u^i v^j divided by the product of their lengths gives the cosine of the angle θ between them, by the standard formula carried over from Euclidean geometry. For two curves that cross at p, take their tangent vectors there; θ is the angle of intersection. The Mercator projection preserves these angles, because the local metric on the chart is conformal to the local metric on the sphere (it differs from it by a positive scalar factor that cancels in the cosine)."
+        },
+        {
+          "type": "math",
+          "tex": "\\cos\\theta = \\frac{g_{ij}\\, u^i\\, v^j}{\\sqrt{g_{ij}\\, u^i\\, u^j}\\, \\sqrt{g_{kl}\\, v^k\\, v^l}}",
+          "display": true,
+          "caption": "θ is the angle between two nonzero tangent vectors u and v at a point p. g_ij is the metric tensor at p. u^i and v^j are the components of u and v in a coordinate basis. The numerator g_ij u^i v^j is the inner product g_p(u, v). The two square roots in the denominator are the metric lengths |u| and |v|. Einstein summation is used on i, j in the numerator and on i, j (and separately on k, l) in the denominator. The formula reduces to the familiar Euclidean cosine when g_ij is the identity matrix."
+        },
+        {
+          "type": "p",
+          "text": "Area, and a startling shortcut. A 2D Riemannian surface has area element √det(g) du dv in coordinates (u, v); on a sphere of radius R this evaluates to R² sin θ dθ dφ, the integrand every introductory calculus class has computed. Three centuries of cartography and one century of topology then converge on a single statement, the local Gauss-Bonnet theorem (Gauss in the 1827 Disquisitiones, generalised by Pierre Bonnet, a Lyon-born differential geometer at the École Polytechnique, in 1848): the integral of the Gaussian curvature K over a geodesic triangle equals exactly the triangle's angle excess."
+        },
+        {
+          "type": "math",
+          "tex": "\\alpha + \\beta + \\gamma - \\pi = \\iint_T K\\, dA",
+          "display": true,
+          "caption": "α, β, γ are the three interior angles of a geodesic triangle T on a 2D Riemannian surface. π is the angle sum of a triangle on the flat plane. The left side α + β + γ − π is therefore the angle excess: how much the spherical-or-curved triangle exceeds the flat-plane value. T (under the double integral sign) is the triangle's interior, a region of the surface. K is the Gaussian curvature, evaluated as a function of position. dA = √det(g) du dv is the area element. The formula is the local Gauss-Bonnet theorem; when K = 0 it reduces to the familiar α + β + γ = π of plane geometry."
+        },
+        {
+          "type": "viz",
+          "src": "2026-06-21-riemannian-metric.html",
+          "height": 520,
+          "caption": "An isoceles geodesic triangle on the unit sphere viewed from above the north pole. A sits at the pole; B and C sit at colatitude size (slider), separated by 120° of longitude (so the angle at A is fixed at 120° by the longitude spacing). As the triangle shrinks, the angle sum approaches the flat-plane value of 180° and the angle excess approaches zero. As it grows to a size of 90°, the triangle covers 1/3 of the upper hemisphere; the angle sum reaches 300° and the excess reaches 120° (= 2π/3 radians = 2π/3 of unit-sphere area). Gauss-Bonnet says the area equals the excess in radians; the readout confirms it as you drag."
+        },
+        {
+          "type": "p",
+          "text": "The viz makes the angle-excess intuition tactile. A small triangle on the sphere is nearly planar and sums to nearly π; the excess scales with the triangle's area, with the proportionality given by K = 1/R². On the flat plane the excess is zero for every triangle (K = 0). On a saddle the excess is negative; angle sums fall below π and shrink further as the triangle grows. Three intrinsic signatures of K, none of which requires any measurement instrument outside the surface."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The Theorema Egregium, with K worked out for the sphere",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Gauss's statement of the Theorema Egregium can now be made precise. The Gaussian curvature K of a 2D Riemannian manifold is a function of the metric components and their first and second partial derivatives, and nothing else. Two surfaces with the same metric (call them isometric) have the same K at corresponding points. Cylinder and sheet of paper, both g_ij = δ_ij, both K = 0 everywhere."
+        },
+        {
+          "type": "p",
+          "text": "In orthogonal coordinates (where F = 0 and the metric is ds² = E du² + G dv²), the formula K takes is due to Francesco Brioschi, an Italian engineer-mathematician who wrote it down in 1854 (the same year as Riemann's lecture, by coincidence). The symbols E, F, G are Gauss's first-fundamental-form coefficients introduced in section 1; subscripts denote partial derivatives, so G_u means ∂G/∂u."
+        },
+        {
+          "type": "math",
+          "tex": "K = -\\frac{1}{2\\sqrt{EG}} \\left( \\frac{\\partial}{\\partial u}\\!\\left(\\frac{G_u}{\\sqrt{EG}}\\right) + \\frac{\\partial}{\\partial v}\\!\\left(\\frac{E_v}{\\sqrt{EG}}\\right) \\right)",
+          "display": true,
+          "caption": "K is the Gaussian curvature, a function of position on the surface. (u, v) are orthogonal local coordinates, so the metric has the form ds² = E du² + G dv² with F = 0. E and G are the diagonal coefficients of the metric, both smooth positive functions of (u, v). Subscripts denote partial derivatives: E_v = ∂E/∂v and G_u = ∂G/∂u. √(EG) is the square root of det(g), the area-element prefactor. The formula expresses K as a combination of E, G and their first and second derivatives only; no information about the surface's embedding in three-space appears anywhere on the right-hand side, which is the precise content of the Theorema Egregium."
+        },
+        {
+          "type": "p",
+          "text": "One worked verification, also done by Gauss. On the sphere of radius R, take colatitude θ and longitude φ as orthogonal coordinates. Then E = R², G = R² sin²θ, F = 0. The relevant derivatives are E_φ = 0 (so the second term inside the parentheses vanishes) and G_θ = 2 R² sinθ cosθ. Plug into Brioschi's formula and simplify."
+        },
+        {
+          "type": "math",
+          "tex": "K_{\\text{sphere}} = -\\frac{1}{2\\sqrt{R^4 \\sin^2\\theta}}\\, \\frac{\\partial}{\\partial \\theta}\\!\\left(\\frac{2 R^2 \\sin\\theta \\cos\\theta}{\\sqrt{R^4 \\sin^2\\theta}}\\right)",
+          "display": true,
+          "caption": "K_sphere is the Gaussian curvature of the sphere of radius R. The first prefactor is the 1/(2√(EG)) of Brioschi's formula, with EG = R⁴ sin²θ on this surface. Inside the outer derivative, G_u/√(EG) becomes 2 R² sinθ cosθ divided by √(R⁴ sin²θ). The E_v term has dropped because E_φ = 0 on the sphere. θ is colatitude, the angle from the north pole. R is the sphere's radius."
+        },
+        {
+          "type": "math",
+          "tex": "K_{\\text{sphere}} = -\\frac{1}{2 R^2 \\sin\\theta}\\, \\frac{\\partial}{\\partial \\theta}(2 \\cos\\theta) = -\\frac{1}{2 R^2 \\sin\\theta}\\, (-2 \\sin\\theta) = \\frac{1}{R^2}",
+          "display": true,
+          "caption": "Same K_sphere, with the fractions inside collapsed. √(R⁴ sin²θ) equals R² sinθ for sinθ > 0, so 2 R² sinθ cosθ divided by R² sinθ equals 2 cosθ; and the outer 1/(2√(EG)) becomes 1/(2 R² sinθ). The second equality differentiates 2 cosθ with respect to θ to get −2 sinθ. The third equality cancels sinθ and the minus signs and leaves 1/R². The result is independent of θ and φ: every point on the sphere has the same Gaussian curvature 1/R². A bigger sphere is flatter, a fact every cartographer has felt in the difficulty of mapping a small globe."
+        },
+        {
+          "type": "p",
+          "text": "Two corollaries follow immediately. The cartographer's corollary is the negative result: there is no isometry from any region of the sphere (K = 1/R²) to any region of the flat plane (K = 0), because isometries preserve K and 1/R² ≠ 0. Every flat map of the Earth therefore distorts something, and the choice of projection is the choice of which distortion to bear. Mercator keeps angles and inflates polar areas. Lambert's 1772 equal-area conic projection keeps areas and warps shapes. None can keep both. The Theorema Egregium is the obstruction."
+        },
+        {
+          "type": "p",
+          "text": "The physicist's corollary is the broader one. Curvature, the property that distinguishes a sphere from a plane, is determined by g_ij alone, without any extra structure. So when Einstein later wrote down the metric of spacetime, the curvature of spacetime came along for free; he did not need to specify it separately. The Riemann curvature tensor R^ρ_σμν, the n-dimensional generalisation of Gauss's scalar K, is a determined function of g_ij and its first and second derivatives, exactly the way K is for n = 2. Specifying a metric specifies the whole intrinsic geometry."
+        }
+      ],
+      "quiz": {
+        "question": "A pair of trousers (one waist and two legs, sewn together at the crotch) and a flat plane both have K = 0 at every smooth point, but the trousers have a singular concentration of curvature at the crotch. Is this consistent with the Theorema Egregium?",
+        "options": [
+          "No; if K = 0 at almost every point, the surface must be globally flat and isometric to a region of the plane, so a crotch singularity contradicts the theorem.",
+          "Yes; the Theorema Egregium says K is determined by g_ij where g_ij is smooth, but does not require that K be smooth everywhere. The trousers are intrinsically flat away from the crotch (every region clear of the seam is isometric to a piece of plane); at the crotch the metric fails to be smooth, and a localised curvature contribution concentrates there, picked up by the integrated Gauss-Bonnet form rather than by the pointwise Brioschi formula.",
+          "No; the metric on the trousers is not well-defined, so the surface is not a Riemannian manifold and the theorem does not apply.",
+          "Yes; the crotch is an extrinsic feature (a kink in the embedding), so by intrinsic-extrinsic separation it has no intrinsic geometric consequence."
+        ],
+        "correctIndex": 1,
+        "explanation": "The Theorema Egregium is a statement about how K is constructed from g_ij wherever both are well-defined; it makes no regularity demand beyond that. The trousers have K = 0 in the smooth flat regions (each leg, the waist, the body) and a localised curvature concentration at the singular seam where the metric is not smooth. A loop drawn around the crotch and parallel-transported back to its start fails to return to its original orientation by exactly the integrated curvature concentration; this is the discrete cousin of the local Gauss-Bonnet formula from section 3. Option (a) confuses K = 0 at most points with K = 0 everywhere, missing the singular contribution. Option (c) draws too sharp a regularity line; the trousers are a perfectly good piecewise-smooth manifold, the standard kind of object for low-regularity differential geometry. Option (d) calls the crotch extrinsic, which is wrong: an intrinsic walk around the crotch from inside the surface shows the angle deficit directly."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Cologne, September 1908: Minkowski takes off the positive-definite restriction",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Einstein's 1905 special relativity expressed all its content as Lorentz transformations: algebraic rules for how the coordinates (t, x, y, z) of one observer relate to the coordinates (t', x', y', z') of another observer moving at constant velocity. The transformations had one invariant: any pair of events, no matter who measured them, kept the same value of the quantity c²(t_2 − t_1)² − (x_2 − x_1)² − (y_2 − y_1)² − (z_2 − z_1)². The invariant was algebraic, written in Einstein's papers as an equation, with no geometric reading attached to it."
+        },
+        {
+          "type": "p",
+          "text": "In September 1908, Hermann Minkowski (who had been one of Einstein's mathematics professors at the Zürich Polytechnic, and who once described his former student as a lazy dog but a clever one) gave a lecture at the 80th Assembly of German Natural Scientists and Physicians in Cologne titled Raum und Zeit (Space and Time). He opened with a sentence that became the founding line of the geometrisation of physics: henceforth space by itself, and time by itself, are doomed to fade away into mere shadows, and only a kind of union of the two will preserve an independent reality. The technical content was that Einstein's invariant was the squared distance in a four-dimensional Riemannian-style geometry, except with one crucial change: the metric was not positive-definite."
+        },
+        {
+          "type": "math",
+          "tex": "ds^2 = -c^2\\, dt^2 + dx^2 + dy^2 + dz^2",
+          "display": true,
+          "caption": "ds² is the squared spacetime line element, but its sign can now be negative. c is the speed of light, the conversion factor that gives time and space the same units inside the formula. t is the time coordinate of any one inertial observer; x, y, z are that observer's spatial coordinates. The coefficient matrix g_μν is diag(−c², 1, 1, 1), a 4×4 diagonal matrix with one negative entry on the diagonal and three positive ones. This is the Lorentzian or (−, +, +, +) signature. The matrix is symmetric and non-degenerate (its determinant is non-zero), but it is no longer positive-definite. Because g_μν is constant in (t, x, y, z), the spacetime described here is flat in the Riemannian sense, with all components of the Riemann tensor equal to zero."
+        },
+        {
+          "type": "p",
+          "text": "Three consequences follow from dropping positive-definiteness. First, ds² no longer has to be ≥ 0. A timelike vector (one that points into the future by more than it points across space, such as the four-velocity of a slow-moving particle) has ds² < 0; the corresponding length, √(−ds²), is its proper time, the time a clock carried along the vector would read. A spacelike vector (one that points across space by more than into the future) has ds² > 0, with length √(ds²) called a proper distance. A lightlike or null vector has ds² = 0; the four-velocity of a photon is null, and the set of all null vectors at a point forms a cone in the tangent space, the light cone, separating events the point can causally influence from events it cannot."
+        },
+        {
+          "type": "p",
+          "text": "Second, the inner product can vanish on nonzero vectors: a null vector is self-orthogonal in the Minkowski metric, ⟨v, v⟩ = 0 with v ≠ 0, an outcome ruled out by positive-definiteness in the Riemannian case. Third, and most importantly, Minkowski's pseudo-Riemannian metric satisfies all of Riemann's other axioms (smoothness, symmetry, non-degeneracy), so the entire machinery the 1854 lecture set up (length, angle, geodesic, Christoffel symbol, Riemann curvature tensor) carries over with at most a few sign changes to track. Free particles fall along timelike geodesics of g_μν; photons trace null geodesics; the proper time of any history is an integral of √(−g_μν ẋ^μ ẋ^ν) dt. The Methodus inveniendi machine runs on the Minkowski metric without modification."
+        },
+        {
+          "type": "p",
+          "text": "This is the one historical case to remember from this lesson. The indispensable mathematical ingredient of special relativity (the indefinite spacetime metric), and of general relativity after it (the same indefinite metric, now curved by matter via Einstein's field equations), was already on Riemann's table in 1854 as a single small relaxation of one axiom. Special relativity is the flat (−, +, +, +) case. General relativity, completed seven years after the Cologne lecture, replaces the flat metric with a position-dependent g_μν(x) and lets the geodesic equation of the previous lesson take over the role of Newton's second law. From Gauss's heliotropes blinking across the hills of Hannover to the Schwarzschild line element governing every GPS satellite in orbit, the entire chain runs through a single object: a smooth, symmetric, non-degenerate matrix-valued field on a manifold. Once Riemann's 1854 lecture had named the object, the rest was a matter of finding which one the world used."
+        }
+      ]
+    }
+  ],
+  "checkInAfter": [1, 3],
+  "finalQuiz": {
+    "question": "This lesson has emphasized that specifying a Riemannian metric g_ij determines length, angle, area, geodesics, and curvature, all through formulas involving g_ij and its derivatives. Which of the following examples best illustrates that principle in a way the lesson's machinery actually makes precise?",
+    "options": [
+      "A cylinder and a flat sheet of paper share the same metric g_ij = δ_ij in good coordinates, so the Theorema Egregium gives them both K = 0; their geodesics, angles, and areas all match locally, and they differ only in extrinsic embedding and global topology.",
+      "A cylinder and a flat sheet share the same embedding in three-space, so they must have the same intrinsic curvature.",
+      "Two Riemannian surfaces with the same total area are always isometric, since the area element √det(g) du dv is metric-determined.",
+      "The metric determines distances only; angles between curves and curvature require a separate connection structure to be specified independently."
+    ],
+    "correctIndex": 0,
+    "explanation": "The cylinder/paper pair is the cleanest demonstration of the lesson's central point. Both surfaces carry the same metric g_ij = δ_ij in well-chosen coordinates (Cartesian on the paper; (s, z) along the cylinder, where s is arc length along the circumference and z is height along the axis). The same metric forces the same K via Brioschi's formula (zero in both cases); the same metric forces the same arc length, angle, and area integrals; and the same metric forces the same geodesic equation (straight lines in both coordinate systems). The two surfaces differ only in their extrinsic embedding in R³ and in their global topology (the cylinder has a loop you cannot contract; the paper does not). Option (b) reverses the relationship: same embedding does not imply same intrinsic geometry (a flat strip and the same strip bent into a cylinder share an embedding's local appearance but the bending is intrinsically silent). Option (c) is wrong because equal area is necessary but nowhere near sufficient for isometry. Option (d) reintroduces a structure (the connection) that the Riemannian framework determines from g_ij alone via the Christoffel-symbol formula of the previous lesson."
+  },
+  "suggestedNodes": [
+    { "id": "riemann_curvature_tensor", "label": "Riemann tensor", "subtitle": "R^ρ_σμν", "edgeType": "extends" },
+    { "id": "schwarzschild_metric", "label": "Schwarzschild", "subtitle": "static BH metric", "edgeType": "applied" },
+    { "id": "minkowski_spacetime", "label": "Minkowski ST", "subtitle": "(−,+,+,+)", "edgeType": "related" }
+  ],
+  "metadata": {
+    "estimatedReadingMinutes": 25,
+    "generatedAt": "2026-06-21T08:00:00Z",
+    "generatedBy": "routine-claude-code"
+  }
+}
