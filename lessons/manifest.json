@@ -362,5 +362,12 @@
     "subtitle": "g_ij(x)",
     "date": "2026-06-21",
     "estimatedReadingMinutes": 25
+  },
+  {
+    "slug": "2026-06-22-schwarzschild-metric",
+    "title": "The Schwarzschild metric: an exact line element from the Eastern Front",
+    "subtitle": "static BH metric",
+    "date": "2026-06-22",
+    "estimatedReadingMinutes": 25
   }
 ]

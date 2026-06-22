@@ -11,7 +11,6 @@
 # auto-suggested 2026-06-18 from calculus-of-variations
 
 # auto-suggested 2026-06-18 from geodesics
-Schwarzschild metric — Karl Schwarzschild's January-1916 closed-form solution to Einstein's vacuum field equations outside a static spherical mass, the (1 − 2GM/c²r) line element that produced Mercury's perihelion to four-figure precision and predicts every black-hole geodesic outside the event horizon
 Parallel transport — the differential-geometric sibling that defines "straight" without a variational principle: keep a vector pointing the same way as you carry it along a curve by demanding ∇_X V = 0, and the curves whose tangent parallel-transports itself are exactly the geodesics, the equivalence that gives the geodesic equation its connection-form derivation
 
 # auto-suggested 2026-05-11 from total-internal-reflection
@@ -170,3 +169,8 @@ Lax-Milgram lemma — Peter Lax and Arthur Milgram 1954, the abstract Hilbert-sp
 # auto-suggested 2026-06-21 from riemannian-metric
 Riemann curvature tensor — R^ρ_σμν built from g_ij and its first and second derivatives via the Christoffel symbols, the n-dimensional generalisation of Gauss's scalar K and the local object Einstein's field equations equate to the stress-energy tensor
 Minkowski spacetime — the flat pseudo-Riemannian (−,+,+,+) metric Hermann Minkowski wrote down in his September 1908 Cologne lecture, the geometric reading of special relativity and the local tangent-space model that every general-relativistic spacetime reduces to in a free-fall frame
+
+# auto-suggested 2026-06-22 from schwarzschild-metric
+Einstein field equations — G_μν = (8πG/c⁴) T_μν, the 1915 nonlinear ten-component system equating the spacetime curvature on the left to the matter-energy stress-energy on the right, the equation Einstein chased for eight years between the 1907 equivalence-principle Annalen note and the November 25 1915 Prussian Academy paper, and the source equations Schwarzschild solved exactly six weeks later
+Kerr metric — Roy Kerr 1963, the rotating-vacuum generalisation of Schwarzschild that took 47 years to find, with a two-parameter (M, J) line element built from the Boyer-Lindquist coordinates, an ergosphere outside the horizon where Penrose energy extraction works, and the realistic geometry of every astrophysical black hole spinning up its accretion disk
+Kruskal-Szekeres coordinates — the 1960 maximal analytic extension of the Schwarzschild geometry into a single (U, V) chart covering two asymptotically flat universes connected by a non-traversable Einstein-Rosen bridge, with light cones at 45° everywhere and the r=r_s horizon and r=0 singularity all visible at once, the picture that finally made the black-hole geometry teachable
