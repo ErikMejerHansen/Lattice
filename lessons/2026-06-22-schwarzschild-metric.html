@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Schwarzschild metric coefficients</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption { font-style: italic; font-size: 12px; color: var(--text-muted); }
+.viz-slider-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); min-height: 36px; }
+.viz-slider-row label { font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 40px; }
+.viz-slider-row .value { font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; font-size: 11px; color: var(--text); min-width: 64px; text-align: right; }
+#viz { padding: 14px 16px 10px; box-sizing: border-box; }
+.plot svg { width: 100%; height: auto; display: block; background: var(--bg-raised); border: 1px solid var(--border); max-height: 320px; }
+.readout { font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; font-size: 11px; color: var(--text); margin-top: 8px; display: flex; flex-wrap: wrap; gap: 12px 16px; }
+.readout span.lbl { color: var(--text-muted); }
+.readout .item { display: flex; gap: 5px; align-items: baseline; }
+.legend { font-size: 11px; color: var(--text-muted); margin-top: 6px; display: flex; gap: 14px; flex-wrap: wrap; }
+.legend .swatch { display: inline-block; width: 22px; height: 0; border-top: 2px solid var(--accent); vertical-align: middle; margin-right: 5px; }
+.legend .swatch.dashed { border-top-style: dashed; }
+.controls { margin-top: 8px; }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div class="plot"><svg id="plot" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg></div>
+  <div class="legend">
+    <span><span class="swatch"></span>−g_tt = 1 − r_s/r</span>
+    <span><span class="swatch dashed"></span>g_rr = 1/(1 − r_s/r)</span>
+  </div>
+  <div class="controls">
+    <div class="viz-slider-row">
+      <label for="rSlider">r / r_s</label>
+      <input id="rSlider" type="range" min="1.01" max="5.99" step="0.01" value="3.00">
+      <span class="value" id="rVal">3.00</span>
+    </div>
+    <div class="readout">
+      <div class="item"><span class="lbl">r (solar M)</span><span id="rkmVal">8.85</span><span class="lbl">km</span></div>
+      <div class="item"><span class="lbl">−g_tt</span><span id="gttVal">0.667</span></div>
+      <div class="item"><span class="lbl">g_rr</span><span id="grrVal">1.500</span></div>
+      <div class="item"><span class="lbl">clock slow by</span><span id="dilVal">1.225</span><span class="lbl">×</span></div>
+      <div class="item"><span class="lbl">ruler stretch</span><span id="strVal">1.225</span><span class="lbl">×</span></div>
+    </div>
+  </div>
+  <div class="viz-caption" style="margin-top: 10px;">
+    The two non-trivial Schwarzschild metric coefficients plotted against r/r_s, with the accent solid curve −g_tt = 1 − r_s/r and the accent dashed curve g_rr = 1/(1 − r_s/r). The shaded band r &lt; r_s is the interior of the event horizon, where the sign of g_tt flips and the radial coordinate becomes timelike. Vertical markers at r = r_s (horizon), r = 1.5 r_s (photon sphere, light orbits unstably), and r = 3 r_s (ISCO, smallest stable massive-particle orbit). Drag the slider to move a probe; the readout shows the local time-dilation factor 1/√(1 − r_s/r) (how much slower a stationary local clock runs compared to a distant clock) and the radial-ruler stretch √(g_rr) (how much longer a stationary local ruler measures the same Δr as a distant ruler). r in km uses the solar-mass r_s = 2.95 km; for other masses scale linearly.
+  </div>
+</div>
+<script>
+(function () {
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  function svgEl(name, attrs, text) {
+    var el = document.createElementNS(SVG_NS, name);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    if (text != null) el.textContent = text;
+    return el;
+  }
+
+  var svg = document.getElementById('plot');
+  var rSlider = document.getElementById('rSlider');
+  var rVal = document.getElementById('rVal');
+  var rkmVal = document.getElementById('rkmVal');
+  var gttEl = document.getElementById('gttVal');
+  var grrEl = document.getElementById('grrVal');
+  var dilEl = document.getElementById('dilVal');
+  var strEl = document.getElementById('strVal');
+
+  var W = 600, H = 340;
+  var M_L = 50, M_R = 16, M_T = 18, M_B = 36;
+  var plotW = W - M_L - M_R;
+  var plotH = H - M_T - M_B;
+
+  var X_MIN = 0.5, X_MAX = 6.0;
+  var Y_MIN = 0.0, Y_MAX = 5.0;
+
+  function xs(x) { return M_L + (x - X_MIN) / (X_MAX - X_MIN) * plotW; }
+  function ys(y) { return M_T + (1 - (y - Y_MIN) / (Y_MAX - Y_MIN)) * plotH; }
+
+  function drawAxes() {
+    svg.appendChild(svgEl('rect', {
+      x: xs(X_MIN), y: ys(Y_MAX),
+      width: xs(X_MAX) - xs(X_MIN),
+      height: ys(Y_MIN) - ys(Y_MAX),
+      fill: 'var(--bg-raised)', stroke: 'none'
+    }));
+
+    svg.appendChild(svgEl('rect', {
+      x: xs(X_MIN), y: ys(Y_MAX),
+      width: xs(1.0) - xs(X_MIN),
+      height: ys(Y_MIN) - ys(Y_MAX),
+      fill: 'var(--border)', 'fill-opacity': '0.45', stroke: 'none'
+    }));
+
+    for (var gy = 1; gy <= 5; gy++) {
+      svg.appendChild(svgEl('line', {
+        x1: xs(X_MIN), y1: ys(gy),
+        x2: xs(X_MAX), y2: ys(gy),
+        stroke: 'var(--border)', 'stroke-width': 0.5
+      }));
+      svg.appendChild(svgEl('text', {
+        x: M_L - 6, y: ys(gy) + 3.5,
+        'font-size': 10, fill: 'var(--text-muted)',
+        'text-anchor': 'end',
+        'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace'
+      }, gy));
+    }
+    svg.appendChild(svgEl('text', {
+      x: M_L - 6, y: ys(0) + 3.5,
+      'font-size': 10, fill: 'var(--text-muted)',
+      'text-anchor': 'end',
+      'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace'
+    }, '0'));
+
+    for (var gx = 1; gx <= 6; gx++) {
+      svg.appendChild(svgEl('line', {
+        x1: xs(gx), y1: ys(Y_MIN),
+        x2: xs(gx), y2: ys(Y_MIN) + 4,
+        stroke: 'var(--text-muted)', 'stroke-width': 0.6
+      }));
+      svg.appendChild(svgEl('text', {
+        x: xs(gx), y: ys(Y_MIN) + 16,
+        'font-size': 10, fill: 'var(--text-muted)',
+        'text-anchor': 'middle',
+        'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace'
+      }, gx));
+    }
+
+    svg.appendChild(svgEl('line', {
+      x1: xs(X_MIN), y1: ys(Y_MIN), x2: xs(X_MAX), y2: ys(Y_MIN),
+      stroke: 'var(--text-muted)', 'stroke-width': 1
+    }));
+    svg.appendChild(svgEl('line', {
+      x1: xs(X_MIN), y1: ys(Y_MIN), x2: xs(X_MIN), y2: ys(Y_MAX),
+      stroke: 'var(--text-muted)', 'stroke-width': 1
+    }));
+
+    svg.appendChild(svgEl('text', {
+      x: xs((X_MIN + X_MAX) / 2), y: H - 6,
+      'font-size': 11, fill: 'var(--text-muted)',
+      'text-anchor': 'middle', 'font-style': 'italic'
+    }, 'r / r_s'));
+
+    function landmark(x, label) {
+      svg.appendChild(svgEl('line', {
+        x1: xs(x), y1: ys(Y_MAX), x2: xs(x), y2: ys(Y_MIN),
+        stroke: 'var(--border-strong)', 'stroke-width': 0.8,
+        'stroke-dasharray': '3 3'
+      }));
+      svg.appendChild(svgEl('text', {
+        x: xs(x), y: ys(Y_MAX) - 4,
+        'font-size': 10, fill: 'var(--text-muted)',
+        'text-anchor': 'middle', 'font-style': 'italic'
+      }, label));
+    }
+    landmark(1.5, 'photon');
+    landmark(3.0, 'ISCO');
+
+    svg.appendChild(svgEl('line', {
+      x1: xs(1), y1: ys(Y_MAX), x2: xs(1), y2: ys(Y_MIN),
+      stroke: 'var(--accent-soft)', 'stroke-width': 1.2
+    }));
+    svg.appendChild(svgEl('text', {
+      x: xs(1) + 4, y: ys(Y_MAX) + 12,
+      'font-size': 10, fill: 'var(--accent)',
+      'font-style': 'italic'
+    }, 'horizon r = r_s'));
+  }
+
+  function curvePath(fn, samples) {
+    var d = '';
+    var prevY = null;
+    for (var i = 0; i <= samples; i++) {
+      var x = X_MIN + (X_MAX - X_MIN) * i / samples;
+      if (x <= 1.001) { prevY = null; continue; }
+      var y = fn(x);
+      if (!isFinite(y)) { prevY = null; continue; }
+      if (y > Y_MAX + 0.2) {
+        if (prevY != null && prevY <= Y_MAX) {
+          d += 'L' + xs(x).toFixed(2) + ',' + ys(Y_MAX + 0.2).toFixed(2);
+        }
+        prevY = y; continue;
+      }
+      if (y < Y_MIN - 0.2) { prevY = y; continue; }
+      d += (prevY == null ? 'M' : 'L') + xs(x).toFixed(2) + ',' + ys(y).toFixed(2);
+      prevY = y;
+    }
+    return d;
+  }
+
+  function drawCurves() {
+    var gtt = curvePath(function (x) { return 1 - 1 / x; }, 400);
+    svg.appendChild(svgEl('path', {
+      d: gtt, fill: 'none',
+      stroke: 'var(--accent)', 'stroke-width': 2.2,
+      'stroke-linejoin': 'round'
+    }));
+
+    var grr = curvePath(function (x) { return 1 / (1 - 1 / x); }, 400);
+    svg.appendChild(svgEl('path', {
+      d: grr, fill: 'none',
+      stroke: 'var(--accent)', 'stroke-width': 2.0,
+      'stroke-dasharray': '6 4',
+      'stroke-linejoin': 'round'
+    }));
+  }
+
+  var probeLine, probeDotTT, probeDotRR;
+  function initProbe() {
+    probeLine = svgEl('line', {
+      x1: 0, y1: ys(Y_MIN), x2: 0, y2: ys(Y_MAX),
+      stroke: 'var(--text)', 'stroke-width': 1.0
+    });
+    svg.appendChild(probeLine);
+    probeDotTT = svgEl('circle', {
+      cx: 0, cy: 0, r: 4.5,
+      fill: 'var(--accent)',
+      stroke: 'var(--bg-raised)', 'stroke-width': 1.5
+    });
+    probeDotRR = svgEl('circle', {
+      cx: 0, cy: 0, r: 4.5,
+      fill: 'var(--bg-raised)',
+      stroke: 'var(--accent)', 'stroke-width': 2
+    });
+    svg.appendChild(probeDotTT);
+    svg.appendChild(probeDotRR);
+  }
+
+  function update() {
+    var x = parseFloat(rSlider.value);
+    rVal.textContent = x.toFixed(2);
+
+    var gtt = 1 - 1 / x;
+    var grr = 1 / (1 - 1 / x);
+    var dilation = 1 / Math.sqrt(gtt);
+    var stretch = Math.sqrt(grr);
+
+    gttEl.textContent = gtt.toFixed(3);
+    grrEl.textContent = grr.toFixed(3);
+    dilEl.textContent = dilation.toFixed(3);
+    strEl.textContent = stretch.toFixed(3);
+    rkmVal.textContent = (x * 2.95).toFixed(2);
+
+    var px = xs(x);
+    probeLine.setAttribute('x1', px); probeLine.setAttribute('x2', px);
+
+    probeDotTT.setAttribute('cx', px);
+    probeDotTT.setAttribute('cy', ys(gtt));
+
+    var grrCapped = Math.min(grr, Y_MAX);
+    probeDotRR.setAttribute('cx', px);
+    probeDotRR.setAttribute('cy', ys(grrCapped));
+  }
+
+  drawAxes();
+  drawCurves();
+  initProbe();
+  rSlider.addEventListener('input', update);
+  update();
+})();
+</script>
+</body>
+</html>

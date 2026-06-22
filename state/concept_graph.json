@@ -519,6 +519,16 @@
       "createdAt": "2026-06-21T08:00:00Z",
       "col": 1,
       "row": 25
+    },
+    {
+      "id": "schwarzschild_metric",
+      "label": "Schwarzschild",
+      "subtitle": "static BH metric",
+      "state": "available",
+      "lesson": "2026-06-22-schwarzschild-metric",
+      "createdAt": "2026-06-22T08:00:00Z",
+      "col": 0,
+      "row": 26
     }
   ],
   "edges": [
@@ -1209,6 +1219,21 @@
     },
     {
       "from": "riemannian_metric",
+      "to": "least_action",
+      "kind": "related"
+    },
+    {
+      "from": "schwarzschild_metric",
+      "to": "riemannian_metric",
+      "kind": "extends"
+    },
+    {
+      "from": "schwarzschild_metric",
+      "to": "geodesics",
+      "kind": "applied"
+    },
+    {
+      "from": "schwarzschild_metric",
       "to": "least_action",
       "kind": "related"
     }
