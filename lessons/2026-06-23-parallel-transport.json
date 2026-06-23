@@ -1,0 +1,203 @@
+{
+  "slug": "2026-06-23-parallel-transport",
+  "title": "Parallel transport: the second way to say straight",
+  "node": {
+    "id": "parallel_transport",
+    "label": "Par. transport",
+    "subtitle": "∇_X V = 0"
+  },
+  "intro": "In 1917 Tullio Levi-Civita, a 43-year-old professor at Padua and the co-architect of the tensor calculus Einstein had just used to write down general relativity, published a short paper called Nozione di parallelismo in una varietà qualunque, the notion of parallelism in an arbitrary manifold. He gave differential geometry a second way to say 'as straight as the curvature permits.' Carry a tangent vector along a curve so that it does not turn relative to the local geometry, demand it for the curve's own tangent, and the geodesic equation falls out of a balance condition on a connection with no minimization principle in sight. This lesson follows that vocabulary from Levi-Civita to Élie Cartan's 1928 reformulation, where the connection becomes a matrix-valued 1-form whose curvature is the Riemann tensor and whose abelian special case is the electromagnetic potential A_μ.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. A surveyor's question Gauss did not get to ask",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Carl Friedrich Gauss spent the 1820s surveying the Kingdom of Hanover with a heliotrope, a small mirror that flashed sunlight from one triangulation point to the next. The work forced him to confront a question that had been latent in cartography for centuries: when two surveyors at different points each claim to be holding their staffs pointing 'north,' do they mean the same thing? On a flat field the answer is obvious, but on a curved Earth (or on any surface that is not a plane) the answer is no, and the disagreement grows with the distance between them. Gauss's Theorema Egregium (1827) had shown that the curvature of a surface is an intrinsic property, detectable from inside, but he never wrote down a notion of parallelism for tangent vectors that would let two distant observers compare directions."
+        },
+        {
+          "type": "p",
+          "text": "Bernhard Riemann, who introduced the n-dimensional generalisation of Gauss's framework in his 1854 Habilitationsvortrag (Riemann's June 10 lecture in Göttingen with Gauss in the audience, covered in the previous lesson), defined the metric tensor g_ij but stopped short of a parallelism rule. Elwin Bruno Christoffel, in an 1869 paper on the transformation of quadratic differentials, worked out the symbols that now bear his name, but read them as algebraic auxiliaries rather than as the components of a geometric object. Gregorio Ricci-Curbastro and his student Levi-Civita assembled these pieces between 1888 and 1900 into the absolute differential calculus, which Einstein and Marcel Grossmann then used as the language of general relativity in 1913."
+        },
+        {
+          "type": "p",
+          "text": "Levi-Civita's 1917 paper crystallised what had been implicit all along. He defined a tangent vector at one point to be parallel to a tangent vector at another point along a specified curve if you could carry the first one along that curve in a way that, at each step, the change was forced entirely by the curve's bending rather than by any genuine turning of the vector relative to the local geometry. The carrying rule had to be specified explicitly, because in a curved space there is no absolute notion of 'same direction.' What he wrote down is what we now call the parallel transport equation. The German mathematician Hermann Weyl saw the paper in 1918, wrote the next year's Raum, Zeit, Materie around it, and within five more years Élie Cartan in Paris had rewritten the whole apparatus in the language of differential forms that would become the backbone of twentieth-century geometry."
+        },
+        {
+          "type": "p",
+          "text": "What follows is that apparatus in its bare-minimum form. Section 2 builds the covariant derivative that fixes the chart-dependent breakage of the ordinary derivative. Section 3 watches the geodesic equation pop out of the parallel transport rule applied to the curve's own tangent. Section 4 reads Foucault's 1851 pendulum as a parallel-transport experiment performed at Earth's surface. Section 5 follows Cartan's connection 1-form into the gauge theory of the twentieth century."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The covariant derivative: a correction that makes derivatives tensors again",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The trouble starts with the ordinary partial derivative. Take a vector field V^μ(x) on a manifold and write its partial derivative ∂_ν V^μ = ∂V^μ/∂x^ν. Under a change of coordinates x → x', the vector components transform as V'^μ = (∂x'^μ/∂x^α) V^α, but the derivative ∂_ν V^μ does not transform as a tensor: the second derivatives of the coordinate change leak in as an unwanted extra term. The ordinary derivative is therefore not a geometric object; it depends on the chart, and so the statement 'V is constant' has no chart-independent meaning."
+        },
+        {
+          "type": "p",
+          "text": "The fix is to add a correction term that exactly cancels the unwanted leakage. Define the covariant derivative ∇_ν V^μ as the partial derivative plus a piece linear in V whose coefficients Γ^μ_νρ are chosen so that the sum transforms tensorially. The resulting object is the connection, and the coefficients Γ^μ_νρ are the connection components in this chart."
+        },
+        {
+          "type": "math",
+          "tex": "\\nabla_\\nu V^\\mu = \\partial_\\nu V^\\mu + \\Gamma^\\mu_{\\nu\\rho} V^\\rho",
+          "display": true,
+          "caption": "∇_ν V^μ is the covariant derivative of the vector component V^μ along the direction x^ν, a tensor by construction. ∂_ν V^μ is the ordinary partial derivative, not a tensor. Γ^μ_νρ are the connection coefficients, the correction terms that absorb the non-tensorial part of the partial derivative. The indices μ (upper), ν (the differentiation direction), and ρ (summed against V^ρ) each run over the manifold's coordinates. The connection coefficients themselves are not tensor components: they transform with an inhomogeneous extra term under coordinate changes, designed precisely to cancel the inhomogeneous extra term in ∂_ν V^μ so that the sum is a tensor."
+        },
+        {
+          "type": "p",
+          "text": "On a Riemannian manifold there is a canonical choice of connection. The Levi-Civita connection (also called the metric connection) is the unique choice that satisfies two conditions: it is metric-compatible, ∇_λ g_μν = 0, so parallel transport preserves lengths and angles; and it is torsion-free, Γ^μ_νρ = Γ^μ_ρν, so parallel transport of two short segments produces the same parallelogram regardless of which is transported first. These two conditions pin down the coefficients uniquely in terms of the metric and its first derivatives."
+        },
+        {
+          "type": "math",
+          "tex": "\\Gamma^\\mu_{\\nu\\rho} = \\tfrac{1}{2} g^{\\mu\\sigma} \\left( \\partial_\\nu g_{\\sigma\\rho} + \\partial_\\rho g_{\\sigma\\nu} - \\partial_\\sigma g_{\\nu\\rho} \\right)",
+          "display": true,
+          "caption": "Γ^μ_νρ are the Christoffel symbols, the components of the Levi-Civita connection in the chosen chart. g_μν are the components of the metric tensor. g^μσ is the inverse metric, defined by g^μσ g_σν = δ^μ_ν. ∂_ν denotes the ordinary partial derivative with respect to coordinate x^ν. The repeated index σ is summed under the Einstein convention. The formula expresses Γ purely in terms of the metric and its first derivatives, so once a metric is given on a manifold, the parallel transport rule follows uniquely. The symmetry Γ^μ_νρ = Γ^μ_ρν in the lower indices is built in by the structure of the right-hand side and is the torsion-free condition."
+        },
+        {
+          "type": "p",
+          "text": "A vector V is parallel-transported along a curve γ(λ) when its covariant derivative along the curve vanishes. Writing the curve's tangent as T^ν = dx^ν/dλ, the condition is T^ν ∇_ν V^μ = 0, often abbreviated ∇_T V = 0. This is the local statement: at every point of the curve, the rate of change of V along T is exactly the connection correction, with no extra turning."
+        }
+      ],
+      "quiz": {
+        "question": "On a 2D surface, a coordinate chart is used to compute the Christoffel symbols Γ^μ_νρ. The chart is then changed to a different one covering the same patch. Which of the following is true about how Γ^μ_νρ transforms under the chart change?",
+        "options": [
+          "Γ^μ_νρ transforms as a tensor of type (1,2), the same way as ∇_ν V^μ does once contracted with V^ρ.",
+          "Γ^μ_νρ transforms as a tensor of type (1,2) plus an inhomogeneous correction involving the second partial derivatives of the coordinate change. The correction is precisely what is needed to cancel the inhomogeneous part of how ∂_ν V^μ transforms, so that ∇_ν V^μ comes out a clean tensor.",
+          "Γ^μ_νρ is invariant under chart changes, because it is built only from the metric tensor.",
+          "Γ^μ_νρ transforms as a tensor only if the chart change is linear (an affine transformation), and otherwise has no well-defined transformation rule."
+        ],
+        "correctIndex": 1,
+        "explanation": "The whole point of introducing Γ^μ_νρ was to fix the non-tensorial transformation of ∂_ν V^μ. The ordinary partial derivative transforms with an extra term involving ∂²x'/∂x∂x, the second derivatives of the coordinate change. The connection coefficients Γ^μ_νρ are designed to transform with an equal-and-opposite inhomogeneous term, so that the sum ∂_ν V^μ + Γ^μ_νρ V^ρ comes out as a clean (1,1) tensor with the inhomogeneous pieces cancelling. Option (a) is the most tempting wrong answer because the covariant derivative IS a tensor; it confuses the tensor character of ∇V with that of Γ itself. Option (c) misreads metric-compatibility as chart-independence. Option (d) confuses connection coefficients with vector components: vectors transform tensorially under all smooth coordinate changes, not just affine ones, but Γ's inhomogeneous piece is exactly the second-derivative term that linear transformations would zero out."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Auto-parallel curves: a geodesic is its own parallel transport",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Pick the vector being transported to be the curve's own tangent. That is, set V^μ equal to T^μ = dx^μ/dλ. The parallel-transport condition ∇_T T = 0 then becomes a second-order ordinary differential equation for the curve itself."
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{d^2 x^\\mu}{d\\lambda^2} + \\Gamma^\\mu_{\\nu\\rho}\\, \\frac{dx^\\nu}{d\\lambda} \\frac{dx^\\rho}{d\\lambda} = 0",
+          "display": true,
+          "caption": "x^μ(λ) are the coordinates of the curve as a function of an affine parameter λ. dx^μ/dλ is the tangent vector at parameter λ. d²x^μ/dλ² is its second derivative. Γ^μ_νρ are the Christoffel symbols of the Levi-Civita connection from the previous section. The repeated indices ν and ρ are summed under the Einstein convention. This is the auto-parallel equation: the curve whose tangent is parallel-transported along itself. The right-hand side is zero because, by parallel-transport, there is no turning relative to the local geometry. The same equation falls out of the variational principle δ∫ds = 0 of the geodesics lesson, and the agreement is not accidental."
+        },
+        {
+          "type": "p",
+          "text": "Compare this to the geodesic equation derived in the geodesics lesson from the variational principle δ∫ds = 0. They are the same equation. The auto-parallel reading does not minimise anything: it is a local balance condition at every point of the curve, saying the tangent direction does not turn faster than the curvature of the space demands. The variational reading is global: it picks the curve as a whole from a family of candidates. Levi-Civita's contribution was to show that the second reading carries the same information as the first, and the bridge between them is the connection."
+        },
+        {
+          "type": "viz",
+          "src": "2026-06-23-parallel-transport.html",
+          "height": 460,
+          "caption": "Parallel transport on the unit sphere along a latitude circle. The slider controls the colatitude θ (angle from the north pole). At each step along the latitude, the vector at left is parallel-transported using the Levi-Civita connection for the sphere. After one full circuit (Δφ = 2π), the transported vector returns to its starting point rotated by the holonomy angle 2π(1 − cos θ), shown in the readout. At the pole (θ → 0) the holonomy vanishes (a tiny loop encloses no area). At the equator (θ = π/2) the holonomy is 2π (the loop encloses the hemisphere of solid angle 2π and the vector returns to itself after a full rotation). The diagram makes Gauss-Bonnet, ∫∫ K dA = holonomy, visually concrete on a surface where K = 1 everywhere."
+        },
+        {
+          "type": "p",
+          "text": "The viz also shows what the auto-parallel condition is not. A latitude circle (except at the equator) is not a geodesic of the sphere: the tangent vector to the latitude is not parallel-transported by the latitude itself. Only the great circles (the equator and the meridians) satisfy ∇_T T = 0 on the sphere, and only they minimise distance between their endpoints. Latitudes are good loops for measuring holonomy precisely because they are non-geodesics whose deviation from the geodesic equation is straightforward to compute."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Foucault's pendulum: parallel transport on a sidereal day",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "On February 3, 1851, Léon Foucault (a 31-year-old French experimentalist with no university degree) hung a 28 kg brass bob from a 67-metre wire under the dome of the Paris Panthéon and set it swinging. By morning the plane of its swing had visibly rotated against the floor. Foucault had a deep argument for what to expect: in an inertial frame the pendulum's swing-plane should stay fixed by Newton's first law, while Earth rotates beneath it, so an observer on the ground would see the plane apparently turn. The wager was on a quantitative formula, and the measurement matched: 270° per day at Paris."
+        },
+        {
+          "type": "p",
+          "text": "The clean formula across all latitudes was given by Foucault that same year. At latitude φ, the plane of the swing precesses at a rate of 360° sin(φ) per sidereal day. At the geographic pole (φ = 90°), the plane completes a full rotation in 24 hours; at the equator (φ = 0°), it does not rotate at all; at Paris (φ ≈ 48.85°), 360° × sin(48.85°) ≈ 271°. The formula was a Coriolis-force calculation in 1851 and stayed so for another sixty years."
+        },
+        {
+          "type": "p",
+          "text": "Levi-Civita's 1917 framework gave the same number a one-line derivation. In one sidereal day, Earth carries the pendulum's anchor point once around a circle of constant latitude φ. The swing-plane direction is a tangent vector to Earth's surface, and the pendulum's response to the slow, smooth motion is to keep the swing-plane parallel-transported with respect to the surface's intrinsic geometry. Earth is well approximated as a sphere on this scale, and parallel transport around a latitude circle at colatitude θ = 90° − φ accumulates a holonomy of 2π(1 − sin φ) per circuit. The lab frame at the pendulum's anchor itself rotates 2π relative to the inertial frame in one day. The observed precession (the angle of the swing-plane relative to the lab, which is what Foucault measured) is the lab rotation minus the parallel-transport rotation: 2π − 2π(1 − sin φ) = 2π sin φ per day."
+        },
+        {
+          "type": "math",
+          "tex": "\\Delta\\Phi_{\\text{Foucault}} = 2\\pi \\sin\\varphi \\quad \\text{per sidereal day}",
+          "display": true,
+          "caption": "ΔΦ_Foucault is the angle by which the swing-plane of the pendulum has precessed relative to the lab floor after one sidereal day, measured in radians. φ is the geographic latitude of the pendulum's anchor (positive northern, negative southern). The 2π is one full revolution. The sin(φ) factor is the only ingredient that depends on where on Earth the pendulum is. The same factor in degrees per sidereal day is 360° sin(φ): 360° at the poles, 0° at the equator, 270.5° at Paris (φ = 48.85°), 240.4° at New York City (φ = 40.78°). The formula is exactly the Gauss-Bonnet holonomy of parallel transport around a latitude circle on a sphere, with the lab-frame rotation subtracted off."
+        },
+        {
+          "type": "p",
+          "text": "The reading reframes Foucault's experiment from the 1851 Coriolis-force calculation, where the precession came from a fictitious force in a rotating frame, to a 1917 geometric calculation, where the precession is the holonomy of Earth's metric. The two answers must agree because there is one experiment, but they illuminate different parts of it. The Coriolis answer is local: at each instant the bob feels a force that bends its swing-plane. The parallel-transport answer is global: the swing-plane has been carried around a closed loop in a curved space, and what we see is the accumulated mismatch between the loop's intrinsic transport and a full circle. The pendulum's precession at the pole equals one revolution per day precisely because the pole encloses a solid angle of 2π under any closed loop touching it. The equator's zero precession is the statement that any closed loop along the equator encloses no solid angle (it bounds the cap and its complement, each of solid angle 2π, identically) so the holonomy is 2π or 0 mod 2π. Geometry forces the latitude-by-latitude formula."
+        }
+      ],
+      "quiz": {
+        "question": "A Foucault pendulum at the equator (latitude φ = 0°) does not rotate relative to the laboratory floor. Which of the following best captures why, in the parallel-transport reading of the experiment?",
+        "options": [
+          "The Coriolis force is exactly zero at the equator because the local vertical is perpendicular to Earth's rotation axis, so there is no Coriolis-force term to deflect the swing-plane.",
+          "Earth's curvature is zero at the equator, so parallel transport along the equator is the same as parallel transport on a flat plane, and no holonomy can accumulate.",
+          "The equator is a great circle of the sphere, hence a geodesic of Earth's surface; parallel transport along a geodesic preserves the angle between the transported vector and the geodesic itself, and after one circuit the swing-plane is back where it started in the local frame.",
+          "The equator's latitude circle encloses zero solid angle (the cap above and the cap below are each one half of the sphere), so the parallel-transport holonomy is 0 modulo 2π, exactly cancelling the lab-frame rotation."
+        ],
+        "correctIndex": 3,
+        "explanation": "The Foucault precession rate is the lab-frame rotation (2π per sidereal day) minus the parallel-transport holonomy around the latitude circle (2π(1 − sin φ) at latitude φ). At φ = 0 these are equal (2π and 2π), giving zero observed precession. The parallel-transport reading attributes the zero to the geometric fact that the equator bounds two equal hemispheres of solid angle 2π each, so the enclosed solid angle is 2π modulo 2π, i.e. effectively zero by Gauss-Bonnet. Option (a) is correct in classical mechanics but is the Coriolis explanation, not the parallel-transport one the question asks about. Option (b) is wrong because Earth's surface (modelled as a sphere) has constant positive Gaussian curvature K = 1/R² everywhere, including the equator; the equator is not a flat region. Option (c) is geometrically correct (the equator is a geodesic and parallel transport preserves angles along geodesics) but does not address why the laboratory observer sees no precession; the Earth still rotates and the lab frame still rotates with it, so 'back to start in the local frame' is not the same as 'no observed rotation against the floor.' Option (d) is the Gauss-Bonnet statement of holonomy, which is the geometric content the parallel-transport reading wants."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Cartan's connection 1-form and the gauge theory that borrowed it",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Élie Cartan, a 53-year-old professor at the Sorbonne, spent the years 1922 to 1926 rewriting the Levi-Civita apparatus in the language of differential forms he had pioneered for Lie groups. In his Leçons sur la géométrie des espaces de Riemann (1928) he repackaged the connection coefficients Γ^μ_νρ into a matrix-valued 1-form ω whose components, in a chosen frame, are exactly the connection in disguise. The two-index lower-row Γ pair was reread as the components of a 1-form (one slot for the differentiation direction) taking values in the Lie algebra of the rotation group SO(n) (the upper index and one lower index together being a matrix entry)."
+        },
+        {
+          "type": "math",
+          "tex": "\\Omega = d\\omega + \\omega \\wedge \\omega",
+          "display": true,
+          "caption": "Ω is Cartan's curvature 2-form, a matrix-valued differential 2-form on the manifold. ω is Cartan's connection 1-form, a matrix-valued 1-form whose components (in a chosen orthonormal frame) repackage the Christoffel symbols. d is the exterior derivative on differential forms. ω ∧ ω is the wedge product of ω with itself; for a matrix-valued 1-form this is a matrix-valued 2-form whose entries are sums of wedge products of scalar 1-forms. The equation is Cartan's second structure equation. Expanded back into components, Ω = R^μ_νρσ dx^ρ ∧ dx^σ where R^μ_νρσ is the Riemann curvature tensor of the previous-lesson Riemannian metric. The Riemann tensor is the curvature of the Levi-Civita connection in Cartan's language; parallel transport around an infinitesimal loop returns the vector rotated by Ω evaluated on that loop's two tangent vectors."
+        },
+        {
+          "type": "p",
+          "text": "The reformulation reads parallel transport as the linear action of a 1-parameter family of group elements: as you advance along a curve, ω(T) at each point is the infinitesimal rotation applied to the transported vector. Integrating ω along a curve gives a finite group element, the holonomy. The path-ordered exponential P exp(∫ω) was new geometric machinery in 1928 and became the standard physicist's notation for parallel transport in any geometry."
+        },
+        {
+          "type": "p",
+          "text": "Twenty-six years later Chen-Ning Yang and Robert Mills, at Brookhaven, were trying to extend electromagnetism's local U(1) phase symmetry to a non-abelian SU(2) symmetry to describe the strong nuclear force. They needed a way to compare a particle's internal phase at neighbouring spacetime points, and they wrote down what they called a 'gauge potential' A_μ that played exactly the role of Cartan's connection 1-form, with the abelian-electromagnetism case A_μ → A_μ + ∂_μ Λ generalised to a non-abelian gauge transformation. The curvature of this connection, F_μν = ∂_μ A_ν − ∂_ν A_μ + i [A_μ, A_ν], reproduces the electromagnetic field tensor in the abelian case and gives a new non-abelian field tensor for SU(2). The 1954 Physical Review paper does not cite Cartan: Yang said in a 1986 talk that he learned the geometric content only in 1975 from Jim Simons (the Stony Brook mathematician who had just developed Chern-Simons theory) over a long lunch in the Stony Brook cafeteria."
+        },
+        {
+          "type": "p",
+          "text": "What Cartan had built between 1922 and 1928 was the geometric infrastructure for every gauge theory of the next sixty years: the electroweak unification (Glashow-Weinberg-Salam, 1967, SU(2) × U(1)) and the strong-force theory (quantum chromodynamics, 1973, SU(3)) are both connections on principal bundles over Minkowski spacetime, with curvatures Ω = dω + ω∧ω determining the field equations and parallel transport along closed loops giving the Wilson loops that distinguish confined from deconfined phases. Levi-Civita's 1917 question (what does it mean for two distant directions to be parallel?) wore three answers across the twentieth century: the surveyor's answer in Hanover, the electron's answer in QED, and the quark's answer in QCD. They are the same question, asked of different bundles."
+        }
+      ]
+    }
+  ],
+  "checkInAfter": [1, 3],
+  "finalQuiz": {
+    "question": "The geodesics lesson derived the equation d²x^μ/dλ² + Γ^μ_νρ (dx^ν/dλ)(dx^ρ/dλ) = 0 from the variational principle δ∫ds = 0. This lesson derived the same equation from the parallel-transport condition ∇_T T = 0. Which of the following best captures the relationship between the two derivations and what it teaches?",
+    "options": [
+      "The two derivations agree only on Riemannian manifolds where the Levi-Civita connection is used. On manifolds with torsion or non-metric connections the geodesic equation (auto-parallel curve) and the extremal length curve (variational solution) are different curves in general, and the agreement is a feature of the metric-compatible torsion-free connection that the Levi-Civita 1917 paper singled out as canonical.",
+      "The two derivations are identical line by line, and Levi-Civita's contribution was just to rewrite the same calculation in different notation.",
+      "The variational principle is the more fundamental of the two, and the parallel-transport condition is only valid as an approximation in regions where the curvature is small.",
+      "The parallel-transport condition gives an equation valid only on surfaces (two-dimensional manifolds), while the variational principle generalises to higher dimensions."
+    ],
+    "correctIndex": 0,
+    "explanation": "The equivalence in the lesson rests silently on two choices: metric-compatibility (∇_λ g_μν = 0, so parallel transport preserves lengths and angles) and torsion-free symmetry (Γ^μ_νρ = Γ^μ_ρν). With both, the auto-parallel curve and the length-extremising curve are the same curve. Drop either, and they diverge. On a manifold with torsion (Einstein-Cartan gravity, supergravity), the auto-parallel curve generally fails to extremise length; on a manifold with a non-metric connection (Weyl's 1918 generalisation, in which lengths can rescale under parallel transport), the variational principle no longer matches the parallel-transport rule. Levi-Civita's 1917 paper made the specific choice that he proved canonical: among all connections compatible with the metric and free of torsion, there is exactly one, and it is the choice that makes geometry's two definitions of 'straight' agree. Option (b) misreads the result: the derivations are not the same calculation, they are two different calculations whose agreement is a theorem. Option (c) inverts the situation: both conditions are exact, and the variational principle has no privilege; the metric and the connection are independent data on a manifold, and only the Levi-Civita choice makes the two readings of straight identical. Option (d) is wrong about generality: the parallel-transport apparatus works in any dimension, and section 5's gauge-theory examples are connections on bundles whose base is the four-dimensional Minkowski spacetime."
+  },
+  "suggestedNodes": [
+    { "id": "cartan_connection", "label": "Cartan conn.", "subtitle": "ω, Ω = dω+ω∧ω", "edgeType": "extends" },
+    { "id": "holonomy", "label": "Holonomy", "subtitle": "loop deficit", "edgeType": "extends" },
+    { "id": "berry_phase", "label": "Berry phase", "subtitle": "adiabatic loop", "edgeType": "applied" }
+  ],
+  "metadata": {
+    "estimatedReadingMinutes": 25,
+    "generatedAt": "2026-06-23T08:00:00Z",
+    "generatedBy": "routine-claude-code"
+  }
+}

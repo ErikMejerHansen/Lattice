@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parallel transport on a sphere</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz {
+  padding: 14px;
+  max-width: 460px;
+  margin: 0 auto;
+}
+.viz-readout {
+  display: flex; justify-content: space-between; gap: 12px;
+  margin-top: 8px; padding: 6px 8px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 12px;
+}
+.viz-readout span { color: var(--text); }
+.viz-readout .label { color: var(--text-muted); }
+.svg-wrap { display: flex; justify-content: center; }
+svg { display: block; }
+.sphere-disk { fill: var(--bg-raised); stroke: var(--border-strong); stroke-width: 1; }
+.meridian, .latitude { fill: none; stroke: var(--border); stroke-width: 0.6; }
+.latitude-active { fill: none; stroke: var(--accent-soft); stroke-width: 1.4; }
+.transport-arrow { stroke: var(--text-muted); stroke-width: 1.2; fill: none; }
+.start-arrow { stroke: var(--text); stroke-width: 2.2; fill: none; }
+.end-arrow { stroke: var(--accent); stroke-width: 2.2; fill: none; }
+.arrow-head { fill: var(--text-muted); }
+.arrow-head-start { fill: var(--text); }
+.arrow-head-end { fill: var(--accent); }
+.pole-dot { fill: var(--text); }
+.axis-label {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10px; fill: var(--text-muted);
+}
+.legend {
+  font-size: 11px; color: var(--text-muted);
+  display: flex; gap: 14px; justify-content: center; margin-top: 6px;
+  flex-wrap: wrap;
+}
+.legend .swatch {
+  display: inline-block; width: 18px; height: 2px; vertical-align: middle; margin-right: 4px;
+}
+.legend .swatch.start { background: var(--text); }
+.legend .swatch.end { background: var(--accent); }
+.legend .swatch.mid { background: var(--text-muted); }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div class="svg-wrap">
+    <svg id="canvas" width="320" height="320" viewBox="0 0 320 320" role="img" aria-label="Parallel transport on a sphere"></svg>
+  </div>
+  <div class="legend">
+    <span><span class="swatch start"></span>start vector (φ = 0)</span>
+    <span><span class="swatch mid"></span>transport along loop</span>
+    <span><span class="swatch end"></span>after one circuit (φ = 2π)</span>
+  </div>
+  <div class="viz-slider-row">
+    <label for="thetaSlider">θ</label>
+    <input id="thetaSlider" type="range" min="10" max="90" step="1" value="45">
+    <span class="value" id="thetaValue">45°</span>
+  </div>
+  <div class="viz-readout">
+    <span><span class="label">colatitude θ (deg):</span> <span id="thetaReadout">45.0</span></span>
+    <span><span class="label">holonomy 2π(1 − cos θ) (deg):</span> <span id="holonomyReadout">105.4</span></span>
+  </div>
+  <div class="viz-caption">
+    Top-down orthographic-from-north-pole view of the unit sphere. The accent latitude circle sits at colatitude θ (angle from the pole). At fifteen evenly spaced points along the loop, the parallel-transported tangent vector is drawn in gray; the dark arrow is the starting vector and the accent arrow is the same vector after one full circuit, both at the same physical point. The angle between them is the holonomy 2π(1 − cos θ), the Gauss-Bonnet integral of K = 1 over the polar cap of solid angle 2π(1 − cos θ). At θ → 0 the holonomy vanishes (a tiny loop encloses no area); at θ = 90° (equator) it is 2π, a full rotation that returns the vector to itself.
+  </div>
+</div>
+<script>
+const svg = document.getElementById('canvas');
+const NS = 'http://www.w3.org/2000/svg';
+
+const W = 320, H = 320;
+const cx = W / 2, cy = H / 2;
+const R = 130;
+
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+function drawArrow(px, py, dx, dy, cls, headCls) {
+  const len = Math.hypot(dx, dy);
+  if (len < 0.001) return;
+  const nx = dx / len, ny = dy / len;
+  const tipX = px + dx, tipY = py + dy;
+  el('line', { x1: px, y1: py, x2: tipX, y2: tipY, class: cls }, svg);
+  const hSize = 6;
+  const leftX = tipX - hSize * nx + hSize * 0.45 * ny;
+  const leftY = tipY - hSize * ny - hSize * 0.45 * nx;
+  const rightX = tipX - hSize * nx - hSize * 0.45 * ny;
+  const rightY = tipY - hSize * ny + hSize * 0.45 * nx;
+  el('polygon', { points: `${tipX},${tipY} ${leftX},${leftY} ${rightX},${rightY}`, class: headCls }, svg);
+}
+
+function render(theta) {
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+  // Outer sphere disk
+  el('circle', { cx, cy, r: R, class: 'sphere-disk' }, svg);
+
+  // Meridians at every 30 degrees
+  for (let k = 0; k < 6; k++) {
+    const a = k * Math.PI / 6;
+    el('line', {
+      x1: cx + Math.cos(a) * R, y1: cy + Math.sin(a) * R,
+      x2: cx - Math.cos(a) * R, y2: cy - Math.sin(a) * R,
+      class: 'meridian'
+    }, svg);
+  }
+
+  // Latitude circles at every 15 degrees colatitude
+  for (let dtheta = 15; dtheta < 90; dtheta += 15) {
+    const r = R * Math.sin(dtheta * Math.PI / 180);
+    el('circle', { cx, cy, r, class: 'latitude' }, svg);
+  }
+
+  // Active latitude circle
+  const thetaRad = theta * Math.PI / 180;
+  const sinT = Math.sin(thetaRad);
+  const cosT = Math.cos(thetaRad);
+  const rActive = R * sinT;
+  el('circle', { cx, cy, r: rActive, class: 'latitude-active' }, svg);
+
+  // Pole + equator labels
+  el('text', { x: cx + 6, y: cy - 4, class: 'axis-label' }, svg).textContent = 'pole (θ = 0)';
+  el('text', { x: cx + R + 4, y: cy + 4, class: 'axis-label' }, svg).textContent = 'eq (θ = 90°)';
+  el('text', { x: cx + rActive + 4, y: cy - 4, class: 'axis-label' }, svg).textContent = 'θ = ' + theta + '°';
+
+  // North pole marker
+  el('circle', { cx, cy, r: 2.6, class: 'pole-dot' }, svg);
+
+  // Parallel-transport vectors along the loop
+  const N = 16;
+  const vScale = 26;
+
+  for (let i = 1; i < N; i++) {
+    const phi = (i / N) * 2 * Math.PI;
+    const Vth = Math.cos(phi * cosT);
+    const Vph = -Math.sin(phi * cosT);
+    const px = cx + rActive * Math.cos(phi);
+    const py = cy + rActive * Math.sin(phi);
+    const dx = vScale * (Vth * cosT * Math.cos(phi) + Vph * (-Math.sin(phi)));
+    const dy = vScale * (Vth * cosT * Math.sin(phi) + Vph * Math.cos(phi));
+    drawArrow(px, py, dx, dy, 'transport-arrow', 'arrow-head');
+  }
+
+  // Start and end vectors at the same point (φ = 0, position (cx + rActive, cy))
+  const px0 = cx + rActive, py0 = cy;
+  const startDx = vScale * cosT;
+  const startDy = 0;
+  const VthEnd = Math.cos(2 * Math.PI * cosT);
+  const VphEnd = -Math.sin(2 * Math.PI * cosT);
+  const endDx = vScale * (VthEnd * cosT);
+  const endDy = vScale * VphEnd;
+  drawArrow(px0, py0, endDx, endDy, 'end-arrow', 'arrow-head-end');
+  drawArrow(px0, py0, startDx, startDy, 'start-arrow', 'arrow-head-start');
+}
+
+const slider = document.getElementById('thetaSlider');
+const tValue = document.getElementById('thetaValue');
+const tReadout = document.getElementById('thetaReadout');
+const hReadout = document.getElementById('holonomyReadout');
+
+function update() {
+  const theta = +slider.value;
+  const thetaRad = theta * Math.PI / 180;
+  const hol = 2 * Math.PI * (1 - Math.cos(thetaRad));
+  const holDeg = hol * 180 / Math.PI;
+  tValue.textContent = theta + '°';
+  tReadout.textContent = theta.toFixed(1);
+  hReadout.textContent = holDeg.toFixed(1);
+  render(theta);
+}
+
+slider.addEventListener('input', update);
+update();
+</script>
+</body>
+</html>
