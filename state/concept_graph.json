@@ -529,6 +529,16 @@
       "createdAt": "2026-06-22T08:00:00Z",
       "col": 0,
       "row": 26
+    },
+    {
+      "id": "parallel_transport",
+      "label": "Par. transport",
+      "subtitle": "∇_X V = 0",
+      "state": "available",
+      "lesson": "2026-06-23-parallel-transport",
+      "createdAt": "2026-06-23T08:00:00Z",
+      "col": 1,
+      "row": 26
     }
   ],
   "edges": [
@@ -1234,6 +1244,21 @@
     },
     {
       "from": "schwarzschild_metric",
+      "to": "least_action",
+      "kind": "related"
+    },
+    {
+      "from": "parallel_transport",
+      "to": "geodesics",
+      "kind": "extends"
+    },
+    {
+      "from": "parallel_transport",
+      "to": "riemannian_metric",
+      "kind": "extends"
+    },
+    {
+      "from": "parallel_transport",
       "to": "least_action",
       "kind": "related"
     }
