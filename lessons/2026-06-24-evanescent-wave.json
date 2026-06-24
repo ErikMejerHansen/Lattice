@@ -1,0 +1,126 @@
+{
+  "slug": "2026-06-24-evanescent-wave",
+  "title": "Evanescent waves: the field that should not be there",
+  "node": {
+    "id": "evanescent_wave",
+    "label": "Evanescent",
+    "subtitle": "E ∝ e^(-z/d)"
+  },
+  "intro": "In 1841 Jean-Daniel Colladon could already trap light inside a curved water jet by total internal reflection, but neither he nor Newton before him would have guessed the field on the air side of the boundary was not zero. Maxwell's equations of 1865 made the trouble unavoidable: the boundary conditions on the electric field are continuous, and continuity does not let a wave simply terminate at an interface. Past the critical angle there is still a field in the lighter medium, oscillating along the boundary and falling off exponentially into the depth, over a distance of about a wavelength. That tiny presence is what turns a 'perfect' mirror into a fingerprint reader, breaks the diffraction limit on sub-wavelength microscopes, and gave Erwin Schrödinger his cleanest classical analog for the quantum tunneling he was about to invent.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The boundary condition that broke 'total'",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Geometric optics had a clean story for total internal reflection by the time Fresnel finished with it in the 1820s. Inside a denser medium at any angle past the critical θ_c, Snell's law had no solution: there was no refracted ray, every photon went into the reflection, and the boundary acted as a perfect mirror. The story explained the silvered ceiling of a swimming pool, the sparkle of cut diamonds, and the light that ran along Colladon's curved water jet without leaking sideways. For two centuries this picture was good enough, and the word 'total' was taken at face value." },
+        { "type": "p", "text": "Maxwell's equations of 1865 made the picture untenable. The tangential components of the electric and magnetic fields must match across any interface. If the wave inside the denser medium is oscillating along the boundary (which it must be, that is where the light is travelling), then the field just on the other side cannot drop to zero. Whatever picture we had of a vacant air side was wrong. There must be a field down there, decaying somehow into the depth but matching the wave above at the boundary itself." },
+        { "type": "p", "text": "Fresnel had felt this even before Maxwell wrote it down. His coefficients for reflection and transmission at an interface, derived from mechanical wave models, contained square roots that turned imaginary past θ_c. He noticed and even computed a few geometries with the imaginary terms left in, but lacking a formalism for the meaning of an imaginary angle he stopped. The trouble was not the math; it was that no one had a clean physical picture for what an imaginary cosine should do to a wave. Maxwell's equations would supply it. The 'totality' of TIR would survive, but only with a subtle qualification, and the field on the other side would turn out to do quite a lot of useful work." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The imaginary angle",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Set up the geometry. A plane wave travels inside a dense medium of refractive index n₁ and strikes a flat boundary with a lighter medium of index n₂. The angle of incidence, measured from the surface normal, is θ. In the lighter medium the refracted ray would travel at some angle θ₂, also from the normal. Snell's law sets the two angles:" },
+        { "type": "math", "tex": "n_1 \\sin\\theta = n_2 \\sin\\theta_2", "display": true, "caption": "n₁ is the refractive index of the denser medium. n₂ is the refractive index of the lighter medium (with n₂ < n₁). θ is the angle of incidence of the wave inside the denser medium. θ₂ is the angle of the refracted ray inside the lighter medium. Both angles are measured from the surface normal." },
+        { "type": "p", "text": "Push θ past the critical angle θ_c = arcsin(n₂/n₁). The right-hand side now requires sin θ₂ > 1, which no real angle can supply. Refusing to discard the equation, take it at face value: sin θ₂ has become a real number greater than 1. Its cosine, fixed by the identity sin²θ₂ + cos²θ₂ = 1, must then be the square root of a negative number. Choose the sign that will produce decay rather than growth:" },
+        { "type": "math", "tex": "\\cos\\theta_2 = i\\sqrt{\\sin^2\\theta_2 - 1}", "display": true, "caption": "i is the imaginary unit. The square root is over a positive quantity (since sin²θ₂ > 1 past the critical angle), so the right-hand side is purely imaginary. The angle θ₂ no longer corresponds to a direction in space; it is a formal symbol whose sine and cosine are still well defined and still obey the wave equation." },
+        { "type": "p", "text": "A plane wave traveling at angle θ₂ in medium 2 carries the spatial phase factor exp(i k₂ (x sin θ₂ + z cos θ₂)). Here x is the coordinate along the boundary, z is the depth into the lighter medium (z = 0 at the surface, z growing downward), and k₂ = 2π n₂ / λ₀ is the wavenumber there, with λ₀ the vacuum wavelength. Substitute the imaginary cosine and the z-dependence stops oscillating: it becomes a real exponential decay." },
+        { "type": "math", "tex": "E(x, z) = E_0 \\, e^{i k_2 x \\sin\\theta_2} \\, e^{-z/d}, \\qquad d = \\frac{\\lambda_0}{2\\pi \\sqrt{n_1^2 \\sin^2\\theta - n_2^2}}", "display": true, "caption": "E(x, z) is the electric field amplitude in the lighter medium at position (x, z), with x along the boundary and z the depth. E₀ is the field amplitude at the surface. The first exponential is a propagating wave running along the boundary. The second is a real exponential decay into the depth. d is the decay length: the depth at which the field has dropped by a factor of e. λ₀ is the vacuum wavelength of the incident light. n₁ and n₂ are the two refractive indices. θ is the (super-critical) angle of incidence." }
+      ],
+      "quiz": {
+        "question": "A plane wave inside crown glass (n₁ = 1.50) hits a glass-air boundary at θ = 60°, well past the critical angle θ_c ≈ 41.8°. The vacuum wavelength is λ₀ = 600 nm. To the nearest 20 nm, what is the decay length d of the evanescent field on the air side?",
+        "options": [
+          "About 120 nm",
+          "About 320 nm",
+          "About 600 nm (the vacuum wavelength itself)",
+          "Zero — past θ_c, no field exists on the air side at all"
+        ],
+        "correctIndex": 0,
+        "explanation": "Plug in: n₁² sin²θ − n₂² = (1.50)² · sin²60° − 1 = 2.25 · 0.75 − 1 = 0.6875. The square root is 0.829. So d = 600 nm / (2π · 0.829) ≈ 115 nm, rounded to about 120 nm. The most tempting wrong answer is 320 nm: that comes from forgetting the factor of 2π in the denominator and computing d ≈ λ₀ / √(0.6875) ≈ 720 nm or, with a different slip, around 320 nm. Option C is the wrong scale: d is a fraction of the wavelength, not the wavelength itself. Option D is the geometric-optics answer and is exactly what Maxwell's equations forbid."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The wavelength rule",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The formula for d is short, but the limits inside it are worth looking at one by one. As θ approaches the critical angle from above, sin²θ approaches (n₂/n₁)², so n₁² sin²θ approaches n₂², the square root in the denominator approaches zero, and d diverges. Just past the cutoff, the field penetrates arbitrarily deep, in principle to the moon. The 'just past' regime is not the regime of a sharp mirror. It is the regime of a leaky one." },
+        { "type": "p", "text": "Push θ further past θ_c and the square root grows, so d shrinks. At grazing incidence (θ = 90°), d reaches its minimum of λ₀ / (2π √(n₁² − n₂²)). For glass against air that minimum is roughly λ₀ / 7, or about 90 nm in green light. Every value of d between this lower bound and infinity is reachable by some choice of incident angle past the critical one." },
+        { "type": "viz", "src": "2026-06-24-evanescent-wave.html", "height": 380, "caption": "A wave inside glass (n₁ = 1.50, top half) hits the glass-air boundary at angle θ. Below the critical angle θ_c ≈ 41.8°, a refracted ray crosses into the air. Past it, the air-side field falls off as exp(−z/d), shown both as a heat strip into the depth and as a curve on the right with the decay length d marked. Slide the angle past θ_c: the depth d collapses from infinity (just past the cutoff) toward a fraction of a wavelength at grazing." },
+        { "type": "p", "text": "Notice what does not appear in the formula for d. Not the intensity of the source. Not the time of day. Not, in any direct way, the geometry of the glass below. The only length scale that sets the depth is the wavelength of the light. Halve the wavelength (go from red to violet) and the depth halves. Double it (go to microwaves) and the depth doubles. This wavelength rule is the deep reason near-field optics is always sub-wavelength: the field reaching past TIR reaches exactly as far as the light's own wavelength, no further." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Frustrated TIR and the tunneling analogy",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Newton, fiddling with a convex lens pressed against a flat plate in 1675, noticed a bright spot at the contact and a system of concentric colored rings around it. He explained the rings (now called Newton's rings, after thin-film interference) and missed the contact spot. The lens and plate were both glass, and at the contact they were optically continuous, so light at all angles passed through. Move them apart by a wavelength and the spot dimmed; move them apart by ten wavelengths and the spot was gone, and the boundary acted again as a clean TIR mirror. Newton had observed frustrated total internal reflection without a theory for it." },
+        { "type": "p", "text": "Bring two prisms within a wavelength of each other across an air gap of thickness g. The evanescent field of the first prism's TIR has not yet decayed inside the gap, and reaches the second prism's surface with some residual amplitude. There, the boundary conditions of Maxwell's equations again apply, and the residual evanescent field drives a propagating wave inside the second prism. Energy crosses the gap. The first prism's reflection is no longer 100%, and the missing fraction now appears on the far side. The transmitted intensity falls off exponentially with the gap:" },
+        { "type": "math", "tex": "T(g) \\propto e^{-2g/d}", "display": true, "caption": "T(g) is the fraction of the incident intensity transmitted across an air gap of thickness g between the two prisms. d is the decay length of the evanescent field inside the gap, the same d as in the single-interface formula. The factor of 2 in the exponent comes from intensity scaling as the square of the field. Read aloud: the gap punishes transmission exponentially, so doubling the gap squares the suppression." },
+        { "type": "p", "text": "Schrödinger's 1926 paper on the wave mechanics of bound states leaned on this exact picture. Inside a classically forbidden region of a potential well, his wavefunction also took the form exp(−κz), evanescent in the same algebraic sense, and a thin barrier let it through with the same exponential suppression. The math was identical because the wave equation was the same. The optical analogy was, by Schrödinger's own account, what taught half his readers what they needed to accept his quantum result: that a particle can be found, sometimes, on the wrong side of a wall it does not have the energy to cross." }
+      ],
+      "quiz": {
+        "question": "In a frustrated-TIR experiment with two glass prisms (n = 1.50), the evanescent decay length in the air gap is d = 100 nm at the chosen angle. The gap is varied from g = 50 nm to g = 200 nm. By roughly what factor does the transmitted intensity drop?",
+        "options": [
+          "About 4 (intensity is proportional to gap thickness)",
+          "About 7 (linear-in-field falls by ≈ e^(−1.5))",
+          "About 20 (intensity ∝ e^(−2g/d), so the ratio is e^(−2·150/100) = e^(−3))",
+          "About 400 (intensity ∝ e^(−4g/d), since both prisms contribute decays)"
+        ],
+        "correctIndex": 2,
+        "explanation": "Intensity scales as |E|² and the field decays as e^(−g/d), so intensity decays as e^(−2g/d). Going from g = 50 to g = 200 increases g by 150 nm, so the ratio is e^(−2·150/100) = e^(−3) ≈ 0.05, a factor of about 20 drop. Option B is the field ratio, not the intensity ratio (a common slip, but the question asks intensity). Option D double-counts: only one decay length is involved, not two; the field crosses one gap with one d. Option A is the geometric-optics intuition (a thicker barrier blocks more linearly) and is wrong about exponentials."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The sub-wavelength keyhole",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Ernst Abbe, working at Zeiss in 1873, proved that no far-field optical microscope could resolve features finer than roughly half a wavelength of the imaging light. The derivation was geometric: a propagating wave carries information at most on the scale of its own wavelength, and trying to focus a beam of vacuum wavelength λ₀ down to a smaller spot fails because the high spatial frequencies needed to draw the smaller spot do not propagate. For visible light this set the resolution floor at about 250 nm, a hard wall that stood for a century." },
+        { "type": "p", "text": "The evanescent field has no such restriction. It does not have to propagate, so its lateral structure on the boundary is free to carry arbitrarily fine detail. Place a single fluorescent molecule on the surface of a TIR substrate, illuminate it from below at θ > θ_c, and the molecule sits inside the evanescent field, picking up local intensity that depends on its exact position to a precision much finer than λ₀. The information is there; the trouble is that it lives only within depth d above the surface, and a conventional far-field detector cannot reach it without converting it back to a propagating wave first." },
+        { "type": "p", "text": "Dieter Pohl, Winfried Denk, and Markus Lanz at IBM Zurich solved this in 1984 with what they called the Near-field Scanning Optical Microscope, NSOM. The trick was a metal-coated optical fiber tapered to an aperture less than λ₀/10, held within d of the sample. The evanescent field at the sample drove a wave through the sub-wavelength aperture, and the fiber carried it to a far-field detector. The first published image showed gold lines 50 nm wide on a glass substrate, resolved at a wavelength of 488 nm. Abbe's bound was real, but it was a bound on far-field imaging, not on imaging in general. The keyhole was sub-wavelength because the field at the keyhole was evanescent, and the bound that protected Abbe was exactly the bound that ignored the field that should not be there." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A plane wave inside glass (n₁ = 1.50) undergoes total internal reflection at a glass-air boundary at θ = 60°. The Fresnel reflection coefficient is exactly 1 in magnitude, yet an evanescent field exists in the air with E(z) ∝ exp(−z/d). Which statement correctly resolves the apparent paradox?",
+    "options": [
+      "The reflection is in fact 99.99…%, with a tiny fraction transmitted into the evanescent field; textbooks round to 100% but the wave is leaky.",
+      "The evanescent field carries no time-averaged Poynting flux into the depth; energy flows along the boundary but does not cross into the air unless a second medium is brought within d of the surface.",
+      "The energy in the evanescent field comes from the air, not the incident light; it is a thermal background that exists independently of the source.",
+      "The evanescent field is a mathematical artifact of an idealized infinite plane wave; physical beams of finite extent do not exhibit it."
+    ],
+    "correctIndex": 1,
+    "explanation": "TIR is 'total' in the energy sense because the time-averaged Poynting vector into the depth is zero; the field on the air side oscillates and decays without transporting net energy across the boundary. The field is real, the energy flow is not. Bring a second medium within d and that medium's boundary conditions reopen a route for the energy to leave, which is exactly the mechanism of frustrated TIR. Option A is wrong: |r| = 1 is exact for a single interface past θ_c, no rounding. Option C invents an unrelated thermal source. Option D is a popular dodge but wrong: real Gaussian beams in the lab exhibit evanescent fields and the depth d measurements (Goos and Hänchen, 1947) confirmed the formula directly."
+  },
+  "suggestedNodes": [
+    {
+      "id": "surface_plasmon",
+      "label": "Surface plasm.",
+      "subtitle": "metal-bound wave",
+      "edgeType": "extends"
+    },
+    {
+      "id": "nsom",
+      "label": "NSOM",
+      "subtitle": "sub-λ imaging",
+      "edgeType": "applied"
+    },
+    {
+      "id": "goos_hanchen",
+      "label": "Goos-Hänchen",
+      "subtitle": "lateral TIR shift",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-06-24T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["total_internal_reflection", "refraction", "wavelength"]
+  }
+}

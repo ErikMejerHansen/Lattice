@@ -376,5 +376,12 @@
     "subtitle": "∇_X V = 0",
     "date": "2026-06-23",
     "estimatedReadingMinutes": 25
+  },
+  {
+    "slug": "2026-06-24-evanescent-wave",
+    "title": "Evanescent waves: the field that should not be there",
+    "subtitle": "E ∝ e^(-z/d)",
+    "date": "2026-06-24",
+    "estimatedReadingMinutes": 22
   }
 ]
