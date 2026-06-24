@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 10px;
+  line-height: 1.7;
+}
+.readout .hi { color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div style="padding: 14px 18px;">
+    <svg id="svg" width="100%" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="viz-slider-row">
+      <label>&theta;</label>
+      <input type="range" id="theta" min="30" max="88" step="0.5" value="55">
+      <span class="value" id="thetaval">55.0&deg;</span>
+    </div>
+    <div class="readout" id="readout"></div>
+    <div class="viz-caption" style="margin-top: 12px;">
+      Left: a plane wave inside glass (n&#8321; = 1.50, upper region) strikes the boundary with air (n&#8322; = 1.00) at angle &theta; from the normal. Below the critical angle &theta;_c &asymp; 41.8&deg;, a refracted ray crosses into the air. Past it, the air-side field decays as exp(&minus;z/d), drawn as a horizontal heat strip whose tone fades into the depth. Right: the same E(z)/E&#8320; curve plotted against depth in nanometers, with the e-folding depth z = d marked. Slide &theta;: at the critical angle, d diverges and the field reaches across the panel; far past, d collapses to about a tenth of a wavelength.
+    </div>
+  </div>
+</div>
+<script>
+const n1 = 1.50;
+const n2 = 1.00;
+const lambda0 = 600; // nm
+const thetaC = Math.asin(n2 / n1) * 180 / Math.PI;
+
+const svg = document.getElementById('svg');
+const ns = 'http://www.w3.org/2000/svg';
+const W = 720, H = 320;
+
+// Layout
+const SCENE_X0 = 30, SCENE_X1 = 360, SCENE_W = SCENE_X1 - SCENE_X0;
+const SCENE_Y0 = 30, SCENE_Y1 = 270, SCENE_H = SCENE_Y1 - SCENE_Y0;
+const BOUNDARY_Y = (SCENE_Y0 + SCENE_Y1) / 2;
+const CURVE_X0 = 420, CURVE_X1 = 700, CURVE_W = CURVE_X1 - CURVE_X0;
+const CURVE_Y0 = 50, CURVE_Y1 = 270, CURVE_H = CURVE_Y1 - CURVE_Y0;
+
+// Maximum depth shown on right curve, in nm
+const Z_MAX_NM = 800;
+
+function mk(tag, attrs) {
+  const el = document.createElementNS(ns, tag);
+  for (const k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+}
+function clear(parent) { while (parent.firstChild) parent.removeChild(parent.firstChild); }
+
+// Background regions in left scene
+const gradGlass = mk('linearGradient', { id: 'gradGlass', x1: 0, y1: 0, x2: 0, y2: 1 });
+gradGlass.appendChild(mk('stop', { offset: 0, 'stop-color': '#d8d0e8' }));
+gradGlass.appendChild(mk('stop', { offset: 1, 'stop-color': '#c9c0e0' }));
+const defs = mk('defs', {});
+defs.appendChild(gradGlass);
+svg.appendChild(defs);
+
+function draw() {
+  clear(svg);
+  svg.appendChild(defs);
+
+  const theta = parseFloat(document.getElementById('theta').value);
+  document.getElementById('thetaval').textContent = theta.toFixed(1) + '°';
+  const thetaRad = theta * Math.PI / 180;
+  const isTIR = theta > thetaC;
+
+  // Left scene: glass region and air region
+  svg.appendChild(mk('rect', { x: SCENE_X0, y: SCENE_Y0, width: SCENE_W, height: BOUNDARY_Y - SCENE_Y0,
+                               fill: 'url(#gradGlass)', stroke: 'none' }));
+  svg.appendChild(mk('rect', { x: SCENE_X0, y: BOUNDARY_Y, width: SCENE_W, height: SCENE_Y1 - BOUNDARY_Y,
+                               fill: '#faf5e9', stroke: 'none' }));
+  svg.appendChild(mk('rect', { x: SCENE_X0, y: SCENE_Y0, width: SCENE_W, height: SCENE_H,
+                               fill: 'none', stroke: '#b8ac8e', 'stroke-width': 1 }));
+  // Boundary line
+  svg.appendChild(mk('line', { x1: SCENE_X0, y1: BOUNDARY_Y, x2: SCENE_X1, y2: BOUNDARY_Y,
+                               stroke: '#1a1a18', 'stroke-width': 1.5 }));
+  // Region labels
+  const labGlass = mk('text', { x: SCENE_X0 + 8, y: SCENE_Y0 + 16, fill: '#6b6359',
+                                 'font-family': 'IBM Plex Mono, monospace', 'font-size': 11 });
+  labGlass.textContent = 'glass  n₁ = 1.50';
+  svg.appendChild(labGlass);
+  const labAir = mk('text', { x: SCENE_X0 + 8, y: SCENE_Y1 - 8, fill: '#6b6359',
+                               'font-family': 'IBM Plex Mono, monospace', 'font-size': 11 });
+  labAir.textContent = 'air  n₂ = 1.00';
+  svg.appendChild(labAir);
+
+  // Incidence point
+  const PX = SCENE_X0 + SCENE_W * 0.42;
+  const PY = BOUNDARY_Y;
+
+  // Normal (dashed vertical)
+  svg.appendChild(mk('line', { x1: PX, y1: SCENE_Y0 + 4, x2: PX, y2: SCENE_Y1 - 4,
+                               stroke: '#a89e90', 'stroke-width': 1, 'stroke-dasharray': '4 4' }));
+
+  // Incoming ray (from upper-left toward P)
+  const RAY_LEN = 160;
+  const ix = PX - RAY_LEN * Math.sin(thetaRad);
+  const iy = PY - RAY_LEN * Math.cos(thetaRad);
+  svg.appendChild(mk('line', { x1: ix, y1: iy, x2: PX, y2: PY,
+                               stroke: '#9c3a22', 'stroke-width': 2.2 }));
+  // Arrow on incoming ray
+  const arrAngle = Math.atan2(PY - iy, PX - ix);
+  const arrTip = { x: PX - 22 * Math.cos(arrAngle), y: PY - 22 * Math.sin(arrAngle) };
+  svg.appendChild(mk('polygon', {
+    points: `${PX - 14 * Math.cos(arrAngle) + 5 * Math.sin(arrAngle)},${PY - 14 * Math.sin(arrAngle) - 5 * Math.cos(arrAngle)} ` +
+            `${PX - 14 * Math.cos(arrAngle) - 5 * Math.sin(arrAngle)},${PY - 14 * Math.sin(arrAngle) + 5 * Math.cos(arrAngle)} ` +
+            `${PX - 4 * Math.cos(arrAngle)},${PY - 4 * Math.sin(arrAngle)}`,
+    fill: '#9c3a22'
+  }));
+
+  // Reflected ray (to upper-right)
+  const rx = PX + RAY_LEN * Math.sin(thetaRad);
+  const ry = PY - RAY_LEN * Math.cos(thetaRad);
+  svg.appendChild(mk('line', { x1: PX, y1: PY, x2: rx, y2: ry,
+                               stroke: isTIR ? '#9c3a22' : '#c47558',
+                               'stroke-width': isTIR ? 2.2 : 1.6,
+                               'stroke-dasharray': isTIR ? null : '5 4' }));
+
+  // Angle of incidence arc
+  svg.appendChild(mk('path', {
+    d: `M ${PX} ${PY - 28} A 28 28 0 0 0 ${PX - 28 * Math.sin(thetaRad)} ${PY - 28 * Math.cos(thetaRad)}`,
+    fill: 'none', stroke: '#6b6359', 'stroke-width': 1
+  }));
+  const labTh = mk('text', {
+    x: PX - 22 * Math.sin(thetaRad / 2 + 0.05) - 8,
+    y: PY - 22 * Math.cos(thetaRad / 2 + 0.05) - 2,
+    fill: '#6b6359', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 11
+  });
+  labTh.textContent = 'θ';
+  svg.appendChild(labTh);
+
+  // Below the boundary: refracted ray OR evanescent strip
+  if (!isTIR) {
+    // Refracted ray by Snell's law
+    const sinTh2 = (n1 / n2) * Math.sin(thetaRad);
+    const theta2 = Math.asin(Math.min(1, sinTh2));
+    const tx = PX + RAY_LEN * Math.sin(theta2);
+    const ty = PY + RAY_LEN * Math.cos(theta2);
+    svg.appendChild(mk('line', { x1: PX, y1: PY, x2: tx, y2: ty,
+                                 stroke: '#9c3a22', 'stroke-width': 2.2 }));
+    // Arrow on refracted ray
+    const ang = Math.atan2(ty - PY, tx - PX);
+    svg.appendChild(mk('polygon', {
+      points: `${tx - 14 * Math.cos(ang) + 5 * Math.sin(ang)},${ty - 14 * Math.sin(ang) - 5 * Math.cos(ang)} ` +
+              `${tx - 14 * Math.cos(ang) - 5 * Math.sin(ang)},${ty - 14 * Math.sin(ang) + 5 * Math.cos(ang)} ` +
+              `${tx - 4 * Math.cos(ang)},${ty - 4 * Math.sin(ang)}`,
+      fill: '#9c3a22'
+    }));
+    // Status text
+    const status = mk('text', { x: SCENE_X0 + SCENE_W - 8, y: SCENE_Y1 - 8, fill: '#6b6359',
+                                 'font-family': 'IBM Plex Mono, monospace', 'font-size': 11,
+                                 'text-anchor': 'end' });
+    status.textContent = 'refraction (θ < θ_c)';
+    svg.appendChild(status);
+  } else {
+    // Evanescent: heat strip from boundary down. Convert pixel depth -> nm.
+    // We'll show pixel z=0..(SCENE_Y1-BOUNDARY_Y) as 0..PIX_TO_NM nm
+    const PIX_DEPTH = SCENE_Y1 - BOUNDARY_Y - 4;
+    const PIX_TO_NM = 800; // 800 nm scale in left panel
+    const dnm = lambda0 / (2 * Math.PI * Math.sqrt(n1 * n1 * Math.sin(thetaRad) * Math.sin(thetaRad) - n2 * n2));
+    // Draw stripes of decreasing opacity
+    const STRIPES = 60;
+    for (let i = 0; i < STRIPES; i++) {
+      const z_nm = (i / STRIPES) * PIX_TO_NM;
+      const amp = Math.exp(-z_nm / dnm);
+      const intensity = amp * amp;
+      const yTop = BOUNDARY_Y + (i / STRIPES) * PIX_DEPTH;
+      const yBot = BOUNDARY_Y + ((i + 1) / STRIPES) * PIX_DEPTH;
+      svg.appendChild(mk('rect', {
+        x: SCENE_X0 + 1, y: yTop, width: SCENE_W - 2, height: yBot - yTop + 0.5,
+        fill: '#9c3a22', opacity: 0.55 * intensity
+      }));
+    }
+    // Mark z = d on left panel
+    const yd = BOUNDARY_Y + Math.min(PIX_DEPTH, (dnm / PIX_TO_NM) * PIX_DEPTH);
+    if (dnm < PIX_TO_NM) {
+      svg.appendChild(mk('line', { x1: SCENE_X0 + 4, y1: yd, x2: SCENE_X1 - 4, y2: yd,
+                                   stroke: '#1a1a18', 'stroke-width': 1, 'stroke-dasharray': '3 3' }));
+      const labd = mk('text', { x: SCENE_X1 - 8, y: yd - 4, fill: '#1a1a18',
+                                 'font-family': 'IBM Plex Mono, monospace', 'font-size': 11,
+                                 'text-anchor': 'end' });
+      labd.textContent = 'z = d';
+      svg.appendChild(labd);
+    }
+    const status = mk('text', { x: SCENE_X0 + SCENE_W - 8, y: SCENE_Y1 - 8, fill: '#1a1a18',
+                                 'font-family': 'IBM Plex Mono, monospace', 'font-size': 11,
+                                 'text-anchor': 'end' });
+    status.textContent = 'evanescent (θ > θ_c)';
+    svg.appendChild(status);
+  }
+
+  // Right panel: E(z)/E0 curve
+  // Axes
+  svg.appendChild(mk('line', { x1: CURVE_X0, y1: CURVE_Y0, x2: CURVE_X0, y2: CURVE_Y1,
+                               stroke: '#1a1a18', 'stroke-width': 1 }));
+  svg.appendChild(mk('line', { x1: CURVE_X0, y1: CURVE_Y1, x2: CURVE_X1, y2: CURVE_Y1,
+                               stroke: '#1a1a18', 'stroke-width': 1 }));
+  // Y-axis label "E(z) / E_0"
+  const yLabel = mk('text', { x: CURVE_X0 - 30, y: CURVE_Y0 + CURVE_H / 2,
+                               fill: '#1a1a18', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 11,
+                               'text-anchor': 'middle',
+                               transform: `rotate(-90 ${CURVE_X0 - 30} ${CURVE_Y0 + CURVE_H / 2})` });
+  yLabel.textContent = 'E(z) / E₀';
+  svg.appendChild(yLabel);
+  // Y-axis ticks
+  for (const v of [0, 0.25, 0.5, 0.75, 1.0]) {
+    const yy = CURVE_Y1 - v * CURVE_H;
+    svg.appendChild(mk('line', { x1: CURVE_X0 - 4, y1: yy, x2: CURVE_X0, y2: yy,
+                                 stroke: '#1a1a18', 'stroke-width': 1 }));
+    const t = mk('text', { x: CURVE_X0 - 7, y: yy + 3, fill: '#6b6359',
+                            'font-family': 'IBM Plex Mono, monospace', 'font-size': 10,
+                            'text-anchor': 'end' });
+    t.textContent = v.toFixed(2);
+    svg.appendChild(t);
+  }
+  // X-axis label "z (nm)"
+  const xLabel = mk('text', { x: (CURVE_X0 + CURVE_X1) / 2, y: CURVE_Y1 + 30,
+                               fill: '#1a1a18', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 11,
+                               'text-anchor': 'middle' });
+  xLabel.textContent = 'z (nm)';
+  svg.appendChild(xLabel);
+  // X-axis ticks every 200 nm up to Z_MAX_NM
+  for (let z = 0; z <= Z_MAX_NM; z += 200) {
+    const xx = CURVE_X0 + (z / Z_MAX_NM) * CURVE_W;
+    svg.appendChild(mk('line', { x1: xx, y1: CURVE_Y1, x2: xx, y2: CURVE_Y1 + 4,
+                                 stroke: '#1a1a18', 'stroke-width': 1 }));
+    const t = mk('text', { x: xx, y: CURVE_Y1 + 16, fill: '#6b6359',
+                            'font-family': 'IBM Plex Mono, monospace', 'font-size': 10,
+                            'text-anchor': 'middle' });
+    t.textContent = String(z);
+    svg.appendChild(t);
+  }
+  // Title for right panel
+  const rTitle = mk('text', { x: (CURVE_X0 + CURVE_X1) / 2, y: CURVE_Y0 - 18,
+                               fill: '#1a1a18', 'font-family': 'IBM Plex Mono, monospace', 'font-size': 11,
+                               'text-anchor': 'middle' });
+  rTitle.textContent = 'air-side field amplitude';
+  svg.appendChild(rTitle);
+
+  // Curve
+  let dnm = NaN;
+  if (isTIR) {
+    dnm = lambda0 / (2 * Math.PI * Math.sqrt(n1 * n1 * Math.sin(thetaRad) * Math.sin(thetaRad) - n2 * n2));
+    let pts = '';
+    const N = 120;
+    for (let i = 0; i <= N; i++) {
+      const z = (i / N) * Z_MAX_NM;
+      const e = Math.exp(-z / dnm);
+      const px = CURVE_X0 + (z / Z_MAX_NM) * CURVE_W;
+      const py = CURVE_Y1 - e * CURVE_H;
+      pts += (i === 0 ? 'M' : 'L') + px + ' ' + py + ' ';
+    }
+    svg.appendChild(mk('path', { d: pts, fill: 'none', stroke: '#9c3a22', 'stroke-width': 2.2 }));
+    // Mark z = d
+    if (dnm > 0 && dnm < Z_MAX_NM) {
+      const xx = CURVE_X0 + (dnm / Z_MAX_NM) * CURVE_W;
+      const yy = CURVE_Y1 - Math.exp(-1) * CURVE_H;
+      svg.appendChild(mk('line', { x1: xx, y1: CURVE_Y1, x2: xx, y2: yy,
+                                   stroke: '#1a1a18', 'stroke-width': 1, 'stroke-dasharray': '3 3' }));
+      svg.appendChild(mk('line', { x1: CURVE_X0, y1: yy, x2: xx, y2: yy,
+                                   stroke: '#1a1a18', 'stroke-width': 1, 'stroke-dasharray': '3 3' }));
+      svg.appendChild(mk('circle', { cx: xx, cy: yy, r: 4, fill: '#9c3a22' }));
+      const lab = mk('text', { x: xx + 6, y: yy - 6, fill: '#1a1a18',
+                                'font-family': 'IBM Plex Mono, monospace', 'font-size': 11 });
+      lab.textContent = 'd ≈ ' + dnm.toFixed(0) + ' nm';
+      svg.appendChild(lab);
+      const lab2 = mk('text', { x: CURVE_X0 + 6, y: yy - 4, fill: '#6b6359',
+                                 'font-family': 'IBM Plex Mono, monospace', 'font-size': 10 });
+      lab2.textContent = '1/e ≈ 0.37';
+      svg.appendChild(lab2);
+    } else if (dnm >= Z_MAX_NM) {
+      const lab = mk('text', { x: (CURVE_X0 + CURVE_X1) / 2, y: CURVE_Y0 + 30, fill: '#9c3a22',
+                                'font-family': 'IBM Plex Mono, monospace', 'font-size': 11,
+                                'text-anchor': 'middle' });
+      lab.textContent = 'd ≈ ' + dnm.toFixed(0) + ' nm   (off panel)';
+      svg.appendChild(lab);
+    }
+  } else {
+    // No evanescent decay below critical angle
+    const msg = mk('text', { x: (CURVE_X0 + CURVE_X1) / 2, y: CURVE_Y0 + CURVE_H / 2,
+                              fill: '#6b6359', 'font-family': 'IBM Plex Mono, monospace',
+                              'font-size': 12, 'text-anchor': 'middle' });
+    msg.textContent = 'θ < θ_c : refraction, not evanescent decay';
+    svg.appendChild(msg);
+  }
+
+  // Readout below
+  const ro = document.getElementById('readout');
+  if (isTIR) {
+    ro.innerHTML =
+      '<span class="hi">θ = ' + theta.toFixed(1) + '°</span> &gt; θ_c = ' + thetaC.toFixed(1) + '°' +
+      '&nbsp; &nbsp; λ₀ = 600 nm&nbsp; &nbsp; ' +
+      'd = λ₀ / (2π √(n₁² sin²θ − n₂²)) = ' +
+      '<span class="hi">' + dnm.toFixed(0) + ' nm</span>' +
+      '&nbsp; (≈ ' + (dnm / lambda0).toFixed(2) + ' λ₀)';
+  } else {
+    ro.innerHTML =
+      '<span class="hi">θ = ' + theta.toFixed(1) + '°</span> &lt; θ_c = ' + thetaC.toFixed(1) + '°' +
+      '&nbsp; &nbsp; refracted at θ₂ = ' +
+      (Math.asin((n1 / n2) * Math.sin(thetaRad)) * 180 / Math.PI).toFixed(1) + '°' +
+      '&nbsp; &nbsp; (no evanescent field; the refracted ray carries the energy across)';
+  }
+}
+
+document.getElementById('theta').addEventListener('input', draw);
+draw();
+</script>
+</body>
+</html>

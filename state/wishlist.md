@@ -13,7 +13,6 @@
 # auto-suggested 2026-06-18 from geodesics
 
 # auto-suggested 2026-05-11 from total-internal-reflection
-Evanescent wave — the exp(-z/d) field that lives in the medium where no ray penetrates, and why a wavelength-thin gap can leak energy across it
 Numerical aperture — NA = √(n₁² − n₂²), the acceptance cone of a step-index fiber and why bigger NA is not always better
 Frustrated TIR — pressing two prisms within a wavelength: optical tunneling that beat Schrödinger to the idea by half a century
 
@@ -178,3 +177,8 @@ Kruskal-Szekeres coordinates — the 1960 maximal analytic extension of the Schw
 Cartan connection form — Élie Cartan 1922-1928 reformulation of the Christoffel symbols as a matrix-valued 1-form ω, with curvature 2-form Ω = dω + ω∧ω containing exactly the Riemann tensor, the language Yang and Mills 1954 reached for thirty years later without knowing it had a name
 Holonomy — the group element accumulated by parallel transport around a closed loop, with the holonomy group at a point as the algebraic invariant of a connection, the geometric quantity Foucault measured at the Panthéon in 1851 and that Ambrose and Singer 1953 characterised by the curvature tensor
 Berry phase — Michael Berry's 1984 discovery that a quantum state adiabatically transported around a closed loop in parameter space acquires a geometric phase equal to the holonomy of the connection on the bundle of eigenstates, the quantum echo of parallel transport that explains the integer quantum Hall effect and molecular Aharonov-Bohm signatures
+
+# auto-suggested 2026-06-24 from evanescent-wave
+Surface plasmons — collective electron oscillations bound to a metal-dielectric interface, evanescent on both sides, the dispersion ω(k) that drags light below the diffraction limit at visible frequencies and powers SPR biosensors
+NSOM (near-field scanning optical microscope) — Pohl, Denk, and Lanz at IBM Zurich 1984, a sub-50-nm tapered fiber aperture held within a wavelength of the sample, the trick that broke Abbe's 1873 limit by an order of magnitude
+Goos-Hänchen shift — the lateral displacement of a TIR-reflected beam by about half a wavelength along the boundary, the 1947 experimental confirmation that the evanescent field has a real penetration depth
