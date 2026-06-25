@@ -549,6 +549,16 @@
       "createdAt": "2026-06-24T08:00:00Z",
       "col": 0,
       "row": 27
+    },
+    {
+      "id": "numerical_aperture",
+      "label": "Num. aperture",
+      "subtitle": "NA = √(n₁²−n₂²)",
+      "state": "available",
+      "lesson": "2026-06-25-numerical-aperture",
+      "createdAt": "2026-06-25T08:00:00Z",
+      "col": 1,
+      "row": 27
     }
   ],
   "edges": [
@@ -1285,6 +1295,21 @@
     {
       "from": "evanescent_wave",
       "to": "wavelength",
+      "kind": "related"
+    },
+    {
+      "from": "numerical_aperture",
+      "to": "refraction",
+      "kind": "extends"
+    },
+    {
+      "from": "numerical_aperture",
+      "to": "total_internal_reflection",
+      "kind": "extends"
+    },
+    {
+      "from": "numerical_aperture",
+      "to": "dispersion",
       "kind": "related"
     }
   ]

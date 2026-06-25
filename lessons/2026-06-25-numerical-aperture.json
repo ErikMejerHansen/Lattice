@@ -1,0 +1,127 @@
+{
+  "slug": "2026-06-25-numerical-aperture",
+  "title": "Numerical aperture: the cone a fiber agrees to listen to",
+  "node": {
+    "id": "numerical_aperture",
+    "label": "Num. aperture",
+    "subtitle": "NA = √(n₁²−n₂²)"
+  },
+  "intro": "Heinrich Lamm, a 22-year-old medical student in Munich, sent the first image through a bundle of glass fibers in 1930: the lit filament of a small lamp, blurred but unmistakable, focused on a screen at the bundle's far end. He had no name for the device, no theory for why the light stayed inside the fibers, and no time to publish a proper paper before the Nazis pushed him out of Germany. Twenty-four years later, when Brian O'Brien at the American Optical Company and Narinder Kapany at Imperial College in London were independently reinventing the bundle for medical endoscopy (looking inside the body through a flexible tube), the practical question that pulled them up short was the one Lamm had not asked: of all the light striking the end of a fiber, what fraction does the fiber actually accept? The answer is the numerical aperture, and it ties refraction at the end face to total internal reflection at the side wall in a single equation.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The bundle that needed a number",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Lamm's 1930 fiber bundle worked, but only barely. He had drawn quartz down to wires about 75 μm thick, packed them parallel in a brass tube, polished both ends flat, and shone a focused image onto one end. Each fiber carried the brightness of whatever pixel of the image happened to land on its entrance face, by total internal reflection (TIR) along the wall: the same effect that traps light inside Colladon's water jet or makes a swimming pool ceiling look silvered from below. The image at the far end was a coarse mosaic, one dot per fiber, and dim. The dimness was the puzzle." },
+        { "type": "p", "text": "When Hopkins and Kapany published the first true coherent fiber bundle in Nature in 1954, the device was meant for endoscopy and the engineering question was acute. Doctors wanted to look into a patient's stomach with a flexible tube, and the only light available was whatever they could send down a second bundle from a lamp at the eyepiece. Every photon counted. Engineers needed to know, before building anything, what fraction of a lamp's output a fiber of given core and cladding indices would actually pick up. The geometric question hiding behind the engineering one was the existence of an acceptance cone." },
+        { "type": "p", "text": "The cone exists because TIR has an angle budget. Inside the core, only rays striking the side wall at angles past the critical angle θ_c stay trapped. Steeper rays (closer to the wall normal) refract out into the cladding and are lost on the first bounce. Trace such a ray back through Snell's law at the end face and it corresponds to some entrance angle in the surrounding air. The set of entrance angles that survive forms a cone with a definite half-angle θ_a. Writing down that half-angle, in a single closed-form number, is what Kapany did in 1955, and what every fiber spec sheet now lists as 'NA.'" }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Snell at the entry, TIR at the wall",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Set the geometry. A step-index fiber is a cylinder with a core of refractive index n_core surrounded by a cladding of slightly lower index n_clad. (The word 'step-index' just means the index changes abruptly at the core-cladding boundary, not gradually.) The end face is flat and perpendicular to the fiber axis. The fiber sits in air of index n_0 = 1.00. A ray enters from the air, striking the end face at angle θ_a measured from the axis (which is also the face normal). After refraction it travels inside the core at angle θ_r from the axis. Snell's law at the end face fixes the two:" },
+        { "type": "math", "tex": "n_0 \\sin\\theta_a = n_{\\text{core}} \\sin\\theta_r", "display": true, "caption": "n_0 is the index of the medium outside the fiber (1.00 for air). n_core is the index of the core glass. θ_a is the entrance angle in air, measured from the fiber axis. θ_r is the propagation angle inside the core, measured from the same axis. Both angles point into the fiber from the end face." },
+        { "type": "p", "text": "Now the ray, propagating at angle θ_r from the axis, hits the side wall of the fiber. The wall is parallel to the axis, so its normal is perpendicular to the axis, and the angle between the ray and the wall's normal is (90° − θ_r). For the ray to undergo total internal reflection at the wall (and so stay trapped in the core) this angle must exceed the critical angle θ_c = arcsin(n_clad / n_core) for the core-cladding pair. Writing 90° − θ_r > θ_c and taking the sine of both sides, sin(90° − θ_r) > sin θ_c, which is cos θ_r > n_clad / n_core. Use sin²θ_r + cos²θ_r = 1 to convert back to a bound on sin θ_r:" },
+        { "type": "math", "tex": "\\sin\\theta_r < \\cos\\theta_c = \\sqrt{1 - \\frac{n_{\\text{clad}}^2}{n_{\\text{core}}^2}} = \\frac{\\sqrt{n_{\\text{core}}^2 - n_{\\text{clad}}^2}}{n_{\\text{core}}}", "display": true, "caption": "θ_r is again the propagation angle inside the core. n_core is the core index. n_clad is the cladding index. θ_c = arcsin(n_clad/n_core) is the critical angle at the core-cladding interface. The inequality says the inside-the-core ray cannot bend too far from the fiber axis, or its first bounce on the cladding wall is no longer total." },
+        { "type": "p", "text": "Substitute this bound on sin θ_r back into Snell's law at the end face. The factor of n_core cancels, and what is left is a bound on the entrance angle θ_a written entirely in terms of the two index numbers:" },
+        { "type": "math", "tex": "n_0 \\sin\\theta_{a,\\max} = \\sqrt{n_{\\text{core}}^2 - n_{\\text{clad}}^2} \\;\\equiv\\; \\text{NA}", "display": true, "caption": "n_0 is the index outside the fiber (1.00 in air). θ_{a,max} is the half-angle of the acceptance cone: the largest entrance angle that still gets trapped. NA is the numerical aperture, the product n_0 · sin θ_{a,max}, written as a closed-form function of the two glass indices. Read aloud: the cone the fiber listens to is set by the square root of the difference of the squared indices." }
+      ],
+      "quiz": {
+        "question": "A standard multimode telecom fiber has core index n_core = 1.500 and cladding index n_clad = 1.485. Sitting in air (n_0 = 1.00), what are its numerical aperture NA and its acceptance half-angle θ_{a,max} (rounded to the nearest 0.5°)?",
+        "options": [
+          "NA ≈ 0.21, θ_{a,max} ≈ 12.5°",
+          "NA ≈ 0.015, θ_{a,max} ≈ 0.9° (essentially a straw)",
+          "NA ≈ 0.50, θ_{a,max} ≈ 30° (the cone is wide because both indices are close to 1.5)",
+          "NA ≈ 1.00, θ_{a,max} ≈ 90° (every ray is accepted)"
+        ],
+        "correctIndex": 0,
+        "explanation": "NA = √(n_core² − n_clad²) = √(2.250 − 2.205) = √0.045 ≈ 0.212. Then θ_{a,max} = arcsin(NA / n_0) = arcsin(0.212) ≈ 12.2°, rounded to 12.5°. The most tempting wrong answer is option B: it comes from subtracting the indices directly (1.500 − 1.485 = 0.015) instead of subtracting their squares. NA depends on n_core² − n_clad², not on n_core − n_clad, and the squaring stretches the small index difference into a much larger acceptance cone."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The cone made visible",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Three facts about the formula are worth holding before going on. First, NA depends only on the two indices; it does not depend on the core diameter, the wavelength, or the length of the fiber. Two fibers with identical n_core and n_clad have identical acceptance cones whether they are 9 μm thick or 9 mm thick. Second, NA grows quickly with the index contrast Δn = n_core − n_clad even when Δn is small. A 1% contrast (Δn = 0.015 at n_core = 1.50) gives an NA already large enough to swallow a 12° cone. Third, the acceptance cone is the cone in air, on the source side; once inside the core the rays propagate at much shallower angles, by a factor of n_core." },
+        { "type": "p", "text": "Real fibers span a wide NA range. Single-mode telecom fiber (the kind that runs Erik's internet) uses an extremely small index contrast, with NA around 0.12 to 0.14. Multimode telecom and short-link fibers are higher, NA ≈ 0.20 to 0.29. Specialty fluoride and plastic optical fibers reach NA ≈ 0.5 and above, accepting cones of 30° or more, useful in illumination and in lab-bench imaging where catching as much light as possible is the priority and the bandwidth penalty (the next section) is irrelevant." },
+        { "type": "viz", "src": "2026-06-25-numerical-aperture.html", "height": 360, "caption": "A step-index fiber with the core (n_core = 1.50, darker band) bounded by cladding (lighter bands above and below). Slide the cladding index n_clad: the acceptance cone (the shaded wedge in air on the left) widens as n_clad drops. A green ray entering inside the cone refracts at the end face and bounces along the wall by total internal reflection. A red ray entering just past the cone edge refracts in, hits the wall at less than the critical angle, and escapes into the cladding on its first bounce. The readout below gives NA, the half-angle θ_a in air, and the critical angle θ_c at the core-cladding wall." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The price of a wide cone",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "A wide acceptance cone is good for catching light but bad for carrying pulses. Two rays entering the same fiber but at different angles θ_r travel different total path lengths to reach the far end. The axial ray (θ_r = 0) goes straight down the axis, length L. A steep ray at angle θ_r covers L/cos θ_r, the longer hypotenuse of the same right triangle. The speed inside the glass is c / n_core. The transit time for any ray is therefore length divided by speed:" },
+        { "type": "math", "tex": "t(\\theta_r) = \\frac{L \\, n_{\\text{core}}}{c \\, \\cos\\theta_r}", "display": true, "caption": "t(θ_r) is the transit time from end to end for a ray traveling at angle θ_r from the fiber axis. L is the straight-line fiber length. n_core is the core index. c is the vacuum speed of light. θ_r is the angle inside the core, the same θ_r as in section 2. The factor 1/cos θ_r is the extra path length penalty: rays that zig-zag take longer." },
+        { "type": "p", "text": "The steepest ray the fiber still accepts is the one whose first bounce on the wall just grazes the critical angle, so cos θ_r = n_clad / n_core (this is the boundary case of the inequality we derived in section 2). The difference in transit time between this steepest ray and the axial ray, the so-called modal dispersion (a 'mode' here meaning a specific ray-path category that the fiber accepts), is:" },
+        { "type": "math", "tex": "\\Delta t = t_{\\max} - t_{\\min} = \\frac{L \\, n_{\\text{core}}}{c} \\left( \\frac{n_{\\text{core}}}{n_{\\text{clad}}} - 1 \\right) = \\frac{L \\, n_{\\text{core}}}{c \\, n_{\\text{clad}}} \\left( n_{\\text{core}} - n_{\\text{clad}} \\right)", "display": true, "caption": "Δt is the spread in transit times between the fastest (axial) ray and the slowest (grazing-TIR) ray. L is the fiber length. n_core and n_clad are the two indices. c is the vacuum speed of light. The right-hand form factors out the index difference n_core − n_clad to make its proportionality to the index contrast visible." },
+        { "type": "p", "text": "The connection to NA falls out by algebra. Since NA² = n_core² − n_clad² = (n_core − n_clad)(n_core + n_clad), the index difference can be written n_core − n_clad = NA² / (n_core + n_clad). For small contrast n_core + n_clad ≈ 2 n_core, so n_core − n_clad ≈ NA² / (2 n_core). Substitute this into the Δt above:" },
+        { "type": "math", "tex": "\\Delta t \\;\\approx\\; \\frac{L \\, \\text{NA}^2}{2 \\, c \\, n_{\\text{core}}}", "display": true, "caption": "Δt is the modal-dispersion spread. L is the fiber length. NA is the numerical aperture from section 2. n_core is the core index. c is the vacuum speed of light. The factor of NA² (not NA) is the key: doubling the acceptance cone width quadruples the pulse smear. The wider the cone, the worse the bandwidth, and the price scales with the square." }
+      ],
+      "quiz": {
+        "question": "A 1 km step-index multimode fiber has n_core = 1.50 and NA = 0.22. The modal-dispersion spread Δt sets the shortest pulse that can be sent without overlapping the next bit (roughly, the maximum bit rate is about 1/Δt). What is Δt for this 1 km fiber?",
+        "options": [
+          "Δt ≈ 1.1 ns (so bit rate up to about 900 Mbit/s/km)",
+          "Δt ≈ 54 ns (so bit rate up to about 18 Mbit/s/km)",
+          "Δt ≈ 110 ns (so bit rate up to about 9 Mbit/s/km)",
+          "Δt ≈ 5 μs (so bit rate limited to about 200 kbit/s/km)"
+        ],
+        "correctIndex": 1,
+        "explanation": "Δt ≈ L · NA² / (2 c n_core) = (1000 m)(0.22)² / (2 · 3·10⁸ m/s · 1.50) = 1000 · 0.0484 / (9·10⁸) ≈ 5.4 · 10⁻⁸ s ≈ 54 ns. The most tempting wrong answer is option A: it comes from using NA in place of NA² in the formula (Δt = L · NA / (2 c n_core)), forgetting that the dispersion penalty is quadratic in the cone width, not linear. That single squaring is the difference between a usable 1 km multimode link and an unusable one."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Shrinking the core until only one mode survives",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "By the late 1970s AT&T's long-haul telecom planners had a problem. Modal dispersion in the multimode fibers of the time capped serious bit rates at a few hundred Mbit/s/km, the wide acceptance cone they had spent the previous decade celebrating now read as a hard wall against the bandwidth they actually wanted. Cutting NA was one obvious lever but a slow one: index contrasts in fused silica were already pushed near the minimum doping could supply, and the gains went as NA². The cleverer lever was hiding inside Maxwell's equations, in a fact that had no analog in geometric optics. When the core diameter is comparable to the wavelength of light inside it, the ray picture breaks down and the field can only sit inside the fiber as a discrete set of standing-wave modes. Shrink the core small enough, and the set has exactly one element. The fiber stops accepting an acceptance cone of rays at all; it accepts only one shape of field, and modal dispersion disappears because there is only one mode left to disperse." },
+        { "type": "p", "text": "The cutoff is governed by a dimensionless number, the V-parameter (also called the normalized frequency), defined as V = (2π a / λ) · NA, where a is the core radius and λ is the vacuum wavelength of the light. (V combines the three knobs an engineer can turn: core size, operating wavelength, and the index contrast bundled into NA.) When V < 2.405 (the first zero of the Bessel function J₀, which is what falls out of solving Maxwell's equations in a cylinder), every mode above the fundamental is cut off and only one survives. Plug in telecom numbers: λ = 1.55 μm, NA = 0.13. The cutoff radius is a < 2.405 · 1.55 / (2π · 0.13) ≈ 4.6 μm, which is why every single-mode telecom fiber on Earth has a core diameter of about 8 to 10 μm, snug under the limit." },
+        { "type": "p", "text": "Single-mode operation was first demonstrated in low-loss silica fiber by Corning Glass Works in 1972 (the same Maurer-Keck-Schultz team whose 1970 breakthrough first brought silica loss below 20 dB/km) and went into commercial deployment in 1983 on AT&T's Northeast Corridor link. The acceptance cone had not changed its formula. What had changed was the realization that NA was no longer the only thing in play. In a single-mode fiber Erik can read about, NA still appears, but now in the V-parameter, where it tells you how small the core has to be drawn to silence every mode but one. The fiber lighting his finger when he holds his phone's flashlight over a strand is multimode and high-NA; the fiber carrying the photons of this sentence from a Frankfurt data center to his desk is single-mode and low-NA, and modal dispersion is, by design, not in it." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "An engineer is specifying optical fibers for two products: a flexible medical fiberscope that needs to illuminate a 30° field of view inside the stomach, and a 50 km long-haul backbone fiber that carries 10 Gbit/s digital traffic. She picks NA = 0.50 for the fiberscope and NA = 0.13 for the backbone. Why are the two NAs so different?",
+    "options": [
+      "The fiberscope operates in visible light where NA is naturally higher; the backbone uses infrared where NA is constrained below 0.2.",
+      "The backbone uses single-mode fiber, so NA is irrelevant for it; the engineer picked 0.13 arbitrarily.",
+      "The fiberscope is short and carries analog images, so modal dispersion (which scales as NA²) does not matter and the wide cone lets the fiber collect more light; the backbone is long and carries digital pulses, so a small NA is necessary to keep modal dispersion below the bit interval (or, in single-mode operation, to make the cutoff core radius large enough to manufacture).",
+      "Both choices are about light collection; the backbone's lower NA is because telecom lasers emit highly collimated beams that do not need a wide acceptance cone."
+    ],
+    "correctIndex": 2,
+    "explanation": "The two products live on opposite sides of the NA trade-off introduced in section 4. The fiberscope is short (centimeters) and the image is read by an eye or a camera that does not care about a 50 ns pulse spread; what matters is gathering as much light as possible from a poorly-lit cavity, and a 30° cone (NA ≈ 0.5) accepts roughly 6× the flux of a 12° cone. The backbone is 50 km, and at NA = 0.5 the multimode dispersion would smear a single bit over (50 000 m)(0.5)² / (2c·1.5) ≈ 28 μs, more than 10⁵ times the duration of a 10 Gbit/s bit. Hence single-mode operation with small NA, and the small NA is then constrained from below by manufacturability: too small an NA and the cutoff core radius grows past what can be reliably drawn. Option D is the tempting wrong answer: yes, telecom lasers are collimated, but the backbone's small NA is set by dispersion and the V-parameter, not by the laser's beam divergence (which is matched to the fiber with a separate coupling lens)."
+  },
+  "suggestedNodes": [
+    {
+      "id": "v_parameter",
+      "label": "V-parameter",
+      "subtitle": "V < 2.405",
+      "edgeType": "extends"
+    },
+    {
+      "id": "modal_dispersion",
+      "label": "Modal disp.",
+      "subtitle": "Δt ∝ NA²",
+      "edgeType": "applied"
+    },
+    {
+      "id": "graded_index_fiber",
+      "label": "Graded-index",
+      "subtitle": "n(r) parabolic",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-06-25T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["refraction", "total_internal_reflection", "dispersion"]
+  }
+}
