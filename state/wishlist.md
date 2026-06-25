@@ -13,7 +13,6 @@
 # auto-suggested 2026-06-18 from geodesics
 
 # auto-suggested 2026-05-11 from total-internal-reflection
-Numerical aperture — NA = √(n₁² − n₂²), the acceptance cone of a step-index fiber and why bigger NA is not always better
 Frustrated TIR — pressing two prisms within a wavelength: optical tunneling that beat Schrödinger to the idea by half a century
 
 # auto-suggested 2026-05-11 from dispersion
@@ -182,3 +181,8 @@ Berry phase — Michael Berry's 1984 discovery that a quantum state adiabaticall
 Surface plasmons — collective electron oscillations bound to a metal-dielectric interface, evanescent on both sides, the dispersion ω(k) that drags light below the diffraction limit at visible frequencies and powers SPR biosensors
 NSOM (near-field scanning optical microscope) — Pohl, Denk, and Lanz at IBM Zurich 1984, a sub-50-nm tapered fiber aperture held within a wavelength of the sample, the trick that broke Abbe's 1873 limit by an order of magnitude
 Goos-Hänchen shift — the lateral displacement of a TIR-reflected beam by about half a wavelength along the boundary, the 1947 experimental confirmation that the evanescent field has a real penetration depth
+
+# auto-suggested 2026-06-25 from numerical-aperture
+V-parameter — V = (2πa/λ)·NA, the dimensionless number bundling core radius, wavelength, and index contrast, with the single-mode cutoff V < 2.405 (first zero of J₀) that fell out of solving Maxwell's equations in a cylinder and that sets the core diameter of every single-mode fiber
+Modal dispersion — Δt ≈ L·NA²/(2c·n_core), the transit-time spread that punishes a wide acceptance cone quadratically and forced the long-haul telecom industry into single-mode operation by the early 1980s
+Graded-index fiber — n(r) = n_core·√(1 − 2Δ(r/a)²), the parabolic profile that equalizes ray transit times by making axial rays travel through a higher index than off-axis rays, killing modal dispersion without requiring single-mode core radii

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 10px;
+  line-height: 1.7;
+}
+.readout .hi { color: var(--accent); }
+.readout .accept { color: #1f7a3a; font-weight: 600; }
+.readout .edge { color: #c47558; font-weight: 600; }
+.readout .escape { color: #9c3a22; font-weight: 600; }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div style="padding: 14px 18px;">
+    <svg id="svg" width="100%" viewBox="0 0 720 300" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="viz-slider-row">
+      <label>n&#8322;</label>
+      <input type="range" id="nclad" min="1.400" max="1.495" step="0.001" value="1.470">
+      <span class="value" id="ncladval">1.470</span>
+    </div>
+    <div class="readout" id="readout"></div>
+    <div class="viz-caption" style="margin-top: 12px;">
+      Cross-section of a step-index fiber. The core (n&#8321; = 1.50, darker center band) is bounded above and below by cladding (n&#8322;, lighter bands). Slide n&#8322; from 1.400 to 1.495 to vary the index contrast. The translucent green wedge in air on the left is the acceptance cone of half-angle &theta;_a. A green ray entering well inside the cone refracts at the end face and zig-zags down the core by total internal reflection. An amber ray entering near the cone's edge zig-zags more shallowly. A red ray entering just past the edge refracts in, hits the cladding wall at less than the critical angle &theta;_c, and escapes into the cladding on its first bounce.
+    </div>
+  </div>
+</div>
+<script>
+const n0 = 1.00;
+const n1 = 1.50;
+const ns = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('svg');
+
+// Layout (viewBox 720 x 300)
+const X_AIR_LEFT = 20;
+const X_FACE = 230;
+const X_RIGHT = 700;
+const Y_AXIS = 150;
+const A = 46;                          // core half-thickness in pixels
+const Y_CORE_TOP = Y_AXIS - A;         // 104
+const Y_CORE_BOT = Y_AXIS + A;         // 196
+const CLAD = 38;                       // cladding thickness in pixels
+const Y_CLAD_TOP = Y_CORE_TOP - CLAD;  // 66
+const Y_CLAD_BOT = Y_CORE_BOT + CLAD;  // 234
+const TAIL_LEN = 195;                  // backward tail length for rays in air
+
+function mk(tag, attrs) {
+  const el = document.createElementNS(ns, tag);
+  for (const k in attrs) {
+    if (attrs[k] !== null && attrs[k] !== undefined) el.setAttribute(k, attrs[k]);
+  }
+  return el;
+}
+function clear(parent) { while (parent.firstChild) parent.removeChild(parent.firstChild); }
+function deg(r) { return r * 180 / Math.PI; }
+function rad(d) { return d * Math.PI / 180; }
+
+function drawText(x, y, text, opts) {
+  opts = opts || {};
+  const t = mk('text', {
+    x: x, y: y,
+    fill: opts.fill || '#1a1a18',
+    'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace',
+    'font-size': opts.size || 11,
+    'text-anchor': opts.anchor || 'start'
+  });
+  t.textContent = text;
+  svg.appendChild(t);
+}
+
+// Build the ray's path: backward tail in air, then propagation in core.
+// thetaA = angle from axis in air (positive = ray enters from upper-left).
+// n2 = current cladding index (for TIR test and possible escape refraction).
+function traceRay(thetaA, n2, color, width, dashed) {
+  const sinA = Math.sin(thetaA);
+  const cosA = Math.cos(thetaA);
+  const tailX = X_FACE - TAIL_LEN * cosA;
+  const tailY = Y_AXIS - TAIL_LEN * sinA;
+
+  // Air segment (backward tail)
+  svg.appendChild(mk('line', {
+    x1: tailX.toFixed(1), y1: tailY.toFixed(1), x2: X_FACE, y2: Y_AXIS,
+    stroke: color, 'stroke-width': width,
+    'stroke-dasharray': dashed ? '5 4' : null,
+    'stroke-linecap': 'round'
+  }));
+  // Small arrow at the entry face on the air segment
+  const arrAng = Math.atan2(Y_AXIS - tailY, X_FACE - tailX);
+  const ax = X_FACE - 12 * Math.cos(arrAng);
+  const ay = Y_AXIS - 12 * Math.sin(arrAng);
+  svg.appendChild(mk('polygon', {
+    points: (X_FACE - 4 * Math.cos(arrAng)).toFixed(1) + ',' + (Y_AXIS - 4 * Math.sin(arrAng)).toFixed(1) +
+            ' ' + (ax + 4 * Math.sin(arrAng)).toFixed(1) + ',' + (ay - 4 * Math.cos(arrAng)).toFixed(1) +
+            ' ' + (ax - 4 * Math.sin(arrAng)).toFixed(1) + ',' + (ay + 4 * Math.cos(arrAng)).toFixed(1),
+    fill: color
+  }));
+
+  // Refract into core: sin(thetaR) = sin(thetaA) / n1
+  const sinR = sinA / n1;
+  if (sinR >= 1) return;
+  const thetaR = Math.asin(sinR);
+  const cosR = Math.cos(thetaR);
+  const thetaC = Math.asin(n2 / n1);
+  // TIR holds iff (90 - thetaR) > thetaC, i.e., thetaR < (PI/2 - thetaC). Add tiny slack.
+  const tirOK = thetaR < (Math.PI / 2 - thetaC) - 1e-7;
+
+  // Start at entry point. Initial direction (cosR, +sinR) (right and down).
+  let x = X_FACE, y = Y_AXIS;
+  let dx = cosR, dy = sinR;
+  let pathD = 'M ' + x.toFixed(1) + ' ' + y.toFixed(1) + ' ';
+
+  let safety = 0;
+  while (x < X_RIGHT && safety++ < 200) {
+    const yWall = dy > 0 ? Y_CORE_BOT : Y_CORE_TOP;
+    const tToWall = (yWall - y) / dy;
+    const tToRight = (X_RIGHT - x) / dx;
+    if (tToRight <= tToWall) {
+      const xN = X_RIGHT;
+      const yN = y + tToRight * dy;
+      pathD += 'L ' + xN.toFixed(1) + ' ' + yN.toFixed(1);
+      break;
+    }
+    const xN = x + tToWall * dx;
+    const yN = yWall;
+    pathD += 'L ' + xN.toFixed(1) + ' ' + yN.toFixed(1) + ' ';
+
+    if (tirOK) {
+      dy = -dy;
+      x = xN; y = yN;
+    } else {
+      // Commit core path, then draw refraction out into the cladding.
+      svg.appendChild(mk('path', {
+        d: pathD, fill: 'none', stroke: color, 'stroke-width': width,
+        'stroke-dasharray': dashed ? '5 4' : null, 'stroke-linejoin': 'round'
+      }));
+      // Refract: in-core angle from wall normal = arccos(|dy|).
+      const cosAC = Math.abs(dy);
+      const sinAC = Math.abs(dx);
+      const sinACL = (n1 / n2) * sinAC;
+      if (sinACL >= 1) return; // safety: would be TIR
+      const cosACL = Math.sqrt(1 - sinACL * sinACL);
+      const nWallY = dy > 0 ? 1 : -1;
+      const tanSign = dx > 0 ? 1 : -1;
+      const newDx = tanSign * sinACL;
+      const newDy = nWallY * cosACL;
+      const yClad = newDy > 0 ? Y_CLAD_BOT : Y_CLAD_TOP;
+      const tCl = Math.min((yClad - yN) / newDy, (X_RIGHT - xN) / newDx);
+      const xC = xN + tCl * newDx;
+      const yC = yN + tCl * newDy;
+      svg.appendChild(mk('line', {
+        x1: xN, y1: yN, x2: xC.toFixed(1), y2: yC.toFixed(1),
+        stroke: color, 'stroke-width': width,
+        'stroke-dasharray': dashed ? '5 4' : null, 'stroke-linecap': 'round'
+      }));
+      // Arrowhead on escape
+      const eAng = Math.atan2(yC - yN, xC - xN);
+      const ex = xC - 9 * Math.cos(eAng);
+      const ey = yC - 9 * Math.sin(eAng);
+      svg.appendChild(mk('polygon', {
+        points: xC.toFixed(1) + ',' + yC.toFixed(1) +
+                ' ' + (ex + 4 * Math.sin(eAng)).toFixed(1) + ',' + (ey - 4 * Math.cos(eAng)).toFixed(1) +
+                ' ' + (ex - 4 * Math.sin(eAng)).toFixed(1) + ',' + (ey + 4 * Math.cos(eAng)).toFixed(1),
+        fill: color
+      }));
+      // Suppress core path drawing below since we already drew it.
+      pathD = '';
+      return;
+    }
+  }
+
+  if (pathD.length > 0) {
+    svg.appendChild(mk('path', {
+      d: pathD, fill: 'none', stroke: color, 'stroke-width': width,
+      'stroke-dasharray': dashed ? '5 4' : null, 'stroke-linejoin': 'round'
+    }));
+  }
+}
+
+function draw() {
+  clear(svg);
+  const n2 = parseFloat(document.getElementById('nclad').value);
+  document.getElementById('ncladval').textContent = n2.toFixed(3);
+
+  const NA = Math.sqrt(n1 * n1 - n2 * n2);
+  const thetaA = Math.asin(Math.min(1, NA / n0));
+  const thetaC = Math.asin(n2 / n1);
+
+  // Background regions
+  // Air panel
+  svg.appendChild(mk('rect', {
+    x: X_AIR_LEFT, y: 30, width: X_FACE - X_AIR_LEFT, height: 240,
+    fill: '#faf5e9', stroke: '#d8cfb8', 'stroke-width': 1
+  }));
+  // Cladding (top + bottom) and core
+  svg.appendChild(mk('rect', {
+    x: X_FACE, y: Y_CLAD_TOP, width: X_RIGHT - X_FACE, height: CLAD,
+    fill: '#ece4d2', stroke: 'none'
+  }));
+  svg.appendChild(mk('rect', {
+    x: X_FACE, y: Y_CORE_TOP, width: X_RIGHT - X_FACE, height: 2 * A,
+    fill: '#d6cce8', stroke: 'none'
+  }));
+  svg.appendChild(mk('rect', {
+    x: X_FACE, y: Y_CORE_BOT, width: X_RIGHT - X_FACE, height: CLAD,
+    fill: '#ece4d2', stroke: 'none'
+  }));
+  // Cladding border
+  svg.appendChild(mk('rect', {
+    x: X_FACE, y: Y_CLAD_TOP, width: X_RIGHT - X_FACE, height: Y_CLAD_BOT - Y_CLAD_TOP,
+    fill: 'none', stroke: '#b8ac8e', 'stroke-width': 1
+  }));
+  // Core walls (dashed)
+  svg.appendChild(mk('line', {
+    x1: X_FACE, y1: Y_CORE_TOP, x2: X_RIGHT, y2: Y_CORE_TOP,
+    stroke: '#6b6359', 'stroke-width': 0.7, 'stroke-dasharray': '3 2'
+  }));
+  svg.appendChild(mk('line', {
+    x1: X_FACE, y1: Y_CORE_BOT, x2: X_RIGHT, y2: Y_CORE_BOT,
+    stroke: '#6b6359', 'stroke-width': 0.7, 'stroke-dasharray': '3 2'
+  }));
+  // End face line
+  svg.appendChild(mk('line', {
+    x1: X_FACE, y1: Y_CLAD_TOP, x2: X_FACE, y2: Y_CLAD_BOT,
+    stroke: '#1a1a18', 'stroke-width': 1.5
+  }));
+  // Axis (dashed)
+  svg.appendChild(mk('line', {
+    x1: X_AIR_LEFT, y1: Y_AXIS, x2: X_RIGHT, y2: Y_AXIS,
+    stroke: '#a89e90', 'stroke-width': 0.7, 'stroke-dasharray': '2 3'
+  }));
+
+  // Region labels
+  drawText(X_AIR_LEFT + 6, 46, 'air  n₀ = 1.00', { size: 11, fill: '#6b6359' });
+  drawText(X_FACE + 8, Y_CLAD_TOP + 13, 'cladding  n₂ = ' + n2.toFixed(3), { size: 10, fill: '#6b6359' });
+  drawText(X_FACE + 8, Y_AXIS - 4, 'core  n₁ = 1.500', { size: 11, fill: '#3d2f4a' });
+  drawText(X_FACE + 8, Y_CLAD_BOT - 5, 'cladding  n₂ = ' + n2.toFixed(3), { size: 10, fill: '#6b6359' });
+  drawText(X_RIGHT - 8, 46, 'step-index fiber', { size: 11, anchor: 'end', fill: '#6b6359' });
+
+  // Acceptance cone wedge (apex at face center, extending back into air)
+  const coneBackX = X_AIR_LEFT + 5;
+  const halfWidth = (X_FACE - coneBackX) * Math.tan(thetaA);
+  const conePts =
+    X_FACE + ',' + Y_AXIS + ' ' +
+    coneBackX + ',' + (Y_AXIS - halfWidth).toFixed(1) + ' ' +
+    coneBackX + ',' + (Y_AXIS + halfWidth).toFixed(1);
+  svg.appendChild(mk('polygon', {
+    points: conePts, fill: '#1f7a3a', opacity: 0.13,
+    stroke: '#1f7a3a', 'stroke-width': 0.7, 'stroke-dasharray': '3 3'
+  }));
+  drawText(coneBackX + 4, Y_AXIS + Math.min(halfWidth + 14, 110),
+           'acceptance cone (2θ_a)', { size: 10, fill: '#1f7a3a' });
+
+  // Theta_a arc at apex
+  const arcR = 28;
+  const arcEndX = X_FACE - arcR * Math.cos(thetaA);
+  const arcEndY = Y_AXIS - arcR * Math.sin(thetaA);
+  svg.appendChild(mk('path', {
+    d: 'M ' + (X_FACE - arcR) + ' ' + Y_AXIS +
+       ' A ' + arcR + ' ' + arcR + ' 0 0 1 ' + arcEndX.toFixed(1) + ' ' + arcEndY.toFixed(1),
+    fill: 'none', stroke: '#1f7a3a', 'stroke-width': 1
+  }));
+  drawText(X_FACE - arcR - 4, Y_AXIS - arcR * Math.sin(thetaA) / 2 + 4,
+           'θ_a', { size: 11, anchor: 'end', fill: '#1f7a3a' });
+
+  // Three rays. Angles chosen so they are visually distinguishable across the slider range.
+  const ANG_INSIDE = 0.45 * thetaA;
+  const ANG_EDGE = 0.96 * thetaA;
+  const ANG_OUTSIDE = Math.min(thetaA + rad(6), rad(70));
+
+  traceRay(ANG_INSIDE,  n2, '#1f7a3a', 2.0, false);  // green, accepted
+  traceRay(ANG_EDGE,    n2, '#c47558', 1.6, true);   // amber, near-edge, dashed
+  traceRay(ANG_OUTSIDE, n2, '#9c3a22', 2.0, false);  // red, escapes
+
+  // Readout
+  const ro = document.getElementById('readout');
+  ro.innerHTML =
+    'n₁ = 1.500&nbsp; &nbsp; n₂ = <span class="hi">' + n2.toFixed(3) + '</span>' +
+    '&nbsp; &nbsp; Δn = ' + (n1 - n2).toFixed(3) +
+    '&nbsp; &nbsp; NA = √(n₁² − n₂²) = <span class="hi">' + NA.toFixed(3) + '</span>' +
+    '<br>' +
+    'acceptance half-angle θ_a = arcsin(NA) = <span class="hi">' + deg(thetaA).toFixed(1) + '°</span>' +
+    '&nbsp; &nbsp; critical angle θ_c = arcsin(n₂/n₁) = ' + deg(thetaC).toFixed(1) + '°' +
+    '<br>' +
+    '<span class="accept">■ accepted (θ ≈ ' + deg(ANG_INSIDE).toFixed(1) + '°)</span>&nbsp; &nbsp; ' +
+    '<span class="edge">■ near edge (θ ≈ ' + deg(ANG_EDGE).toFixed(1) + '°)</span>&nbsp; &nbsp; ' +
+    '<span class="escape">■ escapes (θ ≈ ' + deg(ANG_OUTSIDE).toFixed(1) + '°)</span>';
+}
+
+document.getElementById('nclad').addEventListener('input', draw);
+draw();
+</script>
+</body>
+</html>
