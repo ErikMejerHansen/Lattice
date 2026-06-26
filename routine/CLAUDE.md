@@ -159,6 +159,22 @@ Add edges connecting the new node to 1-3 existing mastered or in_progress nodes 
 
 Layout: place the new node at the next available `(col, row)` slot. Algorithm: `row = max(existing rows) + 1` if every existing row at that col is full (col 0 and col 1 are the only valid cols). Pick the col with fewer nodes.
 
+### 6.5 Update the lesson manifest
+
+Open `lessons/manifest.json`. Append an entry for the new lesson:
+
+```json
+{
+  "slug": "{slug}",
+  "title": "{title}",
+  "subtitle": "{node.subtitle}",
+  "date": "YYYY-MM-DD",
+  "estimatedReadingMinutes": <metadata.estimatedReadingMinutes>
+}
+```
+
+The React app uses this file as its index of every published lesson. A lesson that lands in `/lessons` without a manifest entry will not appear in the constellation node list, so a quiet omission here silently breaks the listing for the human.
+
 ### 7. Update wishlist
 
 Remove the line you used (top non-blank, non-comment line). Preserve everything else.
