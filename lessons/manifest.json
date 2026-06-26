@@ -383,5 +383,19 @@
     "subtitle": "E ∝ e^(-z/d)",
     "date": "2026-06-24",
     "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-06-25-numerical-aperture",
+    "title": "Numerical aperture: the cone a fiber agrees to listen to",
+    "subtitle": "NA = √(n₁²−n₂²)",
+    "date": "2026-06-25",
+    "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-06-26-sellmeier-equation",
+    "title": "The Sellmeier equation: how three resonances fit a sea of glass",
+    "subtitle": "Σ Bᵢλ²/(λ²−Cᵢ)",
+    "date": "2026-06-26",
+    "estimatedReadingMinutes": 23
   }
 ]

@@ -1,0 +1,128 @@
+{
+  "slug": "2026-06-26-sellmeier-equation",
+  "title": "The Sellmeier equation: how three resonances fit a sea of glass",
+  "node": {
+    "id": "sellmeier_equation",
+    "label": "Sellmeier",
+    "subtitle": "Σ Bᵢλ²/(λ²−Cᵢ)"
+  },
+  "intro": "Wolfgang Sellmeier, working from a Gymnasium teaching post in Memel on the Baltic in 1872, took a curve-fitting problem that had stood for forty years and gave it the right physical picture. Augustin Cauchy in 1830 had fit the refractive index of glass with an empirical power series in 1/λ², and the series worked for the visible band but went visibly wrong at the edges where new absorption appeared. Sellmeier proposed that glass should be modeled as a collection of bound oscillators, each with its own natural frequency, and that the refractive index should be assembled out of their responses. The formula he wrote down is still printed in every optical-glass catalog, predicting n(λ) to six significant figures in the transparent window, and it gave Hendrik Lorentz, a decade later, the template for the entire theory of dispersion in matter.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Cauchy and the visible window",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Augustin Cauchy, mathematician at the French Academy of Sciences, published a fit for the refractive index of glass in 1830. He had measured how the index n of a single piece of crown glass (a sodium-calcium silicate, the workhorse window glass of his era) varied with the wavelength λ of the light, found that n traced a smooth concave-up curve when plotted against 1/λ², and fit the curve with the empirical power series:" },
+        { "type": "math", "tex": "n(\\lambda) \\approx A + \\frac{B}{\\lambda^2} + \\frac{C}{\\lambda^4}", "display": true, "caption": "n is the refractive index of the glass at wavelength λ. λ is the vacuum wavelength of the light. A is the long-wavelength limit of the index, the value n approaches when λ grows large. B and C are fitted coefficients with no physical interpretation attached; Cauchy treated them as parameters to be determined from measurement. Read aloud: the index is a constant plus a correction that grows as the wavelength shrinks." },
+        { "type": "p", "text": "For the visible band the truncated series worked beautifully. Two terms (A and B/λ²) reproduced n to four decimals across red, green, and violet. Lens designers seized the formula: every glass in their catalogs came with two Cauchy numbers, and ray-tracing at any wavelength was reduced to a brief arithmetic exercise. For sixty years Cauchy's series was the working dispersion model of practical optics." },
+        { "type": "p", "text": "The series broke at the edges. Push it past 250 nm into the ultraviolet and it predicted indices climbing toward infinity in a way no real glass exhibits. Push past 2000 nm into the near infrared and it predicted n approaching a constant that disagreed with every measurement. The fit had no idea why glass was transparent only between certain wavelengths; it could not see the wall. What Cauchy lacked was the physical reason for the curvature. The slope of n with λ was not a mathematical accident, it was the tail of something, and Wolfgang Sellmeier identified what forty-two years later." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The resonance picture",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Wolfgang Sellmeier, a German physics teacher at the Gymnasium in Memel (now Klaipėda, on the Baltic coast), published his dispersion paper in Annalen der Physik in 1872 under the title 'Zur Erklärung der abnormen Farbenfolgen im Spectrum einiger Substanzen' (on the explanation of the abnormal colour sequences in the spectrum of some substances). He had been puzzling over why certain organic dyes (fuchsine, a synthetic magenta isolated in 1858; cyanine, a blue) showed reversed dispersion near their absorption bands, with blue light bending less than red, against the behavior of every transparent glass on record." },
+        { "type": "p", "text": "His move was to model each molecule as a bound mechanical oscillator with a natural angular frequency ω₀. A passing light wave at frequency ω drives the oscillator, the oscillator drives the polarization of the medium, and the polarization adjusts the index. Far from ω₀ the response is small. Tune the light close to ω₀ and the oscillator resonates, the polarization swings hard, and the contribution to n² − 1 grows. Past the resonance the oscillator's response inverts in phase, producing what was already called anomalous dispersion, the very reversal he had seen in the dyes. Adding contributions from several resonances of strengths Bᵢ at wavelengths √Cᵢ, Sellmeier wrote:" },
+        { "type": "math", "tex": "n^2(\\lambda) = 1 + \\sum_i \\frac{B_i \\, \\lambda^2}{\\lambda^2 - C_i}", "display": true, "caption": "n is the refractive index at vacuum wavelength λ. The sum runs over the material's bound resonances, indexed by i. Bᵢ is the dimensionless strength of the i-th resonance, proportional to how many electrons of that natural frequency are present per unit volume. Cᵢ is the squared wavelength of the i-th resonance (units μm², in the modern convention), so √Cᵢ is the wavelength at which the i-th oscillator resonates. Read aloud: the index squared minus one is a sum of poles, and each pole pulls the index up more strongly the closer the light's wavelength sits to its resonance wavelength." },
+        { "type": "p", "text": "Lorentz published an equivalent derivation from his classical electron theory in the 1880s, this time with a damping term included; what Sellmeier had written down at zero damping was the lossless limit Lorentz finished. The formula and the model survived essentially intact into modern optical engineering, in part because the lossless limit is exactly the right approximation across the transparent window where photons cannot find anything to absorb." }
+      ],
+      "quiz": {
+        "question": "A hypothetical glass has a single Sellmeier resonance at C₁ = 0.01 μm² (resonance wavelength √C₁ = 100 nm in the deep UV) with B₁ = 1. As the wavelength of the light is shortened from 600 nm (red) to 400 nm (violet) across the visible band, what happens to n?",
+        "options": [
+          "n decreases, because shorter wavelengths sit farther on the high-frequency side of the resonance and pick up less response.",
+          "n stays roughly constant, since both 600 nm and 400 nm are far from a resonance at 100 nm and the formula barely changes.",
+          "n increases, because the contribution Bλ²/(λ² − C) grows as λ shrinks toward √C, and the violet sits closer to the UV pole than the red does.",
+          "n becomes complex, because pushing the wavelength toward the resonance brings the medium into its absorption band."
+        ],
+        "correctIndex": 2,
+        "explanation": "Plug in: at λ = 600 nm = 0.36 μm² wavelength-squared, the single Sellmeier term is 1·0.36/(0.36 − 0.01) = 1.029, giving n² = 2.029 and n ≈ 1.424. At λ = 400 nm = 0.16 μm² wavelength-squared, the term is 1·0.16/(0.16 − 0.01) = 1.067, giving n² = 2.067 and n ≈ 1.438. So n rises by about 0.014 across the visible, the normal dispersion of crown glass. Option A is the tail-falls-off-faster intuition, but the pole behavior dominates: closer to C means a larger ratio. Option B treats the resonance as a faraway irrelevance, but its tail extends across the entire visible. Option D would be right only if the wavelength actually entered the absorption band, which 400 nm does not for a resonance at 100 nm; the formula here has no damping term and stays purely real."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Three poles for a transparent glass",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "In modern optical-glass catalogs (the printed reference books, now databases, listing the optical properties of every commercial glass type), the Sellmeier formula is truncated at three terms, with six coefficients (B₁, B₂, B₃, C₁, C₂, C₃) per glass. The truncation is not arbitrary: silicate glass has resonances clustered at the two ends of the spectrum, and three poles bracket the visible." },
+        { "type": "p", "text": "The electronic resonances sit in the ultraviolet. Each silicon-oxygen bond has electronic transitions in the 80 to 150 nm range, where a photon carries enough energy to promote an electron between molecular orbitals. Two Sellmeier terms (with C₁, C₂ around 0.006 to 0.02 μm², corresponding to √Cᵢ of about 80 to 140 nm) cover the strength of these UV bands. The vibrational resonance sits in the infrared. The Si-O lattice has stretching modes near 10 μm wavelength, where photons couple into bond vibrations rather than electronic transitions. A single Sellmeier term (with C₃ around 100 μm², corresponding to √C₃ of about 10 μm) handles this IR band." },
+        { "type": "viz", "src": "2026-06-26-sellmeier-equation.html", "height": 380, "caption": "The refractive index n(λ) of a single-pole toy Sellmeier glass with B₁ = 1, plotted across the visible from 380 to 780 nm. The dashed grey reference curve is BK7, the workhorse borosilicate crown glass, computed from the full three-term Schott Sellmeier coefficients. Slide √C₁: move the UV resonance from far away (50 nm, deep UV) toward the edge of the visible (300 nm, near UV). The curve steepens as the resonance approaches, raising the index uniformly and especially raising it on the blue side. This is what physically happens when a glass is engineered for high dispersion: its UV absorption is pulled closer to the visible window, and the tail of that pole tilts the n(λ) curve." },
+        { "type": "p", "text": "The transparent window between these resonances, from roughly 350 nm to 2500 nm for typical crown glass, is the band where photons find nothing to absorb. Glass is transparent in that window not by some special property of glass but because of where its resonances happen to lie. Move them closer to each other and the window narrows; build a material with no electronic transitions until 50 nm (diamond, which has no bonding electrons of low enough energy) and the transparent window stretches into the deep UV. The shape of n(λ) within the window is everything the lens designer cares about. The UV terms pull n upward on the blue side; the IR term pulls it upward on the red side; in the middle the curve is gentle, and the glass is well-behaved." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Reading a Schott catalog",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Schott AG, founded by Otto Schott in Jena in 1884 to manufacture optical glass for Ernst Abbe's microscope program at the Carl Zeiss workshop, publishes a catalog (printed annually for most of the twentieth century, now an online database) with Sellmeier coefficients for every glass it makes. The flagship general-purpose glass is BK7, a borosilicate crown glass that has been the default low-dispersion glass for lens designers since the 1930s. Its Sellmeier coefficients, fit against many hundreds of refractive-index measurements between 365 nm and 2325 nm, are:" },
+        { "type": "math", "tex": "B_1 = 1.0396, \\quad B_2 = 0.2318, \\quad B_3 = 1.0105", "display": true, "caption": "B₁, B₂, B₃ are the three dimensionless strengths of the BK7 Sellmeier model. B₁ is the strongest UV pole, B₃ is the IR pole, and B₂ is a second, weaker UV pole that captures the substructure of the electronic absorption band." },
+        { "type": "math", "tex": "C_1 = 0.00600 \\,\\mu\\text{m}^2, \\quad C_2 = 0.02002 \\,\\mu\\text{m}^2, \\quad C_3 = 103.56 \\,\\mu\\text{m}^2", "display": true, "caption": "C₁, C₂, C₃ are the three squared resonance wavelengths. The square roots √C₁ ≈ 77 nm and √C₂ ≈ 141 nm are the two UV resonances; √C₃ ≈ 10.2 μm is the IR resonance. The two UV poles are needed because the electronic absorption of borosilicate glass has structure (two distinct bands), not one." },
+        { "type": "p", "text": "These six numbers reproduce the refractive index of BK7 to better than 1 part in 10⁵ across the visible and near infrared. The figure of merit lens designers actually use is the Abbe number V_d, the dispersion-vs-refraction ratio Ernst Abbe introduced in 1873 as a single-number summary of how a glass smears wavelengths:" },
+        { "type": "math", "tex": "V_d = \\frac{n_d - 1}{n_F - n_C}", "display": true, "caption": "V_d is the Abbe number of the glass (dimensionless). n_d is its refractive index at the helium d-line (yellow, 587.6 nm). n_F is the index at the hydrogen F-line (blue, 486.1 nm). n_C is the index at the hydrogen C-line (red, 656.3 nm). The numerator measures how much above vacuum the glass refracts at yellow; the denominator measures how much the index differs between blue and red. Read aloud: a high Abbe number means low dispersion, and a low Abbe number means high dispersion." },
+        { "type": "p", "text": "Plugging the BK7 Sellmeier coefficients into the formula gives n_d = 1.5168, n_F = 1.5224, n_C = 1.5143, and V_d ≈ 64. Dense flint glass SF10 (a lead-silicate, used as the partner glass in achromatic doublets) has V_d ≈ 28, almost half as much. Abbe used these two numbers (n_d and V_d) to chart every glass in a two-dimensional space, and lens designers since 1900 have been picking pairs of glasses (a crown and a flint) whose Abbe-number difference can be made to cancel first-order chromatic aberration. The achromatic doublet (a crown-flint cemented pair of lenses, invented in 1733 by Chester Moore Hall and refined by Abbe) is the reason a refracting telescope can give a clean image at all." }
+      ],
+      "quiz": {
+        "question": "Two glasses are characterized by their Abbe numbers: a crown glass (BK7) with V_d ≈ 64 and a flint glass (SF10) with V_d ≈ 28. A direct-vision prism made of crown spreads sunlight into a rainbow about 0.4° wide across the visible. About how wide a rainbow does an identical prism made of SF10 produce?",
+        "options": [
+          "About 0.4°, because the Abbe number only measures average index, not dispersion.",
+          "About 0.9°, because the dispersion goes as 1/V_d, and 64/28 ≈ 2.3, so the SF10 prism is about 2.3 times more dispersive.",
+          "About 0.2°, because flint glass is denser and a denser glass bends light less.",
+          "About 5°, because flint glass is famously about ten times more dispersive than crown glass."
+        ],
+        "correctIndex": 1,
+        "explanation": "The angular spread between blue and red through a thin prism is proportional to (n_F − n_C), which is the denominator of the Abbe number. For two prisms of the same geometry and similar n_d, the ratio of their rainbows is (V_d,crown / V_d,flint) = 64/28 ≈ 2.3. So the SF10 prism's rainbow is about 2.3 × 0.4° = 0.9° wide. Option A inverts the meaning of V_d: it is built precisely to measure dispersion, not average index. Option C is the textbook trap, confusing density with refraction. Option D overestimates: V_d of common flints range from about 20 to 35, giving dispersion ratios versus BK7 of 2 to 3, not 10."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The poles Sellmeier could not draw",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Sellmeier's formula has one structural omission: it produces a purely real refractive index. At the pole wavelengths √Cᵢ the formula diverges; real glass does not, because real glass at the resonance wavelength absorbs the light, and absorption requires an imaginary part of the refractive index, which Sellmeier's expression simply has no slot for. The fit is exact away from the poles and undefined at them." },
+        { "type": "p", "text": "Hendrik Lorentz, in his electron-theory papers of the 1880s and 1890s, supplied what was missing by inserting a damping term γ into the equation of motion of the bound oscillator. The complex index that emerged had a Lorentzian peak in its imaginary part at the resonance, matching the measured absorption band, and a tail in its real part that reduced to Sellmeier's formula far from the band. The two formulas were not in conflict: Sellmeier's was the lossless tail of Lorentz's, and once you knew the absorption bands of a glass you had the Sellmeier coefficients for free." },
+        { "type": "p", "text": "A second, deeper structural constraint arrived in 1926 from Hans Kramers and Ralph Kronig: the real and imaginary parts of the refractive index of any causally-responding linear medium are not independent. Given the absorption spectrum (the imaginary part of n) at every wavelength, the refractive index (the real part) is determined by an integral over it, now called the Kramers-Kronig relation, a Hilbert-transform pairing in modern language. The reason is causality: the medium cannot respond to a light pulse before the pulse arrives, and that single constraint forces the two parts of the optical response to lock together. A Sellmeier fit to n(λ) in the transparent window is, implicitly, a fit to the integrated absorption of every band outside that window." },
+        { "type": "p", "text": "The Sellmeier formula remains in every optics handbook because, within the transparent window where photons find nothing to absorb, it is precisely the right physical model: the lossless limit of a Lorentz oscillator chain, with poles whose positions and strengths the manufacturer has measured against the absorption data the Kramers-Kronig relation tied to them. Six numbers per glass, fitted once, predict the refractive index to a part in 10⁵ for a century of lens designers. Outside the window, the formula politely points the reader at the poles and at the damping it left out, which is where Lorentz and Kramers and Kronig finished the story." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A new infrared-window glass is being characterized. The lab measures a single dominant electronic absorption band at 180 nm and fits a single-term Sellmeier formula to refractive-index data taken across 500 to 900 nm. The fit residuals are flat at 2 parts in 10⁴ across that band, but extrapolating to 2000 nm overshoots a separate measurement by 1 part in 10³. What is the cleanest physical reason a single-term Sellmeier fit cannot match measurements at both visible and 2 μm at the part-per-10⁵ level?",
+    "options": [
+      "The formula has no damping term, so it diverges at the resonance and is therefore wrong everywhere outside a tiny band near the visible.",
+      "The Abbe number cancels by construction, and any single-pole Sellmeier fit automatically reproduces dispersion across the full transparent window.",
+      "Real glass has multiple resonances at both ends of the transparent window, and the IR vibrational pole's tail (omitted from a UV-only single-term fit) tilts n(λ) up toward the red side of the window.",
+      "The Kramers-Kronig relation forbids any single-pole approximation from working in the visible, so the residual at 2 μm is the lower bound for any glass."
+    ],
+    "correctIndex": 2,
+    "explanation": "Even glass that looks single-pole in the UV has IR vibrational modes (Si-O stretches near 10 μm in silicate glass; longer-wavelength modes in heavier-cation infrared glasses) whose tails contribute to n on the red side of the visible. A UV-only fit will underestimate n at 2 μm because it omits the upward-tilt the IR pole adds. The three-term Schott convention is precisely the workaround: two UV poles plus one IR pole brackets the whole transparent window and brings residuals back to 1 part in 10⁵. Option A confuses the divergence-at-the-pole (a real but local breakdown) with a global error: far from the pole the lossless formula is excellent. Option B inverts the relationship: Abbe number is read off the n(λ) curve a fit produces, so a worse fit gives a worse Abbe number. Option D misuses Kramers-Kronig: that relation links real and imaginary parts and does not by itself forbid a single-pole fit; the residual comes from missing poles, not from causality."
+  },
+  "suggestedNodes": [
+    {
+      "id": "abbe_number",
+      "label": "Abbe number",
+      "subtitle": "V = (n_d−1)/Δn",
+      "edgeType": "extends"
+    },
+    {
+      "id": "lorentz_oscillator",
+      "label": "Lorentz osc.",
+      "subtitle": "damped e⁻ model",
+      "edgeType": "extends"
+    },
+    {
+      "id": "kramers_kronig",
+      "label": "Kramers-Kronig",
+      "subtitle": "Re n ↔ Im n",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-06-26T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": ["dispersion", "refraction", "wavelength"]
+  }
+}

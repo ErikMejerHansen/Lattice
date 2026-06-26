@@ -13,10 +13,9 @@
 # auto-suggested 2026-06-18 from geodesics
 
 # auto-suggested 2026-05-11 from total-internal-reflection
-Frustrated TIR — pressing two prisms within a wavelength: optical tunneling that beat Schrödinger to the idea by half a century
+# Frustrated TIR — was effectively covered by section 4 of the 2026-06-24 evanescent_wave lesson (Newton's contact spot, T(g) ∝ exp(−2g/d), Schrödinger-tunneling analogy), so this wishlist line was removed without a separate lesson.
 
 # auto-suggested 2026-05-11 from dispersion
-Sellmeier equation — n²(λ) = 1 + Σ Bᵢλ²/(λ² − Cᵢ²), the multi-resonance refinement of Cauchy that fits glass across a broader band
 Chromatic aberration — why a single-element lens cannot focus all colors at one point, and how the achromatic doublet kills it
 Group velocity vs phase velocity — vg = vp − λ(dvp/dλ), why a wave packet in a dispersive medium moves at a different speed from its carrier
 
@@ -186,3 +185,8 @@ Goos-Hänchen shift — the lateral displacement of a TIR-reflected beam by abou
 V-parameter — V = (2πa/λ)·NA, the dimensionless number bundling core radius, wavelength, and index contrast, with the single-mode cutoff V < 2.405 (first zero of J₀) that fell out of solving Maxwell's equations in a cylinder and that sets the core diameter of every single-mode fiber
 Modal dispersion — Δt ≈ L·NA²/(2c·n_core), the transit-time spread that punishes a wide acceptance cone quadratically and forced the long-haul telecom industry into single-mode operation by the early 1980s
 Graded-index fiber — n(r) = n_core·√(1 − 2Δ(r/a)²), the parabolic profile that equalizes ray transit times by making axial rays travel through a higher index than off-axis rays, killing modal dispersion without requiring single-mode core radii
+
+# auto-suggested 2026-06-26 from sellmeier-equation
+Abbe number — V_d = (n_d − 1)/(n_F − n_C), the single-number dispersion summary Ernst Abbe wrote down in 1873 to chart every glass in a two-dimensional (n_d, V_d) space and that has driven every achromatic doublet design since the achromatic refractor became routine in 1900
+Lorentz oscillator model — the damped bound-electron equation Hendrik Lorentz wrote down in the 1880s that adds the imaginary part Sellmeier omitted, with Lorentzian absorption peaks and the real-part tail that recovers Sellmeier far from the resonance
+Kramers-Kronig relations — Hans Kramers and Ralph Kronig 1926, the Hilbert-transform pair between the real and imaginary parts of the linear-response function that causality forces on any medium, and the constraint that ties a Sellmeier fit in the transparent window to the integrated absorption of every band outside it
