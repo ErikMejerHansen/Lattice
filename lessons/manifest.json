@@ -397,5 +397,12 @@
     "subtitle": "Σ Bᵢλ²/(λ²−Cᵢ)",
     "date": "2026-06-26",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-06-27-chromatic-aberration",
+    "title": "Chromatic aberration: why one piece of glass cannot focus a rainbow",
+    "subtitle": "f_red ≠ f_blue",
+    "date": "2026-06-27",
+    "estimatedReadingMinutes": 23
   }
 ]
