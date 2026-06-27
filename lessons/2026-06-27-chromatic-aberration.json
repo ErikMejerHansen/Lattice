@@ -1,0 +1,130 @@
+{
+  "slug": "2026-06-27-chromatic-aberration",
+  "title": "Chromatic aberration: why one piece of glass cannot focus a rainbow",
+  "node": {
+    "id": "chromatic_aberration",
+    "label": "Chromatic ab.",
+    "subtitle": "f_red ≠ f_blue"
+  },
+  "intro": "Isaac Newton, after passing sunlight through a prism and watching it fan into a spectrum, concluded in his Opticks of 1704 that a lens made from a single piece of glass could never bring all colors to one focus, and that no combination of glasses could ever do better. He was wrong about the second part, but it took twenty-five years and a London barrister with a personal optician for anyone to find out. This lesson is about why a refracting lens spreads colors apart, how the Abbe number turns that spread into a single design parameter, and how a crown lens cemented to a flint lens cancels the spread to first order. It is also about Chester Moore Hall, John Dollond, and a 1766 patent lawsuit that turned on what counts as inventing something.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Newton's no-go theorem",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Newton's Opticks (1704), Book I, Part II, Proposition III, states the matter as a proved theorem: 'The refractions of the rays of every sort, made out of any medium into air, are known by having the refraction of the rays of any one sort.' In modern terms, he was claiming that the dispersion of every glass is proportional to its mean refraction, so any compound lens that cancels color must also cancel its own focusing power. The argument was geometric and watertight, given his premise. The premise was wrong." },
+        { "type": "p", "text": "He had run the experimentum crucis (the crucial experiment of his prism work, where a beam already separated by one prism is sampled with a slit and sent through a second prism) on glass from a single English crown-glass batch, found a fixed ratio of dispersion to deviation, and assumed every kind of glass would give the same ratio. Crown glass (a soda-lime silicate, the workhorse window glass since Roman times) and the dense lead-bearing flint glasses (developed by George Ravenscroft in London in 1674 for tableware) actually have noticeably different ratios, but Newton had only looked at one." },
+        { "type": "p", "text": "The conclusion was demoralizing for telescope-makers. Anything you built out of refracting elements would smear stars into rainbow streaks. Newton himself responded by building, in 1668, the first practical reflecting telescope: a 6-inch speculum mirror in a tube, focal length 13 cm, the design now called the Newtonian. For the next sixty years the Royal Society treated refractors as a dead end and reflectors as the future of astronomy, and the longest refractors built in that period (Hevelius's 150-foot aerial telescope of 1673, supported on a mast) were monuments to the size you needed to push the chromatic blur below the diffraction limit. It was the wrong response to the wrong proof." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Why a single lens fails",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "A thin lens made of glass of refractive index n, with front-surface radius R₁ and back-surface radius R₂ (signed positive if the center of curvature lies to the right of the surface), has focal length f given by the lens-maker's equation:" },
+        { "type": "math", "tex": "\\frac{1}{f} = (n - 1)\\left(\\frac{1}{R_1} - \\frac{1}{R_2}\\right)", "display": true, "caption": "f is the focal length of the thin lens. n is the refractive index of the glass at the wavelength of the light passing through. R₁ is the signed radius of curvature of the front surface (positive if the surface bulges toward the incoming light, i.e. its center of curvature is on the far side). R₂ is the signed radius of curvature of the back surface, with the same sign convention. The geometric factor (1/R₁ − 1/R₂) is purely a function of the lens shape and is unchanged from one wavelength to the next; the only wavelength-dependent quantity on the right is n." },
+        { "type": "p", "text": "Differentiating with respect to n gives the longitudinal chromatic aberration directly. The shape factor (1/R₁ − 1/R₂) is the same for every color, so the only thing that varies with λ is n; rearranging:" },
+        { "type": "math", "tex": "\\Delta f \\;\\approx\\; -\\,f \\cdot \\frac{\\Delta n}{n - 1} \\;=\\; -\\,\\frac{f}{V_d}", "display": true, "caption": "Δf is the change in focal length between two reference wavelengths (the blue F line at 486.1 nm and the red C line at 656.3 nm by convention). Δn = n_F − n_C is the difference in refractive index between those two wavelengths. n − 1 is the mean refractivity, evaluated at the yellow d line (587.6 nm). V_d = (n_d − 1)/(n_F − n_C) is the Abbe number of the glass, the dimensionless dispersion summary introduced by Ernst Abbe in 1873 (covered in detail in the Sellmeier lesson). Read aloud: the focal length shifts by a fraction 1/V_d of itself between blue and red." },
+        { "type": "p", "text": "For BK7 (the workhorse borosilicate crown, V_d ≈ 64) a 200 mm singlet has a blue-to-red focal shift of 200/64 ≈ 3 mm, large enough that a print at the red focus is several blur-circles wide at the blue focus. The image carries a colored fringe (a halo of one color surrounding every edge) and lens designers call this the longitudinal chromatic aberration: each wavelength has its own focal plane, none of them coincide, and the camera or eye can choose at most one to put a sensor on." }
+      ],
+      "quiz": {
+        "question": "A simple magnifying glass is a thin biconvex BK7 singlet (V_d = 64) of focal length 120 mm. By approximately how much does its focal length differ between the hydrogen blue F line (486 nm) and the hydrogen red C line (656 nm)?",
+        "options": [
+          "About 0.02 mm, since the dispersion of crown glass changes n only in the fourth decimal and the focal shift is therefore tiny.",
+          "Zero, because the lens-maker's equation depends only on the lens shape, and BK7 has a fixed Abbe number.",
+          "About 1.9 mm, with the blue focus closer to the lens than the red focus, computed as Δf ≈ f/V_d = 120/64.",
+          "About 12 mm, because the focal length shifts by Δn directly, and Δn ≈ 0.01 across the visible for BK7."
+        ],
+        "correctIndex": 2,
+        "explanation": "Plug into Δf ≈ f/V_d = 120/64 ≈ 1.9 mm. Blue light bends more (n_F > n_C, so 1/f is larger at the F line), which means a shorter focal length, so the blue focus sits closer to the lens. Option A confuses the size of Δn (about 0.008 for BK7) with the size of Δf: the lever from Δn to Δf is f/(n−1), and for f = 120 mm and (n−1) = 0.52 that lever is large. Option B forgets that n depends on λ; the shape is fixed across colors but n is not. Option D uses Δn directly without dividing by (n−1), missing the geometric factor that the lens-maker equation provides."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Chester Moore Hall, the secret doublet",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Chester Moore Hall (1703-1771) was a barrister at the Inner Temple in London with a personal interest in telescopes and access to enough money to buy glass. Reading the Opticks somewhere around 1729, he noticed that Newton's proof relied on a single empirical ratio of dispersion to refraction, and that nothing in the proof actually required that ratio to be the same for every glass. He set about measuring crown and flint samples and found, exactly as Newton's argument tacitly assumed it could not be, that they differed. Crown glass refracted less per unit dispersion than flint did; equivalently, crown had a higher Abbe number." },
+        { "type": "p", "text": "If crown bent green light by one degree per millimeter of glass thickness and spread the red-to-blue range over an angle s_crown, while flint bent green light by the same one degree but spread red-to-blue over the larger angle s_flint, then a positive crown lens plus a negative flint lens could be made to add up to net positive focusing power (the crown's bend wins because the flint is thinner and negative) while subtracting their dispersions (the flint's larger spread cancels the crown's). The two effects rebalance because each glass has its own ratio of bend to spread, and Newton had assumed that ratio was a universal constant." },
+        { "type": "viz", "src": "2026-06-27-chromatic-aberration.html", "height": 420, "caption": "Three colored rays (the hydrogen F line at 486 nm in blue, the helium d line at 588 nm in green, the hydrogen C line at 656 nm in red) entering a thin lens from the left and focusing on the right. Toggle between 'crown singlet' (a BK7 biconvex lens) and 'achromatic doublet' (a BK7 positive element cemented to a flint negative element with Abbe number V_flint set by the slider). Watch the three foci spread apart in the singlet and collapse onto a near-shared point in the doublet. The slider sets V_flint from 22 (extreme dense flint) to 60 (light crown-like); the formula blows up as V_flint approaches V_crown = 64, because the doublet then has no Abbe-number contrast left to work with."
+        },
+        { "type": "p", "text": "Hall worked in secret. He commissioned the convex crown elements from one London optician and the concave flint elements from another, both of whom subcontracted the actual figuring to a third, George Bass, and the news of what Hall was assembling leaked through the trade. By 1733 Hall had at least one working achromatic refractor of 20-inch focal length, but he never published a description and never patented the design. He was a wealthy barrister; he had built it to look at the moon, not to sell anything. The London optical trade knew about the doublet but did not understand it well enough to make it themselves." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The achromatic condition",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "Two thin lenses placed in contact have powers that add directly. Writing the power of a thin lens as φ = 1/f, the total power of the contact pair is just the sum:" },
+        { "type": "math", "tex": "\\phi_{\\text{total}} \\;=\\; \\phi_1 + \\phi_2", "display": true, "caption": "φ_total is the optical power of the combined doublet (units 1/length, traditionally diopters when f is in meters). φ_1 is the power of the first (crown) element. φ_2 is the power of the second (flint) element; for an achromatic doublet φ_2 will turn out negative, since the flint is concave. The relation holds for thin lenses in contact, where the gap between them is small compared to either focal length." },
+        { "type": "p", "text": "Each element contributes a chromatic spread of its own power, which from the previous section is Δφ_i = φ_i / V_i. The combined chromatic spread is therefore φ_1/V_1 + φ_2/V_2, and the doublet is achromatic (to first order) precisely when that sum vanishes:" },
+        { "type": "math", "tex": "\\frac{\\phi_1}{V_1} + \\frac{\\phi_2}{V_2} \\;=\\; 0", "display": true, "caption": "φ_1, φ_2 are the powers of the crown and flint elements. V_1, V_2 are their Abbe numbers (V_d, evaluated at the d line for the F-to-C wavelength range). The equation states that the dispersion-weighted powers cancel. It is the first-order chromatic correction condition; it leaves a smaller residual error at wavelengths other than F, d, C, which the lesson returns to in section 5." },
+        { "type": "p", "text": "Solving the two equations together gives the powers each element must carry to produce a desired total. Substituting φ_2 = −φ_1 V_2/V_1 from the achromatic condition into φ_total = φ_1 + φ_2:" },
+        { "type": "math", "tex": "\\phi_1 \\;=\\; \\phi_{\\text{total}} \\cdot \\frac{V_1}{V_1 - V_2}, \\qquad \\phi_2 \\;=\\; -\\,\\phi_{\\text{total}} \\cdot \\frac{V_2}{V_1 - V_2}", "display": true, "caption": "φ_1, φ_2 are the individual element powers required to make the doublet achromatic at total power φ_total. V_1 is the higher Abbe number (crown), V_2 the lower (flint). The minus sign on φ_2 says the flint element is always negative when the crown is positive, regardless of which Abbe-number pair is chosen. The denominator (V_1 − V_2) is the Abbe-number contrast between the two glasses; the smaller the contrast, the larger the individual powers each element must carry to deliver a given φ_total." },
+        { "type": "p", "text": "Plugging in BK7 (V_1 = 64) and SF10, a dense lead flint (V_2 = 28): φ_1 = φ_total × 64/36 ≈ 1.78 φ_total, and φ_2 = −φ_total × 28/36 ≈ −0.78 φ_total. To make a doublet of 200 mm focal length you need a crown lens of 200/1.78 ≈ 112 mm focal length and a flint lens of −200/0.78 ≈ −256 mm focal length, cemented together with Canada balsam or modern UV-cure adhesive of nearly-matching n. The crown is the strong positive workhorse; the flint is a weaker negative that subtracts most of the chromatic spread without subtracting too much of the focusing." }
+      ],
+      "quiz": {
+        "question": "A lens designer has a stockpile of BK7 (V = 64) and is choosing a flint partner for an achromatic doublet of total focal length 250 mm. Two flints are available: heavy SF10 (V = 28) or lighter F2 (V = 36). Which choice produces a doublet whose crown element carries less optical power, and why?",
+        "options": [
+          "F2, because a higher flint Abbe number makes the achromatic condition easier to satisfy with less crown power.",
+          "SF10, because the lower flint Abbe number creates a larger contrast (V_1 − V_2 = 36 vs 28), and the formula φ_1 = φ_total · V_1/(V_1 − V_2) gives 1.78 φ_total with SF10 versus 2.28 φ_total with F2.",
+          "Either one, because once V_1 > V_2 the achromatic condition fixes φ_1 = φ_total identically.",
+          "F2, because flint glasses with V closer to crown have lower density and therefore weaker dispersion contribution per unit power."
+        ],
+        "correctIndex": 1,
+        "explanation": "The crown power required is φ_1 = φ_total · V_1/(V_1 − V_2). For SF10, V_1 − V_2 = 64 − 28 = 36, giving φ_1 = φ_total · 64/36 ≈ 1.78 φ_total. For F2, V_1 − V_2 = 64 − 36 = 28, giving φ_1 = φ_total · 64/28 ≈ 2.28 φ_total. The larger Abbe contrast (SF10) lets each element carry less individual power for a given doublet focal length, which is why high-contrast crown-flint pairs are preferred whenever optical-shop tolerances allow. The cost is that the strongest (SF10) flints are dense lead-bearing glasses with poorer transmission in the deep blue and a higher partial-dispersion mismatch. Option A inverts the contrast logic. Option C is incorrect: φ_1 is always greater than φ_total for a contact doublet, because some of it gets cancelled by the negative flint. Option D mixes density with the Abbe number; the two are correlated in glass families but the achromatic condition cares only about V."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Dollond, Mansfield, and the residual that wouldn't die",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "John Dollond, a London optician of Huguenot descent, arrived independently at the achromatic doublet around 1758 (acting on a tip about Hall's design that he may or may not have received, depending on which biographer you trust). He measured Abbe numbers of his own glass stock, derived the achromatic condition, built a 30-inch refractor with sharp uncolored stars, and crucially published the result in the Philosophical Transactions of the Royal Society later the same year. He filed a patent. Within a year Dollond doublets were the desired refractor for every gentleman astronomer in England, and the price of a sharp telescope dropped tenfold relative to the reflector that had displaced refractors after Newton." },
+        { "type": "p", "text": "When Dollond died in 1761, his son Peter began enforcing the patent against other London makers, including a partnership that included George Bass, the very figurer who had ground Hall's original lenses thirty years earlier. The case went to the King's Bench in 1766 with Lord Mansfield presiding. The defense argued that Hall, not Dollond, had invented the doublet, and that Bass himself could attest to it. Mansfield ruled for the Dollonds anyway. His reasoning was that 'the inventor is not he who locks up his invention but he who brings it before the public,' a doctrine that still shapes patent law on prior art and reduction to practice. Hall got the credit in the historical record; Dollond got the royalties." },
+        { "type": "p", "text": "The achromatic condition φ_1/V_1 + φ_2/V_2 = 0 matches focal lengths exactly only at three wavelengths (typically F, d, C), because V_d summarizes the dispersion with one number and the actual n(λ) curve has more structure than that. The residual focal shift between the matched points and the deep violet is called the secondary spectrum, and for an ordinary BK7-SF10 doublet of focal length f it amounts to roughly f/2000 at the g line (435.8 nm). For a 1 m astronomical refractor that is a half-millimeter blur and visibly purple. Ernst Abbe, working at Carl Zeiss in Jena in the 1880s, showed that the residual could be cancelled by adding a third element of a glass whose partial dispersion (the ratio (n_g − n_F) / (n_F − n_C)) is anomalous, that is, not on the linear trend the common silicate glasses lie on." },
+        { "type": "p", "text": "The classic Abbe apochromat used calcium fluorite (CaF₂), a natural mineral whose partial dispersion sits well off the silicate line. Modern apochromats use synthetic fluorocrown glasses (FK51, FCD100) developed by Schott and Ohara in the 1970s, with the same anomalous partial dispersion but easier to grind. Every supertelephoto camera lens of the last fifty years (the 'L' series at Canon, the 'ED' series at Nikon, the 'APO' series at Leica) contains at least one fluorite or fluorocrown element for precisely this reason, and that one element is usually most of the cost. Hall's quiet 1733 doublet killed the first-order error; Abbe's 1886 apochromat killed the second-order residual; and the geometric reason both designs work traces all the way back to Newton having looked at exactly one piece of glass." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A backyard refractor uses a BK7-SF10 achromatic doublet of focal length 800 mm and aperture f/8 (so the diameter is 100 mm). Looking at a bright star the observer sees a sharp white image at the focus, surrounded by a faint purple-blue halo. Which of the following best identifies the halo and what it would take to remove it?",
+    "options": [
+      "Diffraction from the aperture, removable only by increasing the aperture; chromatic correction has nothing to do with it.",
+      "First-order chromatic aberration, indicating the doublet was assembled with the crown and flint in the wrong order; reversing them eliminates the halo.",
+      "Secondary spectrum, the residual focal-shift between the violet g-line and the matched F-d-C wavelengths inherent to the V_d-only correction in any standard crown-flint doublet; eliminating it requires adding a third element of anomalous-partial-dispersion glass (fluorite or a fluorocrown), turning the doublet into an apochromat.",
+      "Astigmatism from a stressed lens cell, fixable by loosening the retaining ring; chromatic effects would produce equal-and-opposite blue and red halos rather than a single purple one."
+    ],
+    "correctIndex": 2,
+    "explanation": "The doublet's Abbe-number-based correction matches focal lengths only at three wavelengths (F, d, C). Light at the g line (435.8 nm), in the deep violet, focuses about f/2000 closer to the lens than the matched colors, producing a small unfocused violet-blue disc around the in-focus white image. The standard purple halo on every Dollond-style achromat is exactly this. Option A confuses diffraction (which produces an Airy disc of one color per wavelength, not a halo coupled to dispersion) with chromatic effects. Option B misdiagnoses the geometry: an achromat is achromatic at three wavelengths regardless of element order, and the order is fixed by curvature signs anyway. Option D misattributes color to a mechanical aberration; astigmatism produces astigmatic blur patterns, not halos of a specific color. The genuine fix is the apochromat: insert a fluorite or fluorocrown element whose anomalous partial dispersion cancels the secondary spectrum, which is what every long-focal-length professional refractor (and every supertelephoto camera lens) since the 1880s has done."
+  },
+  "suggestedNodes": [
+    {
+      "id": "secondary_spectrum",
+      "label": "Apochromat",
+      "subtitle": "fluorite, 3 colors",
+      "edgeType": "extends"
+    },
+    {
+      "id": "spherical_aberration",
+      "label": "Sph. aberration",
+      "subtitle": "marginal vs paraxial",
+      "edgeType": "related"
+    },
+    {
+      "id": "partial_dispersion",
+      "label": "Partial disp.",
+      "subtitle": "P = Δn_g/Δn_FC",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-06-27T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": ["dispersion", "sellmeier_equation", "refraction"]
+  }
+}
