@@ -404,5 +404,12 @@
     "subtitle": "f_red ≠ f_blue",
     "date": "2026-06-27",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-06-28-group-velocity",
+    "title": "Group velocity and phase velocity: why a wave packet outruns its own crests",
+    "subtitle": "vg = dω/dk",
+    "date": "2026-06-28",
+    "estimatedReadingMinutes": 22
   }
 ]
