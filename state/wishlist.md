@@ -16,7 +16,6 @@
 # Frustrated TIR — was effectively covered by section 4 of the 2026-06-24 evanescent_wave lesson (Newton's contact spot, T(g) ∝ exp(−2g/d), Schrödinger-tunneling analogy), so this wishlist line was removed without a separate lesson.
 
 # auto-suggested 2026-05-11 from dispersion
-Group velocity vs phase velocity — vg = vp − λ(dvp/dλ), why a wave packet in a dispersive medium moves at a different speed from its carrier
 
 # auto-suggested 2026-05-13 from compton-scattering
 Pair production — γ → e⁺e⁻, the 1.022 MeV threshold and the cleanest demonstration that energy and mass interconvert
@@ -194,3 +193,8 @@ Kramers-Kronig relations — Hans Kramers and Ralph Kronig 1926, the Hilbert-tra
 Apochromatic lens — three glasses with carefully matched partial dispersions to bring focal lengths together at three wavelengths instead of two, the Lippich-Abbe 1886 microscope-objective design that introduced fluorite as a third element, the architecture every supertelephoto camera lens (Canon L, Nikon ED, Leica APO) has used since
 Spherical aberration — the monochromatic first-cousin of chromatic aberration, where marginal rays through a spherical lens focus closer than paraxial rays, the issue Schmidt corrected with a 1930 aspheric plate at the entrance pupil of his eponymous telescope and that drives the cost of every modern aspheric lens element
 Partial dispersion ratio — P_g,F = (n_g − n_F)/(n_F − n_C), the second-derivative summary of n(λ) that V_d alone misses, the parameter that distinguishes normal silicate glasses (which lie on the linear Abbe-P trend Conrady plotted in 1904) from the anomalous-partial-dispersion fluorocrowns and fluorite that make apochromatic correction possible
+
+# auto-suggested 2026-06-28 from group-velocity
+Soliton — Korteweg and de Vries 1895, the localized hump on shallow water that holds its shape because dispersion (which would spread it) is exactly balanced by nonlinearity (which would steepen it), the same equation that governs solitons on optical fibers and DNA strands
+Fourier transform — ψ(x) ↔ ψ̃(k), the bidirectional map between position-space and wavenumber-space representations of a wave packet, the framework that turns "a packet is a sum of cosines" into a working tool and that underlies every spectral measurement from the FFT to NMR
+GVD pulse broadening — D_λ = -λ/c · d²n/dλ² in ps/(nm·km), the second-derivative dispersion parameter that fixes how fast a packet spreads in a fiber, the design constraint behind 40 Gb/s and 100 Gb/s coherent transmission and the reason every long-haul system carries dispersion-compensating fiber or digital pre-compensation

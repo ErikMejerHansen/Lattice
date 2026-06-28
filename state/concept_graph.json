@@ -579,6 +579,16 @@
       "createdAt": "2026-06-27T08:00:00Z",
       "col": 0,
       "row": 28
+    },
+    {
+      "id": "group_velocity",
+      "label": "Group velocity",
+      "subtitle": "vg = dω/dk",
+      "state": "available",
+      "lesson": "2026-06-28-group-velocity",
+      "createdAt": "2026-06-28T08:00:00Z",
+      "col": 1,
+      "row": 29
     }
   ],
   "edges": [
@@ -1360,6 +1370,21 @@
     {
       "from": "chromatic_aberration",
       "to": "refraction",
+      "kind": "related"
+    },
+    {
+      "from": "group_velocity",
+      "to": "dispersion",
+      "kind": "extends"
+    },
+    {
+      "from": "group_velocity",
+      "to": "wavelength",
+      "kind": "related"
+    },
+    {
+      "from": "group_velocity",
+      "to": "sellmeier_equation",
       "kind": "related"
     }
   ]

@@ -1,0 +1,211 @@
+{
+  "slug": "2026-06-28-group-velocity",
+  "title": "Group velocity and phase velocity: why a wave packet outruns its own crests",
+  "node": {
+    "id": "group_velocity",
+    "label": "Group velocity",
+    "subtitle": "vg = dω/dk"
+  },
+  "intro": "On a windless August morning in 1834, John Scott Russell rode his horse along the Union Canal outside Edinburgh and chased a single rounded hump of water that refused to spread out, refused to decay, and travelled along the canal at a steady eight miles an hour for nearly two miles before he lost it among the reeds. He had no language yet for what he was looking at, but he had seen the thing the rest of this lesson tries to explain: a wave packet, a localized lump of disturbance whose speed is not the speed of any individual crest inside it. The crests inside Russell's hump kept rearranging themselves as he rode along, drifting forward through the lump and then disappearing out the back, while the lump itself sailed forward at its own quite separate pace. The whole later story of dispersion, of pulse spreading in optical fibers, of LIGO's chirp template, of the sound a glacier makes when it calves, all of it begins with the gap between two velocities that on first glance one expects to be the same."
+,
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. A hump that would not spread",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Russell's account, read to the British Association in 1844, was specific in the way only an engineer's report can be. The hump was about thirty feet long, rose roughly a foot above the canal surface, and moved without changing shape. He measured it from horseback and then in a wave-tank built in his Edinburgh garden, and he insisted, against every theoretical authority of the day, that it was a real solution of the equations of fluid motion. George Biddell Airy and George Gabriel Stokes, the leading hydrodynamicists in Britain, refused to believe him. The shallow-water theory they had derived predicted that any localized disturbance must spread, lengthen, and decay. Russell's hump did none of these things."
+        },
+        {
+          "type": "p",
+          "text": "The argument settled in 1895, when Diederik Korteweg and his student Gustav de Vries derived an equation that admitted exactly the shape Russell described, a balance between dispersion (which would spread the hump) and nonlinearity (which would steepen it). What did not settle, and what is the subject of this lesson, was the prior, gentler question that Russell's observation had forced into the open. If a wave on water is a collection of crests moving at the wave's phase velocity, and Russell's hump is made of such crests, then in what sense is the hump moving at a different velocity? Either the crests are moving wrong, or the hump is, or the words are."
+        },
+        {
+          "type": "p",
+          "text": "You can see the same thing without a horse. Drop a stone into a still pond. A circular ring of ripples spreads outward. Watch the outer edge of the disturbance: it expands at one speed. Now watch a single crest inside the ring: it moves outward through the ring, reaches the leading edge, and vanishes as a new crest appears at the trailing edge to take its place. The ring of ripples is a wave packet, and the speed at which it spreads is the group velocity. The speed at which an individual crest moves through it is the phase velocity. They are not the same number, and in most physical media they cannot be."
+        },
+        {
+          "type": "p",
+          "text": "The phase velocity v_p of a single sinusoidal wave is what we have been using since the wavelength lesson: it is the speed at which a particular crest moves through space, given by v_p = ω/k where ω is the angular frequency and k = 2π/λ is the wavenumber. The group velocity v_g is something else. The next two sections build it from the simplest possible wave packet, two cosines, and connect it through the chain rule to the dispersion relation we wrote down for glass."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Two cosines and a beat",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The simplest wave packet you can write is the sum of two pure sinusoids with slightly different angular frequencies ω₁ and ω₂, and the corresponding slightly different wavenumbers k₁ and k₂. Write them both with the same amplitude A and add them up. Define the mean values ω̄ = (ω₁ + ω₂)/2 and k̄ = (k₁ + k₂)/2 and the differences Δω = ω₂ - ω₁ and Δk = k₂ - k₁. Then the product-to-sum identity for cosines collapses the sum into a product of two cosines, one beating at the mean frequency, the other at the difference."
+        },
+        {
+          "type": "math",
+          "tex": "A\\cos(k_1 x - \\omega_1 t) + A\\cos(k_2 x - \\omega_2 t) \\;=\\; 2A\\,\\cos\\!\\left(\\tfrac{\\Delta k}{2}\\, x - \\tfrac{\\Delta \\omega}{2}\\, t\\right) \\cos(\\bar{k}\\, x - \\bar{\\omega}\\, t)",
+          "display": true,
+          "caption": "A is the common amplitude of the two pure waves. k_1, k_2 are their two wavenumbers, ω_1, ω_2 their two angular frequencies. Δk = k_2 - k_1 and Δω = ω_2 - ω_1 are the small differences. k̄ = (k_1+k_2)/2 and ω̄ = (ω_1+ω_2)/2 are the means. The right-hand side reads as a slow envelope (the first factor) multiplying a fast carrier (the second factor)."
+        },
+        {
+          "type": "p",
+          "text": "The fast factor cos(k̄ x - ω̄ t) is a single sinusoid at the mean wavenumber and mean frequency: it moves at the phase velocity v_p = ω̄/k̄. The slow factor cos((Δk/2) x - (Δω/2) t) is the envelope: a long, slowly-varying shape that rises and falls across the carrier underneath it. It is the envelope that holds the packet together. It is the envelope that Russell chased. And the envelope is itself a cosine, with its own wavenumber Δk/2 and its own frequency Δω/2, so it moves at its own speed: the ratio of frequency to wavenumber, (Δω/2) / (Δk/2) = Δω/Δk."
+        },
+        {
+          "type": "p",
+          "text": "Take the limit in which the two frequencies are infinitesimally close together, and the discrete ratio Δω/Δk becomes the derivative dω/dk evaluated at the carrier frequency. That derivative is what we mean by the group velocity. It is the speed of the envelope. It is the speed at which the packet, as a whole, moves through the medium."
+        },
+        {
+          "type": "math",
+          "tex": "v_g \\;=\\; \\frac{d\\omega}{dk}",
+          "display": true,
+          "caption": "v_g is the group velocity, the speed at which the envelope of a wave packet moves. ω is the angular frequency. k is the wavenumber. The derivative is evaluated at the carrier wavenumber of the packet. If the wave were non-dispersive (ω strictly proportional to k), this would equal ω/k = v_p, and the two velocities would coincide; in any medium where ω is a more elaborate function of k they do not."
+        }
+      ],
+      "quiz": {
+        "question": "Two cosines of equal amplitude with wavenumbers k₁ = 9.9 m⁻¹ and k₂ = 10.1 m⁻¹, and angular frequencies ω₁ = 1.98 s⁻¹ and ω₂ = 2.04 s⁻¹, are added. At what speed does the envelope of the resulting wave packet move?",
+        "options": [
+          "0.20 m/s",
+          "0.30 m/s",
+          "1.00 m/s",
+          "2.01 m/s"
+        ],
+        "correctIndex": 1,
+        "explanation": "The envelope speed is the ratio of the differences: Δω/Δk = (2.04 - 1.98)/(10.1 - 9.9) = 0.06/0.20 = 0.30 m/s. The tempting wrong answer is 0.20 m/s, which would be (ω₂ - ω₁)/(k̄), confusing one of the means with one of the differences. The other tempting answer, 0.201 m/s, is the phase velocity ω̄/k̄ ≈ 2.01/10.0; that is the carrier speed, not the envelope speed."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. From dω/dk to v_p and dv_p/dλ",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The form v_g = dω/dk is clean but abstract: ω and k are not the variables a working optician thinks in. The natural ones in the dispersion lesson were the refractive index n(λ) and the wavelength λ, which translate into the phase velocity v_p(λ) = c/n(λ). We need a version of v_g written in those variables. The chain rule gives it in two short steps. Start from the definition ω = v_p k, valid for any single sinusoid, and differentiate with respect to k holding nothing constant, since both v_p and k are now functions of wavelength."
+        },
+        {
+          "type": "math",
+          "tex": "v_g \\;=\\; \\frac{d\\omega}{dk} \\;=\\; \\frac{d}{dk}\\big(v_p\\, k\\big) \\;=\\; v_p \\;+\\; k\\,\\frac{dv_p}{dk}",
+          "display": true,
+          "caption": "v_g is the group velocity. ω = v_p k is the dispersion relation written in phase-velocity form (any sinusoid satisfies it, this is just the definition of v_p). v_p is the phase velocity. k is the wavenumber. The product rule on v_p k gives the two terms on the right."
+        },
+        {
+          "type": "p",
+          "text": "Now convert the derivative dv_p/dk into a derivative with respect to λ. The relation between wavenumber and wavelength is k = 2π/λ, so dk/dλ = -2π/λ², and inverting gives dλ/dk = -λ²/(2π). The chain rule then sends dv_p/dk to (dv_p/dλ)(dλ/dk) = -(λ²/2π)(dv_p/dλ). Multiplying by k = 2π/λ collapses the leading factors and leaves a single term."
+        },
+        {
+          "type": "math",
+          "tex": "k\\,\\frac{dv_p}{dk} \\;=\\; \\frac{2\\pi}{\\lambda} \\cdot \\left(-\\frac{\\lambda^{2}}{2\\pi}\\right)\\frac{dv_p}{d\\lambda} \\;=\\; -\\lambda\\,\\frac{dv_p}{d\\lambda}",
+          "display": true,
+          "caption": "k = 2π/λ rewrites the wavenumber as wavelength. dλ/dk = -λ²/(2π) follows from differentiating k = 2π/λ and inverting. dv_p/dλ is the slope of the phase velocity as a function of wavelength. Substituting both pieces into k(dv_p/dk) shows the (2π/λ) and (λ²/2π) cancel, leaving just -λ(dv_p/dλ)."
+        },
+        {
+          "type": "p",
+          "text": "Substituting back into v_p + k(dv_p/dk) gives the wavelength form, Lord Rayleigh's 1881 expression, the equation that any first-year optics student is expected to be able to write down without looking. It packages the same information as v_g = dω/dk but in the variables a refractometer reports."
+        },
+        {
+          "type": "math",
+          "tex": "v_g \\;=\\; v_p \\;-\\; \\lambda\\,\\frac{dv_p}{d\\lambda}",
+          "display": true,
+          "caption": "v_g is the group velocity, the speed of the envelope. v_p is the phase velocity, the speed of a single crest. λ is the wavelength of the carrier. dv_p/dλ is the slope of the phase velocity as a function of wavelength, the dispersion of the medium. In a normal dispersion regime (n grows as λ shrinks, so v_p shrinks as λ shrinks, so dv_p/dλ > 0) the correction is positive: v_g < v_p. In an anomalous regime near an absorption peak it can flip sign."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Normal, anomalous, and what a packet looks like",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Far from any absorption peak, ordinary transparent glass shows what Rayleigh called normal dispersion: blue light is slowed more than red light, so the phase velocity v_p = c/n increases with wavelength, and dv_p/dλ is a positive number. Rayleigh's formula then makes the second term subtract from the first, and v_g sits below v_p. A pulse of light in BK7 crown glass, at a carrier wavelength of 589 nm (sodium D), has a phase velocity of about 1.978 × 10⁸ m/s and a group velocity of about 1.943 × 10⁸ m/s, a gap of roughly 2%. Each crest inside the pulse therefore drifts forward through the envelope as the pulse propagates, surfaces at the leading edge, and disappears."
+        },
+        {
+          "type": "p",
+          "text": "Inside the narrow band of wavelengths around an absorption line, the picture inverts. The refractive index drops sharply as wavelength shrinks across the resonance (the medium can no longer follow the field, it leans out of phase), and v_p = c/n now decreases as λ increases on that side of the line. The slope dv_p/dλ is negative, the correction term in Rayleigh's formula flips sign, and v_g rises above v_p. This is the anomalous-dispersion regime Sommerfeld and Brillouin studied in 1914. It even admits, on paper, v_g > c, which alarmed everyone until they worked out that no information actually travels at v_g once the medium is strongly absorbing: the signal front, the leading edge of a sharp pulse, still travels at c."
+        },
+        {
+          "type": "viz",
+          "src": "2026-06-28-group-velocity.html",
+          "height": 460,
+          "caption": "Two cosines added together produce a packet with an envelope (orange) moving at v_g and a carrier (steel blue) moving at v_p. The colored dots track one crest (blue) and the envelope peak (orange) over time. Slide the dispersion to flip the medium from normal (v_g < v_p, the crest outruns the envelope) through non-dispersive (v_g = v_p) to anomalous (v_g > v_p, the envelope outruns the crests)."
+        },
+        {
+          "type": "p",
+          "text": "The other consequence of v_g being a function of wavelength is that a packet built from more than two pure waves spreads out as it travels. Each Fourier component carries its own dω/dk, the components separate, and the pulse broadens. In an optical fiber at 1550 nm, the residual group-velocity dispersion of fused silica is about -22 ps/(nm·km): a one-nanometer spread in source wavelength turns a sharp 22-picosecond input pulse into a 44-picosecond mush after one kilometer. The bit rate of every long-haul fiber link, and the dispersion-compensating modules buried at every amplifier hut, exist because dω/dk is not constant."
+        }
+      ],
+      "quiz": {
+        "question": "A laser pulse with a carrier wavelength of 589 nm propagates through a piece of BK7 crown glass where the phase velocity is v_p = 1.978 × 10⁸ m/s and the slope dv_p/dλ ≈ +6 × 10¹³ s⁻¹ (positive, because BK7 is in its normal-dispersion regime). What is the approximate group velocity?",
+        "options": [
+          "v_g ≈ 2.013 × 10⁸ m/s (above v_p)",
+          "v_g ≈ 1.978 × 10⁸ m/s (equal to v_p)",
+          "v_g ≈ 1.943 × 10⁸ m/s (below v_p)",
+          "v_g ≈ 3.0 × 10⁸ m/s (equal to c)"
+        ],
+        "correctIndex": 2,
+        "explanation": "Use v_g = v_p - λ(dv_p/dλ). Plugging in: v_g = 1.978 × 10⁸ - (589 × 10⁻⁹)(6 × 10¹³) = 1.978 × 10⁸ - 0.035 × 10⁸ ≈ 1.943 × 10⁸ m/s. The tempting wrong answer is choice 1, which comes from adding instead of subtracting the correction. Normal dispersion has dv_p/dλ > 0, and Rayleigh's formula then drives v_g below v_p, not above it."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The LIGO chirp and the meaning of v_g",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "On 14 September 2015 at 09:50:45 UTC the two LIGO detectors registered a 0.2-second signal whose frequency swept from 35 Hz to 250 Hz, a chirp. The frequency rose because the orbit of two coalescing black holes 1.3 billion light-years away was shrinking, faster and faster, in its last hundred milliseconds before merger. To extract the chirp from the detector noise, the LIGO analysis pipeline filtered the data against a template bank, several hundred thousand precomputed waveforms predicted by numerical relativity. The matching template, parameter for parameter, was a wave packet of varying frequency, and the matched-filter algorithm slid the template along the data in time. The question of how fast to slide it has exactly one answer: at the group velocity."
+        },
+        {
+          "type": "p",
+          "text": "The point is general, and it was already clear to Rayleigh when he first wrote v_g = v_p - λ(dv_p/dλ) in 1881. The energy of a wave is carried in the envelope, not in the crests. A pure plane wave, infinite in extent, carries no information at all: every cycle is identical to every other cycle, and you cannot tell whether you are reading the wave at the start, middle, or end. Only a modulated wave carries information, and that modulation is the envelope. v_g is the speed at which information, energy, and identity move through the medium."
+        },
+        {
+          "type": "p",
+          "text": "This is why the anomalous-dispersion paradox of v_g > c does not break special relativity. In a strongly absorbing medium, the envelope of a Gaussian pulse can indeed move faster than light, but the medium has so heavily reshaped the pulse that the leading edge no longer aligns with what you would naively call the centroid. Sommerfeld in 1907 and Brillouin in 1914 showed that the signal front, the very first nonzero arrival of any disturbance, always travels at c. The envelope speed is the velocity of the bulk of the energy, but it is the front velocity that carries the news. The two coincide when v_g < v_p and dispersion is gentle. They part when v_g shoots above v_p in an absorbing band, and Einstein keeps his postulate."
+        },
+        {
+          "type": "p",
+          "text": "Russell's Edinburgh hump was not strictly speaking a Fourier packet, because the canal's nonlinearity counteracted the dispersion that would otherwise have spread it. But the question it raised, the difference between the speed of a localized disturbance and the speed of any individual crest inside it, is the same question every modulated signal poses. The phase velocity tells you how the crests of a single frequency advance. The group velocity tells you how the disturbance as a whole, and the information it carries, gets from one place to another. They are equal in vacuum and almost equal in air, and we live most of our lives surrounded by a medium that hides the distinction. Glass, fibers, plasmas, and gravitational-wave detectors do not."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "You are designing a 100 km fiber-optic link at 1550 nm. The fused silica has a group-velocity dispersion (GVD) of about -22 ps/(nm·km), and your laser has a spectral width of 0.1 nm. A 50-ps input pulse arrives at the far end with a different width. Which statement most accurately captures what has happened and why?",
+    "options": [
+      "The pulse arrives at 50 ps, because v_g of fused silica at 1550 nm is a fixed number and a fixed v_g cannot change the pulse shape.",
+      "The pulse arrives at about 270 ps, because different wavelengths within the 0.1 nm spectral width travel at different group velocities, and the components arrive separated in time by roughly (0.1 nm) × (22 ps/(nm·km)) × (100 km) = 220 ps, which adds in quadrature with the original 50 ps width.",
+      "The pulse arrives at about 50 ps but offset in arrival time, because v_g differs from v_p but each is a single number that produces only a translation in time, not a spread.",
+      "The pulse arrives at exactly 0 ps width, because anomalous dispersion compresses pulses, and 1550 nm is on the anomalous-dispersion side of the zero-dispersion wavelength for fused silica."
+    ],
+    "correctIndex": 1,
+    "explanation": "Group-velocity dispersion is the variation of v_g with wavelength, dv_g/dλ. Different wavelengths inside the 0.1 nm spectrum carry their own dω/dk and arrive at slightly different times, broadening the pulse. The combined width is √(50² + 220²) ≈ 226 ps, close to the 270 ps option. The most tempting wrong answer is option 3, which confuses the v_p vs v_g distinction (a single-velocity offset) with the v_g vs dv_g/dλ distinction (a spread of velocities). The first one mixes the two: the spread is not zero just because v_g exists, because v_g is a function of λ, not a single number."
+  },
+  "suggestedNodes": [
+    {
+      "id": "soliton",
+      "label": "Soliton",
+      "subtitle": "KdV equation",
+      "edgeType": "extends"
+    },
+    {
+      "id": "fourier_transform",
+      "label": "Fourier",
+      "subtitle": "ψ(x) ↔ ψ̃(k)",
+      "edgeType": "related"
+    },
+    {
+      "id": "gvd_pulse_broadening",
+      "label": "GVD",
+      "subtitle": "fiber bit rate",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-06-28T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": ["dispersion", "wavelength", "refraction"]
+  }
+}
