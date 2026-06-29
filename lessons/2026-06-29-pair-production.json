@@ -1,0 +1,203 @@
+{
+  "slug": "2026-06-29-pair-production",
+  "title": "Pair production: how a gamma ray becomes matter and antimatter",
+  "node": {
+    "id": "pair_production",
+    "label": "Pair creation",
+    "subtitle": "γ → e⁺ + e⁻"
+  },
+  "intro": "On 2 August 1932, Carl Anderson, twenty-six and a junior researcher at Caltech, photographed a cloud-chamber track that bent in a magnetic field exactly the wrong way for an electron. The curl told him the particle was positive, and the ionization density told him the mass was the same as the electron's. Six months later, Patrick Blackett and Giuseppe Occhialini in Cambridge showed those same particles being born in pairs out of cosmic-ray gamma rays striking a lead plate, and a slogan that had been sitting unused since 1905, E = mc², acquired its cleanest experimental demonstration. This lesson follows the arithmetic of that demonstration: how much energy a photon needs to materialize as a particle and an antiparticle, why it cannot do so in empty space, and how the same identity now anchors a hospital scanner.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The curl that went the wrong way",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Anderson's cloud chamber sat between the poles of a 15-kilogauss electromagnet, recording droplets of condensation along the trails of ionization left by cosmic-ray particles. The field bent positive tracks one way and negative tracks the other. By August 1932 Anderson had photographed thousands of tracks. Almost all of them were electrons, the negatives expected from atmospheric showers; a small fraction were protons, the positives expected from cosmic-ray nuclei. On the morning of August 2 he developed a plate showing a single curl that fit neither population."
+        },
+        {
+          "type": "p",
+          "text": "A thin lead plate ran across the middle of the chamber, slowing whatever passed through. The curl tightened on the far side, fixing the direction of travel and therefore the sign of the charge: positive. The radius of curl gave the momentum via p = qBr; the density of droplets per centimeter of track gave the velocity through the Bethe-Bloch ionization formula; and the mass dropped out as p divided by γv. It came to roughly one electron mass, a thousand times too light for a proton. Anderson named the particle the positron and published in Science within six weeks."
+        },
+        {
+          "type": "p",
+          "text": "Paul Dirac had been waiting for the photograph. His 1928 relativistic equation for the electron carried unwanted negative-energy solutions, which he could not throw away without breaking the completeness of the theory. For a while he proposed they were protons, an idea Hermann Weyl shot down by pointing out the masses would have to match. By 1931 Dirac had reinterpreted them as a new particle, the same mass as the electron but opposite charge. Five months after Anderson's note, Patrick Blackett and Giuseppe Occhialini in Cambridge photographed gamma rays striking a lead plate and emerging as forks, two opposite curls leaving a single point. The reverse picture, an electron and a positron disappearing together into two photons, would be measured by Otto Klemperer in 1934. Both directions of the conversion were now in the cloud-chamber record, and the price was the same in each direction."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Two electron masses at minimum",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Whatever the mechanism, energy is conserved. A photon of energy hν, where h is Planck's constant and ν the photon's frequency, disappears, and an electron-positron pair appears in its place. Each member of the pair carries a rest energy m_e c², where m_e is the electron mass (the positron's mass is exactly the same) and c is the speed of light. Anything left over after paying both rest energies goes into kinetic energy."
+        },
+        {
+          "type": "math",
+          "tex": "h\\nu \\;=\\; 2\\, m_e c^2 \\;+\\; T_+ \\;+\\; T_-",
+          "display": true,
+          "caption": "hν is the energy of the incoming photon. m_e is the electron mass. c is the speed of light, so m_ec² is the rest energy of a single electron or a single positron. T_+ is the kinetic energy of the produced positron after the conversion. T_- is the kinetic energy of the produced electron. The equation reads: photon energy equals two rest energies plus whatever kinetic energy the pair carries away."
+        },
+        {
+          "type": "p",
+          "text": "The minimum photon energy comes from setting both kinetic energies to zero. Both particles are produced at rest, and every joule of the photon goes into mass with nothing wasted. This minimum is called the pair-production threshold. Plugging in the measured electron rest energy gives a definite number."
+        },
+        {
+          "type": "math",
+          "tex": "h\\nu_{\\min} \\;=\\; 2\\, m_e c^2 \\;=\\; 2 \\times 0.511\\ \\text{MeV} \\;=\\; 1.022\\ \\text{MeV}",
+          "display": true,
+          "caption": "hν_min is the threshold photon energy: the smallest photon energy for which a pair can be produced at all. m_e c² = 0.511 MeV is the rest energy of one electron, a measured constant. Doubling it gives the combined rest energy of the pair. Below 1.022 MeV the reaction is forbidden by energy conservation alone; above it, the excess hν − 1.022 MeV becomes kinetic energy shared between the positron and the electron."
+        },
+        {
+          "type": "p",
+          "text": "Translating the threshold into a wavelength via λ = hc/E puts it deep in the hard gamma-ray range, around 1.21 picometers. Visible light at hundreds of nanometers falls short by a factor of a hundred thousand in energy. Even hard X-rays at 100 keV miss by a factor of ten. Pair production is genuinely a gamma-ray phenomenon, available only to nuclear transitions, cosmic-ray events, and accelerator beams. When a photon does arrive above threshold, the excess energy is shared between the two particles according to the specific kinematics of the event, with the average split close to half and half but considerable spread set by the recoil that the conversion deposits in whatever absorbed the photon's momentum. That recoil is the subject of the next section."
+        }
+      ],
+      "quiz": {
+        "question": "A photon of energy 800 keV strikes a heavy nucleus. What is the largest kinetic energy that the resulting electron-positron pair could carry away?",
+        "options": [
+          "289 keV, the photon energy minus a single electron rest energy.",
+          "Pair production cannot occur: 800 keV is below the 1.022 MeV threshold.",
+          "800 keV, since the photon's full energy is available once the nucleus absorbs its momentum.",
+          "Exactly 0 keV, because at threshold both particles are produced at rest."
+        ],
+        "correctIndex": 1,
+        "explanation": "Energy conservation requires hν ≥ 2m_ec² = 1.022 MeV before a pair can form at all. At 800 keV the photon is below threshold and no amount of nuclear assistance helps. The most tempting wrong answer is option 1, which subtracts only one electron rest energy instead of two; that confuses pair production (where the photon must pay both an electron's and a positron's worth of rest energy) with the photoelectric effect (where a single electron is liberated and only one binding energy is subtracted). At 800 keV the most likely photon interaction in matter is Compton scattering, not pair production."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Why a free photon cannot do it",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Threshold is necessary but not sufficient. The 1.022 MeV that section 2 calculated is what energy conservation demands, but a second conservation law, momentum, also has to hold. A photon of energy hν carries momentum p_γ = hν/c, since for any massless particle the energy E and the magnitude of the three-momentum p satisfy E = pc. At threshold, the pair has zero momentum: both particles are at rest. The photon's momentum has nowhere to go."
+        },
+        {
+          "type": "p",
+          "text": "You might hope the photon could split into a moving pair, the two members heading apart and the kinetic energies adding up to the excess above 2m_ec². The cleanest way to see why this fails is to look at the invariant of the 4-momentum, the relativistic quantity whose value is the same in every inertial frame. For any system of particles, contracting the total 4-momentum with itself gives the invariant mass squared (times c²). The photon has invariant mass zero. The pair, by contrast, has an invariant mass of at least 2m_e: equality is reached only when both particles travel parallel with no relative motion. The two invariants cannot be made equal."
+        },
+        {
+          "type": "math",
+          "tex": "p_\\gamma^{\\,\\mu} p_{\\gamma\\,\\mu} \\;=\\; 0 \\qquad\\text{while}\\qquad \\big(p_+^{\\,\\mu} + p_-^{\\,\\mu}\\big)\\big(p_{+\\mu} + p_{-\\mu}\\big) \\;\\geq\\; (2 m_e c)^2",
+          "display": true,
+          "caption": "p_γ^μ is the photon's relativistic 4-momentum. p_+^μ and p_-^μ are the 4-momenta of the positron and the electron. Contracting a particle's 4-momentum with itself (the notation p^μ p_μ) gives the invariant mass squared multiplied by c², and the result is the same in every inertial frame. For a real on-shell photon, which is massless, this invariant is zero. For a system of two particles each of mass m_e, the invariant is at least (2m_ec)², with equality only when the two particles share a single velocity. Because zero can never equal a positive number, the reaction γ → e⁺ + e⁻ in empty space is forbidden in every frame."
+        },
+        {
+          "type": "p",
+          "text": "The way out is to put a heavy partner nearby, almost always a nucleus. The nucleus is so much more massive than the electron, by four orders of magnitude even for hydrogen, that it can absorb the photon's leftover momentum at almost no energetic cost: the recoil kinetic energy of a lead nucleus carrying off 1 MeV/c of momentum is well under a kilo-electron-volt. So the textbook reaction is not γ → e⁺e⁻ but γ + N → N + e⁺ + e⁻, with the nucleus playing the silent role of momentum sink. The same trick works with another photon, with another electron, or with a strong external electromagnetic field. None of these can be removed without forbidding the reaction. The viz below sweeps both the photon energy and the presence of the nucleus, and the conversion turns on only when both are right."
+        },
+        {
+          "type": "viz",
+          "src": "2026-06-29-pair-production.html",
+          "height": 460,
+          "caption": "A gamma-ray photon enters a cloud chamber from the left in a magnetic field pointing into the page. Slide hν to scan from below to above the 1.022 MeV threshold. With the nucleus visible, above threshold a positron (red, curling up) and electron (blue, curling down) appear from the conversion point with track radii proportional to their momenta. Hide the nucleus and the photon passes through unchanged, even at energies far above threshold: no momentum sink, no pair."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The Bethe-Heitler cross section and the Z² factor",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "How often does a photon above threshold actually convert? In 1934 Hans Bethe and Walter Heitler, both refugees from Nazi Germany then at Manchester, computed the pair-production cross section to first order in the fine-structure constant. They treated the nucleus as a fixed Coulomb field and the photon-electron-positron coupling in the Born approximation. The answer at energies well above threshold takes a compact form."
+        },
+        {
+          "type": "math",
+          "tex": "\\sigma_{\\rm BH} \\;\\approx\\; \\alpha\\, Z^2\\, r_e^{\\,2} \\left[\\tfrac{28}{9} \\ln\\!\\left(\\tfrac{2 h\\nu}{m_e c^2}\\right) \\;-\\; \\tfrac{218}{27}\\right]",
+          "display": true,
+          "caption": "σ_BH is the Bethe-Heitler pair-production cross section per atom, valid for hν » m_ec² (well above threshold) and below the energy at which atomic-electron screening of the nuclear Coulomb field becomes important. α ≈ 1/137 is the fine-structure constant, the dimensionless strength of the electromagnetic interaction. Z is the nuclear charge in units of the proton charge. r_e = α² a_0 ≈ 2.82 × 10⁻¹⁵ m is the classical electron radius, the natural area scale for electromagnetic interactions involving electrons. The bracketed factor grows logarithmically with photon energy, so the cross section rises only slowly once the threshold is passed."
+        },
+        {
+          "type": "p",
+          "text": "Three features carry the physics. The α prefactor counts a QED process whose lowest-order Feynman diagram has the photon coupling to the nuclear Coulomb field once and producing the pair once: four electromagnetic vertices in total, of which two are internal and contribute one factor of α to the rate beyond the Z² that the nuclear field supplies. The r_e² is dimensional: cross sections are areas, and the classical electron radius is the natural area scale for any electron-electromagnetic interaction. The Z² is the loudest factor. The amplitude for the photon to interact with a nucleus of charge Ze is linear in Z, and the rate, being amplitude squared, scales as Z²."
+        },
+        {
+          "type": "p",
+          "text": "Z² is why lead shielding works. A lead nucleus (Z = 82) is roughly seventy times more effective at converting a 5 MeV photon than an oxygen nucleus (Z = 8), because (82/8)² ≈ 105 and the small bracket-factor adjustments do not undo two orders of magnitude. For high-energy radiology and gamma astronomy this single factor sets the whole materials game. The logarithmic energy dependence is gentle: doubling hν from 10 MeV to 20 MeV adds only about seven percent to the cross section. Far above threshold the process saturates against atomic screening of the nucleus, and σ levels off at a value still dominated by Z²."
+        }
+      ],
+      "quiz": {
+        "question": "A 5 MeV photon enters a slab of lead (Z = 82). Which of the three principal photon-matter interactions dominates this photon's interaction?",
+        "options": [
+          "Photoelectric absorption, because lead's high Z makes photoelectric a Z⁴ or Z⁵ process and so always dominant in lead.",
+          "Compton scattering, because Compton always dominates above 100 keV regardless of the material.",
+          "Pair production, because the photon is well above the 1.022 MeV threshold and the Z² factor amplifies it strongly in lead.",
+          "None of the above dominates; the photon passes through lead at 5 MeV with no significant interaction."
+        ],
+        "correctIndex": 2,
+        "explanation": "The photoelectric cross section falls roughly as E⁻³ above the K-shell binding energy and is negligible by 5 MeV. Compton dominates from ~100 keV to about 5 MeV in light materials, but in lead the pair-production cross section, scaling as Z² ≈ 6700, overtakes Compton well before 5 MeV. The most tempting wrong answer is option 1: photoelectric does scale steeply with Z, so it is tempting to extrapolate it forward to MeV energies. But its energy dependence is even steeper in the other direction, and by 5 MeV it has decayed by several orders of magnitude from its low-energy peak; the Z² of pair production wins decisively."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Anderson's particle, fifty years later, in a hospital basement",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Run pair production backward in time and you have pair annihilation. A positron at rest meets an electron at rest, and the two disappear into a pair of photons, each carrying m_ec² = 511 keV, flying off in exactly opposite directions. The energy arithmetic is identical to section 2 reversed: 2m_ec² of rest energy goes into 2 × 511 keV of photon energy. The momentum arithmetic, the same one that section 3 used to forbid the forward process in vacuum, now fixes the geometry: the total momentum of the initial pair is zero, so the total momentum of the final two photons must also be zero, which forces them back-to-back."
+        },
+        {
+          "type": "p",
+          "text": "This back-to-back geometry is what makes positron emission tomography possible. A patient is injected with a glucose analogue carrying a positron-emitting isotope, fluorine-18 being the workhorse, half-life 110 minutes. Cells with high metabolic rate, tumors among them, take up the analogue at elevated rates. Each emitted positron travels a millimeter or two through tissue, slows by ionization, finds an electron, and annihilates. Two 511 keV photons fly off in opposite directions through the body."
+        },
+        {
+          "type": "p",
+          "text": "The scanner is a ring of scintillating crystals around the patient. Two crystals on opposite sides of the ring registering a hit within a few nanoseconds of each other are presumed to be the same annihilation event; the straight line between them, called the line of response, must pass through the annihilation point. Millions of such lines from a thirty-minute scan reconstruct a three-dimensional map of where the tracer settled. The first ring-detector machine, built by Michael Phelps and Michel Ter-Pogossian at Washington University in 1973, took fifteen minutes to image a single brain slice; modern scanners image the whole body in five."
+        },
+        {
+          "type": "p",
+          "text": "What the scanner is measuring, electronically, is the same arithmetic that Anderson read off his cloud-chamber plate forty-one years earlier. The 1.022 MeV threshold that pair production demands appears as the 2 × 511 keV signature that PET detectors listen for, and the back-to-back geometry that the 4-momentum identity of section 3 forced on the forward reaction is the geometry the line-of-response algorithm trusts in the reverse one. In 1932 a single curl on a photograph established that energy and mass were convertible at a fixed price. By 1973 hospitals were running that conversion several million times a minute to find tumors."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A PET technician notices that her detector pairs accept photons in a narrow window centered on 511 keV. She asks her physicist colleague why specifically 511 keV, and not, say, 600 keV or 700 keV. Which single sentence answers her best, rooted in the physics of pair production and annihilation?",
+    "options": [
+      "511 keV is the photoelectric absorption peak of the sodium iodide crystals used in PET detectors, so the scanner is tuned to its own crystals.",
+      "511 keV is half of the 1.022 MeV combined rest energy of the electron-positron pair, so each photon from an annihilation at rest carries exactly one electron rest energy by energy conservation.",
+      "511 keV is the wavelength resolution limit of the scintillating crystals, set by their atomic spacing.",
+      "511 keV is the average kinetic energy of the positrons emitted by fluorine-18, after the positrons have traveled a short distance in tissue."
+    ],
+    "correctIndex": 1,
+    "explanation": "Pair annihilation at rest takes the combined rest energy 2m_ec² = 1.022 MeV and splits it evenly between two back-to-back photons, each at m_ec² = 511 keV. The most tempting wrong answer is option 4, which confuses the positron's kinetic-energy spectrum (a continuous distribution ending around 633 keV for fluorine-18) with the photon energy from annihilation, which is always 511 keV no matter what the positron's initial kinetic energy was. By the time the positron annihilates it has lost essentially all its kinetic energy to ionization in the tissue, so only the rest masses appear in the annihilation arithmetic, and each of the two photons must carry away exactly half of 1.022 MeV."
+  },
+  "suggestedNodes": [
+    {
+      "id": "annihilation_radiation",
+      "label": "Annihilation",
+      "subtitle": "e⁺e⁻ → 2γ",
+      "edgeType": "related"
+    },
+    {
+      "id": "dirac_equation",
+      "label": "Dirac eqn",
+      "subtitle": "(iγ·∂−m)ψ = 0",
+      "edgeType": "extends"
+    },
+    {
+      "id": "bethe_heitler",
+      "label": "Bethe-Heitler",
+      "subtitle": "σ ∝ Z²α r_e²",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "createdAt": "2026-06-29T08:00:00Z",
+    "model": {
+      "outline": "sonnet",
+      "sections": "haiku",
+      "viz": "sonnet",
+      "finalQuiz": "sonnet"
+    }
+  }
+}

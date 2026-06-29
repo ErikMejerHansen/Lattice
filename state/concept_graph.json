@@ -589,6 +589,16 @@
       "createdAt": "2026-06-28T08:00:00Z",
       "col": 1,
       "row": 29
+    },
+    {
+      "id": "pair_production",
+      "label": "Pair creation",
+      "subtitle": "γ → e⁺ + e⁻",
+      "state": "available",
+      "lesson": "2026-06-29-pair-production",
+      "createdAt": "2026-06-29T08:00:00Z",
+      "col": 0,
+      "row": 30
     }
   ],
   "edges": [
@@ -1385,6 +1395,21 @@
     {
       "from": "group_velocity",
       "to": "sellmeier_equation",
+      "kind": "related"
+    },
+    {
+      "from": "pair_production",
+      "to": "compton_scattering",
+      "kind": "extends"
+    },
+    {
+      "from": "pair_production",
+      "to": "photon_energy",
+      "kind": "extends"
+    },
+    {
+      "from": "pair_production",
+      "to": "photoelectric_effect",
       "kind": "related"
     }
   ]
