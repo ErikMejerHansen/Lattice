@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pair production in a cloud chamber</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz {
+  padding: 10px 14px 14px;
+  max-width: 620px;
+  margin: 0 auto;
+}
+.chamber-wrap {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  border-radius: 2px;
+  padding: 4px;
+}
+svg { display: block; width: 100%; height: auto; }
+.nucleus-btn {
+  flex: 0 0 auto;
+  min-width: 90px;
+  height: 36px;
+  background: var(--bg-raised);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: 2px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 0 12px;
+}
+.nucleus-btn.on {
+  background: var(--accent);
+  color: var(--bg-raised);
+  border-color: var(--accent);
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 12px;
+  row-gap: 2px;
+}
+.readout .key { color: var(--text-ghost); }
+.outcome.ok { color: var(--accent); }
+.outcome.no { color: var(--text-muted); font-style: italic; }
+.axis-label {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  fill: var(--text-muted);
+}
+.chamber-edge { fill: none; stroke: var(--border-strong); stroke-width: 1; }
+.field-dot { fill: var(--text-ghost); }
+.photon { stroke: var(--accent); stroke-width: 1.6; fill: none; }
+.photon-arrow { fill: var(--accent); }
+.positron-track { stroke: var(--accent); stroke-width: 1.8; fill: none; }
+.electron-track { stroke: #3a5874; stroke-width: 1.8; fill: none; }
+.positron-label { fill: var(--accent); font-style: italic; font-size: 11px; }
+.electron-label { fill: #3a5874; font-style: italic; font-size: 11px; }
+.nucleus { fill: var(--text); stroke: var(--text); stroke-width: 0.5; }
+.nucleus-recoil { stroke: var(--text); stroke-width: 1; fill: none; }
+.nucleus-recoil-arrow { fill: var(--text); }
+.nucleus-label { fill: var(--text-muted); font-size: 11px; font-style: italic; }
+.forbidden-note {
+  fill: var(--text-muted);
+  font-style: italic;
+  font-size: 11px;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <div class="chamber-wrap">
+    <svg viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" aria-label="Cloud chamber simulation of pair production">
+      <rect class="chamber-edge" x="10" y="10" width="580" height="300" rx="2"></rect>
+      <g id="field-dots"></g>
+      <text class="axis-label" x="20" y="28">B into page</text>
+      <text class="axis-label" x="500" y="28">cloud chamber</text>
+      <g id="photon-group"></g>
+      <g id="nucleus-group"></g>
+      <g id="recoil-group"></g>
+      <g id="tracks-group"></g>
+      <g id="labels-group"></g>
+      <g id="note-group"></g>
+    </svg>
+  </div>
+  <div class="viz-slider-row">
+    <label for="energy">hν</label>
+    <input type="range" id="energy" min="500" max="5000" step="10" value="2000" aria-label="photon energy in keV">
+    <div class="value" id="energyValue">2.000 MeV</div>
+  </div>
+  <div class="viz-slider-row">
+    <label>nucleus</label>
+    <button id="nucleus-toggle" class="nucleus-btn on" aria-pressed="true">visible</button>
+    <div class="value" id="thresholdValue">threshold 1.022 MeV</div>
+  </div>
+  <div class="readout">
+    <div class="key">outcome</div>      <div id="outcome" class="outcome ok">pair created</div>
+    <div class="key">positron T</div>   <div id="tPlus">0.489 MeV</div>
+    <div class="key">electron T</div>   <div id="tMinus">0.489 MeV</div>
+    <div class="key">pair |p|</div>     <div id="pairP">0.885 MeV/c each</div>
+  </div>
+  <div class="viz-caption">A 1.022 MeV photon is the minimum that can become an electron and a positron at rest. Slide hν below threshold and energy conservation alone forbids the conversion. Slide it above threshold and the pair appears at the nucleus, with track radii proportional to each particle's momentum. Hide the nucleus and even an 5 MeV photon passes through unconverted: a free photon in vacuum cannot turn into a pair because its momentum has no place to be deposited. The tiny arrow on the nucleus, when shown, is the nuclear recoil that balances the books.</div>
+</div>
+<script>
+(function () {
+  const M_E_C2 = 0.511; // MeV
+  const THRESHOLD = 2 * M_E_C2; // 1.022 MeV
+  // Pixel radius per (MeV/c) of momentum. Tuned so that at 5 MeV photon energy
+  // (p_each ~ 2.45 MeV/c) the curl is large but still inside the chamber view.
+  const R_SCALE = 32;
+  // Conversion point in the chamber
+  const NUC = { x: 280, y: 165 };
+  const CHAMBER = { left: 10, right: 590, top: 10, bottom: 310 };
+
+  const energySlider = document.getElementById('energy');
+  const energyValue = document.getElementById('energyValue');
+  const nucleusBtn = document.getElementById('nucleus-toggle');
+  const outcomeEl = document.getElementById('outcome');
+  const tPlusEl = document.getElementById('tPlus');
+  const tMinusEl = document.getElementById('tMinus');
+  const pairPEl = document.getElementById('pairP');
+
+  const photonGroup = document.getElementById('photon-group');
+  const nucleusGroup = document.getElementById('nucleus-group');
+  const recoilGroup = document.getElementById('recoil-group');
+  const tracksGroup = document.getElementById('tracks-group');
+  const labelsGroup = document.getElementById('labels-group');
+  const noteGroup = document.getElementById('note-group');
+  const fieldDotsGroup = document.getElementById('field-dots');
+
+  let nucleusPresent = true;
+
+  // Sprinkle field dots ("B into page") across the chamber
+  (function drawFieldDots() {
+    const xs = [60, 140, 220, 360, 440, 520];
+    const ys = [60, 120, 200, 260];
+    for (const x of xs) {
+      for (const y of ys) {
+        const dx = x - NUC.x, dy = y - NUC.y;
+        if (dx * dx + dy * dy < 38 * 38) continue; // keep clear around the conversion point
+        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('cx', x);
+        c.setAttribute('cy', y);
+        c.setAttribute('r', 1.4);
+        c.setAttribute('class', 'field-dot');
+        fieldDotsGroup.appendChild(c);
+      }
+    }
+  })();
+
+  function ns(tag, attrs) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  function clear(group) {
+    while (group.firstChild) group.removeChild(group.firstChild);
+  }
+
+  function drawPhotonWavy(x0, x1, y, opts) {
+    clear(photonGroup);
+    // Drawn as a small-amplitude sinusoid
+    const amp = 6;
+    const wavelength = 22;
+    const segments = 90;
+    const dx = (x1 - x0) / segments;
+    let d = '';
+    for (let i = 0; i <= segments; i++) {
+      const x = x0 + i * dx;
+      const yy = y + amp * Math.sin(2 * Math.PI * (x - x0) / wavelength);
+      d += (i === 0 ? 'M' : 'L') + x.toFixed(2) + ' ' + yy.toFixed(2) + ' ';
+    }
+    photonGroup.appendChild(ns('path', { class: 'photon', d: d }));
+    // Tiny arrowhead at the end
+    photonGroup.appendChild(ns('polygon', {
+      class: 'photon-arrow',
+      points: (x1 - 6) + ',' + (y - 4) + ' ' + x1 + ',' + y + ' ' + (x1 - 6) + ',' + (y + 4)
+    }));
+    // Label
+    if (opts && opts.label) {
+      photonGroup.appendChild(ns('text', {
+        class: 'positron-label',
+        x: x0 + 4,
+        y: y - 12
+      })).textContent = 'γ, hν';
+    }
+  }
+
+  function drawNucleus(show) {
+    clear(nucleusGroup);
+    if (!show) return;
+    nucleusGroup.appendChild(ns('circle', {
+      class: 'nucleus',
+      cx: NUC.x, cy: NUC.y, r: 4
+    }));
+    nucleusGroup.appendChild(ns('text', {
+      class: 'nucleus-label',
+      x: NUC.x + 8, y: NUC.y + 4
+    })).textContent = 'nucleus N';
+  }
+
+  function drawCurl(group, sign, r, kind) {
+    // sign = -1 for positron (curls up, smaller y in SVG),
+    //        +1 for electron (curls down, larger y in SVG).
+    // The track starts at NUC heading rightward and curves toward sign*y direction.
+    // Parameterize the orbit center at (NUC.x, NUC.y + sign * r) so that the start
+    // tangent is (+x, 0). The position at angle t along the orbit is:
+    //   x = NUC.x + r * sin(t)
+    //   y = NUC.y + sign * r * (1 - cos(t))
+    if (r < 1.5) return; // too small to draw meaningfully
+
+    const steps = 80;
+    // Draw up to 3/4 turn so the curl is unmistakable, but stop if the track goes off-chamber.
+    const maxT = 1.6 * Math.PI;
+    let d = '';
+    for (let i = 0; i <= steps; i++) {
+      const t = (i / steps) * maxT;
+      const x = NUC.x + r * Math.sin(t);
+      const y = NUC.y + sign * r * (1 - Math.cos(t));
+      if (x < CHAMBER.left + 4 || x > CHAMBER.right - 4 || y < CHAMBER.top + 4 || y > CHAMBER.bottom - 4) break;
+      d += (i === 0 ? 'M' : 'L') + x.toFixed(2) + ' ' + y.toFixed(2) + ' ';
+    }
+    if (!d) return;
+    group.appendChild(ns('path', { class: kind === 'positron' ? 'positron-track' : 'electron-track', d: d }));
+
+    // Label near the start of the curl
+    const labelOffsetY = (sign === -1) ? -8 : 16;
+    const lbl = ns('text', {
+      class: kind === 'positron' ? 'positron-label' : 'electron-label',
+      x: NUC.x + 12,
+      y: NUC.y + labelOffsetY
+    });
+    lbl.textContent = kind === 'positron' ? 'e⁺' : 'e⁻';
+    labelsGroup.appendChild(lbl);
+  }
+
+  function drawRecoil(p_total) {
+    clear(recoilGroup);
+    // Visualize the nuclear recoil as a small arrow opposing the photon's momentum.
+    // In real pair production the nucleus carries off the leftover momentum almost
+    // for free (because of its huge mass). We draw it small to convey "tiny recoil".
+    const len = Math.min(22, 4 + p_total * 6);
+    const x0 = NUC.x;
+    const y0 = NUC.y;
+    const x1 = NUC.x - len;
+    const y1 = NUC.y;
+    recoilGroup.appendChild(ns('line', {
+      class: 'nucleus-recoil',
+      x1: x0, y1: y0, x2: x1, y2: y1
+    }));
+    recoilGroup.appendChild(ns('polygon', {
+      class: 'nucleus-recoil-arrow',
+      points: (x1 + 4) + ',' + (y1 - 3) + ' ' + x1 + ',' + y1 + ' ' + (x1 + 4) + ',' + (y1 + 3)
+    }));
+  }
+
+  function drawNote(text) {
+    clear(noteGroup);
+    if (!text) return;
+    const t = ns('text', {
+      class: 'forbidden-note',
+      x: 300, y: 290, 'text-anchor': 'middle'
+    });
+    t.textContent = text;
+    noteGroup.appendChild(t);
+  }
+
+  function render() {
+    const hnu_MeV = parseFloat(energySlider.value) / 1000;
+    energyValue.textContent = hnu_MeV.toFixed(3) + ' MeV';
+
+    clear(tracksGroup);
+    clear(labelsGroup);
+
+    drawNucleus(nucleusPresent);
+
+    const aboveThreshold = hnu_MeV >= THRESHOLD;
+    const canConvert = nucleusPresent && aboveThreshold;
+
+    if (canConvert) {
+      // Equal split assumption (symmetric case): each particle has E = hν/2, T = E - m_ec².
+      // p = sqrt(E^2 - (m_ec²)²) / c, expressed in MeV/c (set c=1 for these units).
+      const E_each = hnu_MeV / 2;
+      const T_each = E_each - M_E_C2;
+      const p_each = Math.sqrt(Math.max(0, E_each * E_each - M_E_C2 * M_E_C2));
+
+      drawPhotonWavy(20, NUC.x, NUC.y, { label: true });
+      drawCurl(tracksGroup, -1, p_each * R_SCALE, 'positron'); // positron up
+      drawCurl(tracksGroup, +1, p_each * R_SCALE, 'electron'); // electron down
+      drawRecoil(hnu_MeV); // nuclear recoil arrow
+
+      outcomeEl.textContent = 'pair created';
+      outcomeEl.className = 'outcome ok';
+      tPlusEl.textContent = T_each.toFixed(3) + ' MeV';
+      tMinusEl.textContent = T_each.toFixed(3) + ' MeV';
+      pairPEl.textContent = p_each.toFixed(3) + ' MeV/c each';
+      drawNote(null);
+    } else {
+      // Photon passes through the entire chamber unchanged.
+      drawPhotonWavy(20, 580, nucleusPresent ? NUC.y : 165, { label: true });
+      clear(recoilGroup);
+
+      tPlusEl.textContent = '—';
+      tMinusEl.textContent = '—';
+      pairPEl.textContent = '—';
+
+      if (!nucleusPresent) {
+        outcomeEl.textContent = 'no momentum sink: forbidden';
+        outcomeEl.className = 'outcome no';
+        drawNote('no nucleus to absorb the recoil — a free photon cannot pair-produce in vacuum');
+      } else {
+        outcomeEl.textContent = 'below 1.022 MeV: forbidden';
+        outcomeEl.className = 'outcome no';
+        drawNote('photon energy is below the 2 m_e c² threshold');
+      }
+    }
+  }
+
+  energySlider.addEventListener('input', render);
+  nucleusBtn.addEventListener('click', () => {
+    nucleusPresent = !nucleusPresent;
+    nucleusBtn.textContent = nucleusPresent ? 'visible' : 'hidden';
+    nucleusBtn.classList.toggle('on', nucleusPresent);
+    nucleusBtn.setAttribute('aria-pressed', String(nucleusPresent));
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

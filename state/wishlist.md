@@ -18,7 +18,6 @@
 # auto-suggested 2026-05-11 from dispersion
 
 # auto-suggested 2026-05-13 from compton-scattering
-Pair production — γ → e⁺e⁻, the 1.022 MeV threshold and the cleanest demonstration that energy and mass interconvert
 Klein-Nishina formula — QED's relativistic Compton cross section, interpolating between Thomson at low energies and Compton at high
 Inverse Compton scattering — relativistic electrons kicking low-energy photons up to X-rays and γ-rays, the cooling mechanism in AGN jets and the CMB up-scattering behind the Sunyaev-Zel'dovich effect
 
@@ -198,3 +197,8 @@ Partial dispersion ratio — P_g,F = (n_g − n_F)/(n_F − n_C), the second-der
 Soliton — Korteweg and de Vries 1895, the localized hump on shallow water that holds its shape because dispersion (which would spread it) is exactly balanced by nonlinearity (which would steepen it), the same equation that governs solitons on optical fibers and DNA strands
 Fourier transform — ψ(x) ↔ ψ̃(k), the bidirectional map between position-space and wavenumber-space representations of a wave packet, the framework that turns "a packet is a sum of cosines" into a working tool and that underlies every spectral measurement from the FFT to NMR
 GVD pulse broadening — D_λ = -λ/c · d²n/dλ² in ps/(nm·km), the second-derivative dispersion parameter that fixes how fast a packet spreads in a fiber, the design constraint behind 40 Gb/s and 100 Gb/s coherent transmission and the reason every long-haul system carries dispersion-compensating fiber or digital pre-compensation
+
+# auto-suggested 2026-06-29 from pair-production
+Annihilation radiation — e⁺ + e⁻ → 2γ, the time-reverse of pair production that splits 2 m_e c² evenly between two back-to-back 511 keV photons, the geometry every PET scanner trusts
+Dirac equation — (iγ^μ ∂_μ − m c/ℏ)ψ = 0, the 1928 relativistic equation for the electron whose negative-energy solutions Dirac reinterpreted in 1931 as a particle of opposite charge, predicting Anderson's positron from a square root
+Bethe-Heitler formula — σ ≈ α Z² r_e² × log(2hν/m_e c²), the 1934 cross section for pair production in a nuclear Coulomb field and the Z² that makes lead the shield of choice
