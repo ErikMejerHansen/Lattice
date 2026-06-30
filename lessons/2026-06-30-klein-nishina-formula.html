@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Klein-Nishina cross section</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz {
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 14px 16px 16px;
+}
+.plot-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 380px;
+  margin: 0 auto;
+}
+svg.plot { width: 100%; height: 100%; display: block; }
+.axis-line { stroke: var(--border-strong); stroke-width: 1; }
+.axis-tick { stroke: var(--border); stroke-width: 1; }
+.axis-text { fill: var(--text-ghost); font-size: 10px; font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; }
+.thomson-curve { fill: none; stroke: var(--text-ghost); stroke-width: 1.2; stroke-dasharray: 4 4; }
+.kn-curve { fill: rgba(156, 58, 34, 0.18); stroke: var(--accent); stroke-width: 1.8; }
+.beam-arrow { stroke: var(--text-muted); stroke-width: 1; fill: var(--text-muted); }
+.beam-label { fill: var(--text-muted); font-size: 11px; font-style: italic; }
+.readout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 14px;
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: var(--bg-raised);
+  border-left: 2px solid var(--accent-soft);
+  font-size: 12px;
+}
+.readout .k { color: var(--text-muted); font-style: italic; }
+.readout .v {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  color: var(--text);
+}
+.regime {
+  font-style: italic; color: var(--accent);
+  font-size: 12px; margin-top: 6px;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <div class="plot-wrap">
+    <svg class="plot" viewBox="0 0 360 360" aria-label="Polar plot of Klein-Nishina differential cross section">
+      <g class="grid">
+        <circle cx="180" cy="180" r="40"  class="axis-tick" fill="none"></circle>
+        <circle cx="180" cy="180" r="80"  class="axis-tick" fill="none"></circle>
+        <circle cx="180" cy="180" r="120" class="axis-tick" fill="none"></circle>
+        <circle cx="180" cy="180" r="160" class="axis-line" fill="none"></circle>
+        <line x1="20"  y1="180" x2="340" y2="180" class="axis-line"></line>
+      </g>
+      <text x="345" y="178" class="axis-text" text-anchor="end" dy="-4">θ = 0° (forward)</text>
+      <text x="18"  y="178" class="axis-text" text-anchor="start" dy="-4">θ = 180°</text>
+      <text x="184" y="22"  class="axis-text" text-anchor="start">θ = 90°</text>
+      <text x="184" y="350" class="axis-text" text-anchor="start">θ = 270°</text>
+      <text x="222" y="194" class="axis-text">0.25</text>
+      <text x="262" y="194" class="axis-text">0.5</text>
+      <text x="302" y="194" class="axis-text">0.75</text>
+      <text x="342" y="194" class="axis-text">1.0 r_e²/sr</text>
+      <path id="thomson" class="thomson-curve" d=""></path>
+      <path id="kn" class="kn-curve" d=""></path>
+      <g class="beam">
+        <line x1="-6" y1="180" x2="22" y2="180" class="beam-arrow"></line>
+        <polygon points="22,176 30,180 22,184" class="beam-arrow"></polygon>
+        <text x="-2" y="172" class="beam-label">γ in</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="viz-slider-row">
+    <label for="eps">ε</label>
+    <input id="eps" type="range" min="-3" max="2" step="0.01" value="-1" />
+    <span class="value" id="epsVal">0.100</span>
+  </div>
+
+  <div class="readout">
+    <span class="k">hν</span><span class="v" id="hnu">51.1 keV</span>
+    <span class="k">σ_KN / σ_T</span><span class="v" id="sigRatio">0.994</span>
+    <span class="k">forward dσ/dΩ</span><span class="v" id="dsigFwd">1.000 r_e²/sr</span>
+    <span class="k">backward dσ/dΩ</span><span class="v" id="dsigBack">0.793 r_e²/sr</span>
+    <span class="k">forward / backward</span><span class="v" id="fwdBack">1.26</span>
+  </div>
+  <div class="regime" id="regime">classical Thomson regime: dσ/dΩ ≈ (r_e²/2)(1 + cos²θ)</div>
+
+  <div class="viz-caption" style="margin-top: 10px;">
+    The thick orange shape is dσ/dΩ as a polar plot, with θ = 0° pointing right (forward scattering) and θ = 180° pointing left (backscatter). The dashed grey curve is the frequency-independent Thomson result, plotted at the same scale. Slide ε ≡ hν / (m_e c²) from 10⁻³ (X-ray regime) through 1 (γ-ray comparable to the electron rest energy) to 100 (50 MeV photons). Watch the curve crush down at backward angles, the forward tip pin to r_e²/sr, and σ/σ_T fall.
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var CX = 180, CY = 180, R_UNIT = 160; // 160 px = dσ/dΩ of 1 r_e²/sr
+  var thomsonPath = document.getElementById('thomson');
+  var knPath = document.getElementById('kn');
+  var epsInput = document.getElementById('eps');
+  var epsVal = document.getElementById('epsVal');
+  var hnuEl = document.getElementById('hnu');
+  var sigRatioEl = document.getElementById('sigRatio');
+  var dsigFwdEl = document.getElementById('dsigFwd');
+  var dsigBackEl = document.getElementById('dsigBack');
+  var fwdBackEl = document.getElementById('fwdBack');
+  var regimeEl = document.getElementById('regime');
+
+  // Polar to canvas: θ measured from the +x axis (forward); upper half = upper SVG (which is smaller y).
+  function polar(theta, r) {
+    var x = CX + r * Math.cos(theta);
+    var y = CY - r * Math.sin(theta);
+    return [x, y];
+  }
+
+  // Thomson differential cross section in units of r_e²/sr.
+  function dsigThomson(theta) {
+    return 0.5 * (1 + Math.cos(theta) * Math.cos(theta));
+  }
+
+  // Klein-Nishina differential cross section in units of r_e²/sr.
+  function dsigKN(theta, eps) {
+    var cosT = Math.cos(theta);
+    var P = 1 / (1 + eps * (1 - cosT));
+    var ang = P + 1 / P - (1 - cosT * cosT);
+    return 0.5 * P * P * ang;
+  }
+
+  // Numerical total cross section (in units of r_e²) by trapezoidal Simpson-ish sum.
+  function totalSigma(fn, eps) {
+    var N = 400, sum = 0;
+    for (var i = 0; i <= N; i++) {
+      var t = i / N * Math.PI;
+      var w = (i === 0 || i === N) ? 0.5 : 1;
+      sum += w * fn(t, eps) * Math.sin(t);
+    }
+    return 2 * Math.PI * (Math.PI / N) * sum;
+  }
+
+  function buildPath(fn, eps) {
+    var N = 240;
+    var pts = [];
+    // Upper half: θ from 0 → π (the physical scattering angle).
+    for (var i = 0; i <= N; i++) {
+      var theta = i / N * Math.PI;
+      var r = (eps === null) ? dsigThomson(theta) : fn(theta, eps);
+      pts.push(polar(theta, r * R_UNIT));
+    }
+    // Mirror to lower half: -θ produces the same dσ/dΩ.
+    for (var j = N - 1; j >= 0; j--) {
+      var theta2 = -j / N * Math.PI;
+      var r2 = (eps === null) ? dsigThomson(theta2) : fn(theta2, eps);
+      pts.push(polar(theta2, r2 * R_UNIT));
+    }
+    var d = 'M' + pts[0][0].toFixed(2) + ' ' + pts[0][1].toFixed(2);
+    for (var k = 1; k < pts.length; k++) {
+      d += ' L' + pts[k][0].toFixed(2) + ' ' + pts[k][1].toFixed(2);
+    }
+    d += ' Z';
+    return d;
+  }
+
+  // Thomson reference (drawn once).
+  thomsonPath.setAttribute('d', buildPath(dsigThomson, null));
+
+  // Precompute σ_T in our integration scheme so the ratio is exact for the discrete rule.
+  var SIGMA_T_NUM = totalSigma(dsigThomson, null);
+
+  var MEC2_KEV = 511.0;
+
+  function update() {
+    var logEps = parseFloat(epsInput.value);
+    var eps = Math.pow(10, logEps);
+    knPath.setAttribute('d', buildPath(dsigKN, eps));
+
+    var fwd = dsigKN(0, eps);
+    var back = dsigKN(Math.PI, eps);
+    var sigKN = totalSigma(dsigKN, eps);
+    var ratio = sigKN / SIGMA_T_NUM;
+    var hnuKev = eps * MEC2_KEV;
+
+    epsVal.textContent = eps < 0.01 ? eps.toExponential(2) : eps.toFixed(eps < 1 ? 3 : (eps < 10 ? 2 : 1));
+
+    var hnuStr;
+    if (hnuKev < 1) hnuStr = (hnuKev * 1000).toFixed(2) + ' eV';
+    else if (hnuKev < 1000) hnuStr = hnuKev.toFixed(2) + ' keV';
+    else hnuStr = (hnuKev / 1000).toFixed(2) + ' MeV';
+    hnuEl.textContent = hnuStr;
+
+    sigRatioEl.textContent = ratio < 0.001 ? ratio.toExponential(2) : ratio.toFixed(3);
+    dsigFwdEl.textContent = fwd.toFixed(3) + ' r_e²/sr';
+    dsigBackEl.textContent = back < 0.001 ? back.toExponential(2) + ' r_e²/sr' : back.toFixed(3) + ' r_e²/sr';
+    fwdBackEl.textContent = back > 1e-12 ? (fwd / back).toFixed(2) : '∞';
+
+    var regimeStr;
+    if (eps < 0.05) regimeStr = 'classical Thomson regime: dσ/dΩ ≈ (r_e²/2)(1 + cos²θ)';
+    else if (eps < 0.5) regimeStr = 'crossover: recoil starting to bite at backward angles';
+    else if (eps < 5) regimeStr = 'Compton-Klein-Nishina regime: backscatter suppressed';
+    else regimeStr = 'high-energy regime: forward cone, σ_KN ≈ (π r_e²/ε)[ln(2ε) + ½]';
+    regimeEl.textContent = regimeStr;
+  }
+
+  epsInput.addEventListener('input', update);
+  update();
+})();
+</script>
+</body>
+</html>

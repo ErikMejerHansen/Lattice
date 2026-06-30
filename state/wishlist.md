@@ -18,7 +18,6 @@
 # auto-suggested 2026-05-11 from dispersion
 
 # auto-suggested 2026-05-13 from compton-scattering
-Klein-Nishina formula — QED's relativistic Compton cross section, interpolating between Thomson at low energies and Compton at high
 Inverse Compton scattering — relativistic electrons kicking low-energy photons up to X-rays and γ-rays, the cooling mechanism in AGN jets and the CMB up-scattering behind the Sunyaev-Zel'dovich effect
 
 # auto-suggested 2026-05-14 from work-function
@@ -202,3 +201,8 @@ GVD pulse broadening — D_λ = -λ/c · d²n/dλ² in ps/(nm·km), the second-d
 Annihilation radiation — e⁺ + e⁻ → 2γ, the time-reverse of pair production that splits 2 m_e c² evenly between two back-to-back 511 keV photons, the geometry every PET scanner trusts
 Dirac equation — (iγ^μ ∂_μ − m c/ℏ)ψ = 0, the 1928 relativistic equation for the electron whose negative-energy solutions Dirac reinterpreted in 1931 as a particle of opposite charge, predicting Anderson's positron from a square root
 Bethe-Heitler formula — σ ≈ α Z² r_e² × log(2hν/m_e c²), the 1934 cross section for pair production in a nuclear Coulomb field and the Z² that makes lead the shield of choice
+
+# auto-suggested 2026-06-30 from klein-nishina-formula
+Thomson scattering — (8π/3)r_e² ≈ 0.665 barn, the 1906 classical-oscillator calculation that gives the frequency-independent (1+cos²θ) angular distribution and sits as the ε → 0 limit of Klein-Nishina
+Compton telescope — the COMPTEL/INTEGRAL/AMEGO design that reconstructs the direction of an incoming MeV γ-ray from a measured Compton-scatter angle plus an absorption point, with Klein-Nishina supplying the angular-resolution function
+Delbrück scattering — the elastic γ-nucleus scattering via a virtual electron-positron loop predicted by Max Delbrück in 1933, the missing-piece partner to Bethe-Heitler that closed the Meitner-Hupfeld heavy-element residual
