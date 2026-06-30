@@ -599,6 +599,16 @@
       "createdAt": "2026-06-29T08:00:00Z",
       "col": 0,
       "row": 30
+    },
+    {
+      "id": "klein_nishina",
+      "label": "Klein-Nishina",
+      "subtitle": "QED Compton σ",
+      "state": "available",
+      "lesson": "2026-06-30-klein-nishina-formula",
+      "createdAt": "2026-06-30T08:00:00Z",
+      "col": 1,
+      "row": 30
     }
   ],
   "edges": [
@@ -1410,6 +1420,21 @@
     {
       "from": "pair_production",
       "to": "photoelectric_effect",
+      "kind": "related"
+    },
+    {
+      "from": "klein_nishina",
+      "to": "compton_scattering",
+      "kind": "extends"
+    },
+    {
+      "from": "klein_nishina",
+      "to": "pair_production",
+      "kind": "related"
+    },
+    {
+      "from": "klein_nishina",
+      "to": "photon_energy",
       "kind": "related"
     }
   ]

@@ -411,5 +411,19 @@
     "subtitle": "vg = dω/dk",
     "date": "2026-06-28",
     "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-06-29-pair-production",
+    "title": "Pair production: how a gamma ray becomes matter and antimatter",
+    "subtitle": "γ → e⁺ + e⁻",
+    "date": "2026-06-29",
+    "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-06-30-klein-nishina-formula",
+    "title": "Klein-Nishina: the cross section Dirac's equation handed to two visitors at Bohr's institute",
+    "subtitle": "QED Compton σ",
+    "date": "2026-06-30",
+    "estimatedReadingMinutes": 24
   }
 ]

@@ -1,0 +1,230 @@
+{
+  "slug": "2026-06-30-klein-nishina-formula",
+  "title": "Klein-Nishina: the cross section Dirac's equation handed to two visitors at Bohr's institute",
+  "node": {
+    "id": "klein_nishina",
+    "label": "Klein-Nishina",
+    "subtitle": "QED Compton σ"
+  },
+  "intro": "Compton's 1923 paper had pinned the kinematics of an X-ray bouncing off an electron, but it left the probability of the collision to a calculation J. J. Thomson had finished in 1906. By 1928, with γ-ray sources delivering megavolt energies, Thomson was already wrong by factors of two or three. The fix came that autumn from Oskar Klein and Yoshio Nishina, two visitors at Bohr's institute in Copenhagen, who took Dirac's brand-new relativistic electron equation and ran it through the photon-electron collision. Seven pages of arithmetic produced the first nontrivial prediction of quantum electrodynamics, a cross section that still defines every PET scanner, MeV γ-ray telescope, and inverse-Compton model of an AGN jet built since.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The shift Compton found, the rate Thomson left behind",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Compton's 1923 paper (covered in the earlier Compton-scattering lesson) had settled half of the photon's claim to particlehood. The wavelength of an X-ray scattered off graphite at angle θ shifted by Δλ = (h/m_e c)(1 − cos θ), exactly as if the photon were a tiny billiard ball of momentum p = h/λ colliding elastically with a stationary electron. The kinematics were closed. What the paper said nothing about was the rate at which such collisions occurred, or how the scattered intensity distributed itself over the sphere of possible outgoing angles."
+        },
+        {
+          "type": "p",
+          "text": "For that, every textbook still used the calculation J. J. Thomson had finished in 1906, two years after the discovery of the electron. Thomson treated the electron as a tiny charged oscillator driven by an incoming electromagnetic wave. The wave shook the electron up and down at its own frequency, the accelerating charge radiated by the Larmor formula, and integrating over a sphere gave a differential cross section of (r_e²/2)(1 + cos²θ), with r_e the classical electron radius. The total cross section came out to σ_T = (8π/3) r_e² ≈ 0.665 barn, independent of incoming frequency. The wave shakes the electron, the electron re-radiates: there was no room for the recoil that Compton had measured."
+        },
+        {
+          "type": "p",
+          "text": "This worked for soft and hard X-rays at tens of keV, where the recoil was negligible. By 1927 it was beginning to break. Adolf Hagenow at Wisconsin and L. M. Mott-Smith at Rice had measured the scattering of radium γ-rays at one and two MeV, energies comparable to the electron's rest energy m_e c² = 511 keV, and the rate fell well below Thomson's frequency-independent value. Compton's kinematic shift was right; Thomson's classical rate was wrong; and the two halves had to merge into a single relativistic, quantum theory of the γ-electron collision."
+        },
+        {
+          "type": "p",
+          "text": "That theory would have to handle three things at once. It would have to be relativistic, because the recoiling electron was moving at a speed not negligible compared to c. It would have to be quantum, because the experiments counted photons one at a time. And it would have to carry the electron's intrinsic spin, which Goudsmit and Uhlenbeck had pinned down in 1925. The equation that supplied all three appeared in January 1928, from a twenty-five-year-old at St John's College, Cambridge."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Klein in Copenhagen, Nishina in Copenhagen",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Paul Dirac had spent the autumn of 1927 hunting for a wave equation that respected relativity. Schrödinger's equation, written down two years earlier, was first-order in time but second-order in space, an asymmetry that any properly relativistic equation had to undo. Dirac's solution, published in the Proceedings of the Royal Society in February 1928, factored the relativistic energy-momentum identity E² = p²c² + m²c⁴ into a single first-order operator, at the price of allowing the wavefunction to have four components rather than one. ψ acquired both spin and a doubled space of negative-energy solutions that, three years later, Dirac would reinterpret as the antiparticle Anderson photographed in 1932."
+        },
+        {
+          "type": "math",
+          "tex": "\\bigl(i\\hbar\\gamma^{\\mu}\\partial_{\\mu} \\,-\\, m_e c\\bigr)\\,\\psi \\;=\\; 0",
+          "display": true,
+          "caption": "ψ is the four-component electron wavefunction. γ^μ are the four 4-by-4 Dirac matrices, one for each spacetime direction, encoding the algebra that makes a first-order operator square to the relativistic identity E² = p²c² + m²c⁴. ∂_μ is the spacetime gradient (∂/∂t, ∇). m_e is the electron rest mass. c is the speed of light. ℏ is the reduced Planck constant. The equation reads: a specific first-order combination of spacetime derivatives, acting on the four-component electron field, equals zero."
+        },
+        {
+          "type": "p",
+          "text": "Among the foreign physicists at Niels Bohr's Institute for Theoretical Physics in Copenhagen that autumn were Oskar Klein, a Swedish theorist on his fourth visit since 1918 (he was the Klein of Kaluza-Klein, and of the Klein paradox), and Yoshio Nishina, a Japanese physicist who had arrived in Europe in 1921 on a stipend from the Riken institute in Tokyo. Nishina had spent a year at the Cavendish under Rutherford, then transferred to Copenhagen in 1923, and was finishing five years of collaboration with Bohr on X-ray spectroscopy. Both men took the new Dirac equation, set it loose on a free electron interacting with a single photon, and computed the differential cross section to leading order in the fine-structure constant α."
+        },
+        {
+          "type": "p",
+          "text": "The result was submitted to Zeitschrift für Physik on October 30, 1928, and published the following spring. It is the first nontrivial calculation in the history of quantum electrodynamics. Nothing had to be added by hand. The relativistic recoil that Compton had observed, the intrinsic spin Goudsmit and Uhlenbeck had introduced, and the precise interference between the two ways the photon-electron event can unfold (absorb then emit, emit then absorb) all dropped out of Dirac's equation, packaged into a single closed-form expression that interpolated cleanly between Thomson at low energies and the new high-energy regime that experiment was pushing into."
+        }
+      ],
+      "quiz": {
+        "question": "Thomson's 1906 cross section is independent of the incoming photon frequency. Which statement best identifies why it fails for γ-rays of about 1 MeV?",
+        "options": [
+          "Thomson neglected the electron's electric charge.",
+          "Thomson modeled the electron as a stationary oscillator that re-radiates at the driving frequency, which is only valid when the photon energy is small compared to the electron rest energy m_e c² = 511 keV.",
+          "Thomson's derivation omitted the speed of light from the Larmor formula.",
+          "Thomson's formula is correct; the 1920s radium measurements were systematically miscalibrated."
+        ],
+        "correctIndex": 1,
+        "explanation": "Thomson's calculation assumes the electron oscillates at the driving frequency of the incoming wave, recoiling negligibly, and re-radiates at the same frequency. That picture holds whenever the photon's energy hν is small compared to the electron's rest energy m_e c² = 511 keV, because then the momentum h/λ transferred to the electron barely moves it. Once hν approaches m_e c², the photon hands enough energy and momentum to the electron that the recoil becomes significant: the wavelength shifts (Compton 1923), the electron starts moving at relativistic speeds, and its spin enters the calculation. None of that can be put into Thomson's framework by hand. The other options are factual errors about Thomson's derivation or its experimental support."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The Klein-Nishina cross section",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Write the photon-electron collision in the rest frame of the electron before the event. The incoming photon has wavelength λ, frequency ν, and energy hν; the scattered photon has wavelength λ' and flies off at angle θ from the original beam direction. The classical electron radius r_e sets the overall length scale of the result. r_e is defined by equating the electron's rest energy to its electrostatic self-energy, and comes out to about 2.82 femtometres."
+        },
+        {
+          "type": "math",
+          "tex": "r_e \\;\\equiv\\; \\frac{e^{2}}{4\\pi\\varepsilon_{0}\\, m_e c^{2}} \\;\\approx\\; 2.82 \\times 10^{-15}\\ \\text{m}",
+          "display": true,
+          "caption": "r_e is the classical electron radius. e is the elementary charge. ε₀ is the vacuum permittivity. m_e is the electron rest mass. c is the speed of light. The combination e²/(4πε₀) is the Coulomb prefactor in SI units; dividing it by the rest energy m_e c² turns it into a length, the radius of a sphere whose electrostatic self-energy would equal one electron rest mass."
+        },
+        {
+          "type": "p",
+          "text": "The kinematics from the Compton lesson already fix the ratio of the two photon energies. Introducing the dimensionless incoming energy ε ≡ hν/(m_e c²) (so ε = 0.034 at the Mo Kα X-rays Compton used, and ε = 2 at the radium γ-rays Meitner used), the wavelength ratio P ≡ λ/λ' is set by a single line of algebra rewriting the Compton shift as a ratio."
+        },
+        {
+          "type": "math",
+          "tex": "P \\;\\equiv\\; \\frac{\\lambda}{\\lambda'} \\;=\\; \\frac{1}{1 \\,+\\, \\varepsilon\\,(1 - \\cos\\theta)}",
+          "display": true,
+          "caption": "P is the ratio of the incoming photon wavelength λ to the scattered photon wavelength λ'. ε ≡ hν/(m_e c²) is the incoming photon energy expressed in units of the electron rest energy. θ is the scattering angle measured from the incoming beam. The expression is the Compton wavelength shift Δλ = (h/m_e c)(1 − cos θ) rewritten as a ratio."
+        },
+        {
+          "type": "p",
+          "text": "P sits between 0 and 1. At the forward angle θ = 0 the cosine is 1 and P = 1: no scattering, no shift, no energy lost. As θ grows, P falls; and at large ε the fall is steep, because the scattered photon now hands a big fraction of its energy to the recoiling electron. The classical low-frequency limit ε → 0 sends P uniformly to 1 over the whole sphere: the photon barely loses any energy in any direction, and Thomson's frequency-independent picture is recovered. Klein and Nishina's result writes the differential cross section as r_e² times a kinematic factor P² times an angular bracket involving P and θ."
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{d\\sigma}{d\\Omega} \\;=\\; \\frac{r_{e}^{2}}{2}\\;P^{2}\\;\\Bigl[\\,P \\,+\\, \\frac{1}{P} \\,-\\, \\sin^{2}\\theta\\,\\Bigr]",
+          "display": true,
+          "caption": "dσ/dΩ is the differential cross section for the photon to scatter into a unit of solid angle around angle θ. r_e is the classical electron radius defined above. P is the wavelength ratio λ/λ' set by the kinematic formula above. θ is the scattering angle. The factor r_e² fixes the area scale, the factor P² accounts for the lost photon energy, and the bracketed angular factor combines into (1 + cos²θ) when P = 1."
+        },
+        {
+          "type": "p",
+          "text": "Three pieces are doing distinct work. The r_e² out front sets the physical area, about 8 × 10⁻³⁰ m². The P² is purely kinematic: a softer scattered photon carries proportionally less radiation, and the rate falls as the wavelength ratio squared. The angular bracket P + 1/P − sin²θ reduces to (1 + cos²θ) in the Thomson limit P = 1, but at large ε the 1/P term grows large at backward angles while the P² out front kills it faster, and the whole distribution sharpens into a forward cone."
+        },
+        {
+          "type": "viz",
+          "src": "2026-06-30-klein-nishina-formula.html",
+          "height": 460,
+          "caption": "Klein-Nishina differential cross section as a polar plot. Move the slider to set ε = hν/(m_e c²) from the classical limit (ε = 0.001) to hard γ-ray energies (ε = 100). The thick orange curve is dσ/dΩ in units of r_e²; the dashed grey curve is the frequency-independent Thomson result drawn at the same scale. Numerical readouts show ε, the forward-to-backward ratio of dσ/dΩ, and the total cross section σ/σ_T evaluated by numerical integration."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Two limits and a cross section that falls",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The low-energy limit is the easier of the two. Send ε → 0 in the kinematic formula for P, and at every angle the ratio collapses to P = 1. The factor P² out front is unity; the angular bracket simplifies as 1 + 1 − sin²θ = 2 − sin²θ = 1 + cos²θ; and the Klein-Nishina cross section reduces line by line to the formula Thomson had derived from a classical oscillator twenty-three years earlier."
+        },
+        {
+          "type": "math",
+          "tex": "\\left.\\frac{d\\sigma}{d\\Omega}\\right|_{\\varepsilon \\to 0} \\;=\\; \\frac{r_{e}^{2}}{2}\\,\\bigl(1 + \\cos^{2}\\theta\\bigr)",
+          "display": true,
+          "caption": "dσ/dΩ is the differential cross section in the classical low-frequency limit ε → 0. r_e is the classical electron radius. θ is the scattering angle. The distribution is symmetric between the forward and backward hemispheres and is a peanut shape with twin lobes along the beam axis: forward and backward scattering are equally probable per steradian, and 90° scattering is exactly half of either."
+        },
+        {
+          "type": "p",
+          "text": "Integrate this angular distribution over the full sphere and out comes the frequency-independent total cross section every undergraduate optics calculation already used in 1906."
+        },
+        {
+          "type": "math",
+          "tex": "\\sigma_{T} \\;=\\; \\int \\frac{d\\sigma}{d\\Omega}\\,d\\Omega \\;=\\; \\frac{8\\pi}{3}\\,r_{e}^{2} \\;\\approx\\; 6.65 \\times 10^{-29}\\ \\text{m}^{2} \\;\\approx\\; 0.665\\ \\text{barn}",
+          "display": true,
+          "caption": "σ_T is the Thomson total cross section. r_e is the classical electron radius. The barn is the unit nuclear physicists adopted in 1942, equal to 10⁻²⁸ m², named because the uranium nucleus's geometric cross section was said by the Manhattan-Project metallurgists to be 'as big as a barn'."
+        },
+        {
+          "type": "p",
+          "text": "The high-energy limit pulls the other way. At ε ≫ 1 the factor P stays at 1 in the strict forward direction θ = 0, so dσ/dΩ at zero angle remains at the Thomson value r_e². But at any other angle P falls sharply: at backscatter (θ = π) it goes as 1/(2ε), the angular bracket times P² goes as 1/(2ε), and the whole differential cross section at backward angles falls as 1/ε. The distribution narrows into a forward cone whose width shrinks roughly as 1/ε, and the total cross section, dominated by the surviving forward peak, falls slowly with energy."
+        },
+        {
+          "type": "math",
+          "tex": "\\sigma_{KN}\\bigl|_{\\varepsilon \\gg 1} \\;\\approx\\; \\frac{\\pi\\,r_{e}^{2}}{\\varepsilon}\\,\\Bigl[\\,\\ln(2\\varepsilon) \\,+\\, \\tfrac{1}{2}\\,\\Bigr]",
+          "display": true,
+          "caption": "σ_KN is the Klein-Nishina total cross section. r_e is the classical electron radius. ε ≡ hν/(m_e c²) is the incoming photon energy in units of the electron rest energy. The slowly-rising logarithm reflects the Coulomb-like long-range nature of the photon-electron interaction; the asymptotic fall-off is ε⁻¹ ln ε rather than the naive 1/ε."
+        },
+        {
+          "type": "p",
+          "text": "The crossover happens around ε ≈ 1, that is, hν ≈ 511 keV, the electron rest energy. Below it the cross section sits at the Thomson plateau; above it the curve bends down, and by ε = 10 the total cross section has fallen to roughly 13% of its low-energy value. By ε = 100, where individual γ-rays carry 50 MeV, the cross section is down to about 2% of σ_T. The next quiz tests that arithmetic on a specific energy."
+        }
+      ],
+      "quiz": {
+        "question": "A 5.11 MeV γ-ray strikes a free electron, so ε = hν/(m_e c²) = 10. Using the high-energy approximation σ_KN ≈ (π r_e²/ε)[ln(2ε) + ½], what is the ratio σ_KN/σ_T?",
+        "options": [
+          "≈ 1.0, the cross section is essentially frequency-independent at MeV energies.",
+          "≈ 1.30, the formula grows with ε because of the logarithm.",
+          "≈ 0.13, the cross section has fallen to about an eighth of its low-energy value.",
+          "≈ 0.001, the cross section falls roughly as the inverse square of ε."
+        ],
+        "correctIndex": 2,
+        "explanation": "Plug in ε = 10. The numerator is π r_e² [ln(20) + 0.5] = π r_e² (3.00 + 0.5) = 3.50 π r_e². Divide by ε = 10 to get σ_KN ≈ 0.350 π r_e² ≈ 1.10 r_e². The Thomson cross section σ_T = (8π/3) r_e² ≈ 8.38 r_e². The ratio is 1.10 / 8.38 ≈ 0.131. The cross section has fallen by nearly an order of magnitude. The tempting wrong answer is option 0 (frequency-independent), which is the Thomson statement Klein and Nishina overturned; option 3 confuses the ε⁻¹ ln ε fall-off with a 1/ε² fall-off."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Meitner, Hupfeld, and a calculation that traveled",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The first decisive test came eighteen months after the paper was submitted. At the Kaiser Wilhelm Institute for Chemistry in Berlin, Lise Meitner and her assistant Hans Hupfeld had spent the winter of 1929 building a γ-ray absorption apparatus around an RaC' (²¹⁴Po) source whose dominant line lies at 2.20 MeV, an incoming energy of ε ≈ 4.3 in Klein and Nishina's units. They measured the absorption coefficient of those γ-rays in aluminum, iron, copper, tin, and lead, and converted it (using Klein-Nishina's own angular distribution to make the geometric correction) into a per-electron scattering cross section."
+        },
+        {
+          "type": "p",
+          "text": "The light-element numbers came in extraordinarily well. For aluminum, iron, and copper, Klein-Nishina predicted at ε = 4.3 a per-electron total cross section of about 0.21 σ_T, a factor of five below the frequency-independent Thomson value, and Meitner and Hupfeld's measurements landed on that prediction at the few-percent level. They published in Naturwissenschaften in 1930 with the laconic title 'Über die Prüfung der Streuungsformel von Klein und Nishina an γ-Strahlen von RaC'. It was the first time anyone had taken a relativistic quantum field theory prediction (a Dirac-equation calculation worked out to the order needed for one photon and one electron) and watched it match experiment at the few-percent level. Quantum electrodynamics, the theory that nobody yet knew how to write down beyond leading order, had passed its first nontrivial check."
+        },
+        {
+          "type": "p",
+          "text": "The heavy elements showed something stranger. Tin and lead came in above Klein-Nishina, by an amount that grew with the atomic number Z, and Meitner argued in print that the residual could not be coming from scattering off the atomic electrons at all. She was right. Within five years that excess was identified as two distinct effects predicted by the same Dirac framework but acting on the nucleus rather than on the electrons: pair production in the nuclear Coulomb field, written down by Hans Bethe and Walter Heitler in 1934 and scaling as Z² (covered in the prior pair-production lesson), and Delbrück scattering, the elastic scattering of a γ-ray off the cloud of virtual electron-positron pairs surrounding a nucleus, named for Max Delbrück's 1933 prediction. The Meitner-Hupfeld anomaly was visible only because Klein-Nishina worked at the percent level for the electronic part: when the dominant background is solved, the rest of the cross section is forced to come from somewhere new."
+        },
+        {
+          "type": "p",
+          "text": "Nishina sailed back to Japan in December 1928, six weeks after submitting the paper. By 1931 he had founded the Nishina Laboratory at Riken in Tokyo, the first cosmic-ray and nuclear physics group in Japan. Through it passed Sin-Itiro Tomonaga, who would share the 1965 Nobel Prize for the renormalization of QED, and Hideki Yukawa, who would receive the 1949 Nobel Prize for the meson theory of the strong force. Klein returned to Stockholm in 1931 and held a chair there for the next thirty years. Their cross section is still on the inside of every PET scanner that models 511 keV annihilation photons traversing tissue, every Compton telescope (COMPTEL on CGRO, INTEGRAL's SPI, the proposed AMEGO mission) that reconstructs MeV-band γ-ray sky positions, and every inverse-Compton model of an AGN jet up-scattering soft photons to X-rays. Seven pages submitted to Zeitschrift für Physik on a Tuesday in October 1928 are still on call across half a dozen subfields a century later."
+        }
+      ]
+    }
+  ],
+  "checkInAfter": [1, 3],
+  "finalQuiz": {
+    "question": "Why was the Meitner-Hupfeld 1930 measurement of γ-ray scattering on heavy elements (Sn, Pb) a more powerful test of the Klein-Nishina formula than the corresponding measurement on light elements (Al, Fe, Cu)?",
+    "options": [
+      "Because heavier elements scatter γ-rays more isotropically, washing out the angular dependence.",
+      "Because the heavy-element residual above Klein-Nishina was nonzero, forcing the existence of new effects (nuclear pair production and Delbrück scattering) that Dirac's framework had to also predict, and which were identified within five years.",
+      "Because Klein and Nishina's derivation explicitly included the nucleus's electric field, and Z entered the formula directly.",
+      "Because Meitner could not measure light elements precisely enough at MeV energies."
+    ],
+    "correctIndex": 1,
+    "explanation": "Klein-Nishina is a calculation for a free electron, with no dependence on the atomic number Z. Per atomic electron, the predicted cross section is the same in aluminum and in lead. The light-element measurements verified that prediction at the few-percent level, which was already historic: it was the first time a Dirac-based calculation was checked by experiment. The deeper test was on the heavy elements, where the measured cross section sat above Klein-Nishina by an amount that grew with Z. That residual was a positive prediction in disguise: Dirac's framework also implies pair production in the nuclear Coulomb field (Bethe-Heitler, σ ∝ Z²) and Delbrück scattering off virtual electron-positron pairs around the nucleus, and both were identified within five years as the source of the anomaly. Klein-Nishina being right for the electronic part is what made the Z-scaling residual diagnostic. Option 2 inverts the physics: the formula has no nuclear field in it, which is precisely why the residual existed."
+  },
+  "suggestedNodes": [
+    {
+      "id": "thomson_scattering",
+      "label": "Thomson scat.",
+      "subtitle": "σ ∝ (1+cos²θ)",
+      "edgeType": "extends"
+    },
+    {
+      "id": "compton_telescope",
+      "label": "Compton tele.",
+      "subtitle": "MeV γ imaging",
+      "edgeType": "applied"
+    },
+    {
+      "id": "delbruck_scattering",
+      "label": "Delbrück scat.",
+      "subtitle": "γγ → γγ via e⁺e⁻",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-06-30T08:00:00Z",
+    "estimatedReadingMinutes": 24,
+    "modelMix": "outline=sonnet, sections=haiku, viz=sonnet, finalQuiz=sonnet"
+  }
+}
