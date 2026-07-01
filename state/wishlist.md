@@ -18,7 +18,6 @@
 # auto-suggested 2026-05-11 from dispersion
 
 # auto-suggested 2026-05-13 from compton-scattering
-Inverse Compton scattering — relativistic electrons kicking low-energy photons up to X-rays and γ-rays, the cooling mechanism in AGN jets and the CMB up-scattering behind the Sunyaev-Zel'dovich effect
 
 # auto-suggested 2026-05-14 from work-function
 Thermionic emission — J = AT² exp(−φ/kT), Richardson and Dushman, the equation that designed every vacuum-tube cathode and now decides the rim temperature of every solid-oxide fuel cell
@@ -206,3 +205,8 @@ Bethe-Heitler formula — σ ≈ α Z² r_e² × log(2hν/m_e c²), the 1934 cro
 Thomson scattering — (8π/3)r_e² ≈ 0.665 barn, the 1906 classical-oscillator calculation that gives the frequency-independent (1+cos²θ) angular distribution and sits as the ε → 0 limit of Klein-Nishina
 Compton telescope — the COMPTEL/INTEGRAL/AMEGO design that reconstructs the direction of an incoming MeV γ-ray from a measured Compton-scatter angle plus an absorption point, with Klein-Nishina supplying the angular-resolution function
 Delbrück scattering — the elastic γ-nucleus scattering via a virtual electron-positron loop predicted by Max Delbrück in 1933, the missing-piece partner to Bethe-Heitler that closed the Meitner-Hupfeld heavy-element residual
+
+# auto-suggested 2026-07-01 from inverse-compton-scattering
+Synchrotron radiation — P_sync = (4/3) σ_T c γ² β² U_B with U_B = B²/(2μ₀), the twin brother of inverse Compton, spectrum peaking at ν_c ≈ (3/2) γ² eB/(2π m_e c) with the ~70% linear polarization signature of the Crab Nebula wind and the Jansky-Reber pre-history of radio astronomy
+Sunyaev-Zel'dovich cluster cosmology — SPT, ACT, and Planck all-sky catalogues of galaxy clusters selected by their SZ decrement, redshift-independent selection to z ≈ 1.5, cluster mass function as a probe of σ_8 and dark energy
+Blazar SED and the two humps — synchrotron + inverse-Compton double-peaked νF_ν diagram of AGN with a relativistic jet pointed at Earth, the Fossati-Maraschi 1998 blazar sequence, the Whipple 1992 Mrk 421 TeV detection, and the H.E.S.S./MAGIC/VERITAS TeV catalogue of eighty extragalactic sources

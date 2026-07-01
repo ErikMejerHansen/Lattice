@@ -1,0 +1,224 @@
+{
+  "slug": "2026-07-01-inverse-compton-scattering",
+  "title": "Inverse Compton scattering: what Compton looks like when the electron is the one moving fast",
+  "node": {
+    "id": "inverse_compton",
+    "label": "Inv. Compton",
+    "subtitle": "hν → γ² hν"
+  },
+  "intro": "Compton's 1923 X-ray experiment settled the photon's kinematics by hitting a stationary electron with a hard γ-ray. Nothing in that geometry, however, is a law of nature: the electron is at rest only in one particular frame. Boost into a frame where the electron is moving at γ ≫ 1 and the incoming photon is soft, and the same Klein-Nishina vertex now hands the photon a factor of γ² in energy on its way back out. Feenberg and Primakoff pointed this out in 1948, Felten and Morrison used it in 1965 to read the extragalactic X-ray background as cosmic-ray electrons scattering the newly-discovered microwave sky, and Sunyaev and Zel'dovich in 1972 turned the same process into the redshift-independent survey technique that now maps every massive galaxy cluster in the universe.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Compton, but seen from the other frame",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Arthur Compton's 1923 measurement (covered in the earlier Compton-scattering lesson) put an X-ray onto graphite and watched the wavelength come out longer by Δλ = (h/m_e c)(1 − cos θ). The electron was assumed to be at rest, and the shift was interpreted as the photon losing energy to the recoil. Klein and Nishina's 1928 cross section (covered in yesterday's lesson) then supplied the rate. Both calculations sit on a single Lorentz-invariant matrix element, so if we run the electron up to relativistic speeds and let the photon be soft, the same physics is still doing the same job, just seen from a different frame."
+        },
+        {
+          "type": "p",
+          "text": "Do it explicitly. Sit in the lab and watch a cosmic-ray electron of Lorentz factor γ = 10⁴ (a five-GeV electron, common in our Galaxy) fly through a rain of one-eV starlight photons. Boost into the electron's rest frame. The starlight photons, in that frame, come at the electron blueshifted by roughly 2γ, so their energy is now about 20 keV, an ordinary X-ray. Ordinary Compton scattering happens, elastic in the Thomson limit, redirecting a photon at some angle. Boost back to the lab, and the outgoing photon picks up another factor of about 2γ from the beaming. A one-eV photon has become, in one collision, a soft γ-ray of about 40 MeV. Nothing exotic has occurred: the photon has been kicked twice by the same Lorentz transformation, once in and once out."
+        },
+        {
+          "type": "p",
+          "text": "The recognition is due to Eugene Feenberg and Henry Primakoff, working at Washington University in St. Louis in 1948, who first computed the cooling of a relativistic electron in a bath of soft photons and coined the phrase 'inverse Compton effect' for the process. James Felten and Philip Morrison at Cornell picked it up in 1965 and pointed out that if cosmic rays are what we think they are, and if the newly-discovered cosmic microwave background (Penzias and Wilson, that same year) fills the universe with 400 photons per cubic centimeter, then every high-energy electron in the Galaxy and every extragalactic radio source is inverse-Compton-scattering CMB photons up into X-rays right now. The paper reframed the origin of the extragalactic X-ray background overnight."
+        },
+        {
+          "type": "p",
+          "text": "The name is slightly misleading. Nothing is being inverted at the level of the matrix element; the process is exactly Compton scattering. What is inverted is which particle carries most of the initial energy. In Compton 1923 the photon does; in the astrophysical setting the electron does; and the energy flows the other way. That distinction is nothing more than a choice of frame, but the astrophysical consequences (a soft photon reservoir turning into a hard photon reservoir at the cost of relativistic electron kinetic energy) are enormous."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The γ² kick, boost by boost",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Write the lab frame with the electron moving in the +z direction at velocity β = v/c and Lorentz factor γ = 1/√(1 − β²). A photon of energy ε moves in a direction making angle θ with +z, so θ = π is head-on with the electron and θ = 0 is co-moving. The Lorentz transformation for a photon four-momentum gives its energy in the electron rest frame, denoted with a prime, as γε(1 − β cos θ)."
+        },
+        {
+          "type": "math",
+          "tex": "\\varepsilon' \\;=\\; \\gamma\\,\\varepsilon\\,(1 - \\beta\\cos\\theta)",
+          "display": true,
+          "caption": "ε' is the incoming photon energy in the electron rest frame. ε is the incoming photon energy in the lab frame. γ is the electron Lorentz factor. β = v/c is the electron speed in units of c. θ is the photon propagation direction in the lab, measured from the electron velocity vector, so θ = π is head-on with the electron. For head-on collision cos θ = −1 and the factor collapses to γ(1+β), which at β → 1 becomes ≈ 2γ, a doubled-blueshift of order the electron Lorentz factor."
+        },
+        {
+          "type": "p",
+          "text": "In the electron rest frame, as long as the boosted photon energy stays below the electron rest energy m_e c² = 511 keV, we are in the Thomson limit of the Klein-Nishina cross section (the low-energy plateau covered in yesterday's lesson) and the scattering is elastic: ε'_out ≈ ε'. The outgoing photon leaves the electron along a direction that makes some angle θ_out' with the electron velocity in the rest frame. Boost that photon back to the lab, using the reverse Lorentz transformation, and the outgoing energy in the lab is ε_out = γε'_out(1 + β cos θ_out')."
+        },
+        {
+          "type": "math",
+          "tex": "\\varepsilon_{\\text{out}} \\;\\approx\\; \\gamma^{2}\\,(1 - \\beta\\cos\\theta)\\,(1 + \\beta\\cos\\theta_{\\text{out}}')\\,\\varepsilon",
+          "display": true,
+          "caption": "ε_out is the outgoing photon energy in the lab. ε is the incoming photon energy in the lab. γ is the electron Lorentz factor. β is the electron speed in units of c. θ is the incoming photon direction in the lab, measured from the electron velocity vector. θ_out' is the outgoing photon direction measured in the electron rest frame, from the same axis. The two blueshift factors sit as a product: one from the boost into the rest frame, one from the boost back out."
+        },
+        {
+          "type": "p",
+          "text": "Every relativistic factor in that formula is at most 2γ (head-on incoming, forward-beamed outgoing), giving a maximum kick of about 4γ² ε. Now average over an isotropic distribution of incoming photons and over the Thomson angular distribution for the outgoing photon; Feenberg and Primakoff's 1948 result for the mean scattered energy per collision is a specific fraction of the maximum."
+        },
+        {
+          "type": "math",
+          "tex": "\\langle\\varepsilon_{\\text{out}}\\rangle \\;=\\; \\tfrac{4}{3}\\,\\gamma^{2}\\,\\beta^{2}\\,\\varepsilon \\;\\approx\\; \\tfrac{4}{3}\\,\\gamma^{2}\\,\\varepsilon\\qquad(\\beta \\to 1)",
+          "display": true,
+          "caption": "⟨ε_out⟩ is the outgoing photon energy averaged over an isotropic incoming photon distribution and over the Thomson-limit angular distribution. γ is the electron Lorentz factor. β is the electron speed in units of c. ε is the incoming (seed) photon energy. The factor 4/3 comes from carrying out the two angular averages: ⟨(1 − β cos θ)²⟩ for the incoming boost gives 1 + β²/3, and the outgoing beaming pattern supplies the rest."
+        },
+        {
+          "type": "p",
+          "text": "The scaling is the important thing. A single relativistic electron takes a soft photon in and hands back a photon of order γ² times as much energy. For γ = 10³ (a 500-MeV electron) hitting a 1-eV photon, the mean output is 1.3 MeV: soft X-rays become γ-rays. For γ = 10⁴ hitting a 6 × 10⁻⁴ eV CMB photon, the mean output is 80 keV: microwave photons become hard X-rays. The efficiency scaling γ² is the reason inverse Compton dominates the high-energy sky wherever relativistic electrons and a photon reservoir sit together."
+        }
+      ],
+      "quiz": {
+        "question": "A cosmic-ray electron of Lorentz factor γ = 1000 encounters a 1 eV starlight photon. Using ⟨ε_out⟩ ≈ (4/3) γ² ε for the mean scattered energy, roughly what output energy does the photon come out with, and which part of the electromagnetic spectrum does it land in?",
+        "options": [
+          "≈ 1 keV, soft X-rays.",
+          "≈ 1.3 MeV, soft γ-rays.",
+          "≈ 1 eV, still visible (the scattering is elastic in the lab frame).",
+          "≈ 1 GeV, VHE γ-rays."
+        ],
+        "correctIndex": 1,
+        "explanation": "Plug in: ⟨ε_out⟩ ≈ (4/3) × (10³)² × 1 eV = (4/3) × 10⁶ eV ≈ 1.3 MeV. That is a soft γ-ray, above the annihilation line at 511 keV and below the pair-production threshold at 1.022 MeV × 2. The γ² factor of a million turns visible photons into γ-rays in a single collision. Option 2 mistakes the frame: the scattering is elastic in the electron rest frame, not in the lab. Option 3 overshoots by a factor of 10³ (a γ³ scaling instead of γ²). Option 0 undershoots by the same factor. This is the specific insight of Feenberg and Primakoff 1948: relativistic electrons in a soft-photon bath cool by kicking those photons into a much harder band."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The IC power and its twin brother synchrotron",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Take the single-collision kick from the previous section and multiply by the rate at which collisions happen. The rate is c times σ_T times the number density of soft photons; the energy transferred per collision is (4/3) γ² β² ε on average; and summing over the photon reservoir (integrating over the energy distribution to get the total soft-photon energy density U_ph) collapses the whole thing to a strikingly simple formula for the total power a single relativistic electron radiates into inverse-Compton photons."
+        },
+        {
+          "type": "math",
+          "tex": "P_{\\text{IC}} \\;=\\; \\tfrac{4}{3}\\,\\sigma_{T}\\,c\\,\\gamma^{2}\\,\\beta^{2}\\,U_{\\text{ph}}",
+          "display": true,
+          "caption": "P_IC is the total power radiated by a single relativistic electron into inverse-Compton photons. σ_T is the Thomson total cross section (defined in yesterday's Klein-Nishina lesson) of about 0.665 barn. c is the speed of light. γ is the electron Lorentz factor. β is the electron speed in units of c. U_ph is the energy density (in joules per cubic metre) of the soft-photon reservoir, integrated over the full photon spectrum."
+        },
+        {
+          "type": "p",
+          "text": "The formula has a well-known twin. The synchrotron radiation lesson has not been written yet, but the answer is that a relativistic electron gyrating in a magnetic field B radiates a total power P_sync that carries exactly the same γ² β² prefactor and differs only in what stands in for U_ph. Where inverse Compton has the soft-photon energy density, synchrotron has the magnetic energy density U_B = B²/(2μ₀), which measures how much energy per cubic metre the magnetic field holds. The reason for the parallelism is deep: from the electron's point of view, it does not matter whether it is being shaken by the electric field of a passing wave or the electric field a moving magnetic field looks like in its own rest frame. Both are Thomson scatterers by another name."
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{P_{\\text{IC}}}{P_{\\text{sync}}} \\;=\\; \\frac{U_{\\text{ph}}}{U_{B}}",
+          "display": true,
+          "caption": "P_IC is the inverse-Compton power radiated by the electron. P_sync is the synchrotron power radiated by the same electron. U_ph is the soft-photon energy density in the region. U_B = B²/(2μ₀) is the magnetic energy density. The ratio of the two channels is a pure ratio of energy densities, independent of the electron's Lorentz factor: an electron radiates in proportion to the energy density of whichever field is denser."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-01-inverse-compton-scattering.html",
+          "height": 480,
+          "caption": "The γ² kick, seed by seed. Move the γ slider between 10 and 10⁸ and toggle the seed photon between the CMB, ambient starlight, radio synchrotron photons, and a soft-X-ray corona. The output photon energy ⟨ε_out⟩ = (4/3) γ² ε is plotted as an orange dot on a logarithmic electromagnetic spectrum coloured by band (radio through γ-ray), and a regime tag flips to 'Klein-Nishina' once 4γε climbs past m_e c² and the Thomson-limit approximation breaks down."
+        },
+        {
+          "type": "p",
+          "text": "Two consequences follow. First, in any environment where U_ph > U_B, inverse Compton dominates the electron's cooling; where U_B > U_ph, synchrotron dominates. Second, when both channels are observed from the same source, their ratio hands you U_B / U_ph directly, and since the synchrotron spectrum plus source distance measures U_B in absolute terms, the observed IC-to-synchrotron ratio hands you U_ph independently. This is how Chandra measures magnetic fields in the extended lobes of quasar jets: point the telescope at the jet, measure the radio synchrotron flux and the X-ray IC flux, and read off the magnetic field to microgauss precision without ever seeing the field directly (Kataoka and Stawarz 2005 kicked off the systematic program)."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Blazars and the two-humped sky",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The most spectacular natural laboratory for the inverse-Compton process is a blazar: an active galactic nucleus (a supermassive black hole accreting gas at the centre of a distant galaxy) whose relativistic jet happens to point almost exactly at Earth. A blazar's spectral energy distribution, obtained by plotting the flux per logarithmic frequency interval νF_ν versus log ν, has a distinctive two-humped shape spanning fifteen decades of frequency, from the metre-wave radio band to the multi-TeV γ-ray band."
+        },
+        {
+          "type": "p",
+          "text": "The lower-frequency hump is synchrotron radiation from the jet's relativistic electron population. The higher-frequency hump is inverse Compton, produced by the same electrons scattering photons up in energy. In many blazars the seed photons for the IC hump are the synchrotron photons that the same electrons just made moments earlier; this self-consistent process is called synchrotron self-Compton, or SSC, and was first laid out by Frank Jones, Steve O'Dell, and Wayne Stein in 1974. In other blazars the seed photons come from outside the jet: the accretion disk (defined here as the swirling infalling gas around the black hole), the broad-line region (defined as a cloud of ionised gas at parsec scale that reflects disk light), or a torus of infrared-emitting dust further out. That variant is called external Compton, or EC, and was formalised by Sikora, Begelman, and Rees in 1994."
+        },
+        {
+          "type": "p",
+          "text": "The observational payoff arrived on May 15, 1992, when Trevor Weekes and the Whipple 10-metre Cherenkov telescope team detected the first extragalactic source of TeV γ-rays: the blazar Markarian 421, at redshift 0.031. The Whipple detection came from the IC hump; the same electrons producing radio synchrotron were reaching TeV energies at the second hump. Since then more than eighty blazars have been detected at TeV energies by H.E.S.S., MAGIC, and VERITAS (three ground-based imaging Cherenkov telescope arrays that photograph the flashes of blue light TeV photons make when they crash into the upper atmosphere), and the two-humped SED has become the working diagram of blazar physics."
+        },
+        {
+          "type": "p",
+          "text": "The height ratio of the two humps is called Compton dominance and equals U_ph / U_B in the emitting region, from the formula in the previous section. A Compton-dominant blazar is one where the photon energy density in the jet outruns the magnetic energy density by a large factor; the low-frequency-peaked BL Lac objects (a class discovered in 1968 in Sagittarius) sit near Compton dominance of unity, while the flat-spectrum radio quasars can reach Compton dominance of 100. The number is a direct read on how the jet transports energy from the black hole outward."
+        }
+      ],
+      "quiz": {
+        "question": "A blazar has an observed synchrotron-hump luminosity of L_sync = 10⁴⁵ erg/s and an IC-hump luminosity of L_IC = 10⁴⁷ erg/s. Both humps come from the same electron population. Given that P_IC/P_sync = U_ph/U_B, what does this tell you about the balance between photon and magnetic energy density in the emitting region?",
+        "options": [
+          "U_ph ≈ U_B: the jet is in energy equipartition between radiation and magnetic field.",
+          "U_ph ≈ 100 U_B: the jet's radiation energy density is a hundred times its magnetic energy density (Compton dominance 100).",
+          "U_ph ≈ 0.01 U_B: the magnetic energy density is a hundred times the radiation energy density.",
+          "The ratio depends on the electron Lorentz factor γ and cannot be read off from luminosities alone."
+        ],
+        "correctIndex": 1,
+        "explanation": "The ratio P_IC/P_sync equals U_ph/U_B for every electron, independent of γ, because the γ² β² factor cancels between the two channels. Since the observed luminosities are the collective power output of the same electron population, their ratio equals the single-electron ratio. L_IC / L_sync = 10⁴⁷ / 10⁴⁵ = 100 implies U_ph / U_B = 100: the jet is heavily radiation-dominated, and inverse Compton is the dominant cooling channel. Option 3 misses the cancellation of γ. Options 0 and 2 misread the ratio direction."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Sunyaev, Zel'dovich, and the shadow galaxy clusters cast on the microwave sky",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The high-γ ultrarelativistic story is only half of what inverse Compton does. The other half is thermal. Rashid Sunyaev, a young theorist at the Space Research Institute of the USSR Academy of Sciences in Moscow, and his advisor Yakov Zel'dovich, one of the great figures of Soviet physics (nuclear-weapons designer turned astrophysicist), asked in 1969 what happens to a CMB photon as it crosses the hot ionised gas that fills the space between galaxies in a large cluster. The intracluster medium (defined as the diffuse plasma between galaxies in a bound cluster of galaxies) is not full of ultrarelativistic electrons at all. It is at temperatures kT_e of roughly one to ten keV: hot enough to emit thermal X-rays, but with electron speeds around v/c ≈ 0.1, only mildly non-relativistic."
+        },
+        {
+          "type": "p",
+          "text": "The γ² kick of the previous sections is not what these electrons deliver. Instead the mean fractional energy transfer per scattering is 4 kT_e/(m_e c²), which for a 5-keV cluster is about 4 percent per scattering. The optical depth for a CMB photon crossing a rich cluster is of order 10⁻², so only about one photon in a hundred scatters at all, and the mean scattered photon energy is boosted by a few percent. The net effect on the CMB spectrum seen through the cluster is precisely calculable and depends only on the integrated electron pressure along the line of sight, packaged into a dimensionless number called the Compton y-parameter."
+        },
+        {
+          "type": "math",
+          "tex": "y \\;=\\; \\int \\frac{k T_{e}}{m_{e}c^{2}}\\,\\sigma_{T}\\,n_{e}\\,d\\ell",
+          "display": true,
+          "caption": "y is the Compton y-parameter, a dimensionless line-of-sight integral. kT_e is the electron temperature (in energy units) along the sight line. m_e c² is the electron rest energy of 511 keV. σ_T is the Thomson cross section, defined in yesterday's Klein-Nishina lesson. n_e is the electron number density along the sight line. dℓ is the path element. The integral runs from the observer through the cluster and out the other side. For a rich cluster, y sits around 10⁻⁴."
+        },
+        {
+          "type": "p",
+          "text": "The signature is spectacular. Below a crossover frequency at 217 GHz (a specific wavelength of 1.4 mm, on the Rayleigh-Jeans low-frequency side of the CMB peak), the cluster appears as a cold spot on the microwave sky, with an apparent temperature depressed by ΔT/T = −2y. Above 217 GHz the sign flips and the cluster is a warm spot, with ΔT/T = +y depending on frequency. Because y depends only on the pressure integral and not on the redshift of the cluster, the effect is redshift-independent: an SZ decrement from a 10¹⁵ M☉ cluster at redshift z = 2 has the same amplitude as the same cluster at z = 0.1, even though its X-ray flux, which falls as 1/(1+z)⁴, is a hundred times fainter. The technique lets you find clusters at every distance with the same sensitivity, a property no other survey method has."
+        },
+        {
+          "type": "p",
+          "text": "The first detection was Mark Birkinshaw, Stephen Gull, and K. J. Northover with the Owens Valley Radio Observatory's 40-metre dish in 1978, on the cluster Abell 2218. The signal-to-noise ratio was marginal and the community stayed skeptical for a decade. By the mid-1990s interferometric arrays (BIMA and OVRO) had turned it into a routine measurement; by 2010 the South Pole Telescope and the Atacama Cosmology Telescope had used it to compile blind cluster catalogues to redshift 1.5 and beyond; by 2020 Planck's all-sky SZ catalogue held more than a thousand clusters. Every one of those detections is a CMB photon that has, en route to the telescope, been inverse-Compton-scattered by a hot cluster electron. The specific historical case (Birkinshaw's OVRO detection) is the earned entry point to a broader observation: the same photon-electron matrix element that Compton wrote down in 1923 to explain X-ray kinematics on a graphite target has, running in the other direction from ultrarelativistic cosmic-ray electrons all the way down to mildly warm cluster gas, quietly organised the extragalactic X-ray background, blazar SEDs, quasar-jet magnetometry, and the redshift-independent cluster census. One vertex, four decades of experiment, half of the high-energy sky."
+        }
+      ]
+    }
+  ],
+  "checkInAfter": [1, 3],
+  "finalQuiz": {
+    "question": "The Sunyaev-Zel'dovich (SZ) effect is caused by CMB photons inverse-Compton scattering off hot cluster electrons at kT_e ≈ 5 keV, and its amplitude ΔT/T is redshift-independent. The synchrotron-self-Compton (SSC) X-ray emission from a blazar at redshift z is instead ultrarelativistic (γ ≈ 10⁴) and its observed flux falls as 1/(1+z)⁴. Yet both are inverse-Compton scattering. What is the physical distinction that makes SZ redshift-independent and SSC redshift-dependent?",
+    "options": [
+      "SZ uses a different matrix element (thermal Compton) from SSC (Klein-Nishina); the two are unrelated processes that share a name by convention.",
+      "SZ scatters CMB photons whose density scales as (1+z)³, and the extra (1+z) factor from the boosted photon frequency cancels the geometric 1/(1+z)⁴ flux dilution; SSC scatters local source photons whose density does not track the CMB, so the geometric dilution remains.",
+      "SZ is measured in the CMB's frequency band while SSC is measured in the X-ray band; the two bands have different redshift factors.",
+      "SZ measures a temperature ratio and SSC measures a flux, so only SZ is dimensionless. Redshift-independence is a units artifact."
+    ],
+    "correctIndex": 1,
+    "explanation": "The matrix element is the same in both cases: Compton scattering of a photon off an electron, in the Thomson limit for SZ (kT_e/m_e c² ≈ 0.01) and again in the Thomson limit for the seed step of SSC (γ ε ≪ m_e c² for typical blazar parameters). The distinction is what happens to the seed photon reservoir as the universe expands. The CMB photon number density n_γ scales as (1+z)³ (more photons per cubic metre in the past) and each CMB photon's frequency scales as (1+z) (bluer in the past), so the CMB energy density scales as (1+z)⁴. When one of those photons scatters off a cluster electron, the fractional shift ΔT/T = −2y at low frequency is set by the local density-and-temperature integral of the cluster, but the geometric flux dilution of 1/(1+z)⁴ is exactly compensated by the (1+z)⁴ boost in seed photon energy density. The net result is redshift-independent. SSC has no such cancellation: the seed photon field is intrinsic to the jet, unrelated to the CMB, so the observed X-ray flux dilutes as 1/(1+z)⁴ like any other cosmological source. Option 0 misidentifies SZ and SSC as different processes; option 2 mistakes the effect for a band choice; option 3 misreads dimensionless quantities as units artifacts."
+  },
+  "suggestedNodes": [
+    {
+      "id": "synchrotron_radiation",
+      "label": "Synchrotron",
+      "subtitle": "P ∝ γ² β² B²",
+      "edgeType": "related"
+    },
+    {
+      "id": "sunyaev_zeldovich",
+      "label": "SZ effect",
+      "subtitle": "ΔT/T = −2y",
+      "edgeType": "applied"
+    },
+    {
+      "id": "blazar_sed",
+      "label": "Blazar SED",
+      "subtitle": "two-humped νF_ν",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-01T08:00:00Z",
+    "estimatedReadingMinutes": 23,
+    "modelMix": "outline=sonnet, sections=haiku, viz=sonnet, finalQuiz=sonnet"
+  }
+}

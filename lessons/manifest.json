@@ -425,5 +425,12 @@
     "subtitle": "QED Compton σ",
     "date": "2026-06-30",
     "estimatedReadingMinutes": 24
+  },
+  {
+    "slug": "2026-07-01-inverse-compton-scattering",
+    "title": "Inverse Compton scattering: what Compton looks like when the electron is the one moving fast",
+    "subtitle": "hν → γ² hν",
+    "date": "2026-07-01",
+    "estimatedReadingMinutes": 23
   }
 ]
