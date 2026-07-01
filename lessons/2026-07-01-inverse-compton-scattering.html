@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Inverse Compton: the γ² kick</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 92px; text-align: right;
+}
+#viz {
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 14px 16px 16px;
+}
+svg.spectrum { width: 100%; height: 260px; display: block; }
+.band-label { fill: var(--text-ghost); font-size: 10px; font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; }
+.axis-line { stroke: var(--border-strong); stroke-width: 1; }
+.tick-line { stroke: var(--border); stroke-width: 1; }
+.tick-text { fill: var(--text-ghost); font-size: 9px; font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; }
+.seed-dot { fill: var(--text-muted); stroke: var(--bg); stroke-width: 1.5; }
+.out-dot { fill: var(--accent); stroke: var(--bg); stroke-width: 1.5; }
+.kick-arc { fill: none; stroke: var(--accent-soft); stroke-width: 1.4; stroke-dasharray: 3 3; }
+.dot-label { fill: var(--text); font-size: 11px; font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; }
+.dot-label.muted { fill: var(--text-muted); }
+.seed-row {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;
+}
+.seed-btn {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; padding: 6px 10px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 0;
+  min-height: 36px;
+}
+.seed-btn.active {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+.readout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 14px;
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: var(--bg-raised);
+  border-left: 2px solid var(--accent-soft);
+  font-size: 12px;
+}
+.readout .k { color: var(--text-muted); font-style: italic; }
+.readout .v {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  color: var(--text);
+}
+.regime {
+  font-style: italic; color: var(--accent);
+  font-size: 12px; margin-top: 6px;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <svg class="spectrum" viewBox="0 0 520 260" aria-label="Electromagnetic spectrum with seed and output photon markers">
+    <!-- Log-scale x axis from 10^-5 eV to 10^12 eV (17 decades) -->
+    <g id="bands"></g>
+    <line x1="30" y1="170" x2="500" y2="170" class="axis-line"></line>
+    <g id="ticks"></g>
+    <text x="264" y="220" class="band-label" text-anchor="middle">photon energy (eV, log scale)</text>
+
+    <!-- Kick arc between the seed and output dots -->
+    <path id="kickArc" class="kick-arc" d=""></path>
+
+    <!-- Seed dot -->
+    <circle id="seedDot" class="seed-dot" cx="150" cy="170" r="6"></circle>
+    <text id="seedLabel" class="dot-label muted" x="150" y="152" text-anchor="middle">seed hν</text>
+
+    <!-- Output dot -->
+    <circle id="outDot" class="out-dot" cx="350" cy="170" r="7"></circle>
+    <text id="outLabel" class="dot-label" x="350" y="152" text-anchor="middle">⟨hν_out⟩</text>
+  </svg>
+
+  <div class="seed-row" role="group" aria-label="Seed photon selector">
+    <button type="button" class="seed-btn" data-seed="radio">radio synchrotron 10⁻⁵ eV</button>
+    <button type="button" class="seed-btn" data-seed="cmb">CMB 2.35 × 10⁻⁴ eV</button>
+    <button type="button" class="seed-btn" data-seed="star">starlight 1 eV</button>
+    <button type="button" class="seed-btn" data-seed="xray">soft X-ray 100 eV</button>
+  </div>
+
+  <div class="viz-slider-row">
+    <label for="logG">log γ</label>
+    <input id="logG" type="range" min="1" max="8" step="0.01" value="4" />
+    <span class="value" id="logGVal">γ = 10⁴·⁰⁰</span>
+  </div>
+
+  <div class="readout">
+    <span class="k">electron energy</span><span class="v" id="eeVal">5.11 GeV</span>
+    <span class="k">seed photon</span><span class="v" id="seedVal">2.35 × 10⁻⁴ eV (CMB)</span>
+    <span class="k">⟨ε_out⟩ = (4/3) γ² ε</span><span class="v" id="outVal">3.13 × 10⁴ eV</span>
+    <span class="k">output band</span><span class="v" id="bandVal">soft X-ray</span>
+    <span class="k">4 γ ε / m_e c²</span><span class="v" id="knVal">0.018</span>
+  </div>
+  <div class="regime" id="regime">Thomson regime: single scatter is elastic in the electron rest frame</div>
+
+  <div class="viz-caption" style="margin-top: 10px;">
+    The horizontal axis is a logarithmic electromagnetic spectrum from 10⁻⁵ eV (radio) to 10¹² eV (TeV γ-ray), coloured by band. The grey dot is the seed photon energy (pick a source with the buttons); the orange dot is the mean scattered energy ⟨ε_out⟩ = (4/3) γ² ε in the Thomson limit; the dashed arc traces the γ² kick. Once 4γε climbs above m_e c² = 511 keV the Klein-Nishina recoil takes over and the single-scatter output saturates near γ m_e c², shown by a flag on the readout.
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var MEC2_EV = 511000; // m_e c^2 in eV
+
+  var LMIN = -5, LMAX = 12;      // log10(E/eV) axis range
+  var X_LEFT = 30, X_RIGHT = 500;
+  var Y_AXIS = 170;
+
+  function xForLogE(logE) {
+    var frac = (logE - LMIN) / (LMAX - LMIN);
+    if (frac < 0) frac = 0;
+    if (frac > 1) frac = 1;
+    return X_LEFT + frac * (X_RIGHT - X_LEFT);
+  }
+
+  var BANDS = [
+    { lo: -5, hi: -2, color: '#c9d4c0', label: 'radio' },
+    { lo: -2, hi: 0.22, color: '#d8cfb8', label: 'IR' },
+    { lo: 0.22, hi: 0.51, color: '#e6b4a0', label: 'vis' },
+    { lo: 0.51, hi: 2, color: '#c9b0d0', label: 'UV' },
+    { lo: 2, hi: 5, color: '#a8c0d8', label: 'X-ray' },
+    { lo: 5, hi: 12, color: '#c47558', label: 'γ-ray' }
+  ];
+
+  var bandsG = document.getElementById('bands');
+  BANDS.forEach(function (b) {
+    var x1 = xForLogE(b.lo), x2 = xForLogE(b.hi);
+    var rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('x', x1);
+    rect.setAttribute('y', Y_AXIS + 1);
+    rect.setAttribute('width', x2 - x1);
+    rect.setAttribute('height', 18);
+    rect.setAttribute('fill', b.color);
+    rect.setAttribute('opacity', '0.85');
+    bandsG.appendChild(rect);
+    var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', (x1 + x2) / 2);
+    text.setAttribute('y', Y_AXIS + 13);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('class', 'band-label');
+    text.setAttribute('fill', '#1a1a18');
+    text.setAttribute('font-size', '9');
+    text.textContent = b.label;
+    bandsG.appendChild(text);
+  });
+
+  var ticksG = document.getElementById('ticks');
+  for (var e = LMIN; e <= LMAX; e++) {
+    var xTick = xForLogE(e);
+    var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', xTick);
+    line.setAttribute('y1', Y_AXIS);
+    line.setAttribute('x2', xTick);
+    line.setAttribute('y2', Y_AXIS + 4);
+    line.setAttribute('class', 'tick-line');
+    ticksG.appendChild(line);
+    if (e % 2 === 0 || e === LMIN || e === LMAX) {
+      var t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', xTick);
+      t.setAttribute('y', Y_AXIS + 34);
+      t.setAttribute('text-anchor', 'middle');
+      t.setAttribute('class', 'tick-text');
+      t.textContent = (e >= 0 ? '10^' + e : '10^' + e);
+      ticksG.appendChild(t);
+    }
+  }
+
+  var SEEDS = {
+    radio: { eV: 1e-5, label: 'radio synchrotron' },
+    cmb:   { eV: 2.35e-4, label: 'CMB' },
+    star:  { eV: 1.0, label: 'starlight' },
+    xray:  { eV: 100.0, label: 'soft X-ray corona' }
+  };
+
+  var currentSeed = 'cmb';
+  var seedBtns = document.querySelectorAll('.seed-btn');
+  seedBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      currentSeed = btn.getAttribute('data-seed');
+      seedBtns.forEach(function (b) { b.classList.toggle('active', b === btn); });
+      update();
+    });
+    if (btn.getAttribute('data-seed') === currentSeed) btn.classList.add('active');
+  });
+
+  var logGInput = document.getElementById('logG');
+  var logGVal = document.getElementById('logGVal');
+  var eeVal = document.getElementById('eeVal');
+  var seedVal = document.getElementById('seedVal');
+  var outVal = document.getElementById('outVal');
+  var bandVal = document.getElementById('bandVal');
+  var knVal = document.getElementById('knVal');
+  var regime = document.getElementById('regime');
+  var seedDot = document.getElementById('seedDot');
+  var seedLabel = document.getElementById('seedLabel');
+  var outDot = document.getElementById('outDot');
+  var outLabel = document.getElementById('outLabel');
+  var kickArc = document.getElementById('kickArc');
+
+  function bandFor(logE) {
+    for (var i = 0; i < BANDS.length; i++) {
+      if (logE >= BANDS[i].lo && logE < BANDS[i].hi) return BANDS[i].label;
+    }
+    if (logE < BANDS[0].lo) return 'sub-radio';
+    return 'VHE γ-ray';
+  }
+
+  function formatEnergy(eV) {
+    if (eV < 1e-3) return (eV * 1e6).toPrecision(3) + ' μeV';
+    if (eV < 1) return (eV * 1000).toPrecision(3) + ' meV';
+    if (eV < 1e3) return eV.toPrecision(3) + ' eV';
+    if (eV < 1e6) return (eV / 1e3).toPrecision(3) + ' keV';
+    if (eV < 1e9) return (eV / 1e6).toPrecision(3) + ' MeV';
+    if (eV < 1e12) return (eV / 1e9).toPrecision(3) + ' GeV';
+    return (eV / 1e12).toPrecision(3) + ' TeV';
+  }
+
+  function update() {
+    var logG = parseFloat(logGInput.value);
+    var g = Math.pow(10, logG);
+    logGVal.textContent = 'γ = 10^' + logG.toFixed(2);
+
+    var eE = g * MEC2_EV;
+    eeVal.textContent = formatEnergy(eE);
+
+    var seed = SEEDS[currentSeed];
+    seedVal.textContent = formatEnergy(seed.eV) + ' (' + seed.label + ')';
+
+    var thomsonOut = (4 / 3) * g * g * seed.eV;
+    var knParam = 4 * g * seed.eV / MEC2_EV;
+
+    // In the deep Klein-Nishina regime, the single-scatter output saturates near γ m_e c² (the electron gives most of its energy up in one hit).
+    var kn_cap = g * MEC2_EV;
+    var effectiveOut = thomsonOut;
+    var knFlag = false;
+    if (knParam > 1) {
+      effectiveOut = Math.min(thomsonOut, kn_cap);
+      knFlag = true;
+    }
+
+    outVal.textContent = formatEnergy(effectiveOut) + (knFlag ? ' *' : '');
+    var logSeed = Math.log10(seed.eV);
+    var logOut = Math.log10(effectiveOut);
+    bandVal.textContent = bandFor(logOut);
+
+    if (knParam < 0.05) {
+      regime.textContent = 'Thomson regime: 4γε ≪ m_e c², scatter elastic in electron rest frame';
+    } else if (knParam < 1) {
+      regime.textContent = 'crossover: 4γε approaching m_e c², recoil beginning to bite';
+    } else if (knParam < 30) {
+      regime.textContent = 'Klein-Nishina regime: recoil suppresses cross section, output capped near γ m_e c²';
+    } else {
+      regime.textContent = 'deep Klein-Nishina: single scatter drains the electron; total σ falls as ε⁻¹ ln ε';
+    }
+
+    knVal.textContent = knParam < 1e-3 ? knParam.toExponential(2) : knParam.toPrecision(3);
+
+    var xSeed = xForLogE(logSeed);
+    var xOut = xForLogE(logOut);
+    seedDot.setAttribute('cx', xSeed);
+    seedLabel.setAttribute('x', xSeed);
+    outDot.setAttribute('cx', xOut);
+    outLabel.setAttribute('x', xOut);
+
+    // Draw the arc: a quadratic bezier that rises above the axis, midpoint scaled by kick magnitude.
+    var midX = (xSeed + xOut) / 2;
+    var arcHeight = Math.min(120, 20 + 6 * Math.abs(logOut - logSeed));
+    var ctrlY = Y_AXIS - arcHeight;
+    var d = 'M ' + xSeed.toFixed(1) + ' ' + Y_AXIS
+          + ' Q ' + midX.toFixed(1) + ' ' + ctrlY.toFixed(1)
+          + '   ' + xOut.toFixed(1) + ' ' + Y_AXIS;
+    kickArc.setAttribute('d', d);
+  }
+
+  logGInput.addEventListener('input', update);
+  update();
+})();
+</script>
+</body>
+</html>

@@ -609,6 +609,16 @@
       "createdAt": "2026-06-30T08:00:00Z",
       "col": 1,
       "row": 30
+    },
+    {
+      "id": "inverse_compton",
+      "label": "Inv. Compton",
+      "subtitle": "hν → γ² hν",
+      "state": "available",
+      "lesson": "2026-07-01-inverse-compton-scattering",
+      "createdAt": "2026-07-01T08:00:00Z",
+      "col": 0,
+      "row": 31
     }
   ],
   "edges": [
@@ -1436,6 +1446,21 @@
       "from": "klein_nishina",
       "to": "photon_energy",
       "kind": "related"
+    },
+    {
+      "from": "inverse_compton",
+      "to": "klein_nishina",
+      "kind": "extends"
+    },
+    {
+      "from": "inverse_compton",
+      "to": "compton_scattering",
+      "kind": "extends"
+    },
+    {
+      "from": "inverse_compton",
+      "to": "cmb",
+      "kind": "applied"
     }
   ]
 }
