@@ -1,0 +1,305 @@
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz {
+  padding: 12px 14px 14px 14px;
+  box-sizing: border-box;
+}
+.mat-row {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;
+}
+.mat-btn {
+  flex: 1 1 60px;
+  min-height: 40px;
+  padding: 4px 8px;
+  background: var(--bg-raised);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: 0;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.2;
+  cursor: pointer;
+  text-align: center;
+}
+.mat-btn .mat-name { display: block; font-weight: 600; }
+.mat-btn .mat-phi { display: block; font-style: italic; color: var(--text-muted); font-family: "Source Serif 4", serif; font-size: 11px; }
+.mat-btn.active {
+  background: var(--accent);
+  color: var(--bg-raised);
+  border-color: var(--accent);
+}
+.mat-btn.active .mat-phi { color: var(--bg-raised); }
+svg { display: block; width: 100%; height: auto; }
+.readout {
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr;
+  gap: 4px 12px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  margin-top: 10px;
+  padding: 6px 8px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+}
+.readout .k { color: var(--text-muted); font-style: italic; font-family: "Source Serif 4", serif; }
+.readout .v { text-align: right; }
+</style>
+<div id="viz">
+  <div class="mat-row" id="matRow"></div>
+  <svg viewBox="0 0 340 300" preserveAspectRatio="xMidYMid meet" id="chart" aria-label="Richardson-Dushman thermionic current density versus temperature"></svg>
+  <div class="viz-slider-row">
+    <label for="tSlider">T</label>
+    <input type="range" id="tSlider" min="300" max="3000" step="10" value="1800" />
+    <span class="value" id="tVal">1800 K</span>
+  </div>
+  <div class="readout" id="readout"></div>
+  <div class="viz-caption" style="margin-top: 8px;">
+    Richardson-Dushman current density J = A T² exp(-φ/kT), plotted on a semilog axis. Pick a cathode material to set φ; move the T slider to see J at that temperature. Notice how the exponential in φ/kT dwarfs the T² prefactor, and how a Cs curve at 1000 K sits near a W curve at 2500 K.
+  </div>
+</div>
+<script>
+(function() {
+  var materials = [
+    { key: 'Cs',   name: 'Cs',        phi: 2.1 },
+    { key: 'Ba',   name: 'Ba',        phi: 2.5 },
+    { key: 'ThW',  name: 'Th on W',   phi: 2.6 },
+    { key: 'W',    name: 'W',         phi: 4.5 },
+    { key: 'Pt',   name: 'Pt',        phi: 5.6 }
+  ];
+  var A0 = 120;            // A / (cm^2 K^2)
+  var kB = 8.617e-5;       // eV / K
+  var state = { mat: materials[3], T: 1800 };
+
+  // Chart geometry (viewBox 340 x 300)
+  var W = 340, H = 300;
+  var m = { l: 44, r: 14, t: 12, b: 42 };
+  var pw = W - m.l - m.r;
+  var ph = H - m.t - m.b;
+
+  // Axes
+  var Tmin = 300, Tmax = 3000;
+  var log10Jmin = -30, log10Jmax = 10;   // 40 decades visible
+
+  function xScale(T)        { return m.l + (T - Tmin) / (Tmax - Tmin) * pw; }
+  function yScale(log10J)   { return m.t + (log10Jmax - log10J) / (log10Jmax - log10Jmin) * ph; }
+
+  function log10J(T, phi) {
+    // J = 120 * T^2 * exp(-phi / (kB * T))
+    // log10 J = log10(120) + 2 log10(T) + (-phi / (kB T)) / ln(10)
+    if (T <= 0) return -Infinity;
+    return Math.log10(A0) + 2 * Math.log10(T) + (-phi / (kB * T)) / Math.LN10;
+  }
+
+  function J(T, phi) {
+    return Math.pow(10, log10J(T, phi));
+  }
+
+  function formatJ(j) {
+    if (j === 0 || !isFinite(j)) return '0';
+    var e = Math.floor(Math.log10(Math.abs(j)));
+    var m = j / Math.pow(10, e);
+    if (m >= 9.95) { m = m / 10; e = e + 1; }
+    return m.toFixed(2) + '·10^' + e;
+  }
+
+  var svg = document.getElementById('chart');
+  var svgNS = 'http://www.w3.org/2000/svg';
+
+  function el(tag, attrs, text) {
+    var e = document.createElementNS(svgNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function drawAxes() {
+    // Y grid: every 5 decades
+    for (var lg = log10Jmin; lg <= log10Jmax; lg += 5) {
+      var y = yScale(lg);
+      svg.appendChild(el('line', {
+        x1: m.l, x2: m.l + pw, y1: y, y2: y,
+        stroke: 'var(--border)', 'stroke-width': (lg === 0 ? 1 : 0.5),
+        'stroke-dasharray': (lg === 0 ? 'none' : '2 3')
+      }));
+      svg.appendChild(el('text', {
+        x: m.l - 6, y: y + 3, 'text-anchor': 'end',
+        'font-family': 'IBM Plex Mono, monospace', 'font-size': 9,
+        fill: 'var(--text-muted)'
+      }, '10^' + lg));
+    }
+    // X ticks
+    var Tticks = [300, 1000, 1500, 2000, 2500, 3000];
+    for (var i = 0; i < Tticks.length; i++) {
+      var xv = xScale(Tticks[i]);
+      svg.appendChild(el('line', {
+        x1: xv, x2: xv, y1: m.t + ph, y2: m.t + ph + 4,
+        stroke: 'var(--border-strong)', 'stroke-width': 0.6
+      }));
+      svg.appendChild(el('text', {
+        x: xv, y: m.t + ph + 14, 'text-anchor': 'middle',
+        'font-family': 'IBM Plex Mono, monospace', 'font-size': 9,
+        fill: 'var(--text-muted)'
+      }, Tticks[i]));
+    }
+    // Axis frame
+    svg.appendChild(el('line', {
+      x1: m.l, x2: m.l + pw, y1: m.t + ph, y2: m.t + ph,
+      stroke: 'var(--text)', 'stroke-width': 0.8
+    }));
+    svg.appendChild(el('line', {
+      x1: m.l, x2: m.l, y1: m.t, y2: m.t + ph,
+      stroke: 'var(--text)', 'stroke-width': 0.8
+    }));
+    // X-axis label
+    svg.appendChild(el('text', {
+      x: m.l + pw / 2, y: m.t + ph + 30, 'text-anchor': 'middle',
+      'font-family': 'Source Serif 4, serif', 'font-style': 'italic',
+      'font-size': 11, fill: 'var(--text)'
+    }, 'T (K)'));
+    // Y-axis label (rotated)
+    var yLabel = el('text', {
+      x: 0, y: 0, 'text-anchor': 'middle',
+      'font-family': 'Source Serif 4, serif', 'font-style': 'italic',
+      'font-size': 11, fill: 'var(--text)',
+      transform: 'translate(11 ' + (m.t + ph / 2) + ') rotate(-90)'
+    }, 'J (A / cm²)');
+    svg.appendChild(yLabel);
+  }
+
+  function drawCurve() {
+    // Remove any previous curve group
+    var old = document.getElementById('curveG');
+    if (old) old.remove();
+    var g = el('g', { id: 'curveG' });
+    // Sample T points across the range
+    var N = 220;
+    var d = '';
+    var lastVisible = false;
+    for (var i = 0; i <= N; i++) {
+      var Tv = Tmin + (Tmax - Tmin) * (i / N);
+      var lg = log10J(Tv, state.mat.phi);
+      if (!isFinite(lg)) { lastVisible = false; continue; }
+      // Clip: only draw when in visible band
+      if (lg < log10Jmin) { lastVisible = false; continue; }
+      var x = xScale(Tv);
+      var y = yScale(Math.min(lg, log10Jmax));
+      d += (lastVisible ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1) + ' ';
+      lastVisible = true;
+    }
+    g.appendChild(el('path', {
+      d: d, fill: 'none', stroke: 'var(--accent)', 'stroke-width': 1.8
+    }));
+    // Marker at current T
+    var lgT = log10J(state.T, state.mat.phi);
+    if (isFinite(lgT) && lgT >= log10Jmin && lgT <= log10Jmax) {
+      var mx = xScale(state.T);
+      var my = yScale(lgT);
+      // Guide lines
+      g.appendChild(el('line', {
+        x1: mx, x2: mx, y1: my, y2: m.t + ph,
+        stroke: 'var(--accent-soft)', 'stroke-width': 0.7, 'stroke-dasharray': '2 2'
+      }));
+      g.appendChild(el('line', {
+        x1: m.l, x2: mx, y1: my, y2: my,
+        stroke: 'var(--accent-soft)', 'stroke-width': 0.7, 'stroke-dasharray': '2 2'
+      }));
+      g.appendChild(el('circle', {
+        cx: mx, cy: my, r: 4, fill: 'var(--accent)', stroke: 'var(--bg)', 'stroke-width': 1.2
+      }));
+    } else if (isFinite(lgT) && lgT < log10Jmin) {
+      // Off-chart low: indicator at bottom
+      var mx2 = xScale(state.T);
+      g.appendChild(el('line', {
+        x1: mx2, x2: mx2, y1: m.t + ph - 4, y2: m.t + ph,
+        stroke: 'var(--accent)', 'stroke-width': 1.4
+      }));
+    }
+    svg.appendChild(g);
+  }
+
+  function renderReadout() {
+    var lgJ = log10J(state.T, state.mat.phi);
+    var jv = Math.pow(10, lgJ);
+    var kTeV = kB * state.T;
+    var expo = -state.mat.phi / kTeV;
+    var readout = document.getElementById('readout');
+    readout.innerHTML =
+      '<span class="k">material</span><span class="v">' + state.mat.name + '</span>' +
+      '<span class="k">φ</span><span class="v">' + state.mat.phi.toFixed(2) + ' eV</span>' +
+      '<span class="k">T</span><span class="v">' + state.T + ' K</span>' +
+      '<span class="k">kT</span><span class="v">' + kTeV.toFixed(4) + ' eV</span>' +
+      '<span class="k">-φ/kT</span><span class="v">' + expo.toFixed(2) + '</span>' +
+      '<span class="k">J</span><span class="v">' + formatJ(jv) + ' A/cm²</span>';
+  }
+
+  function renderAll() {
+    drawCurve();
+    renderReadout();
+  }
+
+  function buildButtons() {
+    var row = document.getElementById('matRow');
+    row.innerHTML = '';
+    for (var i = 0; i < materials.length; i++) {
+      (function(mat) {
+        var b = document.createElement('button');
+        b.className = 'mat-btn' + (mat.key === state.mat.key ? ' active' : '');
+        b.setAttribute('data-key', mat.key);
+        b.innerHTML = '<span class="mat-name">' + mat.name + '</span><span class="mat-phi">φ=' + mat.phi.toFixed(1) + ' eV</span>';
+        b.addEventListener('click', function() {
+          state.mat = mat;
+          for (var j = 0; j < row.children.length; j++) row.children[j].classList.remove('active');
+          b.classList.add('active');
+          renderAll();
+        });
+        row.appendChild(b);
+      })(materials[i]);
+    }
+  }
+
+  var tSlider = document.getElementById('tSlider');
+  var tVal = document.getElementById('tVal');
+  tSlider.addEventListener('input', function() {
+    state.T = parseInt(tSlider.value, 10);
+    tVal.textContent = state.T + ' K';
+    renderAll();
+  });
+
+  buildButtons();
+  drawAxes();
+  renderAll();
+})();
+</script>

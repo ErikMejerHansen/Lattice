@@ -2,14 +2,14 @@
   {
     "slug": "2026-05-03-photon-energy",
     "title": "Photon energy: the quantum that broke classical physics",
-    "subtitle": "E = hν",
+    "subtitle": "E = h\u03bd",
     "date": "2026-05-03",
     "estimatedReadingMinutes": 20
   },
   {
     "slug": "2026-05-04-wavelength",
     "title": "Wavelength: the ruler that fits the wave",
-    "subtitle": "λ, frequency",
+    "subtitle": "\u03bb, frequency",
     "date": "2026-05-04",
     "estimatedReadingMinutes": 22
   },
@@ -23,42 +23,42 @@
   {
     "slug": "2026-05-04-wiens-displacement-law",
     "title": "Wien's displacement law: the color of fire and the temperature of stars",
-    "subtitle": "λ_max ∝ 1/T",
+    "subtitle": "\u03bb_max \u221d 1/T",
     "date": "2026-05-04",
     "estimatedReadingMinutes": 22
   },
   {
     "slug": "2026-05-04-interference-and-diffraction",
     "title": "Interference and diffraction: when two beams of light produce darkness",
-    "subtitle": "d sin θ = mλ",
+    "subtitle": "d sin \u03b8 = m\u03bb",
     "date": "2026-05-04",
     "estimatedReadingMinutes": 22
   },
   {
     "slug": "2026-05-04-refraction",
     "title": "Refraction: how Fermat made light take the lazy way home",
-    "subtitle": "n sin θ = const",
+    "subtitle": "n sin \u03b8 = const",
     "date": "2026-05-04",
     "estimatedReadingMinutes": 22
   },
   {
     "slug": "2026-05-05-photoelectric-effect",
     "title": "The photoelectric effect: Millikan's ten-year war on Einstein",
-    "subtitle": "K = hν - φ",
+    "subtitle": "K = h\u03bd - \u03c6",
     "date": "2026-05-05",
     "estimatedReadingMinutes": 24
   },
   {
     "slug": "2026-05-06-wave-particle-duality",
     "title": "Wave-particle duality: de Broglie's bet and the accident at Bell Labs",
-    "subtitle": "λ = h/p",
+    "subtitle": "\u03bb = h/p",
     "date": "2026-05-06",
     "estimatedReadingMinutes": 24
   },
   {
     "slug": "2026-05-06-stefan-boltzmann-law",
     "title": "The Stefan-Boltzmann law: the guess that weighed the stars",
-    "subtitle": "j = σT⁴",
+    "subtitle": "j = \u03c3T\u2074",
     "date": "2026-05-06",
     "estimatedReadingMinutes": 23
   },
@@ -100,77 +100,77 @@
   {
     "slug": "2026-05-09-diffraction-gratings",
     "title": "Diffraction gratings: the ruled lines that read the spectrum",
-    "subtitle": "λ/Δλ = mN",
+    "subtitle": "\u03bb/\u0394\u03bb = mN",
     "date": "2026-05-09",
     "estimatedReadingMinutes": 23
   },
   {
     "slug": "2026-05-10-principle-of-least-action",
     "title": "The principle of least action: from Fermat's lazy ray to Lagrange's equation",
-    "subtitle": "δS = 0",
+    "subtitle": "\u03b4S = 0",
     "date": "2026-05-10",
     "estimatedReadingMinutes": 23
   },
   {
     "slug": "2026-05-11-total-internal-reflection",
     "title": "Total internal reflection: the angle that built the internet",
-    "subtitle": "sin θ_c = n₂/n₁",
+    "subtitle": "sin \u03b8_c = n\u2082/n\u2081",
     "date": "2026-05-11",
     "estimatedReadingMinutes": 22
   },
   {
     "slug": "2026-05-11-dispersion",
     "title": "Dispersion: why a prism makes a rainbow and a cheap telescope smears the stars",
-    "subtitle": "n = n(λ)",
+    "subtitle": "n = n(\u03bb)",
     "date": "2026-05-11",
     "estimatedReadingMinutes": 23
   },
   {
     "slug": "2026-05-13-compton-scattering",
     "title": "Compton scattering: the experiment that gave the photon its momentum",
-    "subtitle": "p = h/λ",
+    "subtitle": "p = h/\u03bb",
     "date": "2026-05-13",
     "estimatedReadingMinutes": 24
   },
   {
     "slug": "2026-05-14-work-function",
     "title": "Work function: the surface number that built the vacuum-tube century",
-    "subtitle": "φ = E_vac − E_F",
+    "subtitle": "\u03c6 = E_vac \u2212 E_F",
     "date": "2026-05-14",
     "estimatedReadingMinutes": 23
   },
   {
     "slug": "2026-05-17-schrodinger-equation",
-    "title": "The Schrödinger equation: an equation of motion for matter waves",
-    "subtitle": "iℏ∂ψ/∂t = Ĥψ",
+    "title": "The Schr\u00f6dinger equation: an equation of motion for matter waves",
+    "subtitle": "i\u210f\u2202\u03c8/\u2202t = \u0124\u03c8",
     "date": "2026-05-17",
     "estimatedReadingMinutes": 25
   },
   {
     "slug": "2026-05-18-uncertainty-principle",
     "title": "The Heisenberg uncertainty principle: the noncommutative price of being a wave",
-    "subtitle": "ΔxΔp ≥ ℏ/2",
+    "subtitle": "\u0394x\u0394p \u2265 \u210f/2",
     "date": "2026-05-18",
     "estimatedReadingMinutes": 24
   },
   {
     "slug": "2026-05-20-bohr-atom",
     "title": "The Bohr atom: a rule pulled from nowhere that the wave later explained",
-    "subtitle": "E_n = −13.6/n²",
+    "subtitle": "E_n = \u221213.6/n\u00b2",
     "date": "2026-05-20",
     "estimatedReadingMinutes": 24
   },
   {
     "slug": "2026-05-21-planetary-equilibrium-temperature",
     "title": "Planetary equilibrium temperature: the one line that prices a planet's heat",
-    "subtitle": "(S/4σ)^¼",
+    "subtitle": "(S/4\u03c3)^\u00bc",
     "date": "2026-05-21",
     "estimatedReadingMinutes": 22
   },
   {
     "slug": "2026-05-22-stellar-luminosity",
     "title": "Stellar luminosity: the size and the lifespan read off a point of light",
-    "subtitle": "L = 4πR²σT⁴",
+    "subtitle": "L = 4\u03c0R\u00b2\u03c3T\u2074",
     "date": "2026-05-22",
     "estimatedReadingMinutes": 23
   },
@@ -184,28 +184,28 @@
   {
     "slug": "2026-05-24-recombination",
     "title": "Recombination: the moment the universe turned transparent",
-    "subtitle": "z ≈ 1100",
+    "subtitle": "z \u2248 1100",
     "date": "2026-05-24",
     "estimatedReadingMinutes": 24
   },
   {
     "slug": "2026-05-25-cosmic-redshift",
     "title": "Cosmic redshift: the stretch of space written into starlight",
-    "subtitle": "λ'=(1+z)λ",
+    "subtitle": "\u03bb'=(1+z)\u03bb",
     "date": "2026-05-25",
     "estimatedReadingMinutes": 23
   },
   {
     "slug": "2026-05-26-cmb-anisotropies",
     "title": "CMB anisotropies: the parts-per-100,000 ripples that seeded every galaxy",
-    "subtitle": "ΔT/T ≈ 10⁻⁵",
+    "subtitle": "\u0394T/T \u2248 10\u207b\u2075",
     "date": "2026-05-26",
     "estimatedReadingMinutes": 24
   },
   {
     "slug": "2026-05-27-saha-ionization-equation",
     "title": "The Saha equation: how a star's temperature writes its spectrum",
-    "subtitle": "n₊/n₀ ∝ T^3/2",
+    "subtitle": "n\u208a/n\u2080 \u221d T^3/2",
     "date": "2026-05-27",
     "estimatedReadingMinutes": 22
   },
@@ -219,14 +219,14 @@
   {
     "slug": "2026-05-31-balmer-series",
     "title": "The Balmer series: a schoolteacher's curve-fit and the spectroscopy it built",
-    "subtitle": "1/λ ∝ 1/4 − 1/n²",
+    "subtitle": "1/\u03bb \u221d 1/4 \u2212 1/n\u00b2",
     "date": "2026-05-31",
     "estimatedReadingMinutes": 23
   },
   {
     "slug": "2026-06-02-color-rendering-index",
     "title": "The color rendering index: a number on a bulb box and the spectrum it hides",
-    "subtitle": "Ra = ⟨R₁…R₈⟩",
+    "subtitle": "Ra = \u27e8R\u2081\u2026R\u2088\u27e9",
     "date": "2026-06-02",
     "estimatedReadingMinutes": 22
   },
@@ -247,14 +247,14 @@
   {
     "slug": "2026-06-05-doppler-spectroscopy",
     "title": "Doppler spectroscopy: from Buys-Ballot's brass band to the wobble of 51 Pegasi",
-    "subtitle": "Δλ/λ = v/c",
+    "subtitle": "\u0394\u03bb/\u03bb = v/c",
     "date": "2026-06-05",
     "estimatedReadingMinutes": 23
   },
   {
     "slug": "2026-06-06-stimulated-emission",
     "title": "Stimulated emission: Einstein's missing rate, and why every laser is a 1917 thought experiment",
-    "subtitle": "B₂₁ = B₁₂",
+    "subtitle": "B\u2082\u2081 = B\u2081\u2082",
     "date": "2026-06-06",
     "estimatedReadingMinutes": 24
   },
@@ -268,7 +268,7 @@
   {
     "slug": "2026-06-08-photon-bunching",
     "title": "Photon bunching: when intensity correlations told us something about light that interference could not",
-    "subtitle": "g²(0) = 2 vs 1",
+    "subtitle": "g\u00b2(0) = 2 vs 1",
     "date": "2026-06-08",
     "estimatedReadingMinutes": 24
   },
@@ -282,21 +282,21 @@
   {
     "slug": "2026-06-10-echelle-spectrograph",
     "title": "The echelle spectrograph: trading line count for diffraction order",
-    "subtitle": "2d sin θ_B = mλ",
+    "subtitle": "2d sin \u03b8_B = m\u03bb",
     "date": "2026-06-10",
     "estimatedReadingMinutes": 25
   },
   {
     "slug": "2026-06-11-helium-discovery",
     "title": "Helium: an element found in the Sun twenty-seven years before it was caught on Earth",
-    "subtitle": "D₃ at 587.49 nm",
+    "subtitle": "D\u2083 at 587.49 nm",
     "date": "2026-06-11",
     "estimatedReadingMinutes": 24
   },
   {
     "slug": "2026-06-12-lagrangian-mechanics",
     "title": "Lagrangian mechanics: the book without a single diagram",
-    "subtitle": "L = T − V",
+    "subtitle": "L = T \u2212 V",
     "date": "2026-06-12",
     "estimatedReadingMinutes": 25
   },
@@ -317,7 +317,7 @@
   {
     "slug": "2026-06-16-tautochrone",
     "title": "The tautochrone: where every drop takes the same time",
-    "subtitle": "T = π√(R/g)",
+    "subtitle": "T = \u03c0\u221a(R/g)",
     "date": "2026-06-16",
     "estimatedReadingMinutes": 25
   },
@@ -331,14 +331,14 @@
   {
     "slug": "2026-06-18-calculus-of-variations",
     "title": "The calculus of variations: how Euler turned a generation of tricks into one equation",
-    "subtitle": "δJ[y] = 0",
+    "subtitle": "\u03b4J[y] = 0",
     "date": "2026-06-18",
     "estimatedReadingMinutes": 25
   },
   {
     "slug": "2026-06-18-geodesics",
     "title": "Geodesics: what counts as a straight line when the world is curved",
-    "subtitle": "δ∫ds = 0",
+    "subtitle": "\u03b4\u222bds = 0",
     "date": "2026-06-18",
     "estimatedReadingMinutes": 25
   },
@@ -373,64 +373,71 @@
   {
     "slug": "2026-06-23-parallel-transport",
     "title": "Parallel transport: the second way to say straight",
-    "subtitle": "∇_X V = 0",
+    "subtitle": "\u2207_X V = 0",
     "date": "2026-06-23",
     "estimatedReadingMinutes": 25
   },
   {
     "slug": "2026-06-24-evanescent-wave",
     "title": "Evanescent waves: the field that should not be there",
-    "subtitle": "E ∝ e^(-z/d)",
+    "subtitle": "E \u221d e^(-z/d)",
     "date": "2026-06-24",
     "estimatedReadingMinutes": 22
   },
   {
     "slug": "2026-06-25-numerical-aperture",
     "title": "Numerical aperture: the cone a fiber agrees to listen to",
-    "subtitle": "NA = √(n₁²−n₂²)",
+    "subtitle": "NA = \u221a(n\u2081\u00b2\u2212n\u2082\u00b2)",
     "date": "2026-06-25",
     "estimatedReadingMinutes": 22
   },
   {
     "slug": "2026-06-26-sellmeier-equation",
     "title": "The Sellmeier equation: how three resonances fit a sea of glass",
-    "subtitle": "Σ Bᵢλ²/(λ²−Cᵢ)",
+    "subtitle": "\u03a3 B\u1d62\u03bb\u00b2/(\u03bb\u00b2\u2212C\u1d62)",
     "date": "2026-06-26",
     "estimatedReadingMinutes": 23
   },
   {
     "slug": "2026-06-27-chromatic-aberration",
     "title": "Chromatic aberration: why one piece of glass cannot focus a rainbow",
-    "subtitle": "f_red ≠ f_blue",
+    "subtitle": "f_red \u2260 f_blue",
     "date": "2026-06-27",
     "estimatedReadingMinutes": 23
   },
   {
     "slug": "2026-06-28-group-velocity",
     "title": "Group velocity and phase velocity: why a wave packet outruns its own crests",
-    "subtitle": "vg = dω/dk",
+    "subtitle": "vg = d\u03c9/dk",
     "date": "2026-06-28",
     "estimatedReadingMinutes": 22
   },
   {
     "slug": "2026-06-29-pair-production",
     "title": "Pair production: how a gamma ray becomes matter and antimatter",
-    "subtitle": "γ → e⁺ + e⁻",
+    "subtitle": "\u03b3 \u2192 e\u207a + e\u207b",
     "date": "2026-06-29",
     "estimatedReadingMinutes": 22
   },
   {
     "slug": "2026-06-30-klein-nishina-formula",
     "title": "Klein-Nishina: the cross section Dirac's equation handed to two visitors at Bohr's institute",
-    "subtitle": "QED Compton σ",
+    "subtitle": "QED Compton \u03c3",
     "date": "2026-06-30",
     "estimatedReadingMinutes": 24
   },
   {
     "slug": "2026-07-01-inverse-compton-scattering",
     "title": "Inverse Compton scattering: what Compton looks like when the electron is the one moving fast",
-    "subtitle": "hν → γ² hν",
+    "subtitle": "h\u03bd \u2192 \u03b3\u00b2 h\u03bd",
     "date": "2026-07-01",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-07-02-thermionic-emission",
+    "title": "Thermionic emission: how hot metal became the world's first electron faucet",
+    "subtitle": "AT\u00b2exp(\u2212\u03c6/kT)",
+    "date": "2026-07-02",
+    "estimatedReadingMinutes": 22
   }
 ]
