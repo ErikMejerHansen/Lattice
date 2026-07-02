@@ -3,7 +3,7 @@
     {
       "id": "wavelength",
       "label": "Wavelength",
-      "subtitle": "λ, frequency",
+      "subtitle": "\u03bb, frequency",
       "state": "available",
       "lesson": "2026-05-04-wavelength",
       "createdAt": "2026-05-04T07:00:00Z",
@@ -13,7 +13,7 @@
     {
       "id": "photon_energy",
       "label": "Photon energy",
-      "subtitle": "E = hν",
+      "subtitle": "E = h\u03bd",
       "state": "available",
       "lesson": "2026-05-03-photon-energy",
       "createdAt": "2026-05-03T10:00:00Z",
@@ -33,7 +33,7 @@
     {
       "id": "wien_displacement",
       "label": "Wien's law",
-      "subtitle": "λ_max ∝ 1/T",
+      "subtitle": "\u03bb_max \u221d 1/T",
       "state": "available",
       "lesson": "2026-05-04-wiens-displacement-law",
       "createdAt": "2026-05-04T08:00:00Z",
@@ -43,7 +43,7 @@
     {
       "id": "interference_diffraction",
       "label": "Interference",
-      "subtitle": "d sin θ = mλ",
+      "subtitle": "d sin \u03b8 = m\u03bb",
       "state": "available",
       "lesson": "2026-05-04-interference-and-diffraction",
       "createdAt": "2026-05-04T09:00:00Z",
@@ -53,7 +53,7 @@
     {
       "id": "refraction",
       "label": "Refraction",
-      "subtitle": "n sin θ = const",
+      "subtitle": "n sin \u03b8 = const",
       "state": "available",
       "lesson": "2026-05-04-refraction",
       "createdAt": "2026-05-04T10:00:00Z",
@@ -63,7 +63,7 @@
     {
       "id": "photoelectric_effect",
       "label": "Photoelectric",
-      "subtitle": "K = hν - φ",
+      "subtitle": "K = h\u03bd - \u03c6",
       "state": "available",
       "lesson": "2026-05-05-photoelectric-effect",
       "createdAt": "2026-05-05T08:00:00Z",
@@ -73,7 +73,7 @@
     {
       "id": "wave_particle_duality",
       "label": "Duality",
-      "subtitle": "λ = h/p",
+      "subtitle": "\u03bb = h/p",
       "state": "available",
       "lesson": "2026-05-06-wave-particle-duality",
       "createdAt": "2026-05-06T08:00:00Z",
@@ -83,7 +83,7 @@
     {
       "id": "stefan_boltzmann",
       "label": "Stefan's law",
-      "subtitle": "j = σT⁴",
+      "subtitle": "j = \u03c3T\u2074",
       "state": "available",
       "lesson": "2026-05-06-stefan-boltzmann-law",
       "createdAt": "2026-05-06T11:00:00Z",
@@ -143,7 +143,7 @@
     {
       "id": "diffraction_gratings",
       "label": "Gratings",
-      "subtitle": "λ/Δλ = mN",
+      "subtitle": "\u03bb/\u0394\u03bb = mN",
       "state": "available",
       "lesson": "2026-05-09-diffraction-gratings",
       "createdAt": "2026-05-09T09:00:00Z",
@@ -153,7 +153,7 @@
     {
       "id": "least_action",
       "label": "Least action",
-      "subtitle": "δS = 0",
+      "subtitle": "\u03b4S = 0",
       "state": "available",
       "lesson": "2026-05-10-principle-of-least-action",
       "createdAt": "2026-05-10T10:00:00Z",
@@ -163,7 +163,7 @@
     {
       "id": "total_internal_reflection",
       "label": "TIR",
-      "subtitle": "sin θ_c = n₂/n₁",
+      "subtitle": "sin \u03b8_c = n\u2082/n\u2081",
       "state": "available",
       "lesson": "2026-05-11-total-internal-reflection",
       "createdAt": "2026-05-11T09:30:00Z",
@@ -173,7 +173,7 @@
     {
       "id": "dispersion",
       "label": "Dispersion",
-      "subtitle": "n = n(λ)",
+      "subtitle": "n = n(\u03bb)",
       "state": "available",
       "lesson": "2026-05-11-dispersion",
       "createdAt": "2026-05-11T12:00:00Z",
@@ -183,7 +183,7 @@
     {
       "id": "compton_scattering",
       "label": "Compton",
-      "subtitle": "p = h/λ",
+      "subtitle": "p = h/\u03bb",
       "state": "available",
       "lesson": "2026-05-13-compton-scattering",
       "createdAt": "2026-05-13T10:00:00Z",
@@ -193,7 +193,7 @@
     {
       "id": "work_function",
       "label": "Work function",
-      "subtitle": "φ = E_vac − E_F",
+      "subtitle": "\u03c6 = E_vac \u2212 E_F",
       "state": "available",
       "lesson": "2026-05-14-work-function",
       "createdAt": "2026-05-14T08:00:00Z",
@@ -202,8 +202,8 @@
     },
     {
       "id": "schrodinger_equation",
-      "label": "Schrödinger",
-      "subtitle": "iℏ∂ψ/∂t = Ĥψ",
+      "label": "Schr\u00f6dinger",
+      "subtitle": "i\u210f\u2202\u03c8/\u2202t = \u0124\u03c8",
       "state": "available",
       "lesson": "2026-05-17-schrodinger-equation",
       "createdAt": "2026-05-17T08:00:00Z",
@@ -213,7 +213,7 @@
     {
       "id": "uncertainty_principle",
       "label": "Uncertainty",
-      "subtitle": "ΔxΔp ≥ ℏ/2",
+      "subtitle": "\u0394x\u0394p \u2265 \u210f/2",
       "state": "available",
       "lesson": "2026-05-18-uncertainty-principle",
       "createdAt": "2026-05-18T08:00:00Z",
@@ -223,7 +223,7 @@
     {
       "id": "bohr_atom",
       "label": "Bohr atom",
-      "subtitle": "E_n = −13.6/n²",
+      "subtitle": "E_n = \u221213.6/n\u00b2",
       "state": "available",
       "lesson": "2026-05-20-bohr-atom",
       "createdAt": "2026-05-20T08:00:00Z",
@@ -233,7 +233,7 @@
     {
       "id": "planetary_equilibrium",
       "label": "Planet T_eq",
-      "subtitle": "(S/4σ)^¼",
+      "subtitle": "(S/4\u03c3)^\u00bc",
       "state": "available",
       "lesson": "2026-05-21-planetary-equilibrium-temperature",
       "createdAt": "2026-05-21T08:00:00Z",
@@ -243,7 +243,7 @@
     {
       "id": "stellar_luminosity",
       "label": "Luminosity",
-      "subtitle": "L = 4πR²σT⁴",
+      "subtitle": "L = 4\u03c0R\u00b2\u03c3T\u2074",
       "state": "available",
       "lesson": "2026-05-22-stellar-luminosity",
       "createdAt": "2026-05-22T08:00:00Z",
@@ -263,7 +263,7 @@
     {
       "id": "recombination",
       "label": "Recombination",
-      "subtitle": "z ≈ 1100",
+      "subtitle": "z \u2248 1100",
       "state": "available",
       "lesson": "2026-05-24-recombination",
       "createdAt": "2026-05-24T08:00:00Z",
@@ -273,7 +273,7 @@
     {
       "id": "cosmic_redshift",
       "label": "Redshift",
-      "subtitle": "λ'=(1+z)λ",
+      "subtitle": "\u03bb'=(1+z)\u03bb",
       "state": "available",
       "lesson": "2026-05-25-cosmic-redshift",
       "createdAt": "2026-05-25T08:00:00Z",
@@ -283,7 +283,7 @@
     {
       "id": "cmb_anisotropies",
       "label": "CMB anisotropy",
-      "subtitle": "ΔT/T ≈ 10⁻⁵",
+      "subtitle": "\u0394T/T \u2248 10\u207b\u2075",
       "state": "available",
       "lesson": "2026-05-26-cmb-anisotropies",
       "createdAt": "2026-05-26T08:00:00Z",
@@ -293,7 +293,7 @@
     {
       "id": "saha_ionization",
       "label": "Saha eq.",
-      "subtitle": "n₊/n₀ ∝ T^3/2",
+      "subtitle": "n\u208a/n\u2080 \u221d T^3/2",
       "state": "available",
       "lesson": "2026-05-27-saha-ionization-equation",
       "createdAt": "2026-05-27T08:00:00Z",
@@ -313,7 +313,7 @@
     {
       "id": "balmer_series",
       "label": "Balmer series",
-      "subtitle": "1/λ ∝ 1/4 − 1/n²",
+      "subtitle": "1/\u03bb \u221d 1/4 \u2212 1/n\u00b2",
       "state": "available",
       "lesson": "2026-05-31-balmer-series",
       "createdAt": "2026-05-31T08:00:00Z",
@@ -323,7 +323,7 @@
     {
       "id": "color_rendering_index",
       "label": "CRI / Ra",
-      "subtitle": "Ra = ⟨R₁…R₈⟩",
+      "subtitle": "Ra = \u27e8R\u2081\u2026R\u2088\u27e9",
       "state": "available",
       "lesson": "2026-06-02-color-rendering-index",
       "createdAt": "2026-06-02T08:00:00Z",
@@ -353,7 +353,7 @@
     {
       "id": "doppler_spectroscopy",
       "label": "Doppler shift",
-      "subtitle": "Δλ/λ = v/c",
+      "subtitle": "\u0394\u03bb/\u03bb = v/c",
       "state": "available",
       "lesson": "2026-06-05-doppler-spectroscopy",
       "createdAt": "2026-06-05T08:00:00Z",
@@ -363,7 +363,7 @@
     {
       "id": "stimulated_emission",
       "label": "Stim. emission",
-      "subtitle": "B₂₁ = B₁₂",
+      "subtitle": "B\u2082\u2081 = B\u2081\u2082",
       "state": "available",
       "lesson": "2026-06-06-stimulated-emission",
       "createdAt": "2026-06-06T08:00:00Z",
@@ -383,7 +383,7 @@
     {
       "id": "photon_bunching",
       "label": "Bunching",
-      "subtitle": "g²(0) = 2 vs 1",
+      "subtitle": "g\u00b2(0) = 2 vs 1",
       "state": "available",
       "lesson": "2026-06-08-photon-bunching",
       "createdAt": "2026-06-08T08:00:00Z",
@@ -403,7 +403,7 @@
     {
       "id": "echelle_spectrograph",
       "label": "Echelle",
-      "subtitle": "2d sin θ_B = mλ",
+      "subtitle": "2d sin \u03b8_B = m\u03bb",
       "state": "available",
       "lesson": "2026-06-10-echelle-spectrograph",
       "createdAt": "2026-06-10T08:00:00Z",
@@ -413,7 +413,7 @@
     {
       "id": "helium_discovery",
       "label": "Helium",
-      "subtitle": "D₃ at 587.49 nm",
+      "subtitle": "D\u2083 at 587.49 nm",
       "state": "available",
       "lesson": "2026-06-11-helium-discovery",
       "createdAt": "2026-06-11T08:00:00Z",
@@ -423,7 +423,7 @@
     {
       "id": "lagrangian_mechanics",
       "label": "Lagrangian",
-      "subtitle": "L = T − V",
+      "subtitle": "L = T \u2212 V",
       "state": "available",
       "lesson": "2026-06-12-lagrangian-mechanics",
       "createdAt": "2026-06-12T08:00:00Z",
@@ -453,7 +453,7 @@
     {
       "id": "tautochrone",
       "label": "Tautochrone",
-      "subtitle": "T = π√(R/g)",
+      "subtitle": "T = \u03c0\u221a(R/g)",
       "state": "available",
       "lesson": "2026-06-16-tautochrone",
       "createdAt": "2026-06-16T08:00:00Z",
@@ -473,7 +473,7 @@
     {
       "id": "calculus_of_variations",
       "label": "Calc. of var.",
-      "subtitle": "δJ[y] = 0",
+      "subtitle": "\u03b4J[y] = 0",
       "state": "available",
       "lesson": "2026-06-18-calculus-of-variations",
       "createdAt": "2026-06-18T08:00:00Z",
@@ -483,7 +483,7 @@
     {
       "id": "geodesics",
       "label": "Geodesics",
-      "subtitle": "δ∫ds = 0",
+      "subtitle": "\u03b4\u222bds = 0",
       "state": "available",
       "lesson": "2026-06-18-geodesics",
       "createdAt": "2026-06-18T09:00:00Z",
@@ -533,7 +533,7 @@
     {
       "id": "parallel_transport",
       "label": "Par. transport",
-      "subtitle": "∇_X V = 0",
+      "subtitle": "\u2207_X V = 0",
       "state": "available",
       "lesson": "2026-06-23-parallel-transport",
       "createdAt": "2026-06-23T08:00:00Z",
@@ -543,7 +543,7 @@
     {
       "id": "evanescent_wave",
       "label": "Evanescent",
-      "subtitle": "E ∝ e^(-z/d)",
+      "subtitle": "E \u221d e^(-z/d)",
       "state": "available",
       "lesson": "2026-06-24-evanescent-wave",
       "createdAt": "2026-06-24T08:00:00Z",
@@ -553,7 +553,7 @@
     {
       "id": "numerical_aperture",
       "label": "Num. aperture",
-      "subtitle": "NA = √(n₁²−n₂²)",
+      "subtitle": "NA = \u221a(n\u2081\u00b2\u2212n\u2082\u00b2)",
       "state": "available",
       "lesson": "2026-06-25-numerical-aperture",
       "createdAt": "2026-06-25T08:00:00Z",
@@ -563,7 +563,7 @@
     {
       "id": "sellmeier_equation",
       "label": "Sellmeier",
-      "subtitle": "Σ Bᵢλ²/(λ²−Cᵢ)",
+      "subtitle": "\u03a3 B\u1d62\u03bb\u00b2/(\u03bb\u00b2\u2212C\u1d62)",
       "state": "available",
       "lesson": "2026-06-26-sellmeier-equation",
       "createdAt": "2026-06-26T08:00:00Z",
@@ -573,7 +573,7 @@
     {
       "id": "chromatic_aberration",
       "label": "Chromatic ab.",
-      "subtitle": "f_red ≠ f_blue",
+      "subtitle": "f_red \u2260 f_blue",
       "state": "available",
       "lesson": "2026-06-27-chromatic-aberration",
       "createdAt": "2026-06-27T08:00:00Z",
@@ -583,7 +583,7 @@
     {
       "id": "group_velocity",
       "label": "Group velocity",
-      "subtitle": "vg = dω/dk",
+      "subtitle": "vg = d\u03c9/dk",
       "state": "available",
       "lesson": "2026-06-28-group-velocity",
       "createdAt": "2026-06-28T08:00:00Z",
@@ -593,7 +593,7 @@
     {
       "id": "pair_production",
       "label": "Pair creation",
-      "subtitle": "γ → e⁺ + e⁻",
+      "subtitle": "\u03b3 \u2192 e\u207a + e\u207b",
       "state": "available",
       "lesson": "2026-06-29-pair-production",
       "createdAt": "2026-06-29T08:00:00Z",
@@ -603,7 +603,7 @@
     {
       "id": "klein_nishina",
       "label": "Klein-Nishina",
-      "subtitle": "QED Compton σ",
+      "subtitle": "QED Compton \u03c3",
       "state": "available",
       "lesson": "2026-06-30-klein-nishina-formula",
       "createdAt": "2026-06-30T08:00:00Z",
@@ -613,11 +613,21 @@
     {
       "id": "inverse_compton",
       "label": "Inv. Compton",
-      "subtitle": "hν → γ² hν",
+      "subtitle": "h\u03bd \u2192 \u03b3\u00b2 h\u03bd",
       "state": "available",
       "lesson": "2026-07-01-inverse-compton-scattering",
       "createdAt": "2026-07-01T08:00:00Z",
       "col": 0,
+      "row": 31
+    },
+    {
+      "id": "thermionic_emission",
+      "label": "Thermionic",
+      "subtitle": "AT\u00b2exp(\u2212\u03c6/kT)",
+      "state": "available",
+      "lesson": "2026-07-02-thermionic-emission",
+      "createdAt": "2026-07-02T07:00:00Z",
+      "col": 1,
       "row": 31
     }
   ],
@@ -1461,6 +1471,16 @@
       "from": "inverse_compton",
       "to": "cmb",
       "kind": "applied"
+    },
+    {
+      "from": "thermionic_emission",
+      "to": "work_function",
+      "kind": "extends"
+    },
+    {
+      "from": "thermionic_emission",
+      "to": "photoelectric_effect",
+      "kind": "related"
     }
   ]
 }

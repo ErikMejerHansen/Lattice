@@ -1,0 +1,206 @@
+{
+  "slug": "2026-07-02-thermionic-emission",
+  "title": "Thermionic emission: how hot metal became the world's first electron faucet",
+  "node": {
+    "id": "thermionic_emission",
+    "label": "Thermionic",
+    "subtitle": "AT²exp(−φ/kT)"
+  },
+  "intro": "Heat a wire and it will glow, and long before anyone knew what an electron was, glassblowers building incandescent lamps found that the vacuum inside a hot bulb was not empty. A small current would flow from the filament to any nearby metal plate, uninvited. The current came from electrons boiled out of the metal by temperature alone, a process now called thermionic emission, and its rate is set by two numbers we already know: the work function φ from the previous lesson and the temperature T of the surface. Richardson's equation packs both into one exponential and turns a table of metals into a table of cathodes.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The current from a hot wire",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The first hint came from Frederick Guthrie, a physics teacher in London. In 1873, playing with a red-hot iron sphere, he noticed that it lost a positive charge to the surrounding air but held onto a negative one. His interpretation was tentative and mostly forgotten. Twenty years later, Edison, hunting for the reason his carbon-filament light bulbs blackened, ran a wire from the positive terminal of a battery to a metal plate inside a bulb, saw a current flow from the filament to the plate, and could not make it flow the other way. He patented the 'Edison effect' in 1883 with no idea what it was for, and set it aside."
+        },
+        {
+          "type": "p",
+          "text": "The someone who found the use was John Ambrose Fleming. Sitting in the Marconi Wireless Company office in London in 1904, Fleming needed a way to convert the AC signal at the antenna of a radio receiver into a DC signal a galvanometer could read. He remembered the Edison effect (light bulbs pass current only one way, which is exactly what a rectifier is), added a bulb to his circuit, and named the two-electrode device the thermionic valve. The vacuum tube era started that afternoon."
+        },
+        {
+          "type": "p",
+          "text": "What no one had, in Edison's time or Fleming's, was a theory of the current. Why did it depend so violently on temperature? Why did a filament at 2000 K deliver microamps and one at 2500 K deliver amps? Why did any current flow at all if, as the photoelectric lesson taught, an electron needs at least φ of energy to leave the metal, and the thermal energy kT at 2500 K is only about 0.22 eV, twenty times smaller than the 4.5 eV work function of tungsten? The answer is not in the average thermal energy. It is in the tail."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The exponential tail of the Fermi sea",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The Fermi sea we met in the work-function lesson was drawn at T = 0. All states below E_F are filled, all above are empty, the top surface a perfect step. That step is a fiction of absolute zero. At any real temperature it softens: a few electrons in states just below E_F are thermally excited into states just above, blurring the step over an energy range of roughly kT (which at 2500 K is about 0.22 eV, small compared to φ but not zero). The occupation probability at energy E is given by the Fermi-Dirac distribution."
+        },
+        {
+          "type": "math",
+          "tex": "f(E, T) \\;=\\; \\frac{1}{1 + \\exp\\!\\left(\\dfrac{E - E_{F}}{kT}\\right)}",
+          "display": true,
+          "caption": "f(E, T) is the probability that a single-electron state at energy E is occupied at temperature T. E is the state energy. E_F is the Fermi energy of the metal, the top of the filled sea at T = 0. k is Boltzmann's constant. T is the absolute temperature. Below E_F the probability sits close to one; above E_F it falls off; the transition width around E_F is a few kT."
+        },
+        {
+          "type": "p",
+          "text": "For an electron to escape the metal, its total energy must exceed E_vac. Written in terms of the Fermi energy, that means the excess E − E_F must be greater than the work function φ. The occupancy at those energies is a tiny number, because we are far out on the high-energy tail. When E − E_F is many kT, the +1 in the denominator is negligible compared to the exponential, and the Fermi-Dirac distribution collapses to a pure Boltzmann factor."
+        },
+        {
+          "type": "math",
+          "tex": "f(E, T) \\;\\approx\\; \\exp\\!\\left(-\\dfrac{E - E_{F}}{kT}\\right) \\qquad \\text{when } E - E_{F} \\gg kT",
+          "display": true,
+          "caption": "The Fermi-Dirac distribution reduces to a Boltzmann exponential in its high-energy tail. f(E, T) is the occupancy. E is the electron energy. E_F is the Fermi energy. k is Boltzmann's constant. T is the absolute temperature. The reason thermionic emission is so violently temperature-sensitive is already visible here: at the escape threshold the exponent is −φ/(kT), so a small change in T shifts a huge exponential."
+        },
+        {
+          "type": "p",
+          "text": "Only the tiniest sliver of the Fermi sea has states occupied above E_vac at all. At 2500 K, exp(−4.5 eV / kT) ≈ exp(−21) ≈ 8 × 10⁻¹⁰, so fewer than one in a billion states above the vacuum level is populated. Multiply by the density of such states, and by the fraction whose momentum happens to point outward through the surface with enough normal component, and you get a current density measured in amps per square centimeter. It is small, but it is not zero, and unlike anything else about the Fermi sea, it can be adjusted by turning a knob (the filament current) that anyone can operate."
+        }
+      ],
+      "quiz": {
+        "question": "A student proposes: 'For thermionic emission, only electrons with total energy exactly at E_vac can escape, because they need the minimum energy to leave; any excess is wasted.' Why is this wrong, and what actually sets the emission rate?",
+        "options": [
+          "It is right: only electrons at E = E_vac contribute, and the rate is fixed by the density of states at exactly that energy.",
+          "It is wrong because the emission rate is set by the total population of electrons with E ≥ E_vac, integrated over all energies above threshold and weighted by the Fermi-Dirac tail; the tail is Boltzmann-like, so the population is dominated by energies near E_vac but not confined to it.",
+          "It is wrong because only electrons at exactly E_F can escape, since E_F is the highest occupied energy in the metal.",
+          "It is wrong because electrons cannot escape at any energy without an applied electric field to lift them over the surface barrier."
+        ],
+        "correctIndex": 1,
+        "explanation": "Escape is a threshold, not a resonance. Every electron with total kinetic energy exceeding φ (measured from E_F) and momentum pointing outward through the surface can leave, and the emission current is the integral over the whole tail from E_vac upward. Option A imagines a sharp line where the physics is a continuous integral. Option C confuses 'the highest fully occupied state at T = 0' with 'the highest state that has any occupation at finite T'; the Fermi-Dirac tail extends above E_F at any positive temperature. Option D describes field emission (cold, tunnelling-based, entirely different exponent) rather than thermionic emission, which happens with no applied field at all provided the tail reaches E_vac."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Richardson, Dushman, and the T² surprise",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Owen Willans Richardson began his Cambridge PhD in 1901 with the goal of turning Edison's mystery current into a formula. He treated the conduction electrons as a classical ideal gas confined in a box (the metal) with a lid (the vacuum barrier), asked what fraction had enough kinetic energy to fly over the lid, and multiplied by the rate at which they arrived at the lid. Maxwell-Boltzmann statistics gave him a prefactor proportional to the mean thermal velocity, which scales as the square root of temperature."
+        },
+        {
+          "type": "math",
+          "tex": "J \\;\\propto\\; T^{1/2} \\exp\\!\\left(-\\dfrac{\\varphi}{kT}\\right) \\qquad \\text{(Richardson, 1901, wrong)}",
+          "display": true,
+          "caption": "Richardson's original 1901 formula for the thermionic current density J from a hot metal surface. J is the current per unit area. T is the absolute temperature. φ is the work function. k is Boltzmann's constant. The T^{1/2} prefactor comes from the mean thermal velocity of a classical (Maxwell-Boltzmann) electron gas. The form fit his early data because the exponential dominates so completely that the shape of the prefactor is nearly invisible."
+        },
+        {
+          "type": "p",
+          "text": "Twenty years later, Saul Dushman at General Electric was building industrial vacuum tubes and needed the number, not the shape. Dushman redid the derivation using the Fermi-Dirac distribution (which Sommerfeld would give a full quantum footing in 1928, but which was already in circulation) and got a different prefactor. A Fermi gas does not have a Maxwell-Boltzmann velocity distribution; when you integrate the outgoing flux over the correct occupancy, the leading temperature dependence in the prefactor becomes T², not T^{1/2}. The revised formula matched a much wider swath of measurements, and it is what every textbook now writes down."
+        },
+        {
+          "type": "math",
+          "tex": "J \\;=\\; A\\, T^{2} \\exp\\!\\left(-\\dfrac{\\varphi}{kT}\\right) \\qquad \\text{(Richardson-Dushman, 1923)}",
+          "display": true,
+          "caption": "The Richardson-Dushman equation. J is the thermionic current density, in amperes per square centimeter. A is a material-dependent prefactor with a universal upper bound A₀ = 4πm_e ek²/h³ ≈ 120 A cm⁻² K⁻² (built from the electron mass m_e, the electron charge e, Boltzmann's constant k, and Planck's constant h). T is the absolute temperature. φ is the work function. k is Boltzmann's constant. Two dependencies matter: the T² prefactor climbs mildly with temperature, while the exponential climbs violently. A hundred-kelvin change in T at 2500 K multiplies J by roughly a factor of five."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-02-thermionic-emission.html",
+          "height": 460,
+          "caption": "The Richardson-Dushman current density J plotted against temperature T on a semilog axis. The top row of buttons picks a cathode material, each choice setting a work function φ (Cs 2.1 eV, Ba 2.5 eV, Th on W 2.6 eV, W 4.5 eV, Pt 5.6 eV). The slider sets T from 300 K to 3000 K and the readout gives the emitted current density at that point on the curve. Watch J span dozens of orders of magnitude between room temperature and white-hot tungsten, and watch the exponential dominate the mild T² prefactor. The Cs curve near 1200 K delivers roughly the same current as the W curve near 2500 K; that gap of over a thousand kelvin in operating temperature is why nothing built for volume production runs on pure tungsten."
+        },
+        {
+          "type": "p",
+          "text": "Richardson won the 1928 Nobel Prize 'for his work on the thermionic phenomenon and especially for the discovery of the law named after him,' even though the law he had was slightly wrong. Dushman never made it into the citation, though the 120 A cm⁻² K⁻² universal constant is called the Richardson-Dushman constant by every textbook, and the equation used in practice is Dushman's. The Nobel committee sometimes buys a name and gets a formula thrown in."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Reading φ from a Richardson plot",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The exponential in the Richardson-Dushman equation is what makes measuring φ from a heated cathode a very forgiving experiment. Suppose we measure J at half a dozen temperatures from 1500 K to 2500 K and want to read φ off the data. The prefactor AT² is a slowly varying nuisance; the exponential moves by many orders of magnitude across that range. Take the logarithm of both sides of the equation, and the exponential straightens out into a line."
+        },
+        {
+          "type": "math",
+          "tex": "\\ln\\!\\left(\\dfrac{J}{T^{2}}\\right) \\;=\\; \\ln A \\;-\\; \\dfrac{\\varphi}{k}\\cdot\\dfrac{1}{T}",
+          "display": true,
+          "caption": "The Richardson-Dushman equation rearranged so that plotting ln(J/T²) against 1/T gives a straight line. J is the measured current density. T is the temperature. A is the material prefactor. φ is the work function. k is Boltzmann's constant. The slope of the line is −φ/k, so multiplying the fitted slope by −k gives φ directly in energy units. The y-intercept is ln A, so A comes out too, though with much less precision."
+        },
+        {
+          "type": "p",
+          "text": "A plot of this form is called a Richardson plot, and it has one virtue that is worth the whole procedure: the answer is the slope, and the slope is insensitive to any constant multiplicative error in the current-density measurement. If your detector under-reads J by a factor of three, the missing factor slides into an additive shift of ln A at the y-intercept, and the slope is untouched. Since φ is the physics and A is the surface calibration, that is a very useful trade."
+        },
+        {
+          "type": "p",
+          "text": "The prefactor A has a beautiful theoretical value in one specific way: the constant A₀ ≈ 120 A cm⁻² K⁻² is built entirely from fundamental constants (the electron mass, the electron charge, Boltzmann's constant, Planck's constant) with no material property in it, so it should be the same for every clean metal. In practice, measured A values for real metals lie between 30 and 170 A cm⁻² K⁻², rarely at 120. The reasons are what makes surface physics interesting: not every electron with enough energy actually makes it out (some reflect back from the potential step), φ itself has a small temperature dependence, and adsorbed patches on the surface carry different work functions in parallel. A universal constant, in condensed matter, means a good starting point."
+        }
+      ],
+      "quiz": {
+        "question": "A student measures the thermionic current from a clean tungsten filament at three temperatures, plots ln(J/T²) against 1/T, and gets a straight line of slope −52,000 K. What work function should they report, and what would happen to that number if their ammeter systematically under-reads by a factor of two?",
+        "options": [
+          "φ ≈ 4.5 eV; a factor-of-two error in the absolute current would not change φ, because the slope of ln(J/T²) versus 1/T depends only on how J varies with T, not on its absolute value.",
+          "φ ≈ 52,000 eV; a factor-of-two error would double the reported φ.",
+          "φ ≈ 4.5 eV; a factor-of-two error would halve φ, because ln(J/2) shifts the whole line and rotates its slope.",
+          "φ ≈ 0.45 eV; slope is φ itself, not φ/k."
+        ],
+        "correctIndex": 0,
+        "explanation": "The slope of ln(J/T²) versus 1/T is −φ/k. Multiplying by −k: φ = 52,000 K × k = 52,000 × 8.617×10⁻⁵ eV/K ≈ 4.48 eV, close to the tungsten value. Option B forgets to divide by k and confuses temperature units with energy units. Option D leaves out the Boltzmann conversion in the other direction. Option C is the seductive wrong answer to the second half of the question: a multiplicative error in J becomes an additive shift in ln J (because ln(cJ) = ln c + ln J), which moves the whole line up or down parallel to itself and leaves the slope alone. Slope-based measurements are calibration-tolerant in exactly this way."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The oxide-coated cathode that ran the century",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Every operational vacuum tube built in the twentieth century, from the 1904 Fleming valve to the last picture-tube television off a Sony line in 2008, rested on a single accidental discovery by Arthur Wehnelt in Berlin in 1904. Wehnelt was measuring thermionic emission from platinum-iridium filaments, saw that the currents were disappointingly small at any temperature the wire could survive, and by accident found that when a fragment of calcium carbonate touched a hot cathode the current jumped by a factor of ten thousand. The heat had decomposed the carbonate to calcium oxide, and calcium oxide on a metal has a work function of about 1.5 eV instead of the 4.5 eV of the underlying tungsten."
+        },
+        {
+          "type": "p",
+          "text": "The exponential in Richardson-Dushman does the rest. Slot the two work functions into exp(−φ/kT) at 1000 K, where kT ≈ 0.086 eV, and the ratio of exponentials alone comes out to about exp(3 eV / 0.086 eV) ≈ 10¹⁵. Real oxide cathodes do not gain fifteen orders of magnitude (the prefactor A is smaller for oxides, and the surface is patchy), but they gain seven to eight orders, which is more than enough. An oxide-coated cathode at 1000 K delivers on the order of 0.1 A/cm²; a bare tungsten filament needs to run above 2400 K to match it. Every radio, every television before flat panels, every oscilloscope, every early computer used oxide-coated cathodes because the current you needed was reachable at temperatures the surrounding glass and support wires could tolerate for tens of thousands of hours, not the tens of hours a bare-metal filament would last. The RCA plant in Harrison, New Jersey, made twenty million oxide-cathode tubes a year at the peak."
+        },
+        {
+          "type": "p",
+          "text": "The same exponential now designs a very different device. A solid-oxide fuel cell (SOFC) reverses the problem: instead of boiling electrons out of a metal into a vacuum, it needs a ceramic electrolyte hot enough that O²⁻ ions hop through its lattice at a useful rate, and cool enough that the surrounding metal interconnects do not creep or oxidize. The ion-hopping rate follows an Arrhenius law of the same form Richardson wrote for electrons, and its activation energy plays the role of φ. Set the rim temperature too low and the exchange current dies exponentially; set it too high and the housing gives out. Modern SOFCs sit at 700 to 800°C for exactly this balancing act. Two centuries and two industries apart, the design constraint is the same equation, and the reason it bites is the same: the physics you care about hides in an exponent of a ratio of energies to kT."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A cathode designer wants to increase the current from a thermionic emitter by a factor of 1000 while keeping the operating temperature fixed at 1800 K. Which single change buys the biggest headroom to work with?",
+    "options": [
+      "Increase the collector voltage by a factor of 1000, so more of the emitted electrons reach the plate.",
+      "Coat the cathode with a low-φ material so that φ drops by 1 eV; at 1800 K, exp(1 eV / kT) is about 660, so this one change nearly gets there and a small T bump does the rest.",
+      "Double the emitter area, then wait for temperature-drift stabilization; the factor of 1000 in current will follow from long-term operation.",
+      "Switch from tungsten to platinum, which is denser and has more conduction electrons per unit volume."
+    ],
+    "correctIndex": 1,
+    "explanation": "The Richardson-Dushman equation makes φ the dominant lever because it lives in the exponent. At 1800 K, kT ≈ 0.155 eV, so dropping φ by 1 eV multiplies J by exp(1/0.155) ≈ 660. That is why every practical cathode is oxide-coated rather than pure metal: even a modest drop in φ shifts the current by more than the entire useful temperature range of a bare metal filament. Option A confuses saturation-current thermionic emission with space-charge-limited current in a diode; once the space charge has been pulled clear of the cathode, more voltage does not extract more electrons than the surface is boiling off. Option C is the linear-in-area answer to what is really an intensive-quantity question: doubling the area doubles the total current but leaves J unchanged. Option D is backwards: platinum has a higher work function than tungsten (5.6 vs 4.5 eV), so switching to it collapses J at a given T."
+  },
+  "suggestedNodes": [
+    {
+      "id": "schottky_effect",
+      "label": "Schottky effect",
+      "subtitle": "φ_eff = φ − ΔE",
+      "edgeType": "extends"
+    },
+    {
+      "id": "child_langmuir",
+      "label": "Child-Langmuir",
+      "subtitle": "J ∝ V^{3/2}",
+      "edgeType": "applied"
+    },
+    {
+      "id": "fowler_nordheim",
+      "label": "Field emission",
+      "subtitle": "cold tunnelling",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-02T07:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": [
+      "work_function",
+      "photoelectric_effect",
+      "schrodinger_equation"
+    ]
+  }
+}

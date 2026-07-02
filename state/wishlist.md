@@ -20,9 +20,13 @@
 # auto-suggested 2026-05-13 from compton-scattering
 
 # auto-suggested 2026-05-14 from work-function
-Thermionic emission — J = AT² exp(−φ/kT), Richardson and Dushman, the equation that designed every vacuum-tube cathode and now decides the rim temperature of every solid-oxide fuel cell
 Contact potential difference / Kelvin probe — wire two metals, watch their Fermi levels lock, read the surface-dipole step as a voltage; the technique that maps φ across a sample to the millivolt
 Fermi-Dirac distribution — f(E,T) = 1/(1 + exp((E−μ)/kT)), why filling identical particles into states changes statistical mechanics from Boltzmann to something thicker
+
+# auto-suggested 2026-07-02 from thermionic-emission
+Schottky effect — φ_eff = φ − √(eE/4πε₀), the image-charge argument that lets an applied field peel millivolts off the work function and the reason a real emitter's J(E) is not the Richardson plateau
+Child-Langmuir law — J ∝ V^{3/2}/d², the other equation that governs a real vacuum diode, where space charge in the interelectrode gap caps the current below what the cathode is boiling off
+Field emission (Fowler-Nordheim) — cold emission by quantum tunnelling through a triangular barrier tilted by a strong field, J ∝ E² exp(−B φ^{3/2}/E), the cathode of the scanning tunnelling microscope and the field-emission display
 
 # auto-suggested 2026-05-17 from schrodinger-equation
 Born rule — |ψ|² as a probability density on configuration space, the interpretation Schrödinger never accepted and that survived him anyway
