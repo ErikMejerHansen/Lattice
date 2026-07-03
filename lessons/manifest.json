@@ -439,5 +439,12 @@
     "subtitle": "AT\u00b2exp(\u2212\u03c6/kT)",
     "date": "2026-07-02",
     "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-07-03-contact-potential-difference",
+    "title": "Contact potential difference: how Lord Kelvin turned two touching metals into a voltmeter",
+    "subtitle": "V = \u0394\u03c6/e",
+    "date": "2026-07-03",
+    "estimatedReadingMinutes": 22
   }
 ]

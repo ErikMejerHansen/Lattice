@@ -629,6 +629,16 @@
       "createdAt": "2026-07-02T07:00:00Z",
       "col": 1,
       "row": 31
+    },
+    {
+      "id": "contact_potential",
+      "label": "Kelvin probe",
+      "subtitle": "V = \u0394\u03c6/e",
+      "state": "available",
+      "lesson": "2026-07-03-contact-potential-difference",
+      "createdAt": "2026-07-03T07:00:00Z",
+      "col": 0,
+      "row": 32
     }
   ],
   "edges": [
@@ -1479,6 +1489,21 @@
     },
     {
       "from": "thermionic_emission",
+      "to": "photoelectric_effect",
+      "kind": "related"
+    },
+    {
+      "from": "contact_potential",
+      "to": "work_function",
+      "kind": "extends"
+    },
+    {
+      "from": "contact_potential",
+      "to": "thermionic_emission",
+      "kind": "related"
+    },
+    {
+      "from": "contact_potential",
       "to": "photoelectric_effect",
       "kind": "related"
     }

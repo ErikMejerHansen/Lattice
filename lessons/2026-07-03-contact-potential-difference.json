@@ -1,0 +1,202 @@
+{
+  "slug": "2026-07-03-contact-potential-difference",
+  "title": "Contact potential difference: how Lord Kelvin turned two touching metals into a voltmeter",
+  "node": {
+    "id": "contact_potential",
+    "label": "Kelvin probe",
+    "subtitle": "V = Δφ/e"
+  },
+  "intro": "Alessandro Volta in 1801 pressed a strip of zinc and a strip of copper against his tongue and felt a sting, evidence that two clean metals touched together produce a voltage. Nobody could explain why for a hundred years, until the Fermi sea idea from the work-function lesson supplied the answer: wire two metals together and electrons flow between them until their Fermi levels equalize, leaving the vacuum levels above their surfaces at different heights and a potential difference in the gap between them. That gap voltage is called the contact potential difference (CPD), and it is exactly (φ₁ − φ₂)/e. Lord Kelvin in 1898 figured out how to measure it without wiring in his own contact potentials, and the scanning Kelvin probes on modern surface-analysis benches all still run on his trick.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Volta touched, and nobody could say why",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Alessandro Volta announced the effect in a letter to the Royal Society of London on March 20, 1800. Two dissimilar metals in contact, he wrote, produce a persistent electromotive force with no chemistry required, no motion required, and no charge injected. His demonstration used pairs of metals from what became known as the Volta series (zinc, tin, lead, iron, copper, silver, gold), stacked with brine-soaked cardboard to make the pile that bore his name. What made the series interesting was not the pile but the rule underneath it: pick any two metals from the list, touch them, and the resulting potential difference was as reproducible as their positions in the series predicted."
+        },
+        {
+          "type": "p",
+          "text": "The disagreement that followed was long and vicious. Luigi Galvani, still in Bologna, insisted the electricity came from the frog leg, meaning the biology, and that Volta's metals were merely conducting a charge that biological tissue already possessed. Volta insisted the metals were the source and the biology was the detector. Michael Faraday, weighing in from the Royal Institution in the 1830s with the authority of the man who had discovered electromagnetic induction, sided with neither camp and instead concluded that clean-metal contact potentials could not exist at all. Any observed EMF, he argued, had to come from unnoticed chemistry (an oxide film, a trace electrolyte) at the interface."
+        },
+        {
+          "type": "p",
+          "text": "Faraday was wrong, but there was no direct way to prove it in 1836. Every voltmeter in the world used metal wire probes that introduced their own contact potentials at every junction, and the sum of those unknowns was mixed inextricably into the measured signal. The question of whether a clean-metal contact potential existed at all had to wait until someone figured out how to interrogate the vacuum gap between two surfaces without dragging a wire into it. That someone would be William Thomson, Lord Kelvin, sixty-two years later; the physical explanation would wait longer still, until the Sommerfeld free-electron model of 1927 gave metals their Fermi sea."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Fermi levels lock, vacuum levels do not",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The work-function lesson introduced the two energy levels that matter here. Every metal has a Fermi level E_F, the top of its filled electron sea at zero temperature, and a vacuum level E_vac just outside its surface where a free electron would sit at rest. The work function φ is the gap between them, φ = E_vac − E_F, meaning the energy needed to lift a Fermi-level electron out through the surface into the vacuum immediately above. Different metals have different φ: about 5.1 eV for gold, 4.5 eV for tungsten, 4.1 eV for aluminum, 2.1 eV for cesium."
+        },
+        {
+          "type": "p",
+          "text": "Take two metals A and B with φ_A ≠ φ_B, mount them a few millimeters apart with their surfaces facing, and connect them with a wire. Electrical equilibrium in the wired system demands equal chemical potential, and the chemical potential of an electron in a metal is the Fermi level. So electrons flow through the wire from the lower-φ metal (the one whose Fermi level was originally higher relative to the vacuum) into the higher-φ metal, until E_F,A = E_F,B. The exchange is tiny (a few times 10⁻¹² coulombs for a centimeter-sized capacitor) and stops the instant the two Fermi levels align."
+        },
+        {
+          "type": "p",
+          "text": "Once the Fermi levels are locked, the vacuum levels above the two surfaces are still separated. Adding the work function on top of the shared E_F puts E_vac,A at E_F + φ_A and E_vac,B at E_F + φ_B, so the vacuum-level difference above the two surfaces is exactly φ_A − φ_B. In the gap between them, this shows up as an electrostatic potential difference. Call it the contact potential difference V_CPD and the sign convention is fixed by which surface we take as reference."
+        },
+        {
+          "type": "math",
+          "tex": "V_{\\text{CPD}} \\;=\\; \\dfrac{\\varphi_{A} - \\varphi_{B}}{e}",
+          "display": true,
+          "caption": "V_CPD is the electrostatic potential of surface B measured relative to surface A when the two metals are wired together in electrical equilibrium. φ_A is the work function of metal A. φ_B is the work function of metal B. e is the elementary charge, so that V_CPD comes out in volts when the work functions are in electronvolts. The formula says: whichever metal has the higher work function ends up at the lower electrostatic potential of its own vacuum surface, because it drew electrons in through the wire to align its Fermi level."
+        }
+      ],
+      "quiz": {
+        "question": "Wire a clean gold surface (φ_Au = 5.1 eV) to a clean aluminum surface (φ_Al = 4.1 eV) with their faces separated by a small vacuum gap. What contact potential difference develops between the two surfaces, and which is at higher electrostatic potential?",
+        "options": [
+          "V_CPD = 4.6 V, with neither one privileged; the CPD is the average of the two work functions.",
+          "V_CPD = 9.2 V, with Au at higher potential; the CPD is the sum of the two work functions.",
+          "V_CPD = 1.0 V, with Al at higher potential; the CPD is the difference of the work functions divided by e, and the lower-φ metal sits at higher potential because the higher-φ metal drew electrons in through the wire during equilibration.",
+          "V_CPD = 0 V, because in electrical equilibrium there can be no potential difference anywhere in a connected system."
+        ],
+        "correctIndex": 2,
+        "explanation": "V_CPD = (φ_Au − φ_Al)/e = 1.0 V. The sign works out because during equilibration a small negative charge moved through the wire from Al to Au (which had the deeper Fermi sea to fill), leaving Al positive and Au negative on the vacuum-facing sides. Option A confuses V_CPD with a mean and drops the divide-by-e that turns eV into V. Option B doubles-and-adds where the physics subtracts. Option D is the intuitive trap: equilibrium means no net current flows in the circuit, not that every point is at the same electrostatic potential. The Fermi levels are equal, but the vacuum levels are not, and the offset between them lives in the vacuum gap as V_CPD."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Kelvin's vibrating capacitor",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "William Thomson, by then Lord Kelvin, published the measurement trick in 1898 in the Philosophical Magazine, after almost twenty years of on-and-off attempts. The problem was the one Faraday had run into. Any wire you clip to a surface adds its own metal-metal contact potentials at every junction (probe to sample, probe to voltmeter, voltmeter to reference), and those add into any DC voltmeter reading as an unknown constant offset. Kelvin's move was to stop trying to read a DC voltage at all, and instead to convert the vacuum-gap CPD into a time-varying current that a lock-in-like measurement could isolate."
+        },
+        {
+          "type": "p",
+          "text": "Set up the geometry. Two parallel metal plates face each other across a small vacuum gap of mean width d₀, wired externally through an adjustable DC voltage source of value V_ext. The plates form a parallel-plate capacitor of capacitance C = ε₀A/d, with A the plate area and d the instantaneous gap. Vibrate one plate mechanically so d(t) = d₀ + Δd·sin(ωt), which makes C(t) time-varying with the same period."
+        },
+        {
+          "type": "p",
+          "text": "The instantaneous charge on the capacitor is Q(t) = C(t)·V_total, where V_total is the total voltage across the gap. That total is the sum of everything driving charge onto the plates: the external bias V_ext (which we can set) and the contact potential difference V_CPD (which we want to measure), plus a fixed contribution from wire-junction CPDs that will turn out not to matter. Differentiating Q(t) with respect to time gives the current in the external circuit."
+        },
+        {
+          "type": "math",
+          "tex": "I(t) \\;=\\; \\dfrac{dQ}{dt} \\;=\\; (V_{\\text{CPD}} + V_{\\text{ext}}) \\,\\dfrac{dC}{dt}",
+          "display": true,
+          "caption": "I(t) is the instantaneous current flowing in the external circuit that connects the two plates. Q(t) is the charge on the capacitor at time t. V_CPD is the vacuum-gap contact potential difference we want to measure. V_ext is the DC bias voltage we apply externally. dC/dt is the time derivative of the mechanically vibrated gap capacitance, which oscillates at the vibration frequency ω. The equation says: the AC component of the circuit current at frequency ω has amplitude proportional to (V_CPD + V_ext), so nulling that AC amplitude with V_ext gives V_ext = −V_CPD and reads the contact potential directly."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-03-contact-potential-difference.html",
+          "height": 480,
+          "caption": "A vibrating-capacitor Kelvin probe. Two plates face each other across a gap; the upper plate oscillates at frequency ω, so its capacitance C(t) sweeps between C_min and C_max on every cycle. Move the V_ext slider to change the DC bias across the gap. The right panel shows the instantaneous circuit current I(t) at frequency ω, with amplitude ∝ (V_CPD + V_ext). The vacuum-gap V_CPD is fixed at +0.7 V (say, an Au tip against an Al sample offset by a small extra term); sweep V_ext until the AC current amplitude collapses to zero, and read V_CPD directly as −V_ext at the null. The DC contact potentials in the wire junctions add a constant offset to Q that carries no dC/dt companion, so lock-in detection at ω discards them for free."
+        },
+        {
+          "type": "p",
+          "text": "Sweep V_ext through zero while watching the ω-component of I(t). The amplitude of the AC current shrinks linearly with V_ext + V_CPD, passes through zero at V_ext = −V_CPD, and grows again with opposite phase on the other side. The null point identifies V_CPD as the negative of the applied bias that killed the signal, and it does so with no absolute-current calibration required (a slope crossing zero is measured by its zero, not its slope). The wire-junction contact potentials contribute a fixed DC offset to the total charge Q, but they carry no dC/dt companion of their own, so they leave the ω-amplitude of I untouched. Kelvin had turned an unmeasurable DC voltage into a measurable AC null."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Half of φ lives in the surface dipole",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "If work function were a pure bulk property, then two clean surfaces of the same metal in different crystallographic orientations would have to give the same φ. They do not. The (110) face of tungsten, the most densely packed and lowest-energy surface, has φ = 5.25 eV. The (111) face, one atomic layer less densely packed, has φ = 4.47 eV. The gap between the two, 0.78 eV, is far too large to blame on measurement scatter. The Kelvin probe on a scratched-and-annealed tungsten sample reads exactly this variation as the surface grains reorient, and Zisman at Berkeley showed the effect in 1932 with the modernized vibrating capacitor that is still the standard bench apparatus."
+        },
+        {
+          "type": "p",
+          "text": "The reason is that the work function decomposes into two parts. There is a bulk electronic chemical potential μ (the depth of the Fermi sea below the vacuum inside the metal, ignoring the surface), and there is a surface dipole barrier eD_s that the escaping electron must cross on its way out. The dipole comes from the electron cloud spilling slightly out into vacuum ahead of the last row of positive ion cores, which leaves the outer side of the surface negative and the inner side positive, a dipole layer oriented outward."
+        },
+        {
+          "type": "math",
+          "tex": "\\varphi \\;=\\; -\\mu \\;+\\; e D_{s}",
+          "display": true,
+          "caption": "The surface-dipole decomposition of the work function. φ is the work function of the metal surface. μ is the bulk chemical potential (Fermi energy) of the electrons, measured with a sign such that −μ is a positive contribution to φ. e is the elementary charge. D_s is the surface dipole potential step, the extra electrostatic barrier an escaping electron must cross because the electron cloud spills into vacuum ahead of the ion cores. Two crystal faces of the same metal share μ but differ in D_s, which is why φ varies with facet orientation. A monolayer of adsorbate can flip D_s dramatically without touching μ."
+        },
+        {
+          "type": "p",
+          "text": "Because two facets of the same metal share the same bulk μ, all of the 0.78 eV difference between W(110) and W(111) is a difference in eD_s. Adsorb something onto the surface and you can change D_s by even more. A submonolayer of cesium on tungsten (the classic thermionic-cathode recipe from the last lesson) drops φ from 4.5 eV to about 1.5 eV, a 3-volt collapse driven entirely by the cesium atoms donating a fraction of an electron to tungsten and flipping the sign of D_s. The Kelvin probe reads a 3-volt shift in V_CPD; every bench built after 1932 uses that shift as the working measurement of what surface chemistry is doing to a cathode."
+        }
+      ],
+      "quiz": {
+        "question": "You wire a clean tungsten reference tip (φ_ref = 4.50 eV) into a Kelvin probe and null the current across a small vacuum gap facing an unknown polycrystalline sample. The null is reached at V_ext = −0.75 V, meaning V_CPD = +0.75 V with the reference tip taken as A and the sample as B. What is the work function of the sample surface, and what would you conclude if a second measurement on a different spot on the same sample gave V_CPD = +1.10 V?",
+        "options": [
+          "φ_sample = 5.25 eV; the second spot has φ = 5.60 eV. Add the CPD to the reference in each case.",
+          "φ_sample = 3.75 eV; the second spot has φ = 3.40 eV. Because V_CPD = (φ_ref − φ_sample)/e, a positive V_CPD means the sample has a lower work function than the reference, and different spots differing by 0.35 V reveal a 0.35 eV variation in φ across the sample surface (likely from a different crystallographic facet or an adsorbate patch).",
+          "φ_sample = 4.50 eV; the reference and sample must always agree because their Fermi levels are wired together.",
+          "Cannot determine φ_sample from a single Kelvin probe measurement; the technique reads only current, never a work function."
+        ],
+        "correctIndex": 1,
+        "explanation": "From the definition V_CPD = (φ_A − φ_B)/e with A = reference and B = sample, the first spot has φ_sample = φ_ref − e·V_CPD = 4.50 − 0.75 = 3.75 eV. The second spot has φ_sample = 4.50 − 1.10 = 3.40 eV. Option A is the sign-reversal trap, which reads the formula as (φ_sample − φ_ref)/e; it is the single most common error in Kelvin probe work. Option C confuses Fermi-level alignment (which does hold in the wired system) with vacuum-level alignment (which does not, and whose failure IS the CPD). Option D forgets that once the reference φ is known, the null bias V_ext gives V_CPD as −V_ext with no absolute-current calibration, and V_CPD plus φ_ref plus a sign convention determines φ_sample uniquely. The 0.35 V spatial variation on the sample is exactly the kind of facet-to-facet or adsorbate-patch mapping the technique exists to reveal."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The cantilever that gave Kelvin's method nanometer eyes",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In 1991 Martin Nonnenmacher, Michael O'Boyle, and H. Kumar Wickramasinghe at IBM's T.J. Watson Research Center in Yorktown Heights took Kelvin's 1898 vibrating capacitor and put it on the tip of an atomic force microscope cantilever. An AFM cantilever, invented by Binnig, Quate, and Gerber in 1986, is a spring-mounted sharpened tip a few nanometers wide whose deflection can be read to picometer precision from a bounced laser spot. Nonnenmacher and colleagues drove their cantilever electrically at the tip's mechanical resonance frequency (typically 30 to 100 kHz) with a modulated bias, and detected the resulting electrostatic force that Kelvin's V_CPD would produce between tip and sample. They called the technique Kelvin probe force microscopy (KPFM)."
+        },
+        {
+          "type": "p",
+          "text": "The paper, five and a half pages in Applied Physics Letters, showed a gold-on-graphite sample with the two materials distinguishable by their 0.5 volt CPD contrast at 25 nanometer spatial resolution. Where a benchtop Kelvin probe averaged V_CPD over a plate the size of a fingernail (typically 10⁻⁴ m² of area), the KPFM tip read V_CPD at a spot two atomic terraces wide. The ratio of areas was 10⁻⁸, so the spatial resolution improved by a factor of ten thousand along each axis while the millivolt voltage sensitivity of the lock-in method was retained. Every subsequent scanning-Kelvin-probe apparatus (AFM-based, scanning-tunneling-microscope-based, and photoelectron-based variants alike) descended from this experiment."
+        },
+        {
+          "type": "p",
+          "text": "The applications flooded in through the 2000s. Illuminate a silicon photodiode under a KPFM tip and you can watch the surface photovoltage build up in microseconds as photocarriers redistribute (Sadewasser and Glatzel 2011). Scan across a polycrystalline copper-indium-gallium-selenide solar cell and you see the band bending at grain boundaries where non-radiative recombination steals efficiency (Jiang 2004). Ride along the channel of an organic field-effect transistor and you can pinpoint the trap sites that limit its mobility (Palermo 2006). A KPFM map of a working lithium-ion cathode particle during discharge shows the lithium-depletion front sweeping across the surface in real time (Nagpure 2011)."
+        },
+        {
+          "type": "p",
+          "text": "The observation earned by the specific case is not about resolution. It is about how little the physics changed to accommodate the four-order-of-magnitude scale-down. Kelvin's benchtop apparatus vibrated a centimeter-wide capacitor plate a few hundred microns at 1 kilohertz across a 10 mm gap. The KPFM cantilever vibrates a 10-nanometer-wide tip a few tenths of a nanometer at 60 kilohertz across a 10-nanometer gap. Every length has shrunk by six orders of magnitude, and the frequency has climbed by two. The equation for the current at frequency ω is the same. The null condition is the same. The wire-junction CPDs still cancel by the same lock-in argument. What changed was the meaning of the word 'surface': from a polished laboratory plate to a single atomic-terrace facet. The apparatus scaled; the physics did not."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A Kelvin probe reads the contact potential difference by nulling an AC current at the mechanical vibration frequency ω of the gap capacitor. What role does the vibration play, and what would happen if you tried the same measurement with a static (non-vibrating) capacitor gap and a sensitive DC ammeter in the loop?",
+    "options": [
+      "The vibration averages out mechanical drift, and a static gap would give the same signal but with more noise from thermal drift of the plates.",
+      "The vibration creates fresh contact potentials at each turnaround of the plates, which the DC method cannot access; a static gap would leave the wire CPDs uncanceled.",
+      "The vibration modulates the capacitance so that dC/dt is nonzero and I = V·dC/dt at frequency ω becomes measurable. A static gap has dC/dt = 0 identically, so a DC ammeter reads zero regardless of V_CPD: a capacitor in electrostatic equilibrium carries no current, so the gap voltage is invisible to any DC measurement. The vibration converts a hidden DC voltage into a lock-in-friendly AC current, and the wire-junction DC contact potentials leave I at frequency ω untouched because they carry no dC/dt companion.",
+      "The vibration prevents the tip from touching the sample; a static gap would short-circuit the measurement and destroy the tip."
+    ],
+    "correctIndex": 2,
+    "explanation": "A capacitor in electrostatic equilibrium has Q = CV constant, so I = dQ/dt = 0. The gap voltage exists, but there is no current signature for any ammeter to detect. Kelvin's insight was to force C to vary with time, so that I = V·dC/dt appears as an AC signal at the vibration frequency with amplitude proportional to V. Lock-in detection tuned to ω picks out that signal and rejects everything else, including all the wire-junction DC contact potentials that had defeated every pre-1898 attempt to measure V_CPD directly. Option A misreads the vibration as noise averaging. Option B invents a nonexistent physical effect: the wire CPDs are DC and vibration does not modulate them; they cancel because they contribute nothing at ω, not because vibration creates or destroys them. Option D describes a mechanical hazard that is not what the null method fixes; the null works whether or not the tip could safely touch, and in fact non-contact operation is a bonus, not the reason for vibrating."
+  },
+  "suggestedNodes": [
+    {
+      "id": "kelvin_probe_force_microscopy",
+      "label": "KPFM",
+      "subtitle": "V_CPD, nm scale",
+      "edgeType": "extends"
+    },
+    {
+      "id": "surface_photovoltage",
+      "label": "Surface PV",
+      "subtitle": "illumination ΔV",
+      "edgeType": "applied"
+    },
+    {
+      "id": "volta_series",
+      "label": "Volta series",
+      "subtitle": "1801 EMF list",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-03T07:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": [
+      "work_function",
+      "thermionic_emission",
+      "photoelectric_effect"
+    ]
+  }
+}

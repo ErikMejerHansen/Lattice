@@ -1,0 +1,284 @@
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+</style>
+<style>
+#viz {
+  padding: 12px 14px 14px 14px;
+  box-sizing: border-box;
+}
+.panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.panel {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+}
+.panel h4 {
+  margin: 0; padding: 6px 8px 4px 8px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  font-weight: 500;
+}
+svg { display: block; width: 100%; height: auto; }
+.readout {
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr;
+  gap: 4px 12px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  margin-top: 10px;
+  padding: 6px 8px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+}
+.readout .k { color: var(--text-muted); font-style: italic; font-family: "Source Serif 4", serif; }
+.readout .v { text-align: right; }
+.null-hint {
+  margin-top: 8px;
+  font-style: italic;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  min-height: 18px;
+}
+.null-hint.hit {
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 600;
+}
+@media (max-width: 460px) {
+  .panels { grid-template-columns: 1fr; }
+}
+</style>
+<div id="viz">
+  <div class="panels">
+    <div class="panel">
+      <h4>Vibrating capacitor</h4>
+      <svg id="capSvg" viewBox="0 0 320 220" preserveAspectRatio="xMidYMid meet" aria-label="Two-plate vibrating capacitor with V_ext bias source in the loop"></svg>
+    </div>
+    <div class="panel">
+      <h4>Circuit current I(t)</h4>
+      <svg id="chartSvg" viewBox="0 0 320 220" preserveAspectRatio="xMidYMid meet" aria-label="Circuit current trace at vibration frequency omega"></svg>
+    </div>
+  </div>
+  <div class="viz-slider-row">
+    <label for="vExt">V_ext</label>
+    <input type="range" id="vExt" min="-2000" max="2000" step="10" value="200" />
+    <span class="value" id="vVal">+0.20 V</span>
+  </div>
+  <div class="readout" id="readout"></div>
+  <div class="null-hint" id="nullHint"></div>
+  <div class="viz-caption" style="margin-top: 8px;">
+    A Kelvin-probe schematic. Two plates face each other with a fixed vacuum-gap contact potential V_CPD = +0.70 V (say, a gold tip against an aluminum sample). The top plate vibrates at frequency omega, so the gap capacitance C(t) sweeps between C_min and C_max. The right panel plots the circuit current I(t) = (V_CPD + V_ext) dC/dt at the current V_ext setting. Move the slider until the AC amplitude collapses; the null occurs at V_ext = -V_CPD = -0.70 V, and that null bias IS the measurement of V_CPD, with no absolute-current calibration needed.
+  </div>
+</div>
+<script>
+(function() {
+  var V_CPD = 0.70;
+  var C0 = 5.0;
+  var plateAmp = 12;
+  var freq = 1.0;
+  var vExtEl = document.getElementById('vExt');
+  var vValEl = document.getElementById('vVal');
+  var readoutEl = document.getElementById('readout');
+  var nullHintEl = document.getElementById('nullHint');
+  var capSvg = document.getElementById('capSvg');
+  var chartSvg = document.getElementById('chartSvg');
+  var startT = null;
+
+  function readV() {
+    return parseInt(vExtEl.value, 10) / 1000;
+  }
+
+  function fmtV(v) {
+    return (v >= 0 ? '+' : '') + v.toFixed(2) + ' V';
+  }
+
+  function fmtNorm(x) {
+    return (x >= 0 ? '+' : '') + x.toFixed(2);
+  }
+
+  function draw(t) {
+    var Vext = readV();
+    var Vsum = V_CPD + Vext;
+    var phase = 2 * Math.PI * freq * t;
+
+    var yUpper0 = 90;
+    var yLower = 150;
+    var yTop = yUpper0 - plateAmp * Math.sin(phase);
+
+    var capContent = '';
+
+    // Wire loop from left of top plate down through V_ext, up to left of bottom plate
+    capContent += '<line x1="90" y1="' + yTop + '" x2="30" y2="' + yTop + '" stroke="#1a1a18" stroke-width="1.5" />';
+    capContent += '<line x1="30" y1="' + yTop + '" x2="30" y2="104" stroke="#1a1a18" stroke-width="1.5" />';
+    capContent += '<line x1="30" y1="128" x2="30" y2="150" stroke="#1a1a18" stroke-width="1.5" />';
+    capContent += '<line x1="30" y1="150" x2="90" y2="150" stroke="#1a1a18" stroke-width="1.5" />';
+
+    // Battery symbol for V_ext
+    capContent += '<line x1="20" y1="110" x2="40" y2="110" stroke="#1a1a18" stroke-width="2" />';
+    capContent += '<line x1="26" y1="122" x2="34" y2="122" stroke="#1a1a18" stroke-width="2" />';
+    capContent += '<text x="46" y="120" fill="#1a1a18" font-family="Source Serif 4, serif" font-size="11" font-style="italic">V_ext</text>';
+
+    // Ammeter
+    capContent += '<circle cx="60" cy="' + yTop + '" r="8" fill="#faf5e9" stroke="#1a1a18" stroke-width="1.2" />';
+    capContent += '<text x="60" y="' + (yTop + 3) + '" font-family="IBM Plex Mono, monospace" font-size="9" fill="#1a1a18" text-anchor="middle">A</text>';
+
+    // Top plate (vibrating tip)
+    capContent += '<rect x="90" y="' + (yTop - 4) + '" width="140" height="8" fill="#9c3a22" />';
+    capContent += '<text x="234" y="' + (yTop - 8) + '" fill="#6b6359" font-family="Source Serif 4, serif" font-size="10" font-style="italic">tip (A)</text>';
+
+    // Bottom plate (sample)
+    capContent += '<rect x="90" y="146" width="140" height="8" fill="#1a1a18" />';
+    capContent += '<text x="234" y="164" fill="#6b6359" font-family="Source Serif 4, serif" font-size="10" font-style="italic">sample (B)</text>';
+
+    // Gap indicator
+    var gapMid = (yTop + yLower) / 2;
+    capContent += '<line x1="80" y1="' + yTop + '" x2="80" y2="' + yLower + '" stroke="#b8ac8e" stroke-width="1" />';
+    capContent += '<line x1="76" y1="' + yTop + '" x2="84" y2="' + yTop + '" stroke="#b8ac8e" stroke-width="1" />';
+    capContent += '<line x1="76" y1="' + yLower + '" x2="84" y2="' + yLower + '" stroke="#b8ac8e" stroke-width="1" />';
+    capContent += '<text x="72" y="' + (gapMid + 4) + '" text-anchor="end" fill="#6b6359" font-family="Source Serif 4, serif" font-size="11" font-style="italic">d(t)</text>';
+
+    // Vibration arrow above tip
+    var arrowY = yTop - 26;
+    capContent += '<line x1="160" y1="' + (arrowY - 8) + '" x2="160" y2="' + (arrowY + 8) + '" stroke="#c47558" stroke-width="1.5" />';
+    capContent += '<polyline points="156,' + (arrowY - 4) + ' 160,' + (arrowY - 8) + ' 164,' + (arrowY - 4) + '" fill="none" stroke="#c47558" stroke-width="1.5" />';
+    capContent += '<polyline points="156,' + (arrowY + 4) + ' 160,' + (arrowY + 8) + ' 164,' + (arrowY + 4) + '" fill="none" stroke="#c47558" stroke-width="1.5" />';
+    capContent += '<text x="170" y="' + (arrowY + 3) + '" fill="#6b6359" font-family="Source Serif 4, serif" font-size="10" font-style="italic">omega vibration</text>';
+
+    // Charge indicators when |Vsum| noticeable
+    if (Math.abs(Vsum) > 0.05) {
+      var topSym = Vsum > 0 ? '+' : '-';
+      var botSym = Vsum > 0 ? '-' : '+';
+      var topCol = Vsum > 0 ? '#9c3a22' : '#1a1a18';
+      var botCol = Vsum > 0 ? '#1a1a18' : '#9c3a22';
+      for (var i = 0; i < 5; i++) {
+        var xt = 108 + i * 26;
+        capContent += '<text x="' + xt + '" y="' + (yTop - 9) + '" fill="' + topCol + '" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="700" text-anchor="middle">' + topSym + '</text>';
+        capContent += '<text x="' + xt + '" y="' + (yLower + 21) + '" fill="' + botCol + '" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="700" text-anchor="middle">' + botSym + '</text>';
+      }
+    } else {
+      capContent += '<text x="160" y="' + (yLower + 32) + '" text-anchor="middle" fill="#9c3a22" font-family="Source Serif 4, serif" font-size="11" font-style="italic">null: no net charge oscillation</text>';
+    }
+
+    capSvg.innerHTML = capContent;
+
+    // Chart
+    var axLeft = 32, axRight = 306, axTop = 20, axBot = 190;
+    var midY = (axTop + axBot) / 2;
+    var IscaleMax = 3.0;
+
+    var chartContent = '';
+    chartContent += '<line x1="' + axLeft + '" y1="' + midY + '" x2="' + axRight + '" y2="' + midY + '" stroke="#b8ac8e" stroke-width="1" />';
+    chartContent += '<line x1="' + axLeft + '" y1="' + axTop + '" x2="' + axLeft + '" y2="' + axBot + '" stroke="#b8ac8e" stroke-width="1" />';
+    chartContent += '<text x="' + (axLeft - 5) + '" y="' + (midY + 3) + '" text-anchor="end" fill="#6b6359" font-family="Source Serif 4, serif" font-size="10" font-style="italic">0</text>';
+    chartContent += '<text x="' + (axLeft - 5) + '" y="' + (axTop + 8) + '" text-anchor="end" fill="#6b6359" font-family="Source Serif 4, serif" font-size="10" font-style="italic">+I</text>';
+    chartContent += '<text x="' + (axLeft - 5) + '" y="' + (axBot) + '" text-anchor="end" fill="#6b6359" font-family="Source Serif 4, serif" font-size="10" font-style="italic">-I</text>';
+    chartContent += '<text x="' + ((axLeft + axRight) / 2) + '" y="210" text-anchor="middle" fill="#6b6359" font-family="Source Serif 4, serif" font-size="10" font-style="italic">time (arrow of ω cycles)</text>';
+
+    // Amplitude envelope
+    var Iamp = Math.abs(Vsum) * (plateAmp * 2 * Math.PI * freq * C0 * 60 / (60 * 60));
+    var IampY = (Iamp / IscaleMax) * ((axBot - axTop) / 2);
+    if (IampY > 2) {
+      IampY = Math.min(IampY, (axBot - axTop) / 2 - 2);
+      chartContent += '<line x1="' + axLeft + '" y1="' + (midY - IampY) + '" x2="' + axRight + '" y2="' + (midY - IampY) + '" stroke="#c47558" stroke-width="0.8" stroke-dasharray="3,3" />';
+      chartContent += '<line x1="' + axLeft + '" y1="' + (midY + IampY) + '" x2="' + axRight + '" y2="' + (midY + IampY) + '" stroke="#c47558" stroke-width="0.8" stroke-dasharray="3,3" />';
+    }
+
+    // I(t) waveform, sampled backward through window
+    var Nsamples = 140;
+    var window_s = 3.0;
+    var pts = [];
+    for (var i = 0; i <= Nsamples; i++) {
+      var frac = i / Nsamples;
+      var tPast = t - (1 - frac) * window_s;
+      var phasePast = 2 * Math.PI * freq * tPast;
+      var yPastTop = yUpper0 - plateAmp * Math.sin(phasePast);
+      var dPast = yLower - yPastTop;
+      var dd_dt_past = plateAmp * (2 * Math.PI * freq) * Math.cos(phasePast);
+      var dC_dt_past = -C0 * 60 * dd_dt_past / (dPast * dPast);
+      var Ipast = Vsum * dC_dt_past;
+      var xp = axLeft + frac * (axRight - axLeft);
+      var yp = midY - (Ipast / IscaleMax) * ((axBot - axTop) / 2);
+      if (yp < axTop) yp = axTop;
+      if (yp > axBot) yp = axBot;
+      pts.push(xp.toFixed(1) + ',' + yp.toFixed(1));
+    }
+    chartContent += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="#9c3a22" stroke-width="1.8" />';
+
+    chartSvg.innerHTML = chartContent;
+
+    // Readout
+    readoutEl.innerHTML =
+      '<span class="k">V_CPD (fixed)</span><span class="v">' + fmtV(V_CPD) + '</span>' +
+      '<span class="k">V_ext (slider)</span><span class="v">' + fmtV(Vext) + '</span>' +
+      '<span class="k">V_CPD + V_ext</span><span class="v">' + fmtV(Vsum) + '</span>' +
+      '<span class="k">|I| amp at ω</span><span class="v">' + fmtNorm(Math.abs(Vsum)) + '</span>';
+
+    if (Math.abs(Vsum) < 0.03) {
+      nullHintEl.textContent = 'null found: V_ext = -V_CPD, AC current at ω has collapsed';
+      nullHintEl.classList.add('hit');
+    } else if (Math.abs(Vsum) < 0.15) {
+      nullHintEl.textContent = 'close to null; keep pushing V_ext toward -0.70 V';
+      nullHintEl.classList.remove('hit');
+    } else {
+      var dir = Vsum > 0 ? 'more negative' : 'more positive';
+      nullHintEl.textContent = 'off null by ' + fmtV(Vsum) + '. Push V_ext ' + dir + ' to zero the AC signal.';
+      nullHintEl.classList.remove('hit');
+    }
+  }
+
+  function frame(ts) {
+    if (startT === null) startT = ts;
+    var t = (ts - startT) / 1000;
+    draw(t);
+    requestAnimationFrame(frame);
+  }
+
+  vExtEl.addEventListener('input', function() {
+    vValEl.textContent = fmtV(readV());
+  });
+
+  vValEl.textContent = fmtV(readV());
+  requestAnimationFrame(frame);
+})();
+</script>
