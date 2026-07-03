@@ -20,7 +20,6 @@
 # auto-suggested 2026-05-13 from compton-scattering
 
 # auto-suggested 2026-05-14 from work-function
-Contact potential difference / Kelvin probe — wire two metals, watch their Fermi levels lock, read the surface-dipole step as a voltage; the technique that maps φ across a sample to the millivolt
 Fermi-Dirac distribution — f(E,T) = 1/(1 + exp((E−μ)/kT)), why filling identical particles into states changes statistical mechanics from Boltzmann to something thicker
 
 # auto-suggested 2026-07-02 from thermionic-emission
@@ -214,3 +213,8 @@ Delbrück scattering — the elastic γ-nucleus scattering via a virtual electro
 Synchrotron radiation — P_sync = (4/3) σ_T c γ² β² U_B with U_B = B²/(2μ₀), the twin brother of inverse Compton, spectrum peaking at ν_c ≈ (3/2) γ² eB/(2π m_e c) with the ~70% linear polarization signature of the Crab Nebula wind and the Jansky-Reber pre-history of radio astronomy
 Sunyaev-Zel'dovich cluster cosmology — SPT, ACT, and Planck all-sky catalogues of galaxy clusters selected by their SZ decrement, redshift-independent selection to z ≈ 1.5, cluster mass function as a probe of σ_8 and dark energy
 Blazar SED and the two humps — synchrotron + inverse-Compton double-peaked νF_ν diagram of AGN with a relativistic jet pointed at Earth, the Fossati-Maraschi 1998 blazar sequence, the Whipple 1992 Mrk 421 TeV detection, and the H.E.S.S./MAGIC/VERITAS TeV catalogue of eighty extragalactic sources
+
+# auto-suggested 2026-07-03 from contact-potential-difference
+Kelvin probe force microscopy — Nonnenmacher, O'Boyle, Wickramasinghe 1991 at IBM Yorktown Heights, put Kelvin's vibrating capacitor on an AFM cantilever, mV work-function sensitivity at nm spatial resolution, the technique that maps grain-boundary band bending in polycrystalline solar cells and trap-site potentials in organic transistors
+Surface photovoltage — the CPD shift ΔV_SPV that appears when a semiconductor surface is illuminated, minority carriers piling up in the depletion region and flattening the band bending; the Kronik-Shapira 1999 review that made it a workbench technique for band-offset spectroscopy at the eV scale
+Volta series — Volta's 1801 empirical ordering (Zn, Sn, Pb, Fe, Cu, Ag, Au) that predicted the sign and rough magnitude of every clean-metal EMF long before the Fermi sea existed, and the Kohlrausch 1874 corrected re-tabulation that put φ differences on a millivolt-repeatable footing across every polished laboratory metal
