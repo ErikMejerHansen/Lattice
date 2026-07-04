@@ -20,7 +20,6 @@
 # auto-suggested 2026-05-13 from compton-scattering
 
 # auto-suggested 2026-05-14 from work-function
-Fermi-Dirac distribution — f(E,T) = 1/(1 + exp((E−μ)/kT)), why filling identical particles into states changes statistical mechanics from Boltzmann to something thicker
 
 # auto-suggested 2026-07-02 from thermionic-emission
 Schottky effect — φ_eff = φ − √(eE/4πε₀), the image-charge argument that lets an applied field peel millivolts off the work function and the reason a real emitter's J(E) is not the Richardson plateau
@@ -218,3 +217,8 @@ Blazar SED and the two humps — synchrotron + inverse-Compton double-peaked νF
 Kelvin probe force microscopy — Nonnenmacher, O'Boyle, Wickramasinghe 1991 at IBM Yorktown Heights, put Kelvin's vibrating capacitor on an AFM cantilever, mV work-function sensitivity at nm spatial resolution, the technique that maps grain-boundary band bending in polycrystalline solar cells and trap-site potentials in organic transistors
 Surface photovoltage — the CPD shift ΔV_SPV that appears when a semiconductor surface is illuminated, minority carriers piling up in the depletion region and flattening the band bending; the Kronik-Shapira 1999 review that made it a workbench technique for band-offset spectroscopy at the eV scale
 Volta series — Volta's 1801 empirical ordering (Zn, Sn, Pb, Fe, Cu, Ag, Au) that predicted the sign and rough magnitude of every clean-metal EMF long before the Fermi sea existed, and the Kohlrausch 1874 corrected re-tabulation that put φ differences on a millivolt-repeatable footing across every polished laboratory metal
+
+# auto-suggested 2026-07-04 from fermi-dirac-distribution
+Sommerfeld free-electron model — Munich 1927, replace Maxwell-Boltzmann with Fermi-Dirac in Drude's electron gas and out fall the linear-in-T electronic specific heat γ ≈ 0.7 mJ/(mol·K²) for copper, temperature-independent Pauli paramagnetism, and the corrected Wiedemann-Franz coefficient, the fix that turned every one of Drude's factor-of-100 discrepancies into a percent-level agreement
+Bose-Einstein statistics — the companion distribution f = 1/(e^{(E−μ)/kT} − 1) for identical bosons, Einstein's 1924 extension of Bose's photon paper to material particles, the prediction of Bose-Einstein condensation below a critical temperature, and its 1995 observation in a dilute rubidium vapor at 170 nK (Cornell-Wieman-Ketterle Nobel 2001)
+Chandrasekhar limit — M_Ch ≈ 1.44 M_☉, the maximum mass a white dwarf can sustain by relativistic electron degeneracy pressure, derived by Chandrasekhar on a steamer from Madras to Cambridge in 1930, denounced by Eddington in 1935 as "stellar buffoonery," and only fully accepted after the 1967 discovery of neutron stars opened the collapse channel Eddington had refused to admit

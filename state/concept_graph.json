@@ -639,6 +639,16 @@
       "createdAt": "2026-07-03T07:00:00Z",
       "col": 0,
       "row": 32
+    },
+    {
+      "id": "fermi_dirac",
+      "label": "Fermi-Dirac",
+      "subtitle": "f = 1/(e^x + 1)",
+      "state": "available",
+      "lesson": "2026-07-04-fermi-dirac-distribution",
+      "createdAt": "2026-07-04T07:00:00Z",
+      "col": 1,
+      "row": 32
     }
   ],
   "edges": [
@@ -1505,6 +1515,21 @@
     {
       "from": "contact_potential",
       "to": "photoelectric_effect",
+      "kind": "related"
+    },
+    {
+      "from": "fermi_dirac",
+      "to": "schrodinger_equation",
+      "kind": "extends"
+    },
+    {
+      "from": "fermi_dirac",
+      "to": "work_function",
+      "kind": "extends"
+    },
+    {
+      "from": "fermi_dirac",
+      "to": "thermionic_emission",
       "kind": "related"
     }
   ]
