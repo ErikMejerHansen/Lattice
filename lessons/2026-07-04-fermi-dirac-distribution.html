@@ -1,0 +1,317 @@
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+</style>
+<style>
+#viz {
+  padding: 14px 18px 18px;
+  max-width: 720px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.chart-frame {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  padding: 10px 12px 6px;
+}
+.readout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 16px;
+  margin-top: 10px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 12px;
+}
+.readout .k {
+  color: var(--text-muted);
+  font-style: italic;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 13px;
+}
+.readout .v {
+  color: var(--text);
+  text-align: right;
+}
+.regime-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  background: var(--bg);
+  margin-left: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.regime-tag.hot { color: var(--accent); border-color: var(--accent-soft); }
+.axis line, .axis path {
+  stroke: var(--border-strong);
+  shape-rendering: crispEdges;
+}
+.axis text {
+  fill: var(--text-muted);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10px;
+}
+.axis-title {
+  fill: var(--text-muted);
+  font-style: italic;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 12px;
+}
+.grid line {
+  stroke: var(--border);
+  stroke-dasharray: 2 3;
+  shape-rendering: crispEdges;
+}
+.smear-band {
+  fill: var(--accent-soft);
+  fill-opacity: 0.14;
+}
+.fd-curve {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.2;
+}
+.classical-curve {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 3;
+}
+.ef-line, .half-line {
+  stroke: var(--border-strong);
+  stroke-dasharray: 3 3;
+  stroke-width: 1;
+}
+.ef-label, .half-label {
+  fill: var(--text-muted);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10px;
+}
+.legend {
+  display: flex; flex-wrap: wrap; gap: 10px 18px;
+  margin-top: 8px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.legend .swatch {
+  display: inline-block;
+  width: 18px; height: 2px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+.legend .sw-fd { background: var(--accent); height: 2.2px; }
+.legend .sw-cl { background: var(--text-muted); height: 1.2px; background-image: linear-gradient(to right, var(--text-muted) 60%, transparent 60%); background-size: 6px 1.2px; }
+.legend .sw-band { background: var(--accent-soft); opacity: 0.4; height: 10px; margin-right: 6px; vertical-align: middle; }
+</style>
+
+<div id="viz">
+  <div class="chart-frame">
+    <svg id="chart" viewBox="0 0 640 320" preserveAspectRatio="xMidYMid meet" style="display:block;width:100%;height:auto;"></svg>
+    <div class="legend">
+      <span><span class="swatch sw-fd"></span>Fermi-Dirac f(E, T)</span>
+      <span><span class="swatch sw-cl"></span>classical exp(−(E−μ)/kT)</span>
+      <span><span class="swatch sw-band"></span>±2 k_B T smear band</span>
+    </div>
+  </div>
+
+  <div class="viz-slider-row">
+    <label for="tSlider">T</label>
+    <input id="tSlider" type="range" min="1.477" max="5.477" step="0.005" value="2.477" />
+    <span class="value" id="tValue">300 K</span>
+  </div>
+
+  <div class="readout">
+    <div class="k">E_F</div><div class="v">7.00 eV</div><div class="v"></div>
+    <div class="k">T_F = E_F / k_B</div><div class="v">81,220 K</div><div class="v"></div>
+    <div class="k">k_B T</div><div class="v" id="kbtValue">25.9 meV</div><div class="v"></div>
+    <div class="k">T / T_F</div><div class="v" id="ratioValue">0.0037</div>
+    <div class="v"><span id="regimeTag" class="regime-tag">degenerate</span></div>
+  </div>
+
+  <p class="viz-caption" style="margin-top:12px;">
+    Copper's Fermi energy E_F ≈ 7 eV is held fixed, and the chemical potential μ is
+    taken equal to E_F (the T ≪ T_F approximation, correct to order (T/T_F)²).
+    Slide T on a log scale from 30 K up to 300,000 K. Below the Fermi temperature
+    T_F ≈ 82,000 K the distribution is a nearly perfect step with a k_B T-wide smear
+    at the edge, and only the shaded band participates in transport. Above T_F the
+    smear swallows the whole distribution and the Fermi-Dirac curve converges onto
+    the classical Boltzmann tail.
+  </p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js" integrity="sha512-vc58qvvBdrDR4etbxMdlTt4GBQk1qjvyORR2nrsPsFPyrs+/u5c3+1Ct6upOgdZoIl7eq6k3a1UPDSNAQi/32A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+(function () {
+  const svg = d3.select('#chart');
+  const W = 640, H = 320;
+  const margin = { top: 18, right: 18, bottom: 42, left: 52 };
+  const iw = W - margin.left - margin.right;
+  const ih = H - margin.top - margin.bottom;
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const eMin = 0, eMax = 12; // eV
+  const x = d3.scaleLinear().domain([eMin, eMax]).range([0, iw]);
+  const y = d3.scaleLinear().domain([0, 1.02]).range([ih, 0]);
+
+  const gridX = g.append('g').attr('class', 'grid');
+  gridX.selectAll('line').data(x.ticks(6)).enter().append('line')
+    .attr('x1', d => x(d)).attr('x2', d => x(d))
+    .attr('y1', 0).attr('y2', ih);
+  const gridY = g.append('g').attr('class', 'grid');
+  gridY.selectAll('line').data([0, 0.25, 0.5, 0.75, 1]).enter().append('line')
+    .attr('x1', 0).attr('x2', iw)
+    .attr('y1', d => y(d)).attr('y2', d => y(d));
+
+  const smearBand = g.append('rect').attr('class', 'smear-band')
+    .attr('y', 0).attr('height', ih);
+  const classicalPath = g.append('path').attr('class', 'classical-curve');
+  const fdPath = g.append('path').attr('class', 'fd-curve');
+
+  const EF = 7.0; // eV
+  const kB = 8.617333e-5; // eV/K
+  const TF = EF / kB;
+
+  // Fermi line at E_F
+  g.append('line').attr('class', 'ef-line')
+    .attr('x1', x(EF)).attr('x2', x(EF))
+    .attr('y1', 0).attr('y2', ih);
+  g.append('text').attr('class', 'ef-label')
+    .attr('x', x(EF) + 4).attr('y', 12)
+    .text('E_F = 7 eV');
+
+  // Half occupation line
+  g.append('line').attr('class', 'half-line')
+    .attr('x1', 0).attr('x2', iw)
+    .attr('y1', y(0.5)).attr('y2', y(0.5));
+  g.append('text').attr('class', 'half-label')
+    .attr('x', iw - 4).attr('y', y(0.5) - 4).attr('text-anchor', 'end')
+    .text('f = 1/2');
+
+  // Axes
+  const xAxis = g.append('g').attr('class', 'axis')
+    .attr('transform', `translate(0, ${ih})`)
+    .call(d3.axisBottom(x).ticks(6).tickSizeOuter(0));
+  g.append('text').attr('class', 'axis-title')
+    .attr('x', iw / 2).attr('y', ih + 34).attr('text-anchor', 'middle')
+    .text('single-particle energy E (eV)');
+  const yAxis = g.append('g').attr('class', 'axis')
+    .call(d3.axisLeft(y).tickValues([0, 0.25, 0.5, 0.75, 1]).tickSizeOuter(0));
+  g.append('text').attr('class', 'axis-title')
+    .attr('transform', 'rotate(-90)')
+    .attr('x', -ih / 2).attr('y', -36).attr('text-anchor', 'middle')
+    .text('occupation f(E, T)');
+
+  const N_SAMPLES = 400;
+  const samples = d3.range(N_SAMPLES).map(i => eMin + (eMax - eMin) * i / (N_SAMPLES - 1));
+
+  const line = d3.line().x(d => x(d.E)).y(d => y(d.f)).curve(d3.curveMonotoneX);
+
+  function fFD(E, T) {
+    const arg = (E - EF) / (kB * T);
+    if (arg > 60) return 0;
+    if (arg < -60) return 1;
+    return 1 / (Math.exp(arg) + 1);
+  }
+  function fCL(E, T) {
+    // Classical (Maxwell-Boltzmann) reference, normalized so f(E_F) = 0.5 for visual comparison.
+    // exp(-(E - E_F) / kT) capped at 1.02.
+    const arg = (E - EF) / (kB * T);
+    const val = Math.exp(-arg);
+    return Math.min(val * 0.5, 1.02); // 0.5 so both curves cross at E_F
+  }
+
+  const tSlider = document.getElementById('tSlider');
+  const tValue = document.getElementById('tValue');
+  const kbtValue = document.getElementById('kbtValue');
+  const ratioValue = document.getElementById('ratioValue');
+  const regimeTag = document.getElementById('regimeTag');
+
+  function fmtT(T) {
+    if (T >= 10000) return d3.format(',.0f')(T) + ' K';
+    if (T >= 1000) return d3.format(',.0f')(T) + ' K';
+    return T.toFixed(0) + ' K';
+  }
+  function fmtKbT(kT) {
+    // kT in eV
+    if (kT >= 1) return kT.toFixed(2) + ' eV';
+    if (kT >= 0.01) return (kT * 1000).toFixed(1) + ' meV';
+    return (kT * 1000).toFixed(2) + ' meV';
+  }
+  function fmtRatio(r) {
+    if (r < 0.01) return r.toFixed(4);
+    if (r < 1) return r.toFixed(3);
+    return r.toFixed(2);
+  }
+
+  function update() {
+    const logT = parseFloat(tSlider.value);
+    const T = Math.pow(10, logT);
+    const kT = kB * T;
+    const ratio = T / TF;
+
+    tValue.textContent = fmtT(T);
+    kbtValue.textContent = fmtKbT(kT);
+    ratioValue.textContent = fmtRatio(ratio);
+
+    if (ratio < 0.1) {
+      regimeTag.textContent = 'degenerate';
+      regimeTag.classList.remove('hot');
+    } else if (ratio < 1) {
+      regimeTag.textContent = 'partial';
+      regimeTag.classList.remove('hot');
+    } else {
+      regimeTag.textContent = 'classical';
+      regimeTag.classList.add('hot');
+    }
+
+    const smearWidthEv = 2 * kT; // half-width of ±2 k_B T band
+    const bx1 = x(Math.max(eMin, EF - smearWidthEv));
+    const bx2 = x(Math.min(eMax, EF + smearWidthEv));
+    smearBand.attr('x', bx1).attr('width', Math.max(0, bx2 - bx1));
+
+    const fdData = samples.map(E => ({ E, f: fFD(E, T) }));
+    fdPath.datum(fdData).attr('d', line);
+
+    const clData = samples.map(E => ({ E, f: fCL(E, T) }));
+    classicalPath.datum(clData).attr('d', line);
+  }
+
+  tSlider.addEventListener('input', update);
+  update();
+})();
+</script>

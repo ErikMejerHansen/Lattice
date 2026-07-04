@@ -446,5 +446,12 @@
     "subtitle": "V = \u0394\u03c6/e",
     "date": "2026-07-03",
     "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-07-04-fermi-dirac-distribution",
+    "title": "The Fermi-Dirac distribution: why the electron sea does not boil",
+    "subtitle": "f = 1/(e^x + 1)",
+    "date": "2026-07-04",
+    "estimatedReadingMinutes": 24
   }
 ]

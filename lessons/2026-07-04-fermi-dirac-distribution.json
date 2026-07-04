@@ -1,0 +1,219 @@
+{
+  "slug": "2026-07-04-fermi-dirac-distribution",
+  "title": "The Fermi-Dirac distribution: why the electron sea does not boil",
+  "node": {
+    "id": "fermi_dirac",
+    "label": "Fermi-Dirac",
+    "subtitle": "f = 1/(e^x + 1)"
+  },
+  "intro": "Paul Drude in 1900 pictured a metal's conduction electrons as an ideal gas rattling around inside the ion lattice, and the model got Ohm's law and the Wiedemann-Franz ratio right on the first try. It also predicted a heat capacity that was catastrophically wrong: every mole of free electrons should have soaked up 3R/2 of thermal energy just like any other ideal gas, yet the calorimeters said the electrons contributed essentially nothing. The puzzle sat unresolved for a quarter century until Enrico Fermi in Florence and Paul Dirac in Cambridge, six months apart in 1926, wrote down what happens when the particles filling an ideal gas refuse to occupy the same quantum state. The distribution they derived, f(E,T) = 1/(1 + exp((E − μ)/kT)), turns the gas from a soft cloud into an incompressible fluid at ordinary temperatures. It is what keeps a copper wire cool, what fixes the Fermi level that every semiconductor engineer designs around, and what holds up a white dwarf star against its own gravity."
+  ,
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The metal that should have run too hot",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Paul Drude, in a pair of Annalen der Physik papers in 1900, treated a metal as a container of positive ions in a fixed lattice with a swarm of free electrons flying between them like the molecules of an ideal gas. The picture explained a lot at once. Ohm's law fell out of a mean-time-between-collisions argument. The Wiedemann-Franz ratio (thermal conductivity divided by electrical conductivity divided by absolute temperature) came out constant across metals, in agreement with the 1853 empirical rule that Wiedemann and Franz had extracted from careful copper, silver, and iron measurements. The Hall coefficient came out with roughly the right sign. Drude's model, in short, worked."
+        },
+        {
+          "type": "p",
+          "text": "Except for one number. The equipartition theorem says every quadratic degree of freedom in a thermal system carries (1/2)k_B T of energy. A monatomic ideal gas has three translational degrees, so its molar heat capacity should be (3/2)R, or about 12.5 joules per mole per kelvin. Drude's electron gas should have added exactly this to the ionic lattice heat capacity of a metal, giving a total of (3/2)R for the electrons plus 3R for the ion vibrations (the Dulong-Petit value), for a grand total of (9/2)R at room temperature. The calorimeters said the total was 3R, flat, with no room for the electrons at all. The classical prediction overshot by a factor of about a hundred."
+        },
+        {
+          "type": "p",
+          "text": "The shape of the discrepancy mattered as much as its size. Careful low-temperature measurements from Nernst's Berlin laboratory in the 1910s showed that the actual electronic heat capacity of a metal was not simply zero but rose linearly with temperature: C_electron ≈ γT, with a small proportionality constant γ that varied from metal to metal by less than a factor of ten. Something was suppressing the electron gas from carrying its equipartition share by a huge factor at room temperature and by an even larger factor as T fell. Whatever the suppression was, it had to weaken linearly with T rather than exponentially, ruling out any straightforward gap-with-Boltzmann-factor explanation."
+        },
+        {
+          "type": "p",
+          "text": "The missing ingredient did not exist yet in 1900. It arrived in January 1925 as Wolfgang Pauli's exclusion principle, extracted from the fine structure of alkali-atom spectra and stated as: no two electrons in an atom can share the same set of four quantum numbers. In April 1926 Fermi generalized the rule from atomic bound states to the free-particle states of an ideal gas, and by August Dirac in Cambridge had derived the same distribution from the antisymmetry of the many-electron wavefunction. Both papers said the same thing in different languages. The particles were not free to spread over their thermal share of phase space, because most of the phase space was already occupied by other particles that had gotten there first at lower energy."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Fermi and Dirac, six months apart",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Fermi's paper landed in the Zeitschrift für Physik in April 1926, written in Florence a few months after his appointment to the Rome chair of theoretical physics. He posed it as a thought experiment: quantize an ideal gas the way Bohr had quantized the atom, and enforce Pauli's rule by fiat. Each single-particle quantum state (labelled by momentum and spin) either holds one particle or holds none. Count microstates the way Boltzmann had counted them for a classical gas, but with occupation numbers restricted to 0 or 1 instead of running freely over the non-negative integers. Maximize entropy at fixed total energy and fixed total particle number, and out drops a one-parameter formula for the mean occupation of a state at energy E."
+        },
+        {
+          "type": "p",
+          "text": "Dirac's paper, four months later in the Proceedings of the Royal Society, reached the same equation from a different starting point. Instead of postulating single-occupancy by hand, Dirac wrote down the many-electron wavefunction and required it to change sign under interchange of any two particle labels. Antisymmetry is a stronger statement than exclusion (it forces exclusion but says more, notably about interference between identical particles), and it emerged naturally from the just-formulated Schrödinger equation. The two derivations agreed on every number and disagreed only on the philosophy of where the rule comes from. Fermi and Dirac had never met, and would not meet until 1933; the distribution today carries both their names."
+        },
+        {
+          "type": "p",
+          "text": "The formula names three quantities in one expression. E is the energy of the single-particle state we are asking about. T is the absolute temperature of the reservoir the gas is in equilibrium with. μ (spelled 'mu' and called the chemical potential) is a parameter chosen to make the total number of particles come out right when we sum the mean occupation over every state. k_B is Boltzmann's constant, the fixed conversion factor between temperature and energy per degree of freedom, roughly 1.38 × 10⁻²³ J/K or equivalently 8.617 × 10⁻⁵ eV/K."
+        },
+        {
+          "type": "math",
+          "tex": "f(E, T) \\;=\\; \\dfrac{1}{\\exp\\!\\left(\\dfrac{E - \\mu}{k_{B} T}\\right) + 1}",
+          "display": true,
+          "caption": "The Fermi-Dirac distribution. f(E, T) is the mean occupation number of a quantum state at energy E when the gas is in thermal equilibrium at absolute temperature T. It is bounded between 0 (state definitely empty) and 1 (state definitely full), which encodes Pauli's rule that no more than one particle can occupy a state. E is the single-particle energy of the state. μ is the chemical potential, chosen so that the total number of particles summed over all states equals the actual number N in the gas. k_B is Boltzmann's constant. The +1 in the denominator is what distinguishes this distribution from the Bose-Einstein 1/(e^x − 1) and from the classical Boltzmann e^{−x}: it enforces the ceiling of 1 that Pauli demands."
+        },
+        {
+          "type": "p",
+          "text": "The +1 in the denominator is the entire physics content of the formula. Drop it and the exponent alone would give exp(−(E − μ)/k_B T), which is a classical Maxwell-Boltzmann distribution shifted by μ, in which f can grow without bound as E falls below μ. That is what would let all the electrons pile up at the bottom of the well the way classical particles do. The +1 caps f at 1 no matter how far below μ we go, which forces the extra electrons to spill upward into higher energy states instead. Once you write the formula that way, you can see immediately that its zero-temperature limit is a step function: for E < μ the exponent is a large negative number, exp of that is nearly zero, and f goes to 1; for E > μ the exponent is a large positive number, exp of that blows up, and f goes to zero. The distribution collapses into a hard staircase, one particle in every state below μ and none above."
+        }
+      ],
+      "quiz": {
+        "question": "Take the Fermi-Dirac formula f(E, T) = 1/(exp((E − μ)/k_B T) + 1) and evaluate it at E = μ (the chemical potential itself). What is f(μ, T), and what does the answer say about the state at energy μ?",
+        "options": [
+          "f(μ, T) = 0, because at E = μ the argument of the exponential vanishes and the whole distribution collapses to zero.",
+          "f(μ, T) = 1/2, because when E = μ the exponent is zero, exp(0) = 1, and the formula gives 1/(1 + 1) = 1/2. The state at the chemical potential is half-occupied on average, at any temperature. This is the defining property of μ for a Fermi gas, and it is what makes μ the natural marker of the Fermi sea's surface even when T > 0.",
+          "f(μ, T) = 1, because the chemical potential is by definition the highest occupied energy, so any state at μ must be full.",
+          "f(μ, T) depends on T; at T = 0 the state at μ is full, at T > 0 the state at μ is empty, so f jumps discontinuously."
+        ],
+        "correctIndex": 1,
+        "explanation": "Plug in E = μ. The exponent (E − μ)/k_B T becomes 0/k_B T = 0. The exponential of zero is 1. The denominator is 1 + 1 = 2, so f(μ, T) = 1/2. Option A drops a +1 in the wrong place: the argument of the exponential does vanish, but the whole distribution is 1 divided by (1 + 1), not by 1. Option C is the intuition from the zero-temperature step function taken too literally; at T > 0 the step becomes a smooth ramp centered on μ with a half-occupied crossing point. Option D confuses the small T > 0 behavior with a discontinuous jump; f is continuous in T. The half-occupation at E = μ is not an accident: it is what the chemical potential means for identical fermions at nonzero temperature. The Fermi energy E_F is defined as the T = 0 limit of μ, and it is where the step in the T = 0 staircase sits."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The staircase, and how thermal energy chews on its edge",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The zero-temperature picture is the one to hold in your head first. At T = 0 there is no thermal energy at all, and the particles pack themselves into single-particle quantum states in strict order of energy: the lowest N states are full, everything above them is empty. The energy of the highest occupied state gets a special name, the Fermi energy E_F, and it depends only on the particle density and the shape of the container. For a three-dimensional gas of free electrons at density n, E_F comes out to (ℏ²/2m_e)(3π²n)^(2/3), which is about 7 eV for copper (n ≈ 8.5 × 10²⁸ per cubic meter, one conduction electron per atom). The corresponding Fermi temperature T_F = E_F/k_B is 82,000 K, and this is the key number for what follows."
+        },
+        {
+          "type": "p",
+          "text": "Now warm the gas to room temperature. The thermal scale is k_B T ≈ 25 meV at 300 K, which is a factor of 280 smaller than E_F = 7 eV. Set μ ≈ E_F (a very good approximation whenever k_B T ≪ E_F, correct to order (T/T_F)²) and read off the shape of f(E, T). Far below μ, the exponent (E − μ)/k_B T is a large negative number, exp of that is negligible, and f is still 1. Far above μ, the exponent is a large positive number, exp of that dominates, and f is essentially exp(−(E − μ)/k_B T), a classical Boltzmann tail. The interesting region is a band of width roughly k_B T centered on μ, where f slides smoothly from 1 down through 1/2 down to 0."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-04-fermi-dirac-distribution.html",
+          "height": 480,
+          "caption": "The Fermi-Dirac distribution f(E, T) for a fixed Fermi energy E_F = 7 eV (a stand-in for copper). Slide temperature T from 30 K up to 300,000 K on a log scale and watch the zero-temperature staircase soften into a smooth ramp. The vertical dashed line marks E_F; the horizontal dashed line at f = 0.5 marks the half-occupation crossing. The shaded band around E_F has width 4 k_B T and shows the region where the occupation differs meaningfully from 0 or 1, the only band that participates in transport and heat capacity. Below T_F ≈ 82,000 K (the Fermi temperature of copper) the band is thin and the gas is 'degenerate'; above T_F the band swallows the whole distribution and the gas behaves classically. Room temperature sits at T/T_F ≈ 0.004, so the shaded band is a thin ribbon on the side of a nearly vertical wall."
+        },
+        {
+          "type": "p",
+          "text": "Two things follow immediately from the shape. First, most of the electrons in a metal are frozen out of any thermal process. An electron sitting at, say, 4 eV below μ cannot accept a photon or a phonon of energy 25 meV, because every state within 25 meV of it is already full and Pauli forbids double occupancy. Only electrons within a k_B T-wide slice of the top of the sea are close enough to empty states to absorb thermal quanta. Second, the count of thermally active electrons scales as N × (k_B T / E_F), because that is the fraction of the Fermi sea that lies within the smearing band. At room temperature for copper, that fraction is 25 meV / 7 eV ≈ 0.0036, or about one electron in three hundred participating."
+        },
+        {
+          "type": "p",
+          "text": "The linear-in-T scaling of the participating count is exactly the linear-in-T dependence Nernst's calorimeters had seen. The electronic heat capacity of a metal comes out to C_electron = (π²/2) N k_B (T / T_F), which for copper at 300 K is about 100 times smaller than the classical (3/2) N k_B that Drude's model had predicted. Sommerfeld published this calculation in 1927, the year after Fermi's and Dirac's papers, and it was the moment the electron gas stopped being a puzzle and became a workable model of every metal on the periodic table."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Sommerfeld pulls Drude's model out of the classical fire",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Arnold Sommerfeld had spent the years 1919 to 1926 in Munich building up the quantum theory of atomic spectra, and had trained a generation of students (Heisenberg, Pauli, Bethe, Debye) who scattered across Europe carrying his mathematical style with them. When Fermi and Dirac published their distribution, Sommerfeld saw a way to rescue Drude's model without discarding it. Keep Drude's picture of free electrons in a rigid ion lattice. Keep the classical mean-free-path argument for conductivity. Change only the statistical mechanics: replace the Maxwell-Boltzmann distribution with the Fermi-Dirac distribution. Everything Drude had gotten right survived; everything he had gotten wrong healed."
+        },
+        {
+          "type": "p",
+          "text": "The heat capacity was the biggest fix. Sommerfeld's 1927 calculation went as follows. Start from the total energy U(T) = ∫ E g(E) f(E, T) dE, where g(E) is the density of quantum states per unit energy interval. Expand around T = 0 in powers of (k_B T / E_F). The zero-order term is a constant, the ground-state energy of the Fermi sea. The T² term is the first correction, from the thermal smearing that lifts a small triangle of electrons from just below μ to just above."
+        },
+        {
+          "type": "math",
+          "tex": "U(T) \\;\\approx\\; U(0) \\;+\\; \\dfrac{\\pi^{2}}{6}\\, g(E_{F})\\, (k_{B} T)^{2}",
+          "display": true,
+          "caption": "The Sommerfeld expansion of the internal energy of a Fermi gas at temperatures far below T_F. U(T) is the total internal energy per unit volume at temperature T. U(0) is the ground-state energy of the fully-packed Fermi sea. g(E_F) is the density of quantum states per unit energy at the Fermi energy, in units of (energy · volume)⁻¹. k_B T is the thermal energy scale. The π²/6 is the coefficient of the standard low-temperature expansion of Fermi integrals. Differentiating this with respect to T gives the electronic heat capacity, which is linear in T rather than the classical constant."
+        },
+        {
+          "type": "p",
+          "text": "Differentiate U with respect to T to get the electronic heat capacity per unit volume: c_V = (π²/3) g(E_F) k_B² T. For a free-electron gas, g(E_F) = 3n/(2 E_F), which turns the coefficient into c_V = (π²/2) n k_B (T/T_F). The linear-in-T dependence and the T_F suppression factor drop out together, and the numerical constant is roughly 2 for the free-electron gas. Plugging in copper's n and T_F gives about 0.7 mJ/(mol·K²) times T, or about 0.2 J/(mol·K) at room temperature: a factor of about 60 smaller than the (3/2) R ≈ 12.5 J/(mol·K) that Drude's classical calculation had predicted. The measured value for copper is 0.7 mJ/(mol·K²) times T, in agreement to within a few percent."
+        },
+        {
+          "type": "p",
+          "text": "The same logic tidied up the other loose ends of the Drude model. Pauli paramagnetism replaced Curie paramagnetism as the correct account of the small, temperature-independent magnetic susceptibility of alkali metals: only electrons in the k_B T band near μ can flip spin in a magnetic field, giving a susceptibility proportional to g(E_F) that stays nearly flat with T. The Wiedemann-Franz ratio, which Drude had accidentally gotten right through a lucky cancellation of two factor-of-two errors, came out right for the correct reason: the same thin band of near-μ electrons carries both charge and heat, and their ratio depends only on fundamental constants. The metal that had refused to give up all its numbers to classical statistics gave them up cleanly once the statistics were fixed."
+        }
+      ],
+      "quiz": {
+        "question": "Copper has a Fermi temperature T_F ≈ 82,000 K. What is the ratio of copper's electronic heat capacity at room temperature (300 K) to what the classical Drude equipartition value would have predicted, and why?",
+        "options": [
+          "About 1 to 1; the Fermi-Dirac distribution reproduces the classical result at room temperature because 300 K is a nonzero temperature.",
+          "About 1 to 300; the electronic heat capacity is suppressed by roughly T/T_F because only electrons within k_B T of the Fermi surface can absorb thermal energy without violating Pauli exclusion, and the fraction of participating electrons is (k_B T / E_F) = T/T_F ≈ 0.0037 at 300 K, close to the observed suppression of the measured γT relative to the classical (3/2)R.",
+          "About 300 to 1; the quantum treatment amplifies the classical result because electrons in identical states resonate with each other.",
+          "The ratio is not defined because the Drude model is a classical picture and cannot be compared to Fermi-Dirac directly."
+        ],
+        "correctIndex": 1,
+        "explanation": "The suppression factor is exactly T/T_F, or equivalently k_B T/E_F, and for copper at 300 K it comes out to 300/82000 ≈ 0.0037. Only that small fraction of the Fermi sea sits close enough to μ to have an empty state within thermal reach; the rest is frozen behind other electrons. Multiplied through the (π²/2) numerical factor, the quantum electronic heat capacity is (π²/2)(T/T_F)(3/2)R ≈ 0.03 J/(mol·K) at 300 K, compared to the classical (3/2)R ≈ 12.5 J/(mol·K). Option A ignores the exclusion principle entirely; the Fermi-Dirac distribution does not reduce to classical at room temperature when T ≪ T_F, only when T ≳ T_F. Option C inverts the physics. Option D misreads the comparison: Sommerfeld's whole point was that Drude's classical answer and the quantum answer for the same electron gas can and must be compared, because they are predictions for the same measurable quantity."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Sirius B and the star that Pauli holds up",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In late 1926, weeks after Fermi's paper reached the astronomer Ralph Fowler's desk in Cambridge, Fowler wrote a paper of his own with the title 'On dense matter' and sent it to the Monthly Notices of the Royal Astronomical Society. Sirius B had been troubling astronomers since 1915. It was the faint companion of Sirius A, the brightest star in the northern sky. Walter Adams at Mount Wilson had measured its surface temperature at about 27,000 K and its luminosity at about 1/360 of the Sun's. Feed these two numbers into the Stefan-Boltzmann law and Sirius B's radius came out to roughly the size of the Earth. A star with the mass of the Sun packed into the volume of the Earth had a mean density of about a million grams per cubic centimeter, and nothing in ordinary stellar physics could explain what held it up. Ordinary gas pressure requires enough thermal energy to fluff the star out, and Sirius B had cooled far below what any thermal-pressure calculation would need."
+        },
+        {
+          "type": "p",
+          "text": "Fowler saw the answer in Fermi's April 1926 paper. Compress a gas of free electrons hard enough and the Fermi energy climbs, because there are only so many low-momentum quantum states available at a given volume. At the density inside Sirius B, the Fermi energy of the electron gas is a few hundred keV, thousands of times larger than the thermal energy k_B T of the cooled interior. The gas is 'degenerate': the Fermi-Dirac distribution has collapsed to something within a hair of the T = 0 staircase, and the pressure it exerts is essentially independent of temperature. It comes from Pauli exclusion, not from thermal motion. Every electron is jammed against the next available quantum state, and squeezing the star further requires promoting some electrons to states of higher momentum, at an energy cost that shows up as a huge outward pressure. Fowler's paper closed with a calculation of the mean density Sirius B could sustain by degeneracy pressure alone: about 10⁶ g/cm³, matching Adams's measurement."
+        },
+        {
+          "type": "p",
+          "text": "Four years later, in 1930, a nineteen-year-old Subrahmanyan Chandrasekhar boarded a steamer from Madras to Cambridge to work with Fowler. On the passage he redid Fowler's calculation with a change that Fowler had overlooked: at the densities Sirius B suggested, the Fermi momentum of the electrons was becoming comparable to m_e c, and the electrons had to be treated as relativistic. Relativistic degenerate matter is softer than nonrelativistic degenerate matter (the pressure grows as density to the 4/3 power instead of the 5/3 power), and the softening had an unforgiving consequence. Above a critical mass, degeneracy pressure could no longer balance gravity at any density; the star would collapse without limit."
+        },
+        {
+          "type": "math",
+          "tex": "M_{\\text{Ch}} \\;\\approx\\; \\dfrac{(\\hbar c)^{3/2}}{G^{3/2}}\\, \\dfrac{1}{(m_{p} \\mu_{e})^{2}} \\;\\approx\\; 1.4 \\, M_{\\odot}",
+          "display": true,
+          "caption": "The Chandrasekhar mass. M_Ch is the maximum mass a white dwarf can sustain against gravity by relativistic electron degeneracy pressure alone. ℏ is the reduced Planck constant, c is the speed of light, G is Newton's gravitational constant, m_p is the proton mass. μ_e is the mean molecular weight per electron (about 2 for helium, carbon, or oxygen white dwarfs), and it enters because the electrons that provide the pressure are only a fraction of the total mass. The formula is built entirely from fundamental constants of nature and the composition of the star, with no free parameter. The numerical value comes out to 1.44 solar masses, a hard ceiling above which nothing can be a white dwarf."
+        },
+        {
+          "type": "p",
+          "text": "Chandrasekhar's paper met the same reception as Young's wave theory a century earlier. Sir Arthur Eddington, the eminent Cambridge astronomer whose 1926 monograph The Internal Constitution of the Stars was the reigning textbook on the subject, rose at a Royal Astronomical Society meeting in January 1935 to denounce the calculation as 'stellar buffoonery'. Eddington's objection was that if Chandrasekhar were right, a star more massive than 1.44 M_⊙ that had exhausted its fuel would have to collapse to zero volume, and Eddington considered this manifestly absurd. Chandrasekhar was right and Eddington was wrong; but Eddington was Eddington and Chandrasekhar was twenty-four, and the astronomical community sided with the senior man for the better part of two decades. Only in the 1950s, after the discovery of neutron stars gave a physical outlet for the collapse Eddington had refused to admit, did the Chandrasekhar mass become the standard cornerstone of stellar evolution. Chandrasekhar himself received the Nobel Prize in 1983, fifty-three years after the calculation on the boat."
+        },
+        {
+          "type": "p",
+          "text": "The specific case earns its broader observation not by moral but by scale. The Fermi-Dirac distribution was written down to explain a discrepancy of a factor of a hundred in the specific heat of copper. The same equation, at densities a factor of 10²⁴ larger and temperatures barely a factor of 10 higher, sets a hard mass limit that governs which stars end as white dwarfs and which as neutron stars or black holes. The chemical potential that half-fills the state at μ in a copper wire at 300 K is the same μ that half-fills the state at the surface of the Fermi sea in a white dwarf at 10⁷ K. Fermi's April 1926 paper contains, in three pages of algebra, the mechanism that keeps a metal cool and the mechanism that keeps a dying star from collapsing. The distribution was written for an idealized gas at ordinary conditions; the physics it captured turned out to reach clear across the mass and density range of the observable universe."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "The Fermi-Dirac distribution reduces to the classical Maxwell-Boltzmann distribution exp(−(E − μ)/k_B T) in one limit and to a step function in another. Which limits are these, and what physical picture goes with each?",
+    "options": [
+      "F-D reduces to Maxwell-Boltzmann at low temperature and to a step function at high temperature; low-T gases behave classically and high-T gases behave quantum-mechanically.",
+      "F-D reduces to Maxwell-Boltzmann when E is far above μ (so f ≪ 1) and to a step function at T → 0 (or equivalently T ≪ T_F). Physically: when the state is so unlikely to be occupied that the +1 in the denominator is negligible next to the exp, the exclusion principle stops mattering and the distribution is classical. At very low temperature the smearing band around μ shrinks to zero width and every state below μ is exactly full while every state above μ is exactly empty. The relevant dimensionless parameter is T/T_F: T/T_F ≫ 1 recovers Maxwell-Boltzmann for the whole distribution, T/T_F ≪ 1 gives a nearly-perfect step with a k_B T-wide smear at the edge.",
+      "F-D reduces to Maxwell-Boltzmann when μ is large and to a step function when μ is small; the shape depends on chemical potential alone, not temperature.",
+      "The two limits are the same limit (both correspond to T → ∞) because the exclusion principle is a low-temperature effect only."
+    ],
+    "correctIndex": 1,
+    "explanation": "Look at the formula. When exp((E − μ)/k_B T) is very large (the state is far above μ compared to k_B T), the +1 in the denominator is negligible, and f ≈ exp(−(E − μ)/k_B T), the classical Boltzmann distribution. This is the regime where the state is almost certainly empty and Pauli exclusion is irrelevant because there is no competition for it. When T → 0 (or equivalently T ≪ T_F for the whole gas), the exponent is either a huge positive or a huge negative number for every state not exactly at μ, and f collapses to a step: 1 below μ, 0 above. The width of the smear is k_B T, so lowering T sharpens the step. Option A has the two limits swapped, which is the single most common student error. Option C ignores that both the step and the Boltzmann tail are set by the ratio (E − μ)/k_B T, not by either quantity alone. Option D forgets that the two limits are different: a low-T degenerate gas (T ≪ T_F) shows the step, and the classical Boltzmann tail appears at high E in any Fermi gas (it is the high-energy tail of every degenerate gas as well)."
+  },
+  "suggestedNodes": [
+    {
+      "id": "sommerfeld_free_electron",
+      "label": "Sommerfeld",
+      "subtitle": "C ∝ T, χ flat",
+      "edgeType": "extends"
+    },
+    {
+      "id": "bose_einstein_statistics",
+      "label": "Bose-Einstein",
+      "subtitle": "1/(e^x − 1)",
+      "edgeType": "related"
+    },
+    {
+      "id": "chandrasekhar_limit",
+      "label": "Chandrasekhar",
+      "subtitle": "M_Ch ≈ 1.44 M_☉",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-04T07:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 24,
+    "previouslyMastered": [
+      "schrodinger_equation",
+      "work_function",
+      "thermionic_emission"
+    ]
+  }
+}
