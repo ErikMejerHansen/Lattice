@@ -649,6 +649,16 @@
       "createdAt": "2026-07-04T07:00:00Z",
       "col": 1,
       "row": 32
+    },
+    {
+      "id": "schottky_effect",
+      "label": "Schottky eff.",
+      "subtitle": "Δφ = √(eE/4πε₀)",
+      "state": "available",
+      "lesson": "2026-07-05-schottky-effect",
+      "createdAt": "2026-07-05T07:00:00Z",
+      "col": 0,
+      "row": 33
     }
   ],
   "edges": [
@@ -1530,6 +1540,21 @@
     {
       "from": "fermi_dirac",
       "to": "thermionic_emission",
+      "kind": "related"
+    },
+    {
+      "from": "schottky_effect",
+      "to": "thermionic_emission",
+      "kind": "extends"
+    },
+    {
+      "from": "schottky_effect",
+      "to": "work_function",
+      "kind": "related"
+    },
+    {
+      "from": "schottky_effect",
+      "to": "contact_potential",
       "kind": "related"
     }
   ]

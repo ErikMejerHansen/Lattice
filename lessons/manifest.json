@@ -453,5 +453,12 @@
     "subtitle": "f = 1/(e^x + 1)",
     "date": "2026-07-04",
     "estimatedReadingMinutes": 24
+  },
+  {
+    "slug": "2026-07-05-schottky-effect",
+    "title": "The Schottky effect: how an applied field peels millivolts off a work function",
+    "subtitle": "Δφ = √(eE/4πε₀)",
+    "date": "2026-07-05",
+    "estimatedReadingMinutes": 22
   }
 ]

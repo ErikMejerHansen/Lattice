@@ -1,0 +1,339 @@
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz {
+  padding: 12px 14px 14px 14px;
+  box-sizing: border-box;
+}
+svg { display: block; width: 100%; height: auto; }
+.readout {
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr;
+  gap: 4px 12px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+  margin-top: 10px;
+  padding: 6px 8px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+}
+.readout .k { color: var(--text-muted); font-style: italic; font-family: "Source Serif 4", serif; }
+.readout .v { text-align: right; }
+.regime {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 10.5px;
+  color: var(--accent);
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+</style>
+<div id="viz">
+  <svg viewBox="0 0 340 300" preserveAspectRatio="xMidYMid meet" id="chart" aria-label="Schottky barrier potential energy versus height above cathode surface"></svg>
+  <div class="viz-slider-row">
+    <label for="eSlider">E</label>
+    <input type="range" id="eSlider" min="3" max="11" step="0.05" value="7" />
+    <span class="value" id="eVal">1.0e+07 V/m</span>
+  </div>
+  <div class="readout" id="readout"></div>
+  <div class="regime" id="regime"></div>
+  <div class="viz-caption" style="margin-top: 8px;">
+    The escape barrier for an electron above a metal surface, U(z) = -e²/(16πε₀z) - eEz. The blue dashed line marks the Fermi level (−φ = −4.5 eV, a bare tungsten cathode). The orange curve is the total tilted potential. The barrier peak walks in toward the surface and drops in height as the field E climbs. The readout gives z_max, Δφ (the barrier reduction), and the current enhancement exp(Δφ/kT) at T = 2000 K. Past E ~ 3·10⁹ V/m, Δφ becomes comparable to φ and the classical over-the-top picture breaks down.
+  </div>
+</div>
+<script>
+(function() {
+  // Fundamental constants (SI)
+  var e = 1.602176634e-19;    // C
+  var eps0 = 8.8541878128e-12; // F/m
+  var kB = 8.617333e-5;       // eV/K
+  var kJ = 1.380649e-23;      // J/K
+  // Cathode work function (bare tungsten)
+  var phi_eV = 4.5;
+  var phi_J = phi_eV * e;
+  var T = 2000;               // K
+  var kT_eV = kB * T;
+
+  // z axis in nm; y axis in eV
+  var Zmin = 0.02, Zmax = 6.0;    // nm
+  var Ymin = -8.0, Ymax = 2.0;    // eV
+
+  // Chart geometry (viewBox 340 x 300)
+  var W = 340, H = 300;
+  var m = { l: 42, r: 14, t: 12, b: 42 };
+  var pw = W - m.l - m.r;
+  var ph = H - m.t - m.b;
+
+  function xScale(z_nm) { return m.l + (z_nm - Zmin) / (Zmax - Zmin) * pw; }
+  function yScale(U_eV) { return m.t + (Ymax - U_eV) / (Ymax - Ymin) * ph; }
+
+  // Physics: U(z) in Joules for z in metres, E in V/m
+  // U_image_eV(z_nm) = -(e^2 / (16 pi eps0 z_m)) / e
+  //                  = -e / (16 pi eps0 z_m)   [in volts, but since e is factored, in eV]
+  function U_image_eV(z_nm) {
+    var z_m = z_nm * 1e-9;
+    if (z_m <= 0) return -Infinity;
+    return -(e / (16 * Math.PI * eps0 * z_m));
+  }
+  function U_field_eV(z_nm, E_Vpm) {
+    var z_m = z_nm * 1e-9;
+    // Potential energy of electron -e in field E pointing outward:
+    // U_field = -e*E*z  (in J), divided by e gives V, gives eV per electron
+    return -E_Vpm * z_m;   // volts, same as eV per electron
+  }
+  function U_total_eV(z_nm, E_Vpm) {
+    return U_image_eV(z_nm) + U_field_eV(z_nm, E_Vpm);
+  }
+  function zMax_nm(E_Vpm) {
+    if (E_Vpm <= 0) return Infinity;
+    var z_m = Math.sqrt(e / (16 * Math.PI * eps0 * E_Vpm));
+    return z_m * 1e9;
+  }
+  function deltaPhi_eV(E_Vpm) {
+    return Math.sqrt(e * E_Vpm / (4 * Math.PI * eps0));
+  }
+
+  var state = { E: 1e7 };
+
+  var svg = document.getElementById('chart');
+  var svgNS = 'http://www.w3.org/2000/svg';
+
+  function el(tag, attrs, text) {
+    var elm = document.createElementNS(svgNS, tag);
+    for (var k in attrs) elm.setAttribute(k, attrs[k]);
+    if (text != null) elm.textContent = text;
+    return elm;
+  }
+
+  function drawAxes() {
+    // Grid lines (Y): every 2 eV
+    for (var y = Ymin; y <= Ymax; y += 2) {
+      var yy = yScale(y);
+      svg.appendChild(el('line', {
+        x1: m.l, x2: m.l + pw, y1: yy, y2: yy,
+        stroke: 'var(--border)', 'stroke-width': 0.5,
+        'stroke-dasharray': (y === 0 ? 'none' : '2 3')
+      }));
+      svg.appendChild(el('text', {
+        x: m.l - 6, y: yy + 3, 'text-anchor': 'end',
+        'font-family': 'IBM Plex Mono, monospace', 'font-size': 9,
+        fill: 'var(--text-muted)'
+      }, y.toFixed(0)));
+    }
+    // X ticks
+    var Zticks = [0.5, 1, 2, 3, 4, 5, 6];
+    for (var i = 0; i < Zticks.length; i++) {
+      var xv = xScale(Zticks[i]);
+      svg.appendChild(el('line', {
+        x1: xv, x2: xv, y1: m.t + ph, y2: m.t + ph + 4,
+        stroke: 'var(--border-strong)', 'stroke-width': 0.6
+      }));
+      svg.appendChild(el('text', {
+        x: xv, y: m.t + ph + 14, 'text-anchor': 'middle',
+        'font-family': 'IBM Plex Mono, monospace', 'font-size': 9,
+        fill: 'var(--text-muted)'
+      }, Zticks[i].toString()));
+    }
+    // Axis frame
+    svg.appendChild(el('line', {
+      x1: m.l, x2: m.l + pw, y1: m.t + ph, y2: m.t + ph,
+      stroke: 'var(--text)', 'stroke-width': 0.8
+    }));
+    svg.appendChild(el('line', {
+      x1: m.l, x2: m.l, y1: m.t, y2: m.t + ph,
+      stroke: 'var(--text)', 'stroke-width': 0.8
+    }));
+    // X-axis label
+    svg.appendChild(el('text', {
+      x: m.l + pw / 2, y: m.t + ph + 30, 'text-anchor': 'middle',
+      'font-family': 'Source Serif 4, serif', 'font-style': 'italic',
+      'font-size': 11, fill: 'var(--text)'
+    }, 'z (nm)'));
+    // Y-axis label (rotated)
+    var yLabel = el('text', {
+      x: 0, y: 0, 'text-anchor': 'middle',
+      'font-family': 'Source Serif 4, serif', 'font-style': 'italic',
+      'font-size': 11, fill: 'var(--text)',
+      transform: 'translate(11 ' + (m.t + ph / 2) + ') rotate(-90)'
+    }, 'U (eV)');
+    svg.appendChild(yLabel);
+
+    // Vacuum-level reference at U = 0 (zero-field asymptote of the image-only well)
+    svg.appendChild(el('text', {
+      x: m.l + pw - 4, y: yScale(0) - 4, 'text-anchor': 'end',
+      'font-family': 'Source Serif 4, serif', 'font-style': 'italic',
+      'font-size': 10, fill: 'var(--text-muted)'
+    }, 'vacuum (zero-field)'));
+
+    // Fermi-level reference at U = -phi
+    svg.appendChild(el('line', {
+      x1: m.l, x2: m.l + pw, y1: yScale(-phi_eV), y2: yScale(-phi_eV),
+      stroke: 'var(--text-ghost)', 'stroke-width': 0.8, 'stroke-dasharray': '4 3'
+    }));
+    svg.appendChild(el('text', {
+      x: m.l + pw - 4, y: yScale(-phi_eV) - 4, 'text-anchor': 'end',
+      'font-family': 'Source Serif 4, serif', 'font-style': 'italic',
+      'font-size': 10, fill: 'var(--text-muted)'
+    }, 'Fermi level, -φ = -4.5 eV'));
+  }
+
+  function drawCurve() {
+    var old = document.getElementById('curveG');
+    if (old) old.remove();
+    var g = el('g', { id: 'curveG' });
+
+    // Zero-field (image-only) reference curve
+    var d0 = '';
+    var N = 320;
+    for (var i = 0; i <= N; i++) {
+      var z_nm = Zmin + (Zmax - Zmin) * (i / N);
+      var U = U_image_eV(z_nm);
+      if (!isFinite(U)) continue;
+      var Uc = Math.max(Ymin, Math.min(Ymax, U));
+      var x = xScale(z_nm);
+      var y = yScale(Uc);
+      d0 += (d0.length === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1) + ' ';
+    }
+    g.appendChild(el('path', {
+      d: d0, fill: 'none', stroke: 'var(--text-ghost)', 'stroke-width': 1.0,
+      'stroke-dasharray': '3 3'
+    }));
+
+    // Tilted total curve
+    var d = '';
+    for (var i2 = 0; i2 <= N; i2++) {
+      var z_nm2 = Zmin + (Zmax - Zmin) * (i2 / N);
+      var U2 = U_total_eV(z_nm2, state.E);
+      if (!isFinite(U2)) continue;
+      var Uc2 = Math.max(Ymin, Math.min(Ymax, U2));
+      var x2 = xScale(z_nm2);
+      var y2 = yScale(Uc2);
+      d += (d.length === 0 ? 'M' : 'L') + x2.toFixed(1) + ' ' + y2.toFixed(1) + ' ';
+    }
+    g.appendChild(el('path', {
+      d: d, fill: 'none', stroke: 'var(--accent)', 'stroke-width': 1.8
+    }));
+
+    // Barrier peak marker
+    var zm = zMax_nm(state.E);
+    if (isFinite(zm) && zm >= Zmin && zm <= Zmax) {
+      var Uzm = U_total_eV(zm, state.E);
+      var Uzmc = Math.max(Ymin, Math.min(Ymax, Uzm));
+      var mx = xScale(zm);
+      var my = yScale(Uzmc);
+      g.appendChild(el('line', {
+        x1: mx, x2: mx, y1: my, y2: m.t + ph,
+        stroke: 'var(--accent-soft)', 'stroke-width': 0.7, 'stroke-dasharray': '2 2'
+      }));
+      g.appendChild(el('line', {
+        x1: m.l, x2: mx, y1: my, y2: my,
+        stroke: 'var(--accent-soft)', 'stroke-width': 0.7, 'stroke-dasharray': '2 2'
+      }));
+      // Δφ bracket, drawn from vacuum(0) down to barrier top
+      g.appendChild(el('line', {
+        x1: mx + 6, x2: mx + 6, y1: yScale(0), y2: my,
+        stroke: 'var(--accent)', 'stroke-width': 0.9
+      }));
+      g.appendChild(el('circle', {
+        cx: mx, cy: my, r: 4, fill: 'var(--accent)', stroke: 'var(--bg)', 'stroke-width': 1.2
+      }));
+      // Δφ label
+      var dphi = deltaPhi_eV(state.E);
+      if (dphi > 0.05) {
+        var yLab = (yScale(0) + my) / 2;
+        g.appendChild(el('text', {
+          x: mx + 10, y: yLab + 3, 'text-anchor': 'start',
+          'font-family': 'IBM Plex Mono, monospace', 'font-size': 9.5,
+          fill: 'var(--accent)'
+        }, 'Δφ'));
+      }
+    }
+    svg.appendChild(g);
+  }
+
+  function formatE(E) {
+    var expn = Math.floor(Math.log10(E));
+    var mant = E / Math.pow(10, expn);
+    return mant.toFixed(1) + 'e+' + expn.toString().padStart(2, '0');
+  }
+  function formatEV(v) {
+    if (Math.abs(v) < 1e-3) return (v * 1000).toFixed(2) + ' μeV';
+    if (Math.abs(v) < 1)   return (v * 1000).toFixed(1) + ' meV';
+    return v.toFixed(3) + ' eV';
+  }
+  function formatEnhance(x) {
+    if (x >= 1000)   return x.toExponential(2);
+    if (x >= 10)     return x.toFixed(1) + 'x';
+    return x.toFixed(2) + 'x';
+  }
+
+  function renderReadout() {
+    var zm = zMax_nm(state.E);
+    var dphi = deltaPhi_eV(state.E);
+    var enh = Math.exp(dphi / kT_eV);
+    var readout = document.getElementById('readout');
+    readout.innerHTML =
+      '<span class="k">E</span><span class="v">' + formatE(state.E) + ' V/m</span>' +
+      '<span class="k">z_max</span><span class="v">' + (isFinite(zm) ? zm.toFixed(3) + ' nm' : '∞') + '</span>' +
+      '<span class="k">Δφ</span><span class="v">' + formatEV(dphi) + '</span>' +
+      '<span class="k">φ_eff</span><span class="v">' + (phi_eV - dphi).toFixed(3) + ' eV</span>' +
+      '<span class="k">kT (2000 K)</span><span class="v">' + formatEV(kT_eV) + '</span>' +
+      '<span class="k">J(E)/J_R</span><span class="v">' + formatEnhance(enh) + '</span>';
+
+    var regime = document.getElementById('regime');
+    if (dphi < 0.05) regime.textContent = 'gentle Schottky tuning';
+    else if (dphi < 0.5) regime.textContent = 'Schottky-effect regime, classical over-the-top escape';
+    else if (dphi < phi_eV * 0.6) regime.textContent = 'strong Schottky, tunnelling starts to matter';
+    else regime.textContent = 'Fowler-Nordheim field emission regime (classical picture breaks)';
+  }
+
+  function renderAll() {
+    drawCurve();
+    renderReadout();
+  }
+
+  var eSlider = document.getElementById('eSlider');
+  var eVal = document.getElementById('eVal');
+  eSlider.addEventListener('input', function() {
+    var expn = parseFloat(eSlider.value);
+    state.E = Math.pow(10, expn);
+    eVal.textContent = formatE(state.E) + ' V/m';
+    renderAll();
+  });
+
+  drawAxes();
+  renderAll();
+})();
+</script>

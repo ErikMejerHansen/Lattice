@@ -1,0 +1,214 @@
+{
+  "slug": "2026-07-05-schottky-effect",
+  "title": "The Schottky effect: how an applied field peels millivolts off a work function",
+  "node": {
+    "id": "schottky_effect",
+    "label": "Schottky eff.",
+    "subtitle": "Δφ = √(eE/4πε₀)"
+  },
+  "intro": "Yesterday's Richardson-Dushman equation looked as clean as physics ever gets: fix the temperature of the cathode, fix the metal, and you fix the current per unit area. In practice, nobody who ran a vacuum tube ever saw that plateau hold flat. Bumping the anode voltage above what should have been the saturation knee kept pulling more current out of the cathode, and it did so along a very specific curve, ln J proportional to the square root of the applied field. Walter Schottky, twenty-seven years old at Siemens in 1914, answered the puzzle with a trick Lord Kelvin had drawn in 1848: replace the whole conducting surface with an image charge, add the applied field, and read off how much the barrier has dropped.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The plateau that would not stay flat",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The Richardson-Dushman law we finished the last lesson on writes the thermionic current density as J = AT² exp(−φ/kT). At a fixed cathode temperature T and a fixed material work function φ (the energy an electron needs to leave the metal for the vacuum), J is a number. Applying a voltage V between the cathode and a nearby anode should only change how quickly the emitted electrons cross the vacuum gap, not how many the surface releases per second. Once the anode voltage is high enough that no cloud of electrons piles up in front of the cathode (the space-charge regime, where the negative charge in flight repels new arrivals), we should be on the saturation plateau, where J does not care about V any more."
+        },
+        {
+          "type": "p",
+          "text": "Every practitioner who measured J(V) on a real oxide-coated cathode in the 1900s and 1910s reported the same disappointment. There was no plateau. Past the space-charge knee the current kept rising, slowly, and the rise followed a peculiar shape: plot ln J against √V (or equivalently against √E, where E is the electric field at the cathode surface) and you got a straight line, not a level line. The current was climbing in an exponential of a square root of a voltage. No conventional gas discharge, contact effect, or thermal drift gave that specific functional form. Whatever was going on was mechanical, not accidental, and it wanted a theory."
+        },
+        {
+          "type": "p",
+          "text": "The theory came in 1914 from Walter Schottky, then a fresh doctorate (1912, Berlin, under Max Planck and Emil Warburg) working at Siemens & Halske in Berlin on vacuum-tube amplifiers. Schottky would go on to invent the screen-grid tetrode in 1919 (a four-electrode vacuum tube that reduced grid-plate capacitance and made stable radio-frequency amplification possible), quantify shot noise in 1918 (the current fluctuations that arise from the discreteness of the electron charge itself, and that still carry his name), and lend his name to the Schottky barrier diode (a metal-semiconductor junction we will get to in section 5) and the Schottky defect (a paired vacancy in an ionic crystal). But in 1914 he had one specific job: explain the missing plateau. The tool he reached for was a hundred and forty years old, and its author had died sixty-six years earlier."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Kelvin's image charge trick",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The trick is due to William Thomson (later Lord Kelvin, the same figure from the contact-potential lesson two days ago), who published it in his 1848 Cambridge Mathematical Journal paper on the geometry of static electricity. The setup: an electron sits at height z above a large flat conducting surface. The conductor's own free electrons are pushed away by the invisitor, leaving a positive surface-charge distribution that attracts the intruder back. Solving Poisson's equation with that surface distribution as the boundary condition is a real integral. Kelvin noticed you never have to write it down."
+        },
+        {
+          "type": "p",
+          "text": "Replace the whole conducting half-space with a single fictitious point charge of +e located at the mirror position, distance z below the surface. The fields above the surface produced by that image are identical to the fields the real induced surface charge would produce, because both configurations satisfy the same boundary condition (electric field parallel to the surface = 0 at the surface). Everything above the metal, in other words, cannot tell the difference between the real polarized conductor and a single image charge at −z. This is the method of images, and it turns a hard boundary problem into an elementary two-body Coulomb problem."
+        },
+        {
+          "type": "p",
+          "text": "The interaction energy between the real electron and its image needs one small care. The image is not a physical charge; it is a mathematical stand-in whose fields exist only above the metal. When we compute the work done to bring the electron in from infinity, we are not doing work against a rigid fixed image, we are doing work against an induced distribution that grows continuously as we approach. That integral, worked out honestly, gives exactly half the naive Coulomb energy between electron and image. Naming the potential energy U_image, the electron charge magnitude e, and the vacuum permittivity ε₀ (all three of which appear in what follows), the answer is:"
+        },
+        {
+          "type": "math",
+          "tex": "U_{\\text{image}}(z) \\;=\\; -\\,\\dfrac{e^{2}}{16\\,\\pi\\,\\varepsilon_{0}\\,z}",
+          "display": true,
+          "caption": "The image-charge potential energy of an electron at height z above a grounded conducting surface. U_image is the interaction energy, taken to be zero when z is infinite. e is the magnitude of the electron charge. ε₀ is the vacuum permittivity. z is the height of the electron above the surface. The energy is negative because the induced positive surface charge attracts the electron back toward the metal. The factor of 16 in the denominator, rather than the 8 you would get by treating the image as a real +e at distance 2z, comes from the one-half in the work integral: the image grows in as the electron approaches, and only half the naive Coulomb energy is real."
+        },
+        {
+          "type": "p",
+          "text": "Plug in z = 1 nm and the number comes out to about −0.36 eV, comparable to kT at 4000 K and much larger than kT at any temperature the cathode surface tolerates. The image-charge well is not a small correction. It is a substantial confinement mechanism, and it acts on every electron trying to escape into a nearby vacuum from every clean metal surface. The work function φ we defined in the previous two lessons already contains its effect, integrated over the mean escape distance. What Schottky wanted to know was how that well tilts when you add an outside field."
+        }
+      ],
+      "quiz": {
+        "question": "A student notices that a straightforward Coulomb formula for two point charges, e and +e, separated by 2z, would give an interaction energy of −e²/(8πε₀z), while the correct image-charge result carries a 16 in the denominator instead. What is the physical origin of that factor of 2 difference, and which quantity does it apply to?",
+        "options": [
+          "The two answers are equal; the factor of 2 comes from a units convention (Gaussian vs SI) and drops out.",
+          "The factor of 2 applies only to the potential energy, not to the force. The image is a virtual construction whose field exists only above the surface, and bringing the electron in from infinity does work against an induced distribution that grows continuously as it approaches, so the work integral picks up one half of the naive two-charge Coulomb energy. The force on the real electron, by contrast, is the full Coulomb force of the image at that instant, e²/(16πε₀z²), which happens to match −dU/dz of the halved energy anyway.",
+          "The factor of 2 applies to the force. The image is only half real, so it pulls with half the Coulomb force, and integrating gives half the naive energy.",
+          "There is no factor of 2. Kelvin's original calculation is wrong; the modern quantum-mechanical treatment gives the naive Coulomb energy directly."
+        ],
+        "correctIndex": 1,
+        "explanation": "Option B captures both halves of the subtlety. The image charge is a boundary-condition stand-in, not a real particle, so its Coulomb energy with the real electron is not the total energy of the configuration. Half of that naive energy is stored in the mirror half-space where the image lives (physically, in the polarization of the induced distribution as it forms), and only the half in the real half-space above the metal counts. That is why U carries the 16 in the denominator instead of the 8. The force on the real electron, however, is computed by asking what field the image produces at the electron's location, and that force is the full Coulomb attraction between real electron and image at distance 2z, giving e²/(16πε₀z²) without any additional factor. It happens to equal −dU/dz because U was already halved. Option A confuses SI-vs-Gaussian factors of 4π (which appear differently, in ε₀) with the physical one-half. Option C misapplies the halving to the wrong quantity. Option D is historically wrong (Kelvin was right in 1848, and every 20th-century quantum treatment recovers his answer at large z)."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The barrier bent by an outside field",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Now switch the anode on. An electric field E pointing outward from the cathode surface adds a linear tilt to the potential energy landscape an electron sees: the electron carries charge −e, the field pulls it away from the metal, and the potential energy along the outward direction drops by eE per unit of z. Adding this to Kelvin's image-charge well gives the full escape landscape, in which the electron is pinned by the image on one side and pulled away by the field on the other. Writing U(z) for the total potential energy, e for the electron charge magnitude, ε₀ for the vacuum permittivity, E for the applied field, and z for the height above the surface:"
+        },
+        {
+          "type": "math",
+          "tex": "U(z) \\;=\\; -\\,\\dfrac{e^{2}}{16\\,\\pi\\,\\varepsilon_{0}\\,z} \\;-\\; e\\,E\\,z",
+          "display": true,
+          "caption": "The total potential energy for an electron above a metal surface with an outward-pointing applied field. U(z) is the total potential energy. The first term is the image-charge well from the previous section. e is the magnitude of the electron charge. ε₀ is the vacuum permittivity. E is the applied electric field at the surface, in volts per metre. z is the height above the surface. The first term dominates near the surface, the second term dominates far from it, and the sum has a single maximum in between: the top of the escape barrier."
+        },
+        {
+          "type": "p",
+          "text": "Set the derivative of U with respect to z equal to zero to locate the maximum. Differentiating the first term gives +e²/(16πε₀z²), and differentiating the second gives −eE, so the condition dU/dz = 0 becomes e²/(16πε₀z²) = eE. Solving for z gives the position of the barrier top:"
+        },
+        {
+          "type": "math",
+          "tex": "z_{\\max} \\;=\\; \\sqrt{\\dfrac{e}{16\\,\\pi\\,\\varepsilon_{0}\\,E}}",
+          "display": true,
+          "caption": "The height above the metal surface at which the electron sees the top of the escape barrier. z_max is that height. e is the electron charge magnitude. ε₀ is the vacuum permittivity. E is the applied field at the surface. As E grows, z_max shrinks (the outside field pulls the barrier peak closer to the surface); as E goes to zero, z_max goes to infinity (with no field, the image-charge well never turns around and the barrier peak is at infinity, which is why we needed a work function φ to define the escape energy at all)."
+        },
+        {
+          "type": "p",
+          "text": "Substitute z_max back into U to get the height of the barrier. The image term contributes −e²/(16πε₀ z_max) and the field term contributes −eE·z_max, and using the equation for z_max they are equal, so the total is twice the field term. Working the algebra out step by step (no shortcut): eE·z_max = eE·√(e/(16πε₀E)) = √(e²E²·e/(16πε₀E)) = √(e³E/(16πε₀)), and twice that is √(4·e³E/(16πε₀)) = √(e³E/(4πε₀)). Written as an energy directly, and named ΔU for the drop in the barrier height caused by the field:"
+        },
+        {
+          "type": "math",
+          "tex": "\\Delta U \\;=\\; -\\,U(z_{\\max}) \\;=\\; \\sqrt{\\dfrac{e^{3}\\,E}{4\\,\\pi\\,\\varepsilon_{0}}}",
+          "display": true,
+          "caption": "The reduction of the escape-barrier maximum caused by the applied field, expressed as an energy. ΔU is the barrier reduction. e is the electron charge magnitude. ε₀ is the vacuum permittivity. E is the applied field. The two contributions from image and field are equal at z_max, which is why the answer picks up a factor of 2 that turns 16 in the denominator into 4."
+        },
+        {
+          "type": "p",
+          "text": "Divide by e to convert energy to volts, and the more commonly written form drops out: Δφ = √(eE/(4πε₀)), in the same eV units the work function itself is expressed in. Plug in E = 10⁶ V/m and Δφ comes out to about 38 mV; at E = 10⁸ V/m it is 380 mV; at E = 10¹⁰ V/m it is 3.8 V, which is comparable to the work function itself and the regime where quantum tunnelling through the barrier (Fowler-Nordheim field emission, the topic of a future lesson) takes over from the classical over-the-top escape Schottky described here. In the working range of ordinary vacuum tubes (E from 10⁵ to 10⁷ V/m at the cathode surface), Δφ is a few millivolts up to about 120 mV: small, but multiplied by exp(1/kT) in the Richardson-Dushman equation, decidedly not negligible."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-05-schottky-effect.html",
+          "height": 460,
+          "caption": "The Schottky barrier plotted as U(z) = −e²/(16πε₀z) − eEz. The slider varies the applied field E over eight decades from 10³ V/m to 10¹¹ V/m. Watch the peak of the barrier walk in toward the surface and drop as E increases. The zero-field asymptote (blue dashed line at U = −φ, where φ = 4.5 eV, a bare tungsten cathode) sits above the field-tilted curve; the barrier top pokes above it by Δφ_reduction that shrinks with E. The readout gives Δφ, z_max, and the current enhancement exp(Δφ/kT) at T = 2000 K. As E crosses roughly 3·10⁹ V/m, Δφ becomes comparable to φ and the classical picture breaks down (field emission takes over)."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The Schottky plot and its slope",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The point of the derivation above is one number to feed the Richardson-Dushman law. If the effective work function at nonzero field is φ_eff = φ − Δφ, then the current density becomes J(E) = AT² exp(−(φ − Δφ)/kT), which factors into the zero-field Richardson current J_R multiplied by an exponential enhancement exp(Δφ/kT). Take the logarithm of the ratio and out drops one of the cleanest experimental signatures in vacuum-tube physics."
+        },
+        {
+          "type": "math",
+          "tex": "\\ln\\!\\left(\\dfrac{J(E)}{J_{R}}\\right) \\;=\\; \\dfrac{\\Delta\\varphi}{k\\,T} \\;=\\; \\dfrac{1}{k\\,T}\\,\\sqrt{\\dfrac{e\\,E}{4\\,\\pi\\,\\varepsilon_{0}}}",
+          "display": true,
+          "caption": "The Schottky enhancement of the thermionic current, ready for plotting. J(E) is the emitted current density in the applied field. J_R is the zero-field Richardson-Dushman value. Δφ is the barrier reduction from the previous section. k is Boltzmann's constant. T is the absolute temperature. e is the electron charge. ε₀ is the vacuum permittivity. E is the applied field. Plotting ln(J) against √E, at fixed T, gives a straight line whose slope is √(e/(4πε₀))/(kT), a group of fundamental constants divided by kT and nothing else."
+        },
+        {
+          "type": "p",
+          "text": "This graph is called a Schottky plot. It carries the same forgiving arithmetic as the Richardson plot from yesterday's lesson: the slope depends only on how J moves with E, so any multiplicative calibration error on the current sinks into an additive shift of ln J and leaves the slope alone. Since the slope contains only fundamental constants divided by kT, measuring the slope directly gives kT (a check on the pyrometer reading of T) or, given T, checks the theory. Schottky himself did this in 1914 with an oxide-coated cathode and found the slope agreed with √(e/(4πε₀))/(kT) to within a few percent. The image-charge picture was right."
+        },
+        {
+          "type": "p",
+          "text": "One subtlety worth naming, because it is the sort of thing that trips real measurements: the field E in the formula is the field at the cathode surface, not the anode-to-cathode voltage divided by the gap. For a plane-parallel diode with no space charge, the two agree; for a real cylindrical diode or an oxide cathode with a rough surface, they can differ by a factor of ten or more (patches of thin oxide flake produce field concentrations far larger than the geometric mean, which is why point emitters can go into field emission at voltages a plate emitter cannot reach). Anomalous Schottky slopes reported in the 1920s and 1930s were almost always local field enhancement doing exactly that."
+        }
+      ],
+      "quiz": {
+        "question": "A student runs a Schottky-plot experiment on a clean tungsten cathode at T = 2000 K and applies fields from E = 10⁵ V/m to E = 10⁷ V/m. What is the ratio J(10⁷ V/m) / J(10⁵ V/m), and how does that compare to what a plain (image-charge-blind) Richardson-Dushman calculation would predict for the same fields?",
+        "options": [
+          "Ratio ≈ 100; the current scales linearly with field once you clear space charge.",
+          "Ratio ≈ 1, because the Richardson-Dushman law says J does not depend on E at all above space-charge saturation, and image-charge corrections are millivolt-scale and negligible.",
+          "Ratio ≈ 10; because Δφ grows by a factor of ten from 12 mV at 10⁵ V/m to 120 mV at 10⁷ V/m, and current enhancement inherits that same factor of ten.",
+          "Ratio ≈ 1.87; the Schottky enhancement is exp(Δφ(E)/kT), with Δφ = √(eE/(4πε₀)) ≈ 12 mV at 10⁵ V/m and 120 mV at 10⁷ V/m; at kT ≈ 0.172 eV for T = 2000 K, the current ratio equals exp((120 − 12) mV / 0.172 eV) ≈ exp(0.63) ≈ 1.87. A Richardson-Dushman prediction that ignores the field would give exactly 1, so the two disagree by nearly a factor of two, which is easy to measure and exactly what Schottky reported in 1914."
+        ],
+        "correctIndex": 3,
+        "explanation": "Option D is right. The Schottky enhancement at each field is exp(Δφ/kT), so the ratio of currents at two fields is exp((Δφ₂ − Δφ₁)/kT). Plugging in Δφ = √(eE/(4πε₀)) at both fields (12 mV at 10⁵ V/m and 120 mV at 10⁷ V/m, computed from the value 38 mV at 10⁶ V/m worked out in section 3 and scaled by √10 either way) and dividing by kT at 2000 K (≈ 0.172 eV) gives an exponent of (0.120 − 0.012)/0.172 ≈ 0.63 and a ratio of exp(0.63) ≈ 1.87. Option A confuses classical space-charge-limited current (which scales as V^{3/2}, the Child-Langmuir law, a topic still on the wishlist) with saturation-regime thermionic current. Option B is the vanilla textbook answer and misses exactly the Schottky effect the lesson is about. Option C confuses the ratio of the Δφ values (which is a factor of ten, since Δφ scales as √E and E moved by a factor of one hundred) with the ratio of the enhancement factors exp(Δφ/kT), which involves subtracting the two Δφ values in the exponent, not the direct proportionality Δφ itself carries. The Richardson-Dushman law with no field correction predicts the ratio to be 1, so the Schottky enhancement is nearly a factor of two, which is comfortably resolvable with any 1910s galvanometer."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. From a vacuum-tube fudge factor to a semiconductor foundation",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Twenty-four years after Schottky's Siemens paper, in 1938, he wrote a very different one. He had spent the intervening quarter century watching Sommerfeld and Bloch turn Drude's electron gas into a band theory of solids, watching Wilson explain 1931 how doped silicon can be a semiconductor (a solid whose valence and conduction bands sit close enough in energy that a small amount of chemistry, boron in silicon for holes, phosphorus for electrons, tunes its conductivity across many orders of magnitude), and watching the last decade of point-contact detector-diode work end in a mess of empirical rules with no consistent theory. He asked one specific question: what happens at the interface between a metal and an n-type semiconductor (a semiconductor whose current carriers are electrons donated by phosphorus-like impurities)?"
+        },
+        {
+          "type": "p",
+          "text": "The answer, published almost simultaneously by Schottky at Siemens and Nevill Mott at Bristol, is that Fermi levels equalize at the junction (the same Fermi-level-lock we saw two days ago in the contact-potential lesson), and to do so the semiconductor's bands bend, forming a triangular barrier that lets electrons flow easily one way and only with difficulty the other. The barrier height is set by the metal's work function minus the semiconductor's electron affinity, and its full derivation now goes by the name of the Schottky-Mott rule. This is a rectifier: apply a forward bias V and the current climbs as J_forward = A* T² exp(−φ_B/kT) · exp(eV/kT), apply a reverse bias and the barrier grows and the current stalls. Every metal-semiconductor point-contact diode used in early radar in the 1940s, every hot-carrier Schottky diode in every switching regulator and RF mixer sold today, is the same barrier."
+        },
+        {
+          "type": "p",
+          "text": "The image-charge lowering from section 3 still operates at this new barrier, but now the ε₀ becomes the dielectric constant of the semiconductor (about 11.7 ε₀ for silicon, so the well is eleven times shallower and z_max eleven times larger for the same field), and the applied field is set by the reverse-bias voltage and the depletion-region width. The same formula, Δφ = √(eE/(4πε_s)), predicts how the reverse-bias current climbs above its saturation floor. That climb is called the Schottky effect in a Schottky diode, and any modern datasheet will list the coefficient that governs it. Twenty-four years apart, in vacuum in Berlin in 1914 and in silicon in Erlangen and Bristol in 1938, the same accounting device runs the same equation on the same barrier, and both curves fit the same √E slope. What Schottky sold once to explain a missing plateau in a Wehnelt cathode became, in his second career, the foundation of an industry that in 2026 ships tens of billions of these diodes a year."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A cathode designer is running a saturated thermionic emitter (φ = 2.5 eV, T = 1200 K) and wants to increase J by a factor of 10 by applying an outward field E at the cathode surface. Roughly what field is required, and what does the answer teach about why the Schottky effect is useful in some designs and dominant in others?",
+    "options": [
+      "A field of order 4·10⁷ V/m; a field of that magnitude lowers φ_eff by about 0.24 eV (from Δφ = √(eE/(4πε₀))), which at kT = 0.103 eV (T = 1200 K) multiplies J by exp(2.3) ≈ 10. The Schottky effect is a fine tuner: at 10⁵ V/m the correction is a few percent, at a few times 10⁷ V/m it multiplies J by a factor of ten, and by 10¹⁰ V/m the classical picture breaks down and quantum tunnelling takes over.",
+      "About 10⁴ V/m; any field lowers the barrier by exactly kT ln 10, so this factor-of-ten enhancement is uniformly achievable at millivolt-scale corrections regardless of temperature.",
+      "About 10⁶ V/m; the Schottky effect at that field is 38 mV, and 38 mV / kT at 1200 K is exactly ln 10.",
+      "The Schottky effect never enhances J by more than a percent, so a factor of ten is not reachable by field alone; the designer must instead raise T or lower φ by a coating."
+    ],
+    "correctIndex": 0,
+    "explanation": "The Schottky enhancement of J is exp(Δφ/kT), with Δφ = √(eE/(4πε₀)). At T = 1200 K, kT ≈ 0.103 eV, so a factor-of-ten enhancement needs Δφ ≈ kT ln 10 ≈ 0.24 eV. Inverting Δφ = √(eE/(4πε₀)) with Δφ = 0.24 eV gives E ≈ (0.24 V)² · 4πε₀/e ≈ 4·10⁷ V/m. That is a big field: it corresponds to about forty volts across a micron, which is why Schottky-effect-dominated cathodes are point emitters or thin-film field-plate designs rather than flat oxide cakes. Option B invents a temperature-independent linear relation that does not exist. Option C computes the enhancement at 10⁶ V/m as 38 mV, which at kT = 0.103 eV gives a factor of exp(0.37) ≈ 1.45, not 10. Option D forgets that the range of Δφ across the practically useful field span runs from a few millivolts (Schottky tuning) to a few electron-volts (Fowler-Nordheim tunnelling regime), and the middle of that range delivers plenty of factor-of-ten enhancement."
+  },
+  "suggestedNodes": [
+    {
+      "id": "schottky_barrier_diode",
+      "label": "Schottky diode",
+      "subtitle": "metal-semi rect.",
+      "edgeType": "extends"
+    },
+    {
+      "id": "fowler_nordheim",
+      "label": "Field emission",
+      "subtitle": "cold tunnelling",
+      "edgeType": "related"
+    },
+    {
+      "id": "shot_noise",
+      "label": "Shot noise",
+      "subtitle": "√(2eI Δf)",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-05T07:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": [
+      "thermionic_emission",
+      "work_function",
+      "contact_potential"
+    ]
+  }
+}
