@@ -659,6 +659,16 @@
       "createdAt": "2026-07-05T07:00:00Z",
       "col": 0,
       "row": 33
+    },
+    {
+      "id": "child_langmuir",
+      "label": "Child-Langmuir",
+      "subtitle": "J ∝ V^{3/2}/d²",
+      "state": "available",
+      "lesson": "2026-07-06-child-langmuir-law",
+      "createdAt": "2026-07-06T07:00:00Z",
+      "col": 1,
+      "row": 33
     }
   ],
   "edges": [
@@ -1555,6 +1565,16 @@
     {
       "from": "schottky_effect",
       "to": "contact_potential",
+      "kind": "related"
+    },
+    {
+      "from": "child_langmuir",
+      "to": "thermionic_emission",
+      "kind": "extends"
+    },
+    {
+      "from": "child_langmuir",
+      "to": "schottky_effect",
       "kind": "related"
     }
   ]
