@@ -1,0 +1,218 @@
+{
+  "slug": "2026-07-06-child-langmuir-law",
+  "title": "The Child-Langmuir law: how a cloud of slow electrons throttles its own current",
+  "node": {
+    "id": "child_langmuir",
+    "label": "Child-Langmuir",
+    "subtitle": "J ∝ V^{3/2}/d²"
+  },
+  "intro": "The last three lessons drew the anode-current curve of a thermionic diode from the cathode side: Richardson-Dushman set the ceiling, the Schottky effect nudged the ceiling upward, and both stories asked what a hot metal could boil off if you could sweep the electrons away as fast as they left. The other half of the same J-V curve, at low anode voltages, has nothing to do with what the cathode can supply. It is set by what the vacuum between cathode and anode will permit through. Clement Dexter Child at Colgate in 1911, and Irving Langmuir at General Electric two years later, both found that the current below the Richardson plateau grows as the anode voltage to the three-halves power, capped not by heat but by a self-limiting cloud of electrons already in flight.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. A slope of three-halves nobody had asked for",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Clement Dexter Child was thirty-one years old, an assistant professor of physics at Colgate University in Hamilton, New York, when he published in the May 1911 Physical Review a short paper titled 'Discharge from hot CaO'. He had a hot lime-coated cathode (the Wehnelt cathode from the thermionic-emission lesson) sitting a few millimeters from a cold nickel anode, in a sealed and pumped-down glass envelope. He varied the anode voltage from a few volts to a few hundred and plotted the current. What he saw, and what nobody had a theory for, was that the current did not rise linearly with voltage (as it would in an ohmic conductor), did not rise exponentially (as it would in the semiconductor diode that would not be invented for another thirty-eight years), and did not sit flat at the Richardson value (as saturation would require)."
+        },
+        {
+          "type": "p",
+          "text": "The current rose as V raised to the three-halves power. Not V, not V², but V^{1.5}, a fractional exponent no elementary circuit law had reason to produce. Child suggested a mechanism in his 1911 paper (electron trajectories bent by a growing space charge in the gap) and worked out the derivation to first order. His paper was terse, four pages, and slotted quietly into a journal that at the time was still finding its readership. In 1913, Irving Langmuir, working at General Electric's research laboratory in Schenectady on William Coolidge's high-vacuum X-ray tubes (which desperately needed reliable high-current thermionic emission at controlled voltages), rederived the same law independently and extended it to cylindrical geometry, where the mathematics is different but the exponent 3/2 survives. Langmuir did not know about Child's paper when he started; he cited it prominently once he found it. The two names have been welded together ever since."
+        },
+        {
+          "type": "p",
+          "text": "The puzzle Child and Langmuir solved was not what the hot cathode could produce. Richardson had already answered that: at 2500 K a tungsten filament boils off amperes per square centimeter. The puzzle was that a real diode, wired up on the bench with that same cathode, delivered milliamperes at low anode voltages, not amperes. Something between the cathode and the anode was throttling the current below what the surface wanted to emit. Turn the anode voltage up and the throttle relaxed, and the current rose along that peculiar V^{3/2} curve until it finally hit the Richardson plateau and the throttle disappeared. Whatever the throttle was, it was not the cathode. It was the vacuum."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The self-strangling electron cloud",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Picture the interior of the diode gap. Electrons boil off the hot cathode with thermal velocities in the neighborhood of 10⁵ m/s (kinetic energy kT, about a tenth of an eV at 2500 K), which for the purposes of what follows is essentially zero. The applied field between cathode and anode then pushes them across the gap. Late in the flight they are moving fast; early in the flight they are moving slowly; and slow electrons spend more time in the gap than fast ones. A slow electron is a bit of negative charge that sits in the gap for a while, and while it sits there its own electric field points radially outward. Some of that field points back toward the cathode."
+        },
+        {
+          "type": "p",
+          "text": "Now imagine the cathode is emitting continuously. Every microsecond another swarm of electrons enters the gap, and each swarm spends longer near the cathode (where it is slow) than near the anode (where it is fast). The cloud of electrons in transit is therefore denser near the cathode than near the anode, and denser still if the emission rate rises. That accumulated negative charge, denser at the cathode end of the gap, produces an electric field that opposes the applied field. The electron cloud is screening the anode from the cathode."
+        },
+        {
+          "type": "p",
+          "text": "Push the current higher and the cloud grows denser and the screening grows stronger. There is a limit. Once the space-charge field at the cathode surface exactly cancels the applied field, no further electron can be extracted, because the net force on it at the moment it leaves the metal is zero. This is Langmuir's boundary condition, and it fixes the steady-state current: the maximum J is reached when the electric field at the cathode is exactly zero. Any attempt to push more electrons in would drive the surface field negative (electrons pulled back into the metal), and equilibrium requires a non-negative field. Writing the electron charge magnitude e, mass m, and taking the electron to leave the surface at rest at x = 0, its kinetic energy at position x inside the gap equals eV(x), so its velocity is:"
+        },
+        {
+          "type": "math",
+          "tex": "v(x) \\;=\\; \\sqrt{\\dfrac{2\\,e\\,V(x)}{m}}",
+          "display": true,
+          "caption": "The velocity of a single electron at position x in the gap, starting from rest at the cathode. v(x) is the velocity at position x. e is the magnitude of the electron charge. m is the electron mass. V(x) is the electric potential at position x, measured with V(0) = 0 at the cathode and V(d) = V₀ at the anode. Because the electron enters the gap with essentially zero thermal energy, all its kinetic energy at x comes from the work eV(x) done by the field."
+        },
+        {
+          "type": "p",
+          "text": "Continuity of current at every point in the gap means that the current density J (the charge per area per second crossing a plane at x) is the product of the charge density there and the drift velocity there. Writing ρ(x) for the charge density (a negative quantity, since it is a density of electrons) and using the velocity above, ρ(x) v(x) = -J for a positive J flowing in the +x direction. Solving for ρ(x) and using the velocity formula:"
+        },
+        {
+          "type": "math",
+          "tex": "\\rho(x) \\;=\\; -\\dfrac{J}{v(x)} \\;=\\; -J\\,\\sqrt{\\dfrac{m}{2\\,e\\,V(x)}}",
+          "display": true,
+          "caption": "The charge density in the diode gap in a steady-state space-charge-limited current. ρ(x) is the charge density at position x, negative because it is composed of electrons. J is the magnitude of the current density (positive by convention). e is the electron charge magnitude. m is the electron mass. V(x) is the local potential. The 1/√V dependence says the cloud is denser near the cathode (where V is small and electrons are slow) than near the anode (where V is large and electrons have sped up)."
+        },
+        {
+          "type": "p",
+          "text": "That is two of the three ingredients we need. The third is Poisson's equation, which relates the potential inside the gap to the charge density sitting there. Poisson turns two densities into two derivatives, and the algebra assembles itself around the exponent 3/2."
+        }
+      ],
+      "quiz": {
+        "question": "A student proposes to break through the space-charge limit by 'polishing the cathode so it emits into a beam and does not spread': the electrons will move in a tight column, so they will not fill the gap, and the cloud will not build up. Why does this not raise the current above the Child-Langmuir limit for a given V and d?",
+        "options": [
+          "It does raise the current: focusing removes the space charge from most of the gap, so the current can climb to the Richardson-Dushman value freely.",
+          "The space-charge limit does not depend on how spread out the beam is; it depends on the charge in the flight column between cathode and anode. Focusing the electrons into a tighter column packs the same current into a smaller volume, so the local charge density in the column climbs and the screening effect at the cathode remains, giving the same J = A_emitter × K × V^{3/2}/d² per unit emitter area. The limit is set at the cathode surface, not in the gap volume.",
+          "The space-charge limit is entirely a filament-temperature effect; polishing the cathode changes the emissivity and lifts the ceiling.",
+          "The Child-Langmuir law only applies in cylindrical geometry, so a planar polished cathode is exempt."
+        ],
+        "correctIndex": 1,
+        "explanation": "Option B is right for the right reason. The Langmuir boundary condition (zero electric field at the cathode surface) is a local condition at x = 0, and what determines whether it is satisfied is the total charge in the flight path immediately above that patch of cathode. Squeezing the beam into a narrower column concentrates the same charge into a smaller cross-section, making the local density higher, and the resulting screening at the cathode is at least as strong as before. What actually beats Child-Langmuir is not focusing but changing the geometry (Langmuir's own 1913 extension to cylindrical and spherical diodes gives different prefactors) or moving the electrodes closer together (J scales as 1/d²). Option A gets the direction wrong. Option C confuses saturation (Richardson-Dushman) with the space-charge regime. Option D is factually wrong: Child's original 1911 derivation was planar."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Poisson meets a hungry cathode",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Poisson's equation in one dimension, in SI units, relates the second derivative of the potential to the charge density it sits on, with the vacuum permittivity ε₀ setting the scale of the coupling. Substituting the charge density we derived and writing the equation in the form Child and Langmuir both worked with:"
+        },
+        {
+          "type": "math",
+          "tex": "\\dfrac{d^{2}V}{dx^{2}} \\;=\\; -\\dfrac{\\rho(x)}{\\varepsilon_{0}} \\;=\\; \\dfrac{J}{\\varepsilon_{0}}\\,\\sqrt{\\dfrac{m}{2\\,e\\,V(x)}}",
+          "display": true,
+          "caption": "Poisson's equation with the space-charge density substituted in. V(x) is the potential in the gap. ε₀ is the vacuum permittivity. ρ(x) is the (negative) space-charge density. J is the magnitude of the current density flowing across the gap. m is the electron mass. e is the electron charge magnitude. The equation says: wherever the electron cloud is dense (small V, slow electrons) the potential curves sharply; wherever the cloud is thin (large V, fast electrons) the potential curves gently."
+        },
+        {
+          "type": "p",
+          "text": "The boundary conditions come from the physical setup. The cathode is grounded, so V(0) = 0. The anode sits at V(d) = V₀, where d is the gap width. And Langmuir's condition, which fixes J, sets the electric field at the cathode surface to zero: dV/dx at x = 0 equals 0. Three conditions for a second-order ODE plus one unknown (J), so the system is exactly determined."
+        },
+        {
+          "type": "p",
+          "text": "Try a power-law ansatz. Guess V(x) = C x^α for some constants C and α to be determined. Then the second derivative is C α (α − 1) x^{α − 2}, and V^{−1/2} is C^{−1/2} x^{−α/2}. Substituting into the ODE, the x powers on the two sides must match: α − 2 = −α/2, which gives α = 4/3. The potential inside a space-charge-limited planar diode rises as x to the four-thirds, curving upward gently near the cathode (where the cloud is dense) and steepening as x grows (where the cloud thins out)."
+        },
+        {
+          "type": "math",
+          "tex": "V(x) \\;=\\; V_{0}\\left(\\dfrac{x}{d}\\right)^{4/3}",
+          "display": true,
+          "caption": "The potential inside a space-charge-limited planar diode. V(x) is the potential at position x. V₀ is the anode voltage. d is the gap width. The exponent 4/3 comes from the balance between Poisson's equation and the 1/√V charge-density profile: the electrons pile up preferentially near the cathode, flattening the potential there, and the potential only rises appreciably in the second half of the gap. Contrast with a vacuum gap containing no electrons at all, where V(x) would rise linearly from 0 to V₀."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-06-child-langmuir-law.html",
+          "height": 460,
+          "caption": "The potential V(x) inside a planar vacuum diode, shown for the space-charge-limited case (V ∝ x^{4/3}, solid rust curve) alongside the empty-vacuum case (V ∝ x, dashed cream line). Slide the anode voltage V₀ from 10 V to 500 V and the gap width d from 1 mm to 10 mm. The readout shows the resulting Child-Langmuir current density and the value of the cathode-surface field for the space-charge case, which stays pinned at zero by Langmuir's boundary condition. The visible flatness of the solid curve near x = 0 is Langmuir's condition made visible: the electron cloud has squashed the field at the cathode surface to zero, and the potential only starts to rise once you are well into the gap."
+        },
+        {
+          "type": "p",
+          "text": "The current density J drops out by matching the coefficients. Substituting the ansatz back into the ODE, C α (α − 1) x^{α − 2} equals (J/ε₀) √(m/(2e)) C^{−1/2} x^{−α/2}, and with α = 4/3 both sides have x to the −2/3 power. The x-dependence cancels and the numerical prefactors give (4/9) C^{3/2} = (J/ε₀) √(m/(2e)). Using V₀ = C d^{4/3}, so C = V₀/d^{4/3} and C^{3/2} = V₀^{3/2}/d², and solving for J gives the Child-Langmuir law."
+        },
+        {
+          "type": "math",
+          "tex": "J \\;=\\; \\dfrac{4\\,\\varepsilon_{0}}{9}\\,\\sqrt{\\dfrac{2\\,e}{m}}\\;\\dfrac{V_{0}^{3/2}}{d^{2}}",
+          "display": true,
+          "caption": "The Child-Langmuir law for a planar vacuum diode. J is the space-charge-limited current density. ε₀ is the vacuum permittivity. e is the electron charge magnitude. m is the electron mass. V₀ is the anode voltage. d is the gap width. The 3/2 power of V₀ is the fingerprint. The 1/d² dependence says shrinking the gap by a factor of two quadruples the current at fixed voltage, one of the reasons every practical high-current diode has been driven toward the smallest gap the geometry and voltage hold-off will allow. Numerically, the material-independent prefactor (4ε₀/9)√(2e/m) evaluates to about 2.33 × 10⁻⁶ A V⁻³/² for electrons in SI units."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Three regimes on one J-V curve",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The interesting thing about a real vacuum diode is not any one of these regimes but the transition between them. Sweep the anode voltage V from zero upward at fixed cathode temperature and you cross three distinct territories. In the low-V region, the space-charge cloud dominates and J tracks V^{3/2} along the Child-Langmuir curve. In the mid-V region, once V has grown large enough that the space charge cannot screen the applied field anywhere in the gap, the current levels off at the Richardson-Dushman saturation value J_sat = A T² exp(−φ/kT). And in the high-V region, the Schottky effect lowers the barrier by ΔΦ ∝ √E, so J_sat itself starts a slow logarithmic climb along ln J ∝ √V."
+        },
+        {
+          "type": "p",
+          "text": "The knee between the first two regimes is the design point of every practical thermionic device. Sitting well below the knee, in the space-charge region, means the cathode could emit more but the gap will not let it, and increasing V still buys more current: the cathode is being wasted. Sitting well above the knee, in saturation, means the anode is pulling harder than the cathode can supply, and increasing V buys essentially nothing until Schottky helps at the top. Every vacuum tube from the 1920s onward was designed to run just barely above the knee, sitting on the Richardson plateau with a small safety margin, so that the current was set by the cathode temperature (which the filament heater could regulate) and not by the anode voltage (which was the signal). That is why the Richardson value was called saturation in the trade literature: it was the current the tube saturated to, not a number you tried to exceed."
+        },
+        {
+          "type": "p",
+          "text": "Because the Child-Langmuir current scales as V^{3/2} and depends on the geometry through a single factor of A/d², engineers found it convenient to abstract that combination into a single figure of merit. They defined the perveance K of a diode as J A / V^{3/2}, where A is the emitter area, so that the space-charge current becomes I = K V^{3/2} at any anode voltage. Perveance has SI units of amperes per volt to the three-halves, and its numerical value for a clean planar diode is about 2.33 × 10⁻⁶ A/V³/² times A/d². Practical diodes cluster around perveances of 10⁻⁶ to 10⁻⁵ A/V³/², and the trade shortened that unit to the microperveance, μP = 10⁻⁶ A/V³/²."
+        }
+      ],
+      "quiz": {
+        "question": "A designer has a planar vacuum diode with a tungsten cathode at 2500 K, gap d = 2 mm, and a V^{3/2}-region measurement giving J = 1.5 A/cm² at V₀ = 200 V. Now she halves the gap to d = 1 mm at the same V₀ and same T. What happens to the current density, and why is the answer set by geometry rather than by the cathode temperature?",
+        "options": [
+          "J doubles to 3 A/cm², because halving the gap doubles the field, which linearly speeds up the electron transit.",
+          "J stays at 1.5 A/cm², because the Richardson-Dushman saturation current at 2500 K is fixed by T alone and the geometry cannot exceed it.",
+          "J quadruples to 6 A/cm², because in the space-charge-limited regime J = K V^{3/2}/d², and halving d at fixed V₀ and fixed prefactor multiplies J by 4. The temperature does not enter because the cathode is not the bottleneck in this regime; the space charge in the gap is.",
+          "J is halved to 0.75 A/cm², because halving the gap halves the transit time and the total charge in flight."
+        ],
+        "correctIndex": 2,
+        "explanation": "The Child-Langmuir formula in J-form is J = (4ε₀/9)√(2e/m) V₀^{3/2}/d², proportional to 1/d². Halving d multiplies J by 4, giving 6 A/cm². The cathode temperature is irrelevant here because we are in the space-charge-limited regime, where the diode is passing less current than the cathode wants to emit; the cathode is idling, and geometry sets the throttle. Option A dimensionally cannot be right (the 3/2 exponent and 1/d² dependence are the whole point). Option B confuses the regimes: the Richardson-Dushman ceiling at 2500 K on tungsten is well above 6 A/cm², so we do not hit saturation. Option D counts transit time as if that were the answer, but transit time enters through the space charge density and Poisson's equation, and the result is the 1/d² we derived, not 1/d."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The bottleneck of every electron beam ever built",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Every high-current electron beam produced since 1913 has hit the Child-Langmuir wall in its first millimeter of flight. The Coolidge X-ray tube (William Coolidge, GE, 1913, patented three months after Langmuir's derivation) needed a controllable milliampere-scale current at kilovolt-scale voltage, and Coolidge worked out the cathode geometry empirically until the perveance came out where he wanted it. The Coolidge tube took over from the older gas-discharge X-ray tubes almost overnight, and its descendant is still the tube inside every hospital radiology suite in 2026: a hot filament, a modest space-charge-limited electron beam pointed at a tungsten anode, and the bremsstrahlung X-rays coming off the target."
+        },
+        {
+          "type": "p",
+          "text": "The most influential downstream design is John Robinson Pierce's, at Bell Labs in 1954. Pierce needed high-current, low-perveance electron beams for early travelling-wave tubes and klystrons, and he noticed that a planar Child-Langmuir cathode produces a beam that immediately starts to bloom outward due to its own space charge (each electron in the beam sees the others as a cylindrical negative-charge column pushing it radially away). Pierce asked what electrode shape at the cathode edges would keep the boundary of the beam behaving as if it were the boundary of a full infinite planar diode, so that the interior of the beam experienced a pure Child-Langmuir field. The answer was a wedge-shaped electrode at the cathode rim, tilted at exactly 67.5° to the beam axis, and the resulting geometry is called the Pierce gun. Every klystron, every travelling-wave tube, every electron microscope filament assembly, and every particle accelerator electron injector built since 1954 uses the Pierce geometry or a close cousin. The 67.5° angle sits inside standard cathode assemblies down to this day, an accidentally elegant survivor of a piece of 1954 boundary-value algebra."
+        },
+        {
+          "type": "p",
+          "text": "The Child-Langmuir law also has a plasma-physics twin that shows up wherever a solid conductor meets a hot, ionized gas: the Bohm sheath. Insert a metal probe into a plasma and the electrons (thermally faster than the ions) hit the probe first and charge it negative; the negative probe then repels further electrons and attracts ions, and a thin non-neutral layer (the sheath) grows around the probe. Inside that sheath, the Bohm criterion (David Bohm, wartime work at Berkeley, published 1949) gives the ion flux as the density-times-Bohm-speed n c_s. The current density into the probe is set not by what the plasma wants to supply, but by what the sheath will pass, and the mathematics is Poisson's equation for a space-charge-limited current with a modified boundary condition, the same shape as Child's 1911 diode. Every Langmuir probe measurement in a plasma reactor, every spacecraft charging calculation in low Earth orbit, and every tokamak wall boundary sits on the same equation Child solved for a diode over a hundred years ago. The problem is portable."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A student staring at a tungsten diode's log-log J vs V curve sees three distinct regions: at low V a slope of exactly 1.5, at mid V a plateau, and at very high V a very gentle upward slope. She wants to identify which parts of the curve are set by properties of the cathode (T and φ) and which are set by properties of the gap (d), so she can figure out which parameters to change to raise the current at each operating point. Which reading is correct?",
+    "options": [
+      "The whole curve is set by the cathode: T raises everything up, φ shifts everything sideways. The gap width d does not matter.",
+      "The low-V slope-1.5 region is set by the gap (Child-Langmuir, J ∝ V^{3/2}/d², independent of T and φ), the mid-V plateau is set by the cathode (Richardson-Dushman, J = AT²exp(-φ/kT), independent of d), and the gentle high-V uptick is a small Schottky correction to the cathode plateau (ln J shifts by √E, so the geometry matters again through E = V/d).",
+          "The whole curve is set by the gap: d fixes the perveance and V slides you along the perveance curve; T is only there to make sure the cathode is not completely cold.",
+      "The three regions all correspond to the same physical mechanism (space-charge screening); the differing slopes are artifacts of how the log axes are laid out."
+    ],
+    "correctIndex": 1,
+    "explanation": "Option B partitions the curve correctly along the line of physical bottlenecks. In the low-V region, the cathode wants to emit more than the gap will accept, so the physics is entirely in Poisson's equation for the space-charge cloud, and T and φ do not appear in J = (4ε₀/9)√(2e/m) V^{3/2}/d². In the mid-V region, the gap has cleared the electrons out as fast as the cathode makes them, so what limits J is the cathode alone: T and φ set J_sat via Richardson-Dushman, and d does not appear at all. In the high-V region, the Schottky correction ΔΦ = √(eE/4πε₀) depends on the field at the surface, which for a planar diode is V/d, so d re-enters through the field, but only inside a very slow √-dependence and only correcting φ downward by a small amount. Option A misses that Child-Langmuir depends only on ε₀ and the electron mass, both fundamental constants, and on the geometry. Option C ignores the flat plateau, which is real and material-dependent. Option D dissolves three genuinely different physical mechanisms into one and would predict a single slope on the log-log plot, which is not what is observed."
+  },
+  "suggestedNodes": [
+    {
+      "id": "pierce_gun",
+      "label": "Pierce gun",
+      "subtitle": "67.5° cathode",
+      "edgeType": "extends"
+    },
+    {
+      "id": "klystron",
+      "label": "Klystron",
+      "subtitle": "microwave amp",
+      "edgeType": "applied"
+    },
+    {
+      "id": "bohm_sheath",
+      "label": "Bohm sheath",
+      "subtitle": "plasma-metal",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-06T07:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 22,
+    "previouslyMastered": [
+      "thermionic_emission",
+      "schottky_effect",
+      "work_function"
+    ]
+  }
+}

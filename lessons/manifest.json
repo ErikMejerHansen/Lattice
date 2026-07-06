@@ -460,5 +460,12 @@
     "subtitle": "Δφ = √(eE/4πε₀)",
     "date": "2026-07-05",
     "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-07-06-child-langmuir-law",
+    "title": "The Child-Langmuir law: how a cloud of slow electrons throttles its own current",
+    "subtitle": "J ∝ V^{3/2}/d²",
+    "date": "2026-07-06",
+    "estimatedReadingMinutes": 22
   }
 ]
