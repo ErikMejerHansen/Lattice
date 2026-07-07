@@ -22,7 +22,6 @@
 # auto-suggested 2026-05-14 from work-function
 
 # auto-suggested 2026-07-02 from thermionic-emission
-Field emission (Fowler-Nordheim) — cold emission by quantum tunnelling through a triangular barrier tilted by a strong field, J ∝ E² exp(−B φ^{3/2}/E), the cathode of the scanning tunnelling microscope and the field-emission display
 
 # auto-suggested 2026-07-05 from schottky-effect
 Schottky barrier diode — metal-semiconductor rectifier at the Schottky-Mott junction with sub-nanosecond recovery and no minority-carrier storage, ubiquitous in switching regulators, RF mixers, and clamping diodes
@@ -229,3 +228,8 @@ Chandrasekhar limit — M_Ch ≈ 1.44 M_☉, the maximum mass a white dwarf can 
 Pierce gun — John R. Pierce at Bell Labs 1954, the 67.5° cathode-edge electrode shape that makes a finite-area emitter behave as if it were the interior of an infinite Child-Langmuir diode, the geometry inside every klystron, travelling-wave tube, electron microscope filament, and particle-accelerator electron injector built since
 Klystron — Russell and Sigurd Varian at Stanford 1937, velocity-modulated electron beam that bunches in a drift tube and gives up its kinetic energy to a resonant cavity, the first practical microwave amplifier, still the workhorse of high-power radar, radiotherapy linacs, and the SLAC linear collider
 Bohm sheath criterion — David Bohm 1949 (Berkeley wartime work), the ion Mach number ≥ 1 condition that a plasma must satisfy at the edge of any solid electrode, a plasma-physics twin of Langmuir's zero-field cathode condition and the boundary layer around every Langmuir probe, spacecraft, and tokamak wall
+
+# auto-suggested 2026-07-07 from field-emission
+WKB approximation — the Wentzel-Kramers-Brillouin 1926 approximation for slowly varying potentials, T ≈ exp(-2∫κ dx), the tool that turned Schrödinger's equation into a quantitative theory of tunneling for Gamow, Fowler-Nordheim, and every barrier problem since
+Scanning tunneling microscope — Binnig and Rohrer 1981, the vacuum-gap version of Fowler-Nordheim: current ∝ exp(-2g√(2mφ)/ℏ), atomic-resolution imaging via a 1.1 nm⁻¹ decay length, Nobel Prize 1986
+Field-ion microscope — Erwin Müller 1955, the first true single-atom images, made by ionizing helium atoms hovering above a sharpened tip in a field of ≈10¹⁰ V/m and letting the ions project the surface onto a phosphor

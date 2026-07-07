@@ -1,0 +1,294 @@
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz { padding: 12px 14px 4px; max-width: 560px; margin: 0 auto; box-sizing: border-box; }
+svg { display: block; width: 100%; height: auto; }
+.readout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 22px;
+  margin-top: 8px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11.5px;
+}
+.readout .k { color: var(--text-muted); }
+.readout .v { color: var(--text); text-align: right; }
+</style>
+
+<div id="viz">
+  <svg id="chart" viewBox="0 0 520 320" aria-label="Field-emission barrier and wavefunction"></svg>
+  <div class="viz-slider-row">
+    <label for="Efield">E</label>
+    <input type="range" id="Efield" min="1" max="15" step="0.1" value="5" />
+    <div class="value"><span id="Eval">5.0</span> V/nm</div>
+  </div>
+  <div class="readout">
+    <div class="k">turning point x_c</div><div class="v"><span id="xcVal">0.90</span> nm</div>
+    <div class="k">WKB exponent -2I</div><div class="v"><span id="expVal">-13.05</span></div>
+    <div class="k">transmission T</div><div class="v"><span id="tVal">2.2e-6</span></div>
+    <div class="k">current J</div><div class="v"><span id="jVal">1.8e2</span> A/cm&sup2;</div>
+  </div>
+  <div class="viz-caption">
+    Tungsten cathode, work function &phi; = 4.5 eV. Drag the field slider: the vacuum barrier (rust line) tilts, the classical turning point x_c = &phi;/(eE) marches inward, and the wavefunction (green) decays less steeply through a thinner barrier. The Fowler-Nordheim current density climbs many orders of magnitude across the slider's range.
+  </div>
+</div>
+
+<script>
+(function () {
+  var PHI = 4.5;           // eV
+  var KAPPA0 = 5.123;      // nm^-1 per sqrt(eV): sqrt(2 m_e * eV) / hbar
+  var svg = document.getElementById('chart');
+  var NS = 'http://www.w3.org/2000/svg';
+
+  var W = 520, H = 320;
+  var M = { top: 20, right: 14, bottom: 46, left: 58 };
+  var iw = W - M.left - M.right;
+  var ih = H - M.top - M.bottom;
+
+  var xMin = -0.4, xMax = 2.6;   // nm
+  var yMin = -6.0, yMax = 7.0;   // eV, with E_F = 0
+
+  function sx(x) { return M.left + (x - xMin) / (xMax - xMin) * iw; }
+  function sy(y) { return M.top + (yMax - y) / (yMax - yMin) * ih; }
+
+  function el(tag, attrs) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function text(x, y, s, opts) {
+    var t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', x); t.setAttribute('y', y);
+    if (opts) for (var k in opts) t.setAttribute(k, opts[k]);
+    t.textContent = s;
+    return t;
+  }
+
+  function drawStatic() {
+    // plot area frame
+    svg.appendChild(el('rect', {
+      x: sx(xMin), y: sy(yMax), width: iw, height: ih,
+      fill: '#faf5e9', stroke: '#d8cfb8', 'stroke-width': 1
+    }));
+    // gridlines and y ticks
+    var yticks = [-6, -4, -2, 0, 2, 4, 6];
+    yticks.forEach(function (yv) {
+      svg.appendChild(el('line', {
+        x1: sx(xMin), y1: sy(yv), x2: sx(xMax), y2: sy(yv),
+        stroke: yv === 0 ? '#b8ac8e' : '#e6ddc4',
+        'stroke-width': yv === 0 ? 1 : 0.8,
+        'stroke-dasharray': yv === 0 ? '' : '2 3'
+      }));
+      svg.appendChild(text(sx(xMin) - 6, sy(yv) + 3.5, String(yv), {
+        'font-family': '"IBM Plex Mono", monospace',
+        'font-size': '10', 'fill': '#6b6359', 'text-anchor': 'end'
+      }));
+    });
+    // x ticks
+    var xticks = [0, 0.5, 1, 1.5, 2, 2.5];
+    xticks.forEach(function (xv) {
+      svg.appendChild(el('line', {
+        x1: sx(xv), y1: sy(yMin), x2: sx(xv), y2: sy(yMin) + 4,
+        stroke: '#b8ac8e'
+      }));
+      svg.appendChild(text(sx(xv), sy(yMin) + 15, xv.toFixed(1), {
+        'font-family': '"IBM Plex Mono", monospace',
+        'font-size': '10', 'fill': '#6b6359', 'text-anchor': 'middle'
+      }));
+    });
+
+    // axis labels
+    svg.appendChild(text(M.left + iw / 2, H - 6, 'x (nm), distance from metal surface', {
+      'font-family': '"IBM Plex Mono", monospace',
+      'font-size': '11', 'fill': '#6b6359', 'text-anchor': 'middle'
+    }));
+    var yl = text(0, 0, 'energy above E_F (eV)', {
+      'font-family': '"IBM Plex Mono", monospace',
+      'font-size': '11', 'fill': '#6b6359', 'text-anchor': 'middle'
+    });
+    yl.setAttribute('transform', 'translate(15,' + (M.top + ih / 2) + ') rotate(-90)');
+    svg.appendChild(yl);
+
+    // metal (Fermi sea) shading, x < 0
+    svg.appendChild(el('rect', {
+      x: sx(xMin), y: sy(0), width: sx(0) - sx(xMin), height: sy(yMin) - sy(0),
+      fill: '#c47558', 'fill-opacity': '0.28'
+    }));
+    // metal label
+    svg.appendChild(text((sx(xMin) + sx(0)) / 2, sy(-3), 'metal', {
+      'font-family': '"IBM Plex Mono", monospace',
+      'font-size': '11', 'fill': '#6b6359', 'text-anchor': 'middle', 'font-style': 'italic'
+    }));
+    svg.appendChild(text((sx(xMin) + sx(0)) / 2, sy(-4.2), 'Fermi sea', {
+      'font-family': '"IBM Plex Mono", monospace',
+      'font-size': '9.5', 'fill': '#6b6359', 'text-anchor': 'middle'
+    }));
+    // vacuum label
+    svg.appendChild(text(sx(1.7), sy(6.2), 'vacuum', {
+      'font-family': '"IBM Plex Mono", monospace',
+      'font-size': '11', 'fill': '#a89e90', 'text-anchor': 'middle', 'font-style': 'italic'
+    }));
+
+    // E_F label
+    svg.appendChild(text(sx(2.5), sy(0) - 4, 'E_F', {
+      'font-family': '"IBM Plex Mono", monospace',
+      'font-size': '11', 'fill': '#6b6359', 'text-anchor': 'end'
+    }));
+
+    // metal surface line
+    svg.appendChild(el('line', {
+      x1: sx(0), y1: sy(yMin), x2: sx(0), y2: sy(yMax),
+      stroke: '#b8ac8e', 'stroke-width': 1
+    }));
+  }
+
+  // dynamic elements
+  var barrierPath = el('polyline', {
+    fill: 'none', stroke: '#9c3a22', 'stroke-width': 2, points: ''
+  });
+  var xcLine = el('line', {
+    stroke: '#9c3a22', 'stroke-width': 1, 'stroke-dasharray': '3 3', opacity: 0.7
+  });
+  var xcLabel = text(0, 0, 'x_c', {
+    'font-family': '"IBM Plex Mono", monospace',
+    'font-size': '11', 'fill': '#9c3a22', 'text-anchor': 'middle'
+  });
+  var phiLabel = text(sx(0) + 5, sy(PHI) + 4, 'φ', {
+    'font-family': '"IBM Plex Mono", monospace',
+    'font-size': '13', 'fill': '#9c3a22', 'text-anchor': 'start', 'font-style': 'italic'
+  });
+  var wavePath = el('path', {
+    fill: 'none', stroke: '#2d6a3e', 'stroke-width': 1.4, opacity: 0.9
+  });
+
+  svg.appendChild(barrierPath);
+  svg.appendChild(xcLine);
+  svg.appendChild(xcLabel);
+  svg.appendChild(phiLabel);
+  svg.appendChild(wavePath);
+
+  function computeAndDraw(EF) {
+    // EF: applied field in V/nm; V(x) - E_F = phi - EF*x for 0..x_c, then 0 for x > x_c
+    var xc = PHI / EF;
+
+    // barrier polyline: draw from (0, phi) sloping down to (xc, 0), then flat to xMax
+    var pts = [
+      [sx(0), sy(PHI)].join(','),
+      [sx(xc), sy(0)].join(','),
+      [sx(xMax), sy(0)].join(',')
+    ].join(' ');
+    barrierPath.setAttribute('points', pts);
+
+    // turning-point marker
+    xcLine.setAttribute('x1', sx(xc));
+    xcLine.setAttribute('x2', sx(xc));
+    xcLine.setAttribute('y1', sy(0));
+    xcLine.setAttribute('y2', sy(yMin));
+    xcLabel.setAttribute('x', sx(xc));
+    xcLabel.setAttribute('y', sy(yMin) + 30);
+    xcLabel.textContent = 'x_c = ' + xc.toFixed(2) + ' nm';
+
+    // WKB integral: I = KAPPA0 * (2/3) * phi^(3/2) / EF   (dimensionless)
+    var I = KAPPA0 * (2 / 3) * Math.pow(PHI, 1.5) / EF;
+    var exponent = -2 * I;
+    var T = Math.exp(exponent);
+
+    // engineering F-N current in A/cm^2:
+    // J[A/m^2] = 1.54e-6 * (E_SI)^2 / phi * exp(-6.83e9 * phi^{3/2} / E_SI)
+    // with E_SI = EF * 1e9 V/m, this simplifies to
+    // J[A/m^2] = 1.54e12 * EF^2 / phi * exp(-6.83 * phi^{3/2} / EF)
+    var Jm2 = 1.54e12 * EF * EF / PHI * Math.exp(-6.83 * Math.pow(PHI, 1.5) / EF);
+    var Jcm2 = Jm2 / 1e4;
+
+    // wavefunction: inside metal (x < 0): free oscillation with k proportional to sqrt(E_F depth)
+    // For visual clarity: fixed wavelength inside metal, amplitude 0.8
+    // In barrier (0..xc): exp(-integral of kappa from 0 to x) with amplitude 0.8
+    // Beyond xc: oscillation with amplitude equal to the exit amplitude
+    var d = 'M ' + sx(xMin) + ' ' + sy(-2);
+    var amp = 0.8;
+    var kIn = 6.0 * Math.PI;  // pretty wavelength inside metal (visual)
+    var kOut = 3.0 * Math.PI; // outside x_c
+    // Inside metal
+    var xStep = 0.02;
+    for (var x = xMin; x <= 0; x += xStep) {
+      var y = -2 + amp * Math.cos(kIn * (x - xMin));
+      d += ' L ' + sx(x) + ' ' + sy(y);
+    }
+    // Inside barrier: amplitude decays as exp(-I(x)), where
+    // I(x) = KAPPA0 * (2/3)/EF * (phi^{3/2} - (phi - EF*x)^{3/2})
+    var xEnd = Math.min(xc, xMax);
+    for (var x2 = 0; x2 <= xEnd; x2 += xStep) {
+      var Ix = KAPPA0 * (2 / 3) / EF * (Math.pow(PHI, 1.5) - Math.pow(PHI - EF * x2, 1.5));
+      var envelope = amp * Math.exp(-Ix);
+      // small internal oscillation for visual texture (kappa in the barrier is imaginary,
+      // so no real oscillation; draw a monotonic envelope on the top side)
+      var y2 = -2 + envelope;
+      d += ' L ' + sx(x2) + ' ' + sy(y2);
+    }
+    // beyond turning point: propagating wave, amplitude = envelope at x_c
+    if (xc < xMax) {
+      var exitAmp = amp * Math.exp(-I);
+      // clip visual amplitude to a minimum so the user sees "something" when T is tiny
+      var visualAmp = Math.max(exitAmp, 0.06);
+      for (var x3 = xc; x3 <= xMax; x3 += xStep) {
+        var y3 = -2 + visualAmp * Math.cos(kOut * (x3 - xc));
+        d += ' L ' + sx(x3) + ' ' + sy(y3);
+      }
+    }
+    wavePath.setAttribute('d', d);
+
+    // readouts
+    document.getElementById('Eval').textContent = EF.toFixed(1);
+    document.getElementById('xcVal').textContent = xc.toFixed(2);
+    document.getElementById('expVal').textContent = exponent.toFixed(2);
+    document.getElementById('tVal').textContent = formatSci(T);
+    document.getElementById('jVal').textContent = formatSci(Jcm2);
+  }
+
+  function formatSci(v) {
+    if (!isFinite(v) || v === 0) return '0';
+    var exp = Math.floor(Math.log10(Math.abs(v)));
+    var mant = v / Math.pow(10, exp);
+    return mant.toFixed(1) + 'e' + (exp >= 0 ? '+' : '') + exp;
+  }
+
+  drawStatic();
+
+  var slider = document.getElementById('Efield');
+  slider.addEventListener('input', function () {
+    computeAndDraw(parseFloat(slider.value));
+  });
+  computeAndDraw(parseFloat(slider.value));
+})();
+</script>

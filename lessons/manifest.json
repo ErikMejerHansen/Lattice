@@ -467,5 +467,12 @@
     "subtitle": "J ∝ V^{3/2}/d²",
     "date": "2026-07-06",
     "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-07-07-field-emission",
+    "title": "Field emission: how Fowler and Nordheim taught cold metal to leak electrons",
+    "subtitle": "AE² exp(-B/E)",
+    "date": "2026-07-07",
+    "estimatedReadingMinutes": 22
   }
 ]
