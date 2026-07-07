@@ -1,0 +1,205 @@
+{
+  "slug": "2026-07-07-field-emission",
+  "title": "Field emission: how Fowler and Nordheim taught cold metal to leak electrons",
+  "node": {
+    "id": "field_emission",
+    "label": "Field emission",
+    "subtitle": "AE² exp(-B/E)"
+  },
+  "intro": "Heat a wire hot enough and it emits electrons: that is the previous lesson, thermionic emission, run by thermal excitation over the work-function barrier. Sharpen the wire's tip to a needle instead and put it in a strong electric field, and it emits electrons at room temperature, with no heating at all. Classical physics has nothing to say about the cold case, because no electron in the metal has anywhere near the energy to climb the barrier. Ralph Fowler and Lothar Nordheim, at Cambridge in 1928, opened the door with Schrödinger's newly published wave equation, sent the electron through the barrier rather than over it, and wrote down the formula that today runs inside every scanning tunneling microscope and every field-emission display.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The cold current no one could explain",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The first hint came from Julius Elster in Wolfenbüttel, in 1889, playing with electrostatic machines and platinum needles: a steady, reproducible current from a cold cathode at high voltage, small but stubbornly present. The earliest experiment that could not be brushed off as a leak or a dust artifact was Robert Wood's 1897 paper in the Physical Review, describing steady electron currents from a needle-tipped cathode at a pressure of 10⁻⁶ torr and applied voltages of a few kilovolts. The current was steady, reproducible, temperature-independent, and utterly inexplicable."
+        },
+        {
+          "type": "p",
+          "text": "In 1926 Robert Millikan and Charles Eyring at Caltech nailed the phenomenology down. They measured emission from etched tungsten and platinum tips under fields of order 10⁹ V/m and found the current density scaled as J = a exp(-b/E) for constants a and b that varied from metal to metal but not with temperature. Cool the tip to liquid air; the current does not change. Warm it to red heat; the current does not change either, until thermionic emission finally overtakes it. Something was happening at the surface that owed nothing to thermal energy."
+        },
+        {
+          "type": "p",
+          "text": "The classical puzzle is stark. The work function φ of tungsten is 4.5 eV. At room temperature kT is 0.025 eV, and the Boltzmann factor exp(-φ/kT) is about 10⁻⁸⁰, a number smaller than the count of atoms in the observable universe. No electron in the metal has anywhere near the thermal energy to climb the barrier. Applying an electric field does not help either. The field lives outside the metal and pulls the electron away once it is out; it does not lift the electron out. Classically, the electron sits in a well of depth φ above E_F and stays there."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The triangular barrier and the WKB integral",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The lock opened in 1926, when Erwin Schrödinger published his wave equation. A quantum electron is a wave, and a wave hitting a barrier does not stop dead. It decays exponentially inside the barrier and re-emerges on the far side with a small amplitude. If the barrier is thin enough, that small amplitude carries a large current."
+        },
+        {
+          "type": "p",
+          "text": "Draw the picture. The metal Fermi sea is filled up to the Fermi energy E_F. Above E_F is a vacuum barrier of height φ, the work function. With no applied field, the barrier extends flat all the way to infinity, and nothing tunnels. Turn on an electric field E pointing outward from the metal into the vacuum: an electron of charge -e sitting at distance x in vacuum acquires potential energy -eEx below its no-field value. The barrier tilts. Its height at the surface is still φ, but it falls linearly with x and hits E_F at the classical turning point x_c."
+        },
+        {
+          "type": "math",
+          "tex": "V(x) - E_F \\;=\\; \\varphi - eEx \\qquad (0 \\le x \\le x_c), \\qquad x_c \\;=\\; \\frac{\\varphi}{eE}",
+          "display": true,
+          "caption": "The tilted vacuum barrier seen by an electron at the Fermi level of a cold metal. V(x) is the potential energy at distance x from the surface. E_F is the Fermi energy. φ is the work function (barrier height at the surface). e is the elementary charge. E is the applied electric field. x_c is the classical turning point where V(x_c) = E_F; beyond x_c the electron is a free wave. At E = 5 V/nm and φ = 4.5 eV, x_c is about 0.9 nm."
+        },
+        {
+          "type": "p",
+          "text": "For a slowly varying barrier the transmission is given by the WKB approximation of Wentzel, Kramers, and Brillouin, published the same year Schrödinger's equation appeared. The transmission through the barrier is dominated by an exponential of an integral of the local imaginary momentum κ(x) = √(2m(V(x) - E_F))/ℏ."
+        },
+        {
+          "type": "math",
+          "tex": "T \\;\\approx\\; \\exp\\!\\left(-2 \\int_{0}^{x_c} \\frac{\\sqrt{2m\\,[\\,V(x) - E_F\\,]}}{\\hbar}\\,dx\\right)",
+          "display": true,
+          "caption": "The WKB tunneling probability through the tilted vacuum barrier. T is the transmission coefficient. The integrand √(2m[V(x)-E_F])/ℏ is the local imaginary momentum, the rate at which the wave amplitude decays inside the classically forbidden region. m is the electron mass. ℏ is Planck's constant divided by 2π. The integral runs from the surface (x = 0) to the classical turning point x_c."
+        }
+      ],
+      "quiz": {
+        "question": "You turn up the applied field E at the surface of a cold cathode by a factor of two. The Fowler-Nordheim tunneling current density rises by many orders of magnitude. What causes the rise?",
+        "options": [
+          "The field lifts the electrons in the metal up to energies above the barrier top, and a classical over-the-barrier current begins.",
+          "The field shrinks the classical turning point x_c = φ/(eE), which shrinks the WKB integral roughly in proportion; because T is an exponential of a large negative number, a small change in the exponent produces a huge change in T.",
+          "The field warms the surface, and the higher temperature raises the thermionic emission by exp(-φ/kT).",
+          "The field increases the density of states at E_F by the Zeeman effect."
+        ],
+        "correctIndex": 1,
+        "explanation": "The barrier height at the surface is unchanged: φ does not depend on E. What changes is the barrier width. The WKB integral is roughly (2/3) √(2mφ)/ℏ · x_c, so shrinking x_c linearly shrinks the exponent by the same factor. Because T = exp(exponent) is a very steep function when the exponent is large and negative, small changes in the exponent multiply T by huge factors. Option A is the classical picture Fowler and Nordheim discarded: even at strong fields the barrier top at the surface stays at φ above E_F, and any current below that height is tunneling, not classical escape. Option C is wrong; field emission is measured to be temperature-independent. Option D confuses the Zeeman effect (a magnetic effect on atomic levels) with anything relevant here."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Fowler and Nordheim do the integral",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In 1928 Ralph Fowler, a Cambridge senior fellow with a track record in statistical mechanics, took a young German visitor named Lothar Nordheim into his office and pushed WKB through the triangular barrier by hand. The barrier is linear in x and flat in the transverse directions, so the imaginary-momentum integral has a closed form: substitute u = φ - eEx and the integrand becomes √u, whose antiderivative is (2/3) u^{3/2}."
+        },
+        {
+          "type": "math",
+          "tex": "\\int_{0}^{x_c} \\sqrt{2m\\,(\\varphi - eEx)}\\; dx \\;=\\; \\frac{2}{3}\\,\\frac{\\sqrt{2m}\\,\\varphi^{3/2}}{eE}",
+          "display": true,
+          "caption": "The closed-form WKB integral for a triangular barrier of height φ above E_F and slope eE. m is the electron mass. e is the elementary charge. E is the applied field at the surface. φ is the work function. The φ^{3/2} in the numerator is the hallmark of Fowler-Nordheim tunneling: it is the imprint of a square-root barrier profile that has been integrated once."
+        },
+        {
+          "type": "p",
+          "text": "Multiply the exponent by 2 (the WKB factor), integrate the transverse momentum over the Fermi sea (this gives one factor of E in the prefactor, from the density of tunneling channels open at the surface), and multiply by the rate at which electrons arrive at the barrier (a second factor of E, from the barrier's width scaling with 1/E). The result is a current density whose prefactor scales as E² and whose exponent scales as φ^{3/2}/E."
+        },
+        {
+          "type": "math",
+          "tex": "J \\;=\\; \\frac{e^{3}}{8\\pi h\\,\\varphi}\\; E^{2}\\; \\exp\\!\\left(-\\frac{8\\pi\\sqrt{2m}\\;\\varphi^{3/2}}{3\\,h\\,eE}\\right)",
+          "display": true,
+          "caption": "The Fowler-Nordheim equation for the cold-cathode current density. J is the current per unit area. E is the applied electric field at the emitter surface. φ is the work function of the metal. m is the electron mass. e is the elementary charge. h is Planck's constant. In engineering units (E in V/m, φ in eV, J in A/m²) the prefactor is 1.54×10⁻⁶ E²/φ and the exponent is −6.83×10⁹ φ^{3/2}/E."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-07-field-emission.html",
+          "height": 460,
+          "caption": "Drag the field-strength slider and watch the triangular barrier tilt: the width x_c = φ/(eE) shrinks, the WKB exponent shrinks with it, and the current density climbs many orders of magnitude in one sweep."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The Fowler-Nordheim plot and the sharp-tip trick",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The most useful rearrangement of the Fowler-Nordheim equation is its logarithm. Divide by E² first, then take ln of both sides. What was an exponential becomes an affine function of 1/E."
+        },
+        {
+          "type": "math",
+          "tex": "\\ln\\!\\left(\\frac{J}{E^{2}}\\right) \\;=\\; \\ln A \\;-\\; \\frac{B\\,\\varphi^{3/2}}{E}",
+          "display": true,
+          "caption": "The Fowler-Nordheim plot form. J is the current density. E is the applied field. A = e³/(8πhφ) is the F-N prefactor. B = 8π√(2m)/(3he) ≈ 6.83×10⁹ (V/m)/(eV)^{3/2} is a universal constant built from the electron mass m, the elementary charge e, and Planck's constant h. φ is the work function. Plotted against 1/E, ln(J/E²) is a straight line of slope −Bφ^{3/2} and intercept ln A."
+        },
+        {
+          "type": "p",
+          "text": "Every field emitter is characterized this way. Sweep the applied voltage over a decade, log J and E, plot ln(J/E²) against 1/E. A straight line says the mechanism is F-N tunneling from a clean, well-defined surface. A curved line says something else is going on: ion bombardment, surface diffusion, thermal enhancement, or space-charge back-pressure at high currents. In the days before scanning-probe techniques, the F-N plot was the only knob a cathode engineer had to know if the physics was under control."
+        },
+        {
+          "type": "p",
+          "text": "There is a practical subtlety Fowler and Nordheim did not have to face but every builder of a real emitter does. Their formula uses E for the actual field at the metal surface. The macroscopic field between a needle-shaped cathode and a distant anode is much smaller, because the needle geometry concentrates field lines at the tip. The two are related by a field-enhancement factor β, so that E_local = β E_macro. For a sharp etched tungsten tip, β can reach 100 to 1000, and a kilovolt across a millimeter (E_macro ≈ 10⁶ V/m) delivers 10⁹ V/m at the tip. The slope of the F-N plot, once one knows the geometry and the applied voltage, fixes β experimentally."
+        }
+      ],
+      "quiz": {
+        "question": "Two cold-cathode emitters, made from the same tungsten wire and operated at the same fraction of their voltage range, give straight Fowler-Nordheim plots whose slopes differ by a factor of two. Both are tungsten (same φ). What is the most likely cause?",
+        "options": [
+          "One emitter is running at a higher temperature than the other, and thermionic emission is contaminating the F-N signal.",
+          "The two emitters have different field-enhancement factors β: one tip is roughly twice as sharp as the other, so its local field at the same applied voltage is roughly twice as strong.",
+          "The two emitters have different work functions.",
+          "The Fowler-Nordheim formula does not apply to one of the two emitters."
+        ],
+        "correctIndex": 1,
+        "explanation": "The observed slope of the F-N plot is −Bφ^{3/2}/(β · [applied-voltage/gap]). With β in the denominator of the effective 1/E, doubling β halves the observed slope, exactly as reported. Option A is wrong because thermionic contamination shows up as an upward curvature of the F-N line, not a change in slope of a straight line. Option C is ruled out by 'same tungsten wire': φ is a material property. Option D contradicts the observation of straight lines: two straight F-N plots are two F-N-limited emitters with different geometry, not one that fails to be Fowler-Nordheim at all."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Müller's projector and the atomic-scale STM",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Erwin Müller, in Berlin in 1937, built the first machine that put Fowler and Nordheim to work. He etched a tungsten wire to a fine hemispherical tip and set a phosphor screen a few centimeters away. Under applied voltage, each patch of tip surface fired electrons radially onto the phosphor, magnified a millionfold by the geometry of the diverging beam alone (no lenses, no focusing coils). Müller's field-emission microscope reached about 2 nm resolution: for the first time, human eyes saw the atomic-scale texture of a metal surface, laid out on a fluorescent screen like a projection of the tip itself."
+        },
+        {
+          "type": "p",
+          "text": "The resolution was set by the tunneling exit-cone geometry and by the transverse momentum spread of the emitted electrons. Müller pushed the technique further in 1955 with the field-ion microscope, ionizing helium atoms hovering near the tip so that the projected image was carried by heavy ions rather than by light electrons. That trick beat the electron microscope of the day and delivered true single-atom resolution ten years before anyone else came close. Müller watched single tungsten atoms hop from one lattice site to another as he cycled the tip temperature."
+        },
+        {
+          "type": "p",
+          "text": "The last conceptual step was Gerd Binnig and Heinrich Rohrer at IBM Zurich in 1981. Rather than let the electron fly to a distant screen, they brought a sample within a nanometer of the tip and let the electron tunnel across the vacuum gap. The barrier was no longer a tilted vacuum wedge; it was a vacuum plateau of width g. The tunneling exponent kept the familiar shape exp(-2g √(2mφ)/ℏ), the same square-root-of-work-function Fowler and Nordheim had wrestled with in 1928. But the gap g was now under user control at the picometer level, via piezoelectric scanners."
+        },
+        {
+          "type": "p",
+          "text": "The decay length is atomic. For φ ≈ 4.5 eV, √(2mφ)/ℏ works out to about 1.1 per angstrom, so the tunneling current changes by a factor of e for each 0.1 nm of gap. Move the tip vertically by half an angstrom and the current shifts by 30 percent. In 1983 Binnig and Rohrer's group used exactly this exponential to image the 7×7 reconstruction of the Si(111) surface, a puzzle that had defeated a generation of surface scientists. The cold-cathode exponent Fowler and Nordheim had written in 1928, once a niche formula for a Cambridge vacuum tube, was now reading out how silicon atoms sit on a crystal, one at a time. The Nobel Prize for the STM followed in 1986."
+        }
+      ]
+    }
+  ],
+  "checkInAfter": [
+    1,
+    3
+  ],
+  "finalQuiz": {
+    "question": "Compare thermionic emission J = AT² exp(-φ/kT) with field emission J = A' E² exp(-B φ^{3/2}/E). What structural feature do these two very different mechanisms share, and why does it matter to someone measuring either kind of cathode?",
+    "options": [
+      "Both formulas describe the same physical process (thermal escape over the work-function barrier), just written in different variables.",
+      "Both have the form 'prefactor · exp(-const / knob)': the knob is temperature T for thermionic emission and applied field E for field emission. That common shape gives a common diagnostic tool: plot ln(J/knob²) against 1/knob, and the slope reads out the work function.",
+      "Both apply only when kT > φ or eE > φ; below those thresholds, no current flows at all.",
+      "The two formulas describe the same current in different temperature limits: field emission is the T = 0 limit of the Richardson-Dushman formula."
+    ],
+    "correctIndex": 1,
+    "explanation": "Both currents share the shape 'prefactor · exp(-const / knob)' because in each case the barrier probability is an exponential of an inverse of the mechanism's driving variable: for Richardson-Dushman it is 1/T, for Fowler-Nordheim it is 1/E. That shared shape gives the same diagnostic tool in both cases, a straight line on the plot of ln(J/knob²) against 1/knob, and the same style of slope-reading extracts φ. Option A is wrong: field emission is quantum tunneling through the barrier at essentially any temperature, not thermal excitation over it. Option C invents a nonexistent sharp threshold; the exponentials simply become very small when their argument is unfavorable. Option D confuses 'same shape' with 'same current': the two mechanisms coexist in any hot, biased cathode, and F-N is not the T = 0 limit of Richardson-Dushman."
+  },
+  "suggestedNodes": [
+    {
+      "id": "wkb_approximation",
+      "label": "WKB approx.",
+      "subtitle": "T ≈ exp(-∫κ dx)",
+      "edgeType": "extends"
+    },
+    {
+      "id": "scanning_tunneling_microscope",
+      "label": "STM",
+      "subtitle": "atomic imaging",
+      "edgeType": "applied"
+    },
+    {
+      "id": "field_ion_microscope",
+      "label": "FIM",
+      "subtitle": "He ion imaging",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedBy": "routine",
+    "generatedAt": "2026-07-07T07:00:00Z",
+    "model": "claude-opus-4-7"
+  }
+}

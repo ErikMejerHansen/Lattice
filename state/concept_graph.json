@@ -669,6 +669,16 @@
       "createdAt": "2026-07-06T07:00:00Z",
       "col": 1,
       "row": 33
+    },
+    {
+      "id": "field_emission",
+      "label": "Field emission",
+      "subtitle": "AE² exp(-B/E)",
+      "state": "available",
+      "lesson": "2026-07-07-field-emission",
+      "createdAt": "2026-07-07T07:00:00Z",
+      "col": 0,
+      "row": 34
     }
   ],
   "edges": [
@@ -1575,6 +1585,21 @@
     {
       "from": "child_langmuir",
       "to": "schottky_effect",
+      "kind": "related"
+    },
+    {
+      "from": "field_emission",
+      "to": "thermionic_emission",
+      "kind": "extends"
+    },
+    {
+      "from": "field_emission",
+      "to": "schrodinger_equation",
+      "kind": "extends"
+    },
+    {
+      "from": "field_emission",
+      "to": "work_function",
       "kind": "related"
     }
   ]
