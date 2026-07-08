@@ -679,6 +679,16 @@
       "createdAt": "2026-07-07T07:00:00Z",
       "col": 0,
       "row": 34
+    },
+    {
+      "id": "schottky_barrier_diode",
+      "label": "Schottky diode",
+      "subtitle": "φ_B = φ_m − χ_s",
+      "state": "available",
+      "lesson": "2026-07-08-schottky-barrier-diode",
+      "createdAt": "2026-07-08T07:00:00Z",
+      "col": 1,
+      "row": 34
     }
   ],
   "edges": [
@@ -1600,6 +1610,21 @@
     {
       "from": "field_emission",
       "to": "work_function",
+      "kind": "related"
+    },
+    {
+      "from": "schottky_barrier_diode",
+      "to": "thermionic_emission",
+      "kind": "extends"
+    },
+    {
+      "from": "schottky_barrier_diode",
+      "to": "schottky_effect",
+      "kind": "related"
+    },
+    {
+      "from": "schottky_barrier_diode",
+      "to": "contact_potential",
       "kind": "related"
     }
   ]

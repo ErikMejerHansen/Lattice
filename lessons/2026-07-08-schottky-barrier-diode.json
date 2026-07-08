@@ -1,0 +1,193 @@
+{
+  "slug": "2026-07-08-schottky-barrier-diode",
+  "title": "Schottky barrier diode: how a metal touch became the fastest rectifier",
+  "node": {
+    "id": "schottky_barrier_diode",
+    "label": "Schottky diode",
+    "subtitle": "φ_B = φ_m − χ_s"
+  },
+  "intro": "The first rectifier was a whisker of brass pressed against a lump of galena, and no one who used one for the next forty years had any idea why it worked. Walter Schottky in Berlin and Nevill Mott in Bristol worked out, independently in 1938, that a metal touching a semiconductor forms a barrier much like the vacuum barrier a hot cathode has to climb. Electrons cross it easily one way and only with great difficulty the other. The Schottky diode is a device whose speed comes not from clever engineering but from what physics leaves out: no minority carriers to shuffle around, no storage delay, just a majority-electron current turning on and off at the interface.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The first rectifier was a cat's whisker",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Karl Ferdinand Braun in 1874, a 24-year-old lecturer in Leipzig, was passing currents through samples of galena and iron pyrite when he noticed the resistance changed with the direction of the current. Reverse the polarity and the resistance jumped tenfold or more. Braun had discovered rectification. His paper appeared in Poggendorf's Annalen the same year, and it sat there for two decades with no application waiting."
+        },
+        {
+          "type": "p",
+          "text": "Wireless telegraphy changed that. Marconi's transatlantic signal in 1901 needed a device that could turn radio-frequency oscillations into audible clicks, and Braun's crystals were what came to hand. By 1906 the cat's whisker (a brass or tungsten point on galena, hunted around with a fingertip for a sensitive spot) was a household appliance. G. W. Pickard patented a silicon-and-tungsten version the same year that outperformed everything else, and the U.S. Navy standardized on it through the First World War."
+        },
+        {
+          "type": "p",
+          "text": "Nobody understood how it worked. Solid-state physics did not exist. Braun won the 1909 Nobel Prize (shared with Marconi) for wireless, not for the rectifier, and by the mid-1920s vacuum tubes had displaced the crystal from radio altogether. What survived was a durable puzzle: some semiconductors, touched by some metals in some spots, would let current flow one way and block it the other. The explanation had to wait another decade."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Schottky and Mott build the barrier",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "By 1938 solid-state theory was ready to attempt the puzzle. Walter Schottky at Siemens in Berlin and Nevill Mott in Bristol, working out of the same tradition that produced Fowler and Nordheim, both wrote papers that year on the same problem: what happens at a metal-semiconductor contact. Their reasoning ran along the same tracks, and physicists still call the picture the Schottky-Mott theory."
+        },
+        {
+          "type": "p",
+          "text": "Before contact, the metal sits at a Fermi level a distance φ_m below the vacuum level (its work function). An n-type semiconductor sits with its conduction-band bottom E_c a distance χ_s below the vacuum level (its electron affinity), with its own Fermi level a small distance ξ_n below E_c fixed by the donor concentration. Push the two into contact. Electrons flow from whichever side has the higher Fermi level to the other until the two Fermi levels align. In an n-semiconductor whose Fermi level was originally higher than the metal's, that flow leaves a positively charged depletion region on the semiconductor side: donors stripped of their electrons, conduction band bent upward toward the interface. The metal side stays flat because its electron density is enormous."
+        },
+        {
+          "type": "math",
+          "tex": "\\varphi_B \\;=\\; \\varphi_m \\;-\\; \\chi_s",
+          "display": true,
+          "caption": "The Schottky-Mott barrier height, seen from the metal side. φ_B is the barrier height an electron in the metal must climb to enter the semiconductor conduction band. φ_m is the metal work function (energy from Fermi level to vacuum level). χ_s is the semiconductor electron affinity (energy from conduction-band bottom to vacuum level). The subtraction lines up the two materials via their common vacuum reference."
+        },
+        {
+          "type": "p",
+          "text": "For aluminum (φ_m ≈ 4.28 eV) on n-silicon (χ_s = 4.05 eV) the formula gives φ_B ≈ 0.23 eV, comically small. Real aluminum on n-silicon measures about 0.7 eV. John Bardeen tracked the discrepancy in 1947 to interface states pinning the Fermi level partway down the semiconductor bandgap, largely uncoupling the barrier from the metal choice. Schottky-Mott is the clean starting point; Bardeen's correction is what production engineers use. Both pictures agree that the barrier height, whatever fixes it, does not change with the applied bias."
+        }
+      ],
+      "quiz": {
+        "question": "You want to build a Schottky diode with a higher barrier height, and therefore a smaller reverse leakage current. According to the Schottky-Mott rule, what should you change about the metal?",
+        "options": [
+          "Pick a metal with a lower work function φ_m; that reduces the barrier from the metal side.",
+          "Pick a metal with a higher work function φ_m; the barrier height φ_B = φ_m − χ_s scales directly with it.",
+          "Pick a metal with a higher electrical conductivity, since carriers move more easily and see a lower effective barrier.",
+          "Pick a semiconductor with a smaller electron affinity χ_s; the metal work function does not matter to first order."
+        ],
+        "correctIndex": 1,
+        "explanation": "Schottky-Mott says φ_B = φ_m − χ_s: raising the metal work function raises the barrier directly. Option A is the wrong direction; lowering φ_m gives a smaller barrier and more leakage. Option C confuses conductivity (a bulk transport property) with band alignment at the interface. Option D is right about χ_s but wrong to dismiss φ_m: both terms show up equally, and the metal is far easier to change than the semiconductor. The catch not captured by the rule is Bardeen's Fermi-level pinning, which caps how far metal choice actually moves φ_B in a real device: raising φ_m helps, but not as much as the formula predicts."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Thermionic emission across the barrier",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "With the barrier in place, calculating the current becomes an exercise in thermionic emission across a semiconductor barrier. From the semiconductor side, an electron sees a barrier of height (V_bi − V), where V_bi = φ_B − ξ_n is the built-in voltage and V is the applied bias (positive when the diode is forward-biased). Forward bias shrinks the barrier the semiconductor electron must climb; reverse bias raises it. The rate of thermal escape over the barrier follows the same Boltzmann statistics as the Richardson-Dushman equation for a hot cathode. Only now the Richardson constant A_0 = 4πm_e k²/h³ is replaced by an effective A**, adjusted for the electron effective mass in the semiconductor and the quantum-mechanical transmission of the interface."
+        },
+        {
+          "type": "math",
+          "tex": "J \\;=\\; A^{\\ast\\ast}\\,T^{2}\\, \\exp\\!\\left(-\\frac{\\varphi_B}{k T}\\right)\\;\\Bigl[\\exp\\!\\left(\\tfrac{eV}{kT}\\right) - 1\\Bigr]",
+          "display": true,
+          "caption": "The thermionic-emission Schottky-diode equation. J is the current density (positive from metal into semiconductor). A** is the effective Richardson constant for the semiconductor (about 110 A/cm²/K² for electrons in n-silicon). T is the absolute temperature. φ_B is the barrier height, seen from the metal side. e is the elementary charge. V is the applied bias, positive for forward. The bracket splits into two currents: exp(eV/kT) is the semiconductor-to-metal flux, whose barrier shrinks with forward bias, and −1 is the metal-to-semiconductor flux, whose barrier stays at φ_B and does not depend on V. In equilibrium (V = 0) the two cancel."
+        },
+        {
+          "type": "p",
+          "text": "The pre-exponential J_s = A** T² exp(−φ_B/kT) is the reverse-saturation current, and it depends on temperature and on φ_B ferociously. For aluminum on n-silicon (φ_B = 0.7 eV) at 300 K, J_s is about 2×10⁻⁵ A/cm², and 0.3 V of forward bias delivers 10 A/cm². For platinum on the same silicon (φ_B ≈ 0.85 eV), J_s is a hundred times smaller and 0.4 V is needed for the same forward current. Barrier height sets the turn-on voltage, and the choice of metal sets the barrier height."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-08-schottky-barrier-diode.html",
+          "height": 480,
+          "caption": "Drag the bias slider from reverse (−1 V) to forward (+0.4 V) and watch the semiconductor conduction band bend. The barrier seen from the semiconductor side changes with V; the barrier seen from the metal side (φ_B, the horizontal rust dashed line) does not. The current density readout spans about ten orders of magnitude across the slider."
+        },
+        {
+          "type": "p",
+          "text": "That 0.3 V forward drop compares with 0.7 V for an ordinary p-n silicon diode carrying the same current, a saving of about half a volt. In a switching regulator delivering 1 A at 5 V, the difference is roughly a watt of wasted heat per rectifier. Schottky diodes were the enabling component of switching power supplies for the last quarter of the twentieth century, for exactly this reason."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Why it is fast: no minority-carrier storage",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The other Schottky advantage over p-n is not a smaller turn-on voltage but faster switching. Engineers missed the mechanism for a decade. Consider a p-n silicon diode running forward. The p-side is full of holes, the n-side is full of electrons, and both flow across the junction: holes injected into the n-region as a minority carrier population, electrons injected into the p-region likewise. When the bias reverses to shut the diode off, those minority carriers must first be swept out or recombine before the depletion region can rebuild and the diode can block. The reverse-recovery time is set by the minority-carrier lifetime, not by any capacitance."
+        },
+        {
+          "type": "math",
+          "tex": "t_{rr} \\;\\approx\\; \\tau_p\\, \\ln\\!\\left(1 + \\tfrac{I_F}{I_R}\\right)",
+          "display": true,
+          "caption": "The p-n reverse-recovery time, in the simple constant-lifetime approximation. t_rr is the time the diode continues to conduct in reverse after switching. τ_p is the minority-carrier (hole) lifetime in the n-region, about 1 μs for cleanly grown silicon. I_F is the forward current at turn-off. I_R is the reverse-recovery current the external circuit can supply. For a 100-mA signal diode with a 100-mA reverse-pull, t_rr comes out to about τ_p × 0.7, or hundreds of nanoseconds. That is an eternity in a 500-kHz switching regulator."
+        },
+        {
+          "type": "p",
+          "text": "In a Schottky diode there are no minority carriers to store. The forward current is majority electrons crossing the barrier from the semiconductor into the metal, and those electrons vanish into the metal's electron sea as soon as they arrive. When the bias reverses, no charge has to diffuse back and no recombination is needed. The depletion region rebuilds only as fast as the junction's space-charge capacitance C_j can discharge into the external circuit. That is an RC time, not a τ time, and for a small-signal Schottky it is well under 100 picoseconds."
+        },
+        {
+          "type": "p",
+          "text": "The absence of minority carriers has one further consequence: no diode capacitance from stored charge (no diffusion capacitance). The Schottky's small-signal capacitance is only C_j = ε_s A/W, the geometric capacitance of the depletion region, which for a modestly doped n-Si Schottky at zero bias runs a few tens of picofarads per square millimeter. Switching regulators, microwave mixers, and TTL clamps all take advantage of these two facts together: low forward drop and clean, capacitance-limited turn-off."
+        }
+      ],
+      "quiz": {
+        "question": "A silicon p-n rectifier and a silicon Schottky rectifier are placed in identical circuits: a 5-V, 500-kHz square-wave supply driving an inductor. Which dissipates more power, and why?",
+        "options": [
+          "The p-n rectifier, because it has both a higher forward voltage drop and a longer reverse-recovery time during which reverse current flows before it blocks.",
+          "The Schottky rectifier, because its higher reverse leakage current wastes power in the off state.",
+          "They dissipate about the same, because both are silicon devices with similar bandgaps and similar physics.",
+          "The p-n rectifier, because its p-type contact has higher ohmic resistance to the aluminum metallization."
+        ],
+        "correctIndex": 0,
+        "explanation": "Both losses matter, but at 500 kHz the switching loss dominates for the p-n. During each turn-off there is a t_rr window in which the diode still conducts in reverse; that reverse-recovery charge Q_rr = I_F × τ_p, multiplied by V_supply × f_s, is the power P_rr. The p-n also drops about 0.4 V more per forward cycle. The Schottky wins on both counts. Option B names a real effect but a small one: typical Schottky J_s ≈ 10⁻⁵ A/cm², times reverse voltage times duty cycle, is nanowatts. Option C ignores that bandgap sets the barrier only in a p-n; a Schottky's forward drop is set by φ_B and A**, both very different from the p-n's V_bi ≈ E_g/2e. Option D confuses ohmic contact resistance (minimized by design in any rectifier) with the p-n's minority-carrier storage penalty."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. From radar mixers to switching regulators",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The Schottky diode did not enter the world through switching regulators. Its debut was Second World War radar. Vacuum tubes could not switch fast enough to handle S-band and X-band microwave frequencies (3 to 10 GHz), and the mixer that beat the incoming radar echo against a local oscillator to produce an intermediate frequency needed a nonlinear element that worked cleanly up there. Purdue University, Bell Labs, and the MIT Radiation Laboratory revived the point-contact silicon diode from its cat's-whisker origins, refined the metal-and-whisker geometry into the standardized 1N21 crystal cartridge (1942), and shipped tens of millions of them to receivers by 1945. Half the radar receivers in the Allied fleet were listening through a Schottky diode nobody yet called by that name."
+        },
+        {
+          "type": "p",
+          "text": "After the war the transistor came out of Bell Labs and drew the attention. But the Schottky diode was still the fastest thing on the shelf, and the semiconductor industry rediscovered it for its own uses. In 1970 Texas Instruments launched the 74S TTL logic series, in which every saturating transistor is clamped by a Schottky diode across the base-collector junction to keep the transistor out of deep saturation, cutting propagation delay by a factor of three. In the same decade the switching-regulator boom turned the Schottky rectifier into a billion-unit-per-year commodity: the output rectifier in every DC-DC converter, chosen because of the two properties this lesson has already named."
+        },
+        {
+          "type": "p",
+          "text": "The frontier moved on. Silicon carbide, with a 3.3 eV bandgap and a critical electric field about ten times that of silicon, took Schottky diodes to 1200 V blocking voltages for electric-vehicle chargers and solar inverters. The barrier height at a titanium-on-SiC contact is about 1.3 eV, and a modern 1200-V SiC Schottky rectifier at 25 A dissipates about a third of what a comparable silicon p-n does at the same current. Karl Ferdinand Braun at 24, hunting for a sensitive spot on a lump of galena with a brass whisker in Leipzig in 1874, was, in the terms of its later refinement, doing the same physics on the same principle at the same interface. It took the theorists a hundred and twenty years to catch up, and the switching regulator another thirty."
+        }
+      ]
+    }
+  ],
+  "checkInAfter": [
+    1,
+    3
+  ],
+  "finalQuiz": {
+    "question": "The Schottky diode and the p-n diode both rectify current at silicon interfaces. Which comparison names the single physical feature that distinguishes them at the level of transport?",
+    "options": [
+      "The Schottky uses a metal contact while the p-n uses two doped semiconductor regions; both operate by identical minority-carrier physics but the Schottky uses aluminum for one side.",
+      "In the p-n both electrons and holes cross the junction, and their storage as minority carriers on the wrong side sets the reverse-recovery time; in the Schottky only majority-carrier electrons cross the metal-semiconductor barrier, and there is no minority-carrier storage to sweep out on switching.",
+      "The Schottky operates entirely on quantum tunneling through the metal-semiconductor barrier, while the p-n operates on thermionic emission over the depletion region.",
+      "The p-n barrier can be tuned by doping while the Schottky barrier is fixed by fundamental constants and cannot be changed."
+    ],
+    "correctIndex": 1,
+    "explanation": "The p-n diode is a bipolar device: both electrons and holes participate, and each is injected as a minority carrier on the opposite side. That minority-carrier storage is the entire reason p-n reverse recovery is slow, and its absence in the Schottky (where the only current is majority electrons crossing the barrier from the semiconductor into the metal) is the entire reason the Schottky switches in under a nanosecond. Option A misses the point: it is not the electrode material that matters but the carrier population. Option C reverses the two mechanisms; forward current in a Schottky is thermionic emission over the barrier, not tunneling (tunneling does contribute to reverse and to ohmic contacts on heavily doped semiconductors, but that is not the forward-bias picture). Option D confuses fixed barrier heights with a fixed constant: φ_B = φ_m − χ_s is tunable by metal choice, Fermi-level pinning shifts it further, and the p-n V_bi is likewise tunable by doping."
+  },
+  "suggestedNodes": [
+    {
+      "id": "pn_junction",
+      "label": "p-n junction",
+      "subtitle": "V_bi ≈ 0.7 V",
+      "edgeType": "related"
+    },
+    {
+      "id": "fermi_level_pinning",
+      "label": "FL pinning",
+      "subtitle": "Bardeen 1947",
+      "edgeType": "extends"
+    },
+    {
+      "id": "depletion_region",
+      "label": "Depletion",
+      "subtitle": "W ∝ √(V_bi−V)",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedBy": "routine",
+    "generatedAt": "2026-07-08T07:00:00Z",
+    "model": "claude-opus-4-7"
+  }
+}

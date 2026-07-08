@@ -474,5 +474,12 @@
     "subtitle": "AE² exp(-B/E)",
     "date": "2026-07-07",
     "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-07-08-schottky-barrier-diode",
+    "title": "Schottky barrier diode: how a metal touch became the fastest rectifier",
+    "subtitle": "φ_B = φ_m − χ_s",
+    "date": "2026-07-08",
+    "estimatedReadingMinutes": 23
   }
 ]
