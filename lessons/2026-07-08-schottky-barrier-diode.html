@@ -1,0 +1,290 @@
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz { padding: 12px 14px 4px; max-width: 560px; margin: 0 auto; box-sizing: border-box; }
+svg { display: block; width: 100%; height: auto; }
+.readout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 22px;
+  margin-top: 8px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11.5px;
+}
+.readout .k { color: var(--text-muted); }
+.readout .v { color: var(--text); text-align: right; }
+</style>
+
+<div id="viz">
+  <svg id="chart" viewBox="0 0 520 380" aria-label="Schottky diode band diagram under bias"></svg>
+  <div class="viz-slider-row">
+    <label for="Vbias">V</label>
+    <input type="range" id="Vbias" min="-1.0" max="0.45" step="0.01" value="0.0" />
+    <div class="value"><span id="Vval">0.00</span> V</div>
+  </div>
+  <div class="readout">
+    <div class="k">semi-side barrier V_bi − V</div><div class="v"><span id="bsVal">0.55</span> eV</div>
+    <div class="k">metal-side barrier φ_B</div><div class="v"><span id="bmVal">0.70</span> eV</div>
+    <div class="k">depletion width W</div><div class="v"><span id="wVal">84</span> nm</div>
+    <div class="k">current density J</div><div class="v"><span id="jVal">0</span> A/cm²</div>
+  </div>
+  <div class="viz-caption">
+    Aluminum on n-silicon (φ_B = 0.70 eV, ξ_n = 0.15 eV, N_D = 10¹⁷ cm⁻³, T = 300 K). Drag the bias slider. The conduction band E_c (rust) bends from φ_B at the interface to eV + ξ_n in the bulk. Forward bias (V &gt; 0) lifts the semiconductor Fermi level (dashed brown) and shrinks the semi-side barrier and the depletion width; reverse bias does the opposite. The metal-side barrier φ_B (rust dashed) never moves.
+  </div>
+</div>
+
+<script>
+(function () {
+  var PHI_B = 0.70;
+  var XI_N  = 0.15;
+  var V_BI  = PHI_B - XI_N;
+  var W_COEF = 113.8;
+  var A_STAR = 110;
+  var T = 300;
+  var V_T = 0.02585;
+  var J_S = A_STAR * T * T * Math.exp(-PHI_B / V_T);
+
+  var svg = document.getElementById('chart');
+  var NS = 'http://www.w3.org/2000/svg';
+
+  var W = 520, H = 380;
+  var M = { top: 22, right: 18, bottom: 44, left: 60 };
+  var iw = W - M.left - M.right;
+  var ih = H - M.top - M.bottom;
+
+  var xMin = -30, xMax = 220;
+  var yMin = -1.4, yMax = 1.3;
+
+  function sx(x) { return M.left + (x - xMin) / (xMax - xMin) * iw; }
+  function sy(y) { return M.top + (yMax - y) / (yMax - yMin) * ih; }
+
+  function el(tag, attrs) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function text(x, y, s, opts) {
+    var t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', x); t.setAttribute('y', y);
+    if (opts) for (var k in opts) t.setAttribute(k, opts[k]);
+    t.textContent = s;
+    return t;
+  }
+
+  function drawStatic() {
+    svg.appendChild(el('rect', {
+      x: sx(xMin), y: sy(yMax), width: iw, height: ih,
+      fill: '#faf5e9', stroke: '#d8cfb8', 'stroke-width': 1
+    }));
+    var yticks = [-1.0, -0.5, 0, 0.5, 1.0];
+    yticks.forEach(function (yv) {
+      svg.appendChild(el('line', {
+        x1: sx(xMin), y1: sy(yv), x2: sx(xMax), y2: sy(yv),
+        stroke: yv === 0 ? '#b8ac8e' : '#e6ddc4',
+        'stroke-width': yv === 0 ? 1 : 0.8,
+        'stroke-dasharray': yv === 0 ? '' : '2 3'
+      }));
+      svg.appendChild(text(sx(xMin) - 6, sy(yv) + 3.5, yv.toFixed(1), {
+        'font-family': '"IBM Plex Mono", monospace',
+        'font-size': '10', 'fill': '#6b6359', 'text-anchor': 'end'
+      }));
+    });
+    var xticks = [0, 50, 100, 150, 200];
+    xticks.forEach(function (xv) {
+      svg.appendChild(el('line', {
+        x1: sx(xv), y1: sy(yMin), x2: sx(xv), y2: sy(yMin) + 4,
+        stroke: '#b8ac8e'
+      }));
+      svg.appendChild(text(sx(xv), sy(yMin) + 15, String(xv), {
+        'font-family': '"IBM Plex Mono", monospace',
+        'font-size': '10', 'fill': '#6b6359', 'text-anchor': 'middle'
+      }));
+    });
+
+    svg.appendChild(text(M.left + iw / 2, H - 6, 'x (nm), distance from metal-semiconductor interface', {
+      'font-family': '"IBM Plex Mono", monospace',
+      'font-size': '11', 'fill': '#6b6359', 'text-anchor': 'middle'
+    }));
+    var yl = text(0, 0, 'energy above metal E_F (eV)', {
+      'font-family': '"IBM Plex Mono", monospace',
+      'font-size': '11', 'fill': '#6b6359', 'text-anchor': 'middle'
+    });
+    yl.setAttribute('transform', 'translate(15,' + (M.top + ih / 2) + ') rotate(-90)');
+    svg.appendChild(yl);
+
+    svg.appendChild(el('rect', {
+      x: sx(xMin), y: sy(0), width: sx(0) - sx(xMin), height: sy(yMin) - sy(0),
+      fill: '#c47558', 'fill-opacity': '0.30'
+    }));
+    svg.appendChild(text((sx(xMin) + sx(0)) / 2, sy(-0.55), 'metal', {
+      'font-family': '"IBM Plex Mono", monospace',
+      'font-size': '11', 'fill': '#6b6359', 'text-anchor': 'middle', 'font-style': 'italic'
+    }));
+    svg.appendChild(text((sx(xMin) + sx(0)) / 2, sy(-0.85), 'Fermi sea', {
+      'font-family': '"IBM Plex Mono", monospace',
+      'font-size': '9.5', 'fill': '#6b6359', 'text-anchor': 'middle'
+    }));
+
+    svg.appendChild(text(sx(xMax) - 4, sy(1.15), 'n-Si semiconductor', {
+      'font-family': '"IBM Plex Mono", monospace',
+      'font-size': '11', 'fill': '#a89e90', 'text-anchor': 'end', 'font-style': 'italic'
+    }));
+
+    svg.appendChild(el('line', {
+      x1: sx(0), y1: sy(yMin), x2: sx(0), y2: sy(yMax),
+      stroke: '#b8ac8e', 'stroke-width': 1
+    }));
+
+    svg.appendChild(text(sx(xMax) - 4, sy(0) - 4, 'E_F (metal)', {
+      'font-family': '"IBM Plex Mono", monospace',
+      'font-size': '11', 'fill': '#6b6359', 'text-anchor': 'end'
+    }));
+  }
+
+  var ecPath   = el('polyline', { fill: 'none', stroke: '#9c3a22', 'stroke-width': 2, points: '' });
+  var ecLabel  = text(0, 0, 'E_c', {
+    'font-family': '"IBM Plex Mono", monospace',
+    'font-size': '11', 'fill': '#9c3a22', 'text-anchor': 'start'
+  });
+  var efsLine  = el('line', {
+    stroke: '#6b6359', 'stroke-width': 1.2, 'stroke-dasharray': '5 3', opacity: 0.85
+  });
+  var efsLabel = text(0, 0, 'E_F (semi)', {
+    'font-family': '"IBM Plex Mono", monospace',
+    'font-size': '11', 'fill': '#6b6359', 'text-anchor': 'end'
+  });
+  var phiBLine = el('line', {
+    stroke: '#9c3a22', 'stroke-width': 1, 'stroke-dasharray': '3 3', opacity: 0.55
+  });
+  var phiBLabel = text(0, 0, 'φ_B (fixed)', {
+    'font-family': '"IBM Plex Mono", monospace',
+    'font-size': '10.5', 'fill': '#9c3a22', 'text-anchor': 'start', 'font-style': 'italic'
+  });
+  var wLine    = el('line', {
+    stroke: '#9c3a22', 'stroke-width': 1, 'stroke-dasharray': '2 3', opacity: 0.7
+  });
+  var wLabel   = text(0, 0, 'x = W', {
+    'font-family': '"IBM Plex Mono", monospace',
+    'font-size': '10.5', 'fill': '#9c3a22', 'text-anchor': 'middle'
+  });
+  var deplRect = el('rect', {
+    fill: '#c47558', 'fill-opacity': '0.10'
+  });
+
+  svg.appendChild(deplRect);
+  svg.appendChild(phiBLine);
+  svg.appendChild(efsLine);
+  svg.appendChild(ecPath);
+  svg.appendChild(ecLabel);
+  svg.appendChild(efsLabel);
+  svg.appendChild(phiBLabel);
+  svg.appendChild(wLine);
+  svg.appendChild(wLabel);
+
+  function computeAndDraw(V) {
+    var Wdep = W_COEF * Math.sqrt(Math.max(V_BI - V, 0.0001));
+    var Wclip = Math.min(Wdep, xMax);
+
+    var pts = [];
+    pts.push(sx(0) + ',' + sy(PHI_B));
+    var Nstep = 40;
+    for (var i = 1; i <= Nstep; i++) {
+      var xi = Wclip * i / Nstep;
+      var r = 1 - xi / Wdep;
+      var ec = V + XI_N + (V_BI - V) * r * r;
+      pts.push(sx(xi) + ',' + sy(ec));
+    }
+    if (Wclip < xMax) {
+      pts.push(sx(xMax) + ',' + sy(V + XI_N));
+    }
+    ecPath.setAttribute('points', pts.join(' '));
+
+    ecLabel.setAttribute('x', sx(xMax) - 4);
+    ecLabel.setAttribute('y', sy(V + XI_N) - 4);
+
+    efsLine.setAttribute('x1', sx(0));
+    efsLine.setAttribute('x2', sx(xMax));
+    efsLine.setAttribute('y1', sy(V));
+    efsLine.setAttribute('y2', sy(V));
+    efsLabel.setAttribute('x', sx(xMax) - 4);
+    efsLabel.setAttribute('y', sy(V) + 12);
+
+    phiBLine.setAttribute('x1', sx(-6));
+    phiBLine.setAttribute('x2', sx(0));
+    phiBLine.setAttribute('y1', sy(PHI_B));
+    phiBLine.setAttribute('y2', sy(PHI_B));
+    phiBLabel.setAttribute('x', sx(xMin) + 4);
+    phiBLabel.setAttribute('y', sy(PHI_B) - 5);
+
+    deplRect.setAttribute('x', sx(0));
+    deplRect.setAttribute('y', sy(yMax));
+    deplRect.setAttribute('width', sx(Wclip) - sx(0));
+    deplRect.setAttribute('height', sy(yMin) - sy(yMax));
+
+    wLine.setAttribute('x1', sx(Wclip));
+    wLine.setAttribute('x2', sx(Wclip));
+    wLine.setAttribute('y1', sy(yMin));
+    wLine.setAttribute('y2', sy(yMax));
+    wLabel.setAttribute('x', sx(Wclip));
+    wLabel.setAttribute('y', sy(yMin) + 30);
+
+    var J = J_S * (Math.exp(V / V_T) - 1);
+    var bs = V_BI - V;
+
+    document.getElementById('Vval').textContent = (V >= 0 ? '+' : '') + V.toFixed(2);
+    document.getElementById('bsVal').textContent = bs.toFixed(2);
+    document.getElementById('bmVal').textContent = PHI_B.toFixed(2);
+    document.getElementById('wVal').textContent = Wdep.toFixed(0);
+    document.getElementById('jVal').textContent = formatSignedSci(J);
+  }
+
+  function formatSignedSci(v) {
+    if (!isFinite(v) || v === 0) return '0';
+    var sign = v < 0 ? '-' : '';
+    var a = Math.abs(v);
+    var exp = Math.floor(Math.log10(a));
+    var mant = a / Math.pow(10, exp);
+    if (Math.abs(exp) < 3) return sign + a.toFixed(Math.max(0, 2 - exp));
+    return sign + mant.toFixed(1) + 'e' + (exp >= 0 ? '+' : '') + exp;
+  }
+
+  drawStatic();
+
+  var slider = document.getElementById('Vbias');
+  slider.addEventListener('input', function () {
+    computeAndDraw(parseFloat(slider.value));
+  });
+  computeAndDraw(parseFloat(slider.value));
+})();
+</script>

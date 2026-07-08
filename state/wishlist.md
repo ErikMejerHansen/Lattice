@@ -24,7 +24,6 @@
 # auto-suggested 2026-07-02 from thermionic-emission
 
 # auto-suggested 2026-07-05 from schottky-effect
-Schottky barrier diode — metal-semiconductor rectifier at the Schottky-Mott junction with sub-nanosecond recovery and no minority-carrier storage, ubiquitous in switching regulators, RF mixers, and clamping diodes
 Shot noise — √(2eIΔf), Walter Schottky 1918, current fluctuations from the discreteness of the electron charge itself, the noise floor of every low-current measurement and the foundation of every DC-SQUID-limited electronics chain
 
 # auto-suggested 2026-05-17 from schrodinger-equation
@@ -233,3 +232,8 @@ Bohm sheath criterion — David Bohm 1949 (Berkeley wartime work), the ion Mach 
 WKB approximation — the Wentzel-Kramers-Brillouin 1926 approximation for slowly varying potentials, T ≈ exp(-2∫κ dx), the tool that turned Schrödinger's equation into a quantitative theory of tunneling for Gamow, Fowler-Nordheim, and every barrier problem since
 Scanning tunneling microscope — Binnig and Rohrer 1981, the vacuum-gap version of Fowler-Nordheim: current ∝ exp(-2g√(2mφ)/ℏ), atomic-resolution imaging via a 1.1 nm⁻¹ decay length, Nobel Prize 1986
 Field-ion microscope — Erwin Müller 1955, the first true single-atom images, made by ionizing helium atoms hovering above a sharpened tip in a field of ≈10¹⁰ V/m and letting the ions project the surface onto a phosphor
+
+# auto-suggested 2026-07-08 from schottky-barrier-diode
+p-n junction — the two-region doped-semiconductor rectifier, built-in voltage V_bi ≈ E_g/2e, minority-carrier diffusion currents on both sides, the bipolar sibling to the Schottky whose minority-carrier storage is precisely what the Schottky was invented to avoid
+Fermi-level pinning — John Bardeen 1947, the interface-state hypothesis that explains why real metal-semiconductor barrier heights refuse to track the Schottky-Mott φ_m − χ_s prediction; the same insight that pushed Bardeen and Brattain toward the transistor a few months later
+Depletion region — the space-charge layer of ionized dopants at every junction, with W = √(2ε_s(V_bi − V)/eN_D) from the depletion-approximation solution of Poisson's equation, and junction capacitance C_j = ε_s A/W that governs the small-signal behavior of every diode and transistor
