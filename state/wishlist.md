@@ -24,7 +24,11 @@
 # auto-suggested 2026-07-02 from thermionic-emission
 
 # auto-suggested 2026-07-05 from schottky-effect
-Shot noise — √(2eIΔf), Walter Schottky 1918, current fluctuations from the discreteness of the electron charge itself, the noise floor of every low-current measurement and the foundation of every DC-SQUID-limited electronics chain
+
+# auto-suggested 2026-07-09 from shot-noise
+Johnson-Nyquist noise — 4 k_B T R Δf, the thermal-jitter noise floor Schottky named the Wärmeeffekt in his 1918 Annalen paper, measured by John B. Johnson at Bell Labs in 1927 and derived by Harry Nyquist in 1928 from equilibrium thermodynamics alone, the second intrinsic noise floor no amplifier chain can sink beneath
+Fractional quantum Hall effect — Laughlin's 1983 wavefunction for the ν = 1/3 plateau in a two-dimensional electron gas under strong magnetic field, quasiparticles of charge e/3 as excitations of a strongly correlated liquid built from electrons alone, the state of matter whose fractional charge Saminadayar-Glattli and de-Picciotto-Reznikov-Heiblum measured directly with shot noise in 1997
+Poisson process — the continuous-time counting process of independent events at rate r̄, with Poisson-distributed counts in every window and exponentially distributed inter-arrival times, the mathematical scaffolding under shot noise, radioactive decay, photon counting, and every queueing-theory result from Erlang's 1909 Copenhagen telephone-traffic paper onward
 
 # auto-suggested 2026-05-17 from schrodinger-equation
 Born rule — |ψ|² as a probability density on configuration space, the interpretation Schrödinger never accepted and that survived him anyway

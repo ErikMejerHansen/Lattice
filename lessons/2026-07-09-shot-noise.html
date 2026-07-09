@@ -1,0 +1,288 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#readout {
+  display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 10px;
+  padding: 10px 12px; background: var(--bg-raised);
+  border: 1px solid var(--border);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+}
+#readout .item { min-width: 130px; }
+#readout .k { color: var(--text-muted); }
+#readout .v { color: var(--text); }
+</style>
+</head>
+<body>
+<div id="viz" style="padding: 8px 10px;">
+  <svg id="scope" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
+    <defs>
+      <clipPath id="clipStrip"><rect x="60" y="30" width="620" height="60"/></clipPath>
+      <clipPath id="clipTrace"><rect x="60" y="130" width="620" height="150"/></clipPath>
+    </defs>
+    <text x="55" y="62" text-anchor="end" font-family="Source Serif 4, serif" font-style="italic" font-size="11" fill="var(--text-muted)">arrivals</text>
+    <rect x="60" y="30" width="620" height="60" fill="var(--bg-raised)" stroke="var(--border)"/>
+    <g id="clicksGroup" clip-path="url(#clipStrip)"></g>
+    <text x="55" y="210" text-anchor="end" font-family="Source Serif 4, serif" font-style="italic" font-size="11" fill="var(--text-muted)">I(t)</text>
+    <rect x="60" y="130" width="620" height="150" fill="var(--bg-raised)" stroke="var(--border)"/>
+    <g clip-path="url(#clipTrace)">
+      <rect id="sigmaBand" fill="var(--accent-soft)" opacity="0.22"/>
+      <line id="meanLine" stroke="var(--text-muted)" stroke-dasharray="4,3"/>
+      <path id="Itrace" fill="none" stroke="var(--accent)" stroke-width="1.4"/>
+    </g>
+    <line x1="60" y1="280" x2="680" y2="280" stroke="var(--border-strong)"/>
+    <text x="60" y="298" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--text-muted)">0</text>
+    <text x="680" y="298" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--text-muted)" text-anchor="end">100 ms</text>
+    <text x="370" y="315" text-anchor="middle" font-family="Source Serif 4, serif" font-style="italic" font-size="11" fill="var(--text-muted)">time (scrolling right to left)</text>
+  </svg>
+  <div class="viz-slider-row">
+    <label for="rslider">log r̄</label>
+    <input type="range" id="rslider" min="2" max="12" step="0.05" value="7">
+    <span class="value" id="rval">10⁷ /s</span>
+  </div>
+  <div id="readout">
+    <div class="item"><span class="k">rate r̄:</span> <span class="v" id="rateOut">–</span></div>
+    <div class="item"><span class="k">current I:</span> <span class="v" id="Iout">–</span></div>
+    <div class="item"><span class="k">σ_I (√2eIΔf):</span> <span class="v" id="sigOut">–</span></div>
+    <div class="item"><span class="k">δI/I:</span> <span class="v" id="ratioOut">–</span></div>
+    <div class="item"><span class="k">N per 100 ms:</span> <span class="v" id="Nout">–</span></div>
+  </div>
+  <div class="viz-caption" style="margin-top:10px;">
+    A Poisson click stream. The slider sets the mean arrival rate r̄ over ten decades (10² to 10¹² electrons per second, or 16 aA to 160 nA of current). The top strip shows individual arrivals as vertical ticks over a scrolling 100-ms window; when the rate exceeds what the eye can resolve, the ticks blur into a solid band. The lower panel plots the smoothed current I(t) through a single-pole filter of time constant τ = 5 ms (noise bandwidth Δf = 100 Hz), with a dashed mean line and a shaded ±σ band whose width is 2√(2eIΔf). Watch the mean grow linearly with r̄ while the band width grows only as √r̄: the fractional noise δI/I collapses as 1/√r̄, which is why brighter photodiodes are quieter photodiodes.
+  </div>
+</div>
+<script>
+(function(){
+  var e_charge = 1.602e-19;
+  var T_WINDOW = 0.100;
+  var DT_FILTER = 0.005;
+  var DF = 100;
+  var STRIP_X0 = 60, STRIP_X1 = 680, STRIP_Y0 = 30, STRIP_Y1 = 90;
+  var TRACE_X0 = 60, TRACE_X1 = 680, TRACE_Y0 = 130, TRACE_Y1 = 280;
+  var STRIP_W = STRIP_X1 - STRIP_X0;
+  var TRACE_W = TRACE_X1 - TRACE_X0;
+  var TRACE_H = TRACE_Y1 - TRACE_Y0;
+  var MAX_CLICKS = 3500;
+
+  var clicks = [];
+  var traceSamples = [];
+  var filteredI = 0;
+  var lastFrameTime = null;
+
+  var clicksGroup = document.getElementById('clicksGroup');
+  var Itrace = document.getElementById('Itrace');
+  var sigmaBand = document.getElementById('sigmaBand');
+  var meanLine = document.getElementById('meanLine');
+  var rslider = document.getElementById('rslider');
+  var rval = document.getElementById('rval');
+  var rateOut = document.getElementById('rateOut');
+  var Iout = document.getElementById('Iout');
+  var sigOut = document.getElementById('sigOut');
+  var ratioOut = document.getElementById('ratioOut');
+  var Nout = document.getElementById('Nout');
+
+  function getRate() { return Math.pow(10, parseFloat(rslider.value)); }
+
+  function supExp(logv) {
+    var s = logv.toFixed(1);
+    var out = '';
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charAt(i);
+      if (c === '.') { out += '.'; continue; }
+      if (c === '-') { out += '⁻'; continue; }
+      var digits = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+      var n = parseInt(c, 10);
+      if (!isNaN(n)) out += digits.charAt(n); else out += c;
+    }
+    return out;
+  }
+
+  function fmtRate(r) {
+    if (r < 1e3) return r.toFixed(0) + ' /s';
+    if (r < 1e6) return (r/1e3).toFixed(1) + 'k /s';
+    if (r < 1e9) return (r/1e6).toFixed(1) + 'M /s';
+    if (r < 1e12) return (r/1e9).toFixed(1) + 'G /s';
+    return (r/1e12).toFixed(1) + 'T /s';
+  }
+  function fmtCurrent(I) {
+    if (I <= 0) return '0';
+    if (I < 1e-18) return (I*1e21).toFixed(1) + ' zA';
+    if (I < 1e-15) return (I*1e18).toFixed(1) + ' aA';
+    if (I < 1e-12) return (I*1e15).toFixed(1) + ' fA';
+    if (I < 1e-9) return (I*1e12).toFixed(1) + ' pA';
+    if (I < 1e-6) return (I*1e9).toFixed(1) + ' nA';
+    if (I < 1e-3) return (I*1e6).toFixed(1) + ' µA';
+    return (I*1e3).toFixed(1) + ' mA';
+  }
+  function fmtCount(N) {
+    if (N < 1e3) return N.toFixed(0);
+    if (N < 1e6) return (N/1e3).toFixed(1) + 'k';
+    if (N < 1e9) return (N/1e6).toFixed(1) + 'M';
+    if (N < 1e12) return (N/1e9).toFixed(1) + 'G';
+    return (N/1e12).toFixed(1) + 'T';
+  }
+
+  function poissonSample(lambda) {
+    if (lambda <= 0) return 0;
+    if (lambda < 30) {
+      var L = Math.exp(-lambda), k = 0, p = 1;
+      while (p > L) { k++; p *= Math.random(); if (k > 300) return k; }
+      return k - 1;
+    }
+    var u1 = Math.random(), u2 = Math.random();
+    var z = Math.sqrt(-2 * Math.log(u1 + 1e-30)) * Math.cos(2 * Math.PI * u2);
+    var n = Math.round(lambda + Math.sqrt(lambda) * z);
+    return n < 0 ? 0 : n;
+  }
+
+  function updateReadouts(rate) {
+    var I = rate * e_charge;
+    var sigma = Math.sqrt(2 * e_charge * I * DF);
+    var N100ms = rate * T_WINDOW;
+    rval.textContent = '10' + supExp(parseFloat(rslider.value)) + ' /s';
+    rateOut.textContent = fmtRate(rate);
+    Iout.textContent = fmtCurrent(I);
+    sigOut.textContent = fmtCurrent(sigma);
+    ratioOut.textContent = (sigma/I).toExponential(2);
+    Nout.textContent = fmtCount(N100ms);
+  }
+
+  function drawStrip(now) {
+    var cutoff = now - T_WINDOW;
+    while (clicks.length && clicks[0] < cutoff) clicks.shift();
+    var parts = [];
+    var displayed = clicks;
+    if (clicks.length > 800) {
+      var stride = Math.ceil(clicks.length / 800);
+      displayed = [];
+      for (var i = 0; i < clicks.length; i += stride) displayed.push(clicks[i]);
+    }
+    for (var j = 0; j < displayed.length; j++) {
+      var t = displayed[j];
+      var frac = 1 - (now - t) / T_WINDOW;
+      if (frac < 0 || frac > 1) continue;
+      var x = STRIP_X0 + frac * STRIP_W;
+      parts.push('<line x1="' + x.toFixed(1) + '" y1="' + (STRIP_Y0+6) + '" x2="' + x.toFixed(1) + '" y2="' + (STRIP_Y1-6) + '" stroke="var(--accent)" stroke-width="0.9" opacity="0.75"/>');
+    }
+    if (clicks.length >= MAX_CLICKS) {
+      parts.push('<rect x="' + STRIP_X0 + '" y="' + (STRIP_Y0+6) + '" width="' + STRIP_W + '" height="' + (STRIP_Y1-STRIP_Y0-12) + '" fill="var(--accent)" opacity="0.28"/>');
+    }
+    clicksGroup.innerHTML = parts.join('');
+  }
+
+  function drawTrace(now) {
+    var rate = getRate();
+    var meanI = rate * e_charge;
+    var sigma = Math.sqrt(2 * e_charge * meanI * DF);
+    var halfSpan = Math.max(4 * sigma, meanI * 0.05, 1e-30);
+    var Ymin = meanI - halfSpan;
+    var Ymax = meanI + halfSpan;
+    var Yrange = Ymax - Ymin;
+
+    function yPix(I) {
+      return TRACE_Y0 + (Ymax - I) / Yrange * TRACE_H;
+    }
+    var yMean = yPix(meanI);
+    meanLine.setAttribute('x1', STRIP_X0);
+    meanLine.setAttribute('x2', STRIP_X1);
+    meanLine.setAttribute('y1', yMean);
+    meanLine.setAttribute('y2', yMean);
+    var yHi = yPix(meanI + sigma);
+    var yLo = yPix(meanI - sigma);
+    sigmaBand.setAttribute('x', STRIP_X0);
+    sigmaBand.setAttribute('width', STRIP_W);
+    sigmaBand.setAttribute('y', yHi);
+    sigmaBand.setAttribute('height', Math.max(1, yLo - yHi));
+
+    var cutoff = now - T_WINDOW;
+    while (traceSamples.length && traceSamples[0].t < cutoff) traceSamples.shift();
+    if (traceSamples.length < 2) { Itrace.setAttribute('d', ''); return; }
+    var d = '';
+    for (var i = 0; i < traceSamples.length; i++) {
+      var s = traceSamples[i];
+      var frac = 1 - (now - s.t) / T_WINDOW;
+      if (frac < 0 || frac > 1) continue;
+      var x = STRIP_X0 + frac * TRACE_W;
+      var y = yPix(s.I);
+      d += (d === '' ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1);
+    }
+    Itrace.setAttribute('d', d);
+  }
+
+  function step(tsMs) {
+    var now = tsMs / 1000;
+    if (lastFrameTime === null) { lastFrameTime = now; requestAnimationFrame(step); return; }
+    var dt = now - lastFrameTime;
+    if (dt > 0.1) dt = 0.1;
+    lastFrameTime = now;
+
+    var rate = getRate();
+    var displayRate = Math.min(rate, MAX_CLICKS / T_WINDOW);
+    var clickLambda = displayRate * dt;
+    var N_new = poissonSample(clickLambda);
+    for (var i = 0; i < N_new; i++) {
+      clicks.push(now - dt * Math.random());
+      if (clicks.length > MAX_CLICKS) clicks.shift();
+    }
+
+    var trueLambda = rate * dt;
+    var N_true = poissonSample(trueLambda);
+    var instantI = dt > 0 ? N_true * e_charge / dt : 0;
+    var alpha = 1 - Math.exp(-dt / DT_FILTER);
+    filteredI = filteredI + alpha * (instantI - filteredI);
+    traceSamples.push({t: now, I: filteredI});
+    if (traceSamples.length > 600) traceSamples.splice(0, traceSamples.length - 600);
+
+    drawStrip(now);
+    drawTrace(now);
+    requestAnimationFrame(step);
+  }
+
+  rslider.addEventListener('input', function() {
+    updateReadouts(getRate());
+    filteredI = getRate() * e_charge;
+  });
+
+  updateReadouts(getRate());
+  filteredI = getRate() * e_charge;
+  requestAnimationFrame(step);
+})();
+</script>
+</body>
+</html>
