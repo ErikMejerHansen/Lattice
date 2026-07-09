@@ -689,6 +689,16 @@
       "createdAt": "2026-07-08T07:00:00Z",
       "col": 1,
       "row": 34
+    },
+    {
+      "id": "shot_noise",
+      "label": "Shot noise",
+      "subtitle": "√(2eIΔf)",
+      "state": "available",
+      "lesson": "2026-07-09-shot-noise",
+      "createdAt": "2026-07-09T07:00:00Z",
+      "col": 0,
+      "row": 35
     }
   ],
   "edges": [
@@ -1625,6 +1635,21 @@
     {
       "from": "schottky_barrier_diode",
       "to": "contact_potential",
+      "kind": "related"
+    },
+    {
+      "from": "shot_noise",
+      "to": "thermionic_emission",
+      "kind": "extends"
+    },
+    {
+      "from": "shot_noise",
+      "to": "schottky_effect",
+      "kind": "related"
+    },
+    {
+      "from": "shot_noise",
+      "to": "photoelectric_effect",
       "kind": "related"
     }
   ]

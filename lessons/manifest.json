@@ -481,5 +481,12 @@
     "subtitle": "φ_B = φ_m − χ_s",
     "date": "2026-07-08",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-07-09-shot-noise",
+    "title": "Shot noise: how vacuum-tube hiss weighed a single electron",
+    "subtitle": "√(2eIΔf)",
+    "date": "2026-07-09",
+    "estimatedReadingMinutes": 23
   }
 ]

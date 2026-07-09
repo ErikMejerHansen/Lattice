@@ -1,0 +1,218 @@
+{
+  "slug": "2026-07-09-shot-noise",
+  "title": "Shot noise: how vacuum-tube hiss weighed a single electron",
+  "node": {
+    "id": "shot_noise",
+    "label": "Shot noise",
+    "subtitle": "√(2eIΔf)"
+  },
+  "intro": "Walter Schottky spent the First World War inside Siemens & Halske in Berlin, learning to measure what a vacuum tube was actually doing when nobody was talking into it. In 1918 he published a paper in the Annalen der Physik that named two floors no engineer could sink beneath: the thermal jitter of resistor electrons (the Wärmeeffekt, later renamed Johnson-Nyquist noise, after John B. Johnson at Bell Labs measured it in 1927 and Harry Nyquist derived it in 1928), and a hail-on-tin-roof crackle he called the Schroteffekt, after Schrot, the German word for the small buckshot loaded into hunting cartridges. That crackle, he proved, was the discreteness of the electron charge itself, and its mean-square amplitude was exactly 2eIΔf: the charge quantum e, the mean current I, and the measurement bandwidth Δf, and nothing else. The number is small, but it is unblindable, and once you know what to look for you can turn it around and measure e from a wire and a galvanometer.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The two noise floors of the Annalen der Physik",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "By 1917 the vacuum-tube amplifier (a glass envelope containing a heated cathode, a control grid, and an anode plate, with a small grid voltage able to modulate a much larger plate current — the first electronic gain element in history) had made long-distance telephone repeaters and radio receivers commercially feasible. It had also given every engineer who worked with one the same complaint: even with the input shorted and the room hushed, the plate current was never truly quiet. A steady hiss came out of the loudspeaker, or a fine tremble crawled across the galvanometer needle. Shielding helped; grounding helped; nothing made it go away. Schottky, at Siemens & Halske Berlin doing his mandated wartime service on vacuum-tube amplification, decided the hiss was intrinsic and set out to catalogue what could possibly produce it."
+        },
+        {
+          "type": "p",
+          "text": "His 1918 Annalen der Physik paper (volume 57, pages 541 to 567, titled \"Über spontane Stromschwankungen in verschiedenen Elektrizitätsleitern,\" spontaneous current fluctuations in various electrical conductors) proposed two intrinsic mechanisms and gave the mean-square amplitude for each. The first, the Wärmeeffekt or heat effect, was the thermal jiggling of the electron gas inside any conductor at temperature T; Schottky sketched an argument and stopped, because equipartition alone was not enough to nail the frequency dependence. Nine years later John B. Johnson at Bell Labs (working on vacuum-tube preamps) measured it in a resistor and reported the result to Harry Nyquist in the same building; Nyquist derived the full formula (mean-square voltage = 4 k_B T R Δf) from thermodynamics in 1928, and the phenomenon has been called Johnson-Nyquist noise ever since. Schottky, in 1918, had already told them where to look."
+        },
+        {
+          "type": "p",
+          "text": "The second mechanism, the Schroteffekt or shot effect, was Schottky's original contribution and the subject of the rest of this lesson. His argument was that a current is not a continuous fluid, it is a sequence of discrete electrons arriving at the anode one at a time, and the timing of those arrivals is a random process. Even at a perfectly steady average rate, the number of electrons landing in any specific millisecond fluctuates. Those fluctuations translate directly into a fluctuation in the measured current. Schottky worked out the mean-square amplitude assuming the arrivals were statistically independent, got the answer 2eIΔf, and pointed out that a bench measurement of that amplitude would give a direct route to e independent of Millikan's oil-drop tour de force from 1913. Seven years later at General Electric's Schenectady labs, Albert Hull and Neal Williams did exactly that and reported 1.586 × 10⁻¹⁹ C for the electron charge (Millikan's revised value: 1.591 × 10⁻¹⁹ C), from the noise on a thermionic diode."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Independent arrivals: the Poisson variance",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The argument starts from one physical assumption: the electrons are statistically independent. Whether one electron happens to cross the vacuum gap tells us nothing about whether the next one will. In the vacuum-tube regime Schottky studied, this is nearly exact: the cathode emits at random into a mean electric field, and the individual thermal-tail emissions have no memory of their predecessors. In section 4 we will see what happens when that assumption breaks."
+        },
+        {
+          "type": "p",
+          "text": "Under independence, the number of electrons N arriving in a time window of length T is governed by the Poisson distribution (a probability law for the count of independent events with a fixed mean rate, named for Siméon Denis Poisson who wrote it down in 1837 while studying wrongful convictions in the French courts). If the average rate of arrivals is r̄ per second, then the mean and the variance of N in a window of length T are both equal to r̄T, a coincidence unique to the Poisson family. Naming the mean count N̄ = r̄T, the variance ⟨δN²⟩ (deviation of the count from its mean, squared, averaged over many windows), and the observation window T:"
+        },
+        {
+          "type": "math",
+          "tex": "\\langle \\delta N^{2} \\rangle \\;=\\; N \\;=\\; \\bar{r}\\,T",
+          "display": true,
+          "caption": "The Poisson variance-equals-mean identity. ⟨δN²⟩ is the mean squared deviation of the arrival count in a window of length T. N̄ is the mean arrival count in that window. r̄ is the mean arrival rate per unit time. T is the window duration. The equality of variance and mean is the defining property of the Poisson distribution and follows from the assumption that arrivals are statistically independent."
+        },
+        {
+          "type": "p",
+          "text": "Now translate counts into current. Each arriving electron carries charge e (the elementary charge, 1.602 × 10⁻¹⁹ C), so N electrons in time T constitute an average current I = eN̄/T = e r̄. Solving for the mean rate gives r̄ = I/e, and the mean-square current fluctuation from the count fluctuation δN follows by squaring the identity δI = eδN/T. Naming ⟨δI²⟩ the mean squared current deviation, e the electron charge, I the mean current, and T the observation window:"
+        },
+        {
+          "type": "math",
+          "tex": "\\langle \\delta I^{2} \\rangle \\;=\\; \\dfrac{e^{2}\\,\\langle \\delta N^{2}\\rangle}{T^{2}} \\;=\\; \\dfrac{e^{2}\\,\\bar{r}\\,T}{T^{2}} \\;=\\; \\dfrac{e\\,I}{T}",
+          "display": true,
+          "caption": "The time-domain shot-noise variance. ⟨δI²⟩ is the mean squared current deviation over an observation window of length T. e is the electron charge. r̄ is the mean arrival rate. I = e r̄ is the mean current. T is the window duration. The right-hand side reads 'the mean-square current noise is the electron charge times the average current divided by the observation window.' Longer measurement windows average out more clicks and give smaller fractional noise, exactly as √N intuition demands."
+        },
+        {
+          "type": "p",
+          "text": "This form is not yet the 2eIΔf answer engineers memorize, but it already contains the physical content. Plug in numbers: at I = 1 pA (about 6 × 10⁶ electrons per second, which is what a photomultiplier tube counts in one channel) and T = 1 s, the mean-square current fluctuation comes out to (1.602 × 10⁻¹⁹)(10⁻¹²) = 1.6 × 10⁻³¹ A², or a root-mean-square amplitude of 4 × 10⁻¹⁶ A. Dividing by the mean current gives a fractional noise of 4 × 10⁻⁴, matching the √(1/6 × 10⁶) that Poisson counting predicts directly. In the next section we translate this time-domain variance into the frequency-domain power spectral density that Schottky's original paper actually derived, and out drops the 2eIΔf that has been printed on the datasheet of every photodiode ever sold."
+        }
+      ],
+      "quiz": {
+        "question": "A single-photon detector at the output of a low-light imaging pipeline is counting photons at an average rate of 400 counts per second. The camera exposes for 100 ms and reads out the count as a proxy for scene intensity. What is the expected root-mean-square fluctuation of the count from one 100-ms frame to the next, and why is that not itself the shot-noise formula 2eIΔf?",
+        "options": [
+          "The count is deterministic once the shutter opens, so σ_N = 0 for a stable scene; any observed frame-to-frame variance is entirely readout electronics and is unrelated to the arrival statistics.",
+          "The expected count is 40 per frame with σ_N = √40 ≈ 6.3, giving a fractional noise of about 16%. This is the counting-statistics form of shot noise: variance-equals-mean is the Poisson signature of independent arrivals. The formula 2eIΔf is the frequency-domain restatement of the same fact for a current I = eN/T, where the bandwidth Δf ≈ 1/(2T) plays the role of the observation window. Section 3 derives that translation explicitly.",
+          "The expected count is 40 per frame with σ_N = 40, because the Poisson distribution has σ_N = mean (not √mean), so the fractional noise is 100%.",
+          "The expected count is 40 per frame with σ_N = √(2eIΔf) evaluated at I = 40 · 1.6 × 10⁻¹⁹ / 0.1 s = 6.4 × 10⁻¹⁷ A and Δf = 100 Hz. Any counting formula that does not go through 2eIΔf is missing a factor of 2."
+        ],
+        "correctIndex": 1,
+        "explanation": "Option B is right. For independent arrivals at rate 400/s over 100 ms, the mean count is 40, and the Poisson identity says the variance equals the mean, so σ_N = √40 ≈ 6.3, a 16% fractional fluctuation you can see with the naked eye when the camera clocks a dim scene. The 2eIΔf formula is not a different physical claim; it is exactly this Poisson variance expressed in the frequency-domain language a spectrum analyzer speaks. The observation window T of length 100 ms is equivalent to a rectangular integration whose noise-bandwidth is Δf ≈ 1/(2T) = 5 Hz, and the current-domain restatement ⟨δI²⟩ = eI/T = 2eI·(1/(2T)) reproduces 2eIΔf exactly. Option A ignores counting statistics and blames only readout noise, missing the whole physics. Option C claims the Poisson variance equals the mean squared, which is wrong (the variance equals the mean, not its square). Option D applies the current-domain formula in a way that double-counts the T-to-Δf conversion; the count-domain and current-domain forms are the same fact, not two facts to be multiplied together."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The white spectrum and the 2eIΔf formula",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Real measurements do not sit for a full second on a galvanometer; they run a current through an amplifier of bandwidth Δf (the range of frequencies the amplifier passes with roughly uniform gain), and the noise the operator sees is the total noise within that bandwidth. To translate Schottky's time-domain variance into the bandwidth-domain amplitude engineers actually use, one has to compute the power spectral density (PSD, the amount of noise power carried per unit frequency, in units of amperes squared per hertz), which for a stationary random process is the Fourier transform of its autocorrelation function (Wiener-Khinchin theorem, proved by Norbert Wiener at MIT in 1930 and Aleksandr Khinchin at Moscow State in 1934)."
+        },
+        {
+          "type": "p",
+          "text": "Model each electron arrival as a very short current pulse: mathematically, a Dirac delta function δ(t − t_k) of area e at the arrival time t_k. The total current is then i(t) = e · Σ δ(t − t_k), and its mean is ⟨i(t)⟩ = e r̄ = I. The autocorrelation of the fluctuating part is R_δI(τ) = ⟨δi(t) δi(t + τ)⟩. Because the arrivals are independent, cross terms with different arrival times average to zero, and only the self-correlation of each pulse contributes. Each pulse contributes e² δ(τ) to the autocorrelation, and there are r̄ pulses per second, so:"
+        },
+        {
+          "type": "math",
+          "tex": "R_{\\delta I}(\\tau) \\;=\\; e^{2}\\,\\bar{r}\\,\\delta(\\tau) \\;=\\; e\\,I\\,\\delta(\\tau)",
+          "display": true,
+          "caption": "The autocorrelation of shot-noise current. R_δI(τ) is the autocorrelation function of the current fluctuation, defined as the time-averaged product of δi(t) and δi(t + τ). e is the electron charge. r̄ is the mean arrival rate. I is the mean current. δ(τ) is the Dirac delta at zero time lag. The autocorrelation is a spike at τ = 0 because independent arrivals share no memory: knowing the fluctuation now says nothing about the fluctuation any nonzero time later. The width in τ (zero here, in the idealization) is the transit time of one pulse, which for a real vacuum tube is picoseconds — negligible on any bandwidth an amplifier can process."
+        },
+        {
+          "type": "p",
+          "text": "The Fourier transform of δ(τ) is 1 (over all frequencies, positive and negative), so the two-sided PSD is S̃_I(f) = eI, a constant independent of frequency: shot noise is white noise. Physicists and engineers use the single-sided PSD S_I(f) that folds negative frequencies onto positive ones and therefore doubles: S_I(f) = 2eI. To get the mean-square amplitude actually observed in a measurement bandwidth Δf, integrate S_I over the passed frequencies. Naming the observed variance ⟨δI²⟩_Δf, the electron charge e, the mean current I, and the amplifier bandwidth Δf:"
+        },
+        {
+          "type": "math",
+          "tex": "\\langle \\delta I^{2} \\rangle_{\\Delta f} \\;=\\; \\int_{0}^{\\Delta f} S_{I}(f)\\,df \\;=\\; 2\\,e\\,I\\,\\Delta f",
+          "display": true,
+          "caption": "The engineering form of the Schottky shot-noise formula. ⟨δI²⟩_Δf is the mean squared current fluctuation observed within a measurement bandwidth Δf. S_I(f) = 2eI is the single-sided noise power spectral density in A²/Hz. e is the electron charge, 1.602 × 10⁻¹⁹ C. I is the mean current. Δf is the measurement bandwidth in Hz. The right-hand side depends only on charge, current, and bandwidth: no material property, no temperature, no geometry. This is what makes shot noise a fundamental noise floor rather than a nuisance parameter."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-09-shot-noise.html",
+          "height": 460,
+          "caption": "A Poisson click stream simulator. The slider sets the mean electron arrival rate r̄ over ten decades, from 100 to 10¹² per second (16 aA to 160 nA on the current scale). The top strip shows individual arrivals as vertical ticks over a 100-ms scrolling window; when the rate is too high for ticks to be resolvable, they blur into a solid band. The lower panel plots the smoothed current I(t) with a shaded ±1σ band around the mean; the width of that band is 2√(2eI·Δf) for Δf = 100 Hz (the low-pass corner of the smoothing filter). Watch two things: the mean grows linearly with r̄, and the fluctuation grows only with √r̄, so the fractional noise δI/I shrinks as 1/√r̄. That falling ratio is why brighter photodiodes are quieter photodiodes."
+        },
+        {
+          "type": "p",
+          "text": "Every part of the 2eIΔf formula is worth staring at. There is no material property in it (no scattering rate, no defect density, no mobility, no temperature), which is why shot noise is called intrinsic: it depends on the current and on the discreteness of the charge, and on nothing else. It grows with the bandwidth: the wider the amplifier passband, the more independent samples of the random-arrival process it lets through, and the larger the observed noise. And it is proportional to the current, not to its square, which is what makes it a shot-noise problem for low currents and a not-so-important problem for high currents: the fractional noise √⟨δI²⟩/I scales as 1/√I, so a picoampere photodiode running at 1-Hz bandwidth reads to about 6 × 10⁻⁴ relative accuracy, while a milliampere power supply running at the same bandwidth reads to 6 × 10⁻⁸. Turning the wire around and using shot noise to measure e (as Hull and Williams did in 1925) is easiest in the intermediate regime, where the noise is large enough to see and the current is small enough that no other mechanism dominates."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The Fano factor and Coulomb-quiet electrons",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Schottky derived 2eIΔf under the assumption that the electrons were independent. Real devices break that assumption in two directions, and the shot-noise formula becomes a diagnostic for how badly. Define the Fano factor F (named for Ugo Fano, an Italian-American physicist at the University of Chicago whose 1947 paper on the statistics of ionization events introduced the ratio) as the observed noise divided by the Poisson prediction:"
+        },
+        {
+          "type": "math",
+          "tex": "F \\;=\\; \\dfrac{\\langle \\delta I^{2} \\rangle}{2\\,e\\,I\\,\\Delta f}",
+          "display": true,
+          "caption": "The Fano factor. F is the dimensionless ratio of observed noise power to the full Poisson (Schottky) prediction. ⟨δI²⟩ is the measured mean squared current fluctuation. e is the electron charge. I is the mean current. Δf is the measurement bandwidth. F = 1 exactly reproduces Schottky; F < 1 is sub-Poissonian, meaning the arrivals are anti-correlated and the noise is quieter than shot; F > 1 is super-Poissonian, meaning arrivals are bunched. Every scattering, every space-charge cloud, every transmission-limited channel leaves its signature in F."
+        },
+        {
+          "type": "p",
+          "text": "The classic sub-Poissonian case is a vacuum diode operating in the space-charge-limited regime. When many electrons happen to be in flight between cathode and anode at once, the negative charge cloud they form pushes back on any new emission from the cathode, and the emission rate temporarily drops. When few electrons are in flight, the cloud is thin, the field at the cathode is stronger, and more electrons come out. The result is a self-regulating current with anti-correlated arrivals: an above-average burst is immediately followed by a below-average dip. Measured Fano factors in the space-charge regime run F ≈ 0.1 to 0.3, a factor of three to ten suppression below the Schottky value. Schottky himself derived a factor Γ² for this in a 1926 followup and noted that the temperature-limited regime (where the cathode emits at less than its space-charge-saturation rate) recovers F = 1 exactly, which is why Hull and Williams's 1925 e measurement had to be done under temperature-limited operation to give the Schottky formula clean."
+        },
+        {
+          "type": "p",
+          "text": "The mesoscopic-solid-state case, which we will spend the last section on, is even more surprising. Yuli Khlus in Kharkov in 1987 and Gordey Lesovik at the Landau Institute in 1989, later completed by Markus Büttiker at IBM Rüschlikon in 1990, derived the shot noise of a quantum point contact (a narrow constriction in a two-dimensional electron gas whose conductance is quantized in units of 2e²/h). They found that if each electron mode has transmission probability T through the constriction, the shot noise per mode is F = 1 − T, not F = 1. An open channel (T = 1) is perfectly quiet (F = 0): every electron incident from the reservoir passes through, and there are no fluctuations. A pinched channel (T = 0.5) gives F = 0.5, the maximum shot noise of a two-outcome Bernoulli process. A nearly-closed channel (T ≈ 0) recovers Schottky's F ≈ 1, the Poisson limit that arises when rare independent arrivals happen at a barrier. The full formula, empirically confirmed by Reznikov and Heiblum at the Weizmann Institute in 1995, is F = Σ T_n(1 − T_n) / Σ T_n over all transmitting channels."
+        }
+      ],
+      "quiz": {
+        "question": "A precision current source engineer is comparing two circuits at the same average current I = 1 nA and the same measurement bandwidth Δf = 1 kHz. Circuit A is a vacuum photodiode with a well-illuminated photocathode operating in the temperature-limited regime. Circuit B is a quantum point contact tuned to transmit exactly one mode at T = 1.0 (fully open). What are the measured Fano factors, and what is the ratio σ_A / σ_B of the current noise amplitudes in the two circuits?",
+        "options": [
+          "F_A = 1 and F_B = 1, so σ_A / σ_B = 1. Both are one-electron-at-a-time devices, so both reduce to Schottky.",
+          "F_A = 1 and F_B = 0, so σ_B = 0 and the ratio σ_A / σ_B is infinite. The photodiode is a canonical Poisson (independent) source and hits F = 1 exactly, so σ_A = √(2eIΔf) ≈ 18 fA. The T = 1 quantum point contact is Coulomb-quiet: every incoming electron passes deterministically, there are no partition fluctuations, and the current has no shot noise at all (thermal Johnson noise remains, but that is a separate floor). The circuit designer who does not know the distinction can be wrong by more than 20 dB.",
+          "F_A = 0.3 and F_B = 1.0, so σ_A < σ_B. The photodiode is space-charge-limited and quiet; the quantum point contact is a random barrier and fully Poissonian.",
+          "F_A = 1 and F_B = 0.25, so σ_A / σ_B = 2. Every quantum point contact has F = 0.25 at T = 1.0 because the electron takes half a period to cross."
+        ],
+        "correctIndex": 1,
+        "explanation": "Option B is right. A photocathode running temperature-limited (below its space-charge-saturation current) emits electrons in a truly Poisson stream: no cloud regulates the emission, so F = 1 exactly and the noise is σ_A = √(2eIΔf) = √(2 · 1.6 × 10⁻¹⁹ · 10⁻⁹ · 10³) A = √(3.2 × 10⁻²⁵) A ≈ 1.8 × 10⁻¹³ A = 18 fA. The T = 1 quantum point contact obeys the Khlus-Lesovik-Büttiker formula F = 1 − T = 0, so σ_B = 0 for shot noise (Johnson noise still contributes 4 k_B T G Δf, but that is a separate story), and the ratio σ_A / σ_B diverges. Physically the perfect channel is Coulomb-quiet because there is no branching event: an electron either passes or reflects, and if it always passes, there is nothing random to make noise from. Option A confuses the temperature-limited regime (which does give Schottky) with the space-charge or the transmission story. Option C reverses the two: it is the vacuum diode in the space-charge-limited regime that has F ≈ 0.3, not the temperature-limited one, and the T = 1 QPC that is quiet, not the reverse. Option D invents a formula unrelated to the Khlus-Lesovik-Büttiker prediction."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The one-third electron: Saclay and Rehovot, 1997",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Robert Laughlin's 1983 wavefunction for the fractional quantum Hall effect (a two-dimensional electron gas in a strong magnetic field with filling factor ν = 1/3, which shows a plateau in its Hall resistance at exactly 3h/e² and is impossible to explain with any single-electron picture) predicted a very strange thing: the low-energy excitations of the ν = 1/3 state were not single electrons or single holes, they were quasiparticles carrying charge e/3, one-third of the electron charge. In a system built entirely of electrons, this sounded like the sort of theoretical construct that would remain a theoretical construct. Nobody had a scheme to isolate a single quasiparticle and put it on a scale. Laughlin got the 1998 Nobel Prize with Stormer and Tsui for the physics; the direct measurement of the e/3 charge came in a different way, and it came from Schottky."
+        },
+        {
+          "type": "p",
+          "text": "The idea, laid out theoretically by Chao-Xing Kane and Matthew Fisher at UCSB in 1994, was that a quantum point contact patterned across the ν = 1/3 quantum Hall bar would scatter Laughlin quasiparticles across the constriction one at a time, exactly as a QPC in an ordinary two-dimensional electron gas scatters single electrons. If those quasiparticles carried charge e* = e/3, the shot noise on the scattered current would satisfy Schottky's formula with e replaced by e/3: the noise-to-current ratio would be a factor of three below what one would get for real electrons at the same tunneling current. Turning the derivation of section 3 around, the ratio ⟨δI²⟩ / (2 I Δf) directly reads out the elementary charge on the carriers. Point a Schottky meter at a fractional quantum Hall bar, and it will tell you what a Laughlin quasiparticle weighs."
+        },
+        {
+          "type": "p",
+          "text": "Two groups did the experiment simultaneously in 1997 and got exactly this. Laurent Saminadayar, D. Christian Glattli, Yong Jin, and Bernard Etienne at the Centre National de la Recherche Scientifique in Saclay published in Physical Review Letters in September 1997, working on a GaAs / AlGaAs heterostructure (a semiconductor sandwich whose interface hosts a very clean two-dimensional electron gas) at 25 mK inside a dilution refrigerator (a cryostat that reaches below 100 mK by exploiting the mixing of ³He and ⁴He, the standard lowest-temperature laboratory tool). Rafi de-Picciotto, Michael Reznikov, Moty Heiblum, Vladimir Umansky, Gennadi Bunin, and Diana Mahalu at the Weizmann Institute in Rehovot published in Nature the same month, on their own heterostructure. Both extracted an effective charge from the measured shot noise. Both got e* = 0.34 e ± 0.04, unmistakably one-third to within their bars, and both saw the ratio drift toward the electron value as they tuned away from the ν = 1/3 plateau. The Schottky formula, applied to a system whose excitations classical physics called impossible, weighed a Laughlin quasiparticle."
+        },
+        {
+          "type": "p",
+          "text": "The extraction was direct. At the point-contact scattering site, the mean tunneling current I_t was known from a straightforward DC measurement, and the noise ⟨δI²⟩ was measured by cross-correlating the two contact amplifiers at 4 kHz to reject uncorrelated preamp noise. Taking the ratio and comparing to 2 I_t Δf gave the effective charge on the carriers as ⟨δI²⟩ / (2 I_t Δf). Schottky's 1918 vacuum-tube formula, unchanged in form eighty years later, delivered a number that had no classical shadow: a Laughlin quasiparticle carries one-third of an electron charge. The same accounting device that Schottky used to weigh the electron itself off a Berlin diode also weighs its fractional descendant off a Rehovot heterostructure, and the arithmetic between them is just a bandwidth and a division. When you understand the tool that well, it is worth carrying it forward."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A cryogenic amplifier chain reads a 10-pA current source through a 1-MHz bandwidth. The engineer sees a mean-square current fluctuation of 4.8 × 10⁻²⁶ A². What is the effective charge on the current carriers, and what does this measurement teach about how shot noise is used as a diagnostic?",
+    "options": [
+      "The effective charge is 1.5 × 10⁻¹⁹ C, consistent with the electron charge to within measurement uncertainty. This is the Hull-Williams 1925 methodology applied at cryogenic frequencies: measured shot noise divided by twice the mean current times the bandwidth gives 4.8 × 10⁻²⁶ / (2 · 10⁻¹¹ · 10⁶) = 2.4 × 10⁻²¹ C — wait, that comes out below the electron charge by two orders of magnitude, indicating either sub-Poissonian noise suppression (F < 1) or an artifact.",
+      "The effective charge is 1.5 × 10⁻¹⁹ C, from ⟨δI²⟩/(2IΔf) = 4.8 × 10⁻²⁶ / (2 · 10⁻¹¹ · 10⁶) = 2.4 × 10⁻²¹ C. Something is off by 100.",
+      "The effective charge is 2.4 × 10⁻²¹ C, roughly 1.5 × 10⁻² of the electron charge. This is a sub-Poissonian regime with Fano factor F ≈ 0.015, characteristic of an open ballistic channel (Khlus-Lesovik-Büttiker T → 1 limit) or a heavily space-charge-limited emitter. The measurement teaches that shot noise is not simply a nuisance to be minimized: the Fano factor, defined as measured noise divided by the Schottky prediction 2eIΔf, diagnoses the correlation structure of the carriers. Shot noise carries information the DC current alone cannot deliver.",
+      "The effective charge is exactly the elementary charge; shot noise always gives e regardless of the material or device geometry, because e is a universal constant."
+    ],
+    "correctIndex": 2,
+    "explanation": "Option C is right. The effective charge extracted from the measurement is ⟨δI²⟩/(2IΔf) = 4.8 × 10⁻²⁶ / (2 · 10⁻¹¹ · 10⁶) = 2.4 × 10⁻²¹ C, or roughly 0.015 e. This is not the electron charge because the carriers are not, in this measurement, independent Poisson arrivals. The Fano factor F = 2.4 × 10⁻²¹ / 1.6 × 10⁻¹⁹ ≈ 0.015 signals strong noise suppression, characteristic of a Khlus-Lesovik-Büttiker open ballistic channel (F = 1 − T with T ≈ 0.985) or an aggressively space-charge-limited vacuum-tube emitter. Options A and B contain the correct arithmetic but stop short of interpreting it: they treat the disagreement with e as an error rather than a physical result. Option D reads Schottky's formula as a universal statement that shot noise always gives the electron charge, missing entirely the point of section 4 and section 5 — that the Fano factor is a diagnostic for correlation structure, and that the measured charge extracted from shot noise can be less than e (Coulomb-suppressed transmission or space-charge regulation), can equal e (temperature-limited emission, independent arrivals), or, most famously, can be a rational fraction of e (Laughlin quasiparticles in the fractional quantum Hall regime). Shot noise is not a noise floor to be minimized; it is a measurement channel that carries information the DC current alone does not."
+  },
+  "suggestedNodes": [
+    {
+      "id": "johnson_nyquist_noise",
+      "label": "Johnson noise",
+      "subtitle": "4kTRΔf",
+      "edgeType": "extends"
+    },
+    {
+      "id": "fractional_quantum_hall",
+      "label": "FQH e/3",
+      "subtitle": "Laughlin QP",
+      "edgeType": "applied"
+    },
+    {
+      "id": "poisson_process",
+      "label": "Poisson proc.",
+      "subtitle": "Var = mean",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-09T07:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 23,
+    "previouslyMastered": [
+      "thermionic_emission",
+      "schottky_effect",
+      "photoelectric_effect"
+    ]
+  }
+}
