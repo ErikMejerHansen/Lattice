@@ -26,7 +26,6 @@
 # auto-suggested 2026-07-05 from schottky-effect
 
 # auto-suggested 2026-07-09 from shot-noise
-Johnson-Nyquist noise — 4 k_B T R Δf, the thermal-jitter noise floor Schottky named the Wärmeeffekt in his 1918 Annalen paper, measured by John B. Johnson at Bell Labs in 1927 and derived by Harry Nyquist in 1928 from equilibrium thermodynamics alone, the second intrinsic noise floor no amplifier chain can sink beneath
 Fractional quantum Hall effect — Laughlin's 1983 wavefunction for the ν = 1/3 plateau in a two-dimensional electron gas under strong magnetic field, quasiparticles of charge e/3 as excitations of a strongly correlated liquid built from electrons alone, the state of matter whose fractional charge Saminadayar-Glattli and de-Picciotto-Reznikov-Heiblum measured directly with shot noise in 1997
 Poisson process — the continuous-time counting process of independent events at rate r̄, with Poisson-distributed counts in every window and exponentially distributed inter-arrival times, the mathematical scaffolding under shot noise, radioactive decay, photon counting, and every queueing-theory result from Erlang's 1909 Copenhagen telephone-traffic paper onward
 
@@ -241,3 +240,8 @@ Field-ion microscope — Erwin Müller 1955, the first true single-atom images, 
 p-n junction — the two-region doped-semiconductor rectifier, built-in voltage V_bi ≈ E_g/2e, minority-carrier diffusion currents on both sides, the bipolar sibling to the Schottky whose minority-carrier storage is precisely what the Schottky was invented to avoid
 Fermi-level pinning — John Bardeen 1947, the interface-state hypothesis that explains why real metal-semiconductor barrier heights refuse to track the Schottky-Mott φ_m − χ_s prediction; the same insight that pushed Bardeen and Brattain toward the transistor a few months later
 Depletion region — the space-charge layer of ionized dopants at every junction, with W = √(2ε_s(V_bi − V)/eN_D) from the depletion-approximation solution of Poisson's equation, and junction capacitance C_j = ε_s A/W that governs the small-signal behavior of every diode and transistor
+
+# auto-suggested 2026-07-10 from johnson-nyquist-noise
+Fluctuation-dissipation theorem — Callen and Welton 1951, the coth-form generalization of Nyquist to any linear dissipative response and to the quantum regime, S_V(ω) = 2 Re[Z(ω)] ℏω coth(ℏω/2kT), the theorem that hands one formula to Brownian motion, Johnson noise, and vacuum-zero-point fluctuations at the same time
+Noise temperature — P = k_B T_n Δf, the kelvin-ledger accounting variable that lets an antenna, a preamp, a mixer, and a spectrometer all add on the same line, Friis's 1944 cascade formula T_sys = T_1 + T_2/G_1 + T_3/(G_1 G_2) + ..., and the tool Penzias and Wilson used to isolate 3.4 K of unaccountable excess at Holmdel
+Equipartition theorem — ½ k_B T of energy per quadratic degree of freedom, Boltzmann's 1876 classical-statistical-mechanics theorem, the identity Nyquist used without apology and that fails exactly where the Planck occupancy 1/(exp(ℏω/kT) − 1) departs from k_B T/ℏω, marking the boundary between classical and quantum noise

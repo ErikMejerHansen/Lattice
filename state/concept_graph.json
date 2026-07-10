@@ -699,6 +699,16 @@
       "createdAt": "2026-07-09T07:00:00Z",
       "col": 0,
       "row": 35
+    },
+    {
+      "id": "johnson_nyquist_noise",
+      "label": "Johnson noise",
+      "subtitle": "4 k_B T R Δf",
+      "state": "available",
+      "lesson": "2026-07-10-johnson-nyquist-noise",
+      "createdAt": "2026-07-10T07:00:00Z",
+      "col": 1,
+      "row": 35
     }
   ],
   "edges": [
@@ -1650,6 +1660,21 @@
     {
       "from": "shot_noise",
       "to": "photoelectric_effect",
+      "kind": "related"
+    },
+    {
+      "from": "johnson_nyquist_noise",
+      "to": "shot_noise",
+      "kind": "extends"
+    },
+    {
+      "from": "johnson_nyquist_noise",
+      "to": "cmb",
+      "kind": "applied"
+    },
+    {
+      "from": "johnson_nyquist_noise",
+      "to": "blackbody",
       "kind": "related"
     }
   ]

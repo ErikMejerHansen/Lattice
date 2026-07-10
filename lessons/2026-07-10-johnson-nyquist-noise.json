@@ -1,0 +1,206 @@
+{
+  "slug": "2026-07-10-johnson-nyquist-noise",
+  "title": "Johnson-Nyquist noise: the resistor hiss that thermodynamics alone predicts",
+  "node": {
+    "id": "johnson_nyquist_noise",
+    "label": "Johnson noise",
+    "subtitle": "4 k_B T R Δf"
+  },
+  "intro": "Walter Schottky's 1918 Annalen der Physik paper on spontaneous fluctuations in vacuum tubes named two intrinsic noise floors that no shielding could sink beneath. One was shot noise, the crackle of discrete electrons landing on an anode, which he called the Schroteffekt and solved on the spot. The other, the Wärmeeffekt (heat effect, the thermal jitter of the electron gas in any resistor above absolute zero), he identified but did not close: equipartition gave him a total energy, not a frequency-domain amplitude. Nine years later John B. Johnson at Bell Labs measured the missing spectrum in every kind of resistor he could find, and Harry Nyquist in the same corridor derived it from equilibrium thermodynamics alone. The answer was 4 k_B T R Δf, and it depended on nothing but the temperature T, the resistance R, and the bandwidth Δf of the amplifier that saw it.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The Wärmeeffekt: Schottky's 1918 open problem",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The vacuum-tube amplifier engineer of 1917 had two nemeses. The first was the crackle Schottky had already tracked down: discrete electrons landing at random on the anode, an unblindable Poisson click stream whose mean-square current was 2eIΔf (the Schroteffekt, or shot noise). The second was subtler. Even with the tube cold, or with the plate current shut off, a hiss remained in the input resistor itself. Short the input, and the resistor still whispered. Immerse the resistor in liquid air, and the whisper dropped. Warm it back up, and the whisper returned. Every engineer had seen it, and nobody had a formula for it."
+        },
+        {
+          "type": "p",
+          "text": "Schottky, at Siemens & Halske in Berlin doing his wartime service on tube amplification, wrote in his 1918 Annalen paper that this second effect was a distinct mechanism, the Wärmeeffekt. He argued that the free electrons in any conductor are a gas in thermal equilibrium with the lattice, and their thermal motion (equipartition, the classical-statistical-mechanics theorem that assigns ½ k_B T of energy to every quadratic degree of freedom, proved by Boltzmann in 1876) delivers ½ k_B T of kinetic energy per direction to each electron. The instantaneous imbalance between electrons drifting one way and the other is a fluctuating current, and across the resistor's ends it appears as a fluctuating voltage."
+        },
+        {
+          "type": "p",
+          "text": "Schottky then stopped, and the honest reason is worth naming. Equipartition gave him one number: the total mean-square voltage across the resistor, integrated over all frequencies. But a real amplifier does not integrate over all frequencies. It sees the noise inside its passband Δf and rejects the rest. Without a way to tell the operator how the total noise is distributed in frequency (the power spectral density, watts per hertz, which is what the passband multiplies) equipartition alone could not predict any specific measurement. The problem needed a spectrum, not a variance, and Schottky did not have one. The Annalen paper flagged the Wärmeeffekt and moved on."
+        },
+        {
+          "type": "p",
+          "text": "For nine years the paper sat. Every vacuum-tube engineer knew about the resistor whisper, every experimentalist worked around it, and nobody wrote it down. Schottky himself moved to Würzburg and to industry work on the space-charge regime. The gap was closed inside a single Bell Labs building on West Street in New York, by two men who published back-to-back in the July 1928 Physical Review, and whose combined result has been called Johnson-Nyquist noise ever since."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Johnson at Bell Labs, 1927: the tour of every resistor in the building",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "John Bertrand Johnson had come to Bell Labs in 1922 out of a Yale physics PhD on the space-charge effect. By 1927 he was running experiments on the sensitivity limits of vacuum-tube preamplifiers, and the resistor whisper was in his way. He decided to catalogue it. He built a broadband tube amplifier (the input a Western Electric 264 triode with grid resistor R, the output a rectifier and DC meter that read out the mean-square amplifier voltage) and swept through every kind of resistor Bell Labs had on the shelf: carbon composition, drawn-wire wound on porcelain, thin-film platinum, electrolytic solutions, even a column of graphite dust. He varied R over more than five decades. He immersed samples in liquid air, water baths, and heated oil, varying T from about 80 K to 1200 K. The measurement was excruciating (a single point took hours to average), and the answer was extraordinary."
+        },
+        {
+          "type": "p",
+          "text": "One formula, no material dependence at all, described every resistor at every temperature. Naming the mean-square voltage fluctuation ⟨V²⟩ observed at the terminals of a resistor of resistance R at absolute temperature T through an amplifier of bandwidth Δf, with k_B the Boltzmann constant:"
+        },
+        {
+          "type": "math",
+          "tex": "\\langle V^{2} \\rangle \\;=\\; 4\\,k_{B}\\,T\\,R\\,\\Delta f",
+          "display": true,
+          "caption": "The Johnson-Nyquist mean-square voltage. ⟨V²⟩ is the mean squared voltage fluctuation measured at the resistor terminals over an amplifier passband. k_B is Boltzmann's constant, 1.381 × 10⁻²³ J/K. T is the absolute temperature of the resistor in kelvin. R is the resistance in ohms. Δf is the amplifier bandwidth in hertz. The right-hand side depends only on these four numbers. No mobility, no defect density, no geometry, no material appears anywhere."
+        },
+        {
+          "type": "p",
+          "text": "Read the formula. Doubling R doubles the noise power. Doubling T doubles the noise power. Doubling Δf doubles the noise power. The linearity in each variable is what let Johnson pin the formula down: any deviation from any of the three linearities in his sweeps would have shown up as an obvious curve in his log-log plots, and none did. The material-independence was the shocking part. Whatever mechanism was producing the noise had to depend only on universal thermodynamics, not on the microscopic details of the material Johnson had wired up. That kind of result cries out for a thermodynamic derivation, and Nyquist had one on his desk in the same building."
+        }
+      ],
+      "quiz": {
+        "question": "An audio engineer is designing the input stage of a microphone preamplifier at room temperature (T = 300 K). She hesitates between two microphone loading resistors: R₁ = 2 kΩ and R₂ = 200 Ω. The audio passband is Δf = 20 kHz. What is the ratio V_rms(R₁) / V_rms(R₂) of the Johnson-noise voltages the two resistors deliver, and what practical consequence follows for the input-referred noise the preamp will report?",
+        "options": [
+          "The ratio is 100 (voltage scales linearly with R), so the 2 kΩ resistor is 100 times noisier and unusable. The design has to use the 200 Ω option.",
+          "The ratio is √10 ≈ 3.16. Johnson noise scales as √R at fixed T and Δf, so the 2 kΩ resistor delivers about 3 times more RMS voltage than the 200 Ω resistor. Numerically, V_rms(2 kΩ) = √(4 · 1.38 × 10⁻²³ · 300 · 2000 · 20000) ≈ 810 nV, and V_rms(200 Ω) ≈ 256 nV. Whether that matters depends on the microphone's own output impedance and its signal level: matching the source impedance is what sets the noise budget, not minimizing R in isolation.",
+          "The ratio is 10 (V_rms scales linearly with R and T is unchanged). The 200 Ω resistor is 10 times quieter and should always be preferred.",
+          "The ratio is 1, because Johnson noise is material-independent and does not depend on R at all; the formula 4 k_B T R Δf refers to the power delivered into a matched load, not the voltage at the terminals of the resistor itself."
+        ],
+        "correctIndex": 1,
+        "explanation": "Option B is right. ⟨V²⟩ = 4 k_B T R Δf, so V_rms scales as √R at fixed T and Δf. For the 10× ratio in R, V_rms scales by √10 ≈ 3.16. The numerical values are 810 nV RMS for 2 kΩ and 256 nV RMS for 200 Ω across a 20 kHz audio bandwidth at room temperature. Option A confuses the power scaling (linear in R) with the voltage scaling (√R): it is the mean-square voltage that scales linearly with R, not the RMS voltage. Option C makes the same error, backwards. Option D misreads the formula: 4 k_B T R Δf is the mean-square voltage at the open-circuit terminals of the resistor, which is what the amplifier's high-impedance input measures. The material-independence Johnson demonstrated is that no property of the resistor beyond R, T, and Δf enters, not that R itself drops out. Practically, matching a high-output-impedance source to a low-noise stage is a joint optimization; picking the quieter resistor in isolation ignores that the microphone's signal level also depends on the loading."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Nyquist's 1928 derivation: two resistors on a transmission line",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Harry Nyquist had come to Bell Labs the same year as Johnson, in 1917, on a Yale physics PhD written in Sweden under Gibbs's student Bumstead. By 1928 he was a communications theorist of the first rank (his 1924 paper on telegraph signaling and his 1928 sampling theorem were both on the way to becoming named results), and Johnson brought him the resistor data. Nyquist saw the material-independence at once as a thermodynamic signature and built the following thought experiment. Take two identical resistors, each of resistance R at temperature T, and connect them by a lossless transmission line of length L and characteristic impedance also R (so both ends are impedance-matched, and no wave sent down the line ever reflects). The system is closed and in thermal equilibrium, and the second law forbids any net power flow from one resistor to the other."
+        },
+        {
+          "type": "p",
+          "text": "Now count the modes on the line. Standing electromagnetic waves on a length L (with terminated boundary conditions) form a discrete set with spacing Δf = c/(2L) in frequency, where c is the speed of light in the line. In a bandwidth Δf around any frequency f, there are exactly 2LΔf/c modes in each direction of propagation. Classical equipartition, which Nyquist assumed without apology in the classical-frequency regime that Johnson had measured, assigns k_B T of energy to each mode (½ k_B T for the electric part, ½ k_B T for the magnetic part). The energy per unit length in the passband Δf is therefore 2LΔf/c times k_B T divided by L, which is 2 k_B T Δf / c. Half of that energy is carried by waves travelling in each direction."
+        },
+        {
+          "type": "p",
+          "text": "The power delivered to one resistor by waves arriving from the other is the energy density in one direction times the speed c, so the power flowing into a matched resistor from a bandwidth Δf is P = k_B T Δf. In equilibrium each resistor receives the same power (this is the point of the impedance match, and of the second law), so each resistor must also emit k_B T Δf into the line. That emitted power must come from the resistor's own thermal fluctuations. A voltage source ⟨V²⟩ behind a source resistance R delivers, to a matched load also of resistance R, exactly ⟨V²⟩/(4R) watts of average power. Setting this equal to k_B T Δf gives the answer:"
+        },
+        {
+          "type": "math",
+          "tex": "\\dfrac{\\langle V^{2} \\rangle}{4R} \\;=\\; k_{B}\\,T\\,\\Delta f \\quad\\Longrightarrow\\quad \\langle V^{2} \\rangle \\;=\\; 4\\,k_{B}\\,T\\,R\\,\\Delta f",
+          "display": true,
+          "caption": "Nyquist's derivation, closed in two algebraic steps. ⟨V²⟩ is the mean squared open-circuit voltage that a resistor of resistance R at temperature T must produce to satisfy the second law. k_B is Boltzmann's constant. T is the resistor temperature. R is the resistance. Δf is the bandwidth passed by the receiving amplifier. The right-hand side is exactly Johnson's empirical formula. It came out of no measurement, only equipartition, the second law, and an impedance-matched thermodynamic argument."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-10-johnson-nyquist-noise.html",
+          "height": 460,
+          "caption": "A Johnson-noise voltage trace across a resistor R at temperature T. The two sliders vary log R (10 Ω to 10 MΩ) and log T (4 K to 3000 K). The scrolling window shows 100 ms of voltage v(t) through a fixed Δf = 10 kHz bandwidth-limiting amplifier, with the shaded band drawn at ±V_rms = ±√(4 k_B T R Δf) around zero. The readout below quotes T, R, Δf, and V_rms in nV or μV. Two things to watch: turning R up by a decade increases V_rms by √10 (the trace amplitude gets 3× taller, not 10×); cooling from 300 K to 4 K knocks V_rms down by √(300/4) ≈ 8.7, which is why low-noise front ends live in cryostats. Every horizontal ohm-decade or vertical kelvin-decade of the (R, T) plane looks physically different, but the formula that governs them is the same one Nyquist wrote in two lines."
+        },
+        {
+          "type": "p",
+          "text": "Two things about this argument are worth staring at. First, the material of the resistor never entered. Nyquist treated the resistor as a black box of impedance R at temperature T, and thermodynamics alone forced the noise formula. Whatever mechanism inside the resistor produces the fluctuations (electron scattering, phonon coupling, whatever else), the fluctuation amplitude is fixed by equilibrium with the electromagnetic field on the line. Second, the answer is white: it does not depend on frequency, because the derivation held for any bandwidth Δf around any center frequency f in the classical regime. Both features would carry into the twentieth century as the shape of a much more general theorem, and section 4 gives it a name."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The fluctuation-dissipation theorem: Callen and Welton, 1951",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Nyquist's argument has a soft spot: he used classical equipartition, k_B T per mode, which is the high-temperature limit of the true Planck occupancy of an electromagnetic mode. At room temperature and radio frequencies this is exact to parts per 10⁹, so Johnson's data agreed. But at low temperatures or high frequencies the classical assumption breaks. The number of thermal photons per mode at angular frequency ω is really n(ω, T) = 1/(exp(ℏω/k_B T) − 1), the Planck distribution (Planck's 1900 count of the average occupation of a harmonic oscillator of angular frequency ω in equilibrium at temperature T, with ℏ the reduced Planck constant, 1.055 × 10⁻³⁴ J·s, and n → k_B T / ℏω in the classical limit ℏω ≪ k_B T)."
+        },
+        {
+          "type": "p",
+          "text": "In 1951, Herbert Callen and Theodore Welton at the University of Pennsylvania proved a theorem that generalized Nyquist to any linear dissipative system, quantum or classical. Their result, the fluctuation-dissipation theorem, said that the spontaneous voltage fluctuations across any impedance Z(ω) are set by the real part of Z(ω) times the equilibrium mode energy. Naming S_V(ω) the two-sided voltage power spectral density in V²/Hz, Re[Z(ω)] the resistive (dissipative) part of the impedance at angular frequency ω, ℏ the reduced Planck constant, k_B Boltzmann's constant, and T the absolute temperature:"
+        },
+        {
+          "type": "math",
+          "tex": "S_{V}(\\omega) \\;=\\; 2\\,\\text{Re}[Z(\\omega)]\\,\\hbar\\omega\\,\\coth\\!\\left(\\dfrac{\\hbar\\omega}{2\\,k_{B}\\,T}\\right)",
+          "display": true,
+          "caption": "The Callen-Welton fluctuation-dissipation theorem for voltage noise. S_V(ω) is the two-sided voltage power spectral density in V²/Hz at angular frequency ω. Re[Z(ω)] is the real (resistive, dissipative) part of the complex impedance at ω. ℏ is the reduced Planck constant. k_B is Boltzmann's constant. T is the temperature. coth is the hyperbolic cotangent. The formula reads: the noise a circuit element produces is proportional to the dissipation the same element imposes on any external drive, with the constant of proportionality set by the thermal photon occupancy of its modes."
+        },
+        {
+          "type": "p",
+          "text": "Take the classical limit, ℏω ≪ k_B T. Expand coth(x) ≈ 1/x for small x, and coth(ℏω/(2 k_B T)) ≈ 2 k_B T /(ℏω). Substituting, S_V(ω) ≈ 2 Re[Z(ω)] · ℏω · 2 k_B T /(ℏω) = 4 k_B T Re[Z(ω)]. Integrating over a bandwidth Δf around a low frequency recovers ⟨V²⟩ = 4 k_B T R Δf for a purely resistive Z = R, which is Nyquist. The quantum correction sets in when ℏω ≈ k_B T. At T = 300 K, k_B T ≈ 26 meV, corresponding to a frequency of about 6 THz: classical Nyquist is exact for radio, infrared, and even low-terahertz work. At T = 4 K, k_B T ≈ 0.35 meV, corresponding to about 85 GHz: microwave receivers cooled to liquid helium already start seeing the deviation, and the noise on their input impedance is set by the Planck factor, not by Nyquist's k_B T."
+        }
+      ],
+      "quiz": {
+        "question": "A superconducting single-photon detector amplifier chain is being characterized at T = 20 mK inside a dilution refrigerator, at an operating frequency of 6 GHz. The input impedance seen by the detector is 50 Ω. Which noise formula predicts the actual amplifier input voltage noise, and by what factor does the Nyquist classical prediction ⟨V²⟩ = 4 k_B T R Δf differ from the correct answer?",
+          "options": [
+          "Nyquist gives the correct answer at all temperatures; the classical formula ⟨V²⟩ = 4 k_B T R Δf holds exactly because it was derived from the second law and thermodynamics does not care about ℏ.",
+          "The Callen-Welton formula must be used because ℏω / k_B T = (1.055 × 10⁻³⁴ · 2π · 6 × 10⁹) / (1.381 × 10⁻²³ · 0.020) ≈ 14.4, so kT ≪ ℏω. In this quantum regime the mode occupancy is n ≈ e⁻¹⁴·⁴ ≈ 6 × 10⁻⁷, negligible, and the noise reduces to the zero-point contribution S_V(ω) = 2 R ℏω. Nyquist's classical prediction 4 k_B T R Δf ≈ 4 · 1.381 × 10⁻²³ · 0.020 · 50 · Δf underestimates the true noise by orders of magnitude, because zero-point vacuum fluctuations do not vanish as T → 0, and thermal fluctuations at 20 mK are essentially gone.",
+          "The dominant noise is 1/f noise at low frequencies; both Nyquist and Callen-Welton are irrelevant because superconducting circuits obey neither.",
+          "The Callen-Welton formula is used, and gives ⟨V²⟩ = 8 k_B T R Δf, a factor-of-2 correction to Nyquist that has no ℏ in it."
+        ],
+        "correctIndex": 1,
+        "explanation": "Option B is right. At 6 GHz and 20 mK the ratio ℏω / k_B T ≈ 14.4 is deep in the quantum regime. The Planck occupancy n = 1/(e^14.4 − 1) is about 6 × 10⁻⁷, so thermal photons in the input impedance are essentially absent. Callen-Welton reduces to the zero-point term S_V(ω) ≈ 2 R ℏω (or equivalently, the coth factor tends to 1, so S_V = 2 R ℏω), which for R = 50 Ω and ω = 2π · 6 × 10⁹ rad/s gives about 4 × 10⁻²² V²/Hz. Classical Nyquist at the same T predicts 4 k_B T R = 4 · 1.381 × 10⁻²³ · 0.020 · 50 ≈ 5.5 × 10⁻²³ V²/Hz, roughly an order of magnitude smaller than the true zero-point-limited value. Option A wrongly asserts Nyquist is exact at all temperatures; the derivation used equipartition, which fails when ℏω is comparable to or greater than k_B T. Option C is a distraction: 1/f noise is a separate low-frequency mechanism, not a replacement for thermodynamic noise at microwave frequencies. Option D invents a factor-of-2 correction that misses the entire ℏ-dependent quantum content. Vacuum-quiet is not silent, and every quantum-limited amplifier engineer works against the zero-point floor of Callen-Welton, not the classical Nyquist floor."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Noise temperature and Penzias-Wilson at Holmdel",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Radio engineers do not usually write 4 k_B T R Δf. They write P = k_B T_n Δf, where T_n is the noise temperature (the equivalent temperature a matched resistor would have to hold to deliver the same noise power P into the receiver). It is Johnson-Nyquist rewritten in a variable that mixes physics and engineering: P = ⟨V²⟩ / (4R) = k_B T Δf, so a matched resistor at physical temperature T delivers power k_B T per hertz. If an amplifier is not a simple resistor but a real active device, its input-referred noise power still has units of watts per hertz, and one defines T_n by dividing that power by k_B. The number T_n is not the temperature of anything inside the amplifier; it is a bookkeeping variable that lets an engineer add noise contributions from an antenna, a preamp, a mixer, and a spectrometer using the same formula for every stage."
+        },
+        {
+          "type": "p",
+          "text": "In 1962, Arno Penzias, a Bell Labs radio astronomer, and Robert Wilson, who joined him in 1963, were commissioning the Holmdel horn antenna (a 20-foot metal horn built for Echo satellite communications, then handed to radio astronomy after the Echo program moved on) at 4080 MHz (7.35 cm wavelength). They wanted to measure the radio brightness of the Milky Way's halo, which required knowing the receiver's noise budget to a fraction of a kelvin. They accounted for every stage. The Dicke switch (a mechanical waveguide switch, invented by Robert Dicke at Princeton in 1946, that alternates the receiver input between the antenna and a reference cold load at temperature T_ref) let them subtract the receiver's own drift. The maser amplifier's noise temperature was quoted at 8.5 K. The atmospheric contribution at 90 degrees elevation was calculated at 2.3 K. The waveguide losses added another 1.8 K. Adding up the budget line by line, they expected a system noise temperature of about 12.6 K."
+        },
+        {
+          "type": "p",
+          "text": "The measured system noise temperature was 16.0 K. There was 3.4 K of noise they could not account for. It did not go away with the seasons, it did not depend on which direction the horn was pointed, and it was not correlated with the galactic plane. They cleaned pigeon droppings out of the horn (Penzias and Wilson called them 'a white dielectric material') and evicted the pigeons; the excess stayed. They temperature-cycled the joints; the excess stayed. They wrote up the anomaly in an internal Bell Labs memo and, at Bernard Burke's suggestion, phoned Robert Dicke at Princeton. Dicke was building his own antenna at the time, to look for the cosmic microwave background predicted by his student James Peebles from a hot early universe. He put the phone down, said to his group, 'well, boys, we've been scooped,' and the two teams published back to back in the Astrophysical Journal in July 1965: Dicke, Peebles, Roll, and Wilkinson on the theory, Penzias and Wilson on the 3.5 K residual."
+        },
+        {
+          "type": "p",
+          "text": "The excess had a name: the cosmic microwave background, redshifted relic radiation from the recombination era at z ≈ 1100. But the observational tool that let Penzias and Wilson name it as an excess was Johnson-Nyquist's accounting language. Every stage in their receiver was budgeted in kelvin, using k_B T Δf per stage. The extra 3.4 K stood out because every other kelvin was calibrated. Nyquist's 1928 thermodynamic argument, worked out to solve a preamp noise problem, had by 1965 become the ledger every radio astronomer keeps, and the ledger's residual weighed the early universe. Penzias and Wilson shared the 1978 Nobel; Dicke and Peebles, who had told them what they had found, did not. The instrument-level formula and the cosmological discovery run through the same coth."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A radio-astronomy engineer characterizes a new cryogenic low-noise amplifier at a physical temperature of 4 K and an operating frequency of 1.4 GHz (the neutral-hydrogen line). She measures an input-referred voltage noise across a matched 50 Ω source that corresponds to a noise temperature T_n = 6 K. What does this measurement tell us, and how does the Johnson-Nyquist / Callen-Welton framework let us interpret it?",
+    "options": [
+      "The measured T_n = 6 K is impossible because Nyquist's formula strictly implies T_n = T_physical, so a 4 K amplifier cannot have T_n above 4 K.",
+      "The measurement is dominated by shot noise at 1.4 GHz, and Johnson-Nyquist plays no role in this regime; the amplifier's noise temperature reflects the discreteness of the DC bias current, not thermal fluctuations of the input impedance.",
+      "T_n = 6 K is the noise power the amplifier delivers to its output, expressed as the physical temperature of a fictitious matched resistor. At 1.4 GHz and T = 4 K, ℏω / k_B T ≈ 0.017, so the classical Nyquist form S_V = 4 k_B T R Δf still holds well and the input impedance itself contributes 4 K of noise temperature. The extra 2 K comes from the amplifier's own internal noise (transistor shot noise, gate current, thermal noise in the parasitic resistances) referred back to the input. The measurement tells us how much noise the amplifier adds beyond the fundamental thermodynamic floor. The 3.5 K residual Penzias and Wilson could not budget out in 1964 was exactly this kind of excess, and its physical source turned out to be the CMB.",
+      "The measurement reports the amplifier temperature in equivalent radiation, using Wien's law λ_max = b/T; at T = 6 K, λ_max ≈ 480 μm, in the far infrared, and this is where the amplifier's dominant noise contribution lies."
+    ],
+    "correctIndex": 2,
+    "explanation": "Option C is right. Noise temperature T_n is defined by P_noise = k_B T_n Δf, and it is a bookkeeping variable that lets every stage of a receiver be added on a single kelvin ledger. The physical temperature of the amplifier and its noise temperature are two different things. At 1.4 GHz and T = 4 K, ℏω / k_B T ≈ 0.017, so the classical Nyquist limit is still exact to parts in 10⁴: the source resistor's own thermal noise contributes 4 K to T_n, and the extra 2 K is the amplifier's added noise (transistor and gate contributions, referred to the input). Option A confuses the amplifier's physical temperature with its noise temperature; the whole point of T_n is that an amplifier can add noise from mechanisms other than its own thermal impedance and thereby have T_n > T_physical. Option B is wrong on both counts: shot noise from a DC bias current does contribute to amplifier noise, but Johnson-Nyquist thermal noise from the input source impedance and from the amplifier's internal resistive elements is the dominant contribution at 1.4 GHz, and both mechanisms are budgeted in the same kelvin ledger. Option D confuses noise temperature (an equivalent thermal noise power) with the blackbody temperature that would peak at 1.4 GHz through Wien's law: those are completely different applications of the temperature variable. The unifying observation is that Nyquist's 1928 argument gave engineers a way to add unrelated noise mechanisms on a single line, and Penzias and Wilson used exactly this bookkeeping to isolate a 3.4 K residual whose physical source lay 13 billion years upstream of Holmdel."
+  },
+  "suggestedNodes": [
+    {
+      "id": "fluctuation_dissipation",
+      "label": "FDT",
+      "subtitle": "Callen-Welton",
+      "edgeType": "extends"
+    },
+    {
+      "id": "noise_temperature",
+      "label": "Noise temp.",
+      "subtitle": "P = k_B T_n Δf",
+      "edgeType": "applied"
+    },
+    {
+      "id": "equipartition",
+      "label": "Equipartition",
+      "subtitle": "½ k_B T per DOF",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-10T07:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 24,
+    "previouslyMastered": [
+      "shot_noise",
+      "blackbody",
+      "cmb"
+    ]
+  }
+}

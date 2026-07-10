@@ -488,5 +488,12 @@
     "subtitle": "√(2eIΔf)",
     "date": "2026-07-09",
     "estimatedReadingMinutes": 23
+  },
+  {
+    "slug": "2026-07-10-johnson-nyquist-noise",
+    "title": "Johnson-Nyquist noise: the resistor hiss that thermodynamics alone predicts",
+    "subtitle": "4 k_B T R Δf",
+    "date": "2026-07-10",
+    "estimatedReadingMinutes": 24
   }
 ]
