@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); min-height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 40px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 84px; text-align: right;
+}
+#readout {
+  display: flex; flex-wrap: wrap; gap: 10px 20px; margin-top: 10px;
+  padding: 10px 12px; background: var(--bg-raised);
+  border: 1px solid var(--border);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+}
+#readout .item { min-width: 130px; }
+#readout .k { color: var(--text-muted); }
+#readout .v { color: var(--text); }
+</style>
+</head>
+<body>
+<div id="viz" style="padding: 8px 10px;">
+  <svg id="scope" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
+    <defs>
+      <clipPath id="clipTrace"><rect x="60" y="30" width="640" height="220"/></clipPath>
+    </defs>
+    <rect x="60" y="30" width="640" height="220" fill="var(--bg-raised)" stroke="var(--border)"/>
+    <line x1="60" y1="140" x2="700" y2="140" stroke="var(--border-strong)" stroke-dasharray="3,3"/>
+    <g clip-path="url(#clipTrace)">
+      <rect id="sigmaBand" fill="var(--accent-soft)" opacity="0.22"/>
+      <path id="trace" fill="none" stroke="var(--accent)" stroke-width="1.3"/>
+    </g>
+    <text x="56" y="34" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--text-muted)" id="yTop">+3σ</text>
+    <text x="56" y="90" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--text-muted)" id="yPlus1">+σ</text>
+    <text x="56" y="144" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--text-muted)">0</text>
+    <text x="56" y="197" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--text-muted)" id="yMinus1">−σ</text>
+    <text x="56" y="252" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--text-muted)" id="yBot">−3σ</text>
+    <text x="20" y="145" text-anchor="middle" font-family="Source Serif 4, serif" font-style="italic" font-size="12" fill="var(--text-muted)" transform="rotate(-90 20 145)">v(t)</text>
+    <line x1="60" y1="250" x2="700" y2="250" stroke="var(--border-strong)"/>
+    <text x="60" y="268" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--text-muted)">0</text>
+    <text x="700" y="268" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--text-muted)" text-anchor="end">20 ms</text>
+    <text x="380" y="285" text-anchor="middle" font-family="Source Serif 4, serif" font-style="italic" font-size="12" fill="var(--text-muted)">time t (through Δf = 10 kHz bandwidth-limiting amplifier)</text>
+    <text x="380" y="305" text-anchor="middle" font-family="Source Serif 4, serif" font-style="italic" font-size="11" fill="var(--text-ghost)">shaded band: ±V_rms = ±√(4 k_B T R Δf)</text>
+  </svg>
+  <div class="viz-slider-row">
+    <label for="tslider">log T</label>
+    <input type="range" id="tslider" min="0.6" max="3.5" step="0.02" value="2.477">
+    <span class="value" id="tval">300 K</span>
+  </div>
+  <div class="viz-slider-row">
+    <label for="rslider">log R</label>
+    <input type="range" id="rslider" min="1" max="7" step="0.02" value="4">
+    <span class="value" id="rval">10 kΩ</span>
+  </div>
+  <div id="readout">
+    <div class="item"><span class="k">T:</span> <span class="v" id="Tout">–</span></div>
+    <div class="item"><span class="k">R:</span> <span class="v" id="Rout">–</span></div>
+    <div class="item"><span class="k">Δf:</span> <span class="v">10 kHz</span></div>
+    <div class="item"><span class="k">V_rms:</span> <span class="v" id="Vout">–</span></div>
+    <div class="item"><span class="k">4 k_B T R Δf:</span> <span class="v" id="V2out">–</span></div>
+  </div>
+  <div class="viz-caption">Thermal-noise voltage across a resistor R at temperature T, viewed through a 10 kHz bandwidth. The two sliders sweep T from 4 K (liquid helium) to about 3000 K (a warm cathode), and R from 10 Ω to 10 MΩ. The vertical axis is auto-scaled to ±3 V_rms so the trace shape stays comparable across settings; the ±3σ, ±σ, and 0 tick labels report the actual voltage in fV, pV, nV, μV, or mV. Watch how the axis labels change (V_rms scales as √R and as √T) even though the trace itself looks statistically identical. Cool from 300 K to 4 K and the axis labels drop by about a factor of 8.7; boost R by a decade and they climb by √10.</div>
+</div>
+<script>
+(function() {
+  var kB = 1.381e-23;
+  var df = 1e4;
+  var N = 320;
+  var buffer = new Array(N).fill(0);
+
+  function gauss() {
+    var u = 0, v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+
+  function fmtV(v) {
+    var a = Math.abs(v);
+    if (a >= 1e-3) return (v * 1e3).toFixed(2) + ' mV';
+    if (a >= 1e-6) return (v * 1e6).toFixed(2) + ' μV';
+    if (a >= 1e-9) return (v * 1e9).toFixed(2) + ' nV';
+    if (a >= 1e-12) return (v * 1e12).toFixed(2) + ' pV';
+    if (a >= 1e-15) return (v * 1e15).toFixed(2) + ' fV';
+    return (v * 1e18).toFixed(2) + ' aV';
+  }
+
+  function fmtV2(v2) {
+    var a = Math.abs(v2);
+    if (a >= 1e-18) return (v2 * 1e18).toFixed(2) + ' aV²';
+    if (a >= 1e-24) return (v2 * 1e24).toFixed(2) + ' zV²';
+    if (a >= 1e-30) return (v2 * 1e30).toFixed(2) + ' yV²';
+    return v2.toExponential(2) + ' V²';
+  }
+
+  function fmtR(r) {
+    if (r >= 1e6) return (r / 1e6).toFixed(2) + ' MΩ';
+    if (r >= 1e3) return (r / 1e3).toFixed(2) + ' kΩ';
+    return r.toFixed(1) + ' Ω';
+  }
+
+  function fmtT(t) {
+    if (t >= 100) return t.toFixed(0) + ' K';
+    if (t >= 10) return t.toFixed(1) + ' K';
+    return t.toFixed(2) + ' K';
+  }
+
+  var tS = document.getElementById('tslider');
+  var rS = document.getElementById('rslider');
+  var tV = document.getElementById('tval');
+  var rV = document.getElementById('rval');
+  var Tout = document.getElementById('Tout');
+  var Rout = document.getElementById('Rout');
+  var Vout = document.getElementById('Vout');
+  var V2out = document.getElementById('V2out');
+  var yTop = document.getElementById('yTop');
+  var yBot = document.getElementById('yBot');
+  var yP1 = document.getElementById('yPlus1');
+  var yM1 = document.getElementById('yMinus1');
+  var trace = document.getElementById('trace');
+  var band = document.getElementById('sigmaBand');
+
+  var xL = 60, xR = 700, yT_ = 30, yB_ = 250;
+  var xW = xR - xL, yH = yB_ - yT_;
+  var yMidPx = (yT_ + yB_) / 2;
+  var pxPerSigma = yH / 6;
+
+  band.setAttribute('x', xL);
+  band.setAttribute('y', yMidPx - pxPerSigma);
+  band.setAttribute('width', xW);
+  band.setAttribute('height', 2 * pxPerSigma);
+
+  function updatePars() {
+    var T = Math.pow(10, parseFloat(tS.value));
+    var R = Math.pow(10, parseFloat(rS.value));
+    var V2 = 4 * kB * T * R * df;
+    var Vrms = Math.sqrt(V2);
+    tV.textContent = fmtT(T);
+    rV.textContent = fmtR(R);
+    Tout.textContent = fmtT(T);
+    Rout.textContent = fmtR(R);
+    Vout.textContent = fmtV(Vrms);
+    V2out.textContent = fmtV2(V2);
+    yTop.textContent = '+' + fmtV(3 * Vrms);
+    yBot.textContent = '−' + fmtV(3 * Vrms);
+    yP1.textContent = '+' + fmtV(Vrms);
+    yM1.textContent = '−' + fmtV(Vrms);
+  }
+
+  var frameCounter = 0;
+  var samplesPerFrame = 2;
+
+  function render() {
+    frameCounter++;
+    for (var s = 0; s < samplesPerFrame; s++) {
+      for (var i = 0; i < N - 1; i++) buffer[i] = buffer[i + 1];
+      buffer[N - 1] = gauss();
+    }
+    var d = '';
+    for (var i = 0; i < N; i++) {
+      var x = xL + (i / (N - 1)) * xW;
+      var y = yMidPx - buffer[i] * pxPerSigma;
+      if (y < yT_) y = yT_;
+      if (y > yB_) y = yB_;
+      d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1);
+    }
+    trace.setAttribute('d', d);
+    requestAnimationFrame(render);
+  }
+
+  tS.addEventListener('input', updatePars);
+  rS.addEventListener('input', updatePars);
+
+  updatePars();
+  render();
+})();
+</script>
+</body>
+</html>
