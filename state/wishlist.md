@@ -26,7 +26,6 @@
 # auto-suggested 2026-07-05 from schottky-effect
 
 # auto-suggested 2026-07-09 from shot-noise
-Fractional quantum Hall effect — Laughlin's 1983 wavefunction for the ν = 1/3 plateau in a two-dimensional electron gas under strong magnetic field, quasiparticles of charge e/3 as excitations of a strongly correlated liquid built from electrons alone, the state of matter whose fractional charge Saminadayar-Glattli and de-Picciotto-Reznikov-Heiblum measured directly with shot noise in 1997
 Poisson process — the continuous-time counting process of independent events at rate r̄, with Poisson-distributed counts in every window and exponentially distributed inter-arrival times, the mathematical scaffolding under shot noise, radioactive decay, photon counting, and every queueing-theory result from Erlang's 1909 Copenhagen telephone-traffic paper onward
 
 # auto-suggested 2026-05-17 from schrodinger-equation
@@ -245,3 +244,8 @@ Depletion region — the space-charge layer of ionized dopants at every junction
 Fluctuation-dissipation theorem — Callen and Welton 1951, the coth-form generalization of Nyquist to any linear dissipative response and to the quantum regime, S_V(ω) = 2 Re[Z(ω)] ℏω coth(ℏω/2kT), the theorem that hands one formula to Brownian motion, Johnson noise, and vacuum-zero-point fluctuations at the same time
 Noise temperature — P = k_B T_n Δf, the kelvin-ledger accounting variable that lets an antenna, a preamp, a mixer, and a spectrometer all add on the same line, Friis's 1944 cascade formula T_sys = T_1 + T_2/G_1 + T_3/(G_1 G_2) + ..., and the tool Penzias and Wilson used to isolate 3.4 K of unaccountable excess at Holmdel
 Equipartition theorem — ½ k_B T of energy per quadratic degree of freedom, Boltzmann's 1876 classical-statistical-mechanics theorem, the identity Nyquist used without apology and that fails exactly where the Planck occupancy 1/(exp(ℏω/kT) − 1) departs from k_B T/ℏω, marking the boundary between classical and quantum noise
+
+# auto-suggested 2026-07-11 from fractional-quantum-hall-effect
+Integer quantum Hall effect — Klaus von Klitzing's 1980 discovery of R_xy = h/(νe²) plateaux at integer ν in a silicon MOSFET, the topological gap argument that makes the plateaux exact to a part in 10⁹ regardless of sample geometry or disorder, and the reason the ohm has been defined by K_J and R_K since the 1990 CIPM revisions
+Anyons — Leinaas and Myrheim 1977 plus Wilczek 1982, the observation that indistinguishable particles in two dimensions can carry any exchange phase e^(iθ) between the bosonic and fermionic extremes, and the fractional statistics that Arovas-Schrieffer-Wilczek 1984 pinned to the Laughlin quasiholes at θ = π/m
+Composite fermions — Jainendra Jain 1989, the mean-field construction that attaches two magnetic flux quanta to each electron and turns the strongly correlated ν = p/(2p+1) fractional-quantum-Hall states into effectively integer-filled composite-fermion Landau levels in a reduced effective field

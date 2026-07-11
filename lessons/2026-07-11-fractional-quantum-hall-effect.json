@@ -1,0 +1,210 @@
+{
+  "slug": "2026-07-11-fractional-quantum-hall-effect",
+  "title": "Fractional quantum Hall effect: the third of an electron that lived inside a strong magnet",
+  "node": {
+    "id": "fractional_quantum_hall",
+    "label": "Fractional QHE",
+    "subtitle": "ν = 1/3 plateau"
+  },
+  "intro": "In 1982, Daniel Tsui and Horst Störmer at Bell Labs cranked the magnetic field on their cleanest gallium-arsenide sample past 15 Tesla and found a new plateau in the Hall resistance where none should have been. It sat at exactly three times the fundamental von-Klitzing quantum h/e², a fractional filling of the lowest Landau level, a place where the single-particle picture ran out of Landau levels to fill and had no gap left to explain the plateau. Robert Laughlin closed the gap in a single 1983 paper by writing down a many-body wavefunction, checking that its excitations carried exactly one third of an electron charge, and reducing the whole calculation to a classical two-dimensional plasma. Fifteen years later two French and Israeli groups aimed the shot-noise technique from the last lesson at Laughlin's fractional quasiparticles and read off q = e/3 directly.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The Hall bar, von Klitzing's plateaus, and the 1982 surprise",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The classical Hall effect is Edwin Hall's 1879 Johns Hopkins thesis result: push a current I sideways through a thin conductor sitting in a perpendicular magnetic field B, and a transverse voltage V_H opens up because the moving carriers of density n and charge e get bent by the Lorentz force until an electric field builds up strong enough to cancel the deflection. The transverse (or Hall) resistance R_xy = V_H / I comes out proportional to B and inversely proportional to n. R_xy grows linearly with B, forever, and the slope reads off the carrier density directly."
+        },
+        {
+          "type": "math",
+          "tex": "R_{xy} \\;=\\; \\frac{B}{n\\,e}",
+          "display": true,
+          "caption": "R_xy is the transverse Hall resistance. B is the applied magnetic field perpendicular to the sample. n is the carrier density (electrons per unit area for a two-dimensional sheet). e is the electron charge."
+        },
+        {
+          "type": "p",
+          "text": "In February 1980, Klaus von Klitzing was measuring R_xy on a silicon MOSFET (a metal-oxide-semiconductor field-effect transistor, whose gate voltage pins the electrons into a two-dimensional sheet a few nanometres thick at the silicon-oxide interface) at 1.5 K in the Grenoble High Magnetic Field Laboratory. When he pushed B past 15 Tesla, R_xy did not grow linearly. It grew in perfectly flat stair steps, plateaus of B width separated by sharp risers. On every plateau, R_xy was exactly h / (ν e²), with ν an integer and h Planck's constant, reproducible to a part in a million and independent of which sample, which laboratory, which piece of the country the silicon had come from. Nobel Prize 1985."
+        },
+        {
+          "type": "p",
+          "text": "In November 1982, Daniel Tsui and Horst Störmer at Bell Labs redid von Klitzing's measurement on a much cleaner sample: a modulation-doped gallium-arsenide / aluminum-gallium-arsenide heterostructure (two dissimilar crystals grown atomically flat against each other, so the electrons live in a plane at the interface with almost no impurity scattering), grown by Arthur Gossard, cooled to 480 mK in a dilution refrigerator (the standard sub-kelvin cryostat that pumps on a mixture of helium-3 in helium-4), taken to the Bitter magnet at MIT for fields up to 20 Tesla. They saw von Klitzing's integer plateaus. Then, at B = 15.4 T, they saw one more. R_xy was flat at 3 h / e², to half a percent. In the same window R_xx (the longitudinal resistance, the dissipative part) dropped nearly to zero. A new plateau, at a fractional filling ν = 1/3 of the lowest Landau level. There were not enough integer levels to explain it."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Filling factor, Landau levels, and why 1/3 could not be a single-electron effect",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "To see the puzzle sharply we need one number that appears everywhere in this subject. A two-dimensional electron gas in a magnetic field B has its kinetic energy quantized into Landau levels (the harmonic-oscillator spectrum of a charged particle in a uniform magnetic field, discovered by Lev Landau in 1930), each level packing a maximum number of one-electron orbital states per unit area equal to the flux density B divided by the flux quantum Φ₀ = h/e (the smallest unit of magnetic flux that returns the phase of an electron wavefunction to itself around a loop). Call that maximum orbital density n_Φ."
+        },
+        {
+          "type": "math",
+          "tex": "n_{\\Phi} \\;=\\; \\frac{B}{\\Phi_{0}} \\;=\\; \\frac{eB}{h}",
+          "display": true,
+          "caption": "n_Φ is the number of one-electron orbital states per unit area in each Landau level. B is the magnetic field. Φ₀ = h/e is the magnetic flux quantum. e is the electron charge. h is Planck's constant."
+        },
+        {
+          "type": "p",
+          "text": "The filling factor ν is the ratio of the actual electron density n to this orbital density, ν = n / n_Φ = n h / (e B). It says, on average, how many Landau-level orbital states are occupied per electron. At ν = 1 the lowest Landau level is exactly full. At ν = 2 the two lowest are full. And the Hall resistance on those plateaus reads R_xy = h / (ν e²) = B / (n e), which is precisely the classical formula evaluated at the special fields where ν is an integer. Robert Laughlin had argued in a Physics Today 1981 note that the plateaus flatten out around those integer points because of an energy gap: the next electron you would have to add has to sit in the next Landau level, an energy ℏ ω_c = eB / m* above the last one."
+        },
+        {
+          "type": "p",
+          "text": "The 1982 Bell Labs plateau, however, sat at ν = 1/3. The lowest Landau level was only a third full. The single-particle spectrum at that filling has no gap: every one of the remaining two-thirds of the orbitals could be moved into with no energy cost. Non-interacting electrons at ν = 1/3 must be a metal, dissipative, no plateau. The fact that a plateau appeared meant electron-electron interaction had opened a gap that non-interacting theory did not have. That was the puzzle Laughlin sat down to explain in the autumn of 1982."
+        },
+        {
+          "type": "p",
+          "text": "The stakes were much bigger than one plateau. If the interaction could crystallize the ν = 1/3 filling into a gapped incompressible state, there might be more of them. Within a year Tsui and Störmer had found plateaus at ν = 2/5, 3/7, 4/9, and by 1985 there were fifteen of them. The lowest Landau level was not a featureless sea of orbitals but a densely quantized ladder of correlated electronic phases, one for every odd denominator ν = p/q, and Laughlin's ν = 1/3 was the ground floor."
+        }
+      ],
+      "quiz": {
+        "question": "At the ν = 1/3 plateau, why does the single-particle picture fail to predict a gap?",
+        "options": [
+          "Because at ν = 1/3 the lowest Landau level is only one-third occupied, so many empty orbitals sit at the same one-particle energy and no gap separates the ground state from the next excitation.",
+          "Because the magnetic field at ν = 1/3 is too weak to resolve individual Landau levels.",
+          "Because at ν = 1/3 the electrons occupy the second Landau level and its degeneracy is different.",
+          "Because gallium-arsenide has too many impurities at ν = 1/3 to allow a gap to form."
+        ],
+        "correctIndex": 0,
+        "explanation": "Non-interacting electrons at ν = 1/3 sit in a partly filled lowest Landau level whose remaining orbitals are all at the same energy, so shifting one electron to an unoccupied orbital costs nothing and no plateau can form. The gap has to come from the electron-electron Coulomb interaction, which is exactly what Laughlin's wavefunction supplied."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Laughlin's ansatz: many-body zeros that keep electrons apart",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Laughlin's move in 1983 was one that first-principles quantum mechanicians rarely permit themselves: instead of solving the many-body Schrödinger equation, he WROTE DOWN a candidate ground-state wavefunction, checked it had the right symmetries, and then compared its energy against every other plausible ansatz he could think of. His candidate turned out to be lower in energy than any competitor and to have precisely the ν = 1/m filling factor observed. Naming z_j = x_j + i y_j the complex-plane position of the j-th electron in units of the magnetic length ℓ_B = √(ℏ / eB), and m a positive integer:"
+        },
+        {
+          "type": "math",
+          "tex": "\\Psi_{m}(z_{1},\\dots,z_{N}) \\;=\\; \\prod_{j<k} (z_{j}-z_{k})^{m} \\;\\cdot\\; \\exp\\!\\left(-\\tfrac{1}{4}\\textstyle\\sum_{j} |z_{j}|^{2}\\right)",
+          "display": true,
+          "caption": "Ψ_m is Laughlin's N-electron trial wavefunction on the lowest Landau level. z_j = x_j + i y_j is the complex coordinate of the j-th electron in units of the magnetic length. The product runs over every pair j < k. m is the exponent that fixes the filling: m odd for antisymmetric electrons, with m = 1 giving the fully filled lowest Landau level and m = 3 giving the ν = 1/3 state. The Gaussian factor is the ground-state envelope of a single electron on the lowest Landau level."
+        },
+        {
+          "type": "p",
+          "text": "Three properties fall straight out of this expression. First, whenever two electrons approach each other, z_j → z_k, the wavefunction vanishes as (z_j - z_k)^m, a triple zero for m = 3 rather than the single zero forced by antisymmetry alone (a Slater determinant is the m = 1 wavefunction, the fully filled lowest Landau level, and it has one zero per pair). At m = 3 the electrons avoid each other three times more aggressively than in a free Fermi sea, and this is where the interaction energy is saved. Second, the highest power of any single z_j inside the polynomial is m (N − 1), which fixes the maximum orbital angular momentum an electron can carry and therefore the sample area A, giving a filling ν = N / (A n_Φ) = 1/m exactly. Third, m must be odd, or antisymmetry under electron exchange is violated."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-11-fractional-quantum-hall-effect.html",
+          "height": 520,
+          "caption": "A Metropolis sampler drawing electron positions from |Ψ_m|² in a small disk. Slide m from 1 (fully filled lowest Landau level, ν = 1) to 3 (Laughlin's ν = 1/3 state) to 5 (Laughlin's ν = 1/5): each electron opens a wider correlation hole around itself as m grows."
+        },
+        {
+          "type": "p",
+          "text": "The step that finished the calculation was noticing that |Ψ_m|² can be rewritten as the Boltzmann weight of a classical two-dimensional one-component plasma (a fictitious gas of particles of charge √m in a uniform neutralizing background, interacting through the two-dimensional logarithmic Coulomb potential −log|z_j − z_k|), at inverse temperature β = 1. Everything computational chemistry and plasma physics knew about screening in the two-dimensional one-component plasma applied to the wavefunction. In particular the plasma was known to be a uniform incompressible liquid at exactly the density that makes ν = 1/m, closing the argument that Ψ_m describes an incompressible state whose bulk density is pinned and whose response to adding one flux quantum can be calculated exactly."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Quasiholes carry charge e/m",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "With the ground state pinned down, Laughlin asked what a low-lying excitation looks like. He posed the question through a thought experiment. Thread a fictitious thin solenoid through the plane at point z₀ and adiabatically ramp its magnetic flux from zero to one flux quantum Φ₀ = h/e. Gauge invariance says the state after this ramp must be another eigenstate of the interacting Hamiltonian in the same original field B, because the flux quantum leaves the electron phases invariant. Laughlin wrote the resulting state explicitly. Each electron picks up one extra vanishing zero at z₀, and the many-body wavefunction becomes:"
+        },
+        {
+          "type": "math",
+          "tex": "\\Psi_{\\mathrm{qh}}(z_{0}) \\;=\\; \\prod_{j=1}^{N} (z_{j} - z_{0}) \\;\\cdot\\; \\Psi_{m}",
+          "display": true,
+          "caption": "Ψ_qh is Laughlin's quasihole state built above the ν = 1/m ground state Ψ_m. z_0 is the position of the inserted flux quantum. The product runs over all N electrons. Each factor (z_j - z_0) vanishes when the j-th electron sits at z_0, so all N electrons are pushed away from z_0, leaving a charge deficit there."
+        },
+        {
+          "type": "p",
+          "text": "The plasma analogy makes the charge deficit sharp. Inserting a flux quantum at z₀ is equivalent, in the plasma picture, to adding an external test charge of +1 at z₀ to the same two-dimensional plasma. That test charge draws a screening cloud around itself of magnitude −1 in plasma units, and translating back to real electron charge (each plasma charge unit is √m and its density fixes the electron density) the screening cloud carries exactly one m-th of an electron charge. The deficit inside a small disk around z₀ is:"
+        },
+        {
+          "type": "math",
+          "tex": "q_{\\mathrm{qh}} \\;=\\; -\\frac{e}{m}",
+          "display": true,
+          "caption": "q_qh is the electric charge of a Laughlin quasihole. e is the electron charge. m is the odd integer that fixes the filling ν = 1/m. For m = 3 the quasihole carries −e/3, a third of an electron charge."
+        },
+        {
+          "type": "p",
+          "text": "For m = 3 the answer is one third of an electron charge. Not a mean-field averaging, not a bound state of three electrons splitting evenly along their symmetry axis: an honest-to-god eigenstate of the interacting many-body Hamiltonian carrying charge e/3. The excitation also carries a fractional statistics, neither Bose nor Fermi, discovered by Halperin and Arovas-Schrieffer-Wilczek in 1984, but the fractional charge was the sharpest, most operationally direct prediction. Duncan Haldane in 1983 and Jainendra Jain in 1989 built hierarchies of daughter states at ν = 2/5, 3/7, 4/9 with quasiparticle charges e/5, e/7, e/9. The ν = 1/3 quasihole remained the paradigm case, and its charge waited fifteen years for a direct measurement."
+        }
+      ],
+      "quiz": {
+        "question": "What role does the plasma analogy play in Laughlin's argument that a quasihole carries charge e/m?",
+        "options": [
+          "|Ψ_m|² is the Boltzmann weight of a classical two-dimensional plasma at β = 1, and inserting a flux quantum at z₀ is equivalent to adding a test charge that the plasma screens with a cloud of exactly 1/m of a plasma charge, translating back to a real charge deficit of e/m.",
+          "The plasma analogy replaces the wavefunction with a classical model whose ν = 1/m ground state has literal charge-e/m ions in it, so the wavefunction inherits the same ions.",
+          "The plasma analogy shows that quasiholes are collective plasma oscillations at frequency ω_p, and their charge is read off ω_p by the plasma frequency formula.",
+          "The plasma analogy proves that the wavefunction is exact, and this exactness alone forces the excitations to have fractional charge."
+        ],
+        "correctIndex": 0,
+        "explanation": "Laughlin noticed that |Ψ_m|² has the same functional form as the Boltzmann weight of a two-dimensional one-component plasma of charge-√m particles at inverse temperature 1. Adding one flux quantum at z₀ acts on that fictitious plasma as an external test charge +1, and standard plasma-screening arguments give a screening cloud of magnitude 1/m in plasma units, translating back to a real charge deficit of exactly e/m in the electronic system."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Reading e/3 off shot noise at Saclay and the Weizmann in 1997",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "For fourteen years, the fractional charge was a theoretical claim that everyone in condensed-matter physics believed and no one had directly touched. You cannot pull a Laughlin quasihole out of a sample and weigh its charge on the outside: the quasihole is a many-body excitation that only exists inside the correlated ν = 1/3 liquid, and pulling it out means annihilating it against a real hole in the Fermi sea outside. You need a probe that reads out the charge of a carrier without extracting it, while it is still tunneling as itself. That probe was already sitting on the shelf: shot noise."
+        },
+        {
+          "type": "p",
+          "text": "From the shot-noise lesson, the current-noise power spectral density of a Poisson stream of independent carriers of charge q carrying mean current I is S_I = 2 q I. The prefactor is the effective charge of a single carrier, and the mean current is the mean transport rate. Take a ν = 1/3 sample and constrict it with a quantum point contact (a narrow gate-defined channel, comparable in width to the magnetic length, that partly reflects the fractional-quantum-Hall edge state), so that the current across the constriction consists of Laughlin quasiholes tunneling one at a time from one edge of the sample to the other."
+        },
+        {
+          "type": "math",
+          "tex": "S_{I} \\;=\\; 2\\, q\\, I \\;=\\; 2\\,\\frac{e}{3}\\,I",
+          "display": true,
+          "caption": "S_I is the low-frequency current-noise power spectral density in the weak-tunneling limit. q is the charge of a single tunneling carrier. I is the mean tunneling current. At the ν = 1/3 plateau, if Laughlin was right, q equals e/3, so the shot noise across the quantum point contact is a third of the value a normal electron beam of the same mean current would produce."
+        },
+        {
+          "type": "p",
+          "text": "Two groups did the experiment in 1997. Laurent Saminadayar, Christian Glattli, Yong Jin, and Bernard Étienne at the Laboratoire de Photonique et de Nanostructures near Saclay submitted their measurement to Physical Review Letters on 24 March. Rafi de-Picciotto, Michael Reznikov, Mordehai Heiblum, Vladimir Umansky, Gennady Bunin, and Diana Mahalu at the Weizmann Institute submitted theirs to Nature on 5 May. Both used a modulation-doped gallium-arsenide sample driven onto the ν = 1/3 plateau at about 90 mK, pinched off by a split-gate quantum point contact to weak transmission across the fractional edge, and measured the low-frequency current-noise spectral density at roughly 4 kHz where flicker noise had died away and the amplifier still had gain."
+        },
+        {
+          "type": "p",
+          "text": "Both fits landed on q = 0.32 ± 0.02 e (Saclay) and q = 0.34 ± 0.06 e (Weizmann), with the theoretical prediction e/3 = 0.333 e sitting inside every error bar. Same GaAs, same fractional filling, same shot-noise formula. The number was extracted twice, on two continents, three months apart, and both times it read one third of an electron. The plasma analogy had been correct. The charge had been fractional. And the same shot-noise slope that Schottky had derived in 1918 to make sense of a vacuum-tube crackle had, seventy-nine years later, weighed a piece of a single electron."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Why can shot noise measure the fractional charge of a Laughlin quasiparticle when direct extraction cannot?",
+    "options": [
+      "Shot noise is proportional to the charge q of each independent tunneling carrier, S_I = 2 q I, so a stream of e/3 quasiholes tunneling across a quantum point contact produces exactly a third of the noise that a normal-electron stream at the same mean current would, without ever pulling a quasihole into the outside Fermi sea.",
+      "Shot noise is a purely classical effect that averages over the many-body correlations, so it reads out only the mean charge density and returns e/3 mechanically.",
+      "Shot noise measures the quasiparticle's charge because the Fano factor F equals 1/m for a fractionally filled Landau level regardless of any tunneling geometry.",
+      "Shot noise measures e/3 because at ν = 1/3 the electron beam splits into three independent Poisson streams whose noise adds coherently to three times the classical value."
+    ],
+    "correctIndex": 0,
+    "explanation": "The shot-noise formula S_I = 2 q I picks up the charge of the individual carriers producing the current, not the electrons of the surrounding Fermi sea. If the current across a quantum point contact consists of Laughlin quasiholes tunneling across the ν = 1/3 fluid, each tunneling event transfers e/3, and the measured noise is exactly a third of what an electron stream at the same mean current would give. The 1997 Saclay and Weizmann experiments both landed within their error bars of q = e/3."
+  },
+  "checkInAfter": [1, 3],
+  "suggestedNodes": [
+    {
+      "id": "integer_quantum_hall",
+      "edgeType": "extends"
+    },
+    {
+      "id": "anyons",
+      "edgeType": "related"
+    },
+    {
+      "id": "composite_fermions",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "estimatedReadingMinutes": 24,
+    "generatedBy": "routine",
+    "generatedAt": "2026-07-11T07:00:00Z"
+  }
+}
