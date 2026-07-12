@@ -719,6 +719,16 @@
       "createdAt": "2026-07-11T07:00:00Z",
       "col": 0,
       "row": 36
+    },
+    {
+      "id": "poisson_process",
+      "label": "Poisson proc.",
+      "subtitle": "Var = mean",
+      "state": "available",
+      "lesson": "2026-07-12-poisson-process",
+      "createdAt": "2026-07-12T07:00:00Z",
+      "col": 1,
+      "row": 36
     }
   ],
   "edges": [
@@ -1700,6 +1710,16 @@
     {
       "from": "fractional_quantum_hall",
       "to": "fermi_dirac",
+      "kind": "related"
+    },
+    {
+      "from": "poisson_process",
+      "to": "shot_noise",
+      "kind": "applied"
+    },
+    {
+      "from": "poisson_process",
+      "to": "johnson_nyquist_noise",
       "kind": "related"
     }
   ]

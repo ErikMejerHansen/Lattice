@@ -26,7 +26,6 @@
 # auto-suggested 2026-07-05 from schottky-effect
 
 # auto-suggested 2026-07-09 from shot-noise
-Poisson process — the continuous-time counting process of independent events at rate r̄, with Poisson-distributed counts in every window and exponentially distributed inter-arrival times, the mathematical scaffolding under shot noise, radioactive decay, photon counting, and every queueing-theory result from Erlang's 1909 Copenhagen telephone-traffic paper onward
 
 # auto-suggested 2026-05-17 from schrodinger-equation
 Born rule — |ψ|² as a probability density on configuration space, the interpretation Schrödinger never accepted and that survived him anyway
@@ -249,3 +248,8 @@ Equipartition theorem — ½ k_B T of energy per quadratic degree of freedom, Bo
 Integer quantum Hall effect — Klaus von Klitzing's 1980 discovery of R_xy = h/(νe²) plateaux at integer ν in a silicon MOSFET, the topological gap argument that makes the plateaux exact to a part in 10⁹ regardless of sample geometry or disorder, and the reason the ohm has been defined by K_J and R_K since the 1990 CIPM revisions
 Anyons — Leinaas and Myrheim 1977 plus Wilczek 1982, the observation that indistinguishable particles in two dimensions can carry any exchange phase e^(iθ) between the bosonic and fermionic extremes, and the fractional statistics that Arovas-Schrieffer-Wilczek 1984 pinned to the Laughlin quasiholes at θ = π/m
 Composite fermions — Jainendra Jain 1989, the mean-field construction that attaches two magnetic flux quanta to each electron and turns the strongly correlated ν = p/(2p+1) fractional-quantum-Hall states into effectively integer-filled composite-fermion Landau levels in a reduced effective field
+
+# auto-suggested 2026-07-12 from poisson-process
+Exponential distribution — λe^(−λt), the memoryless inter-arrival wait of a Poisson process and the unique continuous distribution on [0, ∞) with P(T > s + t | T > s) = P(T > t), the Markov-property enabler that makes every Poisson-driven system a birth-death chain and every reliability model that uses it a constant-hazard idealization
+Compound Poisson process — arrivals from a Poisson process at rate λ each carrying an independent random mark drawn from some fixed distribution G (jump size, insurance-claim amount, financial-market shock), the Cramér 1930 collective-risk foundation and the jump component of every Lévy-process pricing model since Merton 1976
+Hawkes process — Alan Hawkes 1971, the self-exciting extension in which each arrival transiently boosts the intensity of future arrivals, the branching-process reformulation that turned it into the dominant model for earthquake aftershocks, high-frequency trade arrivals, and social-media cascades where past events genuinely do inform future rates

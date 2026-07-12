@@ -502,5 +502,12 @@
     "subtitle": "ν = 1/3 plateau",
     "date": "2026-07-11",
     "estimatedReadingMinutes": 24
+  },
+  {
+    "slug": "2026-07-12-poisson-process",
+    "title": "The Poisson process: independence, exponential waits, and the law of small numbers",
+    "subtitle": "Var = mean",
+    "date": "2026-07-12",
+    "estimatedReadingMinutes": 24
   }
 ]
