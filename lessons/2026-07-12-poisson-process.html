@@ -1,0 +1,318 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 32px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 72px; text-align: right;
+}
+#stats {
+  display: flex; flex-wrap: wrap; gap: 8px 18px;
+  margin-top: 10px; padding: 10px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+}
+#stats .k { color: var(--text-muted); }
+#stats .v { color: var(--text); }
+#stats .hi { color: var(--accent); }
+.panels { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+.panel { flex: 1 1 300px; min-width: 280px; }
+</style>
+</head>
+<body>
+<div id="viz" style="padding: 8px 10px;">
+  <svg id="strip" viewBox="0 0 720 84" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
+    <text x="55" y="34" text-anchor="end" font-family="Source Serif 4, serif" font-style="italic" font-size="11" fill="var(--text-muted)">arrivals</text>
+    <rect x="60" y="14" width="620" height="40" fill="var(--bg-raised)" stroke="var(--border)"/>
+    <g id="clicksGroup"></g>
+    <line x1="60" y1="62" x2="680" y2="62" stroke="var(--border-strong)"/>
+    <text x="60" y="76" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--text-muted)">0</text>
+    <text x="680" y="76" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--text-muted)" text-anchor="end" id="stripEnd">–</text>
+    <text x="370" y="82" text-anchor="middle" font-family="Source Serif 4, serif" font-style="italic" font-size="10" fill="var(--text-ghost)">first 80 arrivals of the sample</text>
+  </svg>
+
+  <div class="panels">
+    <div class="panel">
+      <svg viewBox="0 0 360 220" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
+        <text x="180" y="16" text-anchor="middle" font-family="Source Serif 4, serif" font-style="italic" font-size="12" fill="var(--text-muted)">counts per bin vs Poisson PMF</text>
+        <rect x="40" y="26" width="310" height="150" fill="var(--bg-raised)" stroke="var(--border)"/>
+        <g id="countBars"></g>
+        <path id="countTheory" fill="none" stroke="var(--accent)" stroke-width="1.6"/>
+        <g id="countAxisX"></g>
+        <text x="195" y="200" text-anchor="middle" font-family="Source Serif 4, serif" font-style="italic" font-size="11" fill="var(--text-muted)">k arrivals in one bin</text>
+        <text x="18" y="101" text-anchor="middle" font-family="Source Serif 4, serif" font-style="italic" font-size="11" fill="var(--text-muted)" transform="rotate(-90, 18, 101)">P(k)</text>
+      </svg>
+    </div>
+    <div class="panel">
+      <svg viewBox="0 0 360 220" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
+        <text x="180" y="16" text-anchor="middle" font-family="Source Serif 4, serif" font-style="italic" font-size="12" fill="var(--text-muted)">inter-arrival waits vs λe^(−λt)</text>
+        <rect x="40" y="26" width="310" height="150" fill="var(--bg-raised)" stroke="var(--border)"/>
+        <g id="waitBars"></g>
+        <path id="waitTheory" fill="none" stroke="var(--accent)" stroke-width="1.6"/>
+        <g id="waitAxisX"></g>
+        <text x="195" y="200" text-anchor="middle" font-family="Source Serif 4, serif" font-style="italic" font-size="11" fill="var(--text-muted)">wait τ between arrivals</text>
+        <text x="18" y="101" text-anchor="middle" font-family="Source Serif 4, serif" font-style="italic" font-size="11" fill="var(--text-muted)" transform="rotate(-90, 18, 101)">density</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="viz-slider-row">
+    <label for="rslider">log λ</label>
+    <input type="range" id="rslider" min="-0.301" max="2.301" step="0.02" value="1.301">
+    <span class="value" id="rval">20 /s</span>
+  </div>
+
+  <div id="stats">
+    <div><span class="k">rate λ:</span> <span class="v" id="statRate">–</span></div>
+    <div><span class="k">bin width Δ:</span> <span class="v" id="statBin">–</span></div>
+    <div><span class="k">λΔ (theory mean):</span> <span class="v" id="statMean">–</span></div>
+    <div><span class="k">sample mean N̄:</span> <span class="v" id="statSampleMean">–</span></div>
+    <div><span class="k">sample var s²:</span> <span class="v" id="statSampleVar">–</span></div>
+    <div><span class="k">Fano F = s²/N̄:</span> <span class="hi" id="statFano">–</span></div>
+  </div>
+
+  <div class="viz-caption" style="margin-top: 10px;">
+    4000 arrivals drawn from a Poisson process at rate λ, with the bin width chosen so the theoretical bin mean λΔ ≈ 8. Bars are the empirical counts; the smooth line is the Poisson probability mass function (λΔ)^k e^(−λΔ) / k! The right panel plots the empirical inter-arrival histogram against the exponential density λe^(−λt). Move the slider and watch the Fano factor F = s²/N̄ stay near 1: that identity is the fingerprint of the Poisson process.
+  </div>
+</div>
+
+<script>
+(function () {
+  var rslider = document.getElementById('rslider');
+  var rval = document.getElementById('rval');
+  var stripEnd = document.getElementById('stripEnd');
+  var clicksGroup = document.getElementById('clicksGroup');
+  var countBars = document.getElementById('countBars');
+  var countTheory = document.getElementById('countTheory');
+  var countAxisX = document.getElementById('countAxisX');
+  var waitBars = document.getElementById('waitBars');
+  var waitTheory = document.getElementById('waitTheory');
+  var waitAxisX = document.getElementById('waitAxisX');
+  var statRate = document.getElementById('statRate');
+  var statBin = document.getElementById('statBin');
+  var statMean = document.getElementById('statMean');
+  var statSampleMean = document.getElementById('statSampleMean');
+  var statSampleVar = document.getElementById('statSampleVar');
+  var statFano = document.getElementById('statFano');
+
+  function mulberry32(seed) {
+    var s = seed >>> 0;
+    return function () {
+      s = (s + 0x6D2B79F5) >>> 0;
+      var t = s;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  var SEED = 1729;
+  var N_EVENTS = 4000;
+  var CLICKS_ON_STRIP = 80;
+  var TARGET_MU = 8;
+  var N_WAIT_BUCKETS = 40;
+
+  function logFact(n) {
+    if (n < 2) return 0;
+    if (n < 30) {
+      var s = 0;
+      for (var i = 2; i <= n; i++) s += Math.log(i);
+      return s;
+    }
+    return n * Math.log(n) - n + 0.5 * Math.log(2 * Math.PI * n);
+  }
+  function poissonPmf(k, mu) {
+    if (mu <= 0) return k === 0 ? 1 : 0;
+    return Math.exp(k * Math.log(mu) - mu - logFact(k));
+  }
+  function fmtTime(t) {
+    if (t >= 1) return t.toFixed(2) + ' s';
+    if (t >= 0.001) return (t * 1000).toFixed(1) + ' ms';
+    return (t * 1e6).toFixed(1) + ' µs';
+  }
+
+  function draw() {
+    var logRate = parseFloat(rslider.value);
+    var rate = Math.pow(10, logRate);
+    rval.textContent = (rate >= 100 ? rate.toFixed(0)
+                      : rate >= 10 ? rate.toFixed(1)
+                      : rate.toFixed(2)) + ' /s';
+
+    var rng = mulberry32(SEED);
+    var taus = new Float64Array(N_EVENTS);
+    var times = new Float64Array(N_EVENTS);
+    var t = 0;
+    for (var i = 0; i < N_EVENTS; i++) {
+      var u = rng();
+      var tau = -Math.log(1 - u) / rate;
+      taus[i] = tau;
+      t += tau;
+      times[i] = t;
+    }
+    var T = times[N_EVENTS - 1];
+
+    var stripT = times[CLICKS_ON_STRIP - 1];
+    stripEnd.textContent = fmtTime(stripT);
+    var clicksHtml = '';
+    for (var i2 = 0; i2 < CLICKS_ON_STRIP; i2++) {
+      var xc = 60 + (times[i2] / stripT) * 620;
+      clicksHtml += '<line x1="' + xc.toFixed(2) + '" y1="16" x2="' + xc.toFixed(2) + '" y2="52" stroke="var(--accent)" stroke-width="1"/>';
+    }
+    clicksGroup.innerHTML = clicksHtml;
+
+    var binWidth = TARGET_MU / rate;
+    var nBins = Math.floor(T / binWidth);
+    if (nBins < 20) nBins = 20;
+    var counts = new Int32Array(nBins);
+    for (var i3 = 0; i3 < N_EVENTS; i3++) {
+      var b = Math.floor(times[i3] / binWidth);
+      if (b < nBins) counts[b]++;
+    }
+    var sum = 0, sum2 = 0;
+    for (var i4 = 0; i4 < nBins; i4++) { sum += counts[i4]; sum2 += counts[i4] * counts[i4]; }
+    var sampleMean = sum / nBins;
+    var sampleVar = sum2 / nBins - sampleMean * sampleMean;
+    var fano = sampleMean > 0 ? sampleVar / sampleMean : 0;
+
+    var maxK = Math.max(Math.ceil(sampleMean + 4.5 * Math.sqrt(sampleMean + 1)), 14);
+    if (maxK > 60) maxK = 60;
+    var kHist = new Int32Array(maxK + 1);
+    for (var i5 = 0; i5 < nBins; i5++) {
+      var k = counts[i5];
+      if (k <= maxK) kHist[k]++;
+    }
+    var kProb = new Float64Array(maxK + 1);
+    for (var k1 = 0; k1 <= maxK; k1++) kProb[k1] = kHist[k1] / nBins;
+    var peakP = 0;
+    for (var k2 = 0; k2 <= maxK; k2++) {
+      var pp = poissonPmf(k2, sampleMean);
+      if (pp > peakP) peakP = pp;
+      if (kProb[k2] > peakP) peakP = kProb[k2];
+    }
+    var yMax = peakP * 1.18;
+
+    var xLeft = 40, xRight = 350, yTop = 26, yBot = 176;
+    var plotW = xRight - xLeft, plotH = yBot - yTop;
+    var barW = plotW / (maxK + 1);
+    var barsHtml = '';
+    for (var k3 = 0; k3 <= maxK; k3++) {
+      var h = (kProb[k3] / yMax) * plotH;
+      if (h < 0) h = 0;
+      var x = xLeft + k3 * barW;
+      barsHtml += '<rect x="' + (x + 0.5).toFixed(2) + '" y="' + (yBot - h).toFixed(2) + '" width="' + (barW - 1).toFixed(2) + '" height="' + h.toFixed(2) + '" fill="var(--accent-soft)" opacity="0.55"/>';
+    }
+    countBars.innerHTML = barsHtml;
+
+    var d = '', NS = 260;
+    for (var i6 = 0; i6 <= NS; i6++) {
+      var kf = (i6 / NS) * maxK;
+      var kInt = Math.floor(kf);
+      var kFr = kf - kInt;
+      var y0 = poissonPmf(kInt, sampleMean);
+      var y1 = poissonPmf(kInt + 1, sampleMean);
+      var y = y0 * (1 - kFr) + y1 * kFr;
+      var xp = xLeft + (kf + 0.5) * barW;
+      var yp = yBot - (y / yMax) * plotH;
+      d += (i6 === 0 ? 'M' : 'L') + xp.toFixed(2) + ',' + yp.toFixed(2) + ' ';
+    }
+    countTheory.setAttribute('d', d);
+
+    var axisHtml = '';
+    var tickEvery = Math.max(1, Math.round(maxK / 8));
+    for (var k4 = 0; k4 <= maxK; k4 += tickEvery) {
+      var xt = xLeft + (k4 + 0.5) * barW;
+      axisHtml += '<text x="' + xt.toFixed(2) + '" y="' + (yBot + 12) + '" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--text-muted)">' + k4 + '</text>';
+    }
+    countAxisX.innerHTML = axisHtml;
+
+    var tauMax = 5 / rate;
+    var buckW = tauMax / N_WAIT_BUCKETS;
+    var tauHist = new Int32Array(N_WAIT_BUCKETS);
+    for (var i7 = 0; i7 < taus.length; i7++) {
+      if (taus[i7] < tauMax) {
+        var bb = Math.floor(taus[i7] / buckW);
+        if (bb < N_WAIT_BUCKETS) tauHist[bb]++;
+      }
+    }
+    var tauDens = new Float64Array(N_WAIT_BUCKETS);
+    for (var i8 = 0; i8 < N_WAIT_BUCKETS; i8++) tauDens[i8] = tauHist[i8] / (taus.length * buckW);
+    var tauYMax = rate * 1.18;
+
+    var xL2 = 40, xR2 = 350, yT2 = 26, yB2 = 176;
+    var pW2 = xR2 - xL2, pH2 = yB2 - yT2;
+    var bw2 = pW2 / N_WAIT_BUCKETS;
+    var barsHtml2 = '';
+    for (var i9 = 0; i9 < N_WAIT_BUCKETS; i9++) {
+      var h2 = (tauDens[i9] / tauYMax) * pH2;
+      if (h2 < 0) h2 = 0;
+      var x2 = xL2 + i9 * bw2;
+      barsHtml2 += '<rect x="' + (x2 + 0.3).toFixed(2) + '" y="' + (yB2 - h2).toFixed(2) + '" width="' + (bw2 - 0.6).toFixed(2) + '" height="' + h2.toFixed(2) + '" fill="var(--accent-soft)" opacity="0.55"/>';
+    }
+    waitBars.innerHTML = barsHtml2;
+
+    var d2 = '', NS2 = 180;
+    for (var iA = 0; iA <= NS2; iA++) {
+      var tt = (iA / NS2) * tauMax;
+      var yy = rate * Math.exp(-rate * tt);
+      var xx = xL2 + (tt / tauMax) * pW2;
+      var yq = yB2 - (yy / tauYMax) * pH2;
+      d2 += (iA === 0 ? 'M' : 'L') + xx.toFixed(2) + ',' + yq.toFixed(2) + ' ';
+    }
+    waitTheory.setAttribute('d', d2);
+
+    var ax2Html = '';
+    var nTicks = 5;
+    for (var iB = 0; iB <= nTicks; iB++) {
+      var tau2 = (iB / nTicks) * tauMax;
+      var xa = xL2 + (tau2 / tauMax) * pW2;
+      ax2Html += '<text x="' + xa.toFixed(2) + '" y="' + (yB2 + 12) + '" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--text-muted)">' + fmtTime(tau2) + '</text>';
+    }
+    waitAxisX.innerHTML = ax2Html;
+
+    statRate.textContent = rate.toFixed(2) + ' /s';
+    statBin.textContent = fmtTime(binWidth);
+    statMean.textContent = (rate * binWidth).toFixed(3);
+    statSampleMean.textContent = sampleMean.toFixed(3);
+    statSampleVar.textContent = sampleVar.toFixed(3);
+    statFano.textContent = fano.toFixed(3);
+  }
+
+  rslider.addEventListener('input', draw);
+  draw();
+})();
+</script>
+</body>
+</html>

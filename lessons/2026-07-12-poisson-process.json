@@ -1,0 +1,244 @@
+{
+  "slug": "2026-07-12-poisson-process",
+  "title": "The Poisson process: independence, exponential waits, and the law of small numbers",
+  "node": {
+    "id": "poisson_process",
+    "label": "Poisson proc.",
+    "subtitle": "Var = mean"
+  },
+  "intro": "Siméon Denis Poisson wrote down the distribution now bearing his name in an 1837 monograph on the probability of wrongful convictions, and for sixty years almost nobody used it. In 1898 Ladislaus Bortkiewicz revived it with a slim pamphlet called Das Gesetz der kleinen Zahlen (The Law of Small Numbers), fitting it to Prussian army records of deaths by horse kick and getting a match tighter than the dataset itself was a joke about. Twelve years later Ernest Rutherford and Hans Geiger, sitting in a Manchester basement counting α-particles from polonium in 7.5-second windows, discovered that the same law described radioactive decay at the level of individual atoms. This lesson is about the continuous-time process behind that distribution: independent events at a constant rate, with Poisson-distributed counts in every window, exponentially distributed waits between them, and a set of superposition rules so friendly that Agner Krarup Erlang in 1909 Copenhagen used them to size the world's telephone exchanges.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Poisson, Bortkiewicz, and the law of small numbers",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Siméon Denis Poisson published Recherches sur la probabilité des jugements en matière criminelle et en matière civile (Research on the probability of judgments in criminal and civil cases) in 1837, at the end of a career spent extending Laplace's celestial mechanics into every corner of applied mathematics he could reach. The immediate motivation was a public argument with Nicolas de Condorcet's earlier work: how many jurors do you need on a French criminal panel to keep the wrongful-conviction rate small, given assumed individual juror accuracies? The mathematics he needed as a stepping stone was a limit of the binomial distribution in which the number of trials n went to infinity and the individual probability p went to zero while the product np stayed fixed at some finite mean. He derived the resulting probability mass function in a technical appendix, illustrated it with a demography example, and moved on. The book landed with a thud. For sixty years the distribution he had used as a stepping stone stayed in the appendix, nearly unread."
+        },
+        {
+          "type": "p",
+          "text": "Ladislaus Bortkiewicz, born in St Petersburg to Polish parents in 1868 and trained in statistics at Göttingen under Wilhelm Lexis, gave the distribution its second life in 1898. His monograph Das Gesetz der kleinen Zahlen (The Law of Small Numbers), aimed at insurance actuaries who kept encountering rare-event count data, argued that Poisson's formula was the correct model whenever many independent trials each with tiny probability produced a few events per period. The book's most famous chapter, and the one every statistics textbook still reprints, tabulated deaths by horse kick in fourteen corps of the Prussian army over the twenty-year window 1875 to 1894. That is 200 corps-years of data, 122 total fatalities, mean rate 0.61 deaths per corps-year. The observed frequencies of 0, 1, 2, 3, 4 deaths in a corps-year matched the Poisson predictions to within a fraction of one death per category. The dataset was faintly ridiculous and the fit was pitiless."
+        },
+        {
+          "type": "p",
+          "text": "The distribution went from actuarial curiosity to physical law in 1910. Ernest Rutherford, Hans Geiger, and Harry Bateman, at the University of Manchester in a room dominated by a Wilson chamber and an ionization counter, spent an evening counting α-particles emitted by a thin polonium film in successive 7.5-second windows. They recorded 2608 windows. The mean count was 3.87 α-particles per window. The observed distribution across k = 0, 1, 2, ..., 14 was Poisson to a stunning tightness (the χ² test would not be invented for another ten years, but by eye the residuals were within statistical noise). This was the first hard evidence that radioactive decay at the level of individual atoms was a random process, an important fact for what became the whole quantum-mechanical picture of the nucleus."
+        },
+        {
+          "type": "p",
+          "text": "What Bortkiewicz's horse kicks and Rutherford's α-particles share is the assumption of independence: whether a horse kicks a soldier today does not depend on whether one kicked another soldier yesterday, whether a polonium atom emits an α now does not depend on whether its neighbor just did. Add a constant mean rate on top of that independence and the entire picture below follows: the count distribution, the exponential waits, the superposition rules that Erlang leaned on in Copenhagen. The rest of this lesson is unpacking the mathematics that Bortkiewicz was writing down and Rutherford was measuring."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The three axioms and the count distribution",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The Poisson process is fully specified by three axioms about arrivals on a continuous time axis. The first is independent increments: the number of arrivals in disjoint time windows are statistically independent random variables. The second is stationarity: the distribution of arrivals in a window depends only on the window's length, not on when it starts. The third is orderliness (sometimes called simplicity): the probability of two or more arrivals in an infinitesimal window of length Δt vanishes faster than Δt itself, and the probability of exactly one arrival is λΔt to leading order, where the constant λ is called the rate. Every result in this lesson follows from these three axioms and nothing else."
+        },
+        {
+          "type": "p",
+          "text": "Let P_k(t) denote the probability of exactly k arrivals in the window [0, t]. Split [0, t + Δt] into [0, t] followed by [t, t + Δt] and apply independent increments. To end up with k arrivals in the total window, either you had k in the first piece and zero in the second (probability P_k(t) times (1 − λΔt)), or you had k − 1 in the first piece and exactly one in the second (probability P_{k−1}(t) times λΔt), or you had a second-order contribution with two or more in the tail slice. Orderliness pushes that last term into o(Δt). The bookkeeping is:"
+        },
+        {
+          "type": "math",
+          "tex": "P_k(t + \\Delta t) \\;=\\; P_k(t)\\,(1 - \\lambda \\Delta t) \\;+\\; P_{k-1}(t)\\,\\lambda \\Delta t \\;+\\; o(\\Delta t)",
+          "display": true,
+          "caption": "The forward Chapman-Kolmogorov step for a Poisson process. P_k(t) is the probability of exactly k arrivals by time t. λ is the mean arrival rate per unit time. Δt is an infinitesimally short additional time slice. o(Δt) collects the terms of order Δt² and smaller, dominated by the sub-Δt probability of two arrivals in the extra slice. The equation reads: to have k arrivals by time t + Δt, either you already had k and the extra slice contributed zero, or you had k − 1 and the extra slice contributed exactly one."
+        },
+        {
+          "type": "p",
+          "text": "Subtracting P_k(t) from both sides, dividing by Δt, and letting Δt → 0 turns the difference equation into a differential equation. Naming P_k(t) the probability of k arrivals by time t and P_{k−1}(t) its ladder neighbor:"
+        },
+        {
+          "type": "math",
+          "tex": "\\dfrac{dP_k(t)}{dt} \\;=\\; \\lambda\\,\\bigl( P_{k-1}(t) - P_k(t) \\bigr)",
+          "display": true,
+          "caption": "The Poisson master equation. dP_k/dt is the time derivative of the probability of k arrivals in a window of length t. λ is the arrival rate. P_{k−1}(t) is the probability of one fewer arrival at the same time. The equation reads: probability flows into state k at rate λ P_{k−1} (a new arrival lifts you from k − 1 to k) and out of state k at rate λ P_k (a new arrival lifts you from k to k + 1). The initial condition is P_0(0) = 1 and P_k(0) = 0 for all k ≥ 1, since no arrivals have occurred at time zero."
+        },
+        {
+          "type": "p",
+          "text": "Solve iteratively. The k = 0 equation is dP_0/dt = −λ P_0, with solution P_0(t) = e^{−λt} (this is where the exponential first shows up). Plug P_0 into the k = 1 equation, dP_1/dt = λ e^{−λt} − λ P_1, and integrate to get P_1(t) = λt e^{−λt}. The k = 2 equation gives P_2(t) = (λt)² e^{−λt} / 2. The pattern is unmistakable, and induction confirms the general form:"
+        },
+        {
+          "type": "math",
+          "tex": "P_k(t) \\;=\\; \\dfrac{(\\lambda t)^{k}}{k!}\\,e^{-\\lambda t}",
+          "display": true,
+          "caption": "The Poisson probability mass function. P_k(t) is the probability of exactly k arrivals in a window of length t. λ is the arrival rate. k is the nonnegative integer count. The quantity λt is the mean number of arrivals in the window: E[N(t)] = λt. Computing the second moment directly from this formula gives Var[N(t)] = λt as well. The equality of mean and variance is the fingerprint of the Poisson distribution, and any departure from it in a real dataset (measured by the Fano factor F = Var/mean) is a hint that the underlying process is not, in fact, Poisson."
+        }
+      ],
+      "quiz": {
+        "question": "A physicist studying muons at sea level counts arrivals in 60-second windows across many hours of observation and gets a mean of 720 counts per window with a sample variance of 758. Is this consistent with a Poisson process, and what is the Fano factor F = Var/mean the correct way to summarize her finding?",
+        "options": [
+          "F = 720 / 758 ≈ 0.95, sub-Poissonian, consistent with antibunching of sea-level muon arrivals.",
+          "F = 758 / 720 ≈ 1.05. To within the sampling error on a finite number of 60-second windows, this is consistent with F = 1, the Poisson identity. Sea-level muons arrive from independent cosmic-ray showers, and the primary showers are effectively independent from each other, so a Poisson process is the right null model. The small excess of the sample variance over the sample mean is what a Poisson-distributed sample variance is expected to show at this window size.",
+          "The mean and variance are close but Poisson requires them to be exactly equal, so a 5% mismatch rules out a Poisson process.",
+          "Poisson requires the variance to equal the square of the mean, so F = 758 / 720² ≈ 0.0015. The data are inconsistent with Poisson by three orders of magnitude."
+        ],
+        "correctIndex": 1,
+        "explanation": "Option B is right. Var[N] = E[N] is a property of the underlying Poisson distribution, not of any finite sample of it. When you compute a sample variance s² over a finite number of windows, s² fluctuates around the true variance λt with a standard error of roughly √(2/N_windows) · λt. If the experimenter took, say, 400 windows and got λt ≈ 720, the expected sampling spread on s² would be about ±50 counts, easily consistent with the observed 758. The Fano factor F = 758 / 720 ≈ 1.05 is within one standard error of unity, and the correct summary is that the data are consistent with a Poisson null hypothesis. Option A inverts the ratio: the Fano factor is variance over mean, not mean over variance, and getting the direction right matters because sub-Poissonian and super-Poissonian have opposite physical meanings (antibunching versus bursting). Option C misreads the identity as an exact requirement on any finite sample, a mistake no working experimentalist ever makes twice. Option D confuses variance with variance-over-mean-squared, mistaking the Poisson signature (Var = mean) for the fingerprint of a lognormal (Var ∝ mean²)."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Inter-arrival waits and the memoryless bus",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The count distribution is one face of the Poisson process. The dual face is the distribution of the waiting time between consecutive arrivals. Let T denote the time between one arrival and the next (equivalently, the time from t = 0 until the first arrival). The event T > t is exactly the event that zero arrivals have occurred in the window [0, t], and the probability of zero arrivals in that window is P_0(t) = e^{−λt} from the previous section. This is the survival function of T, and differentiating gives its probability density."
+        },
+        {
+          "type": "math",
+          "tex": "P(T > t) \\;=\\; e^{-\\lambda t}, \\qquad f_T(t) \\;=\\; \\lambda\\,e^{-\\lambda t}",
+          "display": true,
+          "caption": "The inter-arrival time distribution. T is the waiting time between two successive arrivals in a Poisson process. λ is the arrival rate, in arrivals per unit time. P(T > t) is the survival function, the probability that no arrival has yet occurred by time t. f_T(t) is the probability density, obtained by differentiating minus the survival function. Both forms together specify the exponential distribution with rate λ. Its mean is 1/λ and its standard deviation is also 1/λ, so the spread of waiting times equals their average: a Poisson process at three calls per minute has calls that arrive on average 20 seconds apart, with a standard deviation of 20 seconds around that average."
+        },
+        {
+          "type": "p",
+          "text": "The exponential distribution has a property no other continuous distribution on [0, ∞) shares. Suppose you have been waiting s seconds at the bus stop without seeing a bus, and you want to know the probability that you will wait another t seconds. Standard conditional-probability bookkeeping gives P(T > s + t | T > s) = P(T > s + t) / P(T > s) = e^{−λ(s+t)} / e^{−λs} = e^{−λt} = P(T > t). The extra wait has no memory of the seconds already elapsed. The bus (in this idealized model) does not know you have been standing there."
+        },
+        {
+          "type": "math",
+          "tex": "P(T > s + t \\;\\mid\\; T > s) \\;=\\; P(T > t)",
+          "display": true,
+          "caption": "The memoryless property of exponential waits. T is a Poisson inter-arrival time. s is the amount of time already elapsed without an arrival. t is the further wait we ask about. The equation reads: given that s seconds have already passed without an arrival, the probability of waiting an additional t seconds is exactly the same as the probability of waiting t seconds from a fresh start. This property is unique to the exponential distribution: any continuous random variable satisfying it must have exponentially decaying survival function. Equivalently, it is the reason Poisson processes are Markov: knowing the current state, one can throw away the entire history."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-12-poisson-process.html",
+          "height": 500,
+          "caption": "An interactive Poisson process. The slider sets the arrival rate λ over three decades, from 0.5 to 200 events per second. The top strip shows 4000 sample arrivals as vertical ticks on a common time axis. The lower left panel counts how many arrivals fall in each 250-ms bin and plots the histogram against the theoretical Poisson mass function P_k(t) = (λt)^k e^{−λt} / k! overlaid as a curve. The lower right panel plots the histogram of the 3999 inter-arrival gaps against the exponential density λ e^{−λt}. As you sweep the rate, watch two things: the count histogram's mean and variance both slide together (the Poisson signature), and the inter-arrival histogram stays exponential with mean 1/λ (the memoryless dual)."
+        },
+        {
+          "type": "p",
+          "text": "The memoryless property is why the Poisson process is so mathematically tractable and why it is such a good null model to test against: given the current state, the future is independent of the past, which is exactly the definition of a Markov process. It is also why exponential inter-arrivals are often a bad model in real life. A city bus running on a schedule has arrivals with much smaller variance than mean (an F factor well below one). A lightbulb close to burnout has an arrival time distribution weighted toward small further waits, not memoryless at all. An earthquake fault line accumulates elastic stress between events, so long waits make short next-waits more likely. Where the exponential fits (Rutherford's α-particles, Erlang's telephone calls, the arrival of neutrinos from all previously exploded supernovae) it fits because the underlying physics really has no memory."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Superposition and thinning",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Two structural properties make the Poisson process the workhorse of applied probability. Both follow from independence and orderliness in a few lines of algebra, and both are used constantly in engineering practice. The first is superposition. Suppose you have two statistically independent Poisson processes, one at rate λ_1 and one at rate λ_2, and you combine their arrivals into a single stream by taking the union of arrival times. The combined stream is itself a Poisson process, with rate λ_1 + λ_2."
+        },
+        {
+          "type": "math",
+          "tex": "\\text{Poisson}(\\lambda_1) \\;\\oplus\\; \\text{Poisson}(\\lambda_2) \\;=\\; \\text{Poisson}(\\lambda_1 + \\lambda_2)",
+          "display": true,
+          "caption": "The superposition rule for independent Poisson processes. Poisson(λ_i) denotes an independent Poisson process with rate λ_i. The symbol ⊕ denotes the merger of two arrival streams by union of their arrival times. λ_1 + λ_2 is the sum of the individual rates. The rule holds only under statistical independence of the two streams. Its proof is direct: in a window of length Δt the probability of at least one arrival from either stream is (λ_1 + λ_2)Δt to leading order, orderliness is preserved (independence of the two streams keeps the probability of a simultaneous double-arrival at order Δt²), and independent increments carry over from each summand. All three Poisson axioms hold on the merged process with the summed rate."
+        },
+        {
+          "type": "p",
+          "text": "Superposition is what a telephone-exchange operator sees when 500 independent subscribers each place calls at their own individual small rate. Each subscriber's calling behavior is at best a poor approximation to Poisson (people have habits, they call at mealtimes, they take breaks). But the aggregate over 500 independent people, none of whom significantly biases the total, tends to a Poisson stream at the pooled rate by a variant of the central limit theorem for point processes (a rigorous version was proved by Palm in 1943 and Khinchin in 1955). This is the reason Erlang's Copenhagen model worked: he did not need each caller to be Poisson individually, only the aggregate at the exchange."
+        },
+        {
+          "type": "p",
+          "text": "The second property is thinning. Suppose you have a Poisson process at rate λ, and you go through the arrivals one by one and independently keep each with probability p (discarding it with probability 1 − p). The retained stream is itself a Poisson process, at the reduced rate pλ. The picture is a photon detector with quantum efficiency η: the photon stream arriving at the detector face is Poisson at rate λ_photon, and the electrical clicks recorded downstream form a Poisson stream at rate η λ_photon. All the structural properties survive thinning: the bin distribution is still Poisson, the inter-click intervals are still exponential, the mean-equals-variance identity still holds."
+        },
+        {
+          "type": "math",
+          "tex": "\\text{Thin}\\bigl(\\text{Poisson}(\\lambda),\\,p\\bigr) \\;=\\; \\text{Poisson}(p\\lambda)",
+          "display": true,
+          "caption": "The thinning rule for a Poisson process. Thin(·, p) denotes the operation of independently keeping each arrival with probability p and discarding it with probability 1 − p. λ is the rate of the original process. p ∈ [0, 1] is the retention probability, called the quantum efficiency in optics and the loss factor in networking. pλ is the rate of the surviving thinned process. Proof: start from the count distribution P_k(t) = (λt)^k e^{−λt}/k! and condition on the count. Given N(t) = n arrivals, the number kept is Binomial(n, p). Summing over n with Poisson weights, the marginal distribution of the kept count is ((pλ)t)^k e^{−pλt}/k!, exactly Poisson with rate pλ. Independence of the retention decision across arrivals preserves independent increments."
+        },
+        {
+          "type": "p",
+          "text": "Together, superposition and thinning give a compact algebra for combining and filtering Poisson streams that stays inside the Poisson family. This closure is not obvious and it is not a general fact for arbitrary probability distributions: aggregate two Gaussians and you get a Gaussian, but pass a Gaussian through a Bernoulli filter and the result is not Gaussian. What makes the Poisson process special is that it is the fixed point of both operations at once, which is exactly why Erlang's Copenhagen paper (the subject of the next section) could aggregate 20,000 telephone subscribers into a Poisson arrival stream and then route it through a busy-line trunk group as another Poisson arrival stream and treat both with the same formulas."
+        }
+      ],
+      "quiz": {
+        "question": "A photon-counting experiment runs a Poisson stream of photons at rate 400 arrivals per second into an optical bench. The photons pass through a lossy fiber (transmission 70%), then a 50/50 beam splitter with both output ports monitored, and finally two photon detectors with quantum efficiency 80% each. What is the rate of coincident clicks per second in the two detectors?",
+        "options": [
+          "112 per second: each arm sees a Poisson at 400·0.7·0.5·0.8 = 112 counts per second, and the coincidences are just the product rate.",
+          "Each arm separately is a thinned Poisson at rate 400·0.7·0.5·0.8 = 112 counts per second. But the beam splitter, in the true single-photon regime, sends each photon to exactly one output port, not both, so the two thinned streams are anti-correlated conditional on a photon arrival. The true (single-photon) coincidence rate is zero. In practice, coincidences come from accidental overlaps of independent photons within the coincidence window Δt: rate approximately 2 · λ_1 · λ_2 · Δt.",
+          "The photon stream cannot be lost to Poisson thinning, so the coincidence rate is 400 per second.",
+          "The two arms are independent Poisson streams, so the coincidence rate is 112 · 112 = 12,544 per second."
+        ],
+        "correctIndex": 1,
+        "explanation": "Option B is the physics and the correct probability. Each arm is separately Poisson at rate 400·0.7·0.5·0.8 = 112 counts per second (superposition and thinning stay inside the Poisson family), so the marginal statistics on each arm alone look Poisson. But a 50/50 beam splitter, at the single-photon level, routes each photon to exactly one output port, not both. Conditional on a photon arrival, the two arms are perfectly anti-correlated: an arrival in one implies no arrival in the other in the same instant. The joint distribution is therefore not the product of the marginals, and the coincidence rate for genuinely single-photon light is zero. The residual coincidences in an experiment come from accidental overlaps of independent photon arrivals within a coincidence resolution window Δt, at rate approximately 2·λ_1·λ_2·Δt. This anti-correlation is the smoking-gun signature of nonclassical light, first exploited in the 1950s by Hanbury Brown and Twiss to measure stellar diameters and in 1977 by Kimble, Dagenais, and Mandel to prove that single-atom fluorescence gave g^(2)(0) = 0. Option A gets the marginal rate on each arm correctly but treats the two arms as independent, missing the anti-correlation. Option C forgets thinning; every optical element in the chain removes photons. Option D multiplies two rates (units of 1/time each) to get a coincidence rate, which is dimensionally wrong; a coincidence rate is (1/time), not (1/time²)."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Erlang in Copenhagen, 1909",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Agner Krarup Erlang was born in 1878 in Lønborg, a village in western Jutland, the son of a schoolteacher descended from Norwegian farmers. He was voracious with books, self-taught himself through the Copenhagen university entrance examinations at fourteen, and graduated from the University of Copenhagen with a degree in mathematics and side interests in astronomy, physics, and Chinese history. He read Latin, Greek, French, German, and Swedish comfortably. In 1908, at thirty, he was working as a mathematics teacher in a private secondary school and doing part-time consulting when the technical director of the Copenhagen Telephone Company (Kjøbenhavns Telefon Aktieselskab, KTAS, the local operating monopoly) hired him to sort out their capacity-planning problems. The problem was blunt. An exchange with n trunk lines can handle at most n simultaneous calls. If a call arrives when all n are busy, KTAS's system dropped the caller with a busy signal (this is called a loss system, in contrast to a delay system that would queue the caller). Adding trunk lines was expensive; too few and subscribers complained; how many did the exchange actually need?"
+        },
+        {
+          "type": "p",
+          "text": "Erlang's 1909 paper Sandsynlighedsregning og Telefonsamtaler (Probability calculation and telephone conversations, in Nyt Tidsskrift for Matematik B, volume 20) laid down two modeling assumptions and derived the rest. Assumption one: the aggregate stream of call requests arriving at the exchange is a Poisson process at rate λ. This was justified by exactly the superposition-of-many-independent-subscribers argument in the previous section. Assumption two: individual call durations are independent exponential random variables with mean 1/μ. This was justified only by the observation that phone calls in the Copenhagen dataset did in fact look exponentially distributed, and by the mathematical convenience of the exponential (memorylessness meant the future evolution of the exchange depended only on n_busy, not on how long any particular call had already been going). Both assumptions turn the state variable n_busy (the number of trunk lines in use) into a continuous-time Markov chain with birth rate λ and death rate n_busy · μ."
+        },
+        {
+          "type": "p",
+          "text": "The equilibrium distribution of this chain has a closed-form expression in terms of ρ = λ/μ, called the offered load (dimensionless, since λ has units 1/time and μ also has units 1/time). The loss probability, the fraction of arriving calls that find n_busy = n and are dropped, is the equilibrium probability of the full state divided by the sum over all states, which after cancelation reads:"
+        },
+        {
+          "type": "math",
+          "tex": "B(n,\\,\\rho) \\;=\\; \\dfrac{\\rho^{n} / n!}{\\displaystyle \\sum_{k=0}^{n} \\rho^{k} / k!}",
+          "display": true,
+          "caption": "The Erlang B loss formula. B(n, ρ) is the fraction of arriving calls that find every trunk line busy and are rejected. n is the integer number of trunk lines. ρ = λ/μ is the offered load in the dimensionless unit later named the Erlang, where λ is the Poisson arrival rate of new-call requests and μ is the reciprocal of the mean call duration. The numerator is the equilibrium weight for the fully-busy state, computed from the birth-death balance of the underlying Markov chain. The denominator normalizes over all states 0 through n. Read plainly: a Copenhagen exchange offered ρ = 15 Erlangs of traffic needs n = 23 trunk lines to hold B below 1 percent, and n = 20 to hold B below 5 percent."
+        },
+        {
+          "type": "p",
+          "text": "The formula shipped straight into KTAS operations planning and, within a decade, into telephone-company traffic tables from Stockholm to Buenos Aires. The British Post Office adopted it in 1920. Bell Labs published its own tabulations of B(n, ρ) that engineers referenced for the next fifty years. Erlang himself worked at KTAS for the rest of his career, publishing about a dozen more papers on telephone traffic and dying suddenly in 1929 of an abdominal illness at age fifty-one. At the 1946 International Traffic Engineering Conference in Copenhagen, seventeen years after his death, the dimensionless unit of offered traffic (call-hours per hour, one Erlang meaning one line continuously busy on average) was named for him. The name persists in every network engineer's software today, four generations after the Copenhagen paper. Erlang the Ericsson-owned programming language, invented in 1986 for building fault-tolerant telecommunications software at the Swedish telephone company, is named after him at one remove."
+        },
+        {
+          "type": "p",
+          "text": "The Copenhagen paper is worth rereading if only to see how much can be built on how little. Erlang had two axioms (Poisson arrivals, exponential call durations), a Markov chain over n_busy, and the equilibrium distribution of that chain. The rest of the paper is bookkeeping. That B(n, ρ) sized the world's telephone exchanges for two-thirds of the twentieth century tells you that the two axioms held on real subscriber populations to within engineering tolerance. The exact place they eventually broke was Ethernet: when Willinger, Taqqu, Sherman, and Wilson at Bellcore measured local-area network arrival streams in 1993 they found that packet arrivals were not Poisson but self-similar, with heavy-tailed correlations across every measured time scale. Erlang B failed on that traffic. The failure was itself a discovery, and the way it was expressed in the network-engineering literature was that the traffic no longer closed under Erlang B. The formula that had worked for eighty years defined the shape of the discovery that finally displaced it in a new domain, which is what a workhorse formula is supposed to do."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Two datasets sit on the desk of a physicist evaluating a candidate photon-counting device. Dataset A comes from a well-attenuated pulsed laser reflected off a diffuser onto the detector, giving 100 counts per millisecond on average. Dataset B comes from a rubidium magneto-optical trap where a small number of individually trapped atoms fluoresce continuously, giving 100 counts per millisecond on average. Both datasets have identical mean rates. The physicist wants to know from the count statistics alone whether the underlying source is Poisson, and which of the two is more likely to deviate. What test does she run, and what does she expect for each source?",
+    "options": [
+      "She computes the Fano factor F = Var/mean on many one-millisecond windows. Dataset A (attenuated laser after diffuser) should give F ≈ 1: a coherent laser field with any residual phase memory scrambled by the diffuser has Poissonian photon statistics (this is the Glauber picture of a classical coherent state). Dataset B (small number of trapped atoms) should give F below 1: after a single atom emits one photon it must be re-excited before it can emit another, and that dead time (roughly the excited-state lifetime, 27 ns for rubidium) makes the photon arrival stream antibunched and sub-Poissonian. The Fano factor is thus a direct diagnostic of whether the source is quantum: if F < 1 in either dataset, the source is nonclassical.",
+      "She fits the tail of the inter-arrival distribution and looks for power-law behavior. Any Poisson process must give a power-law tail with exponent −2.",
+      "The two datasets share a mean, so their statistics must be identical, and neither test can distinguish them.",
+      "She looks at the mean of the counts and confirms both give 100 per millisecond, which by itself proves both are Poisson."
+    ],
+    "correctIndex": 0,
+    "explanation": "Option A is the physicist's answer, and it is one of the reasons the Fano factor is such a workhorse in quantum optics. Dataset A is an attenuated laser after a diffuser: the coherent field of a laser has a Poisson photon-number distribution (Glauber's coherent state |α⟩ has ⟨n⟩ = |α|² and Var(n) = |α|², so F = 1 exactly), and passing through a diffuser only randomizes the phase without changing the photon-count statistics. Dataset B is fluorescence from a small number of individually addressable atoms in a magneto-optical trap. Each atom can emit at most one photon before it must be re-excited, and the re-excitation takes roughly the excited-state lifetime (27 ns for the D2 line of rubidium). Any two-photon coincidences within that dead time are suppressed, and the resulting arrival stream has F < 1: the classical Poisson limit is broken by the discreteness of the emitter. This antibunching, first observed by Kimble, Dagenais, and Mandel in 1977 with sodium atoms, was the first experimental proof that a light field could be nonclassical, and the Fano factor is still the cleanest single-number diagnostic. Option B invents a power-law tail for an exponential distribution, which is exponentially decaying, not power-law. Option C confuses matching means with matching distributions; two processes can share every moment except one and still differ. Option D confuses \"average count\" with \"Poisson statistics,\" a conflation the whole lesson is intended to prevent."
+  },
+  "suggestedNodes": [
+    {
+      "id": "exponential_distribution",
+      "label": "Exp. dist.",
+      "subtitle": "e^{-λt}, memless",
+      "edgeType": "extends"
+    },
+    {
+      "id": "compound_poisson",
+      "label": "Compound P.",
+      "subtitle": "marks + jumps",
+      "edgeType": "extends"
+    },
+    {
+      "id": "hawkes_process",
+      "label": "Hawkes proc.",
+      "subtitle": "self-excite",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-12T07:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 24,
+    "previouslyMastered": [
+      "shot_noise",
+      "johnson_nyquist_noise",
+      "fractional_quantum_hall"
+    ]
+  }
+}
