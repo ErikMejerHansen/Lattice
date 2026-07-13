@@ -1,0 +1,319 @@
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz {
+  box-sizing: border-box;
+  padding: 14px 16px 18px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.panel {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  padding: 10px 12px 8px;
+  margin-top: 8px;
+}
+.panel h3 {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-weight: 500;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 0 0 4px;
+}
+.legend {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  display: flex;
+  gap: 14px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+.legend .swatch {
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+button {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 9px 14px;
+  min-height: 36px;
+  background: var(--accent);
+  color: var(--bg-raised);
+  border: 1px solid var(--accent);
+  cursor: pointer;
+}
+button.secondary {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: var(--border-strong);
+}
+button:active { transform: translateY(1px); }
+.count {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+</style>
+<div id="viz">
+  <div class="panel">
+    <h3>ψ(x): real and imaginary parts</h3>
+    <svg id="amp" viewBox="0 0 680 160" width="100%" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="legend">
+      <span><span class="swatch" style="background: var(--accent)"></span>Re ψ</span>
+      <span><span class="swatch" style="background: var(--accent-soft)"></span>Im ψ</span>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>|ψ(x)|² and sample outcomes</h3>
+    <svg id="prob" viewBox="0 0 680 180" width="100%" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="legend">
+      <span><span class="swatch" style="background: var(--text-ghost); height: 8px; width: 14px"></span>|ψ|² density</span>
+      <span><span class="swatch" style="background: var(--accent); height: 6px; width: 6px; border-radius: 50%"></span>sampled dots</span>
+    </div>
+  </div>
+  <div class="viz-slider-row">
+    <label for="phase">Δφ</label>
+    <input id="phase" type="range" min="0" max="628" value="0">
+    <span class="value" id="phaseValue">0.00 π</span>
+  </div>
+  <div class="controls">
+    <button id="sample1">Sample 1</button>
+    <button id="sample50">Sample 50</button>
+    <button class="secondary" id="clear">Clear</button>
+    <span class="count" id="counter">0 samples</span>
+  </div>
+  <div class="viz-caption" style="margin-top: 10px">
+    Two Gaussian wave packets, one centered at x = −2 and one at x = +2, are added with a relative phase Δφ. The upper panel shows the real and imaginary parts of the sum ψ(x). The lower panel shows |ψ(x)|² and the position samples drawn from it: each click of Sample draws one x value from the probability density and drops a dot. Sweep Δφ to watch two packets interfere in ψ (crest-crest and crest-trough patterns visible in the amplitude) and correspondingly bunch or spread in |ψ|². The single-shot dots are Born's answer to Schrödinger's smeared cloud: every measurement returns one point, and only the accumulation of many measurements traces out the density.
+  </div>
+</div>
+<script>
+(function () {
+  const W = 680;
+  const AMP_H = 160;
+  const PROB_H = 180;
+  const X_MIN = -6, X_MAX = 6;
+  const NPTS = 481;
+  const SIGMA = 0.9;
+  const CENTERS = [-2, 2];
+
+  function xToPx(x) { return ((x - X_MIN) / (X_MAX - X_MIN)) * W; }
+  function pxToX(px) { return X_MIN + (px / W) * (X_MAX - X_MIN); }
+
+  function computeWave(phaseRad) {
+    const xs = new Float64Array(NPTS);
+    const re = new Float64Array(NPTS);
+    const im = new Float64Array(NPTS);
+    const p2 = new Float64Array(NPTS);
+    const dx = (X_MAX - X_MIN) / (NPTS - 1);
+    for (let i = 0; i < NPTS; i++) {
+      const x = X_MIN + i * dx;
+      xs[i] = x;
+      const a = Math.exp(-((x - CENTERS[0]) ** 2) / (2 * SIGMA * SIGMA));
+      const b = Math.exp(-((x - CENTERS[1]) ** 2) / (2 * SIGMA * SIGMA));
+      const rePart = a + b * Math.cos(phaseRad);
+      const imPart = b * Math.sin(phaseRad);
+      re[i] = rePart;
+      im[i] = imPart;
+      p2[i] = rePart * rePart + imPart * imPart;
+    }
+    let norm = 0;
+    for (let i = 0; i < NPTS; i++) norm += p2[i];
+    norm *= dx;
+    const invSqrt = 1 / Math.sqrt(norm);
+    for (let i = 0; i < NPTS; i++) {
+      re[i] *= invSqrt;
+      im[i] *= invSqrt;
+      p2[i] /= norm;
+    }
+    const cdf = new Float64Array(NPTS);
+    let acc = 0;
+    for (let i = 0; i < NPTS; i++) {
+      acc += p2[i] * dx;
+      cdf[i] = acc;
+    }
+    for (let i = 0; i < NPTS; i++) cdf[i] /= cdf[NPTS - 1];
+    return { xs, re, im, p2, cdf, dx };
+  }
+
+  function sampleFrom(state) {
+    const u = Math.random();
+    let lo = 0, hi = state.cdf.length - 1;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (state.cdf[mid] < u) lo = mid + 1;
+      else hi = mid;
+    }
+    return state.xs[lo];
+  }
+
+  function buildPath(values, height, yScale, yZero) {
+    let d = '';
+    for (let i = 0; i < values.length; i++) {
+      const px = (i / (values.length - 1)) * W;
+      const py = yZero - values[i] * yScale;
+      d += (i === 0 ? 'M' : 'L') + px.toFixed(2) + ' ' + py.toFixed(2) + ' ';
+    }
+    return d;
+  }
+
+  function buildFilled(values, height, yScale, yZero) {
+    let d = 'M 0 ' + yZero.toFixed(2) + ' ';
+    for (let i = 0; i < values.length; i++) {
+      const px = (i / (values.length - 1)) * W;
+      const py = yZero - values[i] * yScale;
+      d += 'L ' + px.toFixed(2) + ' ' + py.toFixed(2) + ' ';
+    }
+    d += 'L ' + W.toFixed(2) + ' ' + yZero.toFixed(2) + ' Z';
+    return d;
+  }
+
+  const ampSvg = document.getElementById('amp');
+  const probSvg = document.getElementById('prob');
+  const phaseInput = document.getElementById('phase');
+  const phaseValue = document.getElementById('phaseValue');
+  const counter = document.getElementById('counter');
+
+  ampSvg.innerHTML =
+    '<line x1="0" y1="' + (AMP_H / 2) + '" x2="' + W + '" y2="' + (AMP_H / 2) +
+    '" stroke="var(--border)" stroke-width="1"/>' +
+    '<path id="reWave" fill="none" stroke="var(--accent)" stroke-width="1.6"/>' +
+    '<path id="imWave" fill="none" stroke="var(--accent-soft)" stroke-width="1.4" stroke-dasharray="3 3"/>';
+
+  probSvg.innerHTML =
+    '<path id="probFill" fill="var(--text-ghost)" fill-opacity="0.28"/>' +
+    '<path id="probLine" fill="none" stroke="var(--text-muted)" stroke-width="1.2"/>' +
+    '<line x1="0" y1="' + (PROB_H - 22) + '" x2="' + W + '" y2="' + (PROB_H - 22) +
+    '" stroke="var(--border-strong)" stroke-width="1"/>' +
+    '<g id="dots"></g>' +
+    '<g id="ticks"></g>';
+
+  const ticksGroup = document.getElementById('ticks');
+  const svgNS = 'http://www.w3.org/2000/svg';
+  for (let x = X_MIN; x <= X_MAX; x += 2) {
+    const px = xToPx(x);
+    const line = document.createElementNS(svgNS, 'line');
+    line.setAttribute('x1', px); line.setAttribute('x2', px);
+    line.setAttribute('y1', PROB_H - 22); line.setAttribute('y2', PROB_H - 18);
+    line.setAttribute('stroke', 'var(--border-strong)');
+    line.setAttribute('stroke-width', '1');
+    ticksGroup.appendChild(line);
+    const text = document.createElementNS(svgNS, 'text');
+    text.setAttribute('x', px);
+    text.setAttribute('y', PROB_H - 6);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('font-family', '"IBM Plex Mono", monospace');
+    text.setAttribute('font-size', '9.5');
+    text.setAttribute('fill', 'var(--text-muted)');
+    text.textContent = String(x);
+    ticksGroup.appendChild(text);
+  }
+
+  let state = computeWave(0);
+  const samples = [];
+
+  function refresh() {
+    const phaseRad = parseInt(phaseInput.value, 10) / 100;
+    phaseValue.textContent = (phaseRad / Math.PI).toFixed(2) + ' π';
+    state = computeWave(phaseRad);
+    const ampMax = 0.9;
+    const ampScale = (AMP_H / 2 - 6) / ampMax;
+    document.getElementById('reWave').setAttribute('d',
+      buildPath(state.re, AMP_H, ampScale, AMP_H / 2));
+    document.getElementById('imWave').setAttribute('d',
+      buildPath(state.im, AMP_H, ampScale, AMP_H / 2));
+
+    const probMax = 0.5;
+    const probZero = PROB_H - 22;
+    const probScale = (probZero - 8) / probMax;
+    document.getElementById('probFill').setAttribute('d',
+      buildFilled(state.p2, PROB_H, probScale, probZero));
+    document.getElementById('probLine').setAttribute('d',
+      buildPath(state.p2, PROB_H, probScale, probZero));
+  }
+
+  function drawSamples() {
+    const g = document.getElementById('dots');
+    g.innerHTML = '';
+    const bandTop = PROB_H - 22;
+    for (let i = 0; i < samples.length; i++) {
+      const px = xToPx(samples[i].x);
+      const py = bandTop - 4 - (samples[i].row % 5) * 3;
+      const c = document.createElementNS(svgNS, 'circle');
+      c.setAttribute('cx', px.toFixed(2));
+      c.setAttribute('cy', py.toFixed(2));
+      c.setAttribute('r', 2.2);
+      c.setAttribute('fill', 'var(--accent)');
+      c.setAttribute('fill-opacity', '0.85');
+      g.appendChild(c);
+    }
+    counter.textContent = samples.length + ' sample' + (samples.length === 1 ? '' : 's');
+  }
+
+  function addSample() {
+    samples.push({ x: sampleFrom(state), row: samples.length });
+  }
+
+  phaseInput.addEventListener('input', refresh);
+  document.getElementById('sample1').addEventListener('click', function () {
+    addSample();
+    drawSamples();
+  });
+  document.getElementById('sample50').addEventListener('click', function () {
+    for (let i = 0; i < 50; i++) addSample();
+    drawSamples();
+  });
+  document.getElementById('clear').addEventListener('click', function () {
+    samples.length = 0;
+    drawSamples();
+  });
+
+  refresh();
+  drawSamples();
+})();
+</script>

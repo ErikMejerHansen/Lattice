@@ -28,7 +28,6 @@
 # auto-suggested 2026-07-09 from shot-noise
 
 # auto-suggested 2026-05-17 from schrodinger-equation
-Born rule — |ψ|² as a probability density on configuration space, the interpretation Schrödinger never accepted and that survived him anyway
 Hydrogen atom — Coulomb potential plus spherical-harmonic angular factors, the bound-state spectrum E_n = −13.6 eV / n² that fell out of the equation in three pages
 Quantum tunneling — exponential leakage through a classically forbidden barrier, T ∝ exp(−2κL), the effect that explains α-decay rates spanning twenty orders of magnitude
 
@@ -253,3 +252,7 @@ Composite fermions — Jainendra Jain 1989, the mean-field construction that att
 Exponential distribution — λe^(−λt), the memoryless inter-arrival wait of a Poisson process and the unique continuous distribution on [0, ∞) with P(T > s + t | T > s) = P(T > t), the Markov-property enabler that makes every Poisson-driven system a birth-death chain and every reliability model that uses it a constant-hazard idealization
 Compound Poisson process — arrivals from a Poisson process at rate λ each carrying an independent random mark drawn from some fixed distribution G (jump size, insurance-claim amount, financial-market shock), the Cramér 1930 collective-risk foundation and the jump component of every Lévy-process pricing model since Merton 1976
 Hawkes process — Alan Hawkes 1971, the self-exciting extension in which each arrival transiently boosts the intensity of future arrivals, the branching-process reformulation that turned it into the dominant model for earthquake aftershocks, high-frequency trade arrivals, and social-media cascades where past events genuinely do inform future rates
+
+# auto-suggested 2026-07-13 from born-rule
+Gleason's theorem — Andrew Gleason's 1957 result that the only countably additive probability measure on the projection lattice of a Hilbert space of dimension ≥ 3 has the form μ(P̂) = tr(ρ̂ P̂), the mathematical fact that turned Born's footnote from a postulate into a consequence of Hilbert-space structure
+Bell inequalities — John Bell's 1964 CHSH bound |E(a,b) − E(a,c) + E(a',b) + E(a',c)| ≤ 2 that any local hidden-variable theory must satisfy, quantum mechanics predicting 2√2 for singlet-state spins, and the Aspect 1982 and loophole-free 2015 experiments that closed the argument in favor of quantum mechanics

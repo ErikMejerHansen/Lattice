@@ -1,0 +1,212 @@
+{
+  "slug": "2026-07-13-born-rule",
+  "title": "The Born rule: the footnote that told the wave what it was for",
+  "node": {
+    "id": "born_rule",
+    "label": "Born rule",
+    "subtitle": "P = |ψ|²"
+  },
+  "intro": "Erwin Schrödinger wrote down his wave equation in early 1926 and immediately faced a question he could not answer: what, physically, is ψ? He thought it was a real field, a smeared electron density that could be photographed with a fine enough instrument. Max Born, working in Göttingen four hundred kilometers away, gave a different answer in June of the same year. In a paper on the scattering of electrons off atoms, and specifically in a footnote added in proof, Born proposed that |ψ|² is a probability density: not what the electron is, but where it will be found. Schrödinger never accepted it. The interpretation carried the theory anyway, won Born the 1954 Nobel Prize, and remains, a century later, the rule every experimentalist uses to compare a quantum calculation to a laboratory count.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The wave that Schrödinger could not interpret",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Schrödinger's four wave-mechanics papers of the spring of 1926 gave physics an equation of motion for de Broglie's matter wave and, in the process, a working calculation of the hydrogen spectrum. What they did not give was an answer to the question every reader asked first: what is ψ? Schrödinger's own picture, held for most of 1926 and defended for the rest of his life, was that ψ was a real field on physical space, and that |ψ|² had the interpretation of a smeared electric charge density. On this picture, an electron in the ground state of hydrogen was not a point orbiting a nucleus but a spherically symmetric cloud of charge, all of it real, all of it there at once. The hydrogen atom was a resonating cavity, not a solar system."
+        },
+        {
+          "type": "p",
+          "text": "The picture ran into an immediate problem: an electron released from an atom into free space produces a wave packet that spreads. Solve the free-particle Schrödinger equation with a localized initial ψ and the packet's width grows linearly with time; after a microsecond a hydrogen-atom electron's wave packet is meters across. If ψ were a physical charge distribution, that electron would have smeared itself over a laboratory table. Photographic plates and Wilson-chamber tracks showed nothing of the sort. Each detected electron was a single dot in a definite location, no bigger than the resolution of the emulsion. Whatever ψ was, it did not travel to the detector as a real smeared thing that then reconstituted itself into a point on arrival."
+        },
+        {
+          "type": "p",
+          "text": "Max Born was forty-three, professor of theoretical physics at Göttingen, and the mentor to a generation that included Heisenberg, Jordan, Pauli, and Fermi. He had spent 1925 working with Heisenberg and Jordan on matrix mechanics, so unlike Schrödinger he had no attachment to the picture of ψ as a physical wave. In the spring of 1926, thinking about how to calculate the scattering of an electron off an atom in wave mechanics, Born hit on the interpretation that resolved the smearing problem in a single sentence. ψ is not the electron. |ψ|² is the probability density of where the electron will be found."
+        },
+        {
+          "type": "p",
+          "text": "That sentence displaced the entire question. If ψ is a probability amplitude, its spreading is not a physical fact about a smeared electron; it is a growing uncertainty about where a still-point-like electron will show up. A photographic plate that registers a single dot is not the collapse of a physical wave into a point; it is a single sample drawn from a probability distribution. Schrödinger disliked this enough to say (in a 1935 essay whose title everyone remembers) that if this were the correct interpretation, he wished he had never had anything to do with quantum theory. His feelings did not affect the calculation."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The statement of the rule",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The Born rule has two forms, one for continuous position and one for discrete outcomes. The continuous form applies whenever you measure a particle's position. The wave function ψ(x, t) is a complex-valued function of position x and time t. Its modulus squared, |ψ(x, t)|², is the probability density for finding the particle at position x at time t. The probability of finding the particle in an infinitesimal volume dV around x is |ψ(x, t)|² dV, and the probability of finding it in any finite region Ω is the integral of |ψ|² over Ω."
+        },
+        {
+          "type": "math",
+          "tex": "P(\\mathbf{x} \\in \\Omega,\\, t) \\;=\\; \\int_{\\Omega} \\lvert \\psi(\\mathbf{x}, t) \\rvert^{2}\\, dV",
+          "display": true,
+          "caption": "The continuous Born rule. P(x ∈ Ω, t) is the probability that a position measurement at time t returns a result inside the spatial region Ω. ψ(x, t) is the complex wave function, a function of position x and time t. |ψ|² is the modulus squared, the wave function multiplied by its complex conjugate: a nonnegative real number at every point. dV is the ordinary volume element on real space. The integral runs over the region Ω of interest. Setting Ω to all of space and demanding P = 1 gives the normalization condition ∫ |ψ|² dV = 1, the requirement that the particle be found somewhere with certainty. Schrödinger's own equation preserves this normalization in time: if it holds at t = 0, it holds forever."
+        },
+        {
+          "type": "p",
+          "text": "The discrete form applies whenever you measure a quantity that takes discrete values (energy of a bound state, spin along an axis, angular momentum in units of ℏ). Expand the wave function in the orthonormal eigenstates φ_n of the observable you plan to measure. The coefficient c_n is a complex number, and its modulus squared is the probability that the measurement returns the eigenvalue associated with φ_n."
+        },
+        {
+          "type": "math",
+          "tex": "\\psi \\;=\\; \\sum_{n} c_{n}\\, \\varphi_{n}, \\qquad P(\\text{outcome } n) \\;=\\; \\lvert c_{n} \\rvert^{2}",
+          "display": true,
+          "caption": "The discrete Born rule. ψ is the wave function of the system just before measurement. φ_n is an orthonormal eigenstate of the observable being measured, with associated eigenvalue λ_n. c_n is the complex coefficient c_n = ⟨φ_n | ψ⟩, obtained by projecting ψ onto φ_n. P(outcome n) is the probability that a measurement returns the eigenvalue λ_n. The sum of |c_n|² over all n equals one because the φ_n form a complete orthonormal basis and ψ is normalized: this is the Parseval identity Σ |c_n|² = ⟨ψ | ψ⟩ = 1. Interference between different terms in the sum contributes nothing to any single P(n), but survives in the amplitude ψ and reappears whenever a subsequent measurement is done in a different basis."
+        },
+        {
+          "type": "p",
+          "text": "Both forms share three features that are worth naming out loud. First, they are the only place the theory makes contact with probability at all: everywhere else, ψ evolves deterministically under the Schrödinger equation. Second, the phase of the c_n is invisible in any single measurement, since it cancels in |c_n|², but it is not physically irrelevant: interference between two components of ψ depends on their relative phase, and the phase is what you lose to decoherence when a quantum system entangles with its environment. Third, the rule is silent on when a measurement happens and what constitutes one; that gap is the measurement problem, and quantum mechanics has not closed it in one hundred years."
+        }
+      ],
+      "quiz": {
+        "question": "A hydrogen atom is in a superposition of its ground state and first excited state: ψ = (3/5) φ_1 + (4/5) φ_2, with real coefficients and φ_1, φ_2 the two orthonormal energy eigenstates. What is the probability that a measurement of the atom's energy returns E_2, the energy of the excited state?",
+        "options": [
+          "4/5 = 0.80, because the coefficient in front of φ_2 is 4/5.",
+          "16/25 = 0.64. The Born rule for discrete outcomes gives the probability as the modulus squared of the expansion coefficient, and (4/5)² = 16/25. Consistency check: the ground-state probability is (3/5)² = 9/25, and 16/25 + 9/25 = 25/25 = 1, confirming that ψ was correctly normalized.",
+          "16/25 for the excited state and 9/25 for the ground state add to 25/25 = 1, which cannot be right because probabilities never fill up to exactly one; there must be a small extra term for other states.",
+          "The measurement is deterministic once ψ is specified, and returns E_2 with certainty."
+        ],
+        "correctIndex": 1,
+        "explanation": "Option B is the Born rule applied correctly. Expand ψ in the eigenstates of the observable (here the Hamiltonian, whose eigenstates are the φ_n and whose eigenvalues are the E_n). The probability of outcome E_n is |c_n|², the modulus squared of the projection coefficient c_n = ⟨φ_n | ψ⟩. Here c_2 = 4/5, so P(E_2) = (4/5)² = 16/25 = 0.64. The consistency check is a habit worth developing: the |c_n|² summed over all n must equal one for a normalized wave function, and 9/25 + 16/25 = 1 confirms both that the arithmetic is right and that the state was properly normalized to begin with. Option A confuses the coefficient with its modulus squared; this mistake gives probabilities that do not sum to one and would be obvious in any consistency check. Option C misreads the Parseval identity as if it were an approximation; Σ |c_n|² = 1 exactly whenever ψ is normalized and the {φ_n} are a complete orthonormal basis, which they are for any observable's eigenstates in this course. Option D forgets that the whole point of the Born rule is that measurement is probabilistic: only when the initial ψ is already an eigenstate of the measured observable (a c_n that is 1 for one term and 0 for all others) is the outcome certain."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The footnote of June 1926",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The Born rule was first published in a paper called Zur Quantenmechanik der Stossvorgänge (On the quantum mechanics of collision processes), submitted to Zeitschrift für Physik on June 25, 1926 and printed in volume 37. The paper's ostensible subject was scattering: a plane-wave electron incident on a hydrogen atom, scattered into an outgoing wave, with the amplitude of that outgoing wave in each direction to be interpreted physically. The problem forced Born to say what the outgoing amplitude meant, because if it did not mean anything the entire calculation was empty. He wrote, in the main text, that the intensity of the outgoing wave in direction θ gave the probability of finding the electron scattered into direction θ. Then, in a proof of the printer, he added a footnote."
+        },
+        {
+          "type": "p",
+          "text": "The footnote is one of the most consequential in the history of physics. In the main text Born had written that the probability was proportional to ψ. In the footnote he corrected himself: 'More careful reflection shows that the probability is proportional to the square of the quantity ψ.' Two sentences. The correction turned a linear guess into the quadratic rule that is used today. Born's own uncertainty about which of the two forms was right, right up to the proofs, is a useful reminder that even the people who wrote the founding papers of quantum mechanics did not always know what they were writing until they were forced to."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-13-born-rule.html",
+          "height": 520,
+          "caption": "An interactive Born rule. A superposition of two Gaussian wave packets is drawn as a complex-valued ψ(x): the real part in one line, the imaginary part in another, and |ψ(x)|² as the shaded probability density beneath. A slider controls the relative phase Δφ between the two packets. Sweep the phase and watch the two components' real and imaginary parts interfere: crests add and cancel in the amplitude, but the probability density |ψ|² is what determines where sample dots (drawn one per click of the Sample button) actually land. The single-shot dots are Born's answer to Schrödinger's smeared cloud: each measurement returns a single point, drawn from |ψ|². Enough dots eventually trace out the density."
+        },
+        {
+          "type": "p",
+          "text": "The paper's reception in Göttingen was warm and in Zurich cold. Schrödinger visited Göttingen in July 1926 and had a bitter argument with Bohr on the same theme when he visited Copenhagen in September. Einstein wrote to Born on December 4, 1926 with the line every popular account eventually quotes: quantum mechanics 'says a lot, but does not really bring us any closer to the secret of the Old One. I, at any rate, am convinced that He does not throw dice.' Born's reply, and thirty more years of correspondence, is preserved in the Born-Einstein Letters (published in 1971): a long, warm, unwinnable argument between two friends who never agreed on what the theory was actually about."
+        },
+        {
+          "type": "p",
+          "text": "The 1954 Nobel Prize citation named Born specifically for the statistical interpretation of the wave function. The lag was twenty-eight years, longer than for any other founder of quantum mechanics (Heisenberg had won in 1932, Schrödinger and Dirac jointly in 1933, Pauli in 1945). One reason for the delay was that the Nobel Committee had been reluctant to endorse an interpretation over which the founders were still fighting; another was that Born's role in matrix mechanics had been overshadowed in the popular story by the younger Heisenberg. The prize for the footnote, when it finally came, put the record straight."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Why the square, and why on configuration space",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Two features of the Born rule are not decorative: the square, and the space it lives on. The square is what carries the wave part of quantum mechanics into observable statistics. If the probability were linear in ψ, so P(x) ∝ ψ(x), a two-slit experiment with amplitudes ψ_1 through slit one and ψ_2 through slit two would give a probability ψ_1 + ψ_2 at the screen. Two Gaussian bumps added would give one wider bump. Instead the observed pattern is |ψ_1 + ψ_2|², which expands as |ψ_1|² + |ψ_2|² + 2 Re(ψ_1* ψ_2). The last term is the interference term, and its dependence on the relative phase of ψ_1 and ψ_2 is the fringe pattern Young saw in 1801."
+        },
+        {
+          "type": "math",
+          "tex": "\\lvert \\psi_{1} + \\psi_{2} \\rvert^{2} \\;=\\; \\lvert \\psi_{1} \\rvert^{2} + \\lvert \\psi_{2} \\rvert^{2} + 2\\,\\mathrm{Re}\\!\\bigl(\\psi_{1}^{*}\\,\\psi_{2}\\bigr)",
+          "display": true,
+          "caption": "The two-path Born expansion. ψ_1 is the probability amplitude for the particle to arrive via path one; ψ_2 is the amplitude for path two. |ψ_1|² is the probability contributed by path one alone; |ψ_2|² by path two alone. The remaining term, 2 Re(ψ_1* ψ_2), is the interference cross term, and it is what makes quantum probability disagree with classical probability. When the relative phase between ψ_1 and ψ_2 flips by π, the cross term flips sign: constructive interference at the bright fringes becomes destructive interference at the dark ones. Writing ψ_j = |ψ_j| exp(iφ_j) makes this explicit: 2 Re(ψ_1* ψ_2) = 2 |ψ_1| |ψ_2| cos(φ_2 − φ_1). A linear Born rule (P ∝ ψ) would have no cross term at all, and Young's fringes would vanish."
+        },
+        {
+          "type": "p",
+          "text": "The space is subtler. For a single particle in three dimensions, ψ is a function of three coordinates, x = (x, y, z), and |ψ|² is a probability density on ordinary space. For two particles, ψ is a function of six coordinates, one triple for each particle. |ψ(x_1, x_2)|² is the joint probability density that particle one is at x_1 and particle two is at x_2. The wave function lives on the six-dimensional configuration space of the two-particle system, not on three-dimensional physical space. For N particles it lives on R^{3N}."
+        },
+        {
+          "type": "p",
+          "text": "Configuration space is where Schrödinger's picture of ψ as a real physical field on space broke irrecoverably. A field on real three-dimensional space cannot represent the entangled state of two electrons (a pair of correlated ψ_1 and ψ_2 whose joint behavior refuses to factor into a product of one-particle wave functions), because entangled correlations are not local in physical space at all. Once you accept that ψ lives on the multi-particle configuration space, the picture of a smeared physical cloud you can walk around and photograph collapses, and Born's probabilistic reading is the natural one. This is one reason Schrödinger, who took his own picture as seriously as anyone ever took a physical picture, could not accept Born: it would have required abandoning the framework in which his own equation felt like classical physics."
+        }
+      ],
+      "quiz": {
+        "question": "Two electrons in a singlet spin state are described by an entangled two-particle wave function ψ(x_1, x_2) that does not factor as φ(x_1) χ(x_2). A physicist proposes: 'Since ψ lives on the six-dimensional configuration space R⁶ of the two-particle system, it cannot be a real physical wave in ordinary three-dimensional space, and |ψ|² is not a probability density in ordinary space either.' Is she correct, and what does the two-particle Born rule actually say?",
+        "options": [
+          "She is wrong: for two identical particles ψ can always be factored into one-particle wave functions.",
+          "She is correct about the domain of ψ but wrong that |ψ|² fails to be a probability density: |ψ|² is a probability density on configuration space R⁶, and the marginal probability density for a single-particle measurement (integrate |ψ|² over the other particle's coordinates) is a legitimate density on real space R³.",
+          "She is correct that ψ is not a real physical wave on three-dimensional space, and correct that |ψ(x_1, x_2)|² is a probability density on the six-dimensional configuration space, not on real space. The two-particle Born rule reads P(x_1 ∈ Ω_1 and x_2 ∈ Ω_2) = ∫_{Ω_1} ∫_{Ω_2} |ψ(x_1, x_2)|² dV_1 dV_2, an integral over the joint region in R⁶. Single-particle probabilities are recovered by marginalizing over the other particle's coordinates, and the resulting marginal density on R³ can display correlations (Bell-inequality violations, for instance) that no local classical field could reproduce.",
+          "She is correct about both: ψ is not a wave in ordinary space and |ψ|² is not a probability density at all, so quantum mechanics has no probabilistic interpretation for multi-particle systems."
+        ],
+        "correctIndex": 2,
+        "explanation": "Option C is the two-particle Born rule as physicists actually use it. ψ(x_1, x_2) is a complex-valued function of six spatial coordinates (three for each particle) and lives on the configuration space R⁶. Its modulus squared |ψ|² is a probability density on that space, and the probability that particle one is found in region Ω_1 AND particle two is found in region Ω_2 is the integral of |ψ|² over the joint region Ω_1 × Ω_2. Marginal probabilities for one particle alone are recovered by integrating over the other particle's coordinates: P(x_1 ∈ Ω_1) = ∫_{Ω_1} dV_1 ∫_{all space} dV_2 |ψ(x_1, x_2)|². The marginal density on R³ is well defined but no longer captures the correlations between the two particles; those live in the joint density |ψ|² and are the reason Bell inequalities are violated. Option A is false because entanglement is precisely the case where ψ does not factor; the singlet state is the canonical example. Option B misstates the marginalization: what is a probability density on R³ is the marginal, not |ψ|² itself, which is a density on R⁶. Option D is a straw-man overreach: quantum mechanics has an entirely working probabilistic interpretation for multi-particle systems, given by the joint Born rule on configuration space."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Gleason's theorem and why the rule is not arbitrary",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "For thirty years after Born's footnote, |ψ|² sat in the theory as a postulate: assumed, verified against experiment, but not derived from anything more fundamental. A recurring worry among the theoretically minded (Wigner, in particular, wrote about it repeatedly) was that the rule was arbitrary. Why the square? Why not the fourth power? Why not some more elaborate function of ψ? An answer arrived in 1957 from a twenty-five-year-old mathematician named Andrew Gleason, then an assistant professor at Harvard. His paper 'Measures on the closed subspaces of a Hilbert space' (published in the Journal of Mathematics and Mechanics, later reprinted in his collected works) proved a theorem now known as Gleason's theorem, and its consequence for quantum mechanics is that the Born rule is the only assignment of probabilities to measurement outcomes that is consistent with the Hilbert-space structure of quantum mechanics."
+        },
+        {
+          "type": "p",
+          "text": "The precise statement takes some setup. A measurement outcome in quantum mechanics is described by a projection operator P̂ onto a subspace of the Hilbert space (in the discrete case, P̂ = |φ_n⟩⟨φ_n| for a nondegenerate outcome, and the sum over outcomes of the P̂ operators is the identity). A probability assignment is a function μ that takes each such projection to a nonnegative real number, with μ(0) = 0, μ(identity) = 1, and countable additivity: if a family of orthogonal projections sums to a projection, their μ-values sum to the μ of the sum. Gleason showed that in any Hilbert space of dimension three or more, every such function μ has the form μ(P̂) = trace(ρ̂ P̂) for some density operator ρ̂. Specialized to a pure state ρ̂ = |ψ⟩⟨ψ|, this reads μ(P̂) = ⟨ψ | P̂ | ψ⟩, which is exactly the Born rule."
+        },
+        {
+          "type": "math",
+          "tex": "\\mu(\\hat{P}) \\;=\\; \\mathrm{tr}\\!\\bigl(\\hat{\\rho}\\,\\hat{P}\\bigr) \\quad \\Longrightarrow \\quad \\mu\\bigl(|\\varphi_{n}\\rangle\\langle\\varphi_{n}|\\bigr) \\;=\\; \\lvert \\langle \\varphi_{n} \\vert \\psi \\rangle \\rvert^{2}",
+          "display": true,
+          "caption": "The Gleason form and its Born-rule specialization. μ is a probability assignment on the projection lattice of a Hilbert space, satisfying countable additivity across every family of orthogonal projections. ρ̂ is the density operator, a positive trace-one operator on the Hilbert space; for a pure state it reads ρ̂ = |ψ⟩⟨ψ| with ψ the normalized state vector. P̂ is any projection operator. tr denotes the trace, the sum of diagonal matrix elements in any orthonormal basis. The left equation is the general Gleason form: every probability measure on the lattice has this shape when the Hilbert space has dimension at least three. The right equation specializes it to a one-dimensional projection |φ_n⟩⟨φ_n| onto a single eigenstate φ_n and a pure state ρ̂ = |ψ⟩⟨ψ|, giving the discrete Born rule P(n) = |⟨φ_n | ψ⟩|² = |c_n|². The square, and every other feature of the Born rule, follows from the Hilbert-space geometry; nothing further needs to be assumed."
+        },
+        {
+          "type": "p",
+          "text": "The dimension-three restriction is not decorative: in two dimensions the projection lattice is small enough that other probability measures fit, and only in three or more dimensions does the geometry constrain μ tightly enough for the Gleason form to be forced. The reader unwilling to accept Gleason's proof on faith should note that the theorem was independently reworked by John Bell in 1966 in the paper that led directly to Bell's inequalities (Reviews of Modern Physics, volume 38): Bell wanted a constructive version so as to prove that the assumptions of Gleason were incompatible with local hidden variables, which sharpened his own no-go theorem. Gleason's theorem is what tells you that Born's footnote was not a lucky guess. Given the linear-superposition structure of quantum mechanics, no other probability rule fits."
+        },
+        {
+          "type": "p",
+          "text": "One coda for the theory-versus-history reader: Schrödinger, who lived until 1961, was alive to see both Born's 1954 Nobel Prize and Gleason's 1957 paper. He never came around. His last book, Mind and Matter (1958), still argued that the statistical interpretation was a placeholder for a deeper theory in which ψ would be a physical wave on a suitable configuration space and the appearance of probability would come from something like a hidden-variable coarse-graining. He died three years later. The theory carried on with his equation on the left-hand side and Born's footnote on the right."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A student objects to the Born rule on the grounds that it is postulated rather than derived, and that other choices (P ∝ |ψ|⁴, or P ∝ ψ + ψ*, or a nonlinear function of ψ) would also give nonnegative numbers that could be normalized to a probability. Which of the following is the strongest reply, drawing on both the physics of interference (section 4) and the mathematics of Gleason's theorem (section 5)?",
+    "options": [
+      "The other forms are ruled out because they would give probabilities that do not sum to one; only |ψ|² has this property.",
+      "The Born rule is the only choice for two reasons that reinforce each other. Physically, the square is what carries the interference structure of ψ (linear amplitudes for alternative histories, cross terms 2 Re(ψ_1* ψ_2) between them) into observable probabilities: any other functional form either destroys the interference term (linear rules) or predicts fringe patterns of the wrong shape (quartic or higher). Mathematically, Gleason's theorem shows that in any Hilbert space of dimension three or more, the only countably additive probability measure on the projection lattice has the form μ(P̂) = ⟨ψ | P̂ | ψ⟩, which is exactly the |ψ|² rule. The two arguments meet: the same Hilbert-space linearity that produces interference is the one that forces the square.",
+      "The Born rule is chosen for computational convenience: |ψ|² is easier to normalize than |ψ|⁴.",
+      "The Born rule is derived from a hidden variable theory that fixes the exponent at 2."
+    ],
+    "correctIndex": 1,
+    "explanation": "Option B is the strongest reply because it pulls both strands of the lesson together and shows they say the same thing. Section 4 argued that the interference cross term 2 Re(ψ_1* ψ_2) is a direct consequence of squaring the sum of amplitudes: linear rules would drop it, higher-power rules would distort it, and the observed pattern in every two-path interference experiment (from Young's slits to Davisson-Germer to modern neutron interferometers) is precisely the square. Section 5 argued that Gleason's theorem forces the same rule from a completely different direction: any probability assignment on the projection lattice of a Hilbert space of dimension ≥ 3 that satisfies countable additivity has the form μ(P̂) = ⟨ψ | P̂ | ψ⟩, and this is the Born rule for pure states. Neither argument depends on the other, and their agreement is what makes the Born rule feel forced rather than arbitrary. Option A is superficially true (only |ψ|² normalizes and stays normalized under Schrödinger evolution) but misses the deeper point: the constraint that fixes the rule is the interference structure and the Hilbert-space geometry, not just algebraic tidiness. Option C reverses the logic; convenience is a happy consequence of the rule, not its justification. Option D inverts the historical and mathematical situation entirely: the Born rule is what hidden-variable theorists have tried, and failed, to derive from something more classical; Gleason's theorem and Bell's inequalities together show it cannot be so derived without violating locality."
+  },
+  "suggestedNodes": [
+    {
+      "id": "born_rule_hydrogen_atom",
+      "label": "Hydrogen atom",
+      "subtitle": "E_n = -13.6/n² eV",
+      "edgeType": "related"
+    },
+    {
+      "id": "gleason_theorem",
+      "label": "Gleason thm.",
+      "subtitle": "μ = tr(ρP̂)",
+      "edgeType": "extends"
+    },
+    {
+      "id": "bell_inequalities",
+      "label": "Bell ineq.",
+      "subtitle": "|E| ≤ 2, QM 2√2",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-13T07:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 24,
+    "previouslyMastered": [
+      "schrodinger_equation",
+      "wave_particle_duality",
+      "interference_diffraction"
+    ]
+  }
+}
