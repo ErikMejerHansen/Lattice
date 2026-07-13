@@ -729,6 +729,16 @@
       "createdAt": "2026-07-12T07:00:00Z",
       "col": 1,
       "row": 36
+    },
+    {
+      "id": "born_rule",
+      "label": "Born rule",
+      "subtitle": "P = |ψ|²",
+      "state": "available",
+      "lesson": "2026-07-13-born-rule",
+      "createdAt": "2026-07-13T07:00:00Z",
+      "col": 0,
+      "row": 37
     }
   ],
   "edges": [
@@ -1721,6 +1731,21 @@
       "from": "poisson_process",
       "to": "johnson_nyquist_noise",
       "kind": "related"
+    },
+    {
+      "from": "born_rule",
+      "to": "schrodinger_equation",
+      "kind": "extends"
+    },
+    {
+      "from": "born_rule",
+      "to": "wave_particle_duality",
+      "kind": "extends"
+    },
+    {
+      "from": "born_rule",
+      "to": "interference_diffraction",
+      "kind": "applied"
     }
   ]
 }
