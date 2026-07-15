@@ -1,0 +1,324 @@
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+</style>
+<style>
+  #viz { padding: 16px; box-sizing: border-box; }
+  .readout {
+    display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 10px;
+    font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+    font-size: 12px; color: var(--text);
+  }
+  .readout .k { color: var(--text-muted); margin-right: 4px; }
+  .plot-wrap {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    padding: 12px 10px 6px 10px;
+  }
+  svg { display: block; width: 100%; height: auto; }
+  .axis line, .axis path { stroke: var(--border-strong); fill: none; }
+  .axis text { fill: var(--text-muted); font-size: 10px; font-family: "IBM Plex Mono", monospace; }
+  .curve { fill: none; stroke: var(--accent); stroke-width: 1.6; }
+  .fill { fill: var(--accent); opacity: 0.10; }
+  .mean-line { stroke: var(--accent-soft); stroke-dasharray: 3 3; stroke-width: 1; }
+  .node-mark { fill: var(--text-ghost); }
+  .label {
+    font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+    font-size: 10px; fill: var(--text-muted);
+  }
+  .grid line { stroke: var(--border); stroke-dasharray: 2 3; }
+  .lchips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .lchip {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px; padding: 4px 10px;
+    border: 1px solid var(--border-strong); background: var(--bg-raised);
+    color: var(--text-muted); cursor: pointer; user-select: none;
+    min-width: 36px; text-align: center;
+  }
+  .lchip.active { background: var(--accent); color: var(--bg-raised); border-color: var(--accent); }
+  .lchip.disabled { opacity: 0.35; cursor: not-allowed; }
+  .l-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+  .l-row .l-label { font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px; }
+</style>
+
+<div id="viz">
+  <div class="plot-wrap">
+    <svg id="plot" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+  <div class="viz-slider-row">
+    <label for="n">n</label>
+    <input type="range" id="n" min="1" max="5" step="1" value="3">
+    <span class="value" id="nval">n = 3</span>
+  </div>
+
+  <div class="l-row">
+    <span class="l-label">ℓ</span>
+    <div class="lchips" id="lchips"></div>
+  </div>
+
+  <div class="readout">
+    <span><span class="k">shell</span><span id="orbLabel">3p</span></span>
+    <span><span class="k">E_n</span><span id="energy">−1.51 eV</span></span>
+    <span><span class="k">radial nodes</span><span id="rnodes">1</span></span>
+    <span><span class="k">⟨r⟩/a₀</span><span id="rmean">12.5</span></span>
+  </div>
+
+  <div class="viz-caption" style="margin-top: 14px;">
+    Radial probability P(r) = r²|R_nℓ(r)|² for the hydrogen atom (r in Bohr radii). Pick n from the slider and ℓ from the chips; the peaks show where the electron is likely to be found. Number of radial nodes = n − ℓ − 1. Mean radius ⟨r⟩ climbs with n²; the ℓ = n − 1 "circular" orbits are narrowest, the ℓ = 0 "s" orbitals reach in closest to the nucleus.
+  </div>
+</div>
+
+<script>
+(function() {
+  // --- Physics helpers -----------------------------------------------------
+  // Associated Laguerre polynomial L^alpha_k(x), via recurrence:
+  //   L^a_0(x) = 1
+  //   L^a_1(x) = 1 + a - x
+  //   (k+1) L^a_{k+1}(x) = (2k+1+a-x) L^a_k(x) - (k+a) L^a_{k-1}(x)
+  function assocLaguerre(k, alpha, x) {
+    if (k === 0) return 1;
+    if (k === 1) return 1 + alpha - x;
+    let Lm1 = 1;
+    let L = 1 + alpha - x;
+    for (let j = 1; j < k; j++) {
+      const Lp1 = ((2*j + 1 + alpha - x) * L - (j + alpha) * Lm1) / (j + 1);
+      Lm1 = L;
+      L = Lp1;
+    }
+    return L;
+  }
+
+  // Unnormalized radial function R_nl(r), in units where a_0 = 1.
+  // Proportional to e^{-r/n} * (2r/n)^l * L^{2l+1}_{n-l-1}(2r/n).
+  // We compute proportionally and normalize numerically below, so the overall
+  // constants and their sign convention do not matter for plotting P(r).
+  function radialUnnorm(n, l, r) {
+    const rho = 2 * r / n;
+    const lag = assocLaguerre(n - l - 1, 2*l + 1, rho);
+    return Math.exp(-r / n) * Math.pow(rho, l) * lag;
+  }
+
+  // --- Grid + normalize P(r) = r^2 |R|^2 -----------------------------------
+  const RMAX_A0 = 80;         // covers up to n = 5 comfortably
+  const NGRID = 2000;
+  const dr = RMAX_A0 / NGRID;
+
+  function computeProbability(n, l) {
+    const P = new Float64Array(NGRID + 1);
+    let integral = 0;
+    for (let i = 0; i <= NGRID; i++) {
+      const r = i * dr;
+      const R = radialUnnorm(n, l, r);
+      P[i] = r * r * R * R;
+      integral += P[i] * dr;
+    }
+    // Normalize so ∫₀^∞ P(r) dr = 1
+    const inv = 1 / integral;
+    let mean = 0;
+    for (let i = 0; i <= NGRID; i++) {
+      P[i] *= inv;
+      mean += (i * dr) * P[i] * dr;
+    }
+    return { P, mean };
+  }
+
+  // --- Plotting ------------------------------------------------------------
+  const svg = document.getElementById('plot');
+  const W = 640, H = 360;
+  const M = { l: 44, r: 16, t: 16, b: 40 };
+  const plotW = W - M.l - M.r;
+  const plotH = H - M.t - M.b;
+
+  function niceMaxR(n) {
+    // A comfortable x-range that scales with n
+    if (n === 1) return 8;
+    if (n === 2) return 20;
+    if (n === 3) return 36;
+    if (n === 4) return 55;
+    return 78;
+  }
+
+  function draw(n, l) {
+    const { P, mean } = computeProbability(n, l);
+    const xMax = niceMaxR(n);
+
+    // Compute max of P over the visible range for y-scaling
+    let pMax = 0;
+    const iVisMax = Math.min(NGRID, Math.floor(xMax / dr));
+    for (let i = 0; i <= iVisMax; i++) if (P[i] > pMax) pMax = P[i];
+
+    const xToPx = r => M.l + (r / xMax) * plotW;
+    const yToPx = p => M.t + plotH - (p / pMax) * plotH;
+
+    // Build path
+    let dCurve = '';
+    let dFill = 'M ' + xToPx(0).toFixed(2) + ' ' + yToPx(0).toFixed(2);
+    const step = Math.max(1, Math.floor(NGRID / 400));
+    for (let i = 0; i <= iVisMax; i += step) {
+      const x = xToPx(i * dr).toFixed(2);
+      const y = yToPx(P[i]).toFixed(2);
+      dCurve += (i === 0 ? 'M ' : ' L ') + x + ' ' + y;
+      dFill += ' L ' + x + ' ' + y;
+    }
+    // close fill down to axis
+    dFill += ' L ' + xToPx(iVisMax * dr).toFixed(2) + ' ' + yToPx(0).toFixed(2) + ' Z';
+
+    // --- x-axis ticks
+    const xTicks = niceTicks(0, xMax, 6);
+    // --- y label
+    const orbLabel = n + ['s','p','d','f','g'][l];
+
+    // Radial-node positions (interior zeros of P(r)); n-l-1 zeros
+    const nodes = [];
+    for (let i = 1; i < iVisMax; i++) {
+      // find sign changes of R (not r^2 R^2, which has double zeros).
+      // Recompute R at r_i and r_{i-1}.
+      const r0 = (i - 1) * dr, r1 = i * dr;
+      const R0 = radialUnnorm(n, l, r0), R1 = radialUnnorm(n, l, r1);
+      if (r0 > 0 && R0 * R1 < 0) {
+        // linear interpolate for the crossing
+        const rc = r0 + (r1 - r0) * (-R0) / (R1 - R0);
+        nodes.push(rc);
+      }
+    }
+
+    let html = '';
+
+    // Axes / grid
+    html += '<g class="grid">';
+    for (const t of xTicks) {
+      const x = xToPx(t).toFixed(2);
+      html += `<line x1="${x}" y1="${M.t}" x2="${x}" y2="${M.t + plotH}"/>`;
+    }
+    html += '</g>';
+
+    // Curve area
+    html += `<path class="fill" d="${dFill}"/>`;
+    html += `<path class="curve" d="${dCurve}"/>`;
+
+    // Mean-radius line
+    if (mean <= xMax) {
+      const mx = xToPx(mean).toFixed(2);
+      html += `<line class="mean-line" x1="${mx}" y1="${M.t}" x2="${mx}" y2="${M.t + plotH}"/>`;
+      html += `<text class="label" x="${(+mx + 4).toFixed(1)}" y="${M.t + 12}">⟨r⟩ ≈ ${mean.toFixed(1)} a₀</text>`;
+    }
+
+    // Node markers on x-axis
+    for (const rn of nodes) {
+      const nx = xToPx(rn).toFixed(2);
+      html += `<circle class="node-mark" cx="${nx}" cy="${M.t + plotH}" r="2.5"/>`;
+    }
+
+    // x-axis
+    html += `<g class="axis">`;
+    html += `<line x1="${M.l}" y1="${M.t + plotH}" x2="${M.l + plotW}" y2="${M.t + plotH}"/>`;
+    for (const t of xTicks) {
+      const x = xToPx(t).toFixed(2);
+      html += `<line x1="${x}" y1="${M.t + plotH}" x2="${x}" y2="${M.t + plotH + 4}"/>`;
+      html += `<text x="${x}" y="${M.t + plotH + 16}" text-anchor="middle">${t}</text>`;
+    }
+    html += `<text x="${M.l + plotW / 2}" y="${H - 8}" text-anchor="middle" fill="var(--text-muted)">r / a₀</text>`;
+
+    // y-axis
+    html += `<line x1="${M.l}" y1="${M.t}" x2="${M.l}" y2="${M.t + plotH}"/>`;
+    html += `<text x="10" y="${M.t + plotH / 2}" transform="rotate(-90 10 ${M.t + plotH / 2})" text-anchor="middle" fill="var(--text-muted)">P(r) = r² |R_nℓ|²</text>`;
+    html += `</g>`;
+
+    // Orbital label in the corner
+    html += `<text x="${W - M.r - 8}" y="${M.t + 20}" text-anchor="end" style="font-family: 'IBM Plex Mono', monospace; font-size: 18px; fill: var(--accent);">${orbLabel}</text>`;
+
+    svg.innerHTML = html;
+
+    // --- readouts
+    document.getElementById('orbLabel').textContent = orbLabel;
+    document.getElementById('energy').textContent = (-13.6 / (n * n)).toFixed(2) + ' eV';
+    document.getElementById('rnodes').textContent = (n - l - 1).toString();
+    document.getElementById('rmean').textContent = mean.toFixed(1);
+  }
+
+  function niceTicks(a, b, target) {
+    const range = b - a;
+    const raw = range / target;
+    const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    const norm = raw / mag;
+    const step = (norm < 1.5 ? 1 : norm < 3 ? 2 : norm < 7 ? 5 : 10) * mag;
+    const first = Math.ceil(a / step) * step;
+    const ticks = [];
+    for (let v = first; v <= b + 1e-9; v += step) ticks.push(+v.toFixed(6));
+    return ticks;
+  }
+
+  // --- UI wiring -----------------------------------------------------------
+  const nSlider = document.getElementById('n');
+  const nVal = document.getElementById('nval');
+  const chipContainer = document.getElementById('lchips');
+  let currentN = parseInt(nSlider.value, 10);
+  let currentL = 1;
+
+  function rebuildChips(n, keepL) {
+    chipContainer.innerHTML = '';
+    // ensure currentL is valid; if not, snap to nearest
+    let l = Math.min(keepL, n - 1);
+    if (l < 0) l = 0;
+    currentL = l;
+    const letters = ['s','p','d','f','g'];
+    for (let i = 0; i < 5; i++) {
+      const chip = document.createElement('div');
+      chip.className = 'lchip' + (i === currentL ? ' active' : '') + (i > n - 1 ? ' disabled' : '');
+      chip.textContent = i + ' (' + letters[i] + ')';
+      if (i <= n - 1) {
+        chip.addEventListener('click', () => {
+          currentL = i;
+          rebuildChips(currentN, currentL);
+          draw(currentN, currentL);
+        });
+      }
+      chipContainer.appendChild(chip);
+    }
+  }
+
+  nSlider.addEventListener('input', (e) => {
+    currentN = parseInt(e.target.value, 10);
+    nVal.textContent = 'n = ' + currentN;
+    rebuildChips(currentN, currentL);
+    draw(currentN, currentL);
+  });
+
+  // Initial render
+  nVal.textContent = 'n = ' + currentN;
+  rebuildChips(currentN, currentL);
+  draw(currentN, currentL);
+})();
+</script>

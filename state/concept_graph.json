@@ -739,6 +739,16 @@
       "createdAt": "2026-07-13T07:00:00Z",
       "col": 0,
       "row": 37
+    },
+    {
+      "id": "hydrogen_atom",
+      "label": "Hydrogen atom",
+      "subtitle": "E_n = −13.6/n²",
+      "state": "available",
+      "lesson": "2026-07-15-hydrogen-atom",
+      "createdAt": "2026-07-15T07:00:00Z",
+      "col": 1,
+      "row": 37
     }
   ],
   "edges": [
@@ -1745,6 +1755,21 @@
     {
       "from": "born_rule",
       "to": "interference_diffraction",
+      "kind": "applied"
+    },
+    {
+      "from": "hydrogen_atom",
+      "to": "schrodinger_equation",
+      "kind": "extends"
+    },
+    {
+      "from": "hydrogen_atom",
+      "to": "bohr_atom",
+      "kind": "extends"
+    },
+    {
+      "from": "hydrogen_atom",
+      "to": "balmer_series",
       "kind": "applied"
     }
   ]

@@ -516,5 +516,12 @@
     "subtitle": "P = |ψ|²",
     "date": "2026-07-13",
     "estimatedReadingMinutes": 24
+  },
+  {
+    "slug": "2026-07-15-hydrogen-atom",
+    "title": "The hydrogen atom: 13.6 eV / n² falling out of Schrödinger's equation",
+    "subtitle": "E_n = −13.6/n²",
+    "date": "2026-07-15",
+    "estimatedReadingMinutes": 25
   }
 ]
