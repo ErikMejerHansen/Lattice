@@ -28,7 +28,6 @@
 # auto-suggested 2026-07-09 from shot-noise
 
 # auto-suggested 2026-05-17 from schrodinger-equation
-Hydrogen atom — Coulomb potential plus spherical-harmonic angular factors, the bound-state spectrum E_n = −13.6 eV / n² that fell out of the equation in three pages
 Quantum tunneling — exponential leakage through a classically forbidden barrier, T ∝ exp(−2κL), the effect that explains α-decay rates spanning twenty orders of magnitude
 
 # auto-suggested 2026-05-18 from uncertainty-principle
@@ -256,3 +255,7 @@ Hawkes process — Alan Hawkes 1971, the self-exciting extension in which each a
 # auto-suggested 2026-07-13 from born-rule
 Gleason's theorem — Andrew Gleason's 1957 result that the only countably additive probability measure on the projection lattice of a Hilbert space of dimension ≥ 3 has the form μ(P̂) = tr(ρ̂ P̂), the mathematical fact that turned Born's footnote from a postulate into a consequence of Hilbert-space structure
 Bell inequalities — John Bell's 1964 CHSH bound |E(a,b) − E(a,c) + E(a',b) + E(a',c)| ≤ 2 that any local hidden-variable theory must satisfy, quantum mechanics predicting 2√2 for singlet-state spins, and the Aspect 1982 and loophole-free 2015 experiments that closed the argument in favor of quantum mechanics
+
+# auto-suggested 2026-07-15 from hydrogen-atom
+Zeeman effect — the 2ℓ+1 magnetic-quantum-number splitting of hydrogen lines in an external field, Pieter Zeeman's 1896 Leiden measurement that first showed the m sublevels of Schrödinger's ladder were real observables, the 1902 Nobel with Hendrik Lorentz, and the "anomalous" spin-doubled variant that motivated the discovery of electron spin in 1925
+Fine structure — the α² m_e c² ≈ 10⁻⁴ eV splitting of hydrogen levels that Schrödinger's non-relativistic 1926 equation misses, Sommerfeld's 1916 half-lucky formula, Dirac's 1928 relativistic equation getting it right for the right reason, and the Lamb shift 1947 that revealed the next order of QED radiative corrections

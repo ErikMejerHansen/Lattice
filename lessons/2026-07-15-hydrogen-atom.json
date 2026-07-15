@@ -1,0 +1,227 @@
+{
+  "slug": "2026-07-15-hydrogen-atom",
+  "title": "The hydrogen atom: 13.6 eV / n² falling out of Schrödinger's equation",
+  "node": {
+    "id": "hydrogen_atom",
+    "label": "Hydrogen atom",
+    "subtitle": "E_n = −13.6/n²"
+  },
+  "intro": "Bohr's 1913 model predicted the hydrogen spectrum by decree: quantize the angular momentum in units of ℏ, then read off the levels. It worked, at the cost of an assumption nobody could justify. Thirteen years later, Schrödinger sat down with his new wave equation, wrote a Coulomb potential −ke²/r on the right-hand side, and solved the differential equation. Out fell the same ladder E_n = −13.6 eV / n², along with an angular-momentum quantum number and a magnetic quantum number nobody had asked for. The lesson is what happens when you replace a postulate with an eigenvalue problem.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Bohr's ladder, and the assumption it rested on",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In 1913 Niels Bohr, a twenty-seven-year-old Dane recently arrived in Manchester in Ernest Rutherford's laboratory (Rutherford, the New-Zealand-born experimentalist who had established the year before that atoms have a compact positive nucleus with the electrons somewhere outside it), wrote three papers in the Philosophical Magazine that got the hydrogen spectrum right. His trick was to postulate two things and derive the rest. First, that the electron travels in circular orbits at only certain allowed radii. Second, that in those allowed orbits the classical angular momentum L = m_e v r takes only integer multiples of ℏ, the reduced Planck constant (ℏ = h/2π, where h is Planck's constant of proportionality between a photon's energy and its frequency). Everything else, orbit radius, orbit velocity, orbit energy, followed by ordinary Newtonian mechanics."
+        },
+        {
+          "type": "p",
+          "text": "The prediction that came out was the Rydberg formula: the energy of the n-th level was E_n = −13.6 eV / n², and photons emitted or absorbed in transitions n_i → n_f had frequencies that matched the Balmer, Lyman, and Paschen line series measured in every spectroscopy lab in Europe. To four significant figures. From two postulates and a hydrogen nucleus. It was one of the most spectacular predictions in the history of physics, and it was greeted with immediate suspicion, because Bohr could not say why L had to be an integer multiple of ℏ. The rule felt like a magic incantation stuck onto Newton by hand."
+        },
+        {
+          "type": "p",
+          "text": "The old quantum theory, as it came to be called between 1913 and 1925, spent twelve years extending Bohr's trick without deepening its foundation. Arnold Sommerfeld (the Munich theorist who taught nearly every quantum physicist of the next generation) added elliptical orbits and a second quantum number. Others patched in relativistic corrections and predicted fine structure. But helium, with two electrons, refused to yield to any of it: the old quantum theory could not compute the ground state of the next simplest atom to within a factor of two. The suspicion grew that Bohr's rule was not a foundation but a coincidence that happened to work for one electron. Wave mechanics, when it arrived, replaced the postulate with a boundary-value problem, and the hydrogen atom fell out for a completely different reason."
+        },
+        {
+          "type": "p",
+          "text": "This lesson works through that derivation. It is a well-worn calculation, but the payoff is worth the walk: the same discrete ladder emerges as an eigenvalue condition on a partial differential equation, alongside two extra quantum numbers Bohr had no room for. When Schrödinger did this arithmetic in Zurich in January 1926, he could not sleep for weeks."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Schrödinger's equation in a Coulomb well",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The hydrogen atom is one electron in the electrostatic field of one proton. The proton is about 1836 times heavier than the electron, so to first approximation we fix the proton at the origin and let only the electron move. The proton's charge is +e and the electron's is −e (where e is the elementary charge, 1.602 × 10⁻¹⁹ coulombs); their attractive potential energy at separation r is Coulomb's law, an inverse-r well. Write V(r) for the potential and let k = 1/(4πε₀) (Coulomb's constant, with ε₀ the vacuum permittivity of free space):"
+        },
+        {
+          "type": "math",
+          "tex": "V(r) \\;=\\; -\\,\\frac{k\\,e^{2}}{r}",
+          "display": true,
+          "caption": "V(r) is the potential energy of the electron at radial distance r from the proton. r is the distance between the electron and the proton, measured from the proton at the origin. k is Coulomb's constant, equal to 1/(4πε₀), where ε₀ is the vacuum permittivity. e is the elementary charge. The overall minus sign reflects that the electron and proton attract each other; V(r) → 0 as r → ∞ and V(r) → −∞ as r → 0."
+        },
+        {
+          "type": "p",
+          "text": "The stationary-state Schrödinger equation (Ĥψ = Eψ) for a particle of mass m in three dimensions in a potential V is the direct generalization of the one-dimensional version we already know: replace the one-dimensional Laplacian ∂²/∂x² with the three-dimensional Laplacian ∇², which is the sum of the three second partial derivatives, and let ψ depend on all three spatial coordinates. m here is the electron mass m_e (with the proton fixed, a small correction we will return to). Let ψ(r) stand for the spatial wave function of the electron and let E stand for its total energy. Then:"
+        },
+        {
+          "type": "math",
+          "tex": "\\left[\\,-\\,\\frac{\\hbar^{2}}{2 m_{e}}\\,\\nabla^{2} \\,-\\, \\frac{k\\,e^{2}}{r}\\,\\right]\\,\\psi(\\mathbf{r}) \\;=\\; E\\,\\psi(\\mathbf{r})",
+          "display": true,
+          "caption": "ψ(r) is the spatial wave function of the electron; r is its position (a three-dimensional vector). E is the total energy of the electron, the eigenvalue we want to solve for. ℏ is the reduced Planck constant. m_e is the electron mass. ∇² is the three-dimensional Laplacian, the sum of the second partial derivatives ∂²/∂x² + ∂²/∂y² + ∂²/∂z². The bracketed operator is the Hamiltonian: kinetic energy on the left, Coulomb potential on the right."
+        },
+        {
+          "type": "p",
+          "text": "The Coulomb potential depends only on the distance r, not on the direction. That is the physical hint that suggests using spherical coordinates (r, θ, φ), where r is the distance from the origin, θ is the polar angle measured from the z-axis, and φ is the azimuthal angle measured around it. In spherical coordinates the Laplacian ∇² splits into a piece that involves only derivatives with respect to r and a piece that involves only derivatives with respect to θ and φ. That split is the key to the whole problem: it lets us guess a solution of the separated form ψ(r, θ, φ) = R(r) · Y(θ, φ), where R is a radial factor and Y is an angular factor, and reduce the three-dimensional partial differential equation to two independent problems, one for R and one for Y."
+        },
+        {
+          "type": "math",
+          "tex": "\\psi(r, \\theta, \\varphi) \\;=\\; R(r)\\,\\cdot\\,Y(\\theta, \\varphi)",
+          "display": true,
+          "caption": "ψ is the total wave function. r, θ, and φ are the spherical coordinates: r is the radial distance from the proton, θ is the polar angle from the z-axis, φ is the azimuthal angle. R(r) is the radial factor, a function of r alone. Y(θ, φ) is the angular factor, a function of the two angles alone. This ansatz (educated guess) is licensed by the fact that the Coulomb potential is spherically symmetric, and each of R and Y will turn out to obey its own independent equation."
+        },
+        {
+          "type": "p",
+          "text": "This trick, separation of variables, is standard for partial differential equations with a symmetry (Fourier used it on the heat equation in 1822). It does not always succeed. It succeeds for the hydrogen atom because the Coulomb potential is a function of r only, so nothing in the equation couples the angular and radial dependences."
+        }
+      ],
+      "quiz": {
+        "question": "The Schrödinger equation for a general three-dimensional potential V(r) does not admit a separable solution ψ = R(r) Y(θ, φ). What specific feature of the hydrogen atom lets separation of variables work here?",
+        "options": [
+          "The electron's mass is small compared to the proton's, so we can treat the proton as fixed at the origin.",
+          "The Coulomb potential depends only on the distance r from the origin, not on the angles θ or φ. Because V is spherically symmetric, the Hamiltonian commutes with rotations about any axis through the origin, and the angular and radial parts of the equation can be solved independently.",
+          "The electron is spinless in this treatment, so the wave function has no orientational degrees of freedom.",
+          "The Coulomb potential is proportional to 1/r, and 1/r is the unique potential that admits closed-form solutions to the Schrödinger equation."
+        ],
+        "correctIndex": 1,
+        "explanation": "Spherical symmetry of V(r) is the necessary feature. If V depended on angle (say, an atom in a strong external electric field, or a molecule where two nuclei break the spherical symmetry), the angular and radial derivatives in the Laplacian would couple to V at each point, and the ansatz ψ = R(r) Y(θ, φ) would not close. Option A is true but incidental (a heavier proton just makes the reduced-mass correction smaller). Option C is wrong; spin is a separate degree of freedom that lives alongside ψ, not inside it. Option D confuses this with a different fact: the Coulomb potential does have an extra 'hidden' symmetry (the Runge-Lenz vector) that makes energy independent of ℓ, but even a general spherically symmetric V would still separate; it just would not give the same ℓ-degeneracy."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The angular story: spherical harmonics",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Substitute ψ = R(r) Y(θ, φ) into the Schrödinger equation, divide through by R Y, and multiply by 2m_e r²/ℏ². What comes out separates cleanly: a piece that depends only on r sits on one side of the equation, a piece that depends only on angles sits on the other, and since the two sides must be equal for every r, θ, φ, they must each equal the same constant. Call that separation constant ℏ² ℓ(ℓ+1), where the factor ℏ² is pulled out for later convenience and ℓ(ℓ+1) is the algebraically clean way to write the value. The angular equation is then:"
+        },
+        {
+          "type": "math",
+          "tex": "\\hat{L}^{2}\\,Y(\\theta, \\varphi) \\;=\\; \\hbar^{2}\\,\\ell(\\ell + 1)\\,Y(\\theta, \\varphi)",
+          "display": true,
+          "caption": "Y(θ, φ) is the angular factor of the wave function. L̂² is the operator for the squared magnitude of orbital angular momentum, built from the θ and φ derivative pieces of the Laplacian. ℏ is the reduced Planck constant. ℓ is a non-negative integer (0, 1, 2, ...) that labels the size of the orbital angular momentum. This equation says: Y is an eigenfunction of L̂² with eigenvalue ℏ² ℓ(ℓ+1). The quantization of ℓ comes from demanding Y be a well-defined single-valued function on the sphere."
+        },
+        {
+          "type": "p",
+          "text": "The solutions Y_ℓm(θ, φ) are the spherical harmonics, tabulated already in the eighteenth century by Legendre and Laplace (Laplace, the French mathematician who introduced them in 1782 for his celestial-mechanics work on the gravitational potential of a spinning oblate planet). They are indexed by two integers: ℓ, called the azimuthal quantum number (ℓ = 0, 1, 2, ...), which sets the total angular momentum through |L|² = ℏ² ℓ(ℓ+1); and m, called the magnetic quantum number (m = −ℓ, −ℓ+1, ..., 0, ..., ℓ−1, ℓ), which sets the z-component through L_z = mℏ. For a given ℓ there are 2ℓ + 1 values of m, so there are 2ℓ + 1 independent Y_ℓm sharing the same |L|² eigenvalue."
+        },
+        {
+          "type": "p",
+          "text": "Chemists know the ℓ = 0, 1, 2, 3 patterns as s, p, d, f orbitals, letters that trace back to nineteenth-century spectroscopy (sharp, principal, diffuse, fundamental line series, all pre-quantum labels that got welded onto the quantum numbers when it became clear which line series came from which ℓ). The s orbital is a sphere (Y_00 is a constant on the sphere), the p orbitals have a dumbbell along one axis (Y_10 is proportional to cos θ, hence peaks at the poles), the d orbitals have four lobes or two lobes with a ring, and so on. The important accounting fact is not their shapes but their count: for each ℓ, exactly 2ℓ + 1 angular states."
+        },
+        {
+          "type": "p",
+          "text": "That the magnetic quantum number m falls out here (before we have said a word about magnetism) is the first surprise. Bohr's theory had one integer, n. Schrödinger's equation delivers three, and it does so before we have even touched the radial equation. The name 'magnetic' comes from the Zeeman effect: put a hydrogen atom in a magnetic field, and the 2ℓ + 1 states with different m split into 2ℓ + 1 slightly different energies. Without the field they are degenerate; with the field they are visibly separate lines in a spectrograph, and that is how Pieter Zeeman first detected them in 1896 (Zeeman, the Dutch experimentalist at Leiden who shared the 1902 Nobel with his teacher Hendrik Lorentz for the discovery and its theoretical explanation)."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The radial equation and the 13.6 eV ladder",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "With the angular part disposed of, the radial equation for R(r) reads: put in the Coulomb potential −ke²/r, put in the centrifugal barrier ℏ² ℓ(ℓ+1)/(2m_e r²) that the angular momentum contributes as an effective repulsion, and equate to E R. Let u(r) = r R(r), a common substitution that removes the first-derivative term and gives an equation that looks like a one-dimensional Schrödinger equation with an effective potential:"
+        },
+        {
+          "type": "math",
+          "tex": "-\\,\\frac{\\hbar^{2}}{2 m_{e}}\\,\\frac{d^{2} u}{d r^{2}} \\,+\\, \\left[\\,-\\,\\frac{k e^{2}}{r} \\,+\\, \\frac{\\hbar^{2}\\,\\ell(\\ell + 1)}{2 m_{e}\\,r^{2}}\\,\\right]\\,u(r) \\;=\\; E\\,u(r)",
+          "display": true,
+          "caption": "u(r) is r times the radial factor R(r); the substitution converts the radial equation into a one-dimensional Schrödinger-like form. ℏ is the reduced Planck constant. m_e is the electron mass. k is Coulomb's constant 1/(4πε₀). e is the elementary charge. ℓ is the azimuthal quantum number from the angular equation. r is the radial distance from the proton. E is the total energy. The bracketed term is the effective radial potential: an attractive Coulomb well plus a repulsive centrifugal barrier that keeps a nonzero-ℓ electron away from the origin."
+        },
+        {
+          "type": "p",
+          "text": "Two natural units simplify what follows. First, the Bohr radius, the length scale that falls out of ℏ² and m_e and ke² by dimensional analysis and gives a size comparable to observed atoms. Call it a₀:"
+        },
+        {
+          "type": "math",
+          "tex": "a_{0} \\;=\\; \\frac{\\hbar^{2}}{m_{e}\\,k\\,e^{2}} \\;\\approx\\; 5.29 \\times 10^{-11}\\ \\mathrm{m}",
+          "display": true,
+          "caption": "a₀ is the Bohr radius. ℏ is the reduced Planck constant. m_e is the electron mass. k is Coulomb's constant. e is the elementary charge. Numerically a₀ is about 0.529 ångström (about half a tenth of a nanometer), the smallest natural length that can be built out of the constants of the problem, and, as we will see, the actual mean radius of the ground state of hydrogen."
+        },
+        {
+          "type": "p",
+          "text": "Second, the Rydberg energy, the natural energy scale, likewise built out of the constants of the problem:"
+        },
+        {
+          "type": "math",
+          "tex": "E_{R} \\;=\\; \\frac{m_{e}\\,k^{2}\\,e^{4}}{2\\,\\hbar^{2}} \\;=\\; \\frac{k\\,e^{2}}{2\\,a_{0}} \\;\\approx\\; 13.6\\ \\mathrm{eV}",
+          "display": true,
+          "caption": "E_R is the Rydberg energy. m_e is the electron mass. k is Coulomb's constant. e is the elementary charge. ℏ is the reduced Planck constant. a₀ is the Bohr radius. The second form (ke²/(2 a₀)) is half the Coulomb energy of two elementary charges separated by one Bohr radius. Numerically E_R ≈ 13.6 electron-volts, roughly the energy of an ultraviolet photon."
+        },
+        {
+          "type": "p",
+          "text": "The bound-state solutions require R(r) to decay as r → ∞ (otherwise the electron would not stay near the proton) and to stay finite as r → 0 (otherwise the wave function would blow up at the origin). Both boundary conditions together are only satisfied for special values of E. This is the same trick as a particle in a box: the boundary conditions quantize the allowed energies. Writing E = −E_R / n² with n a positive integer turns out to be the necessary condition; every other value gives a solution that either blows up somewhere or refuses to decay. The full derivation is a page of power-series algebra whose upshot is a two-line summary. The bound-state energies are:"
+        },
+        {
+          "type": "math",
+          "tex": "E_{n} \\;=\\; -\\,\\frac{E_{R}}{n^{2}} \\;=\\; -\\,\\frac{13.6\\ \\mathrm{eV}}{n^{2}} \\qquad n = 1, 2, 3, \\ldots",
+          "display": true,
+          "caption": "E_n is the energy of the n-th bound state, the eigenvalue of the Hamiltonian. E_R is the Rydberg energy, 13.6 eV. n is the principal quantum number, a positive integer 1, 2, 3, .... The minus sign says the states are bound below the ionization threshold at E = 0. n = 1 is the ground state at −13.6 eV; n = ∞ is the ionization limit at 0."
+        },
+        {
+          "type": "p",
+          "text": "And the allowed values of the azimuthal quantum number, once the radial power series is required to terminate (otherwise R(r) grows exponentially at infinity), are constrained by n: ℓ can take the integer values 0, 1, 2, ..., n − 1. So for n = 1 only ℓ = 0 (an s state). For n = 2 there is one s and one p (ℓ = 0 and 1). For n = 3 there are s, p, d (ℓ = 0, 1, 2). With the 2ℓ + 1 magnetic states counted, the total number of independent states at level n comes out to n² (one plus three plus five plus ... up to 2(n−1)+1 = 2n−1, which sums to n²). That the energy depends only on n, not on ℓ or m, is the special feature of the 1/r potential; it is called the 'accidental degeneracy' of hydrogen and reflects a hidden extra symmetry (the Runge-Lenz vector, discovered in the classical Kepler problem two centuries before quantum mechanics)."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-15-hydrogen-atom.html",
+          "height": 480,
+          "caption": "The radial probability density P(r) = r²|R_nℓ(r)|² for the hydrogen atom, plotted in units of the Bohr radius a₀. Pick a principal quantum number n and an azimuthal quantum number ℓ (with ℓ ≤ n−1). The curve shows where the electron is most likely to be found at radius r. Read off two things: the number of radial peaks (equal to n − ℓ, so the number of zeros between them is n − ℓ − 1), and how the outer peak drifts outward roughly as n². The energy readout below the plot ties each choice back to the −13.6 eV / n² ladder."
+        }
+      ],
+      "quiz": {
+        "question": "Consider the transition from the n = 3 level to the n = 2 level of hydrogen (which produces the red Hα line of the Balmer series, the first line Anders Ångström measured in the solar spectrum in 1868). Using E_n = −13.6 eV / n², what is the energy of the emitted photon, and what is the corresponding photon wavelength?",
+        "options": [
+          "ΔE = 13.6 eV × (1/9 − 1/4) = −1.89 eV. The wavelength is |hc/ΔE| = 656 nm (red visible light, matching the observed Hα line).",
+          "ΔE = 13.6 eV × (1/2 − 1/3) = 2.27 eV. The wavelength is 546 nm (green visible light).",
+          "ΔE = 13.6 eV × (1/3 − 1/2) = −2.27 eV. The wavelength is 434 nm (blue visible light).",
+          "ΔE = 13.6 eV × (1 − 1/9) = 12.09 eV. The wavelength is 102.6 nm (ultraviolet)."
+        ],
+        "correctIndex": 0,
+        "explanation": "The initial energy is E_3 = −13.6/9 ≈ −1.51 eV. The final energy is E_2 = −13.6/4 = −3.40 eV. The energy difference is E_3 − E_2 = −1.51 − (−3.40) = +1.89 eV, and this is the energy carried away by the emitted photon. Using λ = hc/E and hc ≈ 1240 eV·nm, the wavelength is 1240/1.89 ≈ 656 nm, which is the red Hα line every amateur solar-observer sees through a narrowband filter. Option B has the arithmetic 1/n_f² − 1/n_i² inverted. Option C is Option B with the sign flipped, still using the wrong denominators. Option D correctly identifies the Lyman-series transition to n = 1 (Lyman α, ultraviolet) but that is n = 3 → n = 1, not n = 3 → n = 2."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Schrödinger's Christmas at Arosa and what came out of it",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The calculation just walked through was done, in a form recognizably the same as this one, by Schrödinger in December 1925 and January 1926 at a chalet in Arosa in the Swiss Alps. He had gone up on a Christmas holiday, taking with him a copy of Louis de Broglie's 1924 doctoral thesis (the paper that proposed matter waves at wavelength λ = h/p, where p is the particle's momentum and h is Planck's constant) and, according to his biographer Walter Moore, a former lover whose identity nobody has ever recovered. The mathematical apparatus he needed (spherical harmonics, associated Laguerre polynomials, boundary conditions on differential equations) had been standard tools in celestial mechanics and mathematical physics since Laplace and Legendre. He assembled them onto de Broglie's matter-wave picture, wrote down what would be called the time-independent Schrödinger equation, and turned the crank on the hydrogen atom."
+        },
+        {
+          "type": "p",
+          "text": "The paper landed in Annalen der Physik in late January 1926 as the first of a four-paper series titled 'Quantisierung als Eigenwertproblem' (Quantization as an Eigenvalue Problem). The title was itself the punchline: Bohr's mysterious integer L = nℏ postulate was now a quantization condition on the standing waves of a Coulomb well, in the same sense that the frequencies of a vibrating drumhead are eigenvalues of the wave equation on a disc. There was no longer any need to impose the integers by hand. They came out of the equation as the only values for which the boundary conditions had solutions."
+        },
+        {
+          "type": "p",
+          "text": "The prediction agreed with the Rydberg formula and with every spectroscopic measurement of hydrogen that had ever been made. Where the old quantum theory had failed, the new theory (with a straightforward two-body reduced-mass correction m_e → μ = m_e m_p/(m_e + m_p) to account for the finite proton mass) matched the observed level energies to the precision of the measurements. The four-paper series took twelve weeks to write and publish. By the summer of 1926 wave mechanics was the working formalism of quantum physics in every European laboratory that had a copy of the journals."
+        },
+        {
+          "type": "p",
+          "text": "The story has a coda that is worth noticing. The Schrödinger derivation gave the right non-relativistic ladder E_n = −13.6 eV / n², but the actual hydrogen spectrum, at high enough resolution, showed each level was split into two closely spaced sublevels: fine structure, on the order of α² times the level energy, where α ≈ 1/137 is the dimensionless fine-structure constant that measures the strength of the electromagnetic interaction. Sommerfeld had already fit that pattern in 1916 with a hybrid relativistic-plus-old-quantum calculation that got the right formula for the wrong reason. The proper reason had to wait for Paul Dirac's 1928 relativistic equation for the electron, which produced the fine structure and also, unexpectedly, predicted the electron's spin quantum number s = 1/2 as a bonus consequence of doing quantum mechanics compatibly with special relativity. The 1926 Schrödinger calculation is the correct leading term. What Dirac did in 1928 is the next-order correction. And what Feynman, Schwinger, and Tomonaga did in the late 1940s (quantum electrodynamics) is the next order after that, which agrees with modern measurements of the hydrogen spectrum to twelve decimal places, the most precise agreement between theory and experiment anywhere in physics."
+        }
+      ]
+    }
+  ],
+  "checkInAfter": [1, 3],
+  "finalQuiz": {
+    "question": "The hydrogen atom's Schrödinger equation delivers three integer quantum numbers (n, ℓ, m) where Bohr's model had only one (n). The energies E_n = −13.6 eV / n² depend only on n. What does that pattern of degeneracies tell us about the hydrogen atom?",
+    "options": [
+      "The independence of E on ℓ and m tells us that at hydrogen's level of description, orbital shape and orientation cost no energy: an electron in a 2s state and an electron in a 2p state (with any m) are all at −3.4 eV. This 'accidental' degeneracy is special to the Coulomb 1/r potential; in a helium atom or any many-electron atom, the electron-electron repulsion breaks the ℓ-degeneracy and (for example) the 2s and 2p states split apart. The ℓ-degeneracy of hydrogen reflects a hidden extra symmetry (the Runge-Lenz vector) of the 1/r potential, one that no other central force enjoys.",
+          "The degeneracy is exact even in helium and heavier atoms; the observed 2s-2p splitting in helium is a purely relativistic effect that Dirac's equation predicts but Schrödinger's does not.",
+      "n counts the number of angular nodes and ℓ counts the number of radial nodes, so n − ℓ − 1 must be non-negative. The energy depends only on n because angular nodes cost no kinetic energy.",
+      "The ℓ-degeneracy is a coincidence of the mathematics that happens to hold for n = 1, 2, 3 but breaks down for n ≥ 4."
+    ],
+    "correctIndex": 0,
+    "explanation": "The E-only-depends-on-n pattern is a genuine physical feature of the 1/r Coulomb potential, not a coincidence and not a spin-orbit effect. Wolfgang Pauli in 1926, working parallel to Schrödinger, noticed that hydrogen has an extra conserved quantity beyond angular momentum: the Runge-Lenz vector, known since Laplace as a conserved quantity of the classical Kepler orbit that points along the semi-major axis. This extra symmetry is what makes the ℓ-degeneracy exact for 1/r, and only for 1/r. In helium the electron-electron 1/r₁₂ term is not spherically symmetric with respect to either nucleus alone, so the extra symmetry is destroyed and the 2s and 2p levels split (in helium the 2s sits about 0.8 eV below 2p, a substantial splitting readable in the visible spectrum). Option B is backwards: the splitting in helium is dominated by electron-electron repulsion, not by relativity. Option C confuses radial and angular node counts: the number of radial nodes is n − ℓ − 1, and the number of angular nodes is ℓ; the energy formula depends on n through E_R/n² for the algebraic reason worked out in section 4, not because 'angular nodes are free'. Option D is a fiction; the degeneracy is exact at every n."
+  },
+  "suggestedNodes": [
+    {"id": "quantum_tunneling", "edgeType": "extends"},
+    {"id": "zeeman_effect", "edgeType": "applied"},
+    {"id": "fine_structure", "edgeType": "related"}
+  ],
+  "metadata": {
+    "estimatedReadingMinutes": 25
+  }
+}
