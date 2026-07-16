@@ -749,6 +749,16 @@
       "createdAt": "2026-07-15T07:00:00Z",
       "col": 1,
       "row": 37
+    },
+    {
+      "id": "quantum_tunneling",
+      "label": "Tunneling",
+      "subtitle": "T ≈ exp(-2κL)",
+      "state": "available",
+      "lesson": "2026-07-16-quantum-tunneling",
+      "createdAt": "2026-07-16T07:00:00Z",
+      "col": 0,
+      "row": 38
     }
   ],
   "edges": [
@@ -1771,6 +1781,21 @@
       "from": "hydrogen_atom",
       "to": "balmer_series",
       "kind": "applied"
+    },
+    {
+      "from": "quantum_tunneling",
+      "to": "schrodinger_equation",
+      "kind": "extends"
+    },
+    {
+      "from": "quantum_tunneling",
+      "to": "uncertainty_principle",
+      "kind": "related"
+    },
+    {
+      "from": "quantum_tunneling",
+      "to": "field_emission",
+      "kind": "related"
     }
   ]
 }

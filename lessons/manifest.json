@@ -523,5 +523,12 @@
     "subtitle": "E_n = −13.6/n²",
     "date": "2026-07-15",
     "estimatedReadingMinutes": 25
+  },
+  {
+    "slug": "2026-07-16-quantum-tunneling",
+    "title": "Quantum tunneling: how alpha particles walked through a wall",
+    "subtitle": "T ≈ exp(-2κL)",
+    "date": "2026-07-16",
+    "estimatedReadingMinutes": 24
   }
 ]

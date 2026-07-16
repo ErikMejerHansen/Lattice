@@ -1,0 +1,213 @@
+{
+  "slug": "2026-07-16-quantum-tunneling",
+  "title": "Quantum tunneling: how alpha particles walked through a wall",
+  "node": {
+    "id": "quantum_tunneling",
+    "label": "Tunneling",
+    "subtitle": "T ≈ exp(-2κL)"
+  },
+  "intro": "By 1911 Ernest Rutherford's Manchester experiments had established that atomic nuclei were compact charged bodies surrounded by a Coulomb barrier, standing about 25 MeV high at the surface of a uranium nucleus. And yet uranium-238 threw out its alpha particles at 4.2 MeV, a factor of six short of what classical mechanics required to get over the wall. It took seventeen years, and Schrödinger's equation, before George Gamow realized what was happening: the alpha was not going over the barrier, it was going through it. This lesson works through that mechanism and shows why a single exponential explains alpha-decay half-lives spanning more than twenty orders of magnitude.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The wall the alphas should not cross",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Rutherford's 1911 scattering experiment at Manchester (fire alpha particles at a thin gold foil, count how many bounce back at large angles) had told him the nucleus was a point charge of Ze packed into roughly 10⁻¹⁴ meters, where Z is the atomic number and e is the elementary charge (1.602 × 10⁻¹⁹ coulombs). A charged particle trying to approach a nucleus therefore faced a Coulomb potential energy that rose as 1/r, cresting near the nuclear surface. That crest is what nuclear physicists call the Coulomb barrier: the maximum electrostatic energy a particle of charge z e has to climb to get in or out. For an alpha particle (z = 2) at a uranium nucleus (Z = 92), it stood at about 25 MeV."
+        },
+        {
+          "type": "p",
+          "text": "But radioactive nuclei were manifestly throwing alpha particles out, and the alphas were coming out slow. Uranium-238 emitted its alphas at 4.2 MeV. Radium-226 at 4.8 MeV. Even polonium-212, the fastest of the naturally occurring alpha emitters, could not clear 9 MeV. Every measured energy missed the barrier by a factor of three to six. And yet the alphas were unmistakably there, leaving cloud-chamber tracks that C. T. R. Wilson had learned to photograph in 1911 (the cloud chamber, a saturated vapor made visible by condensation trails along ionized paths) and firing the Geiger counters Hans Geiger had just built."
+        },
+        {
+          "type": "p",
+          "text": "In 1911 Geiger and John Nuttall, working with Rutherford, published an empirical bombshell now called the Geiger-Nuttall law: a linear correlation of log(t_{1/2}) against 1/√E across every naturally radioactive isotope they could measure, where t_{1/2} is the half-life and E is the emitted alpha's kinetic energy. Uranium-238 half-life: 4.5 billion years. Polonium-212 half-life: 0.3 microseconds. That is more than twenty-four orders of magnitude in rate from a factor-of-two range in energy, and it all falls on a straight line."
+        },
+        {
+          "type": "p",
+          "text": "Classical mechanics had no vocabulary for a curve of that shape. Half-lives climbed exponentially in 1/√E over a modest input range; the alphas were leaking, and the leakage depended exponentially on something no one could name. Rutherford spent fifteen years trying and failing to explain the numbers with clever geometries and preformed nuclear states. Nothing worked. It took Schrödinger's equation, published for a completely different purpose in 1926, before the leak had a mechanism."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The wave inside a wall",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Start with the stationary Schrödinger equation, the one Erwin Schrödinger wrote in Zurich in early 1926 to give a matter wave ψ(x) an energy E in a potential U(x). In its one-dimensional form (which is all we need to see the mechanism cleanly), it reads:"
+        },
+        {
+          "type": "math",
+          "tex": "-\\frac{\\hbar^{2}}{2m}\\,\\frac{d^{2}\\psi}{dx^{2}} \\;+\\; U(x)\\,\\psi \\;=\\; E\\,\\psi",
+          "display": true,
+          "caption": "ℏ is the reduced Planck constant, equal to h/(2π) where h is Planck's constant. m is the mass of the particle. ψ(x) is the matter wave whose squared magnitude |ψ|² gives the probability density of finding the particle at position x. U(x) is the potential energy of the particle at position x. E is the total energy of the particle, a fixed number set by whatever prepared the state."
+        },
+        {
+          "type": "p",
+          "text": "Rearrange to isolate the second derivative. Move the potential term to the right, and multiply through by −2m/ℏ². The equation becomes a statement about the wave function's curvature at every point:"
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{d^{2}\\psi}{dx^{2}} \\;=\\; \\frac{2m}{\\hbar^{2}}\\,\\bigl(U(x) - E\\bigr)\\,\\psi",
+          "display": true,
+          "caption": "d²ψ/dx² is the curvature of the wave function at position x. 2m/ℏ² is a positive constant that sets the scale. (U(x) − E) is the amount by which the potential energy exceeds the particle's total energy at that point; it can be positive or negative."
+        },
+        {
+          "type": "p",
+          "text": "Now look at the sign of the right-hand side region by region. Where U < E (a classically allowed region, where a particle with total energy E has kinetic energy to spare), the right-hand side is negative: the curvature of ψ has opposite sign to ψ, and the wave function oscillates like a cosine. Where U > E (a classically forbidden region, where the particle should not exist at all because it does not have enough total energy), the right-hand side is positive: the curvature of ψ has the same sign as ψ, and the wave function either grows or decays exponentially. Assume a region of constant U with U > E, and the general solution is:"
+        },
+        {
+          "type": "math",
+          "tex": "\\psi(x) \\;=\\; A\\,e^{-\\kappa x} \\;+\\; B\\,e^{+\\kappa x}, \\qquad \\kappa \\;=\\; \\frac{\\sqrt{2m(U - E)}}{\\hbar}",
+          "display": true,
+          "caption": "A is the amplitude of the decaying branch of the solution. B is the amplitude of the growing branch. κ (kappa) is the inverse decay length inside the forbidden region, with SI units of 1/meter. The larger U − E is, the larger κ is, and the faster the wave dies off."
+        },
+        {
+          "type": "p",
+          "text": "The wave function does not vanish at the wall. It leaks into the region it cannot classically enter, decaying on a length scale 1/κ. For an alpha particle facing a nuclear Coulomb barrier, 1/κ works out to a few femtometers, comparable to the nuclear radius itself. That is not a small number relative to the problem. It is the whole game."
+        }
+      ],
+      "quiz": {
+        "question": "For a particle of mass m and total energy E in a region where the potential energy is U > E, the Schrödinger equation gives d²ψ/dx² = (2m/ℏ²)(U−E)ψ, which has a positive right-hand side. What does that force the wave function ψ(x) to look like inside this classically forbidden region?",
+        "options": [
+          "ψ oscillates like a cosine of wavenumber √(2m(U−E))/ℏ.",
+          "ψ is a linear combination of exponentials e^{±κx} with κ = √(2m(U−E))/ℏ.",
+          "ψ is identically zero: no wave can exist where E < U.",
+          "ψ grows linearly with x, because the potential grows and the wave has to keep up."
+        ],
+        "correctIndex": 1,
+        "explanation": "The equation d²ψ/dx² = κ² ψ (with κ² > 0) has solutions e^{−κx} and e^{+κx}, not cosines and sines. Physically, the wave function does not vanish at the boundary of the forbidden region: it enters and decays exponentially with a scale length 1/κ. That is the mathematical origin of tunneling. The leaked amplitude never quite reaches zero, and if the barrier has finite thickness some of it reaches the other side."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The transmission coefficient",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Take the barrier to be a rectangle: a slab of constant potential U between x = 0 and x = L, with U − E > 0, sitting between two flat regions where a particle of energy E moves freely. Outside the barrier ψ is a plane wave, incoming from the left and transmitted to the right. Inside the barrier it is the pair of exponentials from the last section. Match ψ and its first derivative dψ/dx at each wall (both must be continuous where U jumps, or the second derivative would be infinite), solve for the ratio of transmitted amplitude to incoming amplitude, and take the physically interesting limit that κL is not too small. What remains is startling in its simplicity:"
+        },
+        {
+          "type": "math",
+          "tex": "T \\;\\approx\\; e^{-2\\kappa L}",
+          "display": true,
+          "caption": "T is the transmission probability, the fraction of arriving particles that emerge on the far side of the barrier. κ is the same inverse decay length √(2m(U − E))/ℏ from the last section. L is the barrier width. The exponent picks up a factor of 2 (rather than 1) because the transmission probability is the square of the transmitted amplitude, and the amplitude itself decays by e^{−κL} across the barrier."
+        },
+        {
+          "type": "p",
+          "text": "There is no threshold energy, no cutoff. A particle can always get through, at a rate that depends exponentially on the product κL. Halve the width and T grows by e² ≈ 7.4. Double it and T shrinks by the same factor. That is why the numbers are so extreme: modest changes in U − E or in L feed straight into an exponent, and an exponent walks through orders of magnitude quickly."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-16-quantum-tunneling.html",
+          "height": 420,
+          "caption": "A one-dimensional rectangular barrier with adjustable width L and barrier height U above the particle's energy E. The red curve is the real part of the stationary-state wave function ψ(x): oscillating outside, decaying exponentially inside the barrier, oscillating on the far side with a smaller amplitude √T. Slide L or slide E/U and watch the transmitted amplitude change exponentially. The T readout is the exact rectangular-barrier formula, not the large-κL approximation, so it stays honest as κL → 0."
+        },
+        {
+          "type": "p",
+          "text": "Real barriers are not rectangular. The Coulomb wall around a nucleus is a spike that falls like 1/r; the vacuum gap between the tip of a scanning tunneling microscope (STM, the atomic-resolution imaging instrument Gerd Binnig and Heinrich Rohrer built at IBM Zurich in 1981) and the surface below is a trapezoid tilted by the applied bias voltage. To handle any barrier that varies slowly on the length scale 1/κ, Gregor Wentzel in Munich, Hendrik Kramers in Utrecht, and Léon Brillouin in Paris independently produced in 1926 what is now called the WKB approximation (an acronym of their three surnames). Slice the barrier into thin strips, apply the rectangular result to each, and let the strip width go to zero. The exponent becomes an integral:"
+        },
+        {
+          "type": "math",
+          "tex": "T \\;\\approx\\; \\exp\\!\\left(-2\\int_{x_{1}}^{x_{2}} \\kappa(x)\\, dx\\right), \\qquad \\kappa(x) \\;=\\; \\frac{\\sqrt{2m\\bigl(U(x) - E\\bigr)}}{\\hbar}",
+          "display": true,
+          "caption": "T is again the transmission probability. κ(x) is the position-dependent inverse decay length. x₁ and x₂ are the two classical turning points, the positions where U(x) = E and κ(x) = 0. The integrand vanishes at the endpoints and is positive in between. The integral is a kind of geometric area of the classically forbidden region, weighted by √(U − E)."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Gamow at the blackboard",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In the summer of 1928 a twenty-four-year-old George Gamow arrived in Göttingen from Leningrad on a Rockefeller Foundation stipend, one of a wave of young Soviet physicists Max Born was hosting through the second half of the 1920s. Born set him loose on unsolved problems. Gamow, reading Rutherford's essays on radioactivity in the Manchester and Cambridge journals, saw an opening. Schrödinger's equation was two years old. Nobody had applied it to nuclear physics. Nobody had tried to explain the Geiger-Nuttall law from first principles."
+        },
+        {
+          "type": "p",
+          "text": "His model was almost embarrassingly simple. Treat the alpha particle as a wave rattling around inside a spherical potential well: the nucleus. Beyond the nuclear radius R (the boundary between the strong-force well and the outside), the alpha faces the Coulomb barrier U(r) = 2Ze²/(4πε₀ r), where the 2 is the alpha's charge in units of e, Z is the daughter nucleus's charge, ε₀ is the vacuum permittivity, and r is the distance from the center. The barrier peaks at U(R), falls off as 1/r, and reaches the alpha's actual energy E at some outer radius r₂ where U(r₂) = E. Between R and r₂ is the classically forbidden region the alpha has to cross by tunneling. Every time the alpha bounces against the inner wall, a small fraction of its amplitude leaks out; multiplied by an assault frequency f (roughly 10²¹ per second for an MeV alpha in a nucleus of radius 10⁻¹⁴ m), that fraction becomes a decay rate."
+        },
+        {
+          "type": "p",
+          "text": "The WKB integral over the Coulomb tail can be done analytically. Substitute κ(r) = (1/ℏ)√(2m_α(U(r) − E)) into the WKB exponent, integrate from R to r₂ = 2Ze²/(4πε₀ E), and in the useful limit R ≪ r₂ the integral reduces to a clean form Gamow published in Zeitschrift für Physik in August 1928:"
+        },
+        {
+          "type": "math",
+          "tex": "G \\;=\\; \\frac{2\\pi \\cdot 2 Z e^{2}}{4\\pi\\varepsilon_{0}\\,\\hbar\\, v}, \\qquad t_{1/2} \\;\\propto\\; \\frac{1}{f}\\, e^{G}",
+          "display": true,
+          "caption": "G is the Gamow factor, the WKB exponent 2∫κ dr evaluated on the Coulomb barrier in the low-energy limit R ≪ r₂. Z is the daughter nucleus's charge in units of e (the factor of 2 in the numerator is the alpha's own charge). e is the elementary charge. ε₀ is the vacuum permittivity. ℏ is the reduced Planck constant. v is the alpha's velocity outside the barrier, related to its kinetic energy by ½ m_α v² = E. f is the assault frequency at which the alpha strikes the inner wall of the nucleus, roughly 10²¹ per second. t_{1/2} is the observed half-life."
+        },
+        {
+          "type": "p",
+          "text": "The velocity v is the only quantity that changes substantially across the different alpha emitters (Z changes too, but slowly). And v scales as √E, so 1/v scales as 1/√E. The Gamow exponent G is therefore inversely proportional to √E. Take the logarithm of the half-life and you get log(t_{1/2}) ∝ G ∝ 1/√E, plus a slowly varying prefactor. That is exactly the Geiger-Nuttall law, empirically discovered in 1911 and unexplained for seventeen years. The twenty-four orders of magnitude between polonium and uranium came from the exponential of the Coulomb integral, evaluated at slightly different velocities. One equation absorbed the whole plot."
+        }
+      ],
+      "quiz": {
+        "question": "In Gamow's derivation the alpha-decay half-life is t_{1/2} ∝ (1/f) exp(G), where G is the Gamow factor and f the assault frequency. Consider two alpha emitters with the same daughter charge Z but different emitted-alpha velocities v, and suppose one has v twice as large as the other. By roughly what factor do their half-lives differ, assuming the faster emitter starts from a Gamow exponent G ≈ 80?",
+        "options": [
+          "By a factor of about 2, because the half-life is inversely proportional to v.",
+          "By a factor of about 4, since v enters through kinetic energy as v².",
+          "By a factor of about exp(40) ≈ 2 × 10¹⁷, because doubling v halves G to 40 and the half-life carries the factor exp(G).",
+          "By no factor at all: Z fixes the half-life and the two isotopes must therefore agree."
+        ],
+        "correctIndex": 2,
+        "explanation": "G is proportional to 1/v, so doubling v halves G. The half-life carries the factor exp(G). Starting from G ≈ 80 for the slower emitter, the faster one has G ≈ 40, and the ratio of half-lives is exp(80)/exp(40) = exp(40) ≈ 2 × 10¹⁷. That single line of arithmetic is the mechanism behind the Geiger-Nuttall plot's twenty-four-order-of-magnitude vertical range. Options A and B miss the exponentiation entirely; the half-life is not polynomial in v. Option D misreads the formula: Z sets the scale but v carries the energy dependence, and that is where the leverage lives."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Uranium-238, in numbers",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Plug the actual numbers into Gamow's formula for U-238 and it works. The daughter is thorium-234, so Z = 90; the alpha carries E = 4.2 MeV = 6.7 × 10⁻¹³ J, and has mass m_α ≈ 6.64 × 10⁻²⁷ kg. The velocity outside the barrier follows from the alpha's kinetic energy ½ m_α v² = E:"
+        },
+        {
+          "type": "math",
+          "tex": "v \\;=\\; \\sqrt{\\frac{2E}{m_{\\alpha}}} \\;\\approx\\; 1.4 \\times 10^{7}\\ \\mathrm{m/s}",
+          "display": true,
+          "caption": "v is the alpha's velocity once it has escaped the nucleus. E is its kinetic energy (4.2 MeV for U-238). m_α is the alpha's mass. The result is about five percent of the speed of light, so a non-relativistic treatment of the tunneling problem is adequate."
+        },
+        {
+          "type": "p",
+          "text": "Now assemble G. The numerator 2π · 2Z · e² / (4πε₀) evaluates to 4πZ · k_e e², where k_e = 1/(4πε₀) is the Coulomb constant 8.99 × 10⁹ N·m²/C². Plug in Z = 90 and e² = (1.60 × 10⁻¹⁹)² C² and the numerator comes to about 2.6 × 10⁻²⁵ J·m. Divide by ℏ v ≈ (1.05 × 10⁻³⁴ J·s)(1.4 × 10⁷ m/s) ≈ 1.5 × 10⁻²⁷ J·m. That gives a leading-order Gamow exponent G ≈ 170. Correcting for the finite ratio R/r₂ (Gamow's next-order term brings a factor cos⁻¹√(E/U_max) − √(E/U_max − E²/U_max²)) trims the exponent down to about 84 for U-238, which is the number every nuclear physics text quotes. The point is that G lives in the range 50 to 90 for every naturally occurring alpha emitter, and the whole Geiger-Nuttall spread comes from moving inside that window."
+        },
+        {
+          "type": "p",
+          "text": "Take exp(−84) ≈ 3 × 10⁻³⁷: that is the probability of a single tunneling attempt succeeding. Multiply by an assault frequency f ≈ 10²¹ per second (an MeV alpha making round trips inside a nucleus of radius 10⁻¹⁴ m) and the decay rate comes to roughly 3 × 10⁻¹⁶ per second, corresponding to a half-life of about 70 million years. The measured U-238 half-life is 4.5 billion years, a factor of sixty larger. That is a rounding error on a quantity spanning twenty-four orders of magnitude, and refined calculations (Blatt and Weisskopf 1952, Preston 1961) that keep the R/r₂ correction and the preformation probability all the way through bring the answer inside a factor of two of measurement. Gamow got the physics right by pinning down the exponent; every improvement since has been polishing prefactors that never touch the leading behavior."
+        },
+        {
+          "type": "p",
+          "text": "Ronald Gurney and Edward Condon at Princeton reached the same conclusion in the same summer, independently. Their paper appeared in Nature two months after Gamow's in Zeitschrift; both derivations used Schrödinger's 1926 wave equation, unchanged, on a problem it had not been designed for. It was the first time the new mechanics had been asked to speak to the nucleus. It spoke, and the answer had been sitting in the Geiger-Nuttall plot for seventeen years, waiting for someone to recognize the exponential."
+        }
+      ]
+    }
+  ],
+  "checkInAfter": [1, 3],
+  "finalQuiz": {
+    "question": "Alpha emitters differ in half-life by more than twenty-four orders of magnitude but by only a factor of about two in alpha kinetic energy. What single feature of Gamow's tunneling calculation reproduces this enormous sensitivity from such a narrow input range?",
+    "options": [
+      "The transmission probability sits inside the exponential exp(-G) of the WKB integral, and G scales as 1/√E through the alpha velocity. A factor-of-two change in E shifts G by tens, and exponents of tens are factors of 10¹⁰ to 10²⁰.",
+      "The alpha's mass changes across the isotopes, so the reduced mass enters differently.",
+      "The Coulomb barrier changes sharply at the classical turning point, so small changes in E move the turning point drastically.",
+      "The nuclear preformation probability (the odds that four nucleons cluster into an alpha inside the nucleus) differs by twenty-four orders of magnitude between different alpha emitters."
+    ],
+    "correctIndex": 0,
+    "explanation": "The Gamow exponent G ∝ 1/v ∝ 1/√E, so a factor-of-two change in E moves G by tens (roughly a factor of √2 in the exponent, applied to a starting value of 60 to 90). Half-lives carry the factor exp(G), and tens in the exponent are twenty-plus orders of magnitude in rate. That exponential leverage is what collapses the Geiger-Nuttall plot onto a single line: every alpha emitter has G in roughly the same range, and the observed half-lives come from the exponentiation. Option B misidentifies reduced-mass effects (a percent-level correction) as the leading behavior. Option C is a real but subdominant effect: the outer turning point r₂ = 2Ze²/(4πε₀ E) does move with E, and its contribution enters the integral, but its effect on G is polynomial, not exponential. Option D would require a physical mechanism to vary the preformation probability across the periodic table by twenty-four orders of magnitude, which no one has ever proposed and which the data do not support."
+  },
+  "suggestedNodes": [
+    { "id": "alpha_decay", "edgeType": "extends" },
+    { "id": "josephson_effect", "edgeType": "applied" },
+    { "id": "ammonia_inversion", "edgeType": "related" }
+  ],
+  "metadata": {
+    "estimatedReadingMinutes": 24
+  }
+}
