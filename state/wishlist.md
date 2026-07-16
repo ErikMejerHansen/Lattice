@@ -28,7 +28,6 @@
 # auto-suggested 2026-07-09 from shot-noise
 
 # auto-suggested 2026-05-17 from schrodinger-equation
-Quantum tunneling — exponential leakage through a classically forbidden barrier, T ∝ exp(−2κL), the effect that explains α-decay rates spanning twenty orders of magnitude
 
 # auto-suggested 2026-05-18 from uncertainty-principle
 Robertson inequality — ΔAΔB ≥ ½|⟨[Â, B̂]⟩|, the general-operator version of Heisenberg from which the position-momentum case is a special case
@@ -259,3 +258,7 @@ Bell inequalities — John Bell's 1964 CHSH bound |E(a,b) − E(a,c) + E(a',b) +
 # auto-suggested 2026-07-15 from hydrogen-atom
 Zeeman effect — the 2ℓ+1 magnetic-quantum-number splitting of hydrogen lines in an external field, Pieter Zeeman's 1896 Leiden measurement that first showed the m sublevels of Schrödinger's ladder were real observables, the 1902 Nobel with Hendrik Lorentz, and the "anomalous" spin-doubled variant that motivated the discovery of electron spin in 1925
 Fine structure — the α² m_e c² ≈ 10⁻⁴ eV splitting of hydrogen levels that Schrödinger's non-relativistic 1926 equation misses, Sommerfeld's 1916 half-lucky formula, Dirac's 1928 relativistic equation getting it right for the right reason, and the Lamb shift 1947 that revealed the next order of QED radiative corrections
+
+# auto-suggested 2026-07-16 from quantum-tunneling
+Josephson effect — Cooper-pair tunneling across a thin insulating barrier between two superconductors, Brian Josephson's 1962 undergraduate-thesis-turned-Nobel derivation of the DC relation I = I_c sin φ and the AC relation dφ/dt = 2eV/ℏ, and the SQUID magnetometer that turns tunneling into a picotesla-sensitive magnetic-field probe
+Ammonia inversion — the double-well tunneling between two equivalent NH₃ pyramidal geometries at 23.87 GHz, Charles Townes's 1954 ammonia maser (a microwave amplifier based on stimulated emission from the tunneling doublet), and the first practical technology built on quantum tunneling

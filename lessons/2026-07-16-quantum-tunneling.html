@@ -1,0 +1,193 @@
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+</style>
+<style>
+  #viz { padding: 14px 16px 18px; box-sizing: border-box; max-width: 720px; margin: 0 auto; }
+  .plot-wrap {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    padding: 10px;
+  }
+  svg { display: block; width: 100%; height: auto; }
+  .axis-line { stroke: var(--border-strong); stroke-width: 1; fill: none; }
+  .barrier {
+    fill: var(--accent-soft); fill-opacity: 0.16;
+    stroke: var(--accent-soft); stroke-width: 1.2;
+  }
+  .e-line { stroke: var(--text-muted); stroke-dasharray: 4 3; stroke-width: 1; }
+  .zero-line { stroke: var(--border); stroke-width: 0.6; stroke-dasharray: 2 4; }
+  .psi { fill: none; stroke: var(--accent); stroke-width: 1.7; }
+  .label {
+    font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+    font-size: 11px; fill: var(--text-muted);
+  }
+  .label.u { fill: var(--accent-soft); font-size: 12px; }
+  .label.psi { fill: var(--accent); font-style: italic; font-size: 12px; }
+  .readout {
+    display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 12px;
+    font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+    font-size: 12px; color: var(--text);
+  }
+  .readout .k { color: var(--text-muted); margin-right: 5px; }
+</style>
+
+<div id="viz">
+  <div class="plot-wrap">
+    <svg id="plot" viewBox="0 0 680 320" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+  <div class="viz-slider-row">
+    <label for="Lslider">L</label>
+    <input type="range" id="Lslider" min="0.3" max="3.0" step="0.05" value="1.4">
+    <span class="value" id="Lval">L = 1.40</span>
+  </div>
+
+  <div class="viz-slider-row">
+    <label for="Eslider">E/U</label>
+    <input type="range" id="Eslider" min="0.10" max="0.90" step="0.01" value="0.50">
+    <span class="value" id="Eval">E/U = 0.50</span>
+  </div>
+
+  <div class="readout">
+    <span><span class="k">k</span><span id="kval">2.47</span></span>
+    <span><span class="k">κ</span><span id="kappaval">2.47</span></span>
+    <span><span class="k">κL</span><span id="kLval">3.46</span></span>
+    <span><span class="k">T (exact)</span><span id="Tval">0.001</span></span>
+    <span><span class="k">e^(−2κL)</span><span id="Taprxval">0.001</span></span>
+  </div>
+
+  <div class="viz-caption" style="margin-top: 14px;">
+    A rectangular barrier of width L and height U with a particle of total energy E incident from the left. The shaded rectangle is the barrier, the dashed horizontal line at height E is the energy level, and the red curve is the real part of the wave function ψ(x) drawn around that E line. Outside the barrier ψ oscillates with wavenumber k = √(2mE)/ℏ. Inside it decays exponentially with κ = √(2m(U−E))/ℏ. On the far side it oscillates at amplitude √T. Slide L or E/U and watch T change exponentially. The T readout is the exact formula T = 1/(1 + sinh²(κL) · U²/(4E(U−E))); e^(−2κL) is the large-κL approximation Gamow used.
+  </div>
+</div>
+
+<script>
+(function() {
+  const svg = document.getElementById('plot');
+  const W = 680, H = 320;
+  const M = { l: 30, r: 30, t: 20, b: 34 };
+  const plotW = W - M.l - M.r;
+  const plotH = H - M.t - M.b;
+
+  const xMin = -3.2, xMax = 6.2;
+  const yMin = 0, yMax = 1.55;
+
+  const xToPx = x => M.l + (x - xMin) / (xMax - xMin) * plotW;
+  const yToPx = y => M.t + plotH - (y - yMin) / (yMax - yMin) * plotH;
+
+  const AMP = 0.30;
+  const KSCALE = 3.5;
+  const NPTS = 480;
+
+  function compute(EoverU, L) {
+    const U = 1;
+    const E = EoverU * U;
+    const k = KSCALE * Math.sqrt(E);
+    const kappa = KSCALE * Math.sqrt(U - E);
+    const kL = kappa * L;
+    const sh = Math.sinh(kL);
+    const denom = 1 + sh * sh * (U * U) / (4 * E * (U - E));
+    const T = 1 / denom;
+    const Tapx = Math.exp(-2 * kL);
+    return { U, E, L, k, kappa, kL, T, Tapx };
+  }
+
+  function draw(s) {
+    const { U, E, L, k, kappa } = s;
+    let html = '';
+
+    const y0 = yToPx(0);
+    const yU = yToPx(U);
+    const bx0 = xToPx(0), bxL = xToPx(L);
+
+    html += `<line class="zero-line" x1="${xToPx(xMin)}" y1="${y0}" x2="${xToPx(xMax)}" y2="${y0}"/>`;
+
+    html += `<rect class="barrier" x="${bx0.toFixed(1)}" y="${yU.toFixed(1)}" width="${(bxL - bx0).toFixed(1)}" height="${(y0 - yU).toFixed(1)}"/>`;
+
+    html += `<line class="e-line" x1="${xToPx(xMin)}" y1="${yToPx(E)}" x2="${xToPx(xMax)}" y2="${yToPx(E)}"/>`;
+
+    let path = '';
+    const psi = (x) => {
+      if (x < 0) return Math.cos(k * x);
+      if (x < L) return Math.exp(-kappa * x);
+      return Math.exp(-kappa * L) * Math.cos(k * (x - L));
+    };
+    for (let i = 0; i <= NPTS; i++) {
+      const x = xMin + (xMax - xMin) * i / NPTS;
+      const py = E + AMP * psi(x);
+      path += (i === 0 ? 'M ' : ' L ') + xToPx(x).toFixed(1) + ' ' + yToPx(py).toFixed(1);
+    }
+    html += `<path class="psi" d="${path}"/>`;
+
+    html += `<text class="label u" x="${((bx0 + bxL) / 2).toFixed(1)}" y="${(yU - 6).toFixed(1)}" text-anchor="middle">U</text>`;
+    html += `<text class="label" x="${(xToPx(xMax) - 4).toFixed(1)}" y="${(yToPx(E) - 4).toFixed(1)}" text-anchor="end">E = ${E.toFixed(2)} · U</text>`;
+    html += `<text class="label psi" x="${(xToPx(xMin) + 4).toFixed(1)}" y="${(yToPx(E + AMP) - 4).toFixed(1)}">Re ψ(x)</text>`;
+    html += `<text class="label" x="${((bx0 + bxL) / 2).toFixed(1)}" y="${(y0 + 14).toFixed(1)}" text-anchor="middle">L</text>`;
+    html += `<text class="label" x="${xToPx(0).toFixed(1)}" y="${(y0 + 14).toFixed(1)}" text-anchor="middle">0</text>`;
+
+    html += `<line class="axis-line" x1="${xToPx(xMin)}" y1="${y0}" x2="${xToPx(xMax)}" y2="${y0}"/>`;
+
+    svg.innerHTML = html;
+  }
+
+  function fmt(v) {
+    if (!isFinite(v)) return '—';
+    if (v > 0 && v < 1e-3) return v.toExponential(2);
+    if (v >= 1e-3 && v < 1) return v.toFixed(4);
+    return v.toFixed(3);
+  }
+
+  const lS = document.getElementById('Lslider'), lV = document.getElementById('Lval');
+  const eS = document.getElementById('Eslider'), eV = document.getElementById('Eval');
+
+  function update() {
+    const L = parseFloat(lS.value);
+    const Er = parseFloat(eS.value);
+    lV.textContent = 'L = ' + L.toFixed(2);
+    eV.textContent = 'E/U = ' + Er.toFixed(2);
+    const s = compute(Er, L);
+    draw(s);
+    document.getElementById('kval').textContent = s.k.toFixed(3);
+    document.getElementById('kappaval').textContent = s.kappa.toFixed(3);
+    document.getElementById('kLval').textContent = s.kL.toFixed(3);
+    document.getElementById('Tval').textContent = fmt(s.T);
+    document.getElementById('Taprxval').textContent = fmt(s.Tapx);
+  }
+
+  lS.addEventListener('input', update);
+  eS.addEventListener('input', update);
+  update();
+})();
+</script>
