@@ -30,7 +30,6 @@
 # auto-suggested 2026-05-17 from schrodinger-equation
 
 # auto-suggested 2026-05-18 from uncertainty-principle
-Robertson inequality — ΔAΔB ≥ ½|⟨[Â, B̂]⟩|, the general-operator version of Heisenberg from which the position-momentum case is a special case
 Energy-time uncertainty — ΔEΔt ≥ ℏ/2, not a Robertson inequality (time is not an operator) but a separate statement about state lifetimes and natural linewidths
 Gaussian wave packet — the unique minimum-uncertainty state σ_x σ_p = ℏ/2, and how it spreads in free space (Δx grows linearly with t at large t)
 
@@ -262,3 +261,7 @@ Fine structure — the α² m_e c² ≈ 10⁻⁴ eV splitting of hydrogen levels
 # auto-suggested 2026-07-16 from quantum-tunneling
 Josephson effect — Cooper-pair tunneling across a thin insulating barrier between two superconductors, Brian Josephson's 1962 undergraduate-thesis-turned-Nobel derivation of the DC relation I = I_c sin φ and the AC relation dφ/dt = 2eV/ℏ, and the SQUID magnetometer that turns tunneling into a picotesla-sensitive magnetic-field probe
 Ammonia inversion — the double-well tunneling between two equivalent NH₃ pyramidal geometries at 23.87 GHz, Charles Townes's 1954 ammonia maser (a microwave amplifier based on stimulated emission from the tunneling doublet), and the first practical technology built on quantum tunneling
+
+# auto-suggested 2026-07-17 from robertson-inequality
+Squeezed states — Gaussian states of the harmonic oscillator with (Δx)² < ℏ/(2mω) at the price of (Δp)² > ℏmω/2, the tilted phase-space ellipse whose covariance is the extra term in Schrödinger's 1930 tightening of Robertson's inequality; produced experimentally at Bell Labs (Slusher and Yurke, 1985) with degenerate parametric downconversion and now injected into LIGO's arm cavities to shave ~3 dB off the shot-noise floor of gravitational-wave detection
+Spin operators — Ŝ_x, Ŝ_y, Ŝ_z as ℏ/2 times the Pauli matrices, the smallest possible Hilbert space (dim 2) on which Robertson's inequality applies non-trivially, and the algebra [Ŝ_x, Ŝ_y] = iℏŜ_z whose cyclic structure the whole SU(2) representation theory (from spin-½ to spin-j) is built on

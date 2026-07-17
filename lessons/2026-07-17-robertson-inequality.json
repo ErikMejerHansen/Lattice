@@ -1,0 +1,238 @@
+{
+  "slug": "2026-07-17-robertson-inequality",
+  "title": "Robertson's inequality: every commutator sets an uncertainty",
+  "node": {
+    "id": "robertson_inequality",
+    "label": "Robertson",
+    "subtitle": "ΔAΔB ≥ ½|[A,B]|"
+  },
+  "intro": "Werner Heisenberg had position and momentum. Howard Percy Robertson wanted every pair of observables. In July 1929, in a two-page note to Physical Review sent from Princeton, Robertson proved that for any two Hermitian operators Â and B̂ acting on a quantum state, the product of their standard deviations obeys ΔA · ΔB ≥ ½|⟨[Â, B̂]⟩|. The position-momentum case falls out in the first line; the deeper reward is a companion inequality for every other pair of noncommuting observables, with a right-hand side that can itself depend on which state you are in.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. What Heisenberg had, and what he did not",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Heisenberg's 1927 paper had opened with a specific pair of observables, position and momentum, and closed with a hand-wave that similar bounds ought to hold whenever two operators failed to commute. Earle Hesse Kennard, at Cornell, tightened the x-p case a few months later with a proper Fourier argument. Kennard's version (the same bandwidth theorem we saw in the last uncertainty lesson, applied to matter waves through the de Broglie relation p = ℏk) turned Heisenberg's Δx·Δp ≳ h into the sharp inequality Δx·Δp ≥ ℏ/2. But it worked for x and p alone."
+        },
+        {
+          "type": "p",
+          "text": "Hermann Weyl, in Göttingen, then rewrote the position-momentum commutation relation in an exponentiated form, e^(iaX̂)·e^(ibP̂) = e^(iabℏ)·e^(ibP̂)·e^(iaX̂), which fixed a subtle mathematical problem about unbounded operators but did not extend the inequality either. The general theorem, the one that would cover angular momentum, spin components, number and phase, quadratures of the electromagnetic field, was still missing."
+        },
+        {
+          "type": "p",
+          "text": "Howard Percy Robertson arrived at Princeton in the fall of 1928, twenty-five years old, fresh from a postdoctoral year in Göttingen where he had worked with Weyl and Born on the mathematical foundations of the new quantum theory. His temperament was that of a man who wanted the general case rather than the specific one, and the gap Heisenberg had left over was exactly the shape he liked to fill in. He needed no experiment. He needed a proof."
+        },
+        {
+          "type": "p",
+          "text": "In July 1929 he sent a note to Physical Review, two pages long, titled simply 'The Uncertainty Principle.' It contained no experimental proposal, no numerical prediction, no philosophical commentary. It contained a theorem: for any two Hermitian operators Â and B̂ and any normalized quantum state |ψ⟩, the product of the standard deviations of A and B in that state is at least half the absolute value of the expectation value of the commutator [Â, B̂]. Heisenberg's inequality falls out in a single specialization. Every other pair of observables that had ever been written down acquired, in one line, its own bound."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Cauchy-Schwarz, and the residue that is purely imaginary",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The proof begins with two Hermitian operators Â and B̂ and a normalized quantum state |ψ⟩. Define shifted operators α̂ = Â − ⟨Â⟩ and β̂ = B̂ − ⟨B̂⟩ (each observable minus its own mean value in the state). The variances of A and B are then (ΔA)² = ⟨α̂²⟩ and (ΔB)² = ⟨β̂²⟩. This is the same definition of standard deviation you know from ordinary statistics, restated in operator language, and it is where every step below starts."
+        },
+        {
+          "type": "p",
+          "text": "Now apply the Cauchy-Schwarz inequality to the two Hilbert-space vectors α̂|ψ⟩ and β̂|ψ⟩. Cauchy-Schwarz says that for any two vectors u and v, the squared magnitude of their inner product is at most the product of their squared norms: |⟨u,v⟩|² ≤ ⟨u,u⟩⟨v,v⟩. Substituting u = α̂|ψ⟩ and v = β̂|ψ⟩, and using α̂† = α̂ (α̂ inherits Hermiticity from Â), the norms come out to ⟨α̂²⟩ and ⟨β̂²⟩ and the inner product to ⟨α̂β̂⟩:"
+        },
+        {
+          "type": "math",
+          "tex": "\\langle\\hat\\alpha^{2}\\rangle\\,\\langle\\hat\\beta^{2}\\rangle \\;\\geq\\; \\bigl|\\langle\\hat\\alpha\\hat\\beta\\rangle\\bigr|^{2}",
+          "display": true,
+          "caption": "⟨α̂²⟩ is (ΔA)², the variance of A in the state |ψ⟩. ⟨β̂²⟩ is (ΔB)², the variance of B in the same state. ⟨α̂β̂⟩ = ⟨ψ|α̂β̂|ψ⟩ is the expectation value of the (non-Hermitian) product α̂β̂ in the state. The vertical bars denote absolute value of a complex number. The whole line is Cauchy-Schwarz applied to the two vectors α̂|ψ⟩ and β̂|ψ⟩."
+        },
+        {
+          "type": "p",
+          "text": "The trick is to split α̂β̂ into a Hermitian part and an anti-Hermitian part. Any operator can be written as Ô = ½(Ô + Ô†) + ½(Ô − Ô†), and for the product α̂β̂, using (α̂β̂)† = β̂†α̂† = β̂α̂ (which holds because α̂ and β̂ are Hermitian), the pieces come out as the anticommutator and the commutator:"
+        },
+        {
+          "type": "math",
+          "tex": "\\hat\\alpha\\hat\\beta \\;=\\; \\tfrac{1}{2}\\{\\hat\\alpha,\\hat\\beta\\} \\;+\\; \\tfrac{1}{2}[\\hat\\alpha,\\hat\\beta]",
+          "display": true,
+          "caption": "{α̂, β̂} = α̂β̂ + β̂α̂ is the anticommutator of the two operators. [α̂, β̂] = α̂β̂ − β̂α̂ is the commutator. The anticommutator of two Hermitian operators is itself Hermitian (its dagger equals itself). The commutator of two Hermitian operators is anti-Hermitian (its dagger is minus itself). The two half-factors on the right recover α̂β̂ when added."
+        },
+        {
+          "type": "p",
+          "text": "Take the expectation value of both sides in the state |ψ⟩. The expectation of a Hermitian operator is a real number; the expectation of an anti-Hermitian operator is purely imaginary. So ⟨α̂β̂⟩ = (real) + (purely imaginary), and its squared absolute value is the sum of the squares of those two pieces (this is the Pythagorean identity |z|² = (Re z)² + (Im z)² for any complex number z):"
+        },
+        {
+          "type": "math",
+          "tex": "\\bigl|\\langle\\hat\\alpha\\hat\\beta\\rangle\\bigr|^{2} \\;=\\; \\bigl(\\tfrac{1}{2}\\langle\\{\\hat\\alpha,\\hat\\beta\\}\\rangle\\bigr)^{2} \\;+\\; \\bigl(\\tfrac{1}{2}\\,\\bigl|\\langle[\\hat\\alpha,\\hat\\beta]\\rangle\\bigr|\\bigr)^{2}",
+          "display": true,
+          "caption": "The left side is the squared absolute value of the complex number ⟨α̂β̂⟩. The first term on the right is the square of the real part, ½⟨{α̂, β̂}⟩. The second term is the square of the imaginary part, obtained by taking the absolute value of ½⟨[α̂, β̂]⟩ (which is purely imaginary) and squaring it. The equation is just |z|² = (Re z)² + (Im z)² for the specific complex number z = ⟨α̂β̂⟩."
+        },
+        {
+          "type": "p",
+          "text": "Drop the anticommutator term. Removing a nonnegative quantity from the right-hand side of an inequality can only make it weaker, so what remains is still true. Note also that [α̂, β̂] = [Â − ⟨Â⟩, B̂ − ⟨B̂⟩] = [Â, B̂], because the c-number expectation values ⟨Â⟩ and ⟨B̂⟩ commute with every operator and drop out of the commutator. Combining with Cauchy-Schwarz gives:"
+        },
+        {
+          "type": "math",
+          "tex": "(\\Delta A)^{2}(\\Delta B)^{2} \\;\\geq\\; \\bigl|\\langle\\hat\\alpha\\hat\\beta\\rangle\\bigr|^{2} \\;\\geq\\; \\Bigl(\\tfrac{1}{2}\\bigl|\\langle[\\hat A,\\hat B]\\rangle\\bigr|\\Bigr)^{2}",
+          "display": true,
+          "caption": "(ΔA)² and (ΔB)² are the variances of the two observables in the state. The first inequality is Cauchy-Schwarz from the earlier line. The second inequality is the result of dropping the (nonnegative) anticommutator square. |⟨[Â, B̂]⟩| is the absolute value of the expectation of the commutator, evaluated on the state |ψ⟩."
+        },
+        {
+          "type": "p",
+          "text": "Take positive square roots of both sides. What comes out is Robertson's inequality: ΔA · ΔB ≥ ½|⟨[Â, B̂]⟩|. The entire derivation is six algebraic steps and rests on nothing but Cauchy-Schwarz, the definition of a commutator, and the fact that Hermitian operators have real expectation values. Heisenberg's ΔxΔp ≥ ℏ/2 falls out by putting Â = x̂ and B̂ = p̂, using [x̂, p̂] = iℏ, and observing that the expectation value of a c-number is the same c-number in every state."
+        }
+      ],
+      "quiz": {
+        "question": "In the proof above, the anticommutator term (½⟨{α̂, β̂}⟩)² was dropped from the right-hand side of the Pythagorean line to arrive at Robertson's inequality. Why is dropping it a valid step, and what physically is the term one has just thrown away?",
+        "options": [
+          "Dropping it is not valid; the inequality requires keeping both terms, and Robertson's 1929 paper was later retracted after Schrödinger pointed out the algebraic error.",
+          "Removing a nonnegative quantity from the right side of an inequality can only weaken the bound, so what remains is still true. The dropped term is the square of the symmetrized covariance of Â and B̂ in the state, equal to (½⟨ÂB̂ + B̂Â⟩ − ⟨Â⟩⟨B̂⟩)². Keeping it gives Schrödinger's 1930 refinement, which is strictly tighter than Robertson's inequality whenever the covariance is nonzero; this is what the phase-space ellipse of a squeezed state is showing you.",
+          "The anticommutator term vanishes identically for every pair of Hermitian operators, so no information is lost.",
+          "The term is dropped by convention because the anticommutator {α̂, β̂} is not itself Hermitian and does not correspond to a physical observable."
+        ],
+        "correctIndex": 1,
+        "explanation": "Dropping a nonnegative quantity (a real number squared) from the right side of an inequality preserves the inequality but makes it weaker: (a² + b²) ≥ b² is still true, just with less information. What was dropped is the squared symmetrized covariance Cov(A,B)² = (½⟨ÂB̂ + B̂Â⟩ − ⟨Â⟩⟨B̂⟩)². For a Gaussian ground state with ⟨x⟩ = ⟨p⟩ = 0 the covariance vanishes by symmetry, and Robertson and Schrödinger agree; for a squeezed state, the phase-space ellipse is tilted and Cov(x,p) is nonzero, at which point Schrödinger's version is strictly tighter and Robertson has a bit of slack. Option A is historical fantasy; Robertson's paper was neither retracted nor corrected. Option C is false because Cov ≠ 0 in general states (any tilted phase-space ellipse breaks it). Option D confuses non-Hermitian with 'no expectation value'; the anticommutator of two Hermitian operators is manifestly Hermitian, which is exactly why its expectation is real."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Schrödinger's tightening and the shape of the state",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Six months after Robertson's note appeared, Erwin Schrödinger published a follow-up paper in the Berlin Academy proceedings (Sitzungsberichte der Preußischen Akademie, 1930) in which he kept the anticommutator term Robertson had thrown away. Running through the same Cauchy-Schwarz calculation without dropping anything at the last step, Schrödinger arrived at a strengthened form of the inequality, now called the Schrödinger-Robertson inequality in his honor:"
+        },
+        {
+          "type": "math",
+          "tex": "(\\Delta A)^{2}(\\Delta B)^{2} \\;\\geq\\; \\mathrm{Cov}(A,B)^{2} \\;+\\; \\Bigl(\\tfrac{1}{2}\\bigl|\\langle[\\hat A,\\hat B]\\rangle\\bigr|\\Bigr)^{2}",
+          "display": true,
+          "caption": "(ΔA)² and (ΔB)² are the variances of the two observables in the state. Cov(A, B) = ½⟨ÂB̂ + B̂Â⟩ − ⟨Â⟩⟨B̂⟩ is the symmetrized covariance, the same object we dropped last section. The final term is Robertson's original bound squared. Adding a nonnegative term to the right side of an inequality tightens it; Schrödinger's version coincides with Robertson's whenever Cov(A, B) = 0."
+        },
+        {
+          "type": "p",
+          "text": "When does the covariance vanish? For every Gaussian ground state centered at the origin of phase space (the harmonic oscillator ground state, the free-particle Gaussian wave packet at t = 0), the joint distribution of x and p is a symmetric ellipse aligned with the axes, and by symmetry the average of xp + px comes out to zero. In those states Schrödinger's tightening buys nothing over Robertson: both sides sit at ΔxΔp = ℏ/2, and the state saturates both inequalities simultaneously."
+        },
+        {
+          "type": "p",
+          "text": "For a squeezed state, the phase-space ellipse is tilted (or elongated along a diagonal in the x-p plane), and ⟨x̂p̂ + p̂x̂⟩ acquires a nonzero value. The tilt is exactly what lets the position variance drop below ℏ/(2ω) at the cost of the momentum variance climbing above it: the state has borrowed uncertainty from one axis and put it on another. Slusher and Yurke at Bell Labs demonstrated squeezed light experimentally in 1985 by pumping a nonlinear crystal near degeneracy. Since 2019 LIGO has been injecting squeezed vacuum into its arm cavities, dropping the shot-noise floor of its gravitational-wave detectors by around 3 dB. The engineering trick and the extra covariance term in Schrödinger's inequality are the same object, viewed from different sides of the theorem."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Angular momentum: a right-hand side that goes to zero",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Position and momentum have the constant commutator [x̂, p̂] = iℏ, so the right-hand side of Robertson's inequality is a c-number equal to ℏ/2 in every state. The angular-momentum components do not. Their commutation relations, worked out by Born and Jordan in the same 1925 matrix-mechanics paper that gave us [x̂, p̂] = iℏ, involve the components themselves:"
+        },
+        {
+          "type": "math",
+          "tex": "[\\hat J_{x}, \\hat J_{y}] \\;=\\; i\\hbar\\,\\hat J_{z}, \\qquad [\\hat J_{y}, \\hat J_{z}] \\;=\\; i\\hbar\\,\\hat J_{x}, \\qquad [\\hat J_{z}, \\hat J_{x}] \\;=\\; i\\hbar\\,\\hat J_{y}",
+          "display": true,
+          "caption": "Ĵ_x, Ĵ_y, Ĵ_z are the three components of the angular-momentum vector operator. ℏ is the reduced Planck constant. i = √−1. The commutator of any two components equals iℏ times the third component, cyclically. Unlike the position-momentum commutator, whose right side is a constant, these right sides are operators whose expectation values change from one quantum state to the next."
+        },
+        {
+          "type": "p",
+          "text": "Feeding these into Robertson gives ΔJ_x · ΔJ_y ≥ ½|⟨iℏĴ_z⟩| = (ℏ/2)|⟨Ĵ_z⟩|. The bound is not a fixed number. It depends on where the angular momentum is pointing. For a spin-½ particle in the state |↑_z⟩ (the eigenstate of Ĵ_z with eigenvalue +ℏ/2), the right side is (ℏ/2)(ℏ/2) = ℏ²/4. Working out the left side directly: ⟨Ĵ_x⟩ = ⟨Ĵ_y⟩ = 0, ⟨Ĵ_x²⟩ = ⟨Ĵ_y²⟩ = ℏ²/4 (this is the spin-½ identity Ĵ_x² = Ĵ_y² = (ℏ/2)²·I), so ΔJ_x = ΔJ_y = ℏ/2, and the product ΔJ_x · ΔJ_y = ℏ²/4. Robertson's bound is saturated exactly."
+        },
+        {
+          "type": "p",
+          "text": "Now rotate the state ninety degrees. Take |ψ⟩ = (|↑_z⟩ + |↓_z⟩)/√2, the eigenstate of Ĵ_x with eigenvalue +ℏ/2. In this state ⟨Ĵ_z⟩ = 0 by direct computation, so the right side of Robertson's inequality collapses to zero. The bound says nothing: ΔJ_x · ΔJ_y ≥ 0, a triviality. And indeed ΔJ_x = 0 (an eigenstate has zero spread in its own operator) and ΔJ_y = ℏ/2, so the product is zero and the inequality holds vacuously. This is not a failure of Robertson's theorem. It is the state-dependent right-hand side doing exactly what the derivation predicted: when the expectation of the third component vanishes, the theorem cannot forbid the product of the first two uncertainties from dropping all the way to zero."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-17-robertson-inequality.html",
+          "height": 480,
+          "caption": "A spin-½ state on the Bloch sphere at polar angle θ (from +z) and azimuth φ. The bars on the right compare Robertson's left side (ΔJ_x · ΔJ_y, orange) against the right side (½|⟨[Ĵ_x, Ĵ_y]⟩| = (ℏ/2)|⟨Ĵ_z⟩|, red), both in units of ℏ². At the poles (θ = 0 or 180°) the bound is saturated at ℏ²/4. On the equator (θ = 90°) the right side falls to zero: the state has ⟨Ĵ_z⟩ = 0 and the inequality goes vacuous. Sliding φ off the meridian introduces Schrödinger's covariance term, which lifts the left side above the right and shows up as the tan gap-bar underneath."
+        }
+      ],
+      "quiz": {
+        "question": "A physicist prepares a spin-½ particle in the eigenstate of Ĵ_x with eigenvalue +ℏ/2 and then measures Ĵ_y. She reads ΔJ_y = ℏ/2 (the full spread) and ΔJ_x = 0 (an eigenstate has zero spread in its own operator), so their product is 0. Robertson's inequality reads ΔJ_x · ΔJ_y ≥ (ℏ/2)|⟨Ĵ_z⟩|. Is the inequality violated in this state?",
+        "options": [
+          "Yes; ΔJ_x · ΔJ_y = 0 for the prepared state, and Robertson's inequality requires a nonzero lower bound in every state.",
+          "No; in this state ⟨Ĵ_z⟩ = 0, so the right side of Robertson's inequality is also zero, and 0 ≥ 0 holds trivially. The theorem simply does not forbid a state along the equator of the Bloch sphere (where ⟨Ĵ_z⟩ vanishes) from having ΔJ_x · ΔJ_y = 0. This is the key feature that distinguishes Robertson's bound from Heisenberg's ΔxΔp ≥ ℏ/2: because [Ĵ_x, Ĵ_y] is itself an operator, its expectation can vanish, and the constraint disappears in exactly those states where it does.",
+          "No; Robertson's inequality does not apply to spin operators because their spectrum is discrete rather than continuous.",
+          "The question is undefined because Ĵ_x has no eigenstates in a two-dimensional Hilbert space."
+        ],
+        "correctIndex": 1,
+        "explanation": "Both sides are zero in this state. ⟨Ĵ_z⟩ = 0 because (|↑_z⟩ + |↓_z⟩)/√2 puts the state on the equator of the Bloch sphere, and the projection onto the z axis vanishes. So the right side is (ℏ/2)·0 = 0, and the inequality reads 0 ≥ 0, which is trivially true. This is not a bug; it is the state-dependent right-hand side that Robertson's theorem introduces. Whenever the expectation of the third angular-momentum component goes to zero, no lower bound on the product of the other two uncertainties can hold. Option A misreads the theorem: Robertson's bound is state-dependent, not a universal floor. Option C is wrong; Robertson's inequality is an algebraic identity on any Hilbert space (finite- or infinite-dimensional) and applies to spin operators verbatim. Option D is wrong; Ĵ_x has two eigenstates in the spin-½ Hilbert space, (|↑_z⟩ ± |↓_z⟩)/√2, with eigenvalues ±ℏ/2 respectively."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Energy and time: the case Robertson could not touch",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Everywhere quantum mechanics writes down a pair of noncommuting observables, Robertson's inequality supplies a bound. There is one pair for which the theorem does not apply at all. Energy is a Hermitian operator (the Hamiltonian Ĥ). Time is not. In non-relativistic quantum mechanics time is a parameter, the label t on the state |ψ(t)⟩ that enters through the Schrödinger equation, not an operator on the Hilbert space, and no Hermitian t̂ can be constructed with [t̂, Ĥ] = iℏ. Wolfgang Pauli proved this in a footnote to his 1933 Handbuch der Physik article: any operator satisfying that commutation relation would force Ĥ to have a spectrum unbounded below, meaning arbitrarily negative energy states, and no physical Hamiltonian does."
+        },
+        {
+          "type": "p",
+          "text": "Energy-time uncertainty is nevertheless a real experimental phenomenon that spectroscopists could see with their bare eyes in 1928. A hydrogen atom in the 2p state, sitting alone in vacuum, decays to 1s by emitting a Lyman-α photon at 121.6 nm, with lifetime τ ≈ 1.6 ns. The emitted line is not perfectly sharp: it carries a natural line width, a full width at half maximum in energy of about ΔE = ℏ/τ ≈ 0.4 μeV, or 100 MHz on a frequency axis, which every high-resolution spectrometer sees. The lifetime and the width are inversely related in exactly the shape of ΔxΔp, but the derivation cannot come from Robertson."
+        },
+        {
+          "type": "p",
+          "text": "The workaround was found by Leonid Mandelshtam and Igor Tamm at Moscow State University, in a 1945 paper. Instead of trying to promote time to an operator, they defined an effective evolution time τ_A for any observable A: the interval it takes the expectation ⟨Â⟩(t) to shift by one of its own standard deviations. This turns time back into a state-dependent number derived from an operator that does exist. The Schrödinger equation gives d⟨Â⟩/dt = (i/ℏ)⟨[Ĥ, Â]⟩, and combining this with Robertson's inequality for the perfectly legitimate pair (Ĥ, Â) yields:"
+        },
+        {
+          "type": "math",
+          "tex": "\\Delta E \\cdot \\tau_{A} \\;\\geq\\; \\frac{\\hbar}{2}, \\qquad \\tau_{A} \\;=\\; \\frac{\\Delta A}{\\bigl|d\\langle\\hat A\\rangle/dt\\bigr|}",
+          "display": true,
+          "caption": "ΔE is the standard deviation of the Hamiltonian Ĥ in the state (the spread of energies present in the superposition). τ_A is the Mandelshtam-Tamm evolution time for the observable A, the ratio of A's standard deviation to the speed at which its expectation value drifts. ℏ is the reduced Planck constant. The right-hand equation defines τ_A; the left-hand inequality follows from Robertson's bound for (Ĥ, Â) after one derivative of ⟨Â⟩ with respect to time."
+        },
+        {
+          "type": "p",
+          "text": "For the 2p hydrogen state, take Â to be the occupation of the excited state. Its expectation value decays exponentially with the natural lifetime τ, its standard deviation is set by the same exponential, and the ratio ΔA / |d⟨Â⟩/dt| reduces to τ itself. The Mandelshtam-Tamm inequality then reproduces the Weisskopf-Wigner line-width formula ΔE ≥ ℏ/(2τ) that Victor Weisskopf and Eugene Wigner had derived in 1930 from a direct perturbation calculation of the 2p decay amplitude, and that spectroscopists at Zeeman's lab in Amsterdam had already measured on sodium D lines a decade earlier. Robertson had left the energy-time case open in 1929. It took a redefinition of what 'time' meant in the theorem, and fifteen years of somebody else's work, before the answer arrived in the shape Robertson's proof would have wanted."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Robertson's inequality ΔA · ΔB ≥ ½|⟨[Â, B̂]⟩| looks like Heisenberg's ΔxΔp ≥ ℏ/2 with two changes: A and B replacing x and p, and the constant ℏ/2 replaced by a state-dependent expectation value. Which of these four statements about that state-dependent right-hand side is correct?",
+    "options": [
+      "For every pair of Hermitian operators A and B, the right-hand side ½|⟨[Â, B̂]⟩| depends on the state; the position-momentum case is unusual only because [x̂, p̂] = iℏ is a c-number, so its expectation is the same in every state and gives a state-independent bound. When the commutator is itself an operator (as it is for the angular-momentum components), the right-hand side varies with the state and can vanish, at which point the inequality becomes vacuous.",
+      "The right-hand side is always at least ℏ/2 for any pair of Hermitian operators; a smaller value would predict a measurement violating Heisenberg's original inequality.",
+      "The right-hand side is state-dependent only for spin operators; for observables built out of position and momentum (kinetic energy, orbital angular momentum components, momentum moments), it is always a fixed constant.",
+      "The right-hand side is not physically meaningful; Robertson's theorem is a mathematical curiosity, and the only inequalities used in practice are the special cases ΔxΔp ≥ ℏ/2 and ΔEΔτ ≥ ℏ/2."
+    ],
+    "correctIndex": 0,
+    "explanation": "State-dependence of the right side is the new feature Robertson introduces. The position-momentum case is a special one because [x̂, p̂] = iℏ is a c-number, so the expectation of iℏ is iℏ in every state and the bound is ℏ/2 unconditionally. For angular momentum [Ĵ_x, Ĵ_y] = iℏĴ_z is an operator, and ⟨Ĵ_z⟩ can be any value from −jℏ to +jℏ depending on the state, including zero (states in the equatorial plane of the Bloch sphere). In those states Robertson's bound vanishes, and eigenstates of Ĵ_x can have ΔJ_x = 0 with no lower bound forced on ΔJ_y. Option B misreads the theorem: ℏ/2 is not a floor. Option C is wrong; orbital angular momentum L̂_x = ŷp̂_z − ẑp̂_y satisfies the same [L̂_x, L̂_y] = iℏL̂_z algebra as spin, and its Robertson bound is equally state-dependent. Option D is wrong on both counts: Robertson's inequality is used every day in quantum optics (squeezed states), quantum metrology (Heisenberg-limited interferometry), and quantum information (entropic uncertainty relations)."
+  },
+  "suggestedNodes": [
+    {
+      "id": "squeezed_states",
+      "label": "Squeezed",
+      "subtitle": "Δx < √(ℏ/2ω)",
+      "edgeType": "extends"
+    },
+    {
+      "id": "energy_time_uncertainty",
+      "label": "ΔE Δt",
+      "subtitle": "ΔEΔt ≥ ℏ/2",
+      "edgeType": "related"
+    },
+    {
+      "id": "spin_operators",
+      "label": "Spin ops",
+      "subtitle": "[Jx,Jy]=iℏJz",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-17T08:00:00Z",
+    "generatedBy": "routine-claude-code",
+    "estimatedReadingMinutes": 25,
+    "previouslyMastered": [
+      "uncertainty_principle",
+      "schrodinger_equation",
+      "born_rule"
+    ]
+  }
+}

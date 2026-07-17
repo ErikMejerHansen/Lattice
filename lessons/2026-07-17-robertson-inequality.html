@@ -1,0 +1,249 @@
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+</style>
+<style>
+  #viz { padding: 14px 16px 18px; box-sizing: border-box; max-width: 720px; margin: 0 auto; }
+  .plot-wrap {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    padding: 10px;
+  }
+  svg { display: block; width: 100%; height: auto; }
+  .sphere { fill: none; stroke: var(--border-strong); stroke-width: 1.1; }
+  .sphere-eq { fill: none; stroke: var(--border-strong); stroke-width: 0.9; }
+  .sphere-mer-back { fill: none; stroke: var(--border); stroke-width: 0.7; stroke-dasharray: 3 3; }
+  .sphere-mer-front { fill: none; stroke: var(--border-strong); stroke-width: 0.9; }
+  .axis { stroke: var(--text-muted); stroke-width: 1; }
+  .axis-lab { fill: var(--text-muted); font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; font-size: 11px; }
+  .state-vec { stroke: var(--accent); stroke-width: 2.4; stroke-linecap: round; }
+  .state-dot { fill: var(--accent); }
+  .bar-frame { fill: var(--bg); stroke: var(--border); }
+  .bar-lhs { fill: var(--accent-soft); }
+  .bar-rhs { fill: var(--accent); }
+  .bar-gap { fill: var(--accent-soft); fill-opacity: 0.4; }
+  .bar-lab { font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; font-size: 11px; fill: var(--text-muted); }
+  .bar-val { font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; font-size: 11px; fill: var(--text); text-anchor: end; }
+  .readout {
+    display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 10px;
+    font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+    font-size: 12px; color: var(--text);
+  }
+  .readout .k { color: var(--text-muted); margin-right: 6px; }
+  .status {
+    font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+    font-size: 12px; margin-top: 6px;
+  }
+</style>
+
+<div id="viz">
+  <div class="plot-wrap">
+    <svg id="plot" viewBox="0 0 680 360" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+  <div class="viz-slider-row">
+    <label for="tS">θ</label>
+    <input type="range" id="tS" min="0" max="180" step="1" value="35">
+    <span class="value" id="tV">θ = 35°</span>
+  </div>
+
+  <div class="viz-slider-row">
+    <label for="pS">φ</label>
+    <input type="range" id="pS" min="0" max="360" step="1" value="0">
+    <span class="value" id="pV">φ = 0°</span>
+  </div>
+
+  <div class="readout">
+    <span><span class="k">ΔJx/ℏ</span><span id="dxV">0.29</span></span>
+    <span><span class="k">ΔJy/ℏ</span><span id="dyV">0.50</span></span>
+    <span><span class="k">LHS/ℏ²</span><span id="lhsV">0.144</span></span>
+    <span><span class="k">RHS/ℏ²</span><span id="rhsV">0.205</span></span>
+  </div>
+  <div class="status" id="status">saturated</div>
+
+  <div class="viz-caption" style="margin-top: 12px;">
+    A spin-½ state on the Bloch sphere at polar angle θ (from +z) and azimuth φ. Left panel is the sphere with the state drawn as a red vector. Right panel compares Robertson's left side (ΔJ_x·ΔJ_y, orange) against its right side (½|⟨[Ĵ_x, Ĵ_y]⟩| = (ℏ/2)|⟨Ĵ_z⟩|, red), both in units of ℏ². At the poles the bound is saturated at ℏ²/4. On the equator the right side goes to zero and the bound goes vacuous. Sliding φ away from the meridians introduces Schrödinger's covariance term, which lifts the left side above the right; the tan bar underneath is the gap LHS − RHS.
+  </div>
+</div>
+
+<script>
+(function() {
+  const svg = document.getElementById('plot');
+  const cx = 175, cy = 180, R = 120, RY = 34;
+  const barX = 360, barY = 60, barW = 280, barH = 22, barGap = 26;
+
+  function project(x, y, z) {
+    const px = cx + x * R + y * RY * 0.7;
+    const py = cy - z * R + y * RY * 0.32;
+    return { px, py, depth: y };
+  }
+
+  function ellipseArcPath(steps, thetaAngle, uFn) {
+    let d = '';
+    for (let i = 0; i <= steps; i++) {
+      const u = uFn(i / steps);
+      const p = project(u.x, u.y, u.z);
+      d += (i === 0 ? 'M ' : ' L ') + p.px.toFixed(1) + ' ' + p.py.toFixed(1);
+    }
+    return d;
+  }
+
+  function draw(theta, phi) {
+    const sT = Math.sin(theta), cT = Math.cos(theta);
+    const sP = Math.sin(phi), cP = Math.cos(phi);
+    const sx = sT * cP, sy = sT * sP, sz = cT;
+
+    const varX = 0.25 * (1 - sx * sx);
+    const varY = 0.25 * (1 - sy * sy);
+    const dx = Math.sqrt(varX);
+    const dy = Math.sqrt(varY);
+    const lhs = dx * dy;
+    const rhs = 0.5 * 0.5 * Math.abs(sz);
+
+    let html = '';
+
+    html += `<circle class="sphere" cx="${cx}" cy="${cy}" r="${R}"/>`;
+
+    // equator: x = cos u, y = sin u, z = 0. Split into front (u where y*factor gives foreground) and back
+    const eqSteps = 80;
+    let eqBackD = 'M ', eqFrontD = 'M ';
+    let ebFirst = true, efFirst = true;
+    for (let i = 0; i <= eqSteps; i++) {
+      const u = 2 * Math.PI * i / eqSteps;
+      const p = project(Math.cos(u), Math.sin(u), 0);
+      const isBack = Math.sin(u) > 0;
+      if (isBack) {
+        eqBackD += (ebFirst ? '' : ' L ') + p.px.toFixed(1) + ' ' + p.py.toFixed(1);
+        ebFirst = false;
+      } else {
+        eqFrontD += (efFirst ? '' : ' L ') + p.px.toFixed(1) + ' ' + p.py.toFixed(1);
+        efFirst = false;
+      }
+    }
+    html += `<path class="sphere-mer-back" d="${eqBackD}"/>`;
+    html += `<path class="sphere-mer-front" d="${eqFrontD}"/>`;
+
+    // one prime meridian (x-z plane): x = sin u, y = 0, z = cos u
+    let mFrontD = 'M ';
+    let mfFirst = true;
+    for (let i = 0; i <= eqSteps; i++) {
+      const u = 2 * Math.PI * i / eqSteps;
+      const p = project(Math.sin(u), 0, Math.cos(u));
+      mFrontD += (mfFirst ? '' : ' L ') + p.px.toFixed(1) + ' ' + p.py.toFixed(1);
+      mfFirst = false;
+    }
+    html += `<path class="sphere-mer-front" d="${mFrontD}"/>`;
+
+    // axes
+    const zt = project(0, 0, 1.18), zb = project(0, 0, -1.18);
+    const xl = project(-1.18, 0, 0), xr = project(1.18, 0, 0);
+    const yf = project(0, -1.18, 0), yb = project(0, 1.18, 0);
+    html += `<line class="axis" x1="${zt.px}" y1="${zt.py}" x2="${zb.px}" y2="${zb.py}"/>`;
+    html += `<line class="axis" x1="${xl.px}" y1="${xl.py}" x2="${xr.px}" y2="${xr.py}"/>`;
+    html += `<line class="axis" x1="${yf.px}" y1="${yf.py}" x2="${yb.px}" y2="${yb.py}"/>`;
+    html += `<text class="axis-lab" x="${zt.px + 4}" y="${zt.py + 4}">z</text>`;
+    html += `<text class="axis-lab" x="${xr.px + 4}" y="${xr.py + 4}">x</text>`;
+    html += `<text class="axis-lab" x="${yf.px - 10}" y="${yf.py + 12}">y</text>`;
+
+    // state vector
+    const s = project(sx, sy, sz);
+    html += `<line class="state-vec" x1="${cx}" y1="${cy}" x2="${s.px}" y2="${s.py}"/>`;
+    html += `<circle class="state-dot" cx="${s.px}" cy="${s.py}" r="4.5"/>`;
+
+    // bars
+    const scale = 0.25;
+    html += `<text class="bar-lab" x="${barX}" y="${barY - 26}">Robertson bound  (units ℏ²)</text>`;
+    html += `<line class="axis" x1="${barX}" y1="${barY - 18}" x2="${barX + barW}" y2="${barY - 18}"/>`;
+    html += `<text class="axis-lab" x="${barX}" y="${barY - 6}">0</text>`;
+    html += `<text class="axis-lab" x="${barX + barW - 6}" y="${barY - 6}" text-anchor="end">ℏ²/4</text>`;
+
+    const bars = [
+      { key: 'LHS  =  ΔJx · ΔJy', val: lhs, cls: 'bar-lhs' },
+      { key: 'RHS  =  ½ℏ · |⟨Ĵz⟩|', val: rhs, cls: 'bar-rhs' },
+    ];
+    bars.forEach((b, i) => {
+      const y0 = barY + i * (barH + barGap);
+      const w = Math.max(0.5, (b.val / scale) * barW);
+      html += `<text class="bar-lab" x="${barX}" y="${y0 - 4}">${b.key}</text>`;
+      html += `<rect class="bar-frame" x="${barX}" y="${y0}" width="${barW}" height="${barH}"/>`;
+      html += `<rect class="${b.cls}" x="${barX}" y="${y0}" width="${w.toFixed(1)}" height="${barH}"/>`;
+      html += `<text class="bar-val" x="${barX + barW - 5}" y="${y0 + barH - 6}">${b.val.toFixed(4)}</text>`;
+    });
+
+    const gap = lhs - rhs;
+    const yg = barY + 2 * (barH + barGap) + 8;
+    html += `<text class="bar-lab" x="${barX}" y="${yg - 4}">LHS − RHS  (Schrödinger term)</text>`;
+    html += `<rect class="bar-frame" x="${barX}" y="${yg}" width="${barW}" height="${barH}"/>`;
+    const wgap = Math.max(0, Math.min(barW, (gap / scale) * barW));
+    html += `<rect class="bar-gap" x="${barX}" y="${yg}" width="${wgap.toFixed(1)}" height="${barH}"/>`;
+    html += `<text class="bar-val" x="${barX + barW - 5}" y="${yg + barH - 6}">${gap.toFixed(4)}</text>`;
+
+    svg.innerHTML = html;
+
+    document.getElementById('dxV').textContent = dx.toFixed(3);
+    document.getElementById('dyV').textContent = dy.toFixed(3);
+    document.getElementById('lhsV').textContent = lhs.toFixed(4);
+    document.getElementById('rhsV').textContent = rhs.toFixed(4);
+
+    const status = document.getElementById('status');
+    if (rhs < 0.0015) {
+      status.textContent = 'bound vacuous:  ⟨Ĵz⟩ = 0  →  RHS = 0';
+      status.style.color = 'var(--text-muted)';
+    } else if (Math.abs(gap) < 0.0015) {
+      status.textContent = 'saturated:  LHS = RHS   (covariance term vanishes)';
+      status.style.color = 'var(--accent)';
+    } else {
+      status.textContent = 'strict:  LHS − RHS = ' + gap.toFixed(4) + '   (Schrödinger term > 0)';
+      status.style.color = 'var(--accent-soft)';
+    }
+  }
+
+  const tS = document.getElementById('tS');
+  const pS = document.getElementById('pS');
+  const tV = document.getElementById('tV');
+  const pV = document.getElementById('pV');
+
+  function update() {
+    const t = parseFloat(tS.value);
+    const p = parseFloat(pS.value);
+    tV.textContent = 'θ = ' + t.toFixed(0) + '°';
+    pV.textContent = 'φ = ' + p.toFixed(0) + '°';
+    draw(t * Math.PI / 180, p * Math.PI / 180);
+  }
+
+  tS.addEventListener('input', update);
+  pS.addEventListener('input', update);
+  update();
+})();
+</script>
