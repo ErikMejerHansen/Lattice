@@ -537,5 +537,12 @@
     "subtitle": "ΔAΔB ≥ ½|[A,B]|",
     "date": "2026-07-17",
     "estimatedReadingMinutes": 25
+  },
+  {
+    "slug": "2026-07-18-energy-time-uncertainty",
+    "title": "Energy-time uncertainty: what a short-lived state cannot know about its own energy",
+    "subtitle": "ΔE Δt ≥ ℏ/2",
+    "date": "2026-07-18",
+    "estimatedReadingMinutes": 18
   }
 ]

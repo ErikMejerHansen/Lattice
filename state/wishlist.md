@@ -30,7 +30,6 @@
 # auto-suggested 2026-05-17 from schrodinger-equation
 
 # auto-suggested 2026-05-18 from uncertainty-principle
-Energy-time uncertainty — ΔEΔt ≥ ℏ/2, not a Robertson inequality (time is not an operator) but a separate statement about state lifetimes and natural linewidths
 Gaussian wave packet — the unique minimum-uncertainty state σ_x σ_p = ℏ/2, and how it spreads in free space (Δx grows linearly with t at large t)
 
 # auto-suggested 2026-05-20 from bohr-atom
@@ -265,3 +264,8 @@ Ammonia inversion — the double-well tunneling between two equivalent NH₃ pyr
 # auto-suggested 2026-07-17 from robertson-inequality
 Squeezed states — Gaussian states of the harmonic oscillator with (Δx)² < ℏ/(2mω) at the price of (Δp)² > ℏmω/2, the tilted phase-space ellipse whose covariance is the extra term in Schrödinger's 1930 tightening of Robertson's inequality; produced experimentally at Bell Labs (Slusher and Yurke, 1985) with degenerate parametric downconversion and now injected into LIGO's arm cavities to shave ~3 dB off the shot-noise floor of gravitational-wave detection
 Spin operators — Ŝ_x, Ŝ_y, Ŝ_z as ℏ/2 times the Pauli matrices, the smallest possible Hilbert space (dim 2) on which Robertson's inequality applies non-trivially, and the algebra [Ŝ_x, Ŝ_y] = iℏŜ_z whose cyclic structure the whole SU(2) representation theory (from spin-½ to spin-j) is built on
+
+# auto-suggested 2026-07-18 from energy-time-uncertainty
+Fermi's golden rule — Γ = (2π/ℏ)|⟨f|V̂|i⟩|²ρ(E_f), the first-order-perturbation-theory transition rate that turns a coupling matrix element and a density of final states into a decay rate, and hence (via τ = ℏ/Γ) into the natural linewidth this lesson takes for granted; the derivation runs Dirac's 1927 time-dependent perturbation theory to first order and sends the interaction time to infinity to get an energy-conserving δ-function inside the rate integral
+Wigner-Weisskopf theory — the 1930 solution of the two-level atom coupled to a continuum of photon modes, which produces the exponentially damped amplitude exp(−iω₀t)·exp(−t/2τ) this lesson wrote down by hand, together with the small (Lamb-shift-like) real energy correction that comes with the imaginary part; the model shows why the natural line profile is Lorentzian rather than Gaussian and is the workhorse for every laser and every atomic-cavity QED calculation since
+Breit-Wigner resonance — σ(E) ∝ Γ² / [(E − E₀)² + (Γ/2)²], the 1936 formula for the cross-section of an unstable resonance, applied at LEP to pin the Z boson's width to 2.495 GeV and at pion-nucleon scattering to weigh the Δ(1232) baryon; the same Lorentzian shape as the natural linewidth, but read as a cross-section vs. beam energy rather than as an emitted photon spectrum, and the working definition of a "particle" for anything shorter-lived than a nanosecond
