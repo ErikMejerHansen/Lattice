@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 82px; text-align: right;
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 10px;
+  line-height: 1.7;
+}
+.readout .v { color: var(--text); }
+.readout .lbl { color: var(--text-muted); }
+.readout .product { color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div style="padding: 14px 18px;">
+    <svg id="svg" width="100%" viewBox="0 0 720 400" preserveAspectRatio="xMidYMid meet">
+      <g id="scene"></g>
+    </svg>
+    <div class="viz-slider-row">
+      <label>τ</label>
+      <input type="range" id="tauSlider" min="-1.0" max="1.2" step="0.02" value="0.0">
+      <span class="value" id="tauVal">τ = 1.00 ns</span>
+    </div>
+    <div class="readout" id="readout"></div>
+    <div class="viz-caption" style="margin-top: 10px;">
+      Upper panel: |ψ(t)|² = exp(−t/τ), the probability the excited state has not yet decayed.
+      Lower panel: |ψ̃(ω)|² ∝ 1 / [(ω−ω₀)² + (1/2τ)²], the Lorentzian emission spectrum.
+      Drag the τ slider: shorter lifetime steepens the time decay and broadens the frequency line;
+      longer lifetime pinches the spectral line while the atom lingers. Their product ΔE·τ stays anchored near ℏ.
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  const svg = document.getElementById('svg');
+  const scene = document.getElementById('scene');
+  const tauSlider = document.getElementById('tauSlider');
+  const tauVal = document.getElementById('tauVal');
+  const readout = document.getElementById('readout');
+  const HBAR_EVS = 6.582e-16; // ℏ in eV·s
+
+  // Layout
+  const W = 720, H = 400;
+  const pad = { l: 60, r: 24, t: 26, b: 42 };
+  const panelGap = 28;
+  const panelH = (H - pad.t - pad.b - panelGap) / 2;
+  const plotW = W - pad.l - pad.r;
+
+  // Panel origins (top-left of each plot region)
+  const p1 = { x: pad.l, y: pad.t };                       // time panel
+  const p2 = { x: pad.l, y: pad.t + panelH + panelGap };   // freq panel
+
+  // Time-axis domain: 0..T_MAX ns, fixed. tau varies 0.1..10 ns.
+  const T_MAX = 10.0; // ns
+  // Frequency-axis: (ν − ν₀) in MHz, fixed window ±600 MHz around ω₀.
+  const F_HALF = 600; // MHz half-width shown
+
+  function tauFromSlider() {
+    // slider gives log10(tau/ns): −1..1.2 → 0.1 ns .. ~15.85 ns
+    const logv = parseFloat(tauSlider.value);
+    return Math.pow(10, logv);
+  }
+
+  function fmtTau(tau) {
+    if (tau < 0.995) return (tau * 1000).toFixed(0) + ' ps';
+    if (tau < 9.95) return tau.toFixed(2) + ' ns';
+    return tau.toFixed(1) + ' ns';
+  }
+
+  function fmtFreq(hz) {
+    if (hz >= 1e9) return (hz / 1e9).toFixed(2) + ' GHz';
+    if (hz >= 1e6) return (hz / 1e6).toFixed(1) + ' MHz';
+    if (hz >= 1e3) return (hz / 1e3).toFixed(1) + ' kHz';
+    return hz.toFixed(1) + ' Hz';
+  }
+
+  function fmtEnergy(eV) {
+    if (eV >= 1e-6) return (eV * 1e6).toFixed(2) + ' µeV';
+    if (eV >= 1e-9) return (eV * 1e9).toFixed(2) + ' neV';
+    return (eV * 1e12).toFixed(2) + ' peV';
+  }
+
+  function svgNS(tag, attrs, text) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    if (text !== undefined) el.textContent = text;
+    return el;
+  }
+
+  function drawFrame() {
+    while (scene.firstChild) scene.removeChild(scene.firstChild);
+
+    // --- panel 1 title
+    scene.appendChild(svgNS('text', {
+      x: p1.x, y: p1.y - 8,
+      'font-size': 12, 'font-style': 'italic', fill: 'var(--text-muted)',
+    }, 'Time domain: |ψ(t)|² = exp(−t/τ)'));
+
+    // panel 1 axes
+    // x from 0..T_MAX ns → p1.x..p1.x+plotW
+    // y from 0..1 → p1.y+panelH..p1.y
+    scene.appendChild(svgNS('line', {
+      x1: p1.x, y1: p1.y + panelH, x2: p1.x + plotW, y2: p1.y + panelH,
+      stroke: 'var(--border-strong)', 'stroke-width': 1
+    }));
+    scene.appendChild(svgNS('line', {
+      x1: p1.x, y1: p1.y, x2: p1.x, y2: p1.y + panelH,
+      stroke: 'var(--border-strong)', 'stroke-width': 1
+    }));
+
+    // x ticks at 0, 2, 4, 6, 8, 10 ns
+    for (let t = 0; t <= T_MAX; t += 2) {
+      const x = p1.x + (t / T_MAX) * plotW;
+      scene.appendChild(svgNS('line', {
+        x1: x, y1: p1.y + panelH, x2: x, y2: p1.y + panelH + 4,
+        stroke: 'var(--border-strong)', 'stroke-width': 1
+      }));
+      scene.appendChild(svgNS('text', {
+        x: x, y: p1.y + panelH + 16, 'font-size': 10, fill: 'var(--text-muted)',
+        'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace', 'text-anchor': 'middle'
+      }, String(t)));
+    }
+    // x-axis label
+    scene.appendChild(svgNS('text', {
+      x: p1.x + plotW / 2, y: p1.y + panelH + 34,
+      'font-size': 11, fill: 'var(--text-muted)', 'font-style': 'italic', 'text-anchor': 'middle'
+    }, 't (ns)'));
+
+    // y ticks at 0, 0.5, 1
+    [0, 0.5, 1].forEach(v => {
+      const y = p1.y + panelH - v * panelH;
+      scene.appendChild(svgNS('line', {
+        x1: p1.x - 4, y1: y, x2: p1.x, y2: y,
+        stroke: 'var(--border-strong)', 'stroke-width': 1
+      }));
+      scene.appendChild(svgNS('text', {
+        x: p1.x - 8, y: y + 3, 'font-size': 10, fill: 'var(--text-muted)',
+        'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace', 'text-anchor': 'end'
+      }, v.toFixed(1)));
+    });
+    // y-axis label (rotated)
+    scene.appendChild(svgNS('text', {
+      x: -(p1.y + panelH / 2), y: p1.x - 34,
+      'font-size': 11, fill: 'var(--text-muted)', 'font-style': 'italic',
+      'text-anchor': 'middle', transform: 'rotate(-90)'
+    }, '|ψ(t)|²'));
+
+    // --- panel 2 title
+    scene.appendChild(svgNS('text', {
+      x: p2.x, y: p2.y - 8,
+      'font-size': 12, 'font-style': 'italic', fill: 'var(--text-muted)',
+    }, 'Frequency domain: |ψ̃(ω)|² ∝ 1 / [(ω−ω₀)² + (1/2τ)²]'));
+
+    // panel 2 axes
+    scene.appendChild(svgNS('line', {
+      x1: p2.x, y1: p2.y + panelH, x2: p2.x + plotW, y2: p2.y + panelH,
+      stroke: 'var(--border-strong)', 'stroke-width': 1
+    }));
+    scene.appendChild(svgNS('line', {
+      x1: p2.x, y1: p2.y, x2: p2.x, y2: p2.y + panelH,
+      stroke: 'var(--border-strong)', 'stroke-width': 1
+    }));
+
+    // freq x ticks at ±600, ±400, ±200, 0
+    [-600, -400, -200, 0, 200, 400, 600].forEach(f => {
+      const x = p2.x + ((f + F_HALF) / (2 * F_HALF)) * plotW;
+      scene.appendChild(svgNS('line', {
+        x1: x, y1: p2.y + panelH, x2: x, y2: p2.y + panelH + 4,
+        stroke: 'var(--border-strong)', 'stroke-width': 1
+      }));
+      scene.appendChild(svgNS('text', {
+        x: x, y: p2.y + panelH + 16, 'font-size': 10, fill: 'var(--text-muted)',
+        'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace', 'text-anchor': 'middle'
+      }, f === 0 ? 'ν₀' : (f > 0 ? '+' + f : String(f))));
+    });
+    // x-axis label
+    scene.appendChild(svgNS('text', {
+      x: p2.x + plotW / 2, y: p2.y + panelH + 34,
+      'font-size': 11, fill: 'var(--text-muted)', 'font-style': 'italic', 'text-anchor': 'middle'
+    }, 'ν − ν₀ (MHz)'));
+
+    // y ticks at 0, 0.5, 1 (spectrum normalised so peak is 1)
+    [0, 0.5, 1].forEach(v => {
+      const y = p2.y + panelH - v * panelH;
+      scene.appendChild(svgNS('line', {
+        x1: p2.x - 4, y1: y, x2: p2.x, y2: y,
+        stroke: 'var(--border-strong)', 'stroke-width': 1
+      }));
+      scene.appendChild(svgNS('text', {
+        x: p2.x - 8, y: y + 3, 'font-size': 10, fill: 'var(--text-muted)',
+        'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace', 'text-anchor': 'end'
+      }, v.toFixed(1)));
+    });
+    // y-axis label
+    scene.appendChild(svgNS('text', {
+      x: -(p2.y + panelH / 2), y: p2.x - 34,
+      'font-size': 11, fill: 'var(--text-muted)', 'font-style': 'italic',
+      'text-anchor': 'middle', transform: 'rotate(-90)'
+    }, '|ψ̃(ν)|²  (peak-normalised)'));
+
+    // Draw decay curve for current tau
+    const tau_ns = tauFromSlider();
+    const N = 200;
+    // Time curve
+    let pathD = '';
+    for (let i = 0; i <= N; i++) {
+      const t = (i / N) * T_MAX; // ns
+      const y = Math.exp(-t / tau_ns);
+      const px = p1.x + (t / T_MAX) * plotW;
+      const py = p1.y + panelH - y * panelH;
+      pathD += (i === 0 ? 'M' : 'L') + px.toFixed(2) + ',' + py.toFixed(2);
+    }
+    // Fill under curve
+    let fillD = pathD
+      + ' L' + (p1.x + plotW).toFixed(2) + ',' + (p1.y + panelH).toFixed(2)
+      + ' L' + p1.x.toFixed(2) + ',' + (p1.y + panelH).toFixed(2)
+      + ' Z';
+    scene.appendChild(svgNS('path', {
+      d: fillD, fill: 'var(--accent)', 'fill-opacity': '0.12', stroke: 'none'
+    }));
+    scene.appendChild(svgNS('path', {
+      d: pathD, stroke: 'var(--accent)', 'stroke-width': 2, fill: 'none'
+    }));
+
+    // Mark τ on the time plot: dashed vertical line at t = τ
+    if (tau_ns <= T_MAX) {
+      const xTau = p1.x + (tau_ns / T_MAX) * plotW;
+      const yAtTau = p1.y + panelH - Math.exp(-1) * panelH;
+      scene.appendChild(svgNS('line', {
+        x1: xTau, y1: p1.y, x2: xTau, y2: p1.y + panelH,
+        stroke: 'var(--accent-soft)', 'stroke-width': 1, 'stroke-dasharray': '3 3'
+      }));
+      scene.appendChild(svgNS('line', {
+        x1: p1.x, y1: yAtTau, x2: xTau, y2: yAtTau,
+        stroke: 'var(--accent-soft)', 'stroke-width': 1, 'stroke-dasharray': '3 3'
+      }));
+      scene.appendChild(svgNS('text', {
+        x: xTau + 4, y: p1.y + 12,
+        'font-size': 10, fill: 'var(--accent)', 'font-style': 'italic'
+      }, 't = τ, |ψ|² = 1/e'));
+    }
+
+    // Lorentzian in Hz on the freq plot
+    // FWHM_ν = 1/(2π τ). Convert to MHz.
+    const gamma_hz = 1 / (2 * Math.PI * tau_ns * 1e-9); // in Hz
+    const gamma_MHz = gamma_hz / 1e6;
+    const halfW_MHz = gamma_MHz / 2;
+
+    let lorPath = '';
+    for (let i = 0; i <= N; i++) {
+      const nu_MHz = -F_HALF + (i / N) * (2 * F_HALF);
+      const y = (halfW_MHz * halfW_MHz) / (nu_MHz * nu_MHz + halfW_MHz * halfW_MHz);
+      const clampedY = Math.min(Math.max(y, 0), 1);
+      const px = p2.x + ((nu_MHz + F_HALF) / (2 * F_HALF)) * plotW;
+      const py = p2.y + panelH - clampedY * panelH;
+      lorPath += (i === 0 ? 'M' : 'L') + px.toFixed(2) + ',' + py.toFixed(2);
+    }
+    let lorFill = lorPath
+      + ' L' + (p2.x + plotW).toFixed(2) + ',' + (p2.y + panelH).toFixed(2)
+      + ' L' + p2.x.toFixed(2) + ',' + (p2.y + panelH).toFixed(2)
+      + ' Z';
+    scene.appendChild(svgNS('path', {
+      d: lorFill, fill: 'var(--accent)', 'fill-opacity': '0.12', stroke: 'none'
+    }));
+    scene.appendChild(svgNS('path', {
+      d: lorPath, stroke: 'var(--accent)', 'stroke-width': 2, fill: 'none'
+    }));
+
+    // FWHM markers on frequency plot: at ν = ±halfW_MHz, y = 0.5
+    if (halfW_MHz <= F_HALF) {
+      const xL = p2.x + ((-halfW_MHz + F_HALF) / (2 * F_HALF)) * plotW;
+      const xR = p2.x + ((halfW_MHz + F_HALF) / (2 * F_HALF)) * plotW;
+      const yHalf = p2.y + panelH - 0.5 * panelH;
+      scene.appendChild(svgNS('line', {
+        x1: xL, y1: yHalf, x2: xR, y2: yHalf,
+        stroke: 'var(--accent-soft)', 'stroke-width': 1.5, 'stroke-dasharray': '4 3'
+      }));
+      // little vertical tics at half-max
+      scene.appendChild(svgNS('line', {
+        x1: xL, y1: yHalf - 5, x2: xL, y2: yHalf + 5,
+        stroke: 'var(--accent-soft)', 'stroke-width': 1.5
+      }));
+      scene.appendChild(svgNS('line', {
+        x1: xR, y1: yHalf - 5, x2: xR, y2: yHalf + 5,
+        stroke: 'var(--accent-soft)', 'stroke-width': 1.5
+      }));
+      scene.appendChild(svgNS('text', {
+        x: (xL + xR) / 2, y: yHalf - 8,
+        'font-size': 10, fill: 'var(--accent)', 'font-style': 'italic', 'text-anchor': 'middle'
+      }, 'FWHM = 1/(2πτ)'));
+    }
+
+    // center line at ν₀
+    const xC = p2.x + 0.5 * plotW;
+    scene.appendChild(svgNS('line', {
+      x1: xC, y1: p2.y, x2: xC, y2: p2.y + panelH,
+      stroke: 'var(--text-ghost)', 'stroke-width': 1, 'stroke-dasharray': '2 4'
+    }));
+  }
+
+  function updateReadout() {
+    const tau_ns = tauFromSlider();
+    const tau_s = tau_ns * 1e-9;
+    const gamma_hz = 1 / (2 * Math.PI * tau_s); // FWHM in Hz
+    const dE_eV = HBAR_EVS / tau_s;             // ΔE = ℏ/τ
+    const product_eVs = dE_eV * tau_s;          // ΔE · τ (should be ℏ)
+
+    tauVal.textContent = 'τ = ' + fmtTau(tau_ns);
+    readout.innerHTML =
+      '<span class="lbl">Δν (FWHM)</span> = <span class="v">' + fmtFreq(gamma_hz) + '</span>' +
+      '  &nbsp; <span class="lbl">ΔE = ℏ/τ</span> = <span class="v">' + fmtEnergy(dE_eV) + '</span><br>' +
+      '<span class="lbl">ΔE · τ</span> = <span class="product">' + (product_eVs / HBAR_EVS).toFixed(3) + ' ℏ</span>' +
+      '  &nbsp; <span class="lbl">Mandelstam-Tamm floor</span> <span class="v">ΔE · Δt ≥ ℏ/2</span>';
+  }
+
+  function redraw() {
+    drawFrame();
+    updateReadout();
+  }
+
+  tauSlider.addEventListener('input', redraw);
+  redraw();
+})();
+</script>
+</body>
+</html>

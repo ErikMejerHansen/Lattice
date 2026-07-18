@@ -769,6 +769,16 @@
       "createdAt": "2026-07-17T08:00:00Z",
       "col": 1,
       "row": 38
+    },
+    {
+      "id": "energy_time_uncertainty",
+      "label": "Energy-time",
+      "subtitle": "ΔE Δt ≥ ℏ/2",
+      "state": "available",
+      "lesson": "2026-07-18-energy-time-uncertainty",
+      "createdAt": "2026-07-18T08:00:00Z",
+      "col": 0,
+      "row": 39
     }
   ],
   "edges": [
@@ -1821,6 +1831,21 @@
       "from": "robertson_inequality",
       "to": "born_rule",
       "kind": "related"
+    },
+    {
+      "from": "energy_time_uncertainty",
+      "to": "robertson_inequality",
+      "kind": "extends"
+    },
+    {
+      "from": "energy_time_uncertainty",
+      "to": "uncertainty_principle",
+      "kind": "extends"
+    },
+    {
+      "from": "energy_time_uncertainty",
+      "to": "hydrogen_atom",
+      "kind": "applied"
     }
   ]
 }

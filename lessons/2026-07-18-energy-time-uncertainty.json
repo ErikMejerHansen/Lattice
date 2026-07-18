@@ -1,0 +1,201 @@
+{
+  "slug": "2026-07-18-energy-time-uncertainty",
+  "title": "Energy-time uncertainty: what a short-lived state cannot know about its own energy",
+  "node": {
+    "id": "energy_time_uncertainty",
+    "label": "Energy-time",
+    "subtitle": "ΔE Δt ≥ ℏ/2"
+  },
+  "intro": "The pairing of energy and time was written into Heisenberg's original 1927 paper as a paragraph-long aside, sat unresolved for eighteen years, and was quietly assumed by generations of physicists to be a twin of ΔxΔp ≥ ℏ/2. It is not. Time in quantum mechanics is a parameter, not an operator, and Robertson's theorem has nothing to say about it. What ΔEΔt ≥ ℏ/2 actually asserts is a relation between a state's energy spread and the time it takes any observable in that state to change appreciably, a relation that shows up in the laboratory as the natural width of every spectral line ever measured and as the way particle physicists weigh an unstable resonance by how broad its peak is.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The aside in Heisenberg's paper, and Pauli's blocking theorem",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Heisenberg's February 1927 paper is remembered for the gamma-ray microscope and the position-momentum inequality, but a few pages in he wrote another one, almost in passing: for the time at which an atomic transition occurs and the energy released in that transition, ΔE·Δt should also be of order h. He justified it with a short thought experiment about measuring the energy of an atom by a Stern-Gerlach-like deflection over a finite time window. The argument was suggestive, but Heisenberg gave no proof, and no one at the time noticed that the position-momentum case and the energy-time case rested on very different footings."
+        },
+        {
+          "type": "p",
+          "text": "When Robertson published his general theorem in 1929 (the one that turns any commutator into an uncertainty bound), the position-momentum inequality slid into it cleanly: x̂ and p̂ are both self-adjoint operators, [x̂, p̂] = iℏ, apply Cauchy-Schwarz, done. Everyone waited for the same argument to make ΔEΔt ≥ ℏ/2 rigorous. Everyone kept waiting. The problem was that no one could write down a time operator T̂ to feed into Robertson's proof. Time in the Schrödinger equation is a label on the state vector |ψ(t)⟩, an external parameter set by the laboratory clock, not something the wave function is a function of the same way it is a function of x."
+        },
+        {
+          "type": "p",
+          "text": "In 1933 Wolfgang Pauli, writing his encyclopedia article on wave mechanics for the Handbuch der Physik, gave the argument its coup de grace. He proved that no self-adjoint time operator T̂ satisfying [T̂, Ĥ] = iℏ can exist as long as the Hamiltonian Ĥ has a spectrum bounded below (as every physical Hamiltonian does; you cannot have arbitrarily negative energies or the atom would radiate forever). His reasoning: if T̂ were self-adjoint and canonically conjugate to Ĥ, then the operator exp(iτT̂/ℏ) would shift energy eigenstates by an arbitrary amount τ, producing states of lower energy than the ground state. That contradicts the ground state being the ground state. So T̂ does not exist, at least not as a bona-fide observable, and Robertson's inequality cannot be applied. The energy-time relation had to mean something different from the position-momentum relation, and for eighteen years no one knew what."
+        },
+        {
+          "type": "p",
+          "text": "The resolution came in 1945, from Leonid Mandelstam and Igor Tamm at Moscow's Lebedev Institute in the last year of the Great Patriotic War. Their trick was to stop looking for a time operator and instead to redefine Δt as a characteristic time scale intrinsic to the state itself, the smallest time interval over which any observable can change by a full standard deviation. With that redefinition, ΔEΔt ≥ ℏ/2 becomes a theorem, provable in one page, that says nothing about measurement disturbance and everything about how quickly a state can evolve given its energy spread."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Mandelstam-Tamm: time as how long a state takes to change",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The Mandelstam-Tamm derivation starts with a fact about how any observable evolves in time. Pick any Hermitian operator Â with no explicit time dependence. Its expectation value ⟨Â⟩ in a state |ψ(t)⟩ evolves according to a formula Heisenberg wrote down in 1925, obtainable from the Schrödinger equation by differentiating ⟨ψ(t)|Â|ψ(t)⟩ with respect to t and using i ℏ ∂|ψ⟩/∂t = Ĥ|ψ⟩:"
+        },
+        {
+          "type": "math",
+          "tex": "\\frac{d\\langle\\hat A\\rangle}{dt} \\;=\\; \\frac{1}{i\\hbar}\\,\\bigl\\langle [\\hat A,\\hat H]\\bigr\\rangle",
+          "display": true,
+          "caption": "⟨Â⟩ is the expectation value of the observable A in the state |ψ(t)⟩. [Â, Ĥ] is the commutator of A with the Hamiltonian Ĥ. ℏ is the reduced Planck constant. i = √−1. The formula says: the time derivative of ⟨Â⟩ is proportional to the expectation value of the commutator of A with the energy operator. When [Â, Ĥ] = 0 (A is a conserved quantity), ⟨Â⟩ does not change at all."
+        },
+        {
+          "type": "p",
+          "text": "Now bring in Robertson's inequality, applied to the pair Â and Ĥ. Robertson says ΔA · ΔH ≥ ½|⟨[Â, Ĥ]⟩|. But from the equation above, |⟨[Â, Ĥ]⟩| = ℏ · |d⟨Â⟩/dt|. Substituting and identifying ΔH with the state's energy uncertainty ΔE gives:"
+        },
+        {
+          "type": "math",
+          "tex": "\\Delta A \\cdot \\Delta E \\;\\geq\\; \\frac{\\hbar}{2}\\,\\Bigl|\\frac{d\\langle\\hat A\\rangle}{dt}\\Bigr|",
+          "display": true,
+          "caption": "ΔA is the standard deviation of the observable A in the state. ΔE is the standard deviation of the energy in the same state. |d⟨Â⟩/dt| is the absolute value of the rate at which A's expectation value is changing. The inequality relates three things measured in the same state: how spread A is, how spread the energy is, and how fast A's mean is drifting."
+        },
+        {
+          "type": "p",
+          "text": "Divide both sides by ΔE · |d⟨Â⟩/dt| and identify a characteristic time Δt_A ≡ ΔA / |d⟨Â⟩/dt|. This Δt_A is the time it would take, at the current rate of drift, for ⟨Â⟩ to move by one standard deviation, that is, the time you would need to wait to reliably notice that A has changed at all. With that definition the inequality reads Δt_A · ΔE ≥ ℏ/2. Since Δt_A is defined for any observable A that is not conserved, and the inequality holds for every choice, the tightest bound comes from the fastest-changing A. The Mandelstam-Tamm Δt is the shortest such characteristic time in the state, and it is what physicists really mean by 'the state's lifetime' whenever they invoke energy-time uncertainty."
+        },
+        {
+          "type": "p",
+          "text": "Two things are worth pausing on. First, Δt here is not the reading of an external clock; it is a property computed from |ψ⟩ itself, together with a chosen A. Second, the derivation uses Robertson but only for a pair (Â, Ĥ) in which both operators are self-adjoint. Time never appears as an operator; it is the parameter t on which |ψ(t)⟩ depends, and Δt is a rate ratio. Pauli's blocking theorem is respected, and the inequality is proved."
+        }
+      ],
+      "quiz": {
+        "question": "An energy eigenstate |E_n⟩ has zero energy uncertainty (ΔE = 0). What does the Mandelstam-Tamm inequality say about how quickly any observable in this state can change, and why?",
+        "options": [
+          "Nothing can change at all in a finite time; Δt_A is forced to be infinite for every observable A, because a nonzero |d⟨Â⟩/dt| would require ΔE > 0. This is the same statement as 'stationary states are stationary': in an energy eigenstate the expectation value of every observable is constant in time (all time-dependent phases cancel in |ψ(t)⟩⟨ψ(t)|). A perfectly sharp energy demands a state that does not evolve.",
+          "The inequality places no bound on how fast an observable can change in an energy eigenstate; ΔE = 0 makes the right-hand side zero, so the constraint is trivial.",
+          "Observables oscillate with period 2πℏ/E_n, because each energy eigenstate carries a phase exp(−iE_n t/ℏ) that observables inherit.",
+          "The inequality forces Δt_A = ℏ/(2E_n), a nonzero minimum time between successive changes."
+        ],
+        "correctIndex": 0,
+        "explanation": "In an energy eigenstate ΔE = 0, so ΔA · ΔE = 0 for every A. The inequality ΔA · ΔE ≥ (ℏ/2)|d⟨Â⟩/dt| then forces |d⟨Â⟩/dt| = 0 for every observable, and hence Δt_A = ΔA / |d⟨Â⟩/dt| = ∞: no observable can change at all. This is exactly the physical content of 'stationary state.' The overall phase exp(−iE_n t/ℏ) that |E_n⟩ picks up cancels in every expectation value ⟨ψ|Â|ψ⟩, leaving all observables time-independent. Option B misreads the inequality (a zero right side does not license unbounded change; the left side is also zero, but Δt_A is defined as a ratio and blows up when the denominator vanishes). Option C confuses the global phase with observable oscillation (it is precisely the phase that cancels). Option D fabricates a formula that does not follow from the derivation."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The natural linewidth of every spectral line",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Take an excited atomic state with mean lifetime τ. That is, the probability that the atom is still in the upper state after time t decays as exp(−t/τ). The amplitude ψ(t) that appears in the wave function decays with a rate half of that (probability is amplitude squared), so ψ(t) ∝ exp(−iω₀t) · exp(−t/2τ) for t > 0, where ω₀ = ΔE_transition / ℏ is the classical emission frequency. This is the Weisskopf-Wigner ansatz of 1930: a single exponentially damped sinusoid, the simplest imaginable model of an atom radiating away its excitation."
+        },
+        {
+          "type": "p",
+          "text": "Fourier-transform ψ(t) to see what frequencies the emitted radiation actually contains. The transform of a truncated damped sinusoid is a Lorentzian centered on ω₀:"
+        },
+        {
+          "type": "math",
+          "tex": "|\\tilde\\psi(\\omega)|^{2} \\;\\propto\\; \\frac{1}{(\\omega - \\omega_{0})^{2} + (1/2\\tau)^{2}}",
+          "display": true,
+          "caption": "|ψ̃(ω)|² is the power spectrum, the probability per unit angular frequency of finding a photon at frequency ω. ω₀ is the classical center frequency of the transition. τ is the mean lifetime of the upper state. The peak sits at ω = ω₀. The full width at half maximum of a Lorentzian with this form is 2 × (1/2τ) = 1/τ, so Δω_FWHM = 1/τ."
+        },
+        {
+          "type": "p",
+          "text": "Multiply the frequency width by ℏ to get an energy width: ΔE = ℏ · Δω = ℏ/τ. This is the natural linewidth of the transition, the FWHM of the emitted spectrum in energy units. Compare it to the Mandelstam-Tamm bound: ΔE · τ ≈ ℏ, which sits a factor of two above the strict inequality ΔE · Δt ≥ ℏ/2 (the Weisskopf-Wigner ansatz is not the tightest possible envelope, only the natural one for an exponential decay). What the inequality guarantees is a floor. What the atom actually delivers is a Lorentzian sitting close to that floor. Every atomic emission line has this width, superimposed on and often dominated by broader effects (Doppler broadening from thermal motion, pressure broadening from collisions), but underneath them all the natural linewidth is inescapable."
+        },
+        {
+          "type": "p",
+          "text": "The viz below lets you drag the lifetime τ. The upper panel shows |ψ(t)|² decaying in time (the atom emptying its upper state). The lower panel shows the Lorentzian |ψ̃(ω)|² centered on ω₀ (the spectral line as a spectrograph would record it). Slide τ smaller and the decay in time steepens while the Lorentzian in frequency broadens. Slide τ larger and the atom lingers in the upper state while the spectral line pinches down toward a delta function. Their product ΔE · τ stays anchored near ℏ."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-18-energy-time-uncertainty.html",
+          "height": 460,
+          "caption": "Upper panel: probability of still being in the excited state, |ψ(t)|² = exp(−t/τ). Lower panel: emission spectrum, a Lorentzian centered on ω₀ with FWHM 1/τ. Drag the τ slider to trade lifetime against linewidth in real time."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Sodium D lines, hydrogen 21 cm, and the Lorentzian floor",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The two sodium D lines at 589.0 and 589.6 nm are the brightest emission in every street lamp of the pre-LED era. Their upper state (the 3p configuration of atomic sodium) has a measured lifetime of τ ≈ 16.2 ns. The natural energy width is then ΔE = ℏ/τ = 1.055 × 10⁻³⁴ J·s / 1.62 × 10⁻⁸ s ≈ 6.5 × 10⁻²⁷ J, which converts (dividing by h) to a frequency width Δν = 1/(2πτ) ≈ 9.8 MHz. That is fantastically narrow next to the optical carrier frequency of ν ≈ 5 × 10¹⁴ Hz, a fractional width of Δν/ν ≈ 2 × 10⁻⁸. A spectrometer with resolving power of a hundred million just barely sees it. Every ordinary tabletop spectrometer sees the sodium line as vastly broader, but that extra width is Doppler and pressure broadening; the natural linewidth is the irreducible floor."
+        },
+        {
+          "type": "p",
+          "text": "The hydrogen 21 cm line, the ground-state hyperfine transition that maps every atomic-hydrogen cloud in the galaxy, sits at the other extreme. Its upper state (the F = 1 hyperfine level) has a spontaneous-emission rate so small that τ ≈ 1.1 × 10⁷ years. Plugging in: Δν = 1/(2πτ) ≈ 3 × 10⁻¹⁶ Hz, a natural linewidth of order 10⁻²⁴ eV. No spectrograph will ever measure it directly; the line as radio astronomers see it is broadened by Doppler shifts from gas motion by fifteen orders of magnitude beyond the natural width. But the fact that a single atom in intergalactic space, isolated and unperturbed, would emit a photon with an energy spread ten to the minus twenty-four electron-volts is the correct value the Mandelstam-Tamm inequality assigns to that state."
+        },
+        {
+          "type": "p",
+          "text": "Two extremes bracket a range spanning twenty-four orders of magnitude in τ, and the linewidth follows Δω = 1/τ perfectly across the whole range. The physics is the same in every case, and the derivation was written down once in Moscow in 1945."
+        }
+      ],
+      "quiz": {
+        "question": "The 2p state of atomic hydrogen has a measured lifetime of about 1.6 nanoseconds. What is the natural full-width-at-half-maximum linewidth of the Lyman-α transition (2p → 1s) in frequency units, and why is this number essentially never what a laboratory spectrometer actually reads?",
+        "options": [
+          "Δν ≈ 100 MHz. It matches spectrometer readings exactly, because at these energies (~10 eV) natural broadening dominates over every other mechanism.",
+          "Δν ≈ 100 MHz. Real spectrometers read a much wider line because Doppler broadening (from the thermal motion of hydrogen atoms, ~100 GHz at room temperature) and, at higher densities, pressure broadening completely swamp the natural linewidth. The Lorentzian sits underneath a much broader Gaussian Doppler profile and is only recovered by cooling the sample to millikelvin temperatures or by using Lamb-dip or two-photon Doppler-free spectroscopy.",
+          "Δν ≈ 6.6 MHz. Laboratory readings match this exactly because Lyman-α is in the ultraviolet, above the Doppler-broadening regime.",
+          "Δν ≈ 1 GHz. This is the natural linewidth and it is what every spectrometer reads."
+        ],
+        "correctIndex": 1,
+        "explanation": "Δν = 1/(2πτ) = 1/(2π · 1.6 × 10⁻⁹ s) ≈ 1.0 × 10⁸ Hz = 100 MHz. That is the intrinsic Lorentzian floor set by the energy-time inequality. But a real hydrogen sample at room temperature has thermal velocities of order √(kT/m_H) ≈ 1600 m/s, and Lyman-α at 122 nm has a Doppler shift of order (v/c)·ν ≈ (5 × 10⁻⁶)(2.5 × 10¹⁵ Hz) ≈ 10¹⁰ Hz = 10 GHz FWHM. The Doppler Gaussian is a hundred times wider than the natural Lorentzian, so the line looks Doppler-limited and the natural width is invisible unless you go to a cold sample or use Doppler-free techniques (Lamb dips, saturated absorption, two-photon spectroscopy on counterpropagating beams). Option A denies the existence of Doppler broadening. Option C uses an angular-frequency formula for a frequency answer (off by 2π). Option D just makes up a number."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Weighing the Z boson by how wide its resonance is",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "At the Large Electron-Positron collider at CERN, from 1989 to 2000, four detectors watched electrons and positrons annihilate at a center-of-mass energy tunable through the mass of the Z boson (about 91.2 GeV). At each energy setting the experimenters counted how often the collision produced a Z, which quickly decayed back into a fermion-antifermion pair the detectors could see (a muon pair, a hadronic jet, a neutrino pair inferred from missing energy). The count as a function of center-of-mass energy traced out a beautiful resonance peak: a Lorentzian, centered on M_Z c² and with a full width at half maximum of Γ_Z ≈ 2.495 GeV."
+        },
+        {
+          "type": "p",
+          "text": "The Z boson has a mean lifetime, but it is not the sort of thing you measure with a stopwatch. Its lifetime is inferred, entirely, from the width of the resonance. The Mandelstam-Tamm formula reads directly: τ = ℏ/Γ = (6.582 × 10⁻²⁵ GeV·s) / (2.495 GeV) ≈ 2.6 × 10⁻²⁵ seconds. In that time a Z boson traveling at nearly the speed of light covers about 8 × 10⁻¹⁷ meters, roughly one-tenth the diameter of a proton. The Z is not a particle that flies through the detector and disintegrates in flight; the Z is a hump in a cross-section curve, a mass distribution whose width is the direct experimental signature of its lifetime. Nothing else was ever measurable about how long it lived."
+        },
+        {
+          "type": "p",
+          "text": "The same logic runs backward for particles the theory did not yet know existed. In 1952 Fermi and his group at Chicago fired a pion beam at hydrogen and found a sharp peak in the scattering cross-section at a total energy corresponding to a mass around 1232 MeV, with a width of about 117 MeV. From the width they inferred the lifetime of the intermediate resonance (call it Δ, we do now) as τ = ℏ/Γ ≈ 5.6 × 10⁻²⁴ s. No one had directly detected the Δ; they had measured its mass and its energy uncertainty from the shape of a bump. Wolfgang Pauli had blocked the naive time-operator interpretation of ΔEΔt in 1933, but by 1952 Fermi was using the Mandelstam-Tamm content of the inequality as a routine measurement technique. An energy-time uncertainty that was, in Pauli's argument, forbidden from being an observable had become, in Fermi's laboratory, the primary way we learn the ages of the shortest-lived things in nature."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Robertson's 1929 inequality reads ΔA · ΔB ≥ ½|⟨[Â, B̂]⟩|. This lesson argued that the energy-time uncertainty ΔE · Δt ≥ ℏ/2 does NOT follow from Robertson applied to (Ĥ, T̂), yet the inequality is still true and derivable. Which of the following best captures the difference between the two derivations, and why it matters?",
+    "options": [
+      "There is no real difference; T̂ can be constructed by taking the Fourier conjugate of Ĥ, and Robertson's theorem then applies verbatim, yielding ΔE · Δt ≥ ℏ/2 with Δt the standard deviation of T̂.",
+      "Pauli proved in 1933 that no self-adjoint time operator T̂ conjugate to Ĥ can exist for a Hamiltonian bounded below, so Robertson cannot be applied to the pair. Mandelstam and Tamm in 1945 rescued the inequality by redefining Δt as the characteristic time ΔA / |d⟨Â⟩/dt| for any non-conserved observable A. The 'time uncertainty' is a property computed from the state and a chosen observable, not a standard deviation of an external clock reading. This is why lifetimes of resonances (Z boson, Δ baryon) are extracted from the width of a peak in a cross-section curve rather than from a time-of-flight measurement.",
+      "The energy-time inequality is a purely relativistic effect: t enters the Dirac equation on equal footing with x, so a time operator exists in the relativistic theory and Robertson applies there.",
+      "Both inequalities are equivalent restatements of the classical Fourier bandwidth theorem; the operator-versus-parameter distinction is a formality with no physical consequence."
+    ],
+    "correctIndex": 1,
+    "explanation": "Pauli's theorem shows that a self-adjoint T̂ conjugate to a bounded-below Ĥ would require the existence of energy eigenstates of arbitrarily low energy, contradicting the existence of a ground state. So Robertson cannot be applied. Mandelstam-Tamm sidestep the problem: they apply Robertson to (Â, Ĥ) for a real observable A, use the Heisenberg equation of motion to rewrite ⟨[Â, Ĥ]⟩ as ℏ|d⟨Â⟩/dt|, and identify Δt_A ≡ ΔA/|d⟨Â⟩/dt|. This Δt is a rate ratio, not a clock reading, and the inequality ΔE · Δt_A ≥ ℏ/2 holds for every non-conserved A. This is exactly why resonance lifetimes can be extracted from peak widths in cross-section measurements: Γ · τ = ℏ falls straight out for a state whose 'observable' is the projector onto the state itself. Option A is wrong (Fourier conjugation gives a symmetric operator on a suitable domain but not a self-adjoint one; Pauli's argument survives). Option C conflates the relativistic covariance of the coordinate labels with the operator status of time. Option D collapses distinct mathematical structures."
+  },
+  "suggestedNodes": [
+    {
+      "id": "fermi_golden_rule",
+      "label": "Fermi's rule",
+      "subtitle": "Γ ∝ |V|² ρ(E)",
+      "edgeType": "extends"
+    },
+    {
+      "id": "wigner_weisskopf",
+      "label": "Wigner-Weiss",
+      "subtitle": "exp decay ↔ Lor",
+      "edgeType": "extends"
+    },
+    {
+      "id": "breit_wigner",
+      "label": "Breit-Wigner",
+      "subtitle": "σ(E) resonance",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-18T08:00:00Z",
+    "generator": "routine",
+    "estimatedReadingMinutes": 18
+  }
+}
