@@ -544,5 +544,12 @@
     "subtitle": "ΔE Δt ≥ ℏ/2",
     "date": "2026-07-18",
     "estimatedReadingMinutes": 18
+  },
+  {
+    "slug": "2026-07-19-gaussian-wave-packet",
+    "title": "Gaussian wave packet: the unique shape that saturates Heisenberg, and why pinning it tighter makes it spread faster",
+    "subtitle": "ΔxΔp = ℏ/2",
+    "date": "2026-07-19",
+    "estimatedReadingMinutes": 22
   }
 ]

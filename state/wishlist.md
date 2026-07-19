@@ -30,7 +30,6 @@
 # auto-suggested 2026-05-17 from schrodinger-equation
 
 # auto-suggested 2026-05-18 from uncertainty-principle
-Gaussian wave packet — the unique minimum-uncertainty state σ_x σ_p = ℏ/2, and how it spreads in free space (Δx grows linearly with t at large t)
 
 # auto-suggested 2026-05-20 from bohr-atom
 Franck-Hertz experiment — electrons losing energy in 4.9 eV steps through mercury vapor, the 1914 collision experiment that confirmed quantized atomic energy levels directly, without any spectroscopy
@@ -269,3 +268,7 @@ Spin operators — Ŝ_x, Ŝ_y, Ŝ_z as ℏ/2 times the Pauli matrices, the small
 Fermi's golden rule — Γ = (2π/ℏ)|⟨f|V̂|i⟩|²ρ(E_f), the first-order-perturbation-theory transition rate that turns a coupling matrix element and a density of final states into a decay rate, and hence (via τ = ℏ/Γ) into the natural linewidth this lesson takes for granted; the derivation runs Dirac's 1927 time-dependent perturbation theory to first order and sends the interaction time to infinity to get an energy-conserving δ-function inside the rate integral
 Wigner-Weisskopf theory — the 1930 solution of the two-level atom coupled to a continuum of photon modes, which produces the exponentially damped amplitude exp(−iω₀t)·exp(−t/2τ) this lesson wrote down by hand, together with the small (Lamb-shift-like) real energy correction that comes with the imaginary part; the model shows why the natural line profile is Lorentzian rather than Gaussian and is the workhorse for every laser and every atomic-cavity QED calculation since
 Breit-Wigner resonance — σ(E) ∝ Γ² / [(E − E₀)² + (Γ/2)²], the 1936 formula for the cross-section of an unstable resonance, applied at LEP to pin the Z boson's width to 2.495 GeV and at pion-nucleon scattering to weigh the Δ(1232) baryon; the same Lorentzian shape as the natural linewidth, but read as a cross-section vs. beam energy rather than as an emitted photon spectrum, and the working definition of a "particle" for anything shorter-lived than a nanosecond
+
+# auto-suggested 2026-07-19 from gaussian-wave-packet
+Bose-Einstein condensate — the many-body state of identical bosons all in the trap ground state below the critical temperature k_B T_c ≈ 3.3 ℏ² n^(2/3)/m, Anderson-Ensher-Matthews-Wieman-Cornell 1995 rubidium condensate at JILA and Ketterle 1995 sodium condensate at MIT, the 2001 Nobel Prize, and the platform behind every ultracold-atom experiment on superfluidity, optical lattices, and quantum simulation since
+Ehrenfest theorem — Paul Ehrenfest 1927, the identities d⟨x̂⟩/dt = ⟨p̂⟩/m and d⟨p̂⟩/dt = −⟨∇V⟩ that show the centre of a quantum wave packet obeys Newton's equations exactly when the potential is at most quadratic, the operational form of Bohr's correspondence principle and the reason a Gaussian packet in a harmonic trap tracks the classical trajectory of its peak while a packet in a general potential deviates from it in proportion to the packet width

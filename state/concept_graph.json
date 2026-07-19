@@ -779,6 +779,16 @@
       "createdAt": "2026-07-18T08:00:00Z",
       "col": 0,
       "row": 39
+    },
+    {
+      "id": "gaussian_wave_packet",
+      "label": "Wave packet",
+      "subtitle": "ΔxΔp = ℏ/2",
+      "state": "available",
+      "lesson": "2026-07-19-gaussian-wave-packet",
+      "createdAt": "2026-07-19T07:00:00Z",
+      "col": 1,
+      "row": 39
     }
   ],
   "edges": [
@@ -1845,6 +1855,21 @@
     {
       "from": "energy_time_uncertainty",
       "to": "hydrogen_atom",
+      "kind": "applied"
+    },
+    {
+      "from": "gaussian_wave_packet",
+      "to": "uncertainty_principle",
+      "kind": "extends"
+    },
+    {
+      "from": "gaussian_wave_packet",
+      "to": "robertson_inequality",
+      "kind": "extends"
+    },
+    {
+      "from": "gaussian_wave_packet",
+      "to": "schrodinger_equation",
       "kind": "applied"
     }
   ]
