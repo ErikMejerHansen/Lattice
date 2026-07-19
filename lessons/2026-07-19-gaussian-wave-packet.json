@@ -1,0 +1,203 @@
+{
+  "slug": "2026-07-19-gaussian-wave-packet",
+  "title": "Gaussian wave packet: the unique shape that saturates Heisenberg, and why pinning it tighter makes it spread faster",
+  "node": {
+    "id": "gaussian_wave_packet",
+    "label": "Wave packet",
+    "subtitle": "ΔxΔp = ℏ/2"
+  },
+  "intro": "Heisenberg's inequality is a floor, and one specific wave function sits on it: the Gaussian. Erwin Schrödinger found it in 1926 while looking for quantum states that would slide through space the way a classical marble does, and Earle Hesse Kennard nailed down its uniqueness the following year with a one-page calculation. What makes the Gaussian remarkable is not that it minimises σ_x·σ_p, but what happens when you let one loose: the Schrödinger equation forces it to spread, and the tighter you pinned it at t = 0, the faster it comes apart. This lesson builds the packet, watches it spread, and ends at the JILA cover of Science on July 14, 1995.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Schrödinger's sliding bump and Kennard's proof",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In the summer of 1926 Schrödinger had a wave equation but no obvious place inside it for a classical particle. Quantum mechanics gave you a ψ(x, t), an amplitude spread out over space, and yet the world plainly contained localised things: marbles, planets, bullets. Where in ψ did the marble live? He looked for the answer in the simplest system he had, the harmonic oscillator, and asked whether he could build a wave function whose peak followed the classical trajectory x_c(t) = A cos(ω t) without changing shape. He found one, and it was Gaussian. The construction was a superposition of energy eigenstates with amplitudes that reproduced the moving Gaussian at every moment, and Schrödinger published it in Naturwissenschaften in July as an existence proof: quantum mechanics did contain sliding, localised bumps."
+        },
+        {
+          "type": "p",
+          "text": "That paper was about oscillator states, not free particles, but it flagged the Gaussian as a special shape. Six months later Earle Hesse Kennard, an American physicist visiting Copenhagen, turned Heisenberg's heuristic γ-ray-microscope argument for ΔxΔp ≥ h/(2π) into a theorem. Heisenberg had reasoned from scattering: to see an electron with light of wavelength λ you kick it with momentum ≈ h/λ, so you can't measure x more finely than λ without disturbing p by more than h/λ. Suggestive, but nothing about a bona-fide inequality on a state. Kennard reformulated the question. Given any square-integrable ψ(x), compute σ_x as the standard deviation of the operator x̂ in that state and σ_p as the standard deviation of p̂ in the same state. What is the smallest possible product?"
+        },
+        {
+          "type": "p",
+          "text": "The proof runs in a page. Apply the Cauchy-Schwarz inequality to the pair of functions (x̂ − ⟨x̂⟩)ψ and (p̂ − ⟨p̂⟩)ψ, use the canonical commutation relation [x̂, p̂] = iℏ to evaluate the resulting inner product, and out drops σ_x·σ_p ≥ ℏ/2. The Cauchy-Schwarz step is an equality if and only if one of the two functions is a constant multiple of the other, which gives a first-order linear differential equation for ψ. The solution is (up to an overall complex phase, a shift of the peak, and a momentum-boost factor) a Gaussian in x with a specific width. Every other shape has slack. Kennard's paper, 'Zur Quantenmechanik einfacher Bewegungstypen' in Zeitschrift für Physik, is less famous than Heisenberg's, but it did the work that turned the inequality from an argument-by-example into a mathematical fact, and it identified the Gaussian as the unique minimum-uncertainty state."
+        },
+        {
+          "type": "p",
+          "text": "So we have two Gaussians for the price of one construction. Schrödinger's oscillator bump moves without spreading because the trap keeps it together; Kennard's free-particle Gaussian saturates Heisenberg at the instant t = 0. What the two miss between them is a question the rest of this lesson is about: what does a Kennard Gaussian do next, once you let it evolve as a free particle?"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Building the packet: Gaussian in position, Gaussian in momentum",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Write down the packet directly. Let σ_0 be a positive length, and place a Gaussian centred at the origin with a width parameter tuned so that the probability density |ψ|² integrates to 1. The wave function itself carries a fourth-root normalisation, because probability is the square of the amplitude."
+        },
+        {
+          "type": "math",
+          "tex": "\\psi(x, 0) \\;=\\; \\bigl(2\\pi\\sigma_0^{2}\\bigr)^{-1/4}\\,\\exp\\!\\Bigl(-\\tfrac{x^{2}}{4\\sigma_0^{2}}\\Bigr)",
+          "display": true,
+          "caption": "ψ(x, 0) is the initial wave function at time t = 0. x is the position coordinate. σ_0 is the initial position spread, that is, the standard deviation of x̂ in the state ψ. The prefactor (2π σ_0²)^(−1/4) makes ∫|ψ|² dx = 1. exp(−x²/(4σ_0²)) is the Gaussian bell curve of variance σ_0² for |ψ|²; note the factor of 4 in the denominator, which comes from squaring ψ to get |ψ|² and turning the width of ψ into the width of |ψ|²."
+        },
+        {
+          "type": "p",
+          "text": "Compute the position spread and you recover σ_0 exactly. To find the momentum spread, take the Fourier transform of ψ(x, 0), the operation that hands you the amplitude in momentum space, ψ̃(p) = (1/√(2πℏ)) ∫ ψ(x, 0) exp(−i p x / ℏ) dx. The Fourier transform of a Gaussian is another Gaussian, which is the fact that makes this whole packet work. The width of the momentum Gaussian is inversely proportional to the width of the position Gaussian, and the constant of proportionality is set by ℏ."
+        },
+        {
+          "type": "math",
+          "tex": "\\tilde\\psi(p) \\;=\\; \\bigl(2\\pi\\sigma_p^{2}\\bigr)^{-1/4}\\,\\exp\\!\\Bigl(-\\tfrac{p^{2}}{4\\sigma_p^{2}}\\Bigr), \\qquad \\sigma_p \\;=\\; \\frac{\\hbar}{2\\sigma_0}",
+          "display": true,
+          "caption": "ψ̃(p) is the wave function in momentum space, the amplitude for the packet to have momentum p. p is the momentum coordinate. σ_p is the momentum spread, that is, the standard deviation of p̂ in the state ψ. ℏ is the reduced Planck constant. The relation σ_p = ℏ/(2σ_0) is the punchline: making the position packet narrower (small σ_0) forces the momentum packet wider (large σ_p) by the same ratio."
+        },
+        {
+          "type": "p",
+          "text": "Multiply the two widths together and the σ_0 cancels. What is left is exactly ℏ/2, no coefficient, no correction, no inequality. This is the Kennard equality for the Gaussian, and it is why the Gaussian and only the Gaussian sits on the Heisenberg floor. Any other shape, any lumpy bimodal distribution or truncated cosine or top-hat, has a strictly larger product; only this precise fourth-root-normalised bell has none."
+        },
+        {
+          "type": "math",
+          "tex": "\\sigma_x \\cdot \\sigma_p \\;=\\; \\sigma_0 \\cdot \\frac{\\hbar}{2\\sigma_0} \\;=\\; \\frac{\\hbar}{2}",
+          "display": true,
+          "caption": "σ_x is the position standard deviation, equal to σ_0 for this state. σ_p is the momentum standard deviation, equal to ℏ/(2σ_0). ℏ is the reduced Planck constant. The product ℏ/2 is the exact floor of the Heisenberg-Kennard inequality; the Gaussian achieves it and every other wave function overshoots it."
+        }
+      ],
+      "quiz": {
+        "question": "You prepare two Gaussian wave packets of an electron: packet A with σ_0 = 1 nm and packet B with σ_0 = 0.01 nm (about a fifth of the Bohr radius). Which of the following comparisons is correct at t = 0?",
+        "options": [
+          "Packet A and packet B both have σ_x · σ_p = ℏ/2, but packet B has a hundred times larger σ_p (and thus a hundred times larger spread in velocity) because σ_p = ℏ/(2σ_0) is inversely proportional to σ_0. Squeezing the electron into a smaller region does not evade the Heisenberg floor; it enforces it by raising the momentum spread proportionally.",
+          "Packet A has σ_x · σ_p = ℏ/2 and packet B has σ_x · σ_p < ℏ/2, because the smaller packet violates the uncertainty inequality; this is why isolated free electrons cannot be confined below a nanometre in practice.",
+          "Both packets have σ_x · σ_p = ℏ/2 and the same σ_p, because the Kennard equality forces both σ_x and σ_p to take fixed values independent of σ_0.",
+          "Packet B has a smaller σ_p than packet A, because a more localised wave packet corresponds to a better-determined momentum."
+        ],
+        "correctIndex": 0,
+        "explanation": "For a Gaussian wave packet σ_x = σ_0 and σ_p = ℏ/(2σ_0). Both packets sit exactly on the Kennard floor σ_x · σ_p = ℏ/2, but the tighter packet (B) pays for its small σ_x with a hundred-fold larger σ_p. Numerically σ_p(A) = ℏ/(2·10⁻⁹ m) ≈ 5 × 10⁻²⁶ kg·m/s giving a velocity spread of about 6 × 10⁴ m/s for an electron; σ_p(B) is a hundred times larger, giving a velocity spread near 6 × 10⁶ m/s, a few percent of the speed of light. Option B misreads the inequality (no state falls below ℏ/2, ever). Option C confuses fixed product for fixed factors. Option D inverts the sign: for wave packets, tighter in x means broader in p."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Turning the crank: free evolution and why the packet spreads",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Let the packet loose. Free particles obey the Schrödinger equation with no potential, iℏ ∂ψ/∂t = −(ℏ²/2m) ∂²ψ/∂x², where m is the particle's mass. The trick that makes the evolution tractable is that every momentum eigenstate exp(ipx/ℏ) is also an energy eigenstate with energy E(p) = p²/(2m), so time evolution acts on each momentum component by nothing more than a phase exp(−iE(p) t/ℏ) = exp(−i p² t/(2mℏ)). Since |ψ̃(p)|² is what you square to get the momentum distribution, and a phase drops out under the square, |ψ̃(p, t)|² = |ψ̃(p, 0)|² for every t. Momentum spread does not change under free evolution. Whatever σ_p the packet started with is what σ_p stays."
+        },
+        {
+          "type": "p",
+          "text": "So all the spreading must live in position space. To find it, take ψ(x, 0), Fourier transform to ψ̃(p, 0), stamp on the phase exp(−i p² t/(2mℏ)), and inverse-transform back. The integrand is Gaussian in p (from the Kennard shape) times a quadratic phase in p (from the kinetic energy). The two combine into a single quadratic in p, and doing the Gaussian integral gives a Gaussian in x with a time-dependent width."
+        },
+        {
+          "type": "math",
+          "tex": "\\sigma_{x}(t)^{2} \\;=\\; \\sigma_{0}^{2} \\;+\\; \\Bigl(\\frac{\\hbar\\,t}{2 m\\,\\sigma_{0}}\\Bigr)^{2}",
+          "display": true,
+          "caption": "σ_x(t) is the position standard deviation at time t. σ_0 is the initial position spread at t = 0. t is the elapsed time. m is the particle's mass. ℏ is the reduced Planck constant. The first term σ_0² is the width the packet started with. The second term is the growth: it is exactly (σ_p·t/m)² with σ_p = ℏ/(2σ_0), the velocity spread times the elapsed time, squared. The two contributions add in quadrature because position and momentum spreads are independent Gaussian variables."
+        },
+        {
+          "type": "p",
+          "text": "The formula is worth reading twice. At t = 0 the second term is zero and σ_x = σ_0, as required. For large t the first term is negligible and σ_x(t) ≈ (ℏ/(2mσ_0))·t = (σ_p/m)·t, a straight line growing at rate σ_p/m. The rate is the velocity spread you would compute from the momentum spread alone, and it is preordained by the initial σ_0 through the Kennard product σ_0 · σ_p = ℏ/2. So a tightly pinned packet (small σ_0) has a large σ_p and spreads fast; a broad packet has a small σ_p and stays roughly its own width for a long time. The two behaviours cross over at the time t* = 2mσ_0²/ℏ where the two terms in σ_x(t)² are equal."
+        },
+        {
+          "type": "p",
+          "text": "The viz below lets you slide σ_0 and t and watch the packet evolve. The main panel shows the initial |ψ(x, 0)|² as a dashed outline and the current |ψ(x, t)|² as a solid curve. The inset shows the trajectory σ_x(t) tracing out its hyperbolic branch, with a marker at your current t. Slide σ_0 small and the initial dashed curve gets tall and thin, but the solid curve broadens dramatically as t moves. Slide σ_0 large and the dashed and solid curves stay nearly on top of each other for a long stretch. Their product σ_x(t)·σ_p, read out below the sliders, is exactly ℏ/2 at t = 0 and climbs above it for every t > 0."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-19-gaussian-wave-packet.html",
+          "height": 480,
+          "caption": "|ψ(x, 0)|² (dashed) and |ψ(x, t)|² (solid) for a free Gaussian wave packet in units where m = 1 and ℏ = 1. Two sliders set the initial width σ_0 and the elapsed time t. The inset traces σ_x(t) = √(σ_0² + (t/(2σ_0))²) with a moving marker."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Pinning the electron, chilling the atom",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Put numbers on the crossover time t* = 2mσ_0²/ℏ for two very different particles pinned to very different scales, and the physics of the wave packet shows its edges. Take an electron and try to localise it to σ_0 = 0.05 nm, about the size of a hydrogen atom. Then σ_p = ℏ/(2σ_0) ≈ 10⁻²⁴ kg·m/s, giving a velocity spread σ_p/m_e ≈ 10⁶ m/s (a percent of the speed of light). The crossover time is t* = 2·(9.1 × 10⁻³¹ kg)·(5 × 10⁻¹¹ m)²/(1.05 × 10⁻³⁴ J·s) ≈ 4 × 10⁻¹⁷ s, about forty attoseconds. In forty attoseconds an unbound electron pinned to atomic dimensions is already spreading by more than its own initial width, and after a nanosecond it is smeared across a millimetre. This is why you cannot store isolated electrons in a box the size of an atom without a real physical trap: no soft confinement holds; only the Coulomb pull of a nucleus, feeding energy back to the electron via the potential, can pin it there indefinitely."
+        },
+        {
+          "type": "p",
+          "text": "Now do the same for a rubidium-87 atom (m ≈ 1.44 × 10⁻²⁵ kg, a hundred and sixty thousand times heavier than an electron) pinned to σ_0 = 1 μm, the ground-state width of a soft harmonic trap oscillating at 100 Hz. The momentum spread is σ_p ≈ 5 × 10⁻²⁹ kg·m/s and the velocity spread is only σ_p/m ≈ 0.35 mm/s. The crossover time is t* = 2·(1.44 × 10⁻²⁵)·(10⁻⁶)²/(1.05 × 10⁻³⁴) ≈ 3 × 10⁻³ s, three milliseconds. After ten milliseconds the packet has grown to about 3 μm and is well into its linear-in-t regime. After a hundred milliseconds it has grown to about 30 μm, a photograph-sized shadow that a CCD camera can image comfortably. The atom is spreading at the same fundamental rate as the electron, in the sense that both live on the Kennard floor at t = 0, but the atom's much larger mass makes the growth photographable rather than theoretical."
+        },
+        {
+          "type": "p",
+          "text": "Two lessons come out of the comparison. First, the whole show is scaled by ℏ/m; the same inequality that shreds a free electron in attoseconds gently unspools a cold rubidium atom over milliseconds because the atom is heavy. Second, the linear late-time rate σ_x(t) ≈ (σ_p/m)·t reads off the initial momentum distribution: measure the size of the packet after a known expansion time, divide by that time, and you have σ_p. This is not a theoretical trick, it is how ultracold-atom laboratories actually measure temperature and chemical potential."
+        }
+      ],
+      "quiz": {
+        "question": "A cold rubidium-87 atom (m ≈ 1.44 × 10⁻²⁵ kg) is prepared as a Gaussian wave packet with σ_0 = 1 μm and released from a trap. You image the atom cloud after t = 50 ms of free expansion. What is σ_x(t), and what is the fractional excess of σ_x·σ_p above the Heisenberg floor?",
+        "options": [
+          "σ_x(t) ≈ 18 μm, and σ_x·σ_p exceeds ℏ/2 by a factor of about 18. The formula σ_x(t)² = σ_0² + (ℏt/(2mσ_0))² with the given numbers gives (10⁻⁶ m)² + ((1.05 × 10⁻³⁴)(0.05)/(2 · 1.44 × 10⁻²⁵ · 10⁻⁶))² ≈ 10⁻¹² m² + (1.8 × 10⁻⁵ m)² ≈ 3.3 × 10⁻¹⁰ m², so σ_x(t) ≈ 1.8 × 10⁻⁵ m ≈ 18 μm. Since σ_p is unchanged under free evolution and σ_0 = 1 μm, the product σ_x(t)·σ_p equals (σ_x(t)/σ_0)·(ℏ/2) ≈ 18 · (ℏ/2). Free evolution takes a Kennard-saturated packet immediately off the floor.",
+          "σ_x(t) ≈ 1 μm and σ_x·σ_p = ℏ/2. Free evolution of a Gaussian packet keeps σ_x fixed at σ_0 forever because the packet is an eigenstate of the free Hamiltonian.",
+          "σ_x(t) ≈ 18 μm, and σ_x·σ_p = ℏ/2 still. The Kennard equality is preserved by unitary evolution and so remains saturated at every time.",
+          "σ_x(t) ≈ 50 μm, computed as σ_p·t/m directly; the initial σ_0 does not enter because after 50 ms the packet has already forgotten its initial shape."
+        ],
+        "correctIndex": 0,
+        "explanation": "The formula gives (ℏt/(2mσ_0)) = (1.05 × 10⁻³⁴ · 0.05)/(2·1.44 × 10⁻²⁵·10⁻⁶) ≈ 1.8 × 10⁻⁵ m, which dwarfs σ_0 = 10⁻⁶ m, so σ_x(t) ≈ 18 μm. Since σ_p = ℏ/(2σ_0) is conserved under free evolution (free momentum eigenstates only pick up phases), σ_x(t)·σ_p = (σ_x(t)/σ_0)·(σ_0·σ_p) = 18·(ℏ/2). Option B misreads free evolution (a Gaussian is not a free-particle stationary state; only plane waves are). Option C confuses the equality condition at t = 0 with a conservation law; the Kennard equality holds only instantaneously for the packet, and free evolution takes it off the floor immediately. Option D drops the σ_0² term entirely, which is fine as a late-time asymptote but wrong at 50 ms when the exact formula still gives a small correction (√(1² + 18²) ≈ 18.03 μm, so numerically close to 18 μm here, but the reasoning in D is what fails)."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The photograph on the cover of Science, July 14, 1995",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The section-4 arithmetic (rubidium atom, micron trap, milliseconds, tens-of-microns shadow) is not a hypothetical. It is what Eric Cornell and Carl Wieman did at JILA in Boulder, Colorado on the morning of June 5, 1995, using a magnetic trap and a laser cooling stage they had spent five years assembling. They loaded a few thousand rubidium-87 atoms into a magnetic trap oscillating around 200 Hz, evaporatively cooled them by peeling off the hottest atoms one shell at a time until the cloud reached 170 nanokelvin, and then, having no direct way to see whether they had produced the Bose-Einstein condensate they had been chasing, they turned the trap off, waited about sixty milliseconds while the cloud expanded, and took a shadow photograph. The image ran on the cover of Science on July 14 and won Cornell, Wieman, and Wolfgang Ketterle (whose group at MIT had produced the same effect with sodium months later) the 2001 Nobel Prize."
+        },
+        {
+          "type": "p",
+          "text": "What they saw was a sharp central peak sitting on top of a broader, softer Gaussian pedestal. The pedestal was the thermal cloud: several thousand atoms with velocities distributed by Maxwell-Boltzmann, spreading at a rate √(k_B T/m) ≈ 4 mm/s at 170 nK. In sixty milliseconds the thermal cloud had grown to about 240 μm, the wide background in the image. The sharp peak was the condensate: the atoms that had collapsed into the ground state of the trap, a Gaussian wave packet of the sort we have been describing, with σ_0 set by the trap frequency at about 1 μm and σ_p = ℏ/(2σ_0) giving a velocity spread of 0.35 mm/s, an order of magnitude smaller than thermal. The condensate cloud in the same sixty milliseconds had grown only to about 20 μm, the tight peak in the image. The ratio between the two widths in the photograph is literally the ratio between the Kennard velocity spread and the thermal velocity spread of a 170 nanokelvin sample."
+        },
+        {
+          "type": "p",
+          "text": "The technique is called time-of-flight imaging, and every ultracold-atom laboratory now runs it as a matter of routine. It works because at late times the size of the packet is dominated by the momentum spread, exactly as our formula σ_x(t) ≈ (σ_p/m)·t predicts, so the shadow is a magnified picture of the initial momentum distribution. To measure temperature, image the thermal cloud after known t and extract σ_p = m · σ_x(t)/t. To measure the trap frequency for the condensate, image its width and read off ω from σ_0 = √(ℏ/(mω)) via the ground-state wave function. What the photograph on the Science cover shows, section by section, is the Kennard geometry from t = 0 propagated forward sixty milliseconds by the free-particle Schrödinger equation of section 3, with the sharpness of the condensate peak being exactly the visible signature of σ_x(0)·σ_p = ℏ/2 for atoms that had settled into the trap's ground state. When Ketterle later called BEC 'a laser beam made of atoms' he was pointing at the same fact: the condensate saturates Heisenberg, and the photograph proves it."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Section 3 asserted that σ_p is conserved under free evolution of a Gaussian wave packet, while σ_x grows without bound. What is the deepest reason σ_p stays constant, and what does that fact imply about how the tight condensate peak in the JILA photograph is possible in the first place?",
+    "options": [
+      "σ_p is conserved because a Gaussian packet is a stationary state of the free Hamiltonian; the condensate peak is tight because ultracold atoms are stationary states of the trap Hamiltonian.",
+      "σ_p is conserved because momentum eigenstates exp(ipx/ℏ) are free-particle energy eigenstates (E = p²/(2m)) and so evolve only by an overall phase exp(−iE t/ℏ), which leaves |ψ̃(p)|² invariant. That fact makes time-of-flight imaging possible: the initial momentum distribution is preserved and, at late times where σ_x(t) ≈ (σ_p/m)·t, is directly readable off the size of the expanded cloud. The condensate peak in the JILA image is tight because BEC atoms have settled into the ground state of the trap, whose σ_0 is set by the trap frequency and whose σ_p = ℏ/(2σ_0) is a factor of order ten smaller than the thermal σ_p of the surrounding atoms; that ratio survives sixty milliseconds of ballistic expansion and shows up as the ratio of peak-to-pedestal widths in the shadow.",
+          "σ_p is conserved because the packet does not radiate; the condensate peak is tight because it contains no thermally excited atoms, and thermally excited atoms would broaden the momentum distribution just as they broaden the position distribution.",
+          "σ_p is conserved because momentum is a conserved quantity classically, and the correspondence principle guarantees the same conservation quantum mechanically; the condensate peak is tight because the ground-state wave function of the trap has smaller σ_x than any thermal atom."
+    ],
+    "correctIndex": 1,
+    "explanation": "The correct reason is operator-level: the free Hamiltonian is diagonal in the p̂ basis (Ĥ = p̂²/(2m)), so each momentum eigencomponent of ψ̃(p) picks up only a phase exp(−ip²t/(2mℏ)), leaving |ψ̃(p, t)|² = |ψ̃(p, 0)|² and hence σ_p constant. Because the momentum distribution is thus locked in place at t = 0, and because at late times σ_x(t) ≈ (σ_p/m)·t reads off σ_p directly from the size of the cloud after time t, time-of-flight imaging is a magnifier for the initial momentum distribution. The JILA condensate peak is tight for exactly this reason: BEC atoms occupy the trap ground state, whose momentum spread σ_p = ℏ/(2σ_0) is set by the (soft) trap width σ_0, and is a factor of about ten smaller than the thermal Maxwell-Boltzmann spread √(k_B T/m) at 170 nK; that same factor of ten appears in the ratio of the sharp peak's width to the broader thermal pedestal's width in the shadow. Option A wrongly calls the packet a stationary state (it is not; it picks up a whole family of phases, not one). Option C invokes radiation that is not present (free particles do not radiate; the packet just disperses). Option D collapses distinct conservation laws (⟨p̂⟩ is conserved for a symmetric potential too, but σ_p is not; the operator-level argument in the correct answer is what actually preserves σ_p under free evolution)."
+  },
+  "suggestedNodes": [
+    {
+      "id": "bose_einstein_condensate",
+      "label": "BEC",
+      "subtitle": "N_0 ∝ T_c ratio",
+      "edgeType": "applied"
+    },
+    {
+      "id": "coherent_states",
+      "label": "Coherent",
+      "subtitle": "|α⟩, min-Δ",
+      "edgeType": "extends"
+    },
+    {
+      "id": "ehrenfest_theorem",
+      "label": "Ehrenfest",
+      "subtitle": "d⟨p⟩/dt = ⟨F⟩",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-19T07:00:00Z",
+    "generator": "routine",
+    "estimatedReadingMinutes": 22
+  }
+}

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 82px; text-align: right;
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 10px;
+  line-height: 1.7;
+}
+.readout .v { color: var(--text); }
+.readout .lbl { color: var(--text-muted); }
+.readout .product { color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div style="padding: 14px 18px;">
+    <svg id="svg" width="100%" viewBox="0 0 720 400" preserveAspectRatio="xMidYMid meet">
+      <g id="scene"></g>
+    </svg>
+    <div class="viz-slider-row">
+      <label>σ₀</label>
+      <input type="range" id="sigSlider" min="0.30" max="3.00" step="0.02" value="1.00">
+      <span class="value" id="sigVal">σ₀ = 1.00</span>
+    </div>
+    <div class="viz-slider-row">
+      <label>t</label>
+      <input type="range" id="tSlider" min="0.00" max="20.00" step="0.05" value="0.00">
+      <span class="value" id="tVal">t = 0.00</span>
+    </div>
+    <div class="readout" id="readout"></div>
+    <div class="viz-caption" style="margin-top: 10px;">
+      Units where m = 1 and ℏ = 1. Top panel: |ψ(x, 0)|² (dashed) and |ψ(x, t)|² (solid), a Gaussian of width σ_x(t) = √(σ₀² + (t/(2σ₀))²).
+      Bottom panel: σ_x(t) traced against time, with a marker at the current t.
+      Slide σ₀ small: the initial dashed curve grows tall and thin, the solid curve broadens quickly with t.
+      Slide σ₀ large: the two curves stay overlapping much longer. The product σ_x·σ_p equals ℏ/2 only at t = 0.
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  const svg = document.getElementById('svg');
+  const scene = document.getElementById('scene');
+  const sigSlider = document.getElementById('sigSlider');
+  const sigVal = document.getElementById('sigVal');
+  const tSlider = document.getElementById('tSlider');
+  const tVal = document.getElementById('tVal');
+  const readout = document.getElementById('readout');
+
+  // Layout: two panels stacked, top is the density plot, bottom is σ_x(t)
+  const W = 720, H = 400;
+  const pad = { l: 60, r: 24, t: 26, b: 42 };
+  const panelGap = 22;
+  const panelH_top = 210;
+  const panelH_bot = H - pad.t - pad.b - panelGap - panelH_top;
+  const plotW = W - pad.l - pad.r;
+
+  const p1 = { x: pad.l, y: pad.t };
+  const p2 = { x: pad.l, y: pad.t + panelH_top + panelGap };
+
+  const X_HALF = 6;        // top panel: x ∈ [−6, +6]
+  const T_MAX = 20;        // bottom panel: t ∈ [0, 20]
+  const SIG_MAX_PLOT = 6;  // bottom panel: σ_x range [0, 6]
+  const DENS_MAX = 0.75;   // top panel: |ψ|² capped at 0.75 for visual scale
+
+  function sigmaFromSlider() { return parseFloat(sigSlider.value); }
+  function timeFromSlider() { return parseFloat(tSlider.value); }
+
+  function svgNS(tag, attrs, text) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    if (text !== undefined) el.textContent = text;
+    return el;
+  }
+
+  function sigmaXofT(sig0, t) {
+    const v = sig0 * sig0 + (t / (2 * sig0)) * (t / (2 * sig0));
+    return Math.sqrt(v);
+  }
+
+  function density(x, sigma) {
+    // |ψ|² = (1/√(2π σ²)) exp(−x²/(2 σ²))
+    const inv = 1 / Math.sqrt(2 * Math.PI * sigma * sigma);
+    return inv * Math.exp(-(x * x) / (2 * sigma * sigma));
+  }
+
+  function drawAxes() {
+    // Top panel: box + x-axis, y-axis, ticks
+    // x from −X_HALF..X_HALF → p1.x..p1.x+plotW
+    // y from 0..DENS_MAX → p1.y+panelH_top..p1.y
+    scene.appendChild(svgNS('line', {
+      x1: p1.x, y1: p1.y + panelH_top, x2: p1.x + plotW, y2: p1.y + panelH_top,
+      stroke: 'var(--border-strong)', 'stroke-width': 1
+    }));
+    scene.appendChild(svgNS('line', {
+      x1: p1.x, y1: p1.y, x2: p1.x, y2: p1.y + panelH_top,
+      stroke: 'var(--border-strong)', 'stroke-width': 1
+    }));
+
+    // Top title
+    scene.appendChild(svgNS('text', {
+      x: p1.x, y: p1.y - 8, 'font-size': 12, 'font-style': 'italic', fill: 'var(--text-muted)'
+    }, '|ψ(x, 0)|² (dashed) and |ψ(x, t)|² (solid)'));
+
+    // x-ticks at −6, −4, −2, 0, 2, 4, 6
+    for (let xv = -X_HALF; xv <= X_HALF; xv += 2) {
+      const px = p1.x + ((xv + X_HALF) / (2 * X_HALF)) * plotW;
+      scene.appendChild(svgNS('line', {
+        x1: px, y1: p1.y + panelH_top, x2: px, y2: p1.y + panelH_top + 4,
+        stroke: 'var(--border-strong)', 'stroke-width': 1
+      }));
+      scene.appendChild(svgNS('text', {
+        x: px, y: p1.y + panelH_top + 16, 'font-size': 10, fill: 'var(--text-muted)',
+        'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace', 'text-anchor': 'middle'
+      }, String(xv)));
+    }
+    scene.appendChild(svgNS('text', {
+      x: p1.x + plotW / 2, y: p1.y + panelH_top + 32,
+      'font-size': 11, fill: 'var(--text-muted)', 'font-style': 'italic', 'text-anchor': 'middle'
+    }, 'x  (units of initial σ₀ = 1)'));
+
+    // y ticks at 0, 0.25, 0.5, 0.75
+    [0, 0.25, 0.5, 0.75].forEach(v => {
+      const py = p1.y + panelH_top - (v / DENS_MAX) * panelH_top;
+      scene.appendChild(svgNS('line', {
+        x1: p1.x - 4, y1: py, x2: p1.x, y2: py,
+        stroke: 'var(--border-strong)', 'stroke-width': 1
+      }));
+      scene.appendChild(svgNS('text', {
+        x: p1.x - 8, y: py + 3, 'font-size': 10, fill: 'var(--text-muted)',
+        'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace', 'text-anchor': 'end'
+      }, v.toFixed(2)));
+    });
+    scene.appendChild(svgNS('text', {
+      x: -(p1.y + panelH_top / 2), y: p1.x - 38,
+      'font-size': 11, fill: 'var(--text-muted)', 'font-style': 'italic',
+      'text-anchor': 'middle', transform: 'rotate(-90)'
+    }, '|ψ|²'));
+
+    // Bottom panel axes
+    scene.appendChild(svgNS('line', {
+      x1: p2.x, y1: p2.y + panelH_bot, x2: p2.x + plotW, y2: p2.y + panelH_bot,
+      stroke: 'var(--border-strong)', 'stroke-width': 1
+    }));
+    scene.appendChild(svgNS('line', {
+      x1: p2.x, y1: p2.y, x2: p2.x, y2: p2.y + panelH_bot,
+      stroke: 'var(--border-strong)', 'stroke-width': 1
+    }));
+    scene.appendChild(svgNS('text', {
+      x: p2.x, y: p2.y - 6, 'font-size': 12, 'font-style': 'italic', fill: 'var(--text-muted)'
+    }, 'σ_x(t) = √(σ₀² + (t/(2σ₀))²)'));
+
+    // Bottom x ticks at 0, 5, 10, 15, 20
+    for (let tv = 0; tv <= T_MAX; tv += 5) {
+      const px = p2.x + (tv / T_MAX) * plotW;
+      scene.appendChild(svgNS('line', {
+        x1: px, y1: p2.y + panelH_bot, x2: px, y2: p2.y + panelH_bot + 4,
+        stroke: 'var(--border-strong)', 'stroke-width': 1
+      }));
+      scene.appendChild(svgNS('text', {
+        x: px, y: p2.y + panelH_bot + 14, 'font-size': 10, fill: 'var(--text-muted)',
+        'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace', 'text-anchor': 'middle'
+      }, String(tv)));
+    }
+    scene.appendChild(svgNS('text', {
+      x: p2.x + plotW / 2, y: p2.y + panelH_bot + 28,
+      'font-size': 11, fill: 'var(--text-muted)', 'font-style': 'italic', 'text-anchor': 'middle'
+    }, 't  (units where m = ℏ = 1)'));
+
+    // Bottom y ticks at 0, 2, 4, 6
+    [0, 2, 4, 6].forEach(v => {
+      const py = p2.y + panelH_bot - (v / SIG_MAX_PLOT) * panelH_bot;
+      scene.appendChild(svgNS('line', {
+        x1: p2.x - 4, y1: py, x2: p2.x, y2: py,
+        stroke: 'var(--border-strong)', 'stroke-width': 1
+      }));
+      scene.appendChild(svgNS('text', {
+        x: p2.x - 8, y: py + 3, 'font-size': 10, fill: 'var(--text-muted)',
+        'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace', 'text-anchor': 'end'
+      }, String(v)));
+    });
+  }
+
+  function drawCurves() {
+    const sig0 = sigmaFromSlider();
+    const t = timeFromSlider();
+    const sigT = sigmaXofT(sig0, t);
+    const N = 240;
+
+    // --- Top panel: initial density (dashed) and current density (solid)
+    let initPath = '';
+    let curPath = '';
+    for (let i = 0; i <= N; i++) {
+      const x = -X_HALF + (i / N) * (2 * X_HALF);
+      const px = p1.x + ((x + X_HALF) / (2 * X_HALF)) * plotW;
+      const y0 = Math.min(density(x, sig0), DENS_MAX);
+      const yT = Math.min(density(x, sigT), DENS_MAX);
+      const py0 = p1.y + panelH_top - (y0 / DENS_MAX) * panelH_top;
+      const pyT = p1.y + panelH_top - (yT / DENS_MAX) * panelH_top;
+      initPath += (i === 0 ? 'M' : 'L') + px.toFixed(2) + ',' + py0.toFixed(2);
+      curPath  += (i === 0 ? 'M' : 'L') + px.toFixed(2) + ',' + pyT.toFixed(2);
+    }
+    // Filled current density
+    const curFill = curPath
+      + ' L' + (p1.x + plotW).toFixed(2) + ',' + (p1.y + panelH_top).toFixed(2)
+      + ' L' + p1.x.toFixed(2) + ',' + (p1.y + panelH_top).toFixed(2)
+      + ' Z';
+    scene.appendChild(svgNS('path', {
+      d: curFill, fill: 'var(--accent)', 'fill-opacity': '0.12', stroke: 'none'
+    }));
+    // Dashed initial
+    scene.appendChild(svgNS('path', {
+      d: initPath, stroke: 'var(--text-muted)', 'stroke-width': 1.5,
+      'stroke-dasharray': '5 4', fill: 'none'
+    }));
+    // Solid current
+    scene.appendChild(svgNS('path', {
+      d: curPath, stroke: 'var(--accent)', 'stroke-width': 2, fill: 'none'
+    }));
+
+    // σ_x(t) markers on the density plot: vertical lines at ±σ_x(t)
+    const xL = p1.x + ((-sigT + X_HALF) / (2 * X_HALF)) * plotW;
+    const xR = p1.x + ((sigT + X_HALF) / (2 * X_HALF)) * plotW;
+    if (sigT <= X_HALF) {
+      const yPeak = p1.y + panelH_top - Math.min(density(sigT, sigT), DENS_MAX) / DENS_MAX * panelH_top;
+      scene.appendChild(svgNS('line', {
+        x1: xL, y1: p1.y + panelH_top, x2: xL, y2: yPeak,
+        stroke: 'var(--accent-soft)', 'stroke-width': 1, 'stroke-dasharray': '3 3'
+      }));
+      scene.appendChild(svgNS('line', {
+        x1: xR, y1: p1.y + panelH_top, x2: xR, y2: yPeak,
+        stroke: 'var(--accent-soft)', 'stroke-width': 1, 'stroke-dasharray': '3 3'
+      }));
+      scene.appendChild(svgNS('text', {
+        x: xR + 4, y: yPeak - 2,
+        'font-size': 10, fill: 'var(--accent)', 'font-style': 'italic'
+      }, 'σ_x(t)'));
+    }
+
+    // --- Bottom panel: σ_x(t) trajectory for this σ_0
+    let sigPath = '';
+    const Nb = 240;
+    for (let i = 0; i <= Nb; i++) {
+      const tt = (i / Nb) * T_MAX;
+      const s = sigmaXofT(sig0, tt);
+      const clamped = Math.min(s, SIG_MAX_PLOT);
+      const px = p2.x + (tt / T_MAX) * plotW;
+      const py = p2.y + panelH_bot - (clamped / SIG_MAX_PLOT) * panelH_bot;
+      sigPath += (i === 0 ? 'M' : 'L') + px.toFixed(2) + ',' + py.toFixed(2);
+    }
+    scene.appendChild(svgNS('path', {
+      d: sigPath, stroke: 'var(--accent)', 'stroke-width': 2, fill: 'none'
+    }));
+
+    // Reference dotted line at σ_0
+    if (sig0 <= SIG_MAX_PLOT) {
+      const yRef = p2.y + panelH_bot - (sig0 / SIG_MAX_PLOT) * panelH_bot;
+      scene.appendChild(svgNS('line', {
+        x1: p2.x, y1: yRef, x2: p2.x + plotW, y2: yRef,
+        stroke: 'var(--text-ghost)', 'stroke-width': 1, 'stroke-dasharray': '2 4'
+      }));
+      scene.appendChild(svgNS('text', {
+        x: p2.x + plotW - 4, y: yRef - 3,
+        'font-size': 10, fill: 'var(--text-muted)', 'font-style': 'italic', 'text-anchor': 'end'
+      }, 'σ₀'));
+    }
+
+    // Marker at current t
+    const sigNow = Math.min(sigT, SIG_MAX_PLOT);
+    const mx = p2.x + (t / T_MAX) * plotW;
+    const my = p2.y + panelH_bot - (sigNow / SIG_MAX_PLOT) * panelH_bot;
+    scene.appendChild(svgNS('line', {
+      x1: mx, y1: p2.y, x2: mx, y2: p2.y + panelH_bot,
+      stroke: 'var(--accent-soft)', 'stroke-width': 1, 'stroke-dasharray': '3 3'
+    }));
+    scene.appendChild(svgNS('circle', {
+      cx: mx, cy: my, r: 4, fill: 'var(--accent)', stroke: 'var(--bg)', 'stroke-width': 1.5
+    }));
+  }
+
+  function drawFrame() {
+    while (scene.firstChild) scene.removeChild(scene.firstChild);
+    drawAxes();
+    drawCurves();
+  }
+
+  function updateReadout() {
+    const sig0 = sigmaFromSlider();
+    const t = timeFromSlider();
+    const sigT = sigmaXofT(sig0, t);
+    const sigP = 0.5 / sig0;                   // σ_p = ℏ/(2σ_0), with ℏ=1
+    const prod = sigT * sigP;                  // σ_x(t) · σ_p
+    const ratio = prod / 0.5;                  // as multiple of ℏ/2 (=0.5 in these units)
+    const tStar = 2 * sig0 * sig0;             // t* = 2 m σ_0² / ℏ
+
+    sigVal.textContent = 'σ₀ = ' + sig0.toFixed(2);
+    tVal.textContent = 't = ' + t.toFixed(2);
+    readout.innerHTML =
+      '<span class="lbl">σ_x(t)</span> = <span class="v">' + sigT.toFixed(3) + '</span>' +
+      ' &nbsp; <span class="lbl">σ_p</span> = <span class="v">' + sigP.toFixed(3) + '</span>' +
+      ' &nbsp; <span class="lbl">σ_x·σ_p</span> = <span class="product">' + ratio.toFixed(3) + ' × ℏ/2</span><br>' +
+      '<span class="lbl">crossover time</span> <span class="v">t* = 2σ₀² = ' + tStar.toFixed(2) + '</span>' +
+      ' &nbsp; <span class="lbl">Kennard floor</span> <span class="v">σ_x·σ_p ≥ ℏ/2</span>';
+  }
+
+  function redraw() {
+    drawFrame();
+    updateReadout();
+  }
+
+  sigSlider.addEventListener('input', redraw);
+  tSlider.addEventListener('input', redraw);
+  redraw();
+})();
+</script>
+</body>
+</html>
