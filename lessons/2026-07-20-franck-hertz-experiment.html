@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 80px; text-align: right;
+}
+.readout {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 10px;
+  line-height: 1.75;
+}
+.readout .v { color: var(--text); }
+.readout .lbl { color: var(--text-muted); }
+.readout .hi { color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="viz">
+  <div style="padding: 14px 18px;">
+    <svg id="svg" width="100%" viewBox="0 0 720 460" preserveAspectRatio="xMidYMid meet">
+      <g id="scene"></g>
+    </svg>
+    <div class="viz-slider-row">
+      <label>V</label>
+      <input type="range" id="vSlider" min="0.0" max="20.0" step="0.05" value="3.5">
+      <span class="value" id="vVal">V = 3.50 V</span>
+    </div>
+    <div class="readout" id="readout"></div>
+    <div class="viz-caption" style="margin-top: 10px;">
+      Top: anode current I(V) as V sweeps 0 to 20 volts. Dips fall at V ≈ 4.9, 9.8, 14.7, 19.6 V, the multiples of the mercury 6³P₁ excitation energy.
+      Bottom: schematic of a single electron drifting from cathode (left) to grid (right), with its kinetic energy plotted along the way.
+      Each time the kinetic energy reaches 4.9 eV, an inelastic collision with a mercury atom pulls it back to zero (sawtooth pattern).
+      Only electrons with kinetic energy above eV_r ≈ 0.5 eV at the grid can clear the retarding hill and reach the anode.
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  const svg = document.getElementById('svg');
+  const scene = document.getElementById('scene');
+  const vSlider = document.getElementById('vSlider');
+  const vVal = document.getElementById('vVal');
+  const readout = document.getElementById('readout');
+
+  const W = 720, H = 460;
+  const pad = { l: 60, r: 24, t: 22, b: 40 };
+  const gap = 26;
+  const topH = 240;
+  const botH = H - pad.t - pad.b - gap - topH;
+  const plotW = W - pad.l - pad.r;
+
+  const p1 = { x: pad.l, y: pad.t };
+  const p2 = { x: pad.l, y: pad.t + topH + gap };
+
+  const V_MAX = 20;
+  const V_EX = 4.9;
+  const V_R = 0.5;
+  const V_OFFSET = 0.20;  // small geometric offset to shift dips slightly right of n·V_EX
+  const I_MAX_PLOT = 5.0;
+
+  function svgNS(tag, attrs, text) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    if (text !== undefined) el.textContent = text;
+    return el;
+  }
+
+  // Realistic-ish I(V): sqrt rise above V_R, times (1 − Σ Gaussian dips)
+  function currentIV(V) {
+    if (V < V_R) return 0;
+    const base = Math.sqrt(V - V_R);
+    const sigma = 0.55;
+    const depth = 0.60;
+    let dipSum = 0;
+    for (let n = 1; n <= 4; n++) {
+      const c = n * V_EX + V_OFFSET;
+      const z = (V - c) / sigma;
+      dipSum += Math.exp(-z * z);
+    }
+    const dipFactor = Math.max(0, 1 - depth * dipSum);
+    return base * dipFactor;
+  }
+
+  function nCollisions(V) {
+    if (V < V_EX) return 0;
+    return Math.floor(V / V_EX);
+  }
+
+  function drawTopAxes() {
+    // frame
+    scene.appendChild(svgNS('line', {
+      x1: p1.x, y1: p1.y + topH, x2: p1.x + plotW, y2: p1.y + topH,
+      stroke: 'var(--border-strong)', 'stroke-width': 1
+    }));
+    scene.appendChild(svgNS('line', {
+      x1: p1.x, y1: p1.y, x2: p1.x, y2: p1.y + topH,
+      stroke: 'var(--border-strong)', 'stroke-width': 1
+    }));
+    // title
+    scene.appendChild(svgNS('text', {
+      x: p1.x, y: p1.y - 8, 'font-size': 12, 'font-style': 'italic', fill: 'var(--text-muted)'
+    }, 'anode current  I(V)   (arbitrary units)'));
+
+    // x-ticks every 4.9 volts to line up with dips, plus 0, 20
+    const ticks = [0, 4.9, 9.8, 14.7, 19.6];
+    ticks.forEach(vv => {
+      const px = p1.x + (vv / V_MAX) * plotW;
+      scene.appendChild(svgNS('line', {
+        x1: px, y1: p1.y + topH, x2: px, y2: p1.y + topH + 4,
+        stroke: 'var(--border-strong)', 'stroke-width': 1
+      }));
+      scene.appendChild(svgNS('text', {
+        x: px, y: p1.y + topH + 15, 'font-size': 10, fill: 'var(--text-muted)',
+        'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace', 'text-anchor': 'middle'
+      }, vv.toFixed(1)));
+      // dashed vertical guide at expected dip
+      if (vv > 0) {
+        scene.appendChild(svgNS('line', {
+          x1: px, y1: p1.y, x2: px, y2: p1.y + topH,
+          stroke: 'var(--text-ghost)', 'stroke-width': 0.7, 'stroke-dasharray': '2 4'
+        }));
+      }
+    });
+    scene.appendChild(svgNS('text', {
+      x: p1.x + plotW / 2, y: p1.y + topH + 30,
+      'font-size': 11, fill: 'var(--text-muted)', 'font-style': 'italic', 'text-anchor': 'middle'
+    }, 'accelerating voltage V  (volts)'));
+
+    // y-axis label
+    scene.appendChild(svgNS('text', {
+      x: -(p1.y + topH / 2), y: p1.x - 40,
+      'font-size': 11, fill: 'var(--text-muted)', 'font-style': 'italic',
+      'text-anchor': 'middle', transform: 'rotate(-90)'
+    }, 'I  (arb.)'));
+  }
+
+  function drawTopCurve() {
+    const N = 480;
+    let path = '';
+    let fill = '';
+    for (let i = 0; i <= N; i++) {
+      const V = (i / N) * V_MAX;
+      const I = Math.min(currentIV(V), I_MAX_PLOT);
+      const px = p1.x + (V / V_MAX) * plotW;
+      const py = p1.y + topH - (I / I_MAX_PLOT) * topH;
+      path += (i === 0 ? 'M' : 'L') + px.toFixed(2) + ',' + py.toFixed(2);
+      fill += (i === 0 ? 'M' : 'L') + px.toFixed(2) + ',' + py.toFixed(2);
+    }
+    fill += ' L' + (p1.x + plotW).toFixed(2) + ',' + (p1.y + topH).toFixed(2)
+         +  ' L' + p1.x.toFixed(2) + ',' + (p1.y + topH).toFixed(2) + ' Z';
+    scene.appendChild(svgNS('path', {
+      d: fill, fill: 'var(--accent)', 'fill-opacity': '0.10', stroke: 'none'
+    }));
+    scene.appendChild(svgNS('path', {
+      d: path, stroke: 'var(--accent)', 'stroke-width': 2, fill: 'none'
+    }));
+  }
+
+  function drawTopMarker(V) {
+    const I = Math.min(currentIV(V), I_MAX_PLOT);
+    const px = p1.x + (V / V_MAX) * plotW;
+    const py = p1.y + topH - (I / I_MAX_PLOT) * topH;
+    scene.appendChild(svgNS('line', {
+      x1: px, y1: p1.y, x2: px, y2: p1.y + topH,
+      stroke: 'var(--accent-soft)', 'stroke-width': 1, 'stroke-dasharray': '3 3'
+    }));
+    scene.appendChild(svgNS('circle', {
+      cx: px, cy: py, r: 4.5, fill: 'var(--accent)',
+      stroke: 'var(--bg)', 'stroke-width': 1.5
+    }));
+  }
+
+  function drawTubePanel(V) {
+    // Frame
+    scene.appendChild(svgNS('line', {
+      x1: p2.x, y1: p2.y + botH, x2: p2.x + plotW, y2: p2.y + botH,
+      stroke: 'var(--border-strong)', 'stroke-width': 1
+    }));
+    scene.appendChild(svgNS('line', {
+      x1: p2.x, y1: p2.y, x2: p2.x, y2: p2.y + botH,
+      stroke: 'var(--border-strong)', 'stroke-width': 1
+    }));
+
+    // Title
+    scene.appendChild(svgNS('text', {
+      x: p2.x, y: p2.y - 6, 'font-size': 12, 'font-style': 'italic', fill: 'var(--text-muted)'
+    }, "electron kinetic energy through the tube (sawtooth: drops of 4.9 eV per inelastic hit)"));
+
+    // Y-axis: kinetic energy 0 to max(V, V_EX + 1)
+    const KE_MAX = Math.max(V, V_EX) * 1.05 + 0.5;
+    const yScale = (ke) => p2.y + botH - (ke / KE_MAX) * botH;
+
+    // Horizontal dashed line at V_EX
+    const yEx = yScale(V_EX);
+    scene.appendChild(svgNS('line', {
+      x1: p2.x, y1: yEx, x2: p2.x + plotW, y2: yEx,
+      stroke: 'var(--text-ghost)', 'stroke-width': 1, 'stroke-dasharray': '3 3'
+    }));
+    scene.appendChild(svgNS('text', {
+      x: p2.x + plotW - 4, y: yEx - 3,
+      'font-size': 10, fill: 'var(--text-muted)', 'font-style': 'italic', 'text-anchor': 'end'
+    }, 'Hg excitation = 4.9 eV'));
+
+    // Cathode (left) and grid (right) markers
+    scene.appendChild(svgNS('rect', {
+      x: p2.x - 3, y: p2.y + 4, width: 6, height: botH - 8,
+      fill: 'var(--text-muted)', 'fill-opacity': '0.35'
+    }));
+    scene.appendChild(svgNS('text', {
+      x: p2.x - 4, y: p2.y + botH + 14, 'font-size': 10, fill: 'var(--text-muted)',
+      'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace', 'text-anchor': 'end'
+    }, 'K'));
+    scene.appendChild(svgNS('rect', {
+      x: p2.x + plotW - 3, y: p2.y + 4, width: 6, height: botH - 8,
+      fill: 'var(--text-muted)', 'fill-opacity': '0.35'
+    }));
+    scene.appendChild(svgNS('text', {
+      x: p2.x + plotW + 4, y: p2.y + botH + 14, 'font-size': 10, fill: 'var(--text-muted)',
+      'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace'
+    }, 'G'));
+
+    // Sawtooth trajectory of KE(x) as electron drifts K → G
+    // Electron gains KE at rate V per unit fractional distance.
+    // Between collisions: linear rise 0 → V_EX, then sudden drop to 0.
+    // After n collisions, remaining fractional distance carries residual V·(1) − n·V_EX
+    let path = '';
+    let cursor = 0; // fractional position 0..1
+    let ke = 0;
+    const push = (frac, ke_v) => {
+      const px = p2.x + frac * plotW;
+      const py = yScale(ke_v);
+      path += (path === '' ? 'M' : 'L') + px.toFixed(2) + ',' + py.toFixed(2);
+    };
+    push(cursor, ke);
+    const collisions = [];
+    if (V >= V_EX) {
+      const dxPerCollision = V_EX / V; // fractional distance to reach V_EX from 0
+      let n = 0;
+      // include the equality case (collision right at the grid) with a tiny tolerance
+      while (cursor + dxPerCollision <= 1 + 1e-9 && n < 10) {
+        cursor += dxPerCollision;
+        if (cursor > 1) cursor = 1;
+        push(cursor, V_EX);      // rise to threshold
+        collisions.push(cursor);
+        push(cursor, 0);          // sudden drop after inelastic collision
+        n++;
+        if (cursor >= 1) break;
+      }
+    }
+    // Final rise from cursor to 1
+    const finalKE = V * (1 - cursor);
+    push(1, finalKE);
+
+    // Fill under sawtooth
+    const fillPath = path
+      + ' L' + (p2.x + plotW).toFixed(2) + ',' + (p2.y + botH).toFixed(2)
+      + ' L' + p2.x.toFixed(2) + ',' + (p2.y + botH).toFixed(2) + ' Z';
+    scene.appendChild(svgNS('path', {
+      d: fillPath, fill: 'var(--accent)', 'fill-opacity': '0.10', stroke: 'none'
+    }));
+    scene.appendChild(svgNS('path', {
+      d: path, stroke: 'var(--accent)', 'stroke-width': 2, fill: 'none'
+    }));
+
+    // Mark inelastic collisions as small dots
+    collisions.forEach(f => {
+      const px = p2.x + f * plotW;
+      scene.appendChild(svgNS('circle', {
+        cx: px, cy: yScale(V_EX), r: 3.5, fill: 'var(--accent)',
+        stroke: 'var(--bg)', 'stroke-width': 1
+      }));
+    });
+
+    // Retarding hill V_R as a dashed line only at the grid end
+    const yR = yScale(V_R);
+    scene.appendChild(svgNS('line', {
+      x1: p2.x + plotW * 0.92, y1: yR, x2: p2.x + plotW, y2: yR,
+      stroke: 'var(--accent-soft)', 'stroke-width': 1.2, 'stroke-dasharray': '2 3'
+    }));
+    scene.appendChild(svgNS('text', {
+      x: p2.x + plotW - 4, y: yR + 12,
+      'font-size': 10, fill: 'var(--accent)', 'font-style': 'italic', 'text-anchor': 'end'
+    }, 'eV_r hill'));
+
+    // Verdict at grid: does the electron reach the anode?
+    const reaches = finalKE > V_R;
+    scene.appendChild(svgNS('text', {
+      x: p2.x + plotW / 2, y: p2.y + 14,
+      'font-size': 12, fill: reaches ? 'var(--accent)' : 'var(--text-muted)',
+      'font-style': 'italic', 'text-anchor': 'middle'
+    }, reaches ? 'clears the retarding hill → contributes to current' : 'blocked by retarding hill → NO current'));
+
+    // KE axis ticks
+    const keTicks = KE_MAX > 12 ? [0, 5, 10, 15, 20] : (KE_MAX > 5 ? [0, 2, 4, 6, 8, 10] : [0, 1, 2, 3, 4, 5]);
+    keTicks.forEach(v => {
+      if (v > KE_MAX) return;
+      const py = yScale(v);
+      scene.appendChild(svgNS('line', {
+        x1: p2.x - 4, y1: py, x2: p2.x, y2: py,
+        stroke: 'var(--border-strong)', 'stroke-width': 1
+      }));
+      scene.appendChild(svgNS('text', {
+        x: p2.x - 8, y: py + 3, 'font-size': 10, fill: 'var(--text-muted)',
+        'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace', 'text-anchor': 'end'
+      }, String(v)));
+    });
+    scene.appendChild(svgNS('text', {
+      x: -(p2.y + botH / 2), y: p2.x - 40,
+      'font-size': 11, fill: 'var(--text-muted)', 'font-style': 'italic',
+      'text-anchor': 'middle', transform: 'rotate(-90)'
+    }, 'KE  (eV)'));
+    scene.appendChild(svgNS('text', {
+      x: p2.x + plotW / 2, y: p2.y + botH + 28,
+      'font-size': 11, fill: 'var(--text-muted)', 'font-style': 'italic', 'text-anchor': 'middle'
+    }, 'position along tube  (cathode → grid)'));
+  }
+
+  function drawFrame() {
+    while (scene.firstChild) scene.removeChild(scene.firstChild);
+    const V = parseFloat(vSlider.value);
+    drawTopAxes();
+    drawTopCurve();
+    drawTopMarker(V);
+    drawTubePanel(V);
+  }
+
+  function updateReadout() {
+    const V = parseFloat(vSlider.value);
+    const n = nCollisions(V);
+    const finalKE = V - n * V_EX;
+    const clears = finalKE > V_R;
+    const I = currentIV(V);
+    vVal.textContent = 'V = ' + V.toFixed(2) + ' V';
+    readout.innerHTML =
+      '<span class="lbl">eV</span> = <span class="v">' + V.toFixed(2) + ' eV</span>' +
+      ' &nbsp; <span class="lbl">inelastic collisions</span> <span class="v">n = ' + n + '</span>' +
+      ' &nbsp; <span class="lbl">KE at grid</span> <span class="v">' + finalKE.toFixed(2) + ' eV</span>' +
+      ' &nbsp; <span class="' + (clears ? 'hi' : 'lbl') + '">' + (clears ? 'clears hill' : 'blocked') + '</span><br>' +
+      '<span class="lbl">λ (Hg 6³P₁ → 6¹S₀)</span> <span class="v">= hc/(4.9 eV) ≈ 253 nm</span>' +
+      ' &nbsp; <span class="lbl">I(V)</span> <span class="v">' + I.toFixed(3) + '</span>';
+  }
+
+  function redraw() {
+    drawFrame();
+    updateReadout();
+  }
+
+  vSlider.addEventListener('input', redraw);
+  redraw();
+})();
+</script>
+</body>
+</html>
