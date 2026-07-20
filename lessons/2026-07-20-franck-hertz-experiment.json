@@ -1,0 +1,181 @@
+{
+  "slug": "2026-07-20-franck-hertz-experiment",
+  "title": "Franck-Hertz: how a mercury tube proved atomic energy is quantized, without a spectrograph",
+  "node": {
+    "id": "franck_hertz_experiment",
+    "label": "Franck-Hertz",
+    "subtitle": "4.9 eV steps"
+  },
+  "intro": "By 1913 Niels Bohr had written down a hydrogen atom whose electron sat only on discrete circular orbits, radiated only when it jumped between them, and gave off light at frequencies that reproduced Johann Balmer's 1885 formula for the visible hydrogen lines. The fit was uncanny, but it was a fit, and the only evidence was spectroscopy: photograph the light an atom emits, read frequencies off a Rowland grating (a curved diffraction grating that concentrates all the spectrum into one focal plane), and back-solve for the energy levels. A whole framework of transitions, selection rules, and photon emission stood between what you measured (colors of light) and what Bohr had asserted (energies of atomic states). What was needed was a direct probe: a way to hand an atom a controlled amount of energy and watch it either accept or refuse. In 1914 James Franck and Gustav Hertz, working in Berlin, built one out of a tube of mercury vapor and a stream of electrons.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Bohr's postulate wanted a test that did not use light",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bohr's July 1913 paper in Philosophical Magazine had two big claims. First, the electron in an atom occupies only certain stationary orbits with quantized energies E_1, E_2, E_3, and so on; it does not radiate while sitting in one, contrary to Maxwell's electrodynamics, which said any accelerating charge radiates continuously. Second, when the atom drops from a higher orbit to a lower one it emits a single photon whose energy equals the difference between the two levels, hν = E_n − E_m. Plug in the orbit radii Bohr had derived from equating the Coulomb attraction with the centripetal force plus a quantization condition on angular momentum, and out fell the Balmer formula for hydrogen, correct to four decimal places."
+        },
+        {
+          "type": "p",
+          "text": "The reception was mixed. The numerical agreement was too good to dismiss, but the postulates were arbitrary. Why should orbits be quantized? Why should some accelerating charges radiate and some not? Einstein was privately enthusiastic; Otto Stern (later of the Stern-Gerlach experiment, which sent a beam of silver atoms through a nonuniform magnetic field and split it into two, showing spatial quantization of angular momentum) said if this was right he would leave physics. And there was a methodological worry that ran even deeper than the postulates: every piece of evidence for atomic energy levels came filtered through the emission of light. If you already believed Bohr's radiation rule (that hν equals an energy difference) then Balmer's formula was a spectacular confirmation of quantization. If you did not, the spectrum was still just a spectrum, a list of frequencies with no compelling reason to be interpreted as energy differences at all."
+        },
+        {
+          "type": "p",
+          "text": "So there was room for a different sort of experiment. Skip the photons. Take a naked electron of known kinetic energy, throw it at an atom, and see what happens. If the atom's internal energies are truly quantized in the way Bohr had claimed, then an electron whose kinetic energy is less than the first excitation energy ΔE_12 = E_2 − E_1 has nothing it can hand over: the atom cannot accept a smaller-than-quantum amount, so the collision must be elastic (the electron bounces off with essentially all its kinetic energy intact). Push the electron just past ΔE_12 and suddenly a new channel opens: the atom can absorb the whole ΔE_12, leaving the electron with the difference. The signature would be a sudden change in the electron beam at exactly the excitation threshold. That is what James Franck and Gustav Hertz set out to detect."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The tube: cathode, mercury vapor, grid, retarding anode",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The apparatus is one of the simplest triumphs in the history of physics. Franck and Hertz took a glass tube, dropped a small pool of liquid mercury in the bottom, and heated the tube to about 180 °C until the vapor pressure reached about 1 mm Hg. That gave mercury atoms every fraction of a millimeter, close enough that an electron drifting across the tube would collide with several dozen of them on its way. Inside the tube they placed three electrodes in a line: a heated cathode K on one end that boiled off electrons by thermionic emission, a wire-mesh grid G in the middle, and a collector plate A (the anode) on the far end. They put a large positive potential V on the grid relative to the cathode, so electrons were accelerated toward G, gaining kinetic energy eV by the time they reached it (where e is the elementary charge). They put a small negative potential V_r on the anode relative to the grid, so an electron that made it past G had to be still moving fast enough to climb a small potential hill of height eV_r to reach A."
+        },
+        {
+          "type": "p",
+          "text": "The point of the retarding voltage V_r was to be a threshold detector for kinetic energy. Only electrons arriving at G with more than eV_r of kinetic energy could actually reach A and register as anode current. An electron that had drifted through the mercury vapor and made it to G with all its energy intact carried the full eV of kinetic energy and cleared the retarding hill easily. An electron that had lost a chunk of its energy in some collision along the way might not clear it, and would drift back toward G. The measured current I from the anode was, in effect, a running count of how many electrons had made it across the vapor without losing too much of their energy."
+        },
+        {
+          "type": "math",
+          "tex": "K_{\\text{at anode}} \\;=\\; eV \\;-\\; \\Delta E_{\\text{lost in vapor}} \\;-\\; eV_{r}",
+          "display": true,
+          "caption": "K_at_anode is the kinetic energy of an electron when it reaches the anode A. e is the elementary charge (about 1.6 × 10⁻¹⁹ C). V is the accelerating potential applied to the grid G. ΔE_lost_in_vapor is the total energy the electron gave up to mercury atoms during its trip through the vapor. V_r is the small retarding potential on the anode. Only electrons with K_at_anode > 0 make it to A and contribute to the measured current."
+        },
+        {
+          "type": "p",
+          "text": "One physical fact does most of the work in interpreting what the tube measures. Elastic collisions between an electron of mass m_e and a mercury atom of mass M ≈ 200 m_p (where m_p is the proton mass) transfer almost no kinetic energy from the electron to the atom, no matter how many collisions occur. The maximum energy fraction a light projectile can hand to a stationary heavy target in an elastic collision is 4 m_e M / (m_e + M)² ≈ 4 m_e / M ≈ 4 / (200 · 1836) ≈ 10⁻⁵. An electron with eV = 4 eV that bounces elastically off a mercury atom leaves the collision with about 3.99996 eV. So below the excitation threshold, the mercury vapor is transparent to electron kinetic energy: an electron may bounce this way and that among the atoms but it arrives at the grid with essentially the full eV it left the cathode with. That is what makes the sudden drop above threshold so dramatic when it comes."
+        }
+      ],
+      "quiz": {
+        "question": "With the cathode at 0 V, the grid at +V, and the anode at V − V_r (that is, retarding voltage V_r ≈ 0.5 V relative to the grid), why did Franck and Hertz insist on the small retarding hill V_r on the anode side rather than simply putting the anode at V and reading the raw current?",
+        "options": [
+          "The retarding hill turns the anode into a kinetic-energy threshold detector: only electrons that arrive at the grid with more than eV_r of remaining kinetic energy can climb the hill and reach A. Without it, an electron that had lost 4.9 eV to a mercury atom would still drift across G → A along the field-free region and register as current, washing out the very dips the experiment was designed to see. The retarding hill converts a change in electron kinetic energy into a change in the count of electrons that reach the anode.",
+          "The retarding hill prevented mercury ions produced by ionization at V > 10.4 V from being drawn to the anode and contaminating the electron current signal.",
+          "The retarding hill accelerated slow secondary electrons emitted from the grid so they would reach the anode, boosting the signal-to-noise ratio in the low-voltage regime.",
+          "The retarding hill was needed to establish a well-defined zero of potential energy for the mercury atoms in the vapor, so that inelastic collision thresholds would be sharply defined."
+        ],
+        "correctIndex": 0,
+        "explanation": "The whole logic of the tube depends on the retarding hill. An electron accelerated to eV at G still has kinetic energy after any inelastic collision that left it with less than the full eV; if the anode were also at potential V (a field-free path G → A), any of those partially-decelerated electrons would still drift over and register as current, and the anode signal would not distinguish 'electrons that made it across with full energy' from 'electrons that made it across with less energy.' With the small hill eV_r in place, an electron that has lost 4.9 eV to a mercury atom cannot clear it and does not reach A, so its absence appears as a drop in I(V) at exactly the moment when inelastic collisions become possible. Option B confuses a real but separate issue (ion contamination) with the primary design purpose. Option C reverses the sign: the hill decelerates electrons, it does not accelerate anything. Option D invokes a nonexistent effect (the mercury atoms' internal energies are set by their internal structure, not by the tube's electrostatic potential)."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The current curve: sharp dips every 4.9 volts",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Sweep V from 0 to about 15 volts, plot the anode current I on the y-axis, and out comes a curve that is easy to describe but was extraordinary to see: a rising background with sharp, periodic dips at roughly 4.9 V, 9.8 V, and 14.7 V. Below 4.9 V, the current climbs steadily; every electron leaving the cathode arrives at the anode having lost essentially none of its energy in elastic collisions with mercury atoms. At V = 4.9 V the current suddenly plunges. Above that, it climbs again until V = 9.8 V, where it plunges a second time. Then again at 14.7 V. The spacing between dips is exactly 4.9 V, over and over."
+        },
+        {
+          "type": "p",
+          "text": "The Bohr interpretation of these dips is direct. Below 4.9 eV, no channel for the electron to hand energy to a mercury atom exists: mercury's first excited electronic state sits at 4.9 eV above the ground state, and quantization forbids any lesser transfer, so the collisions are all elastic and the current rises. At 4.9 eV, the channel opens: an electron with just this much kinetic energy can excite a mercury atom by handing over the full 4.9 eV, and it emerges with essentially zero kinetic energy. It cannot clear the retarding hill on the anode, and it does not contribute to the current. The current drops. Push V past 4.9 V and there is again a residual eV − 4.9 eV of kinetic energy after one inelastic collision; some of these electrons clear the hill, current climbs. At V = 9.8 V, an electron has enough energy to excite two mercury atoms in sequence (4.9 eV each, in two separate collisions during its trip across the tube). Its final kinetic energy is 9.8 − 9.8 = 0 eV, it cannot clear the retarding hill, and the second dip appears."
+        },
+        {
+          "type": "p",
+          "text": "The peaks are not at exactly 4.9, 9.8, 14.7 because the geometry adds a small offset from the cathode work function and from where along the tube the first inelastic collision typically happens (an electron with just above 4.9 eV is most likely to excite an atom near the grid, not right at the cathode). The dip spacing is the clean number that pins down mercury's first excitation energy, and Franck and Hertz reported it as 4.9 eV in their 1914 paper (they wrote it as an equivalent frequency, 4.9 · e / h ≈ 1.19 × 10¹⁵ Hz). Every subsequent measurement with better vacuum and cleaner grids has narrowed the value to 4.887 eV; Franck and Hertz got it right at the first decimal on a piece of apparatus you could hold in one hand."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-20-franck-hertz-experiment.html",
+          "height": 480,
+          "caption": "Interactive Franck-Hertz curve. The slider sweeps the accelerating voltage V from 0 to 20 volts. The top panel plots the anode current I(V) with a moving marker; the bottom panel is a schematic of the tube showing a running count of how many electrons (per hundred) survive to the anode, based on how many inelastic collisions of 4.9 eV each fit into eV. Dips fall at V ≈ 4.9, 9.8, 14.7, 19.6 V, exactly the multiples of the mercury excitation threshold."
+        },
+        {
+          "type": "p",
+          "text": "There is one more feature of the real curve worth naming here, because it is what pins the Bohr interpretation shut. Franck and Hertz noticed that when V was pushed just past 4.9 V, the tube began to glow, faintly, with light at 253.7 nanometers, in the ultraviolet. They did not measure this in 1914 (their apparatus was not set up for UV spectroscopy at all; they inferred a glow from a fluorescent screen). Their student Reinhold Einsporn measured it directly in 1920, using a fluorescent screen coated with a substance that reradiated visible light when hit by UV. The wavelength turned out to match, to the accuracy of the measurement, hc / (4.9 eV) = 253 nm, and it matched the known mercury spectral line at 253.7 nm. The atoms Franck and Hertz had just excited were dropping back to the ground state and emitting the very photon Bohr's radiation rule predicted."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. What Franck and Hertz got wrong, and Bohr's letter that fixed it",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "There is a beautiful irony in the 1914 paper. Franck and Hertz had built the most direct test of Bohr's atomic quantization anyone had yet done, and they had misinterpreted their own result. Nowhere in the paper do they cite Bohr, and nowhere do they identify 4.9 eV as an excitation energy. What they wrote instead was that 4.9 eV was the ionization energy of mercury, the energy needed to knock an electron completely free of a mercury atom. This was wrong. The true ionization energy of mercury is 10.4 eV, more than twice what they had measured. Their measurement of 4.9 eV was the excitation energy of the 6³P₁ level (a specific excited electronic state in mercury's ladder), not the ionization energy at all."
+        },
+        {
+          "type": "p",
+          "text": "The mistake is understandable. Franck was an experimental physicist with a strong classical intuition: an electron colliding with an atom, losing 4.9 eV in the process, most naturally suggested the electron had knocked something loose. Bohr's picture, in which the atom accepts a discrete amount of energy and stays intact but in an excited state, was foreign. And there was another confounder: mercury vapor near threshold does not stay excited for long. The 6³P₁ state radiates back to the ground state in about 1.3 × 10⁻⁷ seconds, emitting the 253.7 nm photon. In a tube full of vapor those photons then get absorbed by other mercury atoms and reradiated, and reabsorbed, and reradiated. The tube fills with a slow diffusion of trapped UV radiation. To an experimentalist in 1914 with no picture of what a Bohr transition even was, that looked like something being torn apart, not something being softly excited."
+        },
+        {
+          "type": "p",
+          "text": "Bohr, in Manchester, read Franck and Hertz's paper and immediately saw what it really meant. In 1915 he wrote a short response in Philosophical Magazine pointing out that if 4.9 eV were an ionization energy then the emitted UV photons should have wavelength hc / (10.4 eV) = 119 nm, deep in the vacuum ultraviolet, not the 253 nm range Franck and Hertz's fluorescent screen actually indicated. But hc / (4.9 eV) = 253 nm, exactly the wavelength observed, exactly the known mercury emission line at 253.7 nm. So 4.9 eV had to be an excitation energy of a bound state, not an ionization energy of an unbound one; and the experiment had confirmed Bohr's second postulate (that emitted photons carry energies equal to differences between quantized levels) as directly as one could ask. Franck accepted the correction and, in later interviews (he lived until 1964, long enough to be interviewed extensively about the 1914 work), was candid about it: 'For years the Bohr atom stood on our authority. We convinced the physics community with an experiment we did not ourselves fully understand.'"
+        }
+      ],
+      "quiz": {
+        "question": "If Franck and Hertz had been right in their 1914 interpretation that 4.9 eV was mercury's ionization energy, what wavelength of light should the tube have emitted when V was pushed just past that threshold, and how far is that from the 253 nm they actually saw?",
+        "options": [
+          "About 119 nm (vacuum ultraviolet), a factor of two shorter than the 253 nm they saw. Using hc ≈ 1240 eV·nm, a 10.4 eV photon (mercury's real ionization energy) has wavelength 1240 / 10.4 ≈ 119 nm; if 4.9 eV had been the ionization energy the emitted photons would also have been at 119 nm (since ionized then recombined electrons cascade down and the highest-energy photon in that cascade sets the shortest wavelength). The observed 253 nm matches hc / (4.9 eV) = 253 nm exactly, which is a bound-state transition, not an ionization-recombination photon. This is the mismatch that told Bohr the 4.9 eV had to be an excitation energy, not an ionization energy.",
+          "About 253 nm, the same as observed; ionization energy and excitation energy produce photons of the same wavelength because the electron reradiates whatever energy it absorbed.",
+          "About 632 nm (visible red), a factor of 2.5 longer than observed; the ionization interpretation predicts a lower-energy photon than the excitation interpretation because the electron ends up in a continuum state rather than a bound one.",
+          "No specific wavelength; ionized mercury atoms emit a continuous spectrum, not a line, and the 253 nm feature would have to come from some other transition."
+        ],
+        "correctIndex": 0,
+        "explanation": "The photon wavelength is set by hc / E_transition, with hc ≈ 1240 eV·nm a useful mnemonic. An excitation energy of 4.9 eV yields a 253 nm photon, matching the known mercury 6³P₁ → 6¹S₀ line. An ionization energy of 10.4 eV would yield 119 nm (vacuum UV, well outside what Franck and Hertz's fluorescent screen could see). The observed 253 nm therefore rules out the ionization interpretation and locks in the excitation interpretation, which is precisely the reasoning Bohr laid out in his 1915 reply. Option B collapses two distinct physical processes (excitation reradiates a line; ionization + recombination yields a continuum plus lines from the recombined atom's cascade, dominated near threshold by the ionization energy itself). Option C reverses the sign (a larger E gives a shorter λ, not a longer one). Option D is partly true for genuine ionization but misses that ionization would still fix a threshold wavelength near hc / E_ion, not near hc / (4.9 eV)."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The 1920 refinement: Einsporn's second dip and the atoms Bohr said were there",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Franck spent the years 1914 to 1920 doing something quietly heroic: rebuilding the experiment, with a better vacuum, a cleaner grid, and enough resolution to hunt for finer structure. His student Reinhold Einsporn did most of the measurements. What they found, when they scanned V with much finer voltage steps between 4 and 5 volts, was that the single dip at 4.9 V was actually two dips very close together: one at 4.67 V and one at 4.89 V, separated by 0.22 V. The paper appeared in Zeitschrift für Physik in 1920 under the joint names Franck and Einsporn."
+        },
+        {
+          "type": "p",
+          "text": "The two dips were the fingerprints of two distinct excited states of mercury. Mercury's 6p configuration splits into three closely-spaced levels called 6³P₀, 6³P₁, and 6³P₂ by the spin-orbit interaction (the fine-structure interaction that couples an electron's spin to its orbital motion, causing a small energy splitting between states with different total angular momentum). The 6³P₀ state sits at 4.67 eV; the 6³P₁ at 4.89 eV. The 4.67 V dip is Franck and Einsporn hitting the 6³P₀ state; the 4.89 V dip is them hitting the 6³P₁. The 6³P₂ at 5.46 eV appears as a third dip further along, though barely resolved above the noise. Fine structure, which had been read off spectral photographs for decades and interpreted (badly) with all sorts of classical models, had shown up as a splitting in an electron-current curve."
+        },
+        {
+          "type": "p",
+          "text": "One detail from the 1920 paper is worth pausing on. The 4.67 V dip (6³P₀) is smaller than the 4.89 V dip (6³P₁), and their ratio does not match the ratio of the atomic transition probabilities you can read off spectra. The reason is that 6³P₀ is metastable: an atom in that state cannot decay to the ground state by emitting a single photon (the transition is spin-forbidden), so once excited it stays excited for milliseconds, wanders through the tube, and eventually loses its energy in a collision with a wall. That milliseconds-long detour on the wall trip, rather than a prompt photon back to ground state, changes the observed dip shape. Franck did not have a name for what he was seeing (the word 'metastable' in the modern sense was coined a few years later), but he described the behavior precisely, and it was the first electron-collision measurement of a spin-forbidden transition anywhere. He and Gustav Hertz shared the 1925 Nobel Prize in Physics for the whole line of experiments; the citation named the discovery of 'the laws governing the impact of an electron upon an atom.' By then Bohr had won his own Nobel (1922) and the atom he had postulated in 1913 was quantum mechanics's founding empirical fact."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Bohr's 1913 model had two independent postulates: (1) atomic energies are quantized, and (2) emitted photons carry hν = E_n − E_m. Balmer's formula and the hydrogen spectrum are consistent with the pair but do not test them separately. In what precise sense did the Franck-Hertz experiment (1914, plus the Franck-Einsporn 1920 refinement) test each postulate independently, and where does the 253 nm UV line from the tube fit in?",
+    "options": [
+      "The current curve I(V) with dips only at multiples of 4.9 V is a direct test of postulate 1 (energy quantization) that does not use any photon rule at all: the electron gains kinetic energy from a well-defined potential V, hands it to a mercury atom in a collision, and either can (V ≥ 4.9) or cannot (V < 4.9) transfer any energy, depending on whether V matches an internal atomic level; if internal energies were continuous the current would show no threshold behavior of any kind. The 253 nm UV line reradiated by the excited atoms is then a separate, independent test of postulate 2 (the photon rule): the emitted wavelength is hc / (4.9 eV) = 253 nm exactly, matching the known mercury line, so once the electron has excited a bound state whose energy the current curve measured directly, the atom radiates back to ground with a photon whose energy matches the postulated difference. The two postulates are tested by two different measurements on the same tube, and both come out consistent with Bohr.",
+      "The current curve tests postulate 2 (the photon rule), because I(V) drops whenever hν = eV matches a spectral line frequency of mercury; the UV emission at 253 nm tests postulate 1 (energy quantization), because a continuous spectrum would be incompatible with quantized levels.",
+      "Both the current curve and the UV emission test postulate 1 (energy quantization); postulate 2 (the photon rule) is not tested by the Franck-Hertz experiment at all, and had to wait for the Compton effect (1923) for its first direct confirmation.",
+      "Neither postulate is tested independently. The current curve is consistent with either postulate on its own if we allow for elastic scattering off mercury atoms, and the UV emission is a classical Larmor radiation effect that requires no quantization to explain."
+    ],
+    "correctIndex": 0,
+    "explanation": "The design of the Franck-Hertz tube is exactly what makes it a two-postulate test. The electron's kinetic energy at the grid is determined entirely by classical electrostatics (K = eV) and requires no photon rule; the fact that I(V) drops at V ≈ 4.9, 9.8, 14.7 volts and only at those values shows that mercury atoms accept energy only in discrete units of 4.9 eV, which is postulate 1 (quantized internal energies), verified without ever mentioning light. Then the tube glow at 253.7 nm, when V is pushed just past 4.9 V, tests postulate 2: the excited atoms drop back to ground and emit photons whose energy exactly equals hc/λ = 4.9 eV = the level difference measured a moment ago by the current curve. So the same apparatus verifies (independently) that atomic energies are quantized and that the photon rule connects the quantum to the wavelength Bohr predicted. Option B swaps which measurement tests which postulate. Option C is historically wrong: the 253 nm emission from the mercury tube was noticed in 1914 and cleanly measured by Einsporn in 1920, well before Compton, and the wavelength match is a direct confirmation of the photon rule. Option D is wrong on both physics counts: elastic scattering cannot explain 4.9 V-periodic dips (elastic mercury-electron scattering transfers essentially zero energy), and the 253 nm emission is a sharp line, not a Larmor continuum."
+  },
+  "suggestedNodes": [
+    {
+      "id": "franck_condon_principle",
+      "label": "Franck-Condon",
+      "subtitle": "Vibr. overlap",
+      "edgeType": "extends"
+    },
+    {
+      "id": "metastable_states",
+      "label": "Metastable",
+      "subtitle": "Spin-forbid.",
+      "edgeType": "related"
+    },
+    {
+      "id": "ionization_energy",
+      "label": "Ionization E",
+      "subtitle": "IP = 13.6 eV/H",
+      "edgeType": "related"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-20T07:00:00Z",
+    "generator": "routine",
+    "estimatedReadingMinutes": 22
+  }
+}
