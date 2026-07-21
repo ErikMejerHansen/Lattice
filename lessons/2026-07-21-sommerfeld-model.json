@@ -1,0 +1,200 @@
+{
+  "slug": "2026-07-21-sommerfeld-model",
+  "title": "Sommerfeld model: how ellipses and relativity split the hydrogen lines",
+  "node": {
+    "id": "sommerfeld_model",
+    "label": "Sommerfeld",
+    "subtitle": "ΔE ∝ α²/n²"
+  },
+  "intro": "Bohr's 1913 atom gave one energy per quantum number n and one line per Balmer transition. The spectroscopists at Johns Hopkins and Tübingen were staring at those lines through better and better diffraction gratings and seeing doublets, splittings a few parts in ten thousand wide, that Bohr's model had no room to explain. Arnold Sommerfeld, in Munich between 1915 and 1916, closed that gap by putting the electron on an ellipse instead of a circle and then correcting its kinetic energy for special relativity. The answer he wrote down turned out to survive the invention of quantum mechanics twelve years later almost intact, for reasons Sommerfeld himself did not fully understand.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The line that turned out to be a doublet",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bohr's July 1913 model of hydrogen had one quantum number, n, and one energy formula. Fit the Balmer series and its ultraviolet cousin the Lyman series (the transitions ending on n=1, discovered by Theodore Lyman at Harvard between 1906 and 1914) to four significant figures. It was, as Einstein put it, one of the great achievements of thought. Every energy level in Bohr's atom depended only on n."
+        },
+        {
+          "type": "math",
+          "tex": "E_n \\;=\\; -\\frac{R_H}{n^2}",
+          "display": true,
+          "caption": "E_n is the energy of the electron in the n-th allowed orbit. R_H is the Rydberg energy, about 13.6 eV, set by the electron mass and the strength of the Coulomb attraction. n is the principal quantum number, an integer starting at 1 for the ground state."
+        },
+        {
+          "type": "p",
+          "text": "The trouble showed up when the spectroscopists looked harder. Albert Michelson, in 1887, had used his interferometer (the same instrument he had just used to look, unsuccessfully, for the ether wind) to resolve the red hydrogen line H_α into a close doublet, two components separated by about 0.14 cm⁻¹. Henry Rowland, in Baltimore, was ruling diffraction gratings on twenty-foot concave surfaces with 14,438 lines per inch, and by the mid-1890s any hydrogen line photographed on a Rowland grating showed the same fine splitting. Each of Bohr's single energy levels, on close inspection, was not single. Something inside the atom carried an extra degree of freedom that n alone could not name."
+        },
+        {
+          "type": "p",
+          "text": "Bohr knew. In early 1915 he wrote to Sommerfeld in Munich, who was already the reigning European authority on atomic spectra, and asked whether he might see a way out. What was needed was another quantum number, but not one grafted onto the model by hand: it had to fall out of a natural generalization of what Bohr had already done. The natural generalization was staring at everyone from a hundred years of celestial mechanics. Under a 1/r Coulomb potential, the orbit of a bound particle is not a circle. It is an ellipse. Bohr had quantized the circle. Sommerfeld was going to quantize the ellipse."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Ellipses, action integrals, and a second quantum number",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Kepler had shown, three centuries earlier, that a particle in a 1/r potential moves on an ellipse with the attractor at one focus. The circle is the special case of zero eccentricity. For a general orbit under the Coulomb attraction the electron sweeps around an ellipse whose shape is set by two numbers: its size and its eccentricity. Bohr's rule that the angular momentum of the circular orbit be an integer multiple of ℏ could not distinguish those two parameters; it only specified one. Sommerfeld's generalization, arrived at independently and simultaneously by William Wilson in Cambridge in early 1915, is that the Bohr quantum condition applies not just to one degree of freedom but to each independent periodic coordinate. Write the electron's motion in polar coordinates (r, θ). The angle θ is periodic (the orbit closes on itself); the radius r is periodic too (it oscillates between perihelion and aphelion). Each has an associated momentum: p_θ (the angular momentum L) and p_r (the radial momentum). Sommerfeld required that the closed-loop integral of each momentum with respect to its coordinate be an integer multiple of Planck's constant h."
+        },
+        {
+          "type": "math",
+          "tex": "\\oint p_i \\, dq_i \\;=\\; n_i \\, h",
+          "display": true,
+          "caption": "p_i is the momentum conjugate to a periodic coordinate q_i (here, either angular momentum p_θ or radial momentum p_r). The integral is taken over one full period of the coordinate. n_i is a non-negative integer, one quantum number per coordinate. h is Planck's constant. The condition reduces to Bohr's mvr = nℏ for a circular orbit because only the angular integral survives."
+        },
+        {
+          "type": "p",
+          "text": "Apply the rule to the two polar coordinates and out come two integers. The angular integral gives L = kℏ, where the azimuthal quantum number k runs 1, 2, 3, .... The radial integral gives a radial quantum number n_r that runs 0, 1, 2, .... The energy turns out to depend on their sum, the principal quantum number n = n_r + k, and the geometry of the ellipse turns out to depend on their ratio through the eccentricity e."
+        },
+        {
+          "type": "math",
+          "tex": "e \\;=\\; \\sqrt{\\,1 - \\dfrac{k^{2}}{n^{2}}\\,}",
+          "display": true,
+          "caption": "e is the eccentricity of the orbit, running from 0 (a circle) to just under 1 (a needle-thin ellipse). k is the azimuthal quantum number (the quantized angular momentum in units of ℏ). n is the principal quantum number. The circular Bohr orbit is the special case k = n; the most eccentric allowed orbit for a given n is k = 1."
+        },
+        {
+          "type": "p",
+          "text": "For n = 2 there are two allowed orbits: k = 1 (an eccentric ellipse of e ≈ 0.87 that dives close to the nucleus) and k = 2 (a circle). For n = 3, three orbits. All of them, so long as we ignore relativity, share the same Bohr energy −R_H / n². Sommerfeld's rule has not (yet) split any spectral line. What it has done is inventory the states hiding behind each Bohr level, and one of them, the most eccentric, is about to matter."
+        }
+      ],
+      "quiz": {
+        "question": "For principal quantum number n = 3, how many distinct Sommerfeld orbit shapes are allowed, and which of them is the Bohr circular orbit?",
+        "options": [
+          "Three orbits (k = 1, 2, 3); the circular Bohr orbit is the k = 3 case, and k = 1 and k = 2 are ellipses of progressively decreasing eccentricity.",
+          "Nine orbits (all pairs of integers (n_r, k) with n_r + k = 3 up to permutation, and both signs of k); Bohr's circular orbit is one such pair with k = 0.",
+          "Three orbits (k = 0, 1, 2); Bohr's circular orbit corresponds to k = 0 (zero angular momentum, a straight radial oscillation through the nucleus).",
+          "One orbit; n uniquely determines the shape, and Sommerfeld's rule only relabels Bohr's single orbit rather than admitting new ones."
+        ],
+        "correctIndex": 0,
+        "explanation": "Sommerfeld's azimuthal quantum number k runs from 1 to n for a given principal quantum number, and each value picks out a distinct ellipse via e = √(1 − k²/n²). For n = 3, the allowed values k = 1, 2, 3 give eccentricities e = √(1 − 1/9) ≈ 0.94, e = √(1 − 4/9) ≈ 0.75, and e = 0. The k = 3 orbit (e = 0) is the circular Bohr orbit; the other two are ellipses that dive progressively closer to the nucleus at perihelion. Option B invents a two-dimensional quantum number and a spurious sign degeneracy; the radial quantum number n_r = n − k is fixed by n and k, not independent. Option C mistakenly allows k = 0 (angular momentum zero, a straight-line collision orbit); Sommerfeld and later Bohr excluded this on the correspondence-principle grounds that a straight-line trajectory through the nucleus is unphysical, and modern quantum mechanics recovers the same conclusion because the ℓ = 0 state, while allowed, is not the classical Bohr circular orbit. Option D denies that Sommerfeld extended anything, contradicting the whole point of the 1915-1916 work."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The relativistic twist and the fine-structure formula",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "At nonrelativistic level, every (n_r, k) pair with the same n shares the same energy. Sommerfeld has organized states but not split any lines. The move that splits them is the same move Einstein had used nine years earlier for the perihelion of Mercury: acknowledge that at high speeds, the kinetic energy of the electron is not T = p²/2m. It is T = (γ − 1)mc², where γ = 1/√(1 − v²/c²) is the Lorentz factor. For a circular Bohr orbit at n = 1, the electron's speed is αc, where α = e²/(4πε₀ℏc) ≈ 1/137 is the fine-structure constant (a dimensionless number that measures how strong electromagnetism really is). One percent of the speed of light. Not fast, but for an eccentric ellipse the electron speeds up dramatically near perihelion, and its instantaneous speed can approach αc/k on close approach: for k = 1, roughly Zα c."
+        },
+        {
+          "type": "p",
+          "text": "Substitute the relativistic kinetic energy into the equation of motion, and the ellipse ceases to close. Its perihelion advances a tiny angle every revolution, tracing out a rosette (the same figure Le Verrier had computed for Mercury in 1859 and Einstein had explained in 1915). Requantize the rosetting orbit with the same action rule as before (∮ p_i dq_i = n_i h, now applied to the relativistic momenta) and out drops the fine-structure energy. It depends on both n and k, and the k-dependence is what splits Bohr's degeneracy."
+        },
+        {
+          "type": "math",
+          "tex": "E_{n,k} \\;=\\; -\\frac{R_H}{n^{2}}\\left[\\, 1 + \\frac{\\alpha^{2}}{n^{2}}\\!\\left(\\frac{n}{k} - \\frac{3}{4}\\right) \\right]",
+          "display": true,
+          "caption": "E_{n,k} is the relativistic energy of the (n, k) Sommerfeld orbit. R_H is the Rydberg energy from the nonrelativistic formula, about 13.6 eV for hydrogen. α is the fine-structure constant, e²/(4πε₀ℏc) ≈ 1/137. n is the principal quantum number, k is the azimuthal quantum number, with k running 1 to n. The bracketed term is a dimensionless correction of order α² ≈ 5 × 10⁻⁵ that lowers the energy more for small k (eccentric orbits, deep perihelion excursions) than for large k."
+        },
+        {
+          "type": "p",
+          "text": "That α² prefactor is the number Michelson had measured in H_α. It matches. Sommerfeld had gone from Wilson's action rule and Einstein's relativistic kinematics directly to a prediction the spectroscopists could read off their photographic plates. And in the fine-structure constant α, appearing here for the first time as a natural characterization of atomic energy scales, Sommerfeld had named one of the fundamental dimensionless numbers of physics: the one that says the atom is what it is because electromagnetism is neither too strong (α ≈ 1 would collapse the atom) nor too weak (α ≪ 1 would spread it out and unbind it thermally)."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-21-sommerfeld-model.html",
+          "height": 640,
+          "caption": "Drag the n and k sliders to see the Sommerfeld orbit. The bold red ellipse is the classical Kepler orbit for that (n, k) pair; the fainter overlaid ellipses show the relativistic perihelion precession (drawn with α exaggerated to 0.30 for visibility, since the real α ≈ 1/137 makes the precession about 10⁻⁴ radian per orbit and invisible at this scale). Eccentricity, perihelion distance, and the actual fine-structure energy shift ΔE/E_Bohr are printed live below."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Paschen's helium plates and Einstein's telegram",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The clean test of Sommerfeld's formula was not in hydrogen. It was in singly-ionized helium, He⁺, which is hydrogenic (one electron around a nucleus of charge Z = 2) but with a fine-structure splitting that grows steeply with Z. Working out where the Z-dependence enters (the electron sees a Coulomb potential Ze²/(4πε₀r) instead of e²/(4πε₀r), so all velocities scale as Zα rather than α) gives a splitting that scales as α²Z⁴/n³."
+        },
+        {
+          "type": "math",
+          "tex": "\\Delta E_{\\text{fs}} \\;\\propto\\; \\frac{\\alpha^{2}\\,Z^{4}}{n^{3}}",
+          "display": true,
+          "caption": "ΔE_fs is the fine-structure splitting between adjacent-k levels of a hydrogenic ion. α is the fine-structure constant, about 1/137. Z is the nuclear charge in units of the elementary charge (1 for hydrogen, 2 for He⁺, 3 for Li²⁺). n is the principal quantum number of the shell being examined. The Z⁴ scaling is the sharp part: doubling Z multiplies splittings by 16."
+        },
+        {
+          "type": "p",
+          "text": "Friedrich Paschen, in Tübingen, aimed a hot He⁺ discharge at his best diffraction grating in 1916. Every predicted splitting was there, and with the predicted spacing. Paschen sent Sommerfeld the plates. Einstein, reviewing the manuscript, wrote back to Sommerfeld the line that gets quoted every time a physicist writes about this period: 'Ihre Spektralanalyse gehört zu meinen schönsten Erlebnissen in der Physik.' Your spectral analysis belongs among my finest experiences in physics. Sommerfeld's Atombau und Spektrallinien (Atomic Structure and Spectral Lines), published in 1919, became the standard European reference on atomic physics and stayed in print through six German editions and a widely used English translation."
+        },
+        {
+          "type": "p",
+          "text": "The fine-structure agreement was also, as it happens, the Bohr-Sommerfeld model's high-water mark. Extending the action-integral quantization to more than one electron did not work: helium (two electrons), a problem to which Bohr, Born, Kramers, and Heisenberg all applied themselves through the early 1920s, refused to yield a Bohr-Sommerfeld spectrum. The model would be replaced by Schrödinger's wave mechanics in 1926 and Heisenberg's matrix mechanics the year before. But Sommerfeld's fine-structure formula, alone among the old-quantum-theory results, would survive the transition. It would be reproduced almost line for line by relativistic wave mechanics twelve years later. Why it survived is a story in itself."
+        }
+      ],
+      "quiz": {
+        "question": "The fine-structure splittings observed in singly-ionized helium (Z = 2) are, at fixed principal quantum number n, roughly how many times larger than the corresponding splittings in neutral hydrogen (Z = 1)?",
+        "options": [
+          "About 16 times larger, because the splitting scales as Z⁴ and 2⁴ = 16.",
+          "About 4 times larger, because the splitting scales as Z² and 2² = 4.",
+          "About 2 times larger, because the splitting scales linearly with Z.",
+          "The same size, because α is a dimensionless universal constant that does not depend on the nuclear charge."
+        ],
+        "correctIndex": 0,
+        "explanation": "Sommerfeld's formula scales the fine-structure splitting as α²Z⁴/n³. The Z⁴ is not accidental: Z appears once in the Coulomb potential (giving one factor of Z in the orbital speeds) and once more in the size of the orbit (giving another factor via the relativistic β² = v²/c², which enters squared). Doubling Z from 1 (hydrogen) to 2 (He⁺) multiplies the splittings by 2⁴ = 16, which is exactly the amplification factor that let Paschen see clean fine structure in 1916 where hydrogen's splittings were at the edge of what his grating could resolve. Options B and C use the wrong power of Z. Option D misses that although α itself is universal, the atomic energy scales in which it appears are not: the fine-structure splitting is α² times an orbital kinetic energy, and that orbital kinetic energy grows as Z² for a hydrogenic ion."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The right answer for the wrong reason: Sommerfeld to Dirac",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Here is the strangeness of Sommerfeld's result. His azimuthal quantum number k was, in his interpretation, a scalar quantization of the orbital angular momentum: k = ℓ + 1, more or less, in modern notation. He knew nothing of electron spin. That concept did not arrive until 1925, when George Uhlenbeck and Samuel Goudsmit, two graduate students in Leiden, posted a short paper proposing that the electron carried an intrinsic angular momentum of ½ℏ (spin) in addition to whatever orbital motion it had. Sommerfeld's derivation had no room for such a thing."
+        },
+        {
+          "type": "p",
+          "text": "When the fine structure of hydrogen was rederived after 1926 with the new tools (the Schrödinger equation plus spin plus special relativity), three separate α² corrections appeared. First, a relativistic kinetic-energy correction, essentially Sommerfeld's. Second, a spin-orbit coupling, arising because the moving electron sees the nucleus's electric field boosted into a magnetic field, and its spin's magnetic moment couples to that field. Third, a Darwin term, arising because the electron's Zitterbewegung (a jitter over a distance of the reduced Compton wavelength) smears out its interaction with the potential at the origin. Each of these is separately of order α², and none of them corresponds to anything in Sommerfeld's picture."
+        },
+        {
+          "type": "p",
+          "text": "Summed, the three depend only on the total angular momentum j = ℓ ± ½, not on ℓ or s or their combination in any other way. If you replace Sommerfeld's k with j + ½ in his 1916 formula, his energies are exactly correct at order α². And in 1928 Paul Dirac, in Cambridge, wrote down a relativistic wave equation for the electron whose bound-state energies are exactly Sommerfeld's, with j in place of k, obtained in one clean derivation without inserting any of the corrections by hand. Sommerfeld's answer had been right. His reasoning had leapt over spin without noticing that spin was there."
+        },
+        {
+          "type": "p",
+          "text": "Physicists reach for this episode when they want to describe what it feels like to be right for the wrong reason. The Belgian physicist Léon Rosenfeld later called Sommerfeld's derivation \"an act of daring so bold it defied its own foundations.\" It defied them and won because relativistic Coulomb symmetry so constrained the answer that a pre-spin theory with two quantum numbers could not miss it: the answer depends on j and n and nothing else, and j = k − ½ in the pre-spin bookkeeping, and n is n in either. Sommerfeld himself was nominated for the Nobel Prize eighty-four times between 1917 and his death in 1951, a record that still stands. He never won it. Four of his Munich students did: Werner Heisenberg, Wolfgang Pauli, Peter Debye, and Hans Bethe."
+        }
+      ]
+    }
+  ],
+  "checkInAfter": [1, 3],
+  "finalQuiz": {
+    "question": "Consider hydrogen (Z = 1) in the n = 3 shell. Sommerfeld's model admits three orbits with the same principal quantum number: k = 1, 2, 3. At the nonrelativistic level all three share the Bohr energy −R_H/9. When the relativistic correction is included, which of the three orbits sits at the lowest (most negative) energy, and why?",
+    "options": [
+      "k = 1, the most eccentric ellipse. The relativistic correction is proportional to α²/n² · (n/k − 3/4), which is largest for the smallest k because the electron on the most eccentric orbit dives closest to the nucleus at perihelion, moves fastest there, and picks up the largest relativistic kinetic-energy increase (equivalently, the largest downward shift in total energy).",
+          "k = 3, the circle. Sommerfeld's rule always pulls the highest-angular-momentum state deepest, in a Coulomb-atom analog of the way filled electron shells sit deepest in the periodic table.",
+          "k = 2, the intermediate ellipse. The relativistic correction is largest at intermediate eccentricity, where the electron balances close-approach speed against orbital dwell time near the nucleus, giving a broad maximum in the correction.",
+          "All three remain at the same energy. The relativistic correction is a constant addition proportional to α²/n² that shifts every level uniformly and cannot split the Bohr degeneracy."
+    ],
+    "correctIndex": 0,
+    "explanation": "Reading Sommerfeld's formula E_{n,k} = −R_H/n² [1 + (α²/n²)(n/k − 3/4)] for n = 3: the k = 1 term inside the brackets is (3/1 − 3/4) = 9/4; for k = 2 it is (3/2 − 3/4) = 3/4; for k = 3 it is (3/3 − 3/4) = 1/4. Since R_H is positive and the overall sign on the leading factor is negative, the state with the largest bracket lies lowest. That is k = 1, the most eccentric orbit, whose electron dives closest to the nucleus at perihelion (perihelion distance is a(1 − e) ≈ 0.06 · a for k = 1 vs 0.42 · a for k = 2 vs a itself for k = 3, where a is the semi-major axis) and there moves fastest, picking up the largest relativistic mass increase and correspondingly the largest downward energy shift. Option B inverts the physics: high angular momentum means a rounder orbit, farther from the nucleus, less relativistic and higher energy. Option C invents a nonmonotonic dependence that does not exist in Sommerfeld's formula (n/k − 3/4 is monotonic in k). Option D confuses n-dependence with k-dependence: the α²/n² prefactor by itself would indeed shift each n uniformly, but the (n/k − 3/4) factor inside splits the degeneracy across k values, which is exactly the fine structure Michelson and Paschen had measured."
+  },
+  "suggestedNodes": [
+    {
+      "id": "fine_structure_constant",
+      "edgeType": "extends"
+    },
+    {
+      "id": "dirac_equation",
+      "edgeType": "extends"
+    },
+    {
+      "id": "spin_orbit_coupling",
+      "edgeType": "extends"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-21T07:00:00Z",
+    "generator": "routine",
+    "estimatedReadingMinutes": 24
+  }
+}

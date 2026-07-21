@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#wrap { max-width: 420px; margin: 0 auto; padding: 16px; }
+#orbits {
+  width: 100%; height: auto; display: block;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+}
+.viz-slider-row input[type=range] { height: 36px; }
+.readout {
+  margin-top: 12px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  color: var(--text);
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+.readout .row {
+  display: flex; justify-content: space-between;
+  padding: 3px 0;
+}
+.readout .row .k { color: var(--text-muted); }
+.readout .row .v { color: var(--text); }
+.readout .row.hi .v { color: var(--accent); }
+.warn {
+  font-size: 11px; color: var(--text-ghost); font-style: italic;
+  margin-top: 8px; line-height: 1.4;
+}
+</style>
+</head>
+<body>
+<div id="viz">
+  <div id="wrap">
+    <svg id="orbits" viewBox="0 0 400 400"></svg>
+    <div class="viz-slider-row">
+      <label>n</label>
+      <input type="range" id="n-slider" min="1" max="5" value="3" step="1">
+      <span class="value" id="n-val">n = 3</span>
+    </div>
+    <div class="viz-slider-row">
+      <label>k</label>
+      <input type="range" id="k-slider" min="1" max="5" value="1" step="1">
+      <span class="value" id="k-val">k = 1</span>
+    </div>
+    <div class="readout" id="readout"></div>
+    <div class="warn" id="warn"></div>
+    <div class="viz-caption">
+      Sommerfeld's electron on an ellipse. The bold red curve is the classical Kepler orbit for the chosen (n, k) pair, with the nucleus at one focus (red dot). Fainter overlaid ellipses show the relativistic perihelion precession, drawn with α exaggerated to 0.30 to make the rosette visible; at the real α ≈ 1/137 the precession is about 10⁻⁴ radian per orbit. The readout gives eccentricity, perihelion distance (in units of the semi-major axis), the actual per-orbit precession at real α (in arcseconds), and the actual fine-structure energy shift ΔE/E_Bohr = (α²/n²)(n/k − 3/4).
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  var svg = document.getElementById('orbits');
+  var nSlider = document.getElementById('n-slider');
+  var kSlider = document.getElementById('k-slider');
+  var nVal = document.getElementById('n-val');
+  var kVal = document.getElementById('k-val');
+  var readout = document.getElementById('readout');
+  var warn = document.getElementById('warn');
+
+  var ALPHA_DISPLAY = 0.30;
+  var ALPHA_REAL = 1 / 137.036;
+  var CX = 200, CY = 200;
+  var MAX_A = 175;
+
+  function el(tag, attrs) {
+    var e = document.createElementNS(SVG_NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  function clear(node) {
+    while (node.firstChild) node.removeChild(node.firstChild);
+  }
+
+  function draw() {
+    var n = parseInt(nSlider.value, 10);
+    var k = parseInt(kSlider.value, 10);
+    kSlider.max = n;
+    if (k > n) { k = n; kSlider.value = n; }
+    nVal.textContent = 'n = ' + n;
+    kVal.textContent = 'k = ' + k;
+
+    var e = Math.sqrt(1 - (k * k) / (n * n));
+    var a = MAX_A * (n * n) / 25;
+    var b = a * (k / n);
+    var cFocus = a * e;
+
+    var dphiDisplay = Math.PI * (ALPHA_DISPLAY * ALPHA_DISPLAY) / (k * k);
+    var dphiRealRad = Math.PI * (ALPHA_REAL * ALPHA_REAL) / (k * k);
+    var dphiRealArcsec = dphiRealRad * (180 / Math.PI) * 3600;
+    var dE_over_E = (ALPHA_REAL * ALPHA_REAL / (n * n)) * (n / k - 0.75);
+
+    clear(svg);
+
+    var axis1 = el('line', {
+      x1: CX - 190, y1: CY, x2: CX + 190, y2: CY,
+      stroke: 'var(--border)', 'stroke-width': 0.5, 'stroke-dasharray': '3 3'
+    });
+    var axis2 = el('line', {
+      x1: CX, y1: CY - 190, x2: CX, y2: CY + 190,
+      stroke: 'var(--border)', 'stroke-width': 0.5, 'stroke-dasharray': '3 3'
+    });
+    svg.appendChild(axis1);
+    svg.appendChild(axis2);
+
+    var numOrbits = 14;
+    for (var i = numOrbits - 1; i >= 1; i--) {
+      var phi = i * dphiDisplay;
+      var cx0 = CX - cFocus * Math.cos(phi);
+      var cy0 = CY - cFocus * Math.sin(phi);
+      var elp = el('ellipse', {
+        cx: cx0, cy: cy0, rx: a, ry: b,
+        fill: 'none',
+        stroke: 'var(--accent-soft)',
+        'stroke-width': 0.6,
+        opacity: (0.45 * (numOrbits - i) / numOrbits).toFixed(3),
+        transform: 'rotate(' + (phi * 180 / Math.PI).toFixed(3) + ' ' + cx0 + ' ' + cy0 + ')'
+      });
+      svg.appendChild(elp);
+    }
+
+    var first = el('ellipse', {
+      cx: CX - cFocus, cy: CY, rx: a, ry: b,
+      fill: 'none',
+      stroke: 'var(--accent)',
+      'stroke-width': 1.6
+    });
+    svg.appendChild(first);
+
+    var perihelionX = CX - (cFocus + a);
+    var aphelionX = CX - (cFocus - a);
+    var peri = el('circle', {
+      cx: aphelionX, cy: CY, r: 2.5,
+      fill: 'var(--accent)', opacity: 0.6
+    });
+    svg.appendChild(peri);
+    var periLabel = el('text', {
+      x: aphelionX + 5, y: CY - 6,
+      'font-family': "IBM Plex Mono, monospace",
+      'font-size': 9, fill: 'var(--text-muted)'
+    });
+    periLabel.textContent = 'perihelion';
+    svg.appendChild(periLabel);
+
+    var nuc = el('circle', {
+      cx: CX, cy: CY, r: 5,
+      fill: 'var(--accent)'
+    });
+    svg.appendChild(nuc);
+    var nucLabel = el('text', {
+      x: CX + 8, y: CY - 6,
+      'font-family': "IBM Plex Mono, monospace",
+      'font-size': 10, fill: 'var(--text-muted)'
+    });
+    nucLabel.textContent = 'nucleus (focus)';
+    svg.appendChild(nucLabel);
+
+    var isCircle = (k === n);
+    var circleTag = isCircle
+      ? '<span style="color: var(--accent)">circular (Bohr orbit)</span>'
+      : 'elliptical';
+
+    readout.innerHTML =
+      '<div class="row"><span class="k">shape</span><span class="v">' + circleTag + '</span></div>' +
+      '<div class="row"><span class="k">eccentricity e</span><span class="v">' + e.toFixed(4) + '</span></div>' +
+      '<div class="row"><span class="k">perihelion / a</span><span class="v">' + (1 - e).toFixed(4) + '</span></div>' +
+      '<div class="row"><span class="k">precession / orbit (real α = 1/137)</span><span class="v">' + dphiRealArcsec.toExponential(2) + ' arcsec</span></div>' +
+      '<div class="row hi"><span class="k">ΔE / E_Bohr (real α)</span><span class="v">' + (dE_over_E >= 0 ? '+' : '') + dE_over_E.toExponential(3) + '</span></div>';
+
+    if (isCircle) {
+      warn.textContent = 'k = n selects the circular Bohr orbit. All eccentric orbits (k < n) at the same n sit lower in energy at order α².';
+    } else {
+      warn.textContent = 'k < n selects an eccentric ellipse. Smaller k means deeper perihelion approach and a larger downward fine-structure shift.';
+    }
+  }
+
+  nSlider.addEventListener('input', draw);
+  kSlider.addEventListener('input', draw);
+  draw();
+})();
+</script>
+</body>
+</html>

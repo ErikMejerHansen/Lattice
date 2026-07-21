@@ -799,6 +799,16 @@
       "createdAt": "2026-07-20T07:00:00Z",
       "col": 0,
       "row": 40
+    },
+    {
+      "id": "sommerfeld_model",
+      "label": "Sommerfeld",
+      "subtitle": "ΔE ∝ α²/n²",
+      "state": "available",
+      "lesson": "2026-07-21-sommerfeld-model",
+      "createdAt": "2026-07-21T07:00:00Z",
+      "col": 1,
+      "row": 40
     }
   ],
   "edges": [
@@ -1895,6 +1905,21 @@
     {
       "from": "franck_hertz_experiment",
       "to": "spectroscopy_basics",
+      "kind": "related"
+    },
+    {
+      "from": "sommerfeld_model",
+      "to": "bohr_atom",
+      "kind": "extends"
+    },
+    {
+      "from": "sommerfeld_model",
+      "to": "hydrogen_atom",
+      "kind": "extends"
+    },
+    {
+      "from": "sommerfeld_model",
+      "to": "balmer_series",
       "kind": "related"
     }
   ]
