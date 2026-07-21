@@ -558,5 +558,12 @@
     "subtitle": "4.9 eV steps",
     "date": "2026-07-20",
     "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-07-21-sommerfeld-model",
+    "title": "Sommerfeld model: how ellipses and relativity split the hydrogen lines",
+    "subtitle": "ΔE ∝ α²/n²",
+    "date": "2026-07-21",
+    "estimatedReadingMinutes": 24
   }
 ]
