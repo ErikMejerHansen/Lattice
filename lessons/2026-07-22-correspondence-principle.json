@@ -1,0 +1,193 @@
+{
+  "slug": "2026-07-22-correspondence-principle",
+  "title": "The correspondence principle: Bohr's bridge from quantum jumps to classical orbits",
+  "node": {
+    "id": "correspondence_principle",
+    "label": "Correspondence",
+    "subtitle": "large-n limit"
+  },
+  "intro": "Bohr's 1913 atom told you where the energy levels of hydrogen sat, and hence which spectral lines you could see. It said nothing about which of the imaginable jumps between them the electron actually took, or how brightly, or how often. To pin those down Bohr needed a bridge from the strange discrete world of quantum jumps back to the familiar continuous world of Maxwell's electrodynamics, a rule he could apply where the two ought to meet. That rule, the correspondence principle, kept the old quantum theory upright for twelve years and, in 1925, handed Werner Heisenberg the scaffolding on which he built matrix mechanics.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The gap Bohr's 1913 atom left",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Niels Bohr's 1913 paper, written at his father-in-law's country house north of Copenhagen while Bohr was still a postdoc, solved one puzzle but left another wide open. His model gave you the energy of each stationary orbit, E_n = −R_H/n² with the Rydberg energy R_H ≈ 13.6 eV and the principal quantum number n = 1, 2, 3, ..., and by the Bohr rule that emission frequency equals energy gap divided by Planck's constant, ν = (E_n − E_m)/h, it gave you the full ladder of hydrogen spectral lines. What it did not give you was the answer to the more urgent question. Given a hydrogen atom in state n = 5, which of the four states below is the electron actually going to drop to? And how bright should the resulting line be?"
+        },
+        {
+          "type": "p",
+          "text": "In Maxwell's electrodynamics the question does not arise. An accelerating charge radiates continuously at a frequency determined by its motion; a Kepler ellipse of period T radiates a fundamental at ν = 1/T and integer harmonics at 2ν, 3ν, 4ν, and so on, with intensities you compute by Fourier-decomposing the orbit and reading off the amplitude of each harmonic. What frequency, how bright, is a calculation, not a mystery. In Bohr's atom the electron on a stationary orbit does not radiate at all; it only radiates when it jumps between orbits, and the frequency it emits (E_n − E_m)/h is neither the orbital frequency of the initial orbit nor of the final. Two theories, two languages, no bridge."
+        },
+        {
+          "type": "p",
+          "text": "Between 1913 and 1918 Bohr searched for the missing rule. Whatever he found had to reproduce Maxwell's electrodynamics somewhere, because Maxwell's electrodynamics manifestly worked at every scale the nineteenth century had probed. And there was one obvious limit in which the two theories could be forced to shake hands: the limit of large quantum numbers. Take the electron up to n = 100 in a hydrogen atom. The orbits are macroscopic (radius scales as n², so about 0.5 μm at n = 100), the energy levels are spaced almost continuously, and the frequency of the jump n → n−1 is essentially the classical Kepler orbital frequency of the orbit itself. Whatever the quantum theory said in that regime, it had to match what the classical calculation said, or one of the two theories was wrong. Bohr's bet was that both were right, and that consistency at large n was a rule strong enough to pin down what the quantum theory said everywhere else."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Two frequencies meeting at large n",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Write both frequencies down and compare them. The quantum jump frequency between adjacent levels n and n − 1 is fixed by the Bohr rule ν = ΔE/h applied to the Rydberg formula. Below, ν_q is the frequency of the photon emitted when the electron falls from level n to level n − 1, R_H is the Rydberg energy (about 13.6 eV, or 3.29 × 10¹⁵ Hz in units of R_H/h), h is Planck's constant, and n is the principal quantum number."
+        },
+        {
+          "type": "math",
+          "tex": "\\nu_{q}(n \\to n-1) \\;=\\; \\dfrac{R_H}{h}\\left(\\dfrac{1}{(n-1)^{2}} - \\dfrac{1}{n^{2}}\\right) \\;\\xrightarrow{\\,n \\gg 1\\,}\\; \\dfrac{2 R_H}{h\\, n^{3}}",
+          "display": true,
+          "caption": "ν_q(n → n−1) is the frequency of the photon emitted in the quantum jump between adjacent hydrogen levels. R_H is the Rydberg energy, about 13.6 eV. h is Planck's constant. n is the principal quantum number, an integer starting at 2 for the smallest allowed jump. The right-hand limit is the leading term when n is large; it falls off as 1/n³ because the level spacing shrinks as the derivative of −1/n², which is 2/n³."
+        },
+        {
+          "type": "p",
+          "text": "The classical Kepler orbital frequency is the rate at which an electron on the n-th Bohr orbit completes one lap. The orbit's radius is a₀ n², where a₀ is the Bohr radius (about 0.53 Å), and its speed is v = e²/(4πε₀ℏn), where e is the electron charge and ε₀ is the vacuum permittivity. The period is T = 2π r / v and the orbital frequency ν_cl = 1/T. Below, ν_cl(n) is that Kepler frequency for the electron on the n-th Bohr orbit."
+        },
+        {
+          "type": "math",
+          "tex": "\\nu_{cl}(n) \\;=\\; \\dfrac{2 R_H}{h\\, n^{3}}",
+          "display": true,
+          "caption": "ν_cl(n) is the classical Kepler orbital frequency of an electron on the n-th Bohr orbit, computed from the orbit's period T using T = 2π r / v with r = a₀ n² and v = e²/(4πε₀ℏn). R_H is the Rydberg energy. h is Planck's constant. n is the principal quantum number. This is identical to the large-n limit of the quantum jump frequency ν_q(n → n − 1) above."
+        },
+        {
+          "type": "p",
+          "text": "This is the correspondence principle in its narrowest form: for large n, the quantum jump frequency between adjacent hydrogen levels equals the classical orbital frequency of the electron on those levels. It cost Bohr no more than the algebra above to see it, and having seen it he refused to let it be a coincidence. Whatever the quantum theory said at small n, at large n it had to reproduce this identity. Slide the viz below from n = 2 to n = 100 and watch the two frequencies converge."
+        },
+        {
+          "type": "viz",
+          "src": "2026-07-22-correspondence-principle.html",
+          "height": 380,
+          "caption": "Slide n from 2 to 100. The solid curve is the quantum jump frequency ν_q(n → n−1); the dashed curve is the classical Kepler frequency ν_cl(n). Their ratio drops from 3 at n = 2 to just above 1 at n = 100. This is the correspondence, in one plot."
+        }
+      ],
+      "quiz": {
+        "question": "At n = 100 the quantum jump frequency ν_q(100 → 99) is very nearly the classical Kepler frequency ν_cl(100). Now consider the multi-level jump ν_q(100 → 98). Which classical quantity should it correspond to, in the large-n limit?",
+        "options": [
+          "The second harmonic 2 ν_cl(100) of the classical Kepler frequency. Kramers showed in 1919 that the quantum transition n → n − k corresponds, in the large-n limit, to the k-th Fourier harmonic of the classical orbit; the transition to n − 2 corresponds to the second harmonic.",
+          "Half the classical Kepler frequency, ν_cl(100)/2. The energy gap doubles when you jump two levels, so by ν = ΔE/h the frequency doubles; but the transition takes twice as long, so the two factors cancel and correspondence gives one-half the fundamental.",
+          "Twice the classical Kepler frequency evaluated at the final level, 2 ν_cl(98), because the classical frequency at the level where the electron ends up is the one that rules the emitted radiation.",
+          "The correspondence principle does not apply to multi-level jumps; it relates only single-step quantum transitions (Δn = 1) to the fundamental of the classical orbit, and Δn > 1 transitions have no classical analog."
+        ],
+        "correctIndex": 0,
+        "explanation": "Compute the two sides. On the quantum side, ν_q(100 → 98) = (R_H/h) · (1/98² − 1/100²) ≈ (R_H/h) · (4/n³) = 4 R_H/(h · 100³). On the classical side, 2 · ν_cl(100) = 2 · 2 R_H/(h · 100³) = 4 R_H/(h · 100³). They match. The general result, worked out by Hans Kramers in his 1919 Copenhagen thesis, is that the Δn = k quantum transition pairs with the k-th harmonic of the classical Kepler orbit's Fourier decomposition. Option D is the tempting wrong answer, and the most historically important one: it is exactly the reading of correspondence that Heisenberg rejected in 1925, and rejecting it is what let him build matrix mechanics out of the full table of transitions rather than the single-step ladder. Option B inverts the harmonic scaling. Option C picks the wrong level; correspondence at large n pairs the harmonic at the starting level n, where the classical orbit is defined, with the k-th Fourier component of that orbit."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Selection rules from the Fourier decomposition of a Kepler orbit",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The quiz's answer is not an accident; it is a theorem. Any bound periodic orbit can be Fourier-decomposed into a fundamental at frequency ν = 1/T and harmonics at 2ν, 3ν, and so on. The k-th harmonic's amplitude is the k-th Fourier coefficient of the electron's position along the orbit. In classical electrodynamics that coefficient controls the intensity of the k-th harmonic the orbit radiates. Bohr's correspondence principle in its sharper form said this: for large n, the quantum matrix element for the transition n → n − k must reduce, in an appropriate limit, to the classical k-th Fourier coefficient of the orbit at level n."
+        },
+        {
+          "type": "p",
+          "text": "The immediate payoff was a selection rule. For a Kepler ellipse lying in a plane, the electron's Cartesian coordinates x(t) and y(t) sweep out only the fundamental frequency ν and its integer harmonics; there are no other components. The classical radiation therefore contains only ν, 2ν, 3ν, .... Correspondence says the same about the quantum theory at large n: only jumps of Δn = k for integer k contribute, which is trivial for radial emission but not for the angular part. In the Sommerfeld model, where each Bohr level splits into k = 1, 2, ..., n suborbits by the azimuthal quantum number, the analogous Fourier argument applied to the angular coordinate showed that in an electric-dipole transition the azimuthal quantum number ℓ (Sommerfeld's k) can only change by ±1."
+        },
+        {
+          "type": "math",
+          "tex": "\\Delta \\ell \\;=\\; \\pm 1",
+          "display": true,
+          "caption": "Δℓ is the change in the electron's orbital angular momentum quantum number in a radiative transition. Only jumps in which ℓ increases or decreases by exactly one are allowed by the leading (electric-dipole) coupling to the electromagnetic field. The rule was first extracted from the correspondence principle by Bohr and Adalbert Rubinowicz (a young Polish theorist visiting Copenhagen) in a 1918 paper, and it was rederived from quantum mechanics after 1926 by direct computation of dipole matrix elements. It survives the transition."
+        },
+        {
+          "type": "p",
+          "text": "In the pre-1925 old quantum theory this was as good as the transition-selection story got. Bohr and Rubinowicz worked out the details in 1918, and by 1920 the selection rules for hydrogen, helium, and the alkali doublets were being tabulated by every atomic spectroscopist in Europe. Every one of those rules was ultimately a statement about which Fourier components of some classical orbit did not vanish. The correspondence principle had converted an unanswerable question, 'which lines does the atom emit,' into a computable one, 'which harmonics of a Kepler orbit have nonzero amplitude.'"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Kramers 1919 makes it quantitative",
+      "hasQuiz": true,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Hans Kramers, a young Dutch physicist who had joined Bohr in Copenhagen in 1916, took the correspondence principle further than Bohr himself dared. His 1919 doctoral thesis, 'Intensities of Spectral Lines,' worked out the Fourier decomposition of a hydrogen electron's elliptical orbit at each n, extracted the amplitude of the k-th harmonic, and read off, by correspondence, the intensity the atom should emit on the transition n → n − k. This was the first quantitative prediction of any line intensity from Bohr's theory, three years before it had any right to work."
+        },
+        {
+          "type": "p",
+          "text": "Kramers's numbers agreed with the spectroscopists' measurements to within the errors of the day. That was not a small thing. Bohr's theory had, until then, been a bookkeeping device for line positions only; Kramers made it a predictor of line brightness as well. He achieved this by treating correspondence at large n as literal and extrapolating downward: he used the classical Kepler orbit at each n, computed its Fourier decomposition explicitly, and did not flinch when he had to evaluate the formula at n = 3, n = 4, n = 5, where the correspondence-based approximation had every reason to fail. The Balmer series (the visible hydrogen lines with lower level n = 2, first fit by the Basel high-school teacher Johann Balmer in 1885) came out with intensities correct to a factor of a few or better all the way down."
+        },
+        {
+          "type": "p",
+          "text": "In 1924 Kramers pushed the same reasoning into a different problem: the response of an atom to an incident electromagnetic wave (its dispersion, the frequency-dependent refractive index that also underlies Sellmeier's fit and every rainbow). He wrote down what is now called the Kramers dispersion formula, in which the classical polarizability was replaced by a sum over quantum transitions weighted by matrix elements one could read off from the correspondence rule. The formula worked. Its structural feature (a sum over transitions between states, with matrix elements indexed by pairs of quantum numbers) is the mathematical template Heisenberg imitated the following summer to build matrix mechanics."
+        }
+      ],
+      "quiz": {
+        "question": "Kramers extrapolated the correspondence principle downward from large n to compute intensities of hydrogen lines at small n. What was the specific mathematical maneuver that let him do this, and why is it not obvious that it should have worked?",
+        "options": [
+          "He computed the Fourier decomposition of the classical Kepler ellipse at each n and identified the squared amplitude of the k-th harmonic with the intensity of the quantum transition n → n − k, then evaluated the formula at small n where the correspondence identification is only asymptotically justified (holds strictly at n → ∞). It works better than it ought to because the Coulomb problem is unusually well-behaved: its exact quantum matrix elements happen to remain close to the classical Fourier coefficients even at n = 3.",
+          "He solved Schrödinger's wave equation for hydrogen and computed the electric-dipole matrix elements directly, obtaining the intensities exactly.",
+          "He measured line intensities with a Rowland diffraction grating and fitted an empirical power law that happened to match the amplitudes of the Fourier harmonics of a Kepler orbit.",
+          "He inverted Einstein's A and B coefficients from the observed blackbody spectrum of a hydrogen discharge tube at thermal equilibrium, obtaining the emission rates without any reference to orbits or Fourier decompositions."
+        ],
+        "correctIndex": 0,
+        "explanation": "The maneuver was to treat the correspondence identification 'k-th classical Fourier amplitude ↔ quantum matrix element for Δn = k' as literal at any n, not merely at n → ∞. The Coulomb problem is peculiarly forgiving of this extrapolation because its exact (post-1926) quantum matrix elements happen to be close to the classical Fourier coefficients even at n = 3, a fact that is not true for a generic potential. Option B is anachronistic: Schrödinger's wave equation was 1926 and matrix elements were what he computed later, whereas Kramers wrote his thesis in 1919. Option C inverts the direction of the argument: Kramers predicted the intensities from the theory and the spectroscopists confirmed them, not the reverse. Option D confuses Kramers's intensity work with Einstein's 1917 derivation of the A and B coefficients from detailed-balance considerations of blackbody radiation, which gave ratios of rates rather than absolute intensities and was not what Kramers's thesis did."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Heisenberg 1925: correspondence swallows the theory that used it",
+      "hasQuiz": false,
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Werner Heisenberg was twenty-three years old in the summer of 1925, laid up on the North Sea island of Helgoland with severe hay fever, staring at Kramers's 1924 dispersion formula and refusing to invoke any orbit he could not measure. Bohr's atom had a picture: a nucleus, an electron on a Kepler ellipse, a period. Every quantum-theoretic quantity in the old theory was defined by reference to that picture. Heisenberg made a strategic decision. Keep the structure of the correspondence rule (the classical Fourier coefficient c_{n,k} of the orbit at level n paired with a quantum quantity indexed by the transition n → n − k) and throw away the orbit."
+        },
+        {
+          "type": "p",
+          "text": "What replaced the orbit was a table, indexed by pairs (n, m) of quantum numbers, in which each entry q_{nm} was, by construction, the quantum quantity that in the large-n limit reduced to the classical (n − m)-th Fourier coefficient of the orbit at level n. Heisenberg noticed something startling. When you tried to multiply two such tables together to compute the table for a product like p · q, the order of multiplication mattered: the entry (p q)_{nm} was not equal to (q p)_{nm} in general. When he wrote to Max Born in Göttingen (Bohr's rival theoretical stronghold) in July 1925 with this observation, Born recognized within days that Heisenberg's tables were what mathematicians called matrices, and that Heisenberg's peculiar multiplication rule was ordinary matrix multiplication. Matrix mechanics was born."
+        },
+        {
+          "type": "p",
+          "text": "Six months later Erwin Schrödinger, in Zurich, wrote down a wave equation that gave the same energy spectra by a completely different route. Paul Dirac, in Cambridge, showed the following spring that the two theories were mathematically equivalent. In all of them, the correspondence principle was no longer a heuristic rule you invoked from outside the theory; it was a theorem you proved from inside. The classical limit of the new quantum mechanics recovered classical mechanics automatically, and Bohr's bridge became a load-bearing wall in the foundation of the new theory rather than an external prop for the old one."
+        },
+        {
+          "type": "p",
+          "text": "There is a Heisenberg sentence, from a 1929 Chicago lecture series he later published as The Physical Principles of the Quantum Theory, that captures what had happened. 'My efforts,' he said, 'consisted of taking Bohr's correspondence principle so completely at its word that the atomic orbits themselves became superfluous.' The old quantum theory Bohr had propped up for twelve years dissolved into the new one, and Kramers's 1919 intensity thesis and 1924 dispersion formula turned out to have been the last important results anyone would ever compute using it. The bridge had done its job. Everyone had crossed. The tool that had built it was left on the far bank."
+        }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "The correspondence principle demands that the quantum jump frequency ν_q(n → n − k) reduce to the k-th harmonic of the classical Kepler frequency ν_cl(n) in the large-n limit. For a hydrogen electron in the state n = 100, direct calculation gives ν_cl(100) = 2 R_H/(h · 100³) ≈ 6.58 × 10⁹ Hz. Which of the following is the correct application of the correspondence principle to the transition n = 100 → n = 97, and what does the numerical check tell you?",
+    "options": [
+      "The Δn = 3 quantum transition should correspond, in the large-n limit, to the third harmonic of the Kepler frequency: ν_q(100 → 97) ≈ 3 · ν_cl(100) ≈ 19.7 × 10⁹ Hz. Direct evaluation of the Rydberg formula gives ν_q(100 → 97) ≈ 20.7 × 10⁹ Hz, agreeing to within about 5 percent. The residual discrepancy shrinks as n grows further and vanishes in the strict n → ∞ limit that Bohr required.",
+      "The transition covers three levels rather than one, so its frequency is one-third of the fundamental Kepler frequency: ν_q(100 → 97) ≈ ν_cl(100)/3 ≈ 2.2 × 10⁹ Hz.",
+      "Correspondence applies only to the Δn = 1 transition (n = 100 → n = 99); the Δn = 3 transition has no classical analog, because the atom cannot execute a partial orbit and only the single-step jump has a Kepler counterpart.",
+      "The Δn = 3 quantum transition frequency should match the classical Kepler frequency evaluated at the final level, ν_q(100 → 97) ≈ ν_cl(97) ≈ 7.2 × 10⁹ Hz, because that is the orbit the electron ends up on and hence the one whose radiation Maxwell's equations would compute."
+    ],
+    "correctIndex": 0,
+    "explanation": "Compute the two numbers. ν_q(100 → 97) = (R_H/h) · (1/97² − 1/100²) = (3.29 × 10¹⁵ Hz) · (1/9409 − 1/10000) = (3.29 × 10¹⁵ Hz) · (6.28 × 10⁻⁶) ≈ 20.7 × 10⁹ Hz. 3 · ν_cl(100) = 3 · 2 · (3.29 × 10¹⁵ Hz)/10⁶ = 19.7 × 10⁹ Hz. The two agree to about 5 percent, and the ratio is 1 + O(1/n), so as n grows the discrepancy vanishes exactly as Bohr required. Option B inverts the harmonic scaling. Option C is the anti-correspondence position; it misses Kramers's 1919 point that every Fourier harmonic of the classical orbit pairs with a Δn = k quantum transition, and this pairing is exactly what turned Bohr's theory into a predictor of line intensities. Option D pairs the wrong level; correspondence at large n identifies the k-th harmonic of the orbit at the starting level n with the Δn = k transition down from it, not the orbit at the final level (which would give a slightly different answer, ~5% low here, and is not what the Fourier decomposition specifies)."
+  },
+  "suggestedNodes": [
+    {
+      "id": "selection_rules",
+      "label": "Selection rules",
+      "subtitle": "Δℓ = ±1",
+      "edgeType": "extends"
+    },
+    {
+      "id": "matrix_mechanics",
+      "label": "Matrix mechanics",
+      "subtitle": "Heisenberg 1925",
+      "edgeType": "extends"
+    },
+    {
+      "id": "rydberg_states",
+      "label": "Rydberg states",
+      "subtitle": "n ≈ 100, r ~ n²",
+      "edgeType": "applied"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-07-22T07:00:00Z",
+    "generator": "routine",
+    "estimatedReadingMinutes": 22
+  }
+}
