@@ -32,7 +32,6 @@
 # auto-suggested 2026-05-18 from uncertainty-principle
 
 # auto-suggested 2026-05-20 from bohr-atom
-Correspondence principle — Bohr's bridge that quantum predictions must reproduce classical physics in the limit of large quantum numbers, the rule he used to pin down transition rules
 
 # auto-suggested 2026-05-21 from planetary-equilibrium-temperature
 Bond albedo — the fraction of all incident sunlight a body reflects across every wavelength and direction, the number that sets how much energy a planet has to work with
@@ -279,3 +278,8 @@ Ionization energy — the energy required to remove one electron from a neutral 
 # auto-suggested 2026-07-21 from sommerfeld-model
 Fine-structure constant — α = e²/(4πε₀ℏc) ≈ 1/137.036, the dimensionless coupling of electromagnetism that Sommerfeld introduced in 1916 as a natural characterization of atomic energy scales, Feynman's "one of the greatest damn mysteries of physics," the number that sets the ratio of the electron's orbital velocity to c, ties the electron charge to Planck's constant to the speed of light, and controls every relativistic correction from Sommerfeld fine structure through the Lamb shift to the anomalous magnetic moment g_e = 2 + α/π + ... measured today to 12 decimal places
 Spin-orbit coupling — the interaction between an electron's spin magnetic moment and the magnetic field it sees in the nucleus's rest frame (H_SO = (1/(2m²c²)) (1/r)(dV/dr) L·S), the missing piece of Sommerfeld's fine-structure story that Thomas 1926 got right (with the notorious factor of ½ from Thomas precession), the reason j = ℓ ± ½ is the good quantum number in an atom, and the mechanism behind the anomalous Zeeman effect, atomic multiplet structure, and the spin-orbit torque that drives modern spintronics
+
+# auto-suggested 2026-07-22 from correspondence-principle
+Selection rules — Δℓ = ±1 and the other pattern of what atoms can and cannot emit, first extracted by Bohr and Rubinowicz in 1918 as a statement about which Fourier components of a Kepler orbit do not vanish, then rederived from quantum mechanics after 1926 by direct computation of electric-dipole matrix elements, and the reason the mercury 6³P₀ metastable state in the Franck-Hertz lesson lives milliseconds instead of nanoseconds
+Matrix mechanics — Heisenberg's 1925 Helgoland breakthrough that recast every quantum quantity as a table indexed by pairs of quantum numbers (n, m), whose non-commuting product Born and Jordan immediately recognized as ordinary matrix multiplication; the direct descendant of Kramers's 1924 dispersion formula, taken by Heisenberg so literally that the atomic orbit itself became superfluous and the old quantum theory dissolved into what Bohr had spent twelve years trying to underwrite
+Rydberg states — hydrogen and alkalis excited to n ≈ 100 with orbit radii of order 0.5 μm, orbital periods of order 15 microseconds, and lifetimes of milliseconds; the modern laboratory (Kleppner and Ducas at MIT, Haroche in Paris) where Bohr's correspondence limit is not a limit anymore but a measurement, and the platform behind atomic clocks precise to 10⁻¹⁸, Rydberg-atom quantum computing, and cavity QED tests of single-photon dynamics

@@ -565,5 +565,12 @@
     "subtitle": "ΔE ∝ α²/n²",
     "date": "2026-07-21",
     "estimatedReadingMinutes": 24
+  },
+  {
+    "slug": "2026-07-22-correspondence-principle",
+    "title": "The correspondence principle: Bohr's bridge from quantum jumps to classical orbits",
+    "subtitle": "large-n limit",
+    "date": "2026-07-22",
+    "estimatedReadingMinutes": 22
   }
 ]
