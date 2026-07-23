@@ -1,0 +1,314 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bond albedo: A_B = p × q</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); height: 36px; }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 36px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 72px; text-align: right;
+}
+.readout {
+  display: flex; flex-wrap: wrap; gap: 12px 22px;
+  padding: 10px 12px; margin-top: 10px;
+  background: var(--bg-raised); border: 1px solid var(--border);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 12px; color: var(--text);
+}
+.readout .field { display: flex; flex-direction: column; gap: 1px; }
+.readout .lbl {
+  font-family: "Source Serif 4", serif;
+  font-style: italic; font-size: 10px; color: var(--text-muted);
+}
+.readout .v { color: var(--text); }
+.readout .pin { color: var(--accent); font-weight: 600; }
+</style>
+</head>
+<body>
+<div id="viz" style="padding:14px;box-sizing:border-box;">
+  <svg id="plot" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid meet" style="width:100%;display:block;border:1px solid var(--border);background:var(--bg-raised);border-radius:3px;"></svg>
+  <div class="viz-slider-row">
+    <label>p</label>
+    <input type="range" id="pSlider" min="0.05" max="1.00" step="0.01" value="0.37" style="min-height:36px;">
+    <span class="value" id="pVal">0.37</span>
+  </div>
+  <div class="viz-slider-row">
+    <label>q</label>
+    <input type="range" id="qSlider" min="0.30" max="1.60" step="0.01" value="0.79" style="min-height:36px;">
+    <span class="value" id="qVal">0.79</span>
+  </div>
+  <div class="readout" id="readout"></div>
+  <p class="viz-caption" style="margin-top:10px;">Bond albedo panel. The x axis is geometric albedo p, the y axis is phase integral q. Diagonal contours plot lines of constant A_B = p × q. Ghost dots mark real solar-system bodies at their measured (p, q); the accent-colored dot follows the sliders. Readouts show the current A_B and the equilibrium temperature it would produce at Earth's orbit. Slide to the moon at (0.12, 0.60) and A_B lands near 0.07; slide to Enceladus at (0.99, 0.82) and A_B climbs to 0.81, higher than any other body in the solar system.</p>
+</div>
+
+<script>
+const SIGMA = 5.670374419e-8;
+const S0 = 1361;
+
+const svg = document.getElementById('plot');
+const pSlider = document.getElementById('pSlider');
+const qSlider = document.getElementById('qSlider');
+const pVal = document.getElementById('pVal');
+const qVal = document.getElementById('qVal');
+const readoutEl = document.getElementById('readout');
+
+const bodies = [
+  { name: 'Moon',      p: 0.12, q: 0.60, dx: 6, dy: -8, anchor: 'start' },
+  { name: 'Mars',      p: 0.17, q: 1.16, dx: 6, dy:  4, anchor: 'start' },
+  { name: 'Titan',     p: 0.22, q: 1.05, dx: -6, dy: -8, anchor: 'end' },
+  { name: 'Earth',     p: 0.37, q: 0.79, dx: 6, dy: 12, anchor: 'start' },
+  { name: 'Jupiter',   p: 0.54, q: 0.64, dx: 6, dy: -8, anchor: 'start' },
+  { name: 'Venus',     p: 0.67, q: 1.13, dx: -6, dy: -8, anchor: 'end' },
+  { name: 'Enceladus', p: 0.99, q: 0.82, dx: -6, dy: -8, anchor: 'end' }
+];
+
+const P_MIN = 0.00, P_MAX = 1.00;
+const Q_MIN = 0.30, Q_MAX = 1.60;
+
+const W = 600, H = 340;
+const padL = 62, padR = 24, padT = 20, padB = 52;
+const plotW = W - padL - padR;
+const plotH = H - padT - padB;
+
+function xFor(p) { return padL + ((p - P_MIN) / (P_MAX - P_MIN)) * plotW; }
+function yFor(q) { return padT + plotH - ((q - Q_MIN) / (Q_MAX - Q_MIN)) * plotH; }
+
+function ns(tag, attrs, text) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const k in attrs) el.setAttribute(k, attrs[k]);
+  if (text != null) el.textContent = text;
+  return el;
+}
+
+function drawAxes() {
+  const g = ns('g', { id: 'axes' });
+
+  g.appendChild(ns('rect', {
+    x: padL, y: padT, width: plotW, height: plotH,
+    fill: 'none', stroke: 'rgba(26,26,24,0.55)', 'stroke-width': 1
+  }));
+
+  const xTicks = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0];
+  for (const t of xTicks) {
+    const x = xFor(t);
+    g.appendChild(ns('line', {
+      x1: x, y1: padT + plotH, x2: x, y2: padT + plotH + 5,
+      stroke: 'rgba(26,26,24,0.55)', 'stroke-width': 1
+    }));
+    g.appendChild(ns('line', {
+      x1: x, y1: padT, x2: x, y2: padT + plotH,
+      stroke: 'rgba(184,172,142,0.35)', 'stroke-width': 0.5
+    }));
+    const lbl = ns('text', {
+      x: x, y: padT + plotH + 18,
+      'text-anchor': 'middle', 'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace',
+      'font-size': 11, fill: 'var(--text-muted)'
+    }, t.toFixed(1));
+    g.appendChild(lbl);
+  }
+
+  const yTicks = [0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6];
+  for (const t of yTicks) {
+    const y = yFor(t);
+    g.appendChild(ns('line', {
+      x1: padL - 5, y1: y, x2: padL, y2: y,
+      stroke: 'rgba(26,26,24,0.55)', 'stroke-width': 1
+    }));
+    g.appendChild(ns('line', {
+      x1: padL, y1: y, x2: padL + plotW, y2: y,
+      stroke: 'rgba(184,172,142,0.35)', 'stroke-width': 0.5
+    }));
+    const lbl = ns('text', {
+      x: padL - 9, y: y + 4,
+      'text-anchor': 'end', 'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace',
+      'font-size': 11, fill: 'var(--text-muted)'
+    }, t.toFixed(1));
+    g.appendChild(lbl);
+  }
+
+  const xLabel = ns('text', {
+    x: padL + plotW / 2, y: H - 12,
+    'text-anchor': 'middle', 'font-family': 'Source Serif 4, serif',
+    'font-style': 'italic', 'font-size': 12, fill: 'var(--text)'
+  }, 'p  (geometric albedo, dimensionless)');
+  g.appendChild(xLabel);
+
+  const yLabel = ns('text', {
+    x: 14, y: padT + plotH / 2,
+    'text-anchor': 'middle', 'font-family': 'Source Serif 4, serif',
+    'font-style': 'italic', 'font-size': 12, fill: 'var(--text)',
+    transform: `rotate(-90, 14, ${padT + plotH / 2})`
+  }, 'q  (phase integral, dimensionless)');
+  g.appendChild(yLabel);
+
+  svg.appendChild(g);
+}
+
+function drawContours() {
+  const g = ns('g', { id: 'contours' });
+  const levels = [0.1, 0.3, 0.5, 0.7, 0.9];
+
+  for (const A of levels) {
+    let pStart, pEnd;
+    pStart = Math.max(P_MIN, A / Q_MAX);
+    pEnd = Math.min(P_MAX, A / Q_MIN);
+    if (pStart >= pEnd) continue;
+
+    let d = '';
+    const N = 60;
+    for (let i = 0; i <= N; i++) {
+      const p = pStart + (pEnd - pStart) * i / N;
+      const q = A / p;
+      if (q < Q_MIN || q > Q_MAX) continue;
+      const cmd = d === '' ? 'M' : 'L';
+      d += `${cmd}${xFor(p).toFixed(1)},${yFor(q).toFixed(1)}`;
+    }
+    g.appendChild(ns('path', {
+      d: d, fill: 'none', stroke: 'rgba(156,58,34,0.22)',
+      'stroke-width': 1, 'stroke-dasharray': '3,3'
+    }));
+
+    let lx = null, ly = null;
+    const labelP = Math.min(pEnd - 0.02, Math.max(pStart + 0.02, 0.95));
+    const labelQ = A / labelP;
+    if (labelQ >= Q_MIN + 0.05 && labelQ <= Q_MAX - 0.05) {
+      lx = xFor(labelP);
+      ly = yFor(labelQ);
+    } else {
+      const lp = Math.min(P_MAX - 0.02, A / (Q_MIN + 0.05));
+      lx = xFor(lp);
+      ly = yFor(A / lp);
+    }
+    if (lx != null) {
+      g.appendChild(ns('rect', {
+        x: lx - 22, y: ly - 8, width: 26, height: 12,
+        fill: 'var(--bg-raised)', stroke: 'none'
+      }));
+      g.appendChild(ns('text', {
+        x: lx - 9, y: ly + 2,
+        'text-anchor': 'middle', 'font-family': 'IBM Plex Mono, SF Mono, Menlo, monospace',
+        'font-size': 10, fill: 'rgba(156,58,34,0.75)'
+      }, A.toFixed(1)));
+    }
+  }
+
+  const legend = ns('text', {
+    x: padL + plotW - 6, y: padT + 14,
+    'text-anchor': 'end', 'font-family': 'Source Serif 4, serif',
+    'font-style': 'italic', 'font-size': 11, fill: 'rgba(156,58,34,0.85)'
+  }, 'dashed: A_B = p × q');
+  svg.appendChild(legend);
+
+  svg.appendChild(g);
+}
+
+function drawBodies() {
+  const g = ns('g', { id: 'bodies' });
+  for (const b of bodies) {
+    if (b.p < P_MIN || b.p > P_MAX || b.q < Q_MIN || b.q > Q_MAX) continue;
+    const cx = xFor(b.p), cy = yFor(b.q);
+    g.appendChild(ns('circle', {
+      cx: cx, cy: cy, r: 3.5,
+      fill: 'var(--text-ghost)', stroke: 'var(--bg-raised)', 'stroke-width': 1
+    }));
+    g.appendChild(ns('text', {
+      x: cx + b.dx, y: cy + b.dy,
+      'text-anchor': b.anchor, 'font-family': 'Source Serif 4, serif',
+      'font-size': 11, fill: 'var(--text-muted)'
+    }, b.name));
+  }
+  svg.appendChild(g);
+}
+
+const currentDot = ns('circle', {
+  id: 'current', cx: xFor(0.37), cy: yFor(0.79), r: 6.5,
+  fill: 'var(--accent)', stroke: 'var(--bg-raised)', 'stroke-width': 1.5
+});
+
+function makeField(parent, label, pinned) {
+  const wrap = document.createElement('div');
+  wrap.className = 'field';
+  const lbl = document.createElement('span');
+  lbl.className = 'lbl';
+  lbl.textContent = label;
+  const val = document.createElement('span');
+  val.className = pinned ? 'pin' : 'v';
+  wrap.appendChild(lbl);
+  wrap.appendChild(val);
+  parent.appendChild(wrap);
+  return val;
+}
+
+const fP = makeField(readoutEl, 'p (geometric)');
+const fQ = makeField(readoutEl, 'q (phase int.)');
+const fA = makeField(readoutEl, 'A_B = p × q', true);
+const fT = makeField(readoutEl, 'T_eq at 1 AU', true);
+const fTag = makeField(readoutEl, 'nearest body');
+
+function nearest(p, q) {
+  let best = null, bd = Infinity;
+  for (const b of bodies) {
+    const dp = (p - b.p) / (P_MAX - P_MIN);
+    const dq = (q - b.q) / (Q_MAX - Q_MIN);
+    const d = Math.sqrt(dp * dp + dq * dq);
+    if (d < bd) { bd = d; best = b; }
+  }
+  return best && bd < 0.05 ? best.name : '—';
+}
+
+function update() {
+  const p = parseFloat(pSlider.value);
+  const q = parseFloat(qSlider.value);
+  const A = Math.min(1, p * q);
+  pVal.textContent = p.toFixed(2);
+  qVal.textContent = q.toFixed(2);
+  currentDot.setAttribute('cx', xFor(p));
+  currentDot.setAttribute('cy', yFor(Math.max(Q_MIN, Math.min(Q_MAX, q))));
+  const T = Math.pow((1 - A) * S0 / (4 * SIGMA), 0.25);
+  fP.textContent = p.toFixed(2);
+  fQ.textContent = q.toFixed(2);
+  fA.textContent = A.toFixed(3);
+  fT.textContent = T.toFixed(1) + ' K';
+  fTag.textContent = nearest(p, q);
+}
+
+drawAxes();
+drawContours();
+drawBodies();
+svg.appendChild(currentDot);
+pSlider.addEventListener('input', update);
+qSlider.addEventListener('input', update);
+update();
+</script>
+</body>
+</html>

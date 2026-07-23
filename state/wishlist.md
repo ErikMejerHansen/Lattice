@@ -34,7 +34,6 @@
 # auto-suggested 2026-05-20 from bohr-atom
 
 # auto-suggested 2026-05-21 from planetary-equilibrium-temperature
-Bond albedo — the fraction of all incident sunlight a body reflects across every wavelength and direction, the number that sets how much energy a planet has to work with
 Runaway greenhouse — Venus, the positive feedback where an IR-opaque atmosphere lifts the radiating level so high the surface beneath bakes to 737 K
 
 # auto-suggested 2026-05-22 from stellar-luminosity
@@ -283,3 +282,8 @@ Spin-orbit coupling — the interaction between an electron's spin magnetic mome
 Selection rules — Δℓ = ±1 and the other pattern of what atoms can and cannot emit, first extracted by Bohr and Rubinowicz in 1918 as a statement about which Fourier components of a Kepler orbit do not vanish, then rederived from quantum mechanics after 1926 by direct computation of electric-dipole matrix elements, and the reason the mercury 6³P₀ metastable state in the Franck-Hertz lesson lives milliseconds instead of nanoseconds
 Matrix mechanics — Heisenberg's 1925 Helgoland breakthrough that recast every quantum quantity as a table indexed by pairs of quantum numbers (n, m), whose non-commuting product Born and Jordan immediately recognized as ordinary matrix multiplication; the direct descendant of Kramers's 1924 dispersion formula, taken by Heisenberg so literally that the atomic orbit itself became superfluous and the old quantum theory dissolved into what Bohr had spent twelve years trying to underwrite
 Rydberg states — hydrogen and alkalis excited to n ≈ 100 with orbit radii of order 0.5 μm, orbital periods of order 15 microseconds, and lifetimes of milliseconds; the modern laboratory (Kleppner and Ducas at MIT, Haroche in Paris) where Bohr's correspondence limit is not a limit anymore but a measurement, and the platform behind atomic clocks precise to 10⁻¹⁸, Rydberg-atom quantum computing, and cavity QED tests of single-photon dynamics
+
+# auto-suggested 2026-07-23 from bond-albedo
+Phase integral — Russell's q = 2 ∫₀^π Φ(α) sin α dα, the shape factor that turns a body's full-phase brightness into a whole-sphere reflected fraction, with q = 3/2 for a Lambert sphere, q ≈ 0.60 for the moon's opposition-surge regolith, and q > 1 for atmospheric bodies like Venus and Titan whose cloud droplets scatter sunlight forward
+Opposition surge — the sharp brightness spike at zero phase angle from regolith-grain micro-shadows self-hiding at the sub-solar geometry, quantified by Bruce Hapke's 1963 photometric model and the reason the moon's phase integral falls below Lambert's 1.5 to about 0.6, exactly the correction Bond had to sort out from ground-based measurements in 1861
+Tidal heating — orbital-eccentricity dissipation in a body's interior, Peale-Cassen-Reynolds 1979 prediction of Io's volcanism from Jupiter tides three weeks before Voyager confirmed it, the mechanism behind Enceladus's 15.8 GW polar plume output that Cassini traced back through the Bond albedo ledger, and the heat source keeping subsurface liquid-water oceans on Europa, Enceladus, and Titan

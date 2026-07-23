@@ -1,0 +1,107 @@
+{
+  "slug": "2026-07-23-bond-albedo",
+  "title": "Bond albedo: the honest number Fourier's ledger wanted",
+  "node": {
+    "id": "bond_albedo",
+    "label": "Bond albedo",
+    "subtitle": "A_B = p × q"
+  },
+  "intro": "Two months back, Fourier's ledger for a planet's temperature took one number for granted and called it the albedo. Slot 0.30 in for Earth and the answer, 255 K, lands within thirty kelvin of truth. That neat calculation quietly hides a question no one thought to ask cleanly until an 1861 photometric survey out of Harvard forced the issue. There are two very different numbers a physicist can mean by 'the fraction reflected,' and only one of them belongs in the energy balance.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The disc that fooled every early photometer",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The eighteenth century took planetary brightness as read but did not know how to price it. Pierre Bouguer, on his way home from the French geodetic expedition to Peru, published in 1729 the first quantitative photometry, comparing a candle at known distance to the full moon and backing out a sun-moon ratio of roughly 300,000 to one (the modern figure is close to 400,000). Johann Lambert followed in 1760 with Photometria, laying down the diffuse-scattering law that still bears his name and constructing the first grease-spot photometer. Between them they gave a way to measure the flux from the sun, moon, and planets at a fixed geometry, at one specific viewing angle, and to compare them." },
+        { "type": "p", "text": "The comparison did something odd to the moon. Take its brightness at full phase, scale it up as if the whole surface were a perfectly diffusing white disc of the same radius, and back out the reflectance: the moon appears to return something like forty percent of the sunlight falling on it. Wait a lunar month and average, though, and the number collapses. The full-phase brightness is a spike, not a plateau; a few days past full the moon dims far faster than a smooth cosine of illumination angle would predict, because its dusty regolith backscatters strongly toward the sun. Averaged around the orbit the moon reflects about an eighth of what hits it, not two-fifths." },
+        { "type": "p", "text": "The gap between those two numbers is the whole problem. Fourier's planetary ledger needs the total power a body sends back over all directions and all wavelengths, not the intensity you see in one geometry. A 'moon full and center-lit' measurement, blown up by the disc-brightness convention, will overstate what fraction of the sun's warmth the body actually has to work with. Someone had to sort out the difference cleanly, and the man who did it built the second-largest refractor in the world with money raised on Boston Common." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Bond's photometer and Russell's decomposition",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "George Phillips Bond, director of the Harvard College Observatory that his father William Cranch Bond had founded in 1839 (with subscriptions raised after the Great Comet of 1843 dazzled the city), sat down in 1859 with the best photometer in America. He built a rig of graduated silvered pinholes acting as neutral-density wedges, calibrated against a known candle. He then compared the sun, moon, Jupiter, Saturn, and Venus against each other, revising numbers that had run on Bouguer's rough estimate for a hundred and thirty years. His 1861 Memoirs of the American Academy paper, 'On the light of the sun, moon, Jupiter, and Venus,' was the first that stated cleanly that the full-phase brightness ratio and the total reflected fraction were two different things." },
+        { "type": "p", "text": "A half-century later, Henry Norris Russell at Princeton put Bond's distinction on a formula. Russell's 1916 Astrophysical Journal paper 'On the albedo of the planets and their satellites' defined two quantities and named the second after Bond. The geometric albedo p is the ratio of the body's brightness at zero phase (looking straight back down the line of sunlight) to a hypothetical Lambertian disc of the same size at the same position that would reflect all incident light. The Bond albedo A_B is the total reflected power divided by the total incident power, integrated over every wavelength and every direction. Russell then wrote the identity that ties them together, using a shape factor q he called the phase integral:" },
+        { "type": "math", "tex": "A_B = p \\cdot q", "display": true, "caption": "A_B is the Bond albedo, the total fraction of incident sunlight the body reflects, integrated over every wavelength and direction. p is the geometric albedo, a one-angle full-phase brightness ratio measured against a Lambertian disc. q is Russell's phase integral, a dimensionless shape factor that folds the body's directional scattering into a single number." },
+        { "type": "p", "text": "The factor q is what turns the one-angle geometric albedo into the all-angle Bond albedo. For a body whose scattered light peaks in the forward direction relative to the sun, like a cloudy planet, q runs greater than one and A_B exceeds p. For a rough backscattering regolith, like the moon, most of the reflected light heads back the way it came and little escapes sideways; q falls below one and A_B ends up smaller than p. Slot p = 0.12 for the moon into the disc-brightness convention and you overstate the true reflectance by nearly a factor of two." }
+      ],
+      "quiz": {
+        "question": "Fourier's equilibrium-temperature formula T_eq = [S(1 − A)/(4σ)]^(1/4) treats the planet as absorbing a fraction (1 − A) of the incoming sunlight and re-radiating over its whole surface. Which albedo, geometric p or Bond A_B, belongs in that formula?",
+        "options": [
+          "The geometric albedo p, since it is the standard photometric measurement",
+          "The Bond albedo A_B, since the formula is an energy balance over all directions",
+          "Neither: the formula uses the visual albedo defined at a specific wavelength",
+          "Either works, since q is close to 1 for most solar-system bodies"
+        ],
+        "correctIndex": 1,
+        "explanation": "The energy balance behind T_eq counts total absorbed power, which requires the total reflected fraction integrated over all wavelengths and directions: that is the Bond albedo by definition. The geometric p is a full-phase snapshot at one angle; using it as A confuses one number for another. The tempting wrong answer is 'either works.' For some bodies p and A_B are close (Jupiter: p ≈ 0.54, q ≈ 0.64, A_B ≈ 0.34, off by roughly 1.6), but for the moon and Venus q drives them apart by a factor of two, and the formula fails badly at exactly the bodies where its input matters most."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The phase integral, or the moon seen sideways",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Russell's phase integral compresses the body's full brightness-versus-phase curve into a single number. Let Φ(α) be the brightness of the body at phase angle α (the sun-body-observer angle), normalized to Φ(0) = 1 at full phase. Russell's integral is twice the angle-weighted total of Φ across the whole sweep from full (α = 0) to new (α = π)." },
+        { "type": "math", "tex": "q = 2 \\int_{0}^{\\pi} \\Phi(\\alpha)\\,\\sin\\alpha \\, d\\alpha", "display": true, "caption": "q is Russell's phase integral, dimensionless. Φ(α) is the body's brightness at phase angle α, normalized to Φ(0) = 1 at full phase. α is the sun-body-observer angle, from 0 (full) to π (new). The sin α factor is the geometric weight each direction carries into a whole-sphere solid-angle integral around the sun." },
+        { "type": "p", "text": "The number the integral returns depends on the shape of Φ. For a Lambert sphere, a body scattering isotropically off every surface element, the phase function is Φ_L(α) = (1/π)[sin α + (π − α) cos α], a curve that starts at 1 at α = 0, sags smoothly through the intermediate phases, and vanishes at π. Feed Φ_L into Russell's integral and it returns q = 3/2. A perfect white Lambert sphere has p = 2/3 (the geometric-disc versus sphere-integrating-over-illumination factor), and A_B = (2/3) × (3/2) = 1, as it must be for a perfect reflector." },
+        { "type": "p", "text": "Real bodies do not scatter like Lambert. The moon's regolith is a fluff of dust grains whose micro-shadows fill in exactly when the sun sits behind the observer, producing the sharp brightness peak at zero phase called the opposition surge. The moon's Φ(α) plunges out of the α = 0 spike faster than Lambert's does, dragging its phase integral down to q ≈ 0.60 and giving A_B ≈ 0.07 despite a healthy p = 0.12. Venus is the opposite case: its sulfuric acid cloud droplets scatter sunlight strongly in the forward direction, so Φ falls off very gently, its phase integral climbs to q ≈ 1.13, and A_B ends above p, landing at 0.76 (the highest of any planet)." },
+        { "type": "viz", "src": "2026-07-23-bond-albedo.html", "height": 460, "caption": "Interactive Bond albedo panel. Two sliders set the geometric albedo p and the phase integral q; the product A_B = p × q is read off as the total reflected fraction, alongside the equilibrium temperature it produces at Earth's orbit. Ghost dots mark real solar-system bodies at their measured (p, q). Slide to the moon's (0.12, 0.60) and A_B lands near 0.07; slide to Enceladus's (0.99, 0.82) and A_B climbs to 0.81, higher than any other body in the sun." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Voyager finally closes the ledger",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "A phase integral needs data across the whole 0 to 180° sweep of phase angles, and for planets outside Earth's orbit that sweep is unreachable from the ground. Because Earth sits inside the giants' orbits, an outer planet is always seen from near the same side as the sun, so its maximum phase angle is arcsin(1/d): 12° for Jupiter at 5.2 AU, 6° for Saturn, 2° for Neptune at 30 AU. Russell's integral needs Φ(α) all the way to π, and until 1979 the missing tail had to be modeled from Rayleigh or Lambertian analogues. Voyager 1 and 2, flying past on the night side of each giant, closed the geometry by direct observation." },
+        { "type": "p", "text": "The bolometric Bond albedos then fell out of Voyager's infrared observations in a single step. The IRIS instrument (Infrared Interferometer Spectrometer, a Michelson interferometer running from 200 to 2000 cm⁻¹) measured the total infrared power leaving each giant. Stefan-Boltzmann inverted that to an effective temperature T_eff, and comparing 4σT_eff⁴ against the absorbed solar flux gave A_B. Rudolf Hanel's team at NASA Goddard published the first clean numbers in 1981 for Jupiter (A_B = 0.343 ± 0.032) and 1983 for Saturn (0.342 ± 0.030). Uranus and Neptune followed with the 1986 and 1989 flybys: 0.30 and 0.29." },
+        { "type": "p", "text": "Neptune's number is the interesting one. A Bond albedo of 0.29 at 30.1 AU predicts T_eff ≈ 47 K. Voyager 2 measured T_eff = 59.3 K. That excess corresponds to Neptune radiating about 2.6 times as much power as it absorbs from the sun, an internal heat source of order 3 × 10¹⁵ watts. Whatever that heat is (Kelvin-Helmholtz contraction from formation still leaking out, or gravitational separation of helium from hydrogen), the ledger fails to close on sunlight alone. Voyager's Bond albedo did not just check the numbers; it discovered a fact about Neptune's insides." }
+      ],
+      "quiz": {
+        "question": "Why could G. P. Bond compute the moon's Bond albedo from the ground in 1861, but the phase integrals of the giant planets had to wait for the Voyager flybys?",
+        "options": [
+          "Because Earth orbits inside the giant planets' orbits, so their phase angle from the ground never exceeds a few degrees",
+          "Because the giant planets are too faint in visible light to photometer accurately from Earth",
+          "Because their infrared emission cannot be measured through Earth's atmosphere",
+          "Because Bond's silvered-pinhole photometer worked only on terrestrial-brightness bodies"
+        ],
+        "correctIndex": 0,
+        "explanation": "From Earth the phase angle of an outer planet is bounded by arcsin(1/d), which is 12° for Jupiter and 2° for Neptune, so Russell's Φ(α) is invisible over the vast bulk of the 0 to π sweep the phase integral demands. The moon, which orbits Earth, is seen at every phase from 0 to 180° each month, and Bond could read its whole curve off from his roof. Voyager, flying past on the giants' night sides, saw them at exactly the phase angles the integral needed. The distractors are wrong in fact: Jupiter is among the brightest objects in the night sky, ground-based thermal-infrared photometry can reach the giants through the atmospheric window at 10 microns, and Bond's photometer was calibrated flexibly enough to compare the sun and Jupiter directly."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. Enceladus, the whitest thing in the sun",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The Cassini spacecraft's decade at Saturn between 2004 and 2017 finally added a body to the tables that broke every previous entry. Enceladus, the 500-kilometre moon Herschel had spotted in 1789 and no one had thought about for two centuries, turned out to be encased in fresh water ice so bright that the Bond albedo Cassini's CIRS spectrometer read off it was 0.81 ± 0.04 (Howett and colleagues at Southwest Research Institute, 2011). No planet, no moon, no small body previously catalogued had approached that number. Enceladus reflects more than four-fifths of the sunlight that lands on it." },
+        { "type": "p", "text": "Plug 0.81 into Fourier's ledger at Enceladus's distance from the sun, 9.58 AU, and the accounting predicts a bare equilibrium temperature of just under 60 K. Cassini's CIRS measured the actual disc-averaged surface temperature over the moon's day side and returned 75 K. The 15 K excess, integrated over Enceladus's 800,000 square kilometres of surface, corresponds to about 15.8 gigawatts of internal power. All of it comes from tidal dissipation as Saturn stretches and squeezes the moon on its 33-hour orbit, held eccentric by a 2:1 resonance with the outer moon Dione." },
+        { "type": "p", "text": "That tidal engine is what drives the plumes that Cassini imaged rising off the south pole in 2005, which is what sprays fresh water ice into the E-ring, which is what repaints the moon's surface every few thousand years and keeps its Bond albedo pinned near 0.81. The whole feedback closes on that one number. A darker moon would trap more of Saturn's feeble sunlight, run 20 K warmer than 75 K, and its ice chemistry would look different. A brighter one would demand more tidal heat to explain the observations. Cassini's 0.81 balanced the sun and Saturn's tides for a specific small body on the far side of the solar system, using the same accounting Bond first attempted in a Cambridge library in 1861." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A hypothetical icy moon at Enceladus's distance from the sun measures a full-phase geometric albedo of p = 0.95 and a phase integral of q = 0.90. Its disc-averaged surface temperature comes in at 68 K. Assuming a Stefan-Boltzmann balance against absorbed sunlight, is any internal heat source needed to explain the observation?",
+    "options": [
+      "No: sunlight alone at 9.58 AU produces about 68 K on a body of this reflectance",
+      "Yes: sunlight alone at 9.58 AU produces about 55 K, some 13 K short of the observation",
+      "No: the phase integral cancels out of the equilibrium calculation",
+      "Cannot be decided without knowing the moon's radius"
+    ],
+    "correctIndex": 1,
+    "explanation": "Bond albedo is A_B = p × q = 0.95 × 0.90 ≈ 0.855. Solar flux at 9.58 AU is S = 1361/9.58² ≈ 14.8 W/m². The absorbed flux per unit surface area is S(1 − A_B)/4 ≈ 14.8 × 0.145 / 4 ≈ 0.54 W/m². Setting σT⁴ equal to that gives T ≈ 55 K, some 13 K below the observed 68 K. The gap is real and needs an internal heat source, tidal in the Enceladus case, the same signature Cassini read off the real moon. The radius drops out of the balance (πR² absorbing versus 4πR² emitting), so option 4 is not needed. The tempting wrong answer is 'the phase integral cancels': it does not, and forgetting q is precisely how Bond's contemporaries mis-priced the moon by nearly a factor of two."
+  },
+  "suggestedNodes": [
+    { "id": "phase_integral", "label": "Phase integral", "subtitle": "q = ∫Φ sin α dα", "edgeType": "extends" },
+    { "id": "opposition_surge", "label": "Opposition", "subtitle": "α → 0 spike", "edgeType": "related" },
+    { "id": "tidal_heating", "label": "Tidal heating", "subtitle": "orbital squeeze", "edgeType": "applied" }
+  ],
+  "metadata": {
+    "checkInAfter": [1, 3],
+    "createdAt": "2026-07-23T07:00:00Z"
+  }
+}
