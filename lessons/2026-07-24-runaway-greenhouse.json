@@ -1,0 +1,105 @@
+{
+  "slug": "2026-07-24-runaway-greenhouse",
+  "title": "Runaway greenhouse: how Venus lost an ocean and ran the roof off its own thermostat",
+  "node": {
+    "id": "runaway_greenhouse",
+    "label": "Runaway GH",
+    "subtitle": "OLR ceiling, H₂O"
+  },
+  "intro": "Two months back, the ordinary greenhouse effect closed a 33 K gap between the airless Earth and the one we live on. Nudge the CO2, the surface warms, the atmosphere finds a new steady state a few degrees over the old one. But there is a version of the same picture where the thermostat does not click: a positive feedback loop that erases every equilibrium below cloud tops and does not stop climbing until the last drop of ocean is in the sky. Venus ran that loop about a billion years ago, and it is the reason the surface today sits at 737 K under ninety bars of carbon dioxide, and the reason it has no water.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The twin that was not",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Venus was, for most of the twentieth century, imagined as a plausible Earth. Same mass to within twenty percent, same radius to within five, same slot in the inner solar system. Its permanent cloud cover let almost every guess about the surface stand: Svante Arrhenius in 1918 pictured a warm, dripping jungle; the astronomer Fred Hoyle in 1955 wrote of a global ocean of hydrocarbon; Carl Sagan, then a graduate student, was one of the few to suspect something else entirely. The name for the second planet was still 'Earth's twin' and the schoolroom picture was still tropical." },
+        { "type": "p", "text": "The measurement that broke that picture came at 3-centimetre wavelengths. Cornell Mayer, Timothy McCullough, and Russell Sloanaker at the Naval Research Laboratory in Washington pointed a 15-metre dish at Venus in 1956 and read a microwave brightness temperature near 600 K, hot enough to melt lead. The number was so incongruous that most planetary astronomers explained it away for six years, blaming a hypothetical hot ionosphere or non-thermal emission. Mariner 2, coasting past Venus in December 1962, ended the debate: its radiometers scanned the disc and confirmed the emission was thermal, and the surface was about 500 °C." },
+        { "type": "p", "text": "Sagan had already published, in his 1960 PhD thesis and a 1962 Icarus paper, the mechanism that fit. Venus's ninety-bar atmosphere is mostly CO2, and CO2 is a strong absorber of the infrared the ground radiates. What the Sagan calculation supplied was arithmetic for the greenhouse effect at the extreme end. What it did not answer was why. Earth and Venus formed in adjacent lots of the same protoplanetary nebula, from similar rock and similar volatiles. Earth kept its ocean and settled at 288 K. Venus lost its ocean and settled at 737 K. Doubling the CO2 does not do that. Something had run away." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. The loop water vapor tries to close",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The gas that matters for the runaway is not CO2 at all. It is water vapor, and the reason is that its abundance in the atmosphere is a strong function of temperature. Rudolf Clausius and Benoit Clapeyron worked out the relation between saturation vapor pressure and temperature in the 1830s and 1840s, and the modern statement is exponential. Here P_sat is the saturation vapor pressure of water above liquid water at temperature T, L is the specific latent heat of vaporization (about 2.5 × 10⁶ J/kg for water), R_v is the specific gas constant for water vapor (461 J/(kg·K)), and T is the absolute temperature." },
+        { "type": "math", "tex": "\\frac{dP_{\\text{sat}}}{dT} = \\frac{L\\,P_{\\text{sat}}}{R_v\\,T^{2}}", "display": true, "caption": "P_sat is the saturation vapor pressure of water, in pascals. T is the absolute temperature, in kelvin. L is the specific latent heat of vaporization, about 2.5 × 10⁶ J/kg. R_v is the specific gas constant for water vapor, 461 J/(kg·K). Read: the fractional rate at which the atmosphere's water-holding capacity grows with temperature is L/(R_v T²), and at 288 K that comes out to about 6.5 percent per kelvin." },
+        { "type": "p", "text": "The number 6.5 percent per kelvin is the whole feedback in one figure. Warm the atmosphere by one degree and it can hold seven percent more water vapor. Water vapor is a greenhouse gas of its own, contributing roughly half of Earth's present 33 K greenhouse warming. So the additional water vapor from that first degree of warming, if it hangs around, drives further warming, which admits still more vapor, which drives still more warming, in a chain that only terminates when either the added trapping saturates or the water runs out." },
+        { "type": "p", "text": "On Earth today the loop converges. The feedback amplifies an initial forcing by a factor of two or so, not to infinity. This is because at present-day temperatures, each round of warming produces less water-vapor greenhouse effect than the round before, and the geometric sum of a shrinking chain adds up to a finite number. The convergence is guaranteed if and only if the loop gain, the fraction of a temperature perturbation that comes back as further temperature perturbation, is less than one. The unsettling possibility is that on some other planet, or on this planet with a hotter sun, the gain crosses one and the geometric series diverges. There is no new equilibrium below the point where the water is used up." }
+      ],
+      "quiz": {
+        "question": "The water vapor feedback amplifies an initial 1 K warming of Earth's surface into roughly 2 K of total warming, but on early Venus the same mechanism ran away. Which condition is the criterion for the feedback to converge versus diverge?",
+        "options": [
+          "It converges as long as the atmosphere has a cold trap that condenses vapor before it reaches the top",
+          "It converges as long as the loop gain, the fraction of each temperature perturbation returned by the loop, is strictly less than 1",
+          "It converges as long as CO2 remains the dominant greenhouse gas by mass",
+          "It converges as long as the ocean holds more water than the atmosphere can vaporize"
+        ],
+        "correctIndex": 1,
+        "explanation": "Follow a 1 K nudge through the loop and it produces a return warming of g K, which itself produces g² K, and so on. The total is 1 + g + g² + ... = 1/(1 − g), finite if and only if g < 1 and unbounded if g ≥ 1. On present Earth g ≈ 0.5, so the amplifier stays modest. Under a stronger sun or a warmer starting point, g crosses 1 and the sum diverges: that is the runaway. The tempting wrong answer is the cold trap. A cold trap does hold Earth's water in the troposphere today, but its existence is a consequence of g < 1 producing a temperature profile that has a cold point aloft, not the cause of convergence. Once the runaway sets in, the temperature profile bends and the cold trap disappears."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Simpson's ceiling on outgoing heat",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The gain crossing one is what makes the runaway thinkable. What makes it inevitable, once crossed, is a ceiling. George Clarke Simpson, the head of the British Meteorological Office and Scott's meteorologist on the Terra Nova expedition, published a 1927 paper on atmospheric radiation with a curious result buried in it. If you imagined an atmosphere saturated with water vapor at every level (Earth's tropics come close), then no matter how hot you made the surface, the total infrared power leaving the top of the atmosphere could not exceed a specific number. Simpson found the ceiling by hand-calculation with a slide rule at about 280 W/m². The result was regarded at the time as a mathematical oddity." },
+        { "type": "p", "text": "Andrew Ingersoll at Caltech reopened Simpson's paper in 1969, this time reading it as a statement about Venus. Ingersoll's argument, in a single sentence: if the absorbed solar flux on a planet exceeds the Simpson ceiling on outgoing radiation, then no steady-state temperature at all is possible below the point where the ocean fully evaporates. Every warmer temperature emits the same limited number of watts per square metre, and the planet keeps accumulating energy until the water is gone. That is the runaway greenhouse. The name and the mechanism have Ingersoll's fingerprints, but the ceiling is Simpson's, sharpened in the 1990s by Masaki Nakajima, Yoshi-Yuki Hayashi, and Yutaka Abe at the University of Tokyo. In their formulation, the modern best value for a pure-H2O atmosphere is F_lim ≈ 282 W/m²." },
+        { "type": "math", "tex": "F_{\\text{lim}} \\approx 282 \\text{ W/m}^{2}", "display": true, "caption": "F_lim is the Simpson-Nakajima ceiling on the outgoing longwave radiation (OLR) from a saturated water-vapor atmosphere. It is set by the temperature at which the atmosphere becomes optically thick everywhere except a narrow window, and it is independent of the surface temperature below. Once absorbed solar flux exceeds F_lim, the planet has no equilibrium along the moist branch." },
+        { "type": "viz", "src": "2026-07-24-runaway-greenhouse.html", "height": 460, "caption": "Interactive Simpson-Nakajima diagram. The rising curve is OLR(T_surface) for a saturated water-vapor atmosphere, plateauing at F_lim ≈ 282 W/m². The horizontal slider sets the absorbed solar flux F_abs. Where the two cross, a steady surface temperature exists. Push F_abs above the ceiling and the intersection disappears: the planet is committed to a runaway. Ghost markers show Earth today (F_abs ≈ 239 W/m², well below the ceiling) and a hypothetical wet Venus under the modern sun with Earth-like albedo (F_abs ≈ 305 W/m², above the ceiling: the configuration whose runaway erased Venus's ocean)." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Why the ceiling exists at all",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The Simpson ceiling can look like sleight of hand, so it is worth walking through why it must exist. Outgoing infrared from any atmosphere escapes to space from an effective altitude where the optical depth from the top down reaches about unity. Below that level the atmosphere absorbs whatever the ground emits and re-emits it in every direction, upward emission alternating with downward; above that level the gas is too thin to catch what passes. Call this the radiating level, and call its temperature T_rad. Then, to reasonable accuracy, OLR ≈ σT_rad⁴." },
+        { "type": "p", "text": "In a saturated atmosphere the water vapor content at every altitude is fixed by the local temperature through Clausius-Clapeyron, and the atmosphere's temperature-pressure profile is fixed by the moist adiabatic lapse rate (the temperature drop of a rising parcel that stays saturated as it expands). Both are set by thermodynamics, neither by how hot the ground is. Raise the surface temperature and the atmosphere gets deeper, but it climbs along the same fixed T(P) curve. The pressure at which the atmosphere reaches optical depth one from above is pushed higher, but the temperature at that pressure follows the same curve toward the same asymptotic value at low pressure. T_rad approaches a limit; σT_rad⁴ approaches F_lim." },
+        { "type": "p", "text": "This is the physics that distinguishes the water runaway from just piling up more CO2. Add enough CO2 to a dry atmosphere and the ground warms without bound, because CO2 alone leaves an 8-to-13-micron window through which the hot ground can radiate straight to space. Water, once saturated everywhere, closes that window. It absorbs in the atmospheric window that CO2 leaves open, and it does so more strongly the wetter the column gets. The ceiling is not a property of any single gas; it is a property of a condensable greenhouse gas whose atmospheric abundance is thermostatted to temperature by its own phase diagram. That is a description of water, on a planet warm enough to keep the oceans nowhere but the sky." }
+      ],
+      "quiz": {
+        "question": "The Simpson-Nakajima ceiling F_lim ≈ 282 W/m² is a property of a saturated water-vapor atmosphere. Suppose you performed the equivalent calculation for a dry atmosphere of pure CO2 (imagine simply dialing up its column mass without changing anything else). What would you find?",
+        "options": [
+          "The same ceiling near 282 W/m², since it is a general result about greenhouse gases",
+          "A somewhat lower ceiling, since CO2 is a stronger absorber than water vapor",
+          "No ceiling: OLR keeps rising with surface temperature, and the atmosphere can be dialed up indefinitely without a runaway",
+          "A slightly higher ceiling, because CO2 does not condense on warm planets"
+        ],
+        "correctIndex": 2,
+        "explanation": "The ceiling is not about how strong an absorber the gas is. It comes from a condensable gas whose abundance is thermostatted to temperature by its own phase equilibrium (Clausius-Clapeyron). CO2, being non-condensing at the temperatures of interest, has no such thermostat: adding column mass adds column mass, and the radiating level's temperature does not asymptote. The 8-to-13-micron window that CO2 leaves open also lets hot-ground infrared escape essentially unhindered, so OLR keeps tracking σT_surface⁴ upward. The tempting wrong answer is (1): the runaway is often described as a general property of greenhouse gases, but it is specifically a property of the water-condensation thermostat and would not be reproduced by any amount of CO2 alone."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The isotope in the atmosphere that was the ocean",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "If Venus once ran a Simpson-Nakajima runaway, then somewhere in the record its ocean should have left a fingerprint. Once the water is aloft, and there is no cold trap left to keep it in the troposphere, it climbs to altitudes where solar ultraviolet is strong enough to photodissociate the molecule: H2O + hν → H + OH. Hydrogen is the lightest gas in the universe. At Venus's exobase temperature it moves fast enough to escape to space by simple thermal (Jeans) escape, and, under intense EUV flux from the young sun, by hydrodynamic outflow at rates high enough to strip an ocean's worth in a few hundred million years. Oxygen, sixteen times heavier, is left behind, mostly re-buried in oxidized crust and iron sulphides." },
+        { "type": "p", "text": "The fingerprint is a hydrogen isotope. Ordinary hydrogen (protium, mass 1) escapes more readily than deuterium (mass 2), so as the water inventory dwindles, the residue enriches in the heavy isotope. Pioneer Venus, in December 1978, dropped four probes into the Venusian atmosphere; on the descent, the Large Probe's neutral mass spectrometer measured the D/H ratio in atmospheric water vapor and found it 100 to 150 times terrestrial. Thomas Donahue and colleagues published the number in Science in 1982 and read it exactly as the runaway theory predicted: Venus once had at least as much water as Earth, ran a Simpson-Nakajima runaway, lost the ordinary hydrogen out the top of the atmosphere over hundreds of megayears, and left behind an isotope-enriched trace of what used to be an ocean. The 737 K surface today is what remains of that transient, cooled and stabilized once the water was gone, held up by the CO2 blanket that no longer had a runaway to sustain. The number stamped into Venus's D/H is the fossil of an ocean that boiled off into the sky and never came back down." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "A hypothetical rocky planet in an F-type star's habitable zone receives an absorbed solar flux of F_abs = 310 W/m² averaged over its disc, and starts with an Earth-mass ocean. Using the Simpson-Nakajima picture (F_lim ≈ 282 W/m² for a saturated water-vapor atmosphere), what is the likely long-term fate?",
+    "options": [
+      "It settles at an equilibrium hotter than Earth but cooler than Venus, since 310 W/m² is only modestly above 282",
+      "It undergoes a runaway greenhouse: no steady state exists on the moist branch, the surface heats until the ocean fully vaporizes, and the water is subsequently lost to space by photodissociation and hydrogen escape",
+      "It stays cold, since the ocean's high heat capacity buffers any warming past the Simpson ceiling for billions of years",
+      "It equilibrates once its atmosphere collapses under gravity, at which point the greenhouse effect shuts off"
+    ],
+    "correctIndex": 1,
+    "explanation": "The runaway is a binary condition, not a continuous one. Because F_abs > F_lim, no equilibrium exists along the moist branch: at every finite temperature the atmosphere emits at most 282 W/m² but absorbs 310, so it keeps heating until the ocean is gone. The tempting wrong answer is option (1): the reasoning that '310 is only a little above 282, so warming is only a little worse than Earth' misses the topology of the OLR curve, which is flat above the Simpson knee. Once you cross the ceiling, there is no partial-runaway equilibrium sitting just past it; the next stable state is the desiccated hot end. Option (3) confuses heat capacity with an OLR ceiling; the ocean does buy time (of order 10⁸ years) but does not restore equilibrium."
+  },
+  "suggestedNodes": [
+    { "id": "simpson_nakajima_limit", "label": "Simpson limit", "subtitle": "F_lim ≈ 282 W/m²", "edgeType": "extends" },
+    { "id": "moist_adiabat", "label": "Moist adiabat", "subtitle": "wet lapse rate", "edgeType": "related" },
+    { "id": "hydrogen_escape", "label": "H escape", "subtitle": "Jeans + hydro", "edgeType": "applied" }
+  ],
+  "metadata": {
+    "checkInAfter": [1, 3],
+    "createdAt": "2026-07-24T07:00:00Z"
+  }
+}

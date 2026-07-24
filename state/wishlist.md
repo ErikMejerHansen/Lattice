@@ -34,7 +34,6 @@
 # auto-suggested 2026-05-20 from bohr-atom
 
 # auto-suggested 2026-05-21 from planetary-equilibrium-temperature
-Runaway greenhouse — Venus, the positive feedback where an IR-opaque atmosphere lifts the radiating level so high the surface beneath bakes to 737 K
 
 # auto-suggested 2026-05-22 from stellar-luminosity
 Mass-luminosity relation — L ∝ M^3.5, Eddington's discovery that brightness climbs far steeper than mass, the reason heavy stars are profligate and short-lived
@@ -287,3 +286,8 @@ Rydberg states — hydrogen and alkalis excited to n ≈ 100 with orbit radii of
 Phase integral — Russell's q = 2 ∫₀^π Φ(α) sin α dα, the shape factor that turns a body's full-phase brightness into a whole-sphere reflected fraction, with q = 3/2 for a Lambert sphere, q ≈ 0.60 for the moon's opposition-surge regolith, and q > 1 for atmospheric bodies like Venus and Titan whose cloud droplets scatter sunlight forward
 Opposition surge — the sharp brightness spike at zero phase angle from regolith-grain micro-shadows self-hiding at the sub-solar geometry, quantified by Bruce Hapke's 1963 photometric model and the reason the moon's phase integral falls below Lambert's 1.5 to about 0.6, exactly the correction Bond had to sort out from ground-based measurements in 1861
 Tidal heating — orbital-eccentricity dissipation in a body's interior, Peale-Cassen-Reynolds 1979 prediction of Io's volcanism from Jupiter tides three weeks before Voyager confirmed it, the mechanism behind Enceladus's 15.8 GW polar plume output that Cassini traced back through the Bond albedo ledger, and the heat source keeping subsurface liquid-water oceans on Europa, Enceladus, and Titan
+
+# auto-suggested 2026-07-24 from runaway-greenhouse
+Simpson-Nakajima limit — the ~282 W/m² ceiling on outgoing longwave radiation from a saturated water-vapor atmosphere, Simpson 1927's slide-rule result reopened as a planetary bifurcation by Ingersoll 1969 and Nakajima-Hayashi-Abe 1992, the threshold above which no moist equilibrium exists and a wet planet commits to full ocean evaporation
+Moist adiabat — the saturated pseudoadiabatic lapse rate that governs a wet convecting atmosphere, roughly 5 K/km near the surface (against 9.8 K/km dry), the profile whose fixed T(P) curve is what caps the radiating temperature and gives the Simpson-Nakajima runaway its ceiling
+Hydrogen escape — thermal (Jeans) and hydrodynamic outflow of H from a planetary exobase, the mechanism by which post-runaway Venus lost its ocean's hydrogen to space over hundreds of megayears and left its D/H ratio 150 times terrestrial, also the same escape channel Earth's water loses to space at a slow 3 kg/s today
