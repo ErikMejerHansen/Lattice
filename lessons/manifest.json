@@ -572,5 +572,12 @@
     "subtitle": "large-n limit",
     "date": "2026-07-22",
     "estimatedReadingMinutes": 22
+  },
+  {
+    "slug": "2026-07-25-mass-luminosity-relation",
+    "title": "Mass and luminosity: Eddington's steepest curve, and the reason big stars die young",
+    "subtitle": "L ∝ M^3.5",
+    "date": "2026-07-25",
+    "estimatedReadingMinutes": 14
   }
 ]

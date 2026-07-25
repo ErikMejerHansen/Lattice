@@ -1,0 +1,112 @@
+{
+  "slug": "2026-07-25-mass-luminosity-relation",
+  "title": "Mass and luminosity: Eddington's steepest curve, and the reason big stars die young",
+  "node": {
+    "id": "mass_luminosity",
+    "label": "Mass-Lum",
+    "subtitle": "L ∝ M^3.5"
+  },
+  "intro": "By the mid 1920s two things about stars had been measured that nobody had ever thought to compare. Bessel's parallax and its successors had turned apparent brightnesses into absolute luminosities. Wilhelm Struve and his generation of double-star observers had turned orbital periods into masses. When Arthur Eddington finally set the two catalogues side by side in 1924, he did not find luminosity climbing gently with mass, or even linearly. He found it climbing like the fourth power. A star ten times the Sun's mass shines ten thousand times as bright. That single slope, and the price it exacts, decides the lives of most of the stars in the sky.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. Weighing stars, one at a time",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "For most of astronomy's history, the mass of a star was a hopeless quantity. You could see brightness; you could measure position; you could even, after Bessel's 1838 parallax of 61 Cygni, work out distance and therefore true luminosity. But mass sits inside the star and refuses to advertise itself. The only handle astronomers had was gravity, and the only place gravity showed itself was in stars that orbited another star." },
+        { "type": "p", "text": "That work belongs largely to Wilhelm Struve, director of the Pulkovo Observatory outside St. Petersburg in the 1830s and 1840s, and to his son Otto after him. The Struves published catalogues of thousands of visual binaries: pairs of stars close enough on the sky to be gravitationally bound, with periods slow enough (decades to centuries) that a careful observer could watch the ellipse unfold. Kepler's third law then does the arithmetic. Here P is the orbital period in years, a is the semimajor axis of the relative orbit in astronomical units, and M_1 + M_2 is the total mass of the two stars in solar masses." },
+        { "type": "math", "tex": "M_{1} + M_{2} = \\frac{a^{3}}{P^{2}}", "display": true, "caption": "M_1 and M_2 are the two stellar masses, in units of the Sun's mass. a is the semimajor axis of the mutual orbit, in astronomical units (one AU is the average Earth-Sun distance). P is the orbital period, in years. In these units Kepler's third law loses every constant and reads as it does here. Add a measurement of the ratio of each star's distance from the centre of mass (which the sky gives directly) and the individual masses M_1 and M_2 fall out separately." },
+        { "type": "p", "text": "By 1920 a few hundred stars had reliable masses this way, from the red dwarfs of half a solar mass up through Sirius A at two, and out to a handful of blue giants near ten. It was Eddington's idea, not the Struves', to plot each of those masses against the luminosity that other methods had already delivered, and to see what came out." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Eddington's plot, and its power-law surprise",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The plot that Arthur Eddington (a Cambridge astrophysicist who had spent the previous decade turning the newborn theory of general relativity into a working tool for stars) published in his 1924 Monthly Notices paper The Mass-Luminosity Relation is a scatter of about forty binary-star points on log-log axes. What is striking about it, and what he immediately said was striking about it, is that the points do not scatter. They fall along a straight line with a slope near four, spanning almost five decades in luminosity for a range in mass of roughly a factor of thirty." },
+        { "type": "p", "text": "A straight line on log-log axes is a power law. The relation Eddington read off is written in modern form as follows. L is the star's luminosity, the total power it radiates from its surface, measured in units of the Sun's luminosity (L_☉ ≈ 3.83 × 10²⁶ W). M is the star's mass, in units of the Sun's mass (M_☉ ≈ 2.0 × 10³⁰ kg). The exponent 3.5 is a smoothed average across the mass range; the truest modern fits give an exponent closer to 4 for a solar-type star in the middle of the range and a shallower slope near 2 for very massive stars, but 3.5 is the number to remember." },
+        { "type": "math", "tex": "\\frac{L}{L_{\\odot}} \\approx \\left(\\frac{M}{M_{\\odot}}\\right)^{3.5}", "display": true, "caption": "L is the star's luminosity, the total electromagnetic power leaving its surface, in units of the Sun's luminosity L_☉ (about 3.83 × 10²⁶ W). M is the star's mass, in units of the Sun's mass M_☉ (about 2.0 × 10³⁰ kg). The exponent 3.5 is the rough overall slope of the empirical line Eddington plotted in 1924, holding to within a factor of two across the full main-sequence range from about 0.5 M_☉ to about 30 M_☉." },
+        { "type": "p", "text": "A slope of 3.5 is astonishing. It says that doubling a star's mass makes it eleven times as bright (2 to the 3.5 is about 11.3), and that a 10 M_☉ star radiates 10^3.5 ≈ 3200 times as much power as the Sun. The Struves, weighing binaries painstakingly one at a time, could not have suspected this in advance. Nothing else in stellar astronomy scales this steeply. Radius grows roughly as M^0.7, surface temperature roughly as M^0.5, and both are far shallower than luminosity. If a star were a lump of matter obeying an ordinary heat-loss law (something like Stefan-Boltzmann across a fixed-radius sphere), you would expect luminosity to grow like M^2 at most. The observed L ∝ M^3.5 was a signal that something in the star's interior physics was doing much more than heat loss." }
+      ],
+      "quiz": {
+        "question": "Using L/L_☉ ≈ (M/M_☉)^3.5, roughly how much more luminous is a 5 M_☉ main-sequence star than the Sun?",
+        "options": [
+          "About 5 times more luminous",
+          "About 25 times more luminous",
+          "About 280 times more luminous",
+          "About 3000 times more luminous"
+        ],
+        "correctIndex": 2,
+        "explanation": "Plug the numbers in: 5^3.5 = 5^3 · 5^0.5 = 125 · 2.236 ≈ 280. So a 5 M_☉ star pours out about 280 solar luminosities. The tempting wrong answers each pick a different exponent to see if the reader is holding onto the right one. Answer 5 would be right if luminosity were proportional to mass (an exponent of 1). Answer 25 uses an exponent of 2, close to a black-body Stefan-Boltzmann guess at fixed radius. Answer 3000 is the answer for a 10 M_☉ star (10^3.5 ≈ 3200) and shows how quickly the power law bites: doubling the mass again multiplies the brightness by another factor of about 11, not by another factor of about 2 as a naive linear scaling would give."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. Why so steep: radiation trying to escape",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Eddington did not just plot the relation; he explained it. The star's inside, he argued in his 1926 book The Internal Constitution of the Stars, is not a lump but a gaseous ball in hydrostatic equilibrium: at every depth, the outward pressure of the gas (and, at high mass, of the radiation itself) balances the inward pull of gravity from all the mass beneath. Heat generated in the core has to get out somewhere, and Eddington showed that for a star of solar mass or more, the dominant transport mechanism is not convection but radiative diffusion: photons random-walking outward through opaque hot gas, losing a little energy at each scattering." },
+        { "type": "p", "text": "In hydrostatic balance, the central temperature T_c of a star scales roughly as M/R (more mass squeezes harder, more radius spreads the squeeze). The luminosity carried by radiative diffusion is proportional to how strong the temperature gradient is at each depth and inversely proportional to how opaque the gas is (the mean opacity κ, in m²/kg, is a material property of the plasma). Feed the hydrostatic scalings into the radiative-diffusion equation and (through algebra that Eddington did carefully but that a reader can carry out by inspection of the exponents) the luminosity comes out proportional to a specific combination of M, R, and κ." },
+        { "type": "math", "tex": "L \\;\\propto\\; \\frac{M^{3}}{\\kappa}", "display": true, "caption": "L is the star's luminosity, the radiative energy leaving its surface per second. M is the star's mass. κ is the mean opacity of the stellar plasma, in m²/kg, a measure of how effectively each kilogram of matter absorbs or scatters the passing radiation. Read: for a fixed opacity, luminosity should climb as the cube of the mass. The radius R has dropped out entirely, because the temperature gradient scales as one over the radius while the volume through which radiation flows scales as radius cubed and these combine into an R-independent expression." },
+        { "type": "viz", "src": "2026-07-25-mass-luminosity-relation.html", "height": 480, "caption": "Log-log plot of luminosity against mass. Drag the mass slider from 0.1 to 100 solar masses and watch the star slide along the empirical Eddington curve, with the resulting luminosity and main-sequence lifetime read off in solar units." },
+        { "type": "p", "text": "Eddington's L ∝ M^3 is not quite the observed L ∝ M^3.5, and the extra half-power comes from the mass-dependence of the opacity κ itself, which grows slowly with T (Kramers's law, a semi-empirical opacity fit worked out by the Dutch astronomer Hendrik Kramers in 1923 as κ ∝ ρ T^(-7/2)) and pushes the effective slope a little steeper. But the essential answer is Eddington's: the steepness of the mass-luminosity relation is set by how hard it is for photons to leak out of a stellar interior, and adding mass makes the interior so much hotter, and the leak so much faster, that a small increase in weight produces a huge increase in brightness." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. The bill: main-sequence lifetime",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "A star is a nuclear furnace with a fixed fuel supply. Each kilogram of hydrogen fused to helium releases about 0.7 percent of its rest energy as heat (mc² again, with the 0.007 mass defect that Aston measured for helium in 1920). The total energy a star of mass M has available on the main sequence is therefore proportional to M, and the rate at which it spends that energy is L. Life expectancy is the ratio, and the mass-luminosity relation immediately implies a specific scaling for it." },
+        { "type": "p", "text": "Substituting L ∝ M^3.5 gives the main-sequence lifetime τ_MS as a simple power law in mass, calibrated to the Sun's own bookkeeping. The Sun's main-sequence life is about 10 billion years (τ_☉ ≈ 10¹⁰ yr), set by the mass of hydrogen in its core, its central temperature, and its 4 × 10²⁶ W luminosity." },
+        { "type": "math", "tex": "\\tau_{\\text{MS}} \\;\\approx\\; \\tau_{\\odot} \\left(\\frac{M}{M_{\\odot}}\\right)^{-2.5}", "display": true, "caption": "τ_MS is the star's main-sequence lifetime, the time it spends fusing hydrogen to helium in its core before it runs out and swells into a red giant. τ_☉ is the corresponding Sun's lifetime, about 10¹⁰ years. M is the star's mass in solar units. The exponent −2.5 comes directly from dividing the available fuel (proportional to M) by the burn rate (proportional to L ∝ M^3.5): fuel over burn rate is proportional to M^(1 − 3.5) = M^(−2.5)." },
+        { "type": "p", "text": "The number is savage. A 10 M_☉ star (a hot blue B-type) lives 10^(−2.5) ≈ 0.003 solar lifetimes, or about 30 million years. A 30 M_☉ O-type star lives roughly 2 million years and is dead before a single galactic rotation completes. On the other end, a 0.3 M_☉ red dwarf lives about 10^(2.5) ≈ 300 solar lifetimes, or three trillion years, which is more than two hundred times the current age of the universe. Every red dwarf ever formed is still burning. Every high-mass star born with the galaxy is long gone. The main-sequence stars visible in the sky today are heavily biased toward the long-lived low-mass end simply because the profligate ones burned out." }
+      ],
+      "quiz": {
+        "question": "A star of 4 M_☉ sits on the upper main sequence. Using L ∝ M^3.5 and τ_MS ∝ M^(-2.5), roughly how long is its main-sequence lifetime compared to the Sun's 10 billion years?",
+        "options": [
+          "About 40 billion years",
+          "About 2.5 billion years",
+          "About 300 million years",
+          "About 30 million years"
+        ],
+        "correctIndex": 2,
+        "explanation": "The scaling is τ_MS ∝ M^(-2.5). For M = 4 M_☉ that gives 4^(-2.5) = 1 / 4^2.5 = 1 / (16 · 2) = 1 / 32. Multiply the Sun's 10 billion years by 1/32 and get about 300 million years. Answer A inverts the scaling into τ ∝ M^(+2.5), a common trap. Answer B uses the shallower 1/M scaling that would follow from L ∝ M^2 rather than M^3.5. Answer D would be right for a 10 M_☉ star, not a 4 M_☉ one. The point is not the exact number but the pattern: quadruple the Sun's mass and the lifetime collapses by a factor of thirty."
+      }
+    },
+    {
+      "id": "s5",
+      "heading": "5. The Eddington limit at the top",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The steep climb of L with M cannot continue forever, and Eddington himself, in the same 1926 book, worked out where it must stop. As luminosity climbs past a few thousand solar luminosities, the outward push of radiation itself, that is, the force of photons scattering off free electrons on their way out, becomes a substantial fraction of the inward pull of gravity. There must be a mass at which the radiative push exactly cancels gravity in the star's outer envelope. Above that mass, the star cannot hold on to its outer layers: they are literally blown into space by their own light." },
+        { "type": "p", "text": "The balance Eddington wrote down equates the gravitational acceleration g_grav at the surface with the radiative acceleration g_rad delivered by the outgoing photon flux. Here G is Newton's gravitational constant, M is the star's mass, and R its radius. κ is the electron-scattering opacity per unit mass (about 0.034 m²/kg for a fully ionized hydrogen plasma, a number set by the Thomson cross-section for a photon scattering off a single free electron divided by the mass of a proton). L is the star's luminosity, and c is the speed of light. The R² cancels between the two sides." },
+        { "type": "math", "tex": "\\frac{G M}{R^{2}} \\;=\\; \\frac{\\kappa L}{4\\pi R^{2} c}", "display": true, "caption": "The left-hand side is the gravitational acceleration g_grav at the surface of the star, with G being Newton's constant (6.67 × 10⁻¹¹ N·m²/kg²), M the star's mass, and R its radius. The right-hand side is the radiative acceleration g_rad on each free electron in the surface layer, given by the electron-scattering opacity κ (about 0.034 m²/kg for fully ionized hydrogen) times the local radiative flux L / (4πR²), divided by c to convert flux into force per unit mass. Set the two equal and R² cancels: the resulting equation involves M and L alone." },
+        { "type": "math", "tex": "L_{\\text{Edd}} \\;=\\; \\frac{4\\pi G c}{\\kappa}\\,M \\;\\approx\\; 3.2 \\times 10^{4} \\left(\\frac{M}{M_{\\odot}}\\right) L_{\\odot}", "display": true, "caption": "L_Edd is the Eddington luminosity, the maximum luminosity a star of mass M can sustain before radiation pressure alone would blow its outer envelope into space. G is Newton's constant, c is the speed of light, κ is the electron-scattering opacity, and M is the mass. The numerical coefficient 3.2 × 10⁴ solar luminosities per solar mass comes from plugging in κ = 0.034 m²/kg. Notice L_Edd is linear in M, while the empirical mass-luminosity relation makes L climb as M^3.5. The two curves must cross." },
+        { "type": "p", "text": "Where they cross is the upper limit on stellar mass. Setting M^3.5 = 3.2 × 10⁴ M gives M^2.5 ≈ 3.2 × 10⁴, so M ≈ 10⁴/²·⁵ ≈ 60 M_☉ as a first estimate. Realistic stellar models (Krzysztof Belczynski's group at the University of Warsaw and others in the 2010s) push the true upper bound a little higher, to about 150 M_☉, because a very massive star's opacity is enhanced above pure electron scattering and its interior structure runs cooler than the crude estimate assumes. But the physical picture is Eddington's: above roughly a hundred solar masses, a star born from a collapsing cloud cannot survive its own luminosity. The most massive object known in the Milky Way (R136a1 in the Large Magellanic Cloud, weighed by the Very Large Telescope at ESO's Paranal site in the 2010s) sits at about 200 M_☉ and is visibly shedding several 10⁻⁴ solar masses per year in a radiation-driven wind, exactly the loss Eddington predicted would happen at the top of his own steep curve." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "Antares, a red supergiant, has a mass of about 12 M_☉. Using the mass-luminosity relation and the main-sequence lifetime scaling, what is the most consistent story about Antares?",
+    "options": [
+      "It shines with about 12 solar luminosities and has a main-sequence lifetime of about 100 billion years, so it is a good candidate for a very long-lived stable star",
+      "It shines with about 6000 solar luminosities and has a main-sequence lifetime of about 20 million years, so it is a young star that formed recently in cosmic terms",
+      "It shines with about 200 solar luminosities and has a main-sequence lifetime of about 1 billion years, well below the Eddington limit",
+      "It shines with about 3 × 10⁶ solar luminosities, which is above its own Eddington limit and so it should be blowing itself apart"
+    ],
+    "correctIndex": 1,
+    "explanation": "For M = 12 M_☉: L ∝ M^3.5 gives 12^3.5 = 12^3 · 12^0.5 = 1728 · 3.46 ≈ 6000 L_☉. τ_MS = τ_☉ · M^(-2.5) = 10^10 · 12^(-2.5) = 10^10 / (144 · 3.46) ≈ 2 × 10⁷ years. Both numbers agree with the observed astrophysics of a 12-solar-mass B-type main-sequence progenitor: it lives about twenty million years on the main sequence and then spends a brief later phase as a red supergiant like Antares today. Answer A treats luminosity as linear in mass and forgets the mass-luminosity relation entirely. Answer C uses the shallower Stefan-Boltzmann scaling L ∝ M^2 that fails. Answer D confuses the mass-luminosity relation with the Eddington limit: the Eddington luminosity for 12 M_☉ is about 4 × 10⁵ L_☉, which is much greater than Antares's 6 × 10³ L_☉, so radiation pressure is nowhere near overwhelming gravity."
+  },
+  "suggestedNodes": [
+    { "id": "eddington_limit", "edgeType": "extends" },
+    { "id": "stellar_nucleosynthesis", "edgeType": "related" },
+    { "id": "main_sequence", "edgeType": "extends" }
+  ],
+  "metadata": {
+    "estimatedReadingMinutes": 14,
+    "createdAt": "2026-07-25T07:00:00Z",
+    "generator": "routine v1"
+  }
+}
