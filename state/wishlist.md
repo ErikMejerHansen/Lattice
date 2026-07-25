@@ -36,7 +36,6 @@
 # auto-suggested 2026-05-21 from planetary-equilibrium-temperature
 
 # auto-suggested 2026-05-22 from stellar-luminosity
-Mass-luminosity relation — L ∝ M^3.5, Eddington's discovery that brightness climbs far steeper than mass, the reason heavy stars are profligate and short-lived
 Main sequence — the hydrogen-burning diagonal where stars spend ninety percent of their lives, and why a star's position on it is fixed almost entirely by its mass
 
 # auto-suggested 2026-05-23 from greenhouse-effect
@@ -291,3 +290,7 @@ Tidal heating — orbital-eccentricity dissipation in a body's interior, Peale-C
 Simpson-Nakajima limit — the ~282 W/m² ceiling on outgoing longwave radiation from a saturated water-vapor atmosphere, Simpson 1927's slide-rule result reopened as a planetary bifurcation by Ingersoll 1969 and Nakajima-Hayashi-Abe 1992, the threshold above which no moist equilibrium exists and a wet planet commits to full ocean evaporation
 Moist adiabat — the saturated pseudoadiabatic lapse rate that governs a wet convecting atmosphere, roughly 5 K/km near the surface (against 9.8 K/km dry), the profile whose fixed T(P) curve is what caps the radiating temperature and gives the Simpson-Nakajima runaway its ceiling
 Hydrogen escape — thermal (Jeans) and hydrodynamic outflow of H from a planetary exobase, the mechanism by which post-runaway Venus lost its ocean's hydrogen to space over hundreds of megayears and left its D/H ratio 150 times terrestrial, also the same escape channel Earth's water loses to space at a slow 3 kg/s today
+
+# auto-suggested 2026-07-25 from mass-luminosity-relation
+Eddington limit — L_Edd = 4πGcM/κ ≈ 3.2 × 10⁴ (M/M_☉) L_☉, the maximum luminosity a star of a given mass can sustain before radiation pressure alone blows its outer envelope into space, the ceiling that caps stellar masses near 150 M_☉ and drives the mass-loss winds of the most luminous stars
+Stellar nucleosynthesis — the pp chain and CNO cycle in main-sequence cores plus the triple-alpha and later burning stages that build carbon, oxygen, and everything up to iron in evolved stars, Hoyle-Fowler-Burbidge-Burbidge 1957 B²FH paper as the founding synthesis

@@ -1,0 +1,251 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mass-luminosity relation viz</title>
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+#viz { padding: 14px 16px 12px; }
+svg { display: block; width: 100%; height: auto; }
+.axis { stroke: var(--border-strong); stroke-width: 1; }
+.tick { stroke: var(--border-strong); stroke-width: 0.8; }
+.grid { stroke: var(--border); stroke-width: 0.6; stroke-dasharray: 2 3; }
+.tick-text { font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; font-size: 10px; fill: var(--text-muted); }
+.axis-label { font-style: italic; font-size: 12px; fill: var(--text); }
+.ml-curve { fill: none; stroke: var(--accent); stroke-width: 2.2; }
+.edd-line { fill: none; stroke: var(--text-ghost); stroke-width: 1.4; stroke-dasharray: 5 3; }
+.eq-dot { fill: var(--accent); }
+.eq-halo { fill: none; stroke: var(--accent); stroke-width: 1.2; opacity: 0.35; }
+.marker-dot { fill: var(--text-muted); }
+.marker-label { font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace; font-size: 9.5px; fill: var(--text-muted); }
+.readout {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-left: 3px solid var(--border-strong);
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  color: var(--text);
+  background: var(--bg-raised);
+  line-height: 1.7;
+}
+.readout .row { display: flex; justify-content: space-between; gap: 10px; }
+.readout .k { color: var(--text-muted); }
+.readout .v { color: var(--text); }
+.readout.overedd { border-left-color: var(--accent); }
+.readout.overedd .warn { color: var(--accent); font-weight: bold; }
+</style>
+<div id="viz">
+  <svg id="plot" viewBox="0 0 520 340" preserveAspectRatio="xMidYMid meet" aria-label="Log-log plot of luminosity versus mass"></svg>
+  <div class="viz-slider-row">
+    <label for="mass">M</label>
+    <input id="mass" type="range" min="-1.0" max="2.2" step="0.01" value="0">
+    <span class="value" id="mass-val">1.00 M☉</span>
+  </div>
+  <div class="readout" id="readout"></div>
+  <div class="viz-caption">Log-log plot of stellar luminosity against stellar mass. The rust curve is the empirical Eddington relation L ∝ M^3.5; the dashed grey line is the Eddington limit L_Edd ∝ M, above which radiation pressure would blow the star apart. Drag the mass slider to slide a star along the curve and read off its luminosity and main-sequence lifetime.</div>
+</div>
+<script>
+(function () {
+  var svg = document.getElementById('plot');
+  var W = 520, H = 340;
+  var pad = { l: 60, r: 22, t: 18, b: 46 };
+  var plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+
+  var logMmin = -1.0, logMmax = 2.3;
+  var logLmin = -3.5, logLmax = 7.0;
+
+  function xOfLogM(lm) { return pad.l + (lm - logMmin) / (logMmax - logMmin) * plotW; }
+  function yOfLogL(ll) { return pad.t + plotH - (ll - logLmin) / (logLmax - logLmin) * plotH; }
+
+  function svgEl(name, attrs, text) {
+    var e = document.createElementNS('http://www.w3.org/2000/svg', name);
+    if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  var g = svgEl('g');
+  svg.appendChild(g);
+
+  var xTicks = [-1, 0, 1, 2];
+  var xLabels = { '-1': '0.1', '0': '1', '1': '10', '2': '100' };
+  var yTicks = [-3, -1, 1, 3, 5, 7];
+  var yLabels = { '-3': '10⁻³', '-1': '10⁻¹', '1': '10', '3': '10³', '5': '10⁵', '7': '10⁷' };
+
+  xTicks.forEach(function (lm) {
+    var x = xOfLogM(lm);
+    g.appendChild(svgEl('line', { class: 'grid', x1: x, y1: pad.t, x2: x, y2: pad.t + plotH }));
+    g.appendChild(svgEl('line', { class: 'tick', x1: x, y1: pad.t + plotH, x2: x, y2: pad.t + plotH + 4 }));
+    g.appendChild(svgEl('text', { class: 'tick-text', x: x, y: pad.t + plotH + 15, 'text-anchor': 'middle' }, xLabels[String(lm)]));
+  });
+  yTicks.forEach(function (ll) {
+    var y = yOfLogL(ll);
+    g.appendChild(svgEl('line', { class: 'grid', x1: pad.l, y1: y, x2: pad.l + plotW, y2: y }));
+    g.appendChild(svgEl('line', { class: 'tick', x1: pad.l - 4, y1: y, x2: pad.l, y2: y }));
+    g.appendChild(svgEl('text', { class: 'tick-text', x: pad.l - 8, y: y + 3.5, 'text-anchor': 'end' }, yLabels[String(ll)]));
+  });
+
+  g.appendChild(svgEl('line', { class: 'axis', x1: pad.l, y1: pad.t, x2: pad.l, y2: pad.t + plotH }));
+  g.appendChild(svgEl('line', { class: 'axis', x1: pad.l, y1: pad.t + plotH, x2: pad.l + plotW, y2: pad.t + plotH }));
+
+  g.appendChild(svgEl('text', {
+    class: 'axis-label', x: pad.l + plotW / 2, y: H - 10, 'text-anchor': 'middle'
+  }, 'M / M☉  (log)'));
+  g.appendChild(svgEl('text', {
+    class: 'axis-label',
+    x: 0, y: 0,
+    'text-anchor': 'middle',
+    transform: 'translate(15,' + (pad.t + plotH / 2) + ') rotate(-90)'
+  }, 'L / L☉  (log)'));
+
+  var eddCoef = Math.log10(3.2e4);
+  var eddPath = 'M';
+  var N = 120;
+  for (var i = 0; i <= N; i++) {
+    var lm = logMmin + (logMmax - logMmin) * (i / N);
+    var ll = eddCoef + lm;
+    if (ll > logLmax) ll = logLmax;
+    if (ll < logLmin) ll = logLmin;
+    eddPath += (i === 0 ? '' : ' L') + xOfLogM(lm).toFixed(2) + ',' + yOfLogL(ll).toFixed(2);
+  }
+  g.appendChild(svgEl('path', { class: 'edd-line', d: eddPath }));
+  g.appendChild(svgEl('text', {
+    class: 'tick-text',
+    x: xOfLogM(2.0) - 4,
+    y: yOfLogL(eddCoef + 2.0) - 6,
+    'text-anchor': 'end',
+    fill: 'var(--text-ghost)'
+  }, 'L_Edd (radiation-pressure limit)'));
+
+  var mlPath = 'M';
+  for (var j = 0; j <= N; j++) {
+    var lm2 = logMmin + (logMmax - logMmin) * (j / N);
+    var ll2 = 3.5 * lm2;
+    if (ll2 > logLmax) ll2 = logLmax;
+    if (ll2 < logLmin) ll2 = logLmin;
+    mlPath += (j === 0 ? '' : ' L') + xOfLogM(lm2).toFixed(2) + ',' + yOfLogL(ll2).toFixed(2);
+  }
+  g.appendChild(svgEl('path', { class: 'ml-curve', d: mlPath }));
+  g.appendChild(svgEl('text', {
+    class: 'tick-text',
+    x: xOfLogM(1.5) + 4,
+    y: yOfLogL(3.5 * 1.5) + 14,
+    'text-anchor': 'start',
+    fill: 'var(--accent)'
+  }, 'L ∝ M^3.5'));
+
+  var markers = [
+    { name: 'Proxima Cen (0.12)', M: 0.12 },
+    { name: 'Sun (1.0)', M: 1.0 },
+    { name: 'Sirius A (2.0)', M: 2.0 },
+    { name: 'Antares (12)', M: 12 },
+    { name: 'R136a1 (~200)', M: 200 }
+  ];
+  markers.forEach(function (m) {
+    var lm = Math.log10(m.M);
+    var ll = 3.5 * lm;
+    if (lm > logMmax || ll > logLmax) return;
+    g.appendChild(svgEl('circle', {
+      class: 'marker-dot',
+      cx: xOfLogM(lm),
+      cy: yOfLogL(ll),
+      r: 3
+    }));
+    var labelDx = (m.M >= 12) ? -6 : 6;
+    var anchor = (m.M >= 12) ? 'end' : 'start';
+    g.appendChild(svgEl('text', {
+      class: 'marker-label',
+      x: xOfLogM(lm) + labelDx,
+      y: yOfLogL(ll) - 6,
+      'text-anchor': anchor
+    }, m.name));
+  });
+
+  var eqHalo = svgEl('circle', { class: 'eq-halo', cx: 0, cy: 0, r: 10 });
+  var eqDot = svgEl('circle', { class: 'eq-dot', cx: 0, cy: 0, r: 5.5 });
+  g.appendChild(eqHalo);
+  g.appendChild(eqDot);
+
+  var slider = document.getElementById('mass');
+  var mLabel = document.getElementById('mass-val');
+  var readout = document.getElementById('readout');
+
+  function fmtMass(M) {
+    if (M < 1) return M.toFixed(2) + ' M☉';
+    if (M < 10) return M.toFixed(2) + ' M☉';
+    return M.toFixed(0) + ' M☉';
+  }
+  function fmtLum(L) {
+    if (L < 0.001) return L.toExponential(2) + ' L☉';
+    if (L < 1) return L.toPrecision(2) + ' L☉';
+    if (L < 1000) return L.toFixed(0) + ' L☉';
+    return L.toExponential(2) + ' L☉';
+  }
+  function fmtLife(t) {
+    if (t > 1e12) return (t / 1e12).toFixed(1) + ' Tyr';
+    if (t > 1e9) return (t / 1e9).toFixed(1) + ' Gyr';
+    if (t > 1e6) return (t / 1e6).toFixed(1) + ' Myr';
+    return (t / 1e3).toFixed(0) + ' kyr';
+  }
+
+  function update() {
+    var lm = +slider.value;
+    var M = Math.pow(10, lm);
+    var ll = 3.5 * lm;
+    var L = Math.pow(10, ll);
+    var tau = 1e10 * Math.pow(M, -2.5);
+    var LEdd = 3.2e4 * M;
+
+    mLabel.textContent = fmtMass(M);
+    eqDot.setAttribute('cx', xOfLogM(lm));
+    eqDot.setAttribute('cy', yOfLogL(ll));
+    eqHalo.setAttribute('cx', xOfLogM(lm));
+    eqHalo.setAttribute('cy', yOfLogL(ll));
+
+    var overEdd = L > LEdd;
+    var warnHTML = overEdd
+      ? '<div class="row warn"><span>above L_Edd</span><span>radiation blows the envelope</span></div>'
+      : '';
+    readout.className = 'readout' + (overEdd ? ' overedd' : '');
+    readout.innerHTML =
+      '<div class="row"><span class="k">M</span><span class="v">' + fmtMass(M) + '</span></div>' +
+      '<div class="row"><span class="k">L = M^3.5</span><span class="v">' + fmtLum(L) + '</span></div>' +
+      '<div class="row"><span class="k">τ_MS = 10¹⁰ · M^(−2.5)</span><span class="v">' + fmtLife(tau) + '</span></div>' +
+      '<div class="row"><span class="k">L_Edd = 3.2×10⁴ · M</span><span class="v">' + fmtLum(LEdd) + '</span></div>' +
+      warnHTML;
+  }
+
+  slider.addEventListener('input', update);
+  slider.addEventListener('change', update);
+  update();
+})();
+</script>
