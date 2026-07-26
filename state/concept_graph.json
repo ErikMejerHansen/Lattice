@@ -849,6 +849,16 @@
       "createdAt": "2026-07-25T07:00:00Z",
       "col": 1,
       "row": 42
+    },
+    {
+      "id": "main_sequence",
+      "label": "Main sequence",
+      "subtitle": "core H burning",
+      "state": "available",
+      "lesson": "2026-07-26-main-sequence",
+      "createdAt": "2026-07-26T07:00:00Z",
+      "col": 0,
+      "row": 43
     }
   ],
   "edges": [
@@ -2020,6 +2030,21 @@
     {
       "from": "mass_luminosity",
       "to": "stefan_boltzmann",
+      "kind": "related"
+    },
+    {
+      "from": "main_sequence",
+      "to": "hr_diagram",
+      "kind": "extends"
+    },
+    {
+      "from": "main_sequence",
+      "to": "mass_luminosity",
+      "kind": "extends"
+    },
+    {
+      "from": "main_sequence",
+      "to": "stellar_luminosity",
       "kind": "related"
     }
   ]

@@ -36,7 +36,6 @@
 # auto-suggested 2026-05-21 from planetary-equilibrium-temperature
 
 # auto-suggested 2026-05-22 from stellar-luminosity
-Main sequence — the hydrogen-burning diagonal where stars spend ninety percent of their lives, and why a star's position on it is fixed almost entirely by its mass
 
 # auto-suggested 2026-05-23 from greenhouse-effect
 Lapse rate — why air cools about 6.5 K per kilometre going up, the adiabatic expansion of rising parcels and the profile the radiating level sits on
@@ -294,3 +293,8 @@ Hydrogen escape — thermal (Jeans) and hydrodynamic outflow of H from a planeta
 # auto-suggested 2026-07-25 from mass-luminosity-relation
 Eddington limit — L_Edd = 4πGcM/κ ≈ 3.2 × 10⁴ (M/M_☉) L_☉, the maximum luminosity a star of a given mass can sustain before radiation pressure alone blows its outer envelope into space, the ceiling that caps stellar masses near 150 M_☉ and drives the mass-loss winds of the most luminous stars
 Stellar nucleosynthesis — the pp chain and CNO cycle in main-sequence cores plus the triple-alpha and later burning stages that build carbon, oxygen, and everything up to iron in evolved stars, Hoyle-Fowler-Burbidge-Burbidge 1957 B²FH paper as the founding synthesis
+
+# auto-suggested 2026-07-26 from main-sequence
+Vogt-Russell theorem — Heinrich Vogt in Heidelberg and Henry Norris Russell at Princeton independently 1926, the structural uniqueness result that a star in hydrostatic and thermal equilibrium has its radius, luminosity, and interior fully determined by its mass and composition, the theorem that turns the observed HR diagonal into a mathematical corollary
+Cluster turn-off — Allan Sandage's mid-1950s Mount Wilson technique of dating open and globular star clusters by the mass at which stars are leaving the main sequence, the workhorse chronometer that gives globular ages ~12 Gyr and pinned down the tension with Hubble expansion age in the 1990s
+Helioseismology — the study of the Sun's global 5-minute pressure-mode oscillations that ring through its interior, measured to one part in 10⁶ by GONG and SOHO since 1995, and inverted to give the sound-speed profile, core hydrogen fraction (X_c ≈ 0.34 today, from initial 0.71), and interior rotation of a single star to unprecedented precision
