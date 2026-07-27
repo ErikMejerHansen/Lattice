@@ -586,5 +586,12 @@
     "subtitle": "core H burning",
     "date": "2026-07-26",
     "estimatedReadingMinutes": 18
+  },
+  {
+    "slug": "2026-07-27-lapse-rate",
+    "title": "The lapse rate: why the sky cools 6.5 K per kilometre, and the ladder that lifts the surface above the radiating level",
+    "subtitle": "Γ = g/c_p",
+    "date": "2026-07-27",
+    "estimatedReadingMinutes": 20
   }
 ]
