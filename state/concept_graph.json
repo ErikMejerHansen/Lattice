@@ -859,6 +859,16 @@
       "createdAt": "2026-07-26T07:00:00Z",
       "col": 0,
       "row": 43
+    },
+    {
+      "id": "lapse_rate",
+      "label": "Lapse rate",
+      "subtitle": "Γ = g/c_p",
+      "state": "available",
+      "lesson": "2026-07-27-lapse-rate",
+      "createdAt": "2026-07-27T07:00:00Z",
+      "col": 1,
+      "row": 43
     }
   ],
   "edges": [
@@ -2045,6 +2055,21 @@
     {
       "from": "main_sequence",
       "to": "stellar_luminosity",
+      "kind": "related"
+    },
+    {
+      "from": "lapse_rate",
+      "to": "greenhouse_effect",
+      "kind": "extends"
+    },
+    {
+      "from": "lapse_rate",
+      "to": "planetary_equilibrium",
+      "kind": "applied"
+    },
+    {
+      "from": "lapse_rate",
+      "to": "runaway_greenhouse",
       "kind": "related"
     }
   ]

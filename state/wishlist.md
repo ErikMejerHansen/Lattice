@@ -38,7 +38,6 @@
 # auto-suggested 2026-05-22 from stellar-luminosity
 
 # auto-suggested 2026-05-23 from greenhouse-effect
-Lapse rate — why air cools about 6.5 K per kilometre going up, the adiabatic expansion of rising parcels and the profile the radiating level sits on
 Atmospheric window — the 8 to 13 micron band where the surface radiates almost straight to space, why frost forms on clear nights and what weather satellites see through
 Radiative forcing — ΔF in W/m² at the top of atmosphere, the common currency that lets CO2, methane, and solar changes be added on one ledger
 
@@ -298,3 +297,8 @@ Stellar nucleosynthesis — the pp chain and CNO cycle in main-sequence cores pl
 Vogt-Russell theorem — Heinrich Vogt in Heidelberg and Henry Norris Russell at Princeton independently 1926, the structural uniqueness result that a star in hydrostatic and thermal equilibrium has its radius, luminosity, and interior fully determined by its mass and composition, the theorem that turns the observed HR diagonal into a mathematical corollary
 Cluster turn-off — Allan Sandage's mid-1950s Mount Wilson technique of dating open and globular star clusters by the mass at which stars are leaving the main sequence, the workhorse chronometer that gives globular ages ~12 Gyr and pinned down the tension with Hubble expansion age in the 1990s
 Helioseismology — the study of the Sun's global 5-minute pressure-mode oscillations that ring through its interior, measured to one part in 10⁶ by GONG and SOHO since 1995, and inverted to give the sound-speed profile, core hydrogen fraction (X_c ≈ 0.34 today, from initial 0.71), and interior rotation of a single star to unprecedented precision
+
+# auto-suggested 2026-07-27 from lapse-rate
+Hadley cell — the tropical overturning circulation from the equator to ~30° latitude, George Hadley's 1735 explanation for the trade winds and the reason the descending arm at 30° dries out into a ring of subtropical deserts, the atmospheric engine that pumps latent heat aloft along the moist adiabat and returns dry air poleward
+Moist static energy — h = c_p T + gz + L_v q, the almost-conserved quantity along a moist adiabat that packages temperature, geopotential, and latent heat into one number, the working thermodynamic coordinate of tropical convection and the currency in which climate models balance the atmospheric heat budget
+Tropopause height — the altitude at which adiabatic cooling from below and radiative cooling from above balance, sitting at ~11 km in mid-latitudes and ~17 km over the tropics, the ceiling that traps most weather in the troposphere and the level whose upward creep under CO₂ forcing is one of the cleanest fingerprints of anthropogenic climate change
