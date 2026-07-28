@@ -869,6 +869,16 @@
       "createdAt": "2026-07-27T07:00:00Z",
       "col": 1,
       "row": 43
+    },
+    {
+      "id": "atmospheric_window",
+      "label": "Atm. window",
+      "subtitle": "8-13 μm gap",
+      "state": "available",
+      "lesson": "2026-07-28-atmospheric-window",
+      "createdAt": "2026-07-28T07:00:00Z",
+      "col": 0,
+      "row": 44
     }
   ],
   "edges": [
@@ -2070,6 +2080,21 @@
     {
       "from": "lapse_rate",
       "to": "runaway_greenhouse",
+      "kind": "related"
+    },
+    {
+      "from": "atmospheric_window",
+      "to": "greenhouse_effect",
+      "kind": "extends"
+    },
+    {
+      "from": "atmospheric_window",
+      "to": "wien_displacement",
+      "kind": "applied"
+    },
+    {
+      "from": "atmospheric_window",
+      "to": "stefan_boltzmann",
       "kind": "related"
     }
   ]

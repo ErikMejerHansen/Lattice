@@ -38,7 +38,6 @@
 # auto-suggested 2026-05-22 from stellar-luminosity
 
 # auto-suggested 2026-05-23 from greenhouse-effect
-Atmospheric window — the 8 to 13 micron band where the surface radiates almost straight to space, why frost forms on clear nights and what weather satellites see through
 Radiative forcing — ΔF in W/m² at the top of atmosphere, the common currency that lets CO2, methane, and solar changes be added on one ledger
 
 # auto-suggested 2026-05-24 from recombination
@@ -302,3 +301,8 @@ Helioseismology — the study of the Sun's global 5-minute pressure-mode oscilla
 Hadley cell — the tropical overturning circulation from the equator to ~30° latitude, George Hadley's 1735 explanation for the trade winds and the reason the descending arm at 30° dries out into a ring of subtropical deserts, the atmospheric engine that pumps latent heat aloft along the moist adiabat and returns dry air poleward
 Moist static energy — h = c_p T + gz + L_v q, the almost-conserved quantity along a moist adiabat that packages temperature, geopotential, and latent heat into one number, the working thermodynamic coordinate of tropical convection and the currency in which climate models balance the atmospheric heat budget
 Tropopause height — the altitude at which adiabatic cooling from below and radiative cooling from above balance, sitting at ~11 km in mid-latitudes and ~17 km over the tropics, the ceiling that traps most weather in the troposphere and the level whose upward creep under CO₂ forcing is one of the cleanest fingerprints of anthropogenic climate change
+
+# auto-suggested 2026-07-28 from atmospheric-window
+Split-window technique — the AVHRR/VIIRS sea-surface-temperature retrieval that differences two adjacent infrared channels (T₁₁ − T₁₂) to isolate residual water vapor absorption in the atmospheric window, correct for it, and recover global SSTs to a few tenths of a kelvin day and night
+Water vapor continuum — the pressure-squared, non-Lorentzian residual absorption that fills the middle of the 8-13 μm window, mostly self-broadened dimer-like states of H₂O, the leading source of window opacity in the humid tropics and the piece MODTRAN and LBLRTM took decades to parametrize
+CFC radiative forcing — chlorofluorocarbons whose C-F and C-Cl stretching modes sit inside the atmospheric window at 8-12 μm, giving them per-molecule global warming potentials thousands of times CO₂, and why the Montreal Protocol turned out to be a climate treaty as well as an ozone one

@@ -1,0 +1,110 @@
+{
+  "slug": "2026-07-28-atmospheric-window",
+  "title": "The atmospheric window: the 8 to 13 micron gap the planet radiates through",
+  "node": {
+    "id": "atmospheric_window",
+    "label": "Atm. window",
+    "subtitle": "8-13 μm gap"
+  },
+  "intro": "The greenhouse lesson closed with an unresolved number: an effective emissivity of about 0.77 for the whole of Earth's atmosphere, short of the 1.0 a perfectly opaque slab would demand. The missing 0.23 is not spread evenly across the infrared. It sits mostly in one wide gap, from about 8 to 13 microns, where water vapor and carbon dioxide barely absorb, where the surface radiates almost straight to space, where frost forms on grass on nights the thermometer never touched freezing, and where the infrared cameras of every weather satellite have looked since the 1960s. That gap is called the atmospheric window.",
+  "sections": [
+    {
+      "id": "s1",
+      "heading": "1. The gap Tyndall could not resolve",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "When John Tyndall pushed carbonic acid and water vapor through his rock-salt tube in 1859, his thermopile (a stack of thermocouples that turns a temperature difference into an electric current) answered a single question: does the gas absorb radiant heat? It did, strongly. What Tyndall could not tell was where in the spectrum the absorption fell. His source was a broadband platinum wire, his detector a summing pile, and any wavelength that carried energy was averaged in with all the others. He had established that the atmosphere was cloudy to heat; he could not yet see which colors of heat it was cloudy to." },
+        { "type": "p", "text": "The wavelength answer came slowly, over the twentieth century. Frederick Fowle, working under Charles Abbot at the Smithsonian Astrophysical Observatory, dragged prism spectrographs up Mount Wilson and Mount Whitney in the 1910s to compare solar spectra from below and above the bulk of the atmosphere. Later balloon work by Arthur Adel and Marcel Migeotte, into the 1940s, mapped water vapor's band at 6.3 microns and its picket of rotation lines beyond 15; carbon dioxide's bands at 4.3 and 15; ozone's at 9.6. The gaps between were startling. In one stretch of the middle infrared the atmosphere let almost every photon through." },
+        { "type": "p", "text": "That widest gap runs from about 8 to 13 microns, in the middle of the thermal infrared. Everywhere else in that spectral neighborhood the sky is a wall: look down from orbit or up from the ground and you see the air itself glowing at its own local temperature. Here it becomes a pane of glass. This gap is what atmospheric physicists call the atmospheric window." },
+        { "type": "p", "text": "The plot that fixed the picture was recorded from orbit in April 1970 by NASA's Nimbus 4 satellite, whose IRIS spectrometer pointed straight down and returned Earth's outgoing spectrum wavelength by wavelength. The trace looks like a Planck curve near 280 K, with a large bite out between 13 and 17 microns (where the CO₂ band emits from the cold upper troposphere rather than the warm ground), a narrow bite at 9.6 (the ozone band), and, on either side of that ozone notch, the atmospheric window: emission at nearly ground temperature reaching space almost undiminished." }
+      ]
+    },
+    {
+      "id": "s2",
+      "heading": "2. Where the window sits, and why it sits there",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "The window is not a chosen band, it is what the molecules leave. Each greenhouse gas absorbs at frequencies set by its own vibrational and rotational modes: water vapor bends at 6.3 microns and rotates in a comb of lines beyond 15; carbon dioxide bends at 15 microns and stretches asymmetrically at 4.3; ozone bends at 9.6. Between the water bend on one side and the water rotation lines and CO₂ band on the other, no strong fundamentals fall. What sits alone in the middle of the resulting gap is exactly that ozone bend, an interior partition inside the otherwise-clear window." },
+        { "type": "p", "text": "A single absorption line has a shape. Near its center it looks Lorentzian, dropping off with the square of the distance from its center frequency ν₀. Here γ is the pressure-broadened halfwidth (the frequency offset at which absorption falls to half its peak) and S is the integrated line strength:" },
+        { "type": "math", "tex": "\\alpha(\\nu) = \\frac{S}{\\pi}\\,\\frac{\\gamma}{(\\nu - \\nu_0)^2 + \\gamma^2}", "display": true, "caption": "α(ν) is the absorption coefficient at frequency ν. ν₀ is the center of the spectral line. γ is the pressure-broadened halfwidth, the offset from ν₀ at which absorption drops to half its peak. S is the integrated line strength, a molecular constant that sets the overall size of the line. Read together: the absorption is a sharp peak at ν₀ that falls off as (ν − ν₀)⁻² in its wings." },
+        { "type": "p", "text": "The (ν − ν₀)⁻² fall-off is fast, so between line centers the absorption drops steeply. The 8-to-13 micron window is the arithmetic of that fall-off: on one side, the tails of the water rotation lines fading toward shorter wavelengths; on the other, the tail of the carbon dioxide 15 micron band; in between, no strong fundamentals to fill the gap. The remarkable coincidence is where Earth's Planck curve peaks. Wien's law, applied to a 288 K surface, gives a peak wavelength near 10 microns, squarely in the middle of the window. Half of Earth's thermal emission lies between 8 and 13 microns, and much of that half escapes to space directly." }
+      ],
+      "quiz": {
+        "question": "A hypothetical planet has an atmosphere much like Earth's, with the same water vapor and carbon dioxide, but no ozone at all. What happens to its atmospheric window?",
+        "options": [
+          "It closes entirely, because ozone's 9.6 micron band is what holds the window open.",
+          "It widens and simplifies, since the 9.6 micron absorption ozone puts inside the window disappears.",
+          "It shifts to shorter wavelengths, following the missing ozone band.",
+          "It does not change, because ozone is not a greenhouse gas."
+        ],
+        "correctIndex": 1,
+        "explanation": "Ozone's contribution to the middle infrared is not to open the window but to place a narrow absorption band right at 9.6 microns inside an otherwise clear stretch. Removing ozone erases that interior partition and leaves the whole 8-to-13 micron band uniformly transparent, a widening rather than a closing. The tempting distractor is the last option: ozone is very much a greenhouse gas (per molecule, one of the strongest), just one whose main infrared band happens to sit inside the window rather than outside it, which makes its removal a widening rather than a shrinking."
+      }
+    },
+    {
+      "id": "s3",
+      "heading": "3. The 288 K peak lands in the window",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "Two curves live in the same corner of the infrared. Draw them together. Along the horizontal axis lay out wavelength from 4 to 30 microns. Above the axis plot the atmospheric transmission, a jagged curve running near 1 in the window and diving toward 0 in the CO₂ and water bands. On top of it, overlay the Planck emission from a blackbody at the surface temperature, a smooth hump peaking near 10 microns. The pedagogical point of the atmospheric window is the shape of their overlap." },
+        { "type": "p", "text": "The Planck hump for a 288 K ground sits almost entirely between 4 and 40 microns, with roughly a third of its integrated area falling inside the 8-to-13 window where the transmission curve is high. That area, per square metre per second, is the wattage the surface sends directly to space with no atmospheric intervention. Everywhere else the emission is absorbed and re-emitted from cold altitudes, but here it leaves as if the atmosphere were absent." },
+        { "type": "viz", "src": "2026-07-28-atmospheric-window.html", "height": 420, "caption": "The atmospheric transmission in gray against wavelength, from 4 to 30 microns. On top, in the accent color, the Planck curve for a blackbody at the surface temperature. Drag the surface temperature slider between 220 K (upper troposphere) and 320 K (a hot desert surface) and watch the Planck peak walk across the spectrum; the readout shows what fraction of the surface's emission falls inside the 8-to-13 window. A second slider closes the window by adding tropical water vapor, which fills the band with continuum absorption." },
+        { "type": "p", "text": "Slide the temperature. Cool the surface toward 220 K and the Planck peak walks past the window toward longer wavelengths, and the direct-to-space flux collapses because most of the emission has crossed into the CO₂ band. Warm the surface toward 320 K and the peak walks back through the window, and the fraction of directly-radiated emission climbs. Now push the humidity slider up. Even the transparent 8-to-13 band starts to fill in, because water vapor has a residual continuum absorption whose strength grows as the square of vapor pressure. Humid tropical air is a distinctly greyer window than dry Arctic air." }
+      ]
+    },
+    {
+      "id": "s4",
+      "heading": "4. Frost on a clear night",
+      "hasQuiz": true,
+      "blocks": [
+        { "type": "p", "text": "A clear, dry night is the atmospheric window's most familiar advertisement. Point an infrared thermometer straight up at a cloudless sky and its readout, calibrated to a blackbody, will give a sky temperature of −40 to −60 °C over dry inland stations, tens of degrees below the air near the ground. That number is not the air; it is the effective temperature the ground sees looking up through the window, toward whatever mostly-cold layers of atmosphere and, past them, empty space are ultimately absorbing the ground's photons." },
+        { "type": "p", "text": "The ground radiates upward through the window at nearly its full blackbody rate. It receives back through the same window only a much smaller sky emission. The difference is a net upward loss, which persists all night. Here ε_win is the effective transparency of the window band, σ is the Stefan-Boltzmann constant, T_s is the surface temperature, and T_sky is the effective radiative temperature of the sky as seen through that band:" },
+        { "type": "math", "tex": "F_{\\text{net}} = \\varepsilon_{\\text{win}}\\,\\sigma\\,(T_s^{4} - T_{\\text{sky}}^{4})", "display": true, "caption": "F_net is the net infrared power the surface loses per square metre through the atmospheric window. ε_win is the fraction of the surface's window-band emission that leaves directly for space, close to 1 on clear dry nights and near 0 under thick cloud. σ is the Stefan-Boltzmann constant, 5.67 × 10⁻⁸ W m⁻² K⁻⁴. T_s is the surface temperature. T_sky is the effective radiative temperature of the sky as seen through the window band." },
+        { "type": "p", "text": "During the day the sun replenishes this loss and more. At night the ground cools through the window until its conductive contact with the soil below and the settling of a shallow chilled layer of air catch up with the outgoing wattage. On a still, clear night in a dry basin the surface can fall 5 to 10 K below the air a few metres above it. If it crosses the dew point on the way, water condenses; if it also crosses zero, the condensation is ice, and you get frost on grass in air that never itself froze. Draw a thick low cloud across the sky and the window closes. Liquid water in cloud is nearly opaque across the whole infrared, so the sky the ground now sees is at cloud-base temperature, only a few kelvin cooler than the air. F_net collapses toward zero, and the same night is markedly warmer. Radiation frost is a phenomenon of clear skies alone." }
+      ],
+      "quiz": {
+        "question": "You camp in a dry mountain valley on a summer evening. The dusk air temperature is a mild 8 °C. Overnight the sky stays perfectly clear, and in the morning you find rime frost on your tent. What put it there, given that the air never fell to freezing?",
+        "options": [
+          "The tent fabric conducted heat outward faster than the ground could resupply it, dragging its temperature below the surrounding air.",
+          "The tent radiated infrared through the atmospheric window to a sky whose effective radiative temperature was tens of degrees below freezing, cooling the fabric below 0 °C.",
+          "Water vapor in the air condensed directly to ice on the tent, bypassing the liquid phase, without any change in the tent's temperature.",
+          "The atmosphere blocked the tent's thermal emission, causing heat to accumulate and destabilize into localized freezing."
+        ],
+        "correctIndex": 1,
+        "explanation": "The tent, like any body near ordinary ambient temperatures, radiates most of its heat in the 8-to-13 micron band. On a clear, dry night the sky in that band has an effective temperature well below freezing, so the net upward radiative loss F_net = ε_win σ (T_s⁴ − T_sky⁴) is large and steady. The fabric cools past the dew point (where 'frost' is deposition of ice directly from vapor at a surface below 0 °C), and by morning it is rimed. The conduction option contributes, but the driving imbalance is the radiative one through the window. The last option is nonsense: an atmosphere that blocked emission would warm the tent, not cool it, which is exactly the reason a cloudy night stays mild." }
+    },
+    {
+      "id": "s5",
+      "heading": "5. What weather satellites see through",
+      "hasQuiz": false,
+      "blocks": [
+        { "type": "p", "text": "The first television image of Earth's weather came from TIROS-1 in April 1960. Its cameras were visible-light: they showed daylit cloud patterns and nothing else. What made meteorology from orbit useful in every hour, not just daytime, was the infrared radiometer added to Nimbus-1 in 1964 and refined on every polar-orbiting satellite since: a channel centered near 11 microns, looking straight through the atmospheric window at whatever emitted last, whether that was a warm ocean, a cool land surface, or the cold top of a cloud." },
+        { "type": "p", "text": "In the window band the atmosphere is nearly transparent, so the brightness temperature the satellite records at each pixel is close to the physical temperature of whatever emitted it. Warm tropical ocean reads as a warm pixel, cold high cirrus as a cold pixel. From this alone, forecasters can trace a hurricane's eye as a warm subsiding pixel of ocean glimpsed through the storm's central well, and can estimate cloud-top heights by turning brightness temperatures into altitudes with the tropospheric lapse rate." },
+        { "type": "p", "text": "Nearly transparent is not perfectly transparent. The window is a little dirty with residual water vapor, more so over the tropics and less over the poles, and the satellite's brightness temperature is depressed a fraction of a degree below the true sea surface temperature. To recover that true temperature from the noisy channel, NOAA's operational algorithm on the AVHRR instrument uses two adjacent window channels, at 11 and 12 microns, and differences them. Here T_s is the retrieved sea surface temperature, T₁₁ and T₁₂ are the brightness temperatures in the two channels, and a and b are coefficients fit empirically against a fleet of moored buoys:" },
+        { "type": "math", "tex": "T_s = T_{11} + a\\,(T_{11} - T_{12}) + b", "display": true, "caption": "T_s is the retrieved sea surface temperature. T₁₁ is the brightness temperature the satellite measures in its 11 micron channel. T₁₂ is the brightness temperature in the 12 micron channel. The difference T₁₁ − T₁₂ is small over a dry column and large over a moist one, because water vapor absorbs slightly more at 12 microns than at 11, so the difference is a proxy for the total column vapor. a and b are coefficients fit empirically from ship and buoy comparisons, and their job is to undo the small water-vapor depression to give the true surface temperature." },
+        { "type": "p", "text": "The split-window trick works because the two channels sit in the same window but sample slightly different water vapor absorptions. Their difference is a proxy for the vapor column between the satellite and the surface, and once you know that column you can subtract its effect from the temperature reading. Modern AVHRR and VIIRS instruments recover global sea surface temperatures to a few tenths of a kelvin, day and night, by leaning on exactly this piece of atmospheric physics: a window that is wide enough to be useful, a residual absorption inside it regular enough to be modeled, and two channels close enough together to see the same scene through slightly different tints of the same pane." }
+      ]
+    }
+  ],
+  "finalQuiz": {
+    "question": "The atmospheric window's usefulness for satellite temperature sensing rests on which pair of facts?",
+    "options": [
+      "The window is perfectly transparent to infrared, so satellite radiance readings need no atmospheric correction at all.",
+      "The window is nearly transparent, and its small residual absorption comes almost entirely from water vapor, whose column can be inferred from the difference between two nearby infrared channels.",
+      "The window is broad enough to admit all wavelengths of sunlight to the surface, allowing satellites to measure the reflected sunlight directly.",
+      "The window absorbs strongly in the ozone band, and satellites exploit that absorption to measure the ozone column."
+    ],
+    "correctIndex": 1,
+    "explanation": "Satellites can read a scene through the window because the atmosphere lets nearly the full thermal brightness of the surface shine through, but the small remaining absorption in the band is dominated by water vapor and depresses the reading by a few tenths to a few degrees. The split-window algorithm handles that precisely: two nearby channels see the same scene through slightly different water vapor absorptions, and their difference measures the vapor column, which can then be used to correct the temperature. The first option is wrong because the window is not perfectly clean and uncorrected satellite readings would carry a systematic vapor bias. The third confuses the thermal window at 8-13 microns with the visible band at 0.4-0.7 microns, a completely different part of the spectrum where satellites do measure reflected sunlight."
+  },
+  "suggestedNodes": [
+    { "id": "split_window_technique", "label": "Split window", "subtitle": "T₁₁ − T₁₂ SST", "edgeType": "applied" },
+    { "id": "water_vapor_continuum", "label": "H₂O continuum", "subtitle": "α ∝ p_v²", "edgeType": "extends" },
+    { "id": "cfc_radiative_forcing", "label": "CFC forcing", "subtitle": "in-window absorbers", "edgeType": "applied" }
+  ],
+  "metadata": {
+    "estimatedReadingMinutes": 20,
+    "createdAt": "2026-07-28T07:00:00Z",
+    "generator": "routine v1"
+  }
+}
