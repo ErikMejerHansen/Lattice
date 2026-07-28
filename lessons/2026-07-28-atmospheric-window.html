@@ -1,0 +1,316 @@
+<style>
+:root {
+  --bg: #f4eee2;
+  --bg-raised: #faf5e9;
+  --text: #1a1a18;
+  --text-muted: #6b6359;
+  --text-ghost: #a89e90;
+  --accent: #9c3a22;
+  --accent-soft: #c47558;
+  --border: #d8cfb8;
+  --border-strong: #b8ac8e;
+}
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.viz-caption {
+  font-style: italic; font-size: 12px; color: var(--text-muted);
+}
+.viz-slider-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.viz-slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+.viz-slider-row label {
+  font-style: italic; font-size: 13px; color: var(--text-muted); min-width: 28px;
+}
+.viz-slider-row .value {
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text); min-width: 60px; text-align: right;
+}
+.readout {
+  display: grid;
+  grid-template-columns: max-content auto;
+  gap: 4px 18px;
+  margin-top: 10px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text);
+}
+.readout .k { color: var(--text-muted); }
+.plot-wrap { width: 100%; overflow-x: auto; }
+svg { display: block; max-width: 100%; height: auto; }
+.legend {
+  display: flex; flex-wrap: wrap; gap: 14px;
+  font-family: "IBM Plex Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px; color: var(--text-muted);
+  margin-top: 8px;
+}
+.legend-swatch {
+  display: inline-block; width: 20px; height: 10px; vertical-align: middle;
+  margin-right: 5px;
+}
+input[type=range] { min-height: 36px; }
+</style>
+<div id="viz" style="padding: 14px 16px 18px 16px; box-sizing: border-box;">
+  <div class="plot-wrap">
+    <svg id="chart" viewBox="0 0 560 380" preserveAspectRatio="xMidYMid meet"
+      style="width: 100%; max-width: 560px;">
+      <g id="grid"></g>
+      <rect id="win-rect" fill="#faf5e9" stroke="#b8ac8e" stroke-dasharray="2 3" stroke-width="1"/>
+      <path id="path-transmission" fill="#e8dfc7" fill-opacity="0.6" stroke="#b8ac8e" stroke-width="0.8"/>
+      <path id="path-escape" fill="#c47558" fill-opacity="0.55" stroke="none"/>
+      <path id="path-planck" stroke="#9c3a22" stroke-width="1.8" fill="none"/>
+      <line id="peak-marker" y1="40" y2="300" stroke="#9c3a22" stroke-width="0.8" stroke-dasharray="1 3"/>
+      <g id="axes"></g>
+      <text id="win-label" text-anchor="middle" font-family="IBM Plex Mono, monospace"
+        font-size="10.5" fill="#9c3a22">atmospheric window (8–13 μm)</text>
+      <text x="300" y="336" text-anchor="middle" font-family="Source Serif 4, serif"
+        font-style="italic" font-size="12" fill="#6b6359">λ (μm)</text>
+      <text transform="translate(18 170) rotate(-90)" text-anchor="middle"
+        font-family="Source Serif 4, serif" font-style="italic" font-size="12" fill="#6b6359">
+        B_λ (normalized) &amp; τ (0–1)
+      </text>
+    </svg>
+  </div>
+
+  <div class="legend">
+    <span><span class="legend-swatch" style="background: #9c3a22; height: 2px;"></span>Planck B_λ at surface T</span>
+    <span><span class="legend-swatch" style="background: #e8dfc7; border: 1px solid #b8ac8e;"></span>atmospheric transmission τ</span>
+    <span><span class="legend-swatch" style="background: #c47558; opacity: 0.55;"></span>escapes to space (B_λ × τ)</span>
+  </div>
+
+  <div class="viz-slider-row">
+    <label>T</label>
+    <input type="range" id="temp-slider" min="220" max="320" step="1" value="288">
+    <span class="value" id="temp-val">288 K</span>
+  </div>
+  <div class="viz-slider-row">
+    <label>H₂O</label>
+    <input type="range" id="hum-slider" min="0" max="1" step="0.02" value="0.3">
+    <span class="value" id="hum-val">30 %</span>
+  </div>
+
+  <div class="readout">
+    <div class="k">Wien peak λ_max</div><div id="peak-val">10.06 μm</div>
+    <div class="k">Fraction of Planck curve in 8–13 μm</div><div id="window-frac">–</div>
+    <div class="k">Fraction escaping directly to space</div><div id="escape-frac">–</div>
+  </div>
+
+  <div class="viz-caption" style="margin-top: 12px;">
+    Atmospheric transmission τ(λ) in tan against wavelength from 4 to 30 μm, with the 8–13 μm
+    window highlighted. The rust Planck curve B_λ shows the surface's thermal emission at the
+    temperature you set; the shaded region under it is B_λ × τ, the part that escapes directly to
+    space through the atmosphere. Drag T from 220 K (upper troposphere) to 320 K (a hot desert
+    surface) and watch the peak walk through the window. Push H₂O to close the window with
+    water vapor continuum absorption.
+  </div>
+</div>
+
+<script>
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  var chart = { x0: 46, y0: 40, x1: 540, y1: 300 };
+  var CW = chart.x1 - chart.x0;
+  var CH = chart.y1 - chart.y0;
+  var LMIN = 4, LMAX = 30;
+
+  function xOf(lam) { return chart.x0 + (lam - LMIN) / (LMAX - LMIN) * CW; }
+  function yOf(v)   { return chart.y1 - v * CH; }
+
+  var C2 = 14388.0;
+  function planck(lam, T) {
+    var x = C2 / (lam * T);
+    if (x > 700) return 0;
+    return 1.0 / (Math.pow(lam, 5) * (Math.exp(x) - 1));
+  }
+
+  var DIPS = [
+    { c: 4.3,  d: 0.96, w: 0.22 },
+    { c: 6.3,  d: 0.86, w: 0.55 },
+    { c: 7.5,  d: 0.30, w: 0.50 },
+    { c: 9.6,  d: 0.55, w: 0.28 },
+    { c: 12.6, d: 0.18, w: 1.20 },
+    { c: 15.0, d: 0.96, w: 1.50 },
+    { c: 18.5, d: 0.55, w: 2.20 },
+    { c: 24.0, d: 0.80, w: 4.00 },
+    { c: 28.5, d: 0.90, w: 3.00 }
+  ];
+
+  function transmission(lam, hum) {
+    var tau = 1.0, i;
+    for (i = 0; i < DIPS.length; i++) {
+      var d = DIPS[i];
+      tau *= 1.0 - d.d * Math.exp(-Math.pow((lam - d.c) / d.w, 2));
+    }
+    var cont = hum * 0.55 * Math.exp(-Math.pow((lam - 10.5) / 3.5, 2));
+    tau *= (1.0 - cont);
+    if (tau < 0) tau = 0;
+    if (tau > 1) tau = 1;
+    return tau;
+  }
+
+  var N = 280;
+  var lambdas = [];
+  for (var i = 0; i <= N; i++) lambdas.push(LMIN + i * (LMAX - LMIN) / N);
+
+  function pathLine(ys) {
+    var s = '', x, y;
+    for (var i = 0; i < lambdas.length; i++) {
+      x = xOf(lambdas[i]);
+      y = yOf(ys[i]);
+      s += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1);
+    }
+    return s;
+  }
+
+  function pathArea(ys) {
+    return pathLine(ys)
+      + 'L' + xOf(lambdas[lambdas.length - 1]).toFixed(1) + ' ' + yOf(0).toFixed(1)
+      + 'L' + xOf(lambdas[0]).toFixed(1) + ' ' + yOf(0).toFixed(1) + 'Z';
+  }
+
+  function buildStatic() {
+    var axes = document.getElementById('axes');
+    axes.innerHTML = '';
+
+    var line = document.createElementNS(NS, 'line');
+    line.setAttribute('x1', chart.x0); line.setAttribute('x2', chart.x1);
+    line.setAttribute('y1', chart.y1); line.setAttribute('y2', chart.y1);
+    line.setAttribute('stroke', '#6b6359'); line.setAttribute('stroke-width', '1');
+    axes.appendChild(line);
+
+    var ly = document.createElementNS(NS, 'line');
+    ly.setAttribute('x1', chart.x0); ly.setAttribute('x2', chart.x0);
+    ly.setAttribute('y1', chart.y0); ly.setAttribute('y2', chart.y1);
+    ly.setAttribute('stroke', '#6b6359'); ly.setAttribute('stroke-width', '1');
+    axes.appendChild(ly);
+
+    var xticks = [4, 8, 12, 16, 20, 24, 28];
+    for (var i = 0; i < xticks.length; i++) {
+      var lam = xticks[i];
+      var x = xOf(lam);
+      var t = document.createElementNS(NS, 'line');
+      t.setAttribute('x1', x); t.setAttribute('x2', x);
+      t.setAttribute('y1', chart.y1); t.setAttribute('y2', chart.y1 + 4);
+      t.setAttribute('stroke', '#6b6359');
+      axes.appendChild(t);
+      var lbl = document.createElementNS(NS, 'text');
+      lbl.setAttribute('x', x); lbl.setAttribute('y', chart.y1 + 16);
+      lbl.setAttribute('font-family', 'IBM Plex Mono, monospace');
+      lbl.setAttribute('font-size', '10');
+      lbl.setAttribute('fill', '#6b6359');
+      lbl.setAttribute('text-anchor', 'middle');
+      lbl.textContent = lam;
+      axes.appendChild(lbl);
+    }
+
+    var yticks = [0, 0.25, 0.5, 0.75, 1.0];
+    for (var j = 0; j < yticks.length; j++) {
+      var v = yticks[j];
+      var y = yOf(v);
+      var t2 = document.createElementNS(NS, 'line');
+      t2.setAttribute('x1', chart.x0 - 4); t2.setAttribute('x2', chart.x0);
+      t2.setAttribute('y1', y); t2.setAttribute('y2', y);
+      t2.setAttribute('stroke', '#6b6359');
+      axes.appendChild(t2);
+      var lbl2 = document.createElementNS(NS, 'text');
+      lbl2.setAttribute('x', chart.x0 - 6); lbl2.setAttribute('y', y + 3);
+      lbl2.setAttribute('font-family', 'IBM Plex Mono, monospace');
+      lbl2.setAttribute('font-size', '10');
+      lbl2.setAttribute('fill', '#6b6359');
+      lbl2.setAttribute('text-anchor', 'end');
+      lbl2.textContent = v.toFixed(2);
+      axes.appendChild(lbl2);
+    }
+
+    var bands = [
+      { l: 4.3,  txt: 'CO₂' },
+      { l: 6.3,  txt: 'H₂O' },
+      { l: 9.6,  txt: 'O₃' },
+      { l: 15.0, txt: 'CO₂' },
+      { l: 24.0, txt: 'H₂O' }
+    ];
+    for (var k = 0; k < bands.length; k++) {
+      var b = bands[k];
+      var bt = document.createElementNS(NS, 'text');
+      bt.setAttribute('x', xOf(b.l)); bt.setAttribute('y', chart.y1 - 6);
+      bt.setAttribute('font-family', 'Source Serif 4, serif');
+      bt.setAttribute('font-style', 'italic');
+      bt.setAttribute('font-size', '10');
+      bt.setAttribute('fill', '#6b6359');
+      bt.setAttribute('text-anchor', 'middle');
+      bt.textContent = b.txt;
+      axes.appendChild(bt);
+    }
+
+    var winRect = document.getElementById('win-rect');
+    winRect.setAttribute('x', xOf(8));
+    winRect.setAttribute('y', chart.y0);
+    winRect.setAttribute('width', xOf(13) - xOf(8));
+    winRect.setAttribute('height', CH);
+
+    var winLabel = document.getElementById('win-label');
+    winLabel.setAttribute('x', (xOf(8) + xOf(13)) / 2);
+    winLabel.setAttribute('y', chart.y0 - 8);
+  }
+
+  function render(T, hum) {
+    var B = new Array(lambdas.length);
+    var tau = new Array(lambdas.length);
+    var Bmax = 0, i;
+    for (i = 0; i < lambdas.length; i++) {
+      B[i] = planck(lambdas[i], T);
+      if (B[i] > Bmax) Bmax = B[i];
+      tau[i] = transmission(lambdas[i], hum);
+    }
+    var Bn = new Array(lambdas.length);
+    var esc = new Array(lambdas.length);
+    for (i = 0; i < lambdas.length; i++) {
+      Bn[i] = B[i] / Bmax;
+      esc[i] = Bn[i] * tau[i];
+    }
+
+    document.getElementById('path-transmission').setAttribute('d', pathArea(tau));
+    document.getElementById('path-escape').setAttribute('d', pathArea(esc));
+    document.getElementById('path-planck').setAttribute('d', pathLine(Bn));
+
+    var lamPeak = 2898.0 / T;
+    var px = xOf(lamPeak);
+    var pm = document.getElementById('peak-marker');
+    pm.setAttribute('x1', px);
+    pm.setAttribute('x2', px);
+
+    var total = 0, winInt = 0, escInt = 0;
+    for (i = 1; i < lambdas.length; i++) {
+      var dlam = lambdas[i] - lambdas[i - 1];
+      var bavg = 0.5 * (Bn[i] + Bn[i - 1]);
+      var eavg = 0.5 * (esc[i] + esc[i - 1]);
+      total += bavg * dlam;
+      escInt += eavg * dlam;
+      var lmid = 0.5 * (lambdas[i] + lambdas[i - 1]);
+      if (lmid >= 8 && lmid <= 13) winInt += bavg * dlam;
+    }
+    var winFrac = winInt / total;
+    var escFrac = escInt / total;
+
+    document.getElementById('temp-val').textContent = T + ' K';
+    document.getElementById('hum-val').textContent = Math.round(hum * 100) + ' %';
+    document.getElementById('peak-val').textContent = lamPeak.toFixed(2) + ' μm';
+    document.getElementById('window-frac').textContent = (winFrac * 100).toFixed(0) + ' %';
+    document.getElementById('escape-frac').textContent = (escFrac * 100).toFixed(0) + ' %';
+  }
+
+  buildStatic();
+  var tempSlider = document.getElementById('temp-slider');
+  var humSlider  = document.getElementById('hum-slider');
+  function update() { render(+tempSlider.value, +humSlider.value); }
+  tempSlider.addEventListener('input', update);
+  humSlider.addEventListener('input', update);
+  update();
+})();
+</script>
